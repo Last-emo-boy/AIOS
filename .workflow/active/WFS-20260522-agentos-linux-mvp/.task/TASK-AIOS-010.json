@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-010",
   "title": "Implement first service recovery workflow",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P1",
   "type": "workflow",
@@ -24,7 +24,8 @@
     "Service recovery workflow implementation",
     "Example Runbook",
     "End-to-end workflow test",
-    "docs/runbooks/service-recovery.md"
+    "docs/runbooks/service-recovery.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-010-service-recovery.json"
   ],
   "acceptance_criteria": [
     "Read-only diagnostics run without approval and without persistent side effects.",
@@ -37,6 +38,12 @@
     "Run denied restart path and confirm no restart effect.",
     "Inspect audit.show last-run output."
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-010-service-recovery.json",
+    "unit_tests": "41 passed; 0 failed",
+    "approved_demo": "diagnostics plus approved restart led to healthy status/http observations.",
+    "denied_demo": "restart approval denied and no svc.restart EffectPrepared event was recorded."
+  },
   "risk_notes": [
     "The workflow must not infer success from model output; it must verify actual service health."
   ]

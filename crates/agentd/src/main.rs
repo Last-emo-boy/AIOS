@@ -12,6 +12,7 @@ use agentd::{
     recovery::RecoveryReconciler,
     rollback::{content_hash, WriteDiffExecutor, WriteRequest},
     sandbox::{SandboxCompiler, SandboxExecutor, SandboxOperation},
+    service_recovery::{RestartApproval, ServiceFixture, ServiceRecoveryWorkflow},
     tui::{ApprovalDecision, build_demo_session},
 };
 
@@ -99,6 +100,29 @@ fn main() {
                 .map(PathBuf::from)
                 .unwrap_or_else(|| PathBuf::from(".workflow/artifacts/rollback/demo"));
             run_write_diff_demo(&agentd, root)
+        }
+        Some("--service-recovery-demo") => {
+            let approval = match args.get(2).map(String::as_str) {
+                Some("approved") | Some("approve") | None => RestartApproval::Approved,
+                Some("denied") | Some("deny") => RestartApproval::Denied,
+                Some(other) => return finish(Err(format!("unknown restart approval: {other}"))),
+            };
+            let path = args
+                .get(3)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
+            run_service_recovery_demo(path, approval)
+        }
+        Some("--audit-show") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
+            let run_id = args
+                .get(3)
+                .map(String::as_str)
+                .unwrap_or("run-service-recovery");
+            run_audit_show(path, run_id)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -449,6 +473,22 @@ fn run_write_diff_demo(agentd: &Agentd, root: PathBuf) -> Result<(), String> {
         agentd::api::escape_json(&after_rollback),
         agentd::api::escape_json(&root.join("audit.jsonl").display().to_string())
     );
+    Ok(())
+}
+
+fn run_service_recovery_demo(path: &str, approval: RestartApproval) -> Result<(), String> {
+    let journal = AuditJournal::new(path);
+    let report = ServiceRecoveryWorkflow.run(&journal, ServiceFixture::degraded_nginx(), approval)?;
+    println!("{}", report.to_json());
+    Ok(())
+}
+
+fn run_audit_show(path: &str, run_id: &str) -> Result<(), String> {
+    let journal = AuditJournal::new(path);
+    let lines = journal
+        .run_timeline(run_id)
+        .map_err(|error| error.to_string())?;
+    println!("[{}]", lines.join(","));
     Ok(())
 }
 

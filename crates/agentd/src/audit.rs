@@ -198,12 +198,14 @@ pub fn redact_summary(summary: &str) -> String {
     let mut output = Vec::new();
     for token in summary.split_whitespace() {
         let lower = token.to_ascii_lowercase();
-        if lower.contains("secret")
-            || lower.contains("password")
-            || lower.contains("token")
-            || lower.contains("apikey")
-            || lower.contains("api_key")
-        {
+        let key = lower
+            .split_once('=')
+            .map(|(key, _)| key)
+            .or_else(|| lower.split_once(':').map(|(key, _)| key));
+        let key = key.map(|value| {
+            value.trim_matches(|ch: char| !ch.is_ascii_alphanumeric() && ch != '_')
+        });
+        if matches!(key, Some("secret" | "password" | "token" | "apikey" | "api_key")) {
             output.push("[REDACTED]");
         } else {
             output.push(token);
@@ -311,5 +313,21 @@ mod tests {
         assert!(!line.contains("token=abc"));
         assert!(line.contains("[REDACTED]"));
         assert!(line.contains("public-data"));
+    }
+
+    #[test]
+    fn redaction_does_not_hide_non_secret_words_containing_token() {
+        let event = AuditEvent::new(
+            AuditEventType::PolicyEvaluated,
+            "run-5",
+            "step-5",
+            "operator",
+            "approval required for token=value",
+        );
+        let line = event.to_json_line();
+        assert!(line.contains("approval required"));
+        assert!(line.contains("for"));
+        assert!(!line.contains("token=value"));
+        assert!(line.contains("[REDACTED]"));
     }
 }
