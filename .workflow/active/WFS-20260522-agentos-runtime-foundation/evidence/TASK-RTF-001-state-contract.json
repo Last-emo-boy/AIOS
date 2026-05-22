@@ -1,0 +1,54 @@
+{
+  "id": "TASK-RTF-001",
+  "status": "passed",
+  "completed_at": "2026-05-23T00:06:48+08:00",
+  "summary": "Runtime state transitions, audit event mapping, persistence sources, idempotency rules, failure handling, and recovery policies are defined for generic Agent runs.",
+  "deliverables": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-001-state-contract.json"
+  ],
+  "acceptance": [
+    {
+      "criterion": "Every state transition has a durable source of truth.",
+      "status": "passed",
+      "evidence": "runtime-state-contract.md defines RunStore and AuditJournal source of truth for each state and transition."
+    },
+    {
+      "criterion": "No transition can erase earlier audit evidence.",
+      "status": "passed",
+      "evidence": "idempotency rules require repeat operations to load existing evidence and forbid erasing failed evidence."
+    },
+    {
+      "criterion": "Recovery behavior is deterministic when a run stops in each non-terminal state.",
+      "status": "passed",
+      "evidence": "runtime state table defines recovery policy for Accepted, Planning, Planned, AwaitingApproval, Executing, Observing, Verifying, RollbackPending, and Recovering."
+    },
+    {
+      "criterion": "Approval timeout and denial do not produce EffectPrepared for the protected step.",
+      "status": "passed",
+      "evidence": "allowed transition table maps AwaitingApproval -> Denied/Suspended with no EffectPrepared."
+    }
+  ],
+  "existing_audit_events_used": [
+    "IntentReceived",
+    "PlanFrozen",
+    "PolicyEvaluated",
+    "ApprovalBound",
+    "EffectPrepared",
+    "EffectObserved",
+    "CommitSealed",
+    "RollbackPending",
+    "RollbackObserved",
+    "RecoveryStarted",
+    "RecoveryCompleted",
+    "SandboxDenied"
+  ],
+  "downstream_tests_required": [
+    "state transition tests in TASK-ACR-005",
+    "run recovery tests in TASK-SEF-007",
+    "approval denial and timeout no-effect tests",
+    "crash after EffectPrepared and EffectObserved tests",
+    "verification failure to RollbackPending tests",
+    "invariant violation to FailedClosed tests"
+  ]
+}

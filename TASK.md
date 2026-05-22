@@ -26,6 +26,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - 当前 Maestro 计划已切到 Runtime Foundation：`.workflow/active/WFS-20260522-agentos-runtime-foundation`。
 - Runtime Foundation 已完成详细 TASK 展开，状态为 `planned`：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
+- `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
 - Wave 1 已完成：boot handoff、`agentd` lifecycle skeleton 和 terminal-first TUI surface 均已验证。
 - Wave 2 已完成：semantic tool routing、append-only audit journal 和 recovery reconciler 均已验证。
@@ -44,7 +45,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：`TASK-RTF-001`，定义 runtime state transitions 和 audit event mapping。
+- 下一执行任务：`TASK-RTF-002`，定义模块 ownership 与 runtime integration points。
 
 ## Runtime Foundation 任务计划
 
@@ -67,7 +68,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 ### Runtime Foundation Wave 0：边界冻结
 
 - `TASK-RTF-000`：冻结 Agent Core 和 Security Execution Foundation 边界（completed）
-- `TASK-RTF-001`：定义 runtime state transitions 和 audit event mapping（pending）
+- `TASK-RTF-001`：定义 runtime state transitions 和 audit event mapping（completed）
 - `TASK-RTF-002`：定义模块 ownership 与 runtime integration points（pending）
 - `TASK-RTF-003`：把 MVP safety invariants 继承为 runtime gates（pending）
 

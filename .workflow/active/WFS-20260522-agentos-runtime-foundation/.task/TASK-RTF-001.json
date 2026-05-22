@@ -1,7 +1,7 @@
 {
   "id": "TASK-RTF-001",
   "title": "Define runtime state transitions and event mapping",
-  "status": "pending",
+  "status": "completed",
   "wave": 0,
   "priority": "P0",
   "type": "architecture",
@@ -36,5 +36,26 @@
   ],
   "risk_notes": [
     "The core risk is creating a runtime that can advance based on memory-only state and lose truth after restart."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T00:06:48+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-001-state-contract.json",
+    "contract": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    "states_defined": [
+      "Accepted",
+      "Planning",
+      "Planned",
+      "AwaitingApproval",
+      "Executing",
+      "Observing",
+      "Verifying",
+      "Completed",
+      "Denied",
+      "Suspended",
+      "RollbackPending",
+      "Recovering",
+      "FailedClosed"
+    ],
+    "approval_denial_no_effect_prepared": true
+  }
 }
