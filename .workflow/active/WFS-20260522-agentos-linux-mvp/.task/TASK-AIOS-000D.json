@@ -1,0 +1,39 @@
+{
+  "id": "TASK-AIOS-000D",
+  "title": "Propagate Wave 0 decisions into Wave 1 entry criteria",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "planning",
+  "source": "research.md:469",
+  "depends_on": [
+    "TASK-AIOS-000A",
+    "TASK-AIOS-000B",
+    "TASK-AIOS-000C"
+  ],
+  "purpose": "Make downstream tasks consume the frozen Wave 0 decisions instead of rediscovering product scope during implementation.",
+  "scope": [
+    "Update Wave 1 tasks with selected product shape, distro base, boot target, and model policy.",
+    "Mark Wave 0 task statuses consistently.",
+    "Update TASK.md next step and Maestro workflow state.",
+    "Verify JSON files and task references."
+  ],
+  "deliverables": [
+    "Updated TASK-AIOS-001/002/003 task files",
+    "Updated TASK-AIOS-000 parent status",
+    "Updated .workflow/state.json and plan.json",
+    "Verification command output"
+  ],
+  "acceptance_criteria": [
+    "Wave 1 tasks reference the selected MVP shape and assumptions.",
+    "Wave 0 parent and subtasks are marked completed.",
+    "All JSON workflow files parse successfully.",
+    "Git history contains one commit for each completed Wave 0 task."
+  ],
+  "verification": [
+    "Run JSON parse validation across .workflow.",
+    "Run git log and confirm Wave 0 task commits exist.",
+    "Run git status --short and confirm no accidental uncommitted changes remain after final commit."
+  ],
+  "commit_policy": "Commit immediately after this task is completed."
+}

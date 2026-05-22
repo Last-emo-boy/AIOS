@@ -1,0 +1,36 @@
+{
+  "id": "TASK-AIOS-000B",
+  "title": "Freeze MVP operating assumptions",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "decision",
+  "source": "research.md:21",
+  "depends_on": [
+    "TASK-AIOS-000A"
+  ],
+  "purpose": "Resolve every explicit assumption from research.md lines 23-31 into accepted, rejected, or deferred status.",
+  "scope": [
+    "Freeze target hardware and virtualization assumption.",
+    "Freeze network policy and untrusted workload egress policy.",
+    "Freeze external LLM policy and local fallback requirement.",
+    "Freeze tenant model, GUI scope, package manager target, and reliability target."
+  ],
+  "deliverables": [
+    "docs/decisions/001-mvp-operating-assumptions.md",
+    "Updated .workflow/state.json active_decisions",
+    "Updated .workflow/active/WFS-20260522-agentos-linux-mvp/plan.json assumptions"
+  ],
+  "acceptance_criteria": [
+    "Each assumption from research.md lines 23-31 is listed with status and rationale.",
+    "The document names implementation consequences for Wave 1.",
+    "External LLM policy preserves local-only or stub planner operation.",
+    "No unresolved TODO markers remain in the decision document."
+  ],
+  "verification": [
+    "Search the decision document for TODO markers.",
+    "Compare assumption table against research.md lines 23-31.",
+    "Confirm plan.json assumptions match the decision."
+  ],
+  "commit_policy": "Commit immediately after this task is completed."
+}

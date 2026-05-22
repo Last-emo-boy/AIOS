@@ -1,0 +1,36 @@
+{
+  "id": "TASK-AIOS-000C",
+  "title": "Lock MVP non-goals and scope change control",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "decision",
+  "source": "research.md:438",
+  "depends_on": [
+    "TASK-AIOS-000A",
+    "TASK-AIOS-000B"
+  ],
+  "purpose": "Prevent Alpha/Beta/high-security concerns from leaking into the MVP execution path.",
+  "scope": [
+    "List MVP non-goals with rationale.",
+    "Define scope expansion rules and required approval evidence.",
+    "Define what belongs to Alpha, Beta, and the high-security product line.",
+    "Record risk boundaries that must not be weakened by implementation shortcuts."
+  ],
+  "deliverables": [
+    "docs/decisions/002-mvp-scope-control.md",
+    "Updated workflow-session.json non_goals and open_decisions",
+    "Updated TASK.md MVP 不做 section"
+  ],
+  "acceptance_criteria": [
+    "Firecracker productionization, seL4/Genode, multi-tenant, HA, GUI-native, and online self-update are explicitly out of MVP.",
+    "The document defines how a deferred item can re-enter scope.",
+    "Security bottom lines remain stronger than convenience shortcuts.",
+    "No unresolved TODO markers remain in the decision document."
+  ],
+  "verification": [
+    "Search the decision document for TODO markers.",
+    "Confirm workflow-session.json and TASK.md contain the same non-goal boundary."
+  ],
+  "commit_policy": "Commit immediately after this task is completed."
+}

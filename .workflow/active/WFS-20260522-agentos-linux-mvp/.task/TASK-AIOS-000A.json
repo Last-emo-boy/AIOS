@@ -1,0 +1,33 @@
+{
+  "id": "TASK-AIOS-000A",
+  "title": "Select MVP product shape and first workflows",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "decision",
+  "source": "research.md:33",
+  "depends_on": [],
+  "purpose": "Choose the first product form so all implementation tasks optimize for one concrete environment and user.",
+  "scope": [
+    "Choose developer VM, cloud VM, or an explicitly narrowed dual-track MVP.",
+    "Name the primary operator and operating environment.",
+    "Select the first three workflows that will drive design and tests.",
+    "Record why the alternatives are deferred."
+  ],
+  "deliverables": [
+    "docs/decisions/000-mvp-shape.md",
+    "Updated TASK.md decision section",
+    "Updated .workflow/state.json DEC-001"
+  ],
+  "acceptance_criteria": [
+    "The decision names one primary MVP shape.",
+    "The document names primary user, environment, and first three workflows.",
+    "Deferred shapes are explicitly scoped for later waves or milestones.",
+    "No unresolved TODO markers remain in the decision document."
+  ],
+  "verification": [
+    "Search the decision document for TODO markers.",
+    "Confirm TASK.md and .workflow/state.json reflect the selected shape."
+  ],
+  "commit_policy": "Commit immediately after this task is completed."
+}

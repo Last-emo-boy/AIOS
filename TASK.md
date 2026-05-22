@@ -33,7 +33,11 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Wave 0：产品与架构冻结
 
-- `TASK-AIOS-000`：冻结 MVP 产品形态与运行假设
+- `TASK-AIOS-000`：冻结 MVP 产品形态与运行假设（父任务）
+- `TASK-AIOS-000A`：选择 MVP 产品形态与首批 workflow
+- `TASK-AIOS-000B`：冻结 MVP 运行假设
+- `TASK-AIOS-000C`：锁定 MVP non-goals 与 scope change control
+- `TASK-AIOS-000D`：把 Wave 0 决策传播到 Wave 1 入口条件
 
 退出标准：
 
