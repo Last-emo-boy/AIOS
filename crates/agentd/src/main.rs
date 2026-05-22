@@ -3,11 +3,12 @@ use std::io::{self, Write};
 use std::process;
 
 use agentd::{
-    api::SemanticToolCall,
+    api::{RiskClass, SemanticToolCall},
     audit::{AuditEvent, AuditEventType, AuditJournal},
     lifecycle::{Agentd, LifecycleConfig},
+    policy::{ApprovalToken, PolicyEvaluator, PolicyRequest, stable_parameter_hash},
     recovery::RecoveryReconciler,
-    tui::{build_demo_session, ApprovalDecision},
+    tui::{ApprovalDecision, build_demo_session},
 };
 
 fn main() {
@@ -73,6 +74,13 @@ fn main() {
                 .map(String::as_str)
                 .unwrap_or(".workflow/artifacts/recovery/demo.jsonl");
             run_recovery_demo(path)
+        }
+        Some("--policy-demo") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/policy/demo.jsonl");
+            run_policy_demo(&agentd, path)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -213,6 +221,85 @@ fn run_recovery_demo(path: &str) -> Result<(), String> {
         .map_err(|error| error.to_string())?;
     println!("{}", report.to_json());
     println!("{}", report.render_prompt());
+    Ok(())
+}
+
+fn run_policy_demo(agentd: &Agentd, path: &str) -> Result<(), String> {
+    let routed = agentd
+        .route_tool(&SemanticToolCall::new(
+            "fs.write.diff",
+            vec![("path", "/etc/nginx/nginx.conf"), ("content_hash", "abc")],
+        ))
+        .map_err(|error| error.reason)?;
+    let request = PolicyRequest::from_routed("operator", &routed);
+    let evaluator = PolicyEvaluator;
+    let paused = evaluator.evaluate(&request, None);
+    let token = ApprovalToken {
+        actor: request.actor.clone(),
+        tool: request.tool.clone(),
+        resource: request.resource.clone(),
+        parameter_hash: request.parameter_hash.clone(),
+        expires_at: 60,
+        policy_version: request.policy_version.clone(),
+    };
+    let allowed = evaluator.evaluate(&request, Some(&token));
+    let lease = evaluator
+        .acquire_lease(&request, &allowed)
+        .map_err(|error| error.to_string())?;
+    let denied_request = PolicyRequest {
+        actor: "operator".to_string(),
+        tool: "shell.exec".to_string(),
+        resource: "host".to_string(),
+        risk: RiskClass::Never,
+        parameter_hash: stable_parameter_hash(&[("cmd".to_string(), "id".to_string())]),
+        policy_version: "policy-v1".to_string(),
+        now: 0,
+    };
+    let denied = evaluator.evaluate(&denied_request, None);
+
+    let journal = AuditJournal::new(path);
+    evaluator
+        .record_decision(&journal, "run-policy", "step-write", &request, &paused)
+        .map_err(|error| error.to_string())?;
+    evaluator
+        .record_decision(
+            &journal,
+            "run-policy",
+            "step-denied",
+            &denied_request,
+            &denied,
+        )
+        .map_err(|error| error.to_string())?;
+    let mut approval_event = AuditEvent::new(
+        AuditEventType::ApprovalBound,
+        "run-policy",
+        "step-write",
+        "operator",
+        format!(
+            "lease_id={} actor={} tool={} resource={} expires_at={} risk={}",
+            lease.lease_id,
+            lease.actor,
+            lease.tool,
+            lease.resource,
+            lease.expires_at,
+            lease.risk.as_str()
+        ),
+    );
+    approval_event.policy_version = lease.policy_version.clone();
+    approval_event.tool_version = "tool-v1".to_string();
+    approval_event.parameter_hash = lease.parameter_hash.clone();
+    journal
+        .append(&approval_event)
+        .map_err(|error| error.to_string())?;
+
+    println!(
+        "{{\"without_approval\":{},\"with_approval\":{},\"denied\":{},\"lease\":{},\"audit_path\":\"{}\"}}",
+        paused.to_json(),
+        allowed.to_json(),
+        denied.to_json(),
+        lease.to_json(),
+        agentd::api::escape_json(path)
+    );
     Ok(())
 }
 

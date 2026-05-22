@@ -1,0 +1,45 @@
+{
+  "task": "TASK-AIOS-007",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:34:00+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "26 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --policy-demo",
+      "result": "fs.write.diff paused without approval, allowed with exact approval, emitted lease metadata, and denied shell.exec."
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/policy/demo.jsonl",
+      "result": "Recorded PolicyEvaluated entries for pause-for-approval and deny, plus ApprovalBound for the issued lease; denied shell.exec did not produce EffectPrepared or EffectObserved."
+    }
+  ],
+  "decision_model": [
+    "read-only -> allow",
+    "write-with-diff -> pause-for-approval unless exact approval token matches",
+    "execute-with-confirmation -> pause-for-approval unless exact approval token matches",
+    "privileged-with-human-approval -> pause-for-approval unless exact approval token matches",
+    "never -> deny"
+  ],
+  "lease_fields": [
+    "lease_id",
+    "actor",
+    "tool",
+    "resource",
+    "parameter_hash",
+    "expires_at",
+    "policy_version",
+    "risk"
+  ],
+  "approval_binding": {
+    "actor": true,
+    "tool": true,
+    "resource": true,
+    "parameter_hash": true,
+    "expires_at": true,
+    "policy_version": true
+  },
+  "denied_without_execution": true
+}

@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-007",
   "title": "Implement capability lease model and policy evaluator",
-  "status": "pending",
+  "status": "completed",
   "wave": 3,
   "priority": "P0",
   "type": "security",
@@ -21,7 +21,8 @@
     "Capability lease schema",
     "Policy evaluator implementation",
     "Approval token schema",
-    "docs/capability-policy.md"
+    "docs/capability-policy.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-007-capability-policy.json"
   ],
   "acceptance_criteria": [
     "Each semantic tool maps to exactly one risk class before execution.",
@@ -34,6 +35,12 @@
     "Attempt parameter mutation after approval and confirm denial.",
     "Inspect audit records for decision and lease fields."
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-007-capability-policy.json",
+    "unit_tests": "26 passed; 0 failed",
+    "policy_demo": "fs.write.diff pauses without approval, allows with exact approval, emits lease metadata, and denies shell.exec.",
+    "denied_without_execution": true
+  },
   "risk_notes": [
     "Approval must bind exact action parameters, not a broad session-level grant."
   ]

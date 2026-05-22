@@ -10,6 +10,7 @@ The audit journal is append-only JSONL. It records intent, plan, approval, prepa
 
 - `IntentReceived`
 - `PlanFrozen`
+- `PolicyEvaluated`
 - `ApprovalBound`
 - `EffectPrepared`
 - `EffectObserved`

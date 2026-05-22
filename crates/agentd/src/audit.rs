@@ -8,6 +8,7 @@ use crate::api::escape_json;
 pub enum AuditEventType {
     IntentReceived,
     PlanFrozen,
+    PolicyEvaluated,
     ApprovalBound,
     EffectPrepared,
     EffectObserved,
@@ -23,6 +24,7 @@ impl AuditEventType {
         match self {
             AuditEventType::IntentReceived => "IntentReceived",
             AuditEventType::PlanFrozen => "PlanFrozen",
+            AuditEventType::PolicyEvaluated => "PolicyEvaluated",
             AuditEventType::ApprovalBound => "ApprovalBound",
             AuditEventType::EffectPrepared => "EffectPrepared",
             AuditEventType::EffectObserved => "EffectObserved",
@@ -38,6 +40,7 @@ impl AuditEventType {
         Some(match value {
             "IntentReceived" => Self::IntentReceived,
             "PlanFrozen" => Self::PlanFrozen,
+            "PolicyEvaluated" => Self::PolicyEvaluated,
             "ApprovalBound" => Self::ApprovalBound,
             "EffectPrepared" => Self::EffectPrepared,
             "EffectObserved" => Self::EffectObserved,

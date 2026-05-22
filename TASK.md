@@ -25,13 +25,15 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
 - Wave 1 已完成：boot handoff、`agentd` lifecycle skeleton 和 terminal-first TUI surface 均已验证。
 - Wave 2 已完成：semantic tool routing、append-only audit journal 和 recovery reconciler 均已验证。
+- Wave 3 进行中：capability lease model 和 policy evaluator 已验证，sandbox executor 是下一项。
 - `TASK-AIOS-001` 已完成：最小 initramfs 通过 `E:\qemu\qemu-system-x86_64.exe` 启动，并观察到 `/sbin/agentd` 输出 `AGENTD_HANDOFF_OK`。
 - `TASK-AIOS-002` 已完成：Rust `agentd` lifecycle skeleton 提供 local-only/stub 模式、健康状态、模块边界和 typed stub APIs。
 - `TASK-AIOS-003` 已完成：terminal-first TUI surface 支持 intent、plan preview、approval/denial/timeout/suspended 和 audit projection。
 - `TASK-AIOS-004` 已完成：semantic tool schema/router 支持 normalized params、`fs.write.diff` 风险分类，并拒绝 normal-mode `shell.exec`。
 - `TASK-AIOS-005` 已完成：append-only JSONL audit journal 支持核心事件、未封口 effect 查询和 secret-like summary redaction。
 - `TASK-AIOS-006` 已完成：recovery reconciler 可分类未完成 effect，写入 RecoveryStarted/Completed，并为写入类 effect 要求人工确认。
-- 下一执行任务：`TASK-AIOS-007`。
+- `TASK-AIOS-007` 已完成：policy evaluator 支持 allow / deny / pause-for-approval，approval token 绑定 exact parameter hash，并记录 denied decision without execution。
+- 下一执行任务：`TASK-AIOS-008`。
 
 ## 必须先冻结的决策
 
@@ -93,7 +95,7 @@ Wave 1 入口约束：
 
 ### Wave 3：Capability、sandbox 与 rollback
 
-- `TASK-AIOS-007`：实现 capability lease model 和 policy evaluator
+- `TASK-AIOS-007`：实现 capability lease model 和 policy evaluator（completed）
 - `TASK-AIOS-008`：为 read-only / low-risk tools 增加 Linux sandbox executor
 - `TASK-AIOS-009`：实现 `write-with-diff` 和 rollback handle flow
 
@@ -137,4 +139,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-Wave 0 决策已经传播到 Wave 1 入口条件。下一步从 `TASK-AIOS-001` 开始做最小可启动镜像。
+继续执行 Wave 3。下一步从 `TASK-AIOS-008` 开始实现 read-only / low-risk semantic tools 的 Linux sandbox executor。
