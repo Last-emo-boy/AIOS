@@ -52,6 +52,14 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-002`：实现 `agentd` lifecycle skeleton
 - `TASK-AIOS-003`：构建 terminal-first TUI intent / approval surface
 
+Wave 1 入口约束：
+
+- 目标形态是 Developer VM first，Cloud VM compatible。
+- 目标环境是 `x86_64` Debian/Ubuntu-compatible Linux VM。
+- Wave 1 验收不能依赖 Firecracker、外部 LLM、fleet orchestration 或 GUI。
+- `agentd` 与 TUI 必须支持 local-only 或 stub planner mode。
+- normal mode 不允许任意 root shell。
+
 退出标准：
 
 - 最小镜像可以启动到 `agentd` / TUI 路径。
@@ -116,4 +124,4 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 下一步
 
-继续完成 `TASK-AIOS-000D`，把 Wave 0 决策传播到 Wave 1 入口条件。Wave 0 完成后，从 `TASK-AIOS-001` 开始做最小可启动镜像。
+Wave 0 决策已经传播到 Wave 1 入口条件。下一步从 `TASK-AIOS-001` 开始做最小可启动镜像。

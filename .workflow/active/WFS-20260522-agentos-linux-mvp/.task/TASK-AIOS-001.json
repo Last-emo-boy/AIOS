@@ -9,7 +9,18 @@
   "depends_on": [
     "TASK-AIOS-000"
   ],
+  "decision_inputs": [
+    "docs/decisions/000-mvp-shape.md",
+    "docs/decisions/001-mvp-operating-assumptions.md",
+    "docs/decisions/002-mvp-scope-control.md"
+  ],
   "purpose": "Prove the MVP base can boot and hand control to an agentd entrypoint through initramfs/rootfs configuration.",
+  "entry_constraints": [
+    "Target Developer VM first, Cloud VM compatible.",
+    "Target x86_64 Linux VM using Debian/Ubuntu-compatible userland.",
+    "Do not require Firecracker, remote LLM credentials, fleet orchestration, or native GUI for acceptance.",
+    "Boot path must preserve the no arbitrary root shell normal-mode boundary."
+  ],
   "scope": [
     "Create a reproducible image build recipe for the chosen Linux base.",
     "Support a kernel command-line path using init=/sbin/agentd or rdinit=/sbin/agentd.",
@@ -25,7 +36,8 @@
     "A local command builds the image from a clean checkout.",
     "A local command boots the image and reaches the agentd placeholder within the agreed startup budget.",
     "Boot logs clearly show kernel -> initramfs/rootfs -> agentd handoff.",
-    "Failure paths produce actionable console logs."
+    "Failure paths produce actionable console logs.",
+    "The smoke test runs without remote LLM access and without Firecracker."
   ],
   "verification": [
     "Run boot smoke test.",

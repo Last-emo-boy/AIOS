@@ -20,6 +20,14 @@
 - 写入必须先在 shadow/overlay 工作区生成 diff，审批后才提交。
 - 默认沙箱组合包括 namespace、cgroup、seccomp/no_new_privs，Landlock 作为文件访问加固层。
 
+## Wave 0 冻结决策
+
+- 产品形态：Developer VM first, Cloud VM compatible。
+- 目标环境：`x86_64` Debian/Ubuntu-compatible Linux VM。
+- 模型策略：external LLM optional-only；local-only 或 stub planner mode 必须工作。
+- UI 策略：TUI 是 native MVP surface。
+- 范围控制：Firecracker productionization、seL4/Genode、多租户、HA、native GUI、online self-update、normal-mode arbitrary root shell 均不属于 MVP。
+
 ## 推迟到 Alpha/Beta
 
 - Firecracker runner 的完整生命周期和镜像治理。

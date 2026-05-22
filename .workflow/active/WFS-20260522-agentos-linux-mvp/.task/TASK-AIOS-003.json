@@ -9,7 +9,18 @@
   "depends_on": [
     "TASK-AIOS-002"
   ],
+  "decision_inputs": [
+    "docs/decisions/000-mvp-shape.md",
+    "docs/decisions/001-mvp-operating-assumptions.md",
+    "docs/decisions/002-mvp-scope-control.md"
+  ],
   "purpose": "Provide the operator-facing terminal surface for intent input, plan preview, status, approval, denial, and audit inspection.",
+  "entry_constraints": [
+    "TUI is the native MVP surface; no web or native GUI is required for acceptance.",
+    "Approval UI must be a projection of policy/audit state, not the security boundary.",
+    "Plan preview must work with deterministic stub planner output.",
+    "Service recovery is the first concrete workflow family to optimize for."
+  ],
   "scope": [
     "Render an interactive terminal shell or TUI attached to agentd.",
     "Accept natural-language intent and show a deterministic plan preview from stub planner output.",
@@ -26,7 +37,8 @@
     "Operator can submit an intent and receive a frozen plan preview.",
     "High-risk placeholder steps pause for approval and record the decision.",
     "The TUI remains responsive while a simulated tool call streams status.",
-    "All visible actions map to structured agentd API calls."
+    "All visible actions map to structured agentd API calls.",
+    "The TUI can render Developer VM service recovery plan states without requiring GUI components."
   ],
   "verification": [
     "Run TUI integration test in local terminal.",

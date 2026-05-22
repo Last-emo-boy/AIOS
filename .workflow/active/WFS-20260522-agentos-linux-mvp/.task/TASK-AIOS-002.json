@@ -9,7 +9,18 @@
   "depends_on": [
     "TASK-AIOS-001"
   ],
+  "decision_inputs": [
+    "docs/decisions/000-mvp-shape.md",
+    "docs/decisions/001-mvp-operating-assumptions.md",
+    "docs/decisions/002-mvp-scope-control.md"
+  ],
   "purpose": "Create the minimal agentd process model needed for PID 1 operation, health reporting, shutdown handling, and deterministic module boundaries.",
+  "entry_constraints": [
+    "agentd must run in local-only or stub planner mode.",
+    "Model Broker may be stubbed but no module may directly require external LLM credentials.",
+    "Normal mode must not expose arbitrary root shell.",
+    "Keep PID 1 minimal; adapters that can live outside agentd should remain child services or stubs."
+  ],
   "scope": [
     "Define agentd module boundaries for planner, policy, capability, tool router, audit, rollback, model broker, and TUI.",
     "Implement process signal handling suitable for PID 1 responsibilities.",
@@ -26,7 +37,8 @@
     "agentd starts as the boot handoff target and stays alive.",
     "agentd can report status, module readiness, and last error.",
     "agentd handles termination and child reaping paths deliberately.",
-    "All stub APIs return typed results and structured errors."
+    "All stub APIs return typed results and structured errors.",
+    "agentd lifecycle tests pass with local-only or stub planner mode."
   ],
   "verification": [
     "Run unit tests for lifecycle and API stubs.",
