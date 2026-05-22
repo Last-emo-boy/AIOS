@@ -1,7 +1,7 @@
 {
   "id": "TASK-ACR-003",
   "title": "Implement ModelBroker trait and stub provider",
-  "status": "pending",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "runtime",
@@ -41,5 +41,16 @@
   ],
   "risk_notes": [
     "A weak ModelBroker boundary would let model integrations leak into policy or executor code."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T01:11:57+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-003-model-broker.json",
+    "implementation": "crates/agentd/src/agent_core.rs",
+    "documentation": "docs/model-broker.md",
+    "tests": {
+      "cargo test -p agentd model_broker::": "7 passed; 0 failed",
+      "cargo test -p agentd": "70 passed; 0 failed"
+    },
+    "next_task": "TASK-ACR-004"
+  }
 }

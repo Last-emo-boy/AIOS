@@ -1,0 +1,75 @@
+{
+  "id": "TASK-ACR-003",
+  "status": "passed",
+  "completed_at": "2026-05-23T01:11:57+08:00",
+  "summary": "ModelBroker is implemented as the only model boundary with structured plan/classify/summarize/sanitize requests, deterministic StubModelProvider, metadata-only call logs, bounded output checks, secret-like input rejection, and fail-closed timeout/provider failure behavior.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    "docs/model-broker.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-003-model-broker.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd model_broker::",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 63 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "70 passed; 0 failed"
+    },
+    {
+      "command": "rg -n \"StubModelProvider|ModelBroker|provider\\.plan|\\.plan\\(&recovery_request|model provider|remote model|local model\" crates docs .workflow --glob '!target/**'",
+      "status": "passed",
+      "result": "Provider implementation and direct plan calls are confined to agent_core::model_broker and tests; docs/workflow files only describe the boundary."
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "AgentCore can plan through StubModelProvider without network access.",
+      "status": "passed",
+      "evidence": "agent_core::model_broker::tests::stub_provider_plans_without_network_or_effects validates deterministic local-only planning and absence of EffectPrepared/EffectObserved/CommitSealed strings."
+    },
+    {
+      "criterion": "Invalid model output is rejected before it becomes a PlanSpec.",
+      "status": "passed",
+      "evidence": "agent_core::model_broker::tests::malformed_provider_output_is_rejected_before_plan_spec rejects shell.exec raw output through ToolRouter validation."
+    },
+    {
+      "criterion": "Timeouts and provider failures degrade to Suspended or FailedClosed, not tool execution.",
+      "status": "passed",
+      "evidence": "timeout/cancel tests map to Suspended; provider failure and oversized output map to FailedClosed; tests assert no EffectPrepared in failure logs."
+    },
+    {
+      "criterion": "ModelBroker calls are logged with metadata but not raw secret values.",
+      "status": "passed",
+      "evidence": "call_log_contains_metadata_not_raw_prompt_or_secret_values asserts provider/model/latency metadata exists and raw prompt/secret-like keys are absent."
+    },
+    {
+      "criterion": "No module except ModelBroker directly calls model providers.",
+      "status": "passed",
+      "evidence": "source search found StubModelProvider direct use only inside agent_core::model_broker implementation/tests; docs describe the boundary."
+    }
+  ],
+  "model_broker_contract": {
+    "module": "agentd::agent_core::model_broker",
+    "trait": "ModelBroker",
+    "provider": "StubModelProvider",
+    "operations": [
+      "plan",
+      "classify",
+      "summarize",
+      "sanitize"
+    ],
+    "normal_execution": "local-only deterministic stub",
+    "failure_states": {
+      "timeout": "Suspended",
+      "cancelled": "Suspended",
+      "provider_failure": "FailedClosed",
+      "invalid_output": "FailedClosed",
+      "output_too_large": "FailedClosed"
+    },
+    "side_effect_path": "none; ModelBroker returns structured data only"
+  }
+}
