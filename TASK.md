@@ -20,6 +20,11 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - Firecracker 作为危险动作隔离层进入 Alpha，不阻塞 MVP。
 - seL4/Genode 是高安全版独立产品线，不拖慢 Linux 主线。
 
+## 当前进度
+
+- Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
+- 下一执行任务：`TASK-AIOS-001`。
+
 ## 必须先冻结的决策
 
 1. 首发产品形态：**已冻结为 Developer VM first, Cloud VM compatible**，见 `docs/decisions/000-mvp-shape.md`。
@@ -34,11 +39,11 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Wave 0：产品与架构冻结
 
-- `TASK-AIOS-000`：冻结 MVP 产品形态与运行假设（父任务）
-- `TASK-AIOS-000A`：选择 MVP 产品形态与首批 workflow
-- `TASK-AIOS-000B`：冻结 MVP 运行假设
-- `TASK-AIOS-000C`：锁定 MVP non-goals 与 scope change control
-- `TASK-AIOS-000D`：把 Wave 0 决策传播到 Wave 1 入口条件
+- `TASK-AIOS-000`：冻结 MVP 产品形态与运行假设（父任务，completed）
+- `TASK-AIOS-000A`：选择 MVP 产品形态与首批 workflow（completed，commit `6a7e6ab`）
+- `TASK-AIOS-000B`：冻结 MVP 运行假设（completed，commit `951241d`）
+- `TASK-AIOS-000C`：锁定 MVP non-goals 与 scope change control（completed，commit `a68e3bd`）
+- `TASK-AIOS-000D`：把 Wave 0 决策传播到 Wave 1 入口条件（completed，commit `7281c8e`）
 
 退出标准：
 
