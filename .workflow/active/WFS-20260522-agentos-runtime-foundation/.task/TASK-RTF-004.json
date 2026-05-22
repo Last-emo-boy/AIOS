@@ -1,7 +1,7 @@
 {
   "id": "TASK-RTF-004",
   "title": "Define Distribution Alpha entry criteria from runtime foundation",
-  "status": "pending",
+  "status": "completed",
   "wave": 5,
   "priority": "P1",
   "type": "planning",
@@ -36,5 +36,16 @@
   ],
   "risk_notes": [
     "Without this bridge, distro work can produce a bootable image that lacks a real agent runtime."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T06:31:10+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json",
+    "documentation": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    "verification": {
+      "blocked until final audit": "Distribution Alpha remains blocked until TASK-RTF-005 final Runtime Foundation audit passes",
+      "document review": "Distribution Alpha entry contract defines runtime prerequisites, rootfs artifacts, inherited gates, VM image factory prerequisite, Firecracker boundary, and ModelBroker rule",
+      "no implementation changes": "planning task only; Rust runtime WIP was not touched"
+    },
+    "next_task": "TASK-RTF-005"
+  }
 }

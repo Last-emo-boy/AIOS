@@ -502,34 +502,44 @@ Convergence checks:
 
 ## Pending Execution Pointer
 
-Current next task: `TASK-RTF-004`.
+Current next task: `TASK-RTF-005`.
 
-Runtime Foundation Wave 4 is complete. `TASK-SEF-010` passed the Security
-Execution Foundation final verification across full agentd regression, safety
-gate, AgentCore adversarial tests, service recovery approved/denied smoke,
-runtime audit projection, release/provenance generation, initramfs build, and
-QEMU dependency check.
+Runtime Foundation Wave 5 has completed `TASK-RTF-004`. Distribution Alpha
+entry criteria now require the generic AgentCore runtime, Security Execution
+Foundation, installed rootfs runtime artifacts, persistent run/audit/rollback
+state, ModelBroker config, runtime safety gates, release/provenance evidence,
+and QEMU gates. Distribution Alpha remains blocked until `TASK-RTF-005`
+completes the Runtime Foundation final audit.
 
-The next implementation should define Distribution Alpha entry criteria from
-the completed runtime foundation. It must translate the runtime contract into
-distribution gates for installed `agentd`, policy packs, semantic tool
-manifests, run-state persistence, audit projection, rollback/recovery
-artifacts, and ModelBroker configuration.
+The next implementation should complete the Runtime Foundation final audit. It
+must verify that every `TASK-RTF-*`, `TASK-ACR-*`, and `TASK-SEF-*` task is
+complete, parse workflow JSON, rerun or validate the required runtime gates,
+confirm Distribution Alpha remains blocked on the final audit evidence, and
+close this workflow only if current evidence proves the runtime foundation is
+ready for the future distribution workflow.
 
-Minimum read-first set for `TASK-RTF-004`:
+Minimum read-first set for `TASK-RTF-005`:
 
 - `TASK.md`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-005.json`
 - `.workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-004.json`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md`
 - `.workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json`
 - `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md`
 - `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md`
 - `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md`
 
-Minimum verification for `TASK-RTF-004`:
+Minimum verification for `TASK-RTF-005`:
 
+- Verify all Runtime Foundation task JSON files are `completed`
 - JSON parse of updated workflow artifacts
-- Cross-check that Distribution Alpha remains blocked until `TASK-RTF-005`
-- Confirm no generated release or smoke artifacts are staged
+- `cargo test -p agentd`
+- `cargo test -p agentd safety::`
+- `cargo test -p agentd agent_core::`
+- `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1`
+- `git status --ignored --short`
+- Confirm Distribution Alpha entry criteria are present and final audit is the remaining blocker
 
 ## Distribution Bridge Requirement
 

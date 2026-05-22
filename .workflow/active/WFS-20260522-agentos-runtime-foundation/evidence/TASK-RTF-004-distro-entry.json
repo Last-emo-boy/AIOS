@@ -1,0 +1,80 @@
+{
+  "task": "TASK-RTF-004",
+  "status": "completed",
+  "completed_at": "2026-05-23T06:31:10+08:00",
+  "summary": "Distribution Alpha entry criteria were defined as a runtime-foundation handoff contract. Alpha work is blocked from starting from the MVP boot skeleton alone and must inherit AgentCore, Security Execution Foundation, runtime artifact installation, persistent state directories, safety gates, release/provenance checks, and QEMU gates.",
+  "deliverables": {
+    "entry_criteria_document": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    "task_index_update": "TASK.md",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json"
+  },
+  "entry_contract": {
+    "distribution_alpha_status": "blocked until TASK-RTF-005 completes Runtime Foundation final audit",
+    "mvp_skeleton_only": "rejected as an Alpha base",
+    "required_runtime_prerequisites": [
+      "AgentCore runtime data model",
+      "persistent RunStore",
+      "ModelBroker stub/local provider mode",
+      "Planner with frozen PlanSpec",
+      "AgentCore run loop",
+      "dependency-aware StepScheduler",
+      "ObservationProcessor trust boundary",
+      "bounded Agent memory",
+      "generic AgentCore service recovery",
+      "AgentCore adversarial runtime tests",
+      "SecurityExecutionEngine as only side-effect path",
+      "runtime audit projection",
+      "TASK-SEF-010 final SEF verification",
+      "TASK-RTF-005 final Runtime Foundation audit"
+    ],
+    "mandatory_rootfs_artifacts": [
+      "agentd",
+      "policy pack",
+      "semantic tool manifest",
+      "run-state directory",
+      "audit directory",
+      "rollback directory",
+      "ModelBroker config",
+      "runtime memory directory",
+      "release/provenance metadata"
+    ],
+    "inherited_gates": [
+      "cargo test -p agentd",
+      "cargo test -p agentd safety::",
+      "cargo test -p agentd agent_core::",
+      "cargo test -p agentd agent_core::adversarial",
+      "cargo test -p agentd agent_core::service_recovery",
+      "approved and denied service recovery smoke when packaging changes touch runtime",
+      "runtime audit projection evidence",
+      "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "QEMU dependency gate and full QEMU boot smoke when boot/rootfs/image factory changes affect handoff",
+      "artifact hygiene check"
+    ],
+    "firecracker_position": "Alpha executor/isolation profile behind SecurityExecutionEngine, not a substitute for SEF or a parallel side-effect path",
+    "model_broker_rule": "stub/local-only mode remains mandatory; external LLM providers are optional-only and cannot be required by acceptance tests"
+  },
+  "acceptance_evidence": {
+    "distribution_alpha_cannot_start_from_mvp_skeleton_only": "docs/distribution-alpha-entry-criteria.md rejects a bootable Linux image with agentd binary as insufficient and blocks promotion until TASK-RTF-005.",
+    "generic_service_recovery_required": "entry criteria list generic AgentCore service recovery and TASK-ACR-009 as prerequisites for future Alpha packaging and VM image tasks.",
+    "runtime_safety_gates_required": "entry criteria inherit full regression, safety::, agent_core::, agent_core::adversarial, service recovery, audit projection, release/provenance, QEMU, and artifact hygiene gates.",
+    "persistent_runtime_directories_and_artifacts_specified": "entry criteria define rootfs contracts for agentd, policy pack, semantic tool manifest, run-state, audit, rollback, ModelBroker config, memory, and release/provenance metadata."
+  },
+  "read_first_sources": [
+    "TASK.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-004.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    "docs/release-artifacts.md",
+    "docs/boot-chain.md",
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md"
+  ],
+  "verification": {
+    "document_review": "Distribution Alpha entry criteria document includes prerequisites, runtime artifacts, inherited gates, VM image factory prerequisite, Firecracker boundary, ModelBroker rule, and future task dependency rule.",
+    "next_pointer": "Runtime Foundation execution should proceed to TASK-RTF-005 after this task.",
+    "code_changes": "No Rust implementation changes were made for this planning task."
+  },
+  "next_task": "TASK-RTF-005"
+}

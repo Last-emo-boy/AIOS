@@ -69,7 +69,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：`TASK-RTF-004`，定义 Distribution Alpha entry criteria from runtime foundation。
+- `TASK-RTF-004` 已完成：Distribution Alpha entry criteria 已定义，明确 Alpha 不能只从 MVP skeleton 启动，必须继承 generic AgentCore、Security Execution Foundation、rootfs runtime artifacts、persistent runtime directories、release/provenance 和 QEMU gates；Distribution Alpha 仍阻塞到 `TASK-RTF-005` final audit。
+- 下一执行任务：`TASK-RTF-005`，完成 Runtime Foundation final audit。
 
 ## Runtime Foundation 任务计划
 
@@ -169,7 +170,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Runtime Foundation Wave 5：发行版入口桥接
 
-- `TASK-RTF-004`：定义 Distribution Alpha entry criteria from runtime foundation（pending）
+- `TASK-RTF-004`：定义 Distribution Alpha entry criteria from runtime foundation（completed）
 - `TASK-RTF-005`：完成 Runtime Foundation final audit（pending）
 
 退出标准：
@@ -282,4 +283,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-Runtime Foundation Wave 4 已完成 `TASK-SEF-010`：Security Execution Foundation final verification 已通过，generic Agent runtime 的安全执行底座、审计投影、service recovery、release/provenance 和 QEMU dependency gate 均已验证。下一步执行 `TASK-RTF-004`，定义 Distribution Alpha entry criteria from runtime foundation。
+Runtime Foundation Wave 5 已完成 `TASK-RTF-004`：Distribution Alpha entry criteria 已定义，明确未来发行版 Alpha 必须继承 AgentCore、Security Execution Foundation、rootfs runtime artifacts、persistent runtime directories、runtime safety gates、release/provenance 和 QEMU gates，且仍阻塞到 Runtime Foundation final audit。下一步执行 `TASK-RTF-005`，完成 Runtime Foundation final audit。
