@@ -1,0 +1,39 @@
+{
+  "task": "TASK-AIOS-012",
+  "status": "completed",
+  "verified_at": "2026-05-22T23:12:41+08:00",
+  "checks": [
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "result": "Completed cargo tests, safety gate, release build, initramfs build, boot smoke dependency check, dependency inventory, and provenance generation."
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/release/provenance.json",
+      "result": "Provenance contains source git revision/status, toolchain versions, build commands, agentd binary hash, initramfs hash/manifest, dependency inventory hash, and promotion policy."
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/release/dependency-inventory.json",
+      "result": "Inventory lists workspace package agentd 0.1.0 and Cargo.lock sha256."
+    },
+    {
+      "command": "Select-String provenance/inventory for secret-like values",
+      "result": "Only policy label secret_policy was found; no secret value fields such as password=, token=, api_key, or apikey were present."
+    }
+  ],
+  "generated_artifacts": [
+    ".workflow/artifacts/release/dependency-inventory.json",
+    ".workflow/artifacts/release/provenance.json",
+    "target/release/agentd.exe",
+    "image/out/agentos-initramfs.cpio.gz",
+    "image/out/agentos-initramfs.manifest.json"
+  ],
+  "release_gates": [
+    "cargo test -p agentd",
+    "cargo test -p agentd safety::",
+    "cargo build -p agentd --release",
+    "image/build-initramfs.ps1",
+    "scripts/boot-smoke-test.ps1 -DependencyCheckOnly"
+  ],
+  "artifact_policy": "Generated binaries, initramfs, cached kernels, release metadata, and boot logs remain ignored; source, scripts, docs, task evidence, and CI definitions are committed.",
+  "promotion_note": "This verification ran before the TASK-AIOS-012 commit, so provenance records the pending release script/docs as workspace status. Formal promotion should rerun scripts/build-release.ps1 after tagging or from a clean revision."
+}

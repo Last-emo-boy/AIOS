@@ -37,7 +37,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-009` 已完成：`fs.write.diff` 先生成 shadow diff 和 rollback handle，commit 写入完整 audit 链，rollback 可恢复旧内容。
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
-- 下一执行任务：`TASK-AIOS-012`。
+- `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
+- 下一执行任务：归档 Wave 4，并执行最终全量完成审计。
 
 ## 必须先冻结的决策
 
@@ -113,7 +114,7 @@ Wave 1 入口约束：
 
 - `TASK-AIOS-010`：实现第一个 service recovery workflow（completed）
 - `TASK-AIOS-011`：加入 adversarial / safety regression tests（completed）
-- `TASK-AIOS-012`：建立 MVP build、provenance 和 release artifact flow
+- `TASK-AIOS-012`：建立 MVP build、provenance 和 release artifact flow（completed）
 
 退出标准：
 

@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-012",
   "title": "Establish MVP build, provenance, and release artifact flow",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P1",
   "type": "release",
@@ -23,7 +23,8 @@
     "Build pipeline definition",
     "Provenance metadata file",
     "SBOM or dependency inventory",
-    "docs/release-artifacts.md"
+    "docs/release-artifacts.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-012-release-artifacts.json"
   ],
   "acceptance_criteria": [
     "A clean machine can reproduce the core MVP build steps from documented commands.",
@@ -36,6 +37,13 @@
     "Inspect provenance metadata.",
     "Confirm clean build does not depend on untracked local state."
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-012-release-artifacts.json",
+    "release_pipeline": "scripts/build-release.ps1 completed successfully.",
+    "dependency_inventory": ".workflow/artifacts/release/dependency-inventory.json generated and inspected.",
+    "provenance": ".workflow/artifacts/release/provenance.json generated and inspected.",
+    "promotion_note": "Formal promotion should rerun release build after tagging or from a clean revision."
+  },
   "risk_notes": [
     "Supply-chain discipline should start in MVP because agentd controls privileged system paths."
   ]

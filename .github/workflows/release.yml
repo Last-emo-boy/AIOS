@@ -1,0 +1,35 @@
+name: release-metadata
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  release-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Run tests
+        run: cargo test -p agentd
+      - name: Run safety gate
+        run: cargo test -p agentd safety::
+      - name: Build release binary
+        run: cargo build -p agentd --release
+      - name: Generate dependency inventory
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path .workflow/artifacts/release | Out-Null
+          $metadata = cargo metadata --format-version 1 --locked --no-deps | ConvertFrom-Json
+          $inventory = [ordered]@{
+            schema = "aios.dependency-inventory.v1"
+            generated_at = (Get-Date).ToString("o")
+            packages = $metadata.packages | ForEach-Object {
+              [ordered]@{
+                name = $_.name
+                version = $_.version
+                license = $_.license
+              }
+            }
+          }
+          $inventory | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath .workflow/artifacts/release/dependency-inventory.json -Encoding UTF8
