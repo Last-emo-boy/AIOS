@@ -1,0 +1,89 @@
+{
+  "id": "TASK-ACR-007",
+  "status": "passed",
+  "completed_at": "2026-05-23T03:16:53+08:00",
+  "summary": "ObservationProcessor is implemented as agent_core::observation. It converts semantic tool output and external content into structured Observation records with explicit trust labels, redaction status, policy flags, sanitized replanning hints, and ObservationRef hashes. Untrusted observation text is never converted directly into a tool call; suggested commands are routed through source-to-sink policy and audited as denied without EffectPrepared.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-007-observations.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::observation",
+      "status": "passed",
+      "result": "4 passed; 0 failed; 128 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd agent_core::run_loop",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 125 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "132 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "External content is marked untrusted by default.",
+      "status": "passed",
+      "evidence": "agent_core::observation::tests::external_content_is_untrusted_sanitized_and_replanning_only verifies ObservationSource::ExternalContent and TrustBoundary::ExternalUntrusted."
+    },
+    {
+      "criterion": "Observation text that asks the agent to run commands cannot create a direct tool call.",
+      "status": "passed",
+      "evidence": "agent_core::observation::tests::observation_text_cannot_create_direct_tool_call_or_effect verifies suggested-command text produces a denied source-to-sink PolicyEvaluated audit entry and no EffectPrepared event."
+    },
+    {
+      "criterion": "Secret-like output is redacted before memory or model context.",
+      "status": "passed",
+      "evidence": "agent_core::observation::tests::secret_like_tool_output_is_redacted_before_projection verifies token-like output is replaced with [REDACTED], secret handles remain visible, and raw secret values are absent from Observation JSON."
+    },
+    {
+      "criterion": "Policy-relevant flags are visible in audit and run-state projection.",
+      "status": "passed",
+      "evidence": "Observation::to_json includes policy_flags, and EffectObserved audit summaries include trust labels, redaction status, and flags; tests verify prompt-injection, suggested-command, external-url, credential-request, and secret-like-content flags."
+    },
+    {
+      "criterion": "Replanning after observation still goes through Planner validation and PolicyEvaluator.",
+      "status": "passed",
+      "evidence": "ProcessedObservation exposes ReplanningHint with direct_tool_call_allowed=false; AgentCore run_loop still delegates execution to PlanStepPolicyAdapter before EffectEnvelope preparation."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::agent_core::observation",
+    "core_type": "ObservationProcessor<B>",
+    "input": "ObservationInput",
+    "output": "ProcessedObservation",
+    "trust_labels": [
+      "local-system",
+      "sandboxed-tool",
+      "external-untrusted",
+      "model-summary",
+      "operator-approved"
+    ],
+    "policy_flags": [
+      "secret-like-content",
+      "external-url",
+      "credential-request",
+      "prompt-injection",
+      "suggested-command",
+      "privilege-escalation-request",
+      "sanitized-summary"
+    ],
+    "safety_ordering": [
+      "Raw observation text is redacted before Observation construction",
+      "External and model-origin content is sanitized through ModelBroker before replanning hints",
+      "Suggested commands are audited through source-to-sink policy and denied as direct actions",
+      "Run loop stores ObservationRef only after ObservationProcessor succeeds",
+      "Planner validation and PolicyEvaluator remain the only path from replanning to side effects"
+    ],
+    "integration_points": [
+      "AgentCore execute_allowed_step uses ObservationProcessor for semantic tool observations",
+      "ObservationRef carries trust label and hash for RunStore snapshots",
+      "AuditJournal records observation trust labels, redaction status, and policy flags"
+    ]
+  },
+  "next_task": "TASK-ACR-008"
+}
