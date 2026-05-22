@@ -1,0 +1,44 @@
+{
+  "id": "FINAL-AUDIT-20260522",
+  "workflow_id": "WFS-20260522-agentos-linux-mvp",
+  "status": "passed",
+  "completed_at": "2026-05-22T23:21:02+08:00",
+  "scope": "Final completion audit for AgentOS Linux MVP task plan",
+  "checks": [
+    {
+      "name": "task_status",
+      "status": "passed",
+      "evidence": "All TASK-AIOS-000 through TASK-AIOS-012 task JSON files report status=completed, including TASK-AIOS-000A through TASK-AIOS-000D subtasks."
+    },
+    {
+      "name": "workflow_json_parse",
+      "status": "passed",
+      "evidence": "All .workflow/**/*.json files parsed successfully with ConvertFrom-Json."
+    },
+    {
+      "name": "agentd_test_suite",
+      "status": "passed",
+      "command": "cargo test -p agentd",
+      "evidence": "49 passed; 0 failed."
+    },
+    {
+      "name": "release_pipeline",
+      "status": "passed",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "evidence": "agentd tests passed, safety tests passed, release build succeeded, initramfs built, boot smoke dependency check passed, dependency inventory and provenance were generated.",
+      "initramfs_sha256": "741e8a6bd8d4a00981743d711c59f720bffe0cc0212bcc73f7f2e079f542228d"
+    },
+    {
+      "name": "qemu_boot_smoke",
+      "status": "passed",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "evidence": "Boot smoke test observed AGENTD_HANDOFF_OK."
+    },
+    {
+      "name": "git_worktree_boundary",
+      "status": "passed",
+      "evidence": "git status --ignored --short showed only ignored generated directories before final metadata update: .workflow/artifacts/, image/cache/, image/initramfs/, image/out/, target/."
+    }
+  ],
+  "conclusion": "All planned MVP waves and tasks are complete, current gates pass, and generated artifacts remain outside tracked source."
+}
