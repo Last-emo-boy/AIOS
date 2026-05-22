@@ -1,0 +1,62 @@
+{
+  "id": "TASK-RTF-002",
+  "status": "passed",
+  "completed_at": "2026-05-23T00:11:50+08:00",
+  "summary": "Runtime module ownership, integration points, audit write rules, CLI/TUI entry points, stub/implemented boundaries, and duplicate-stack prohibitions are defined.",
+  "deliverables": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-module-ownership.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-002-module-map.json"
+  ],
+  "acceptance": [
+    {
+      "criterion": "Each planned runtime module has one owner and one integration point.",
+      "status": "passed",
+      "evidence": "runtime-module-ownership.md#ownership-matrix"
+    },
+    {
+      "criterion": "Existing MVP modules are reused instead of forked.",
+      "status": "passed",
+      "evidence": "ownership matrix maps ToolRouter, PolicyEvaluator, AuditJournal, SandboxExecutor, Rollback manager, RecoveryReconciler, TUI, and Safety suite to existing crates/agentd/src modules."
+    },
+    {
+      "criterion": "The plan clearly separates in-process library calls from future IPC boundaries.",
+      "status": "passed",
+      "evidence": "runtime-module-ownership.md states first implementation remains in-process inside agentd and future IPC is deferred."
+    },
+    {
+      "criterion": "Testing responsibility is assigned per module.",
+      "status": "passed",
+      "evidence": "ownership matrix includes a Test owner column for every runtime responsibility."
+    }
+  ],
+  "existing_modules_checked": [
+    "api.rs",
+    "audit.rs",
+    "lifecycle.rs",
+    "modules.rs",
+    "policy.rs",
+    "recovery.rs",
+    "rollback.rs",
+    "sandbox.rs",
+    "safety.rs",
+    "service_recovery.rs",
+    "tools.rs",
+    "tui.rs"
+  ],
+  "new_module_slots": [
+    "agent_core.rs",
+    "model_broker.rs",
+    "planner.rs",
+    "memory.rs",
+    "security_execution.rs"
+  ],
+  "duplicate_stack_prohibited": [
+    "second policy engine",
+    "second audit journal",
+    "second semantic tool router",
+    "second rollback manager",
+    "second recovery reconciler",
+    "shell execution path",
+    "service-specific orchestration loop bypassing AgentCore"
+  ]
+}
