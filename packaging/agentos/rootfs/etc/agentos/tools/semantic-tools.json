@@ -1,0 +1,61 @@
+{
+  "schema": "agentos.semantic-tools.v1",
+  "manifest_version": "alpha-1",
+  "normal_mode_shell_exec": "absent-and-denied",
+  "tools": [
+    {
+      "name": "svc.logs",
+      "risk": "read-only",
+      "required_parameters": ["service"],
+      "optional_parameters": ["last"]
+    },
+    {
+      "name": "svc.status",
+      "risk": "read-only",
+      "required_parameters": ["service"],
+      "optional_parameters": []
+    },
+    {
+      "name": "http.check",
+      "risk": "read-only",
+      "required_parameters": ["url"],
+      "optional_parameters": []
+    },
+    {
+      "name": "config.test",
+      "risk": "read-only",
+      "required_parameters": ["service"],
+      "optional_parameters": []
+    },
+    {
+      "name": "fs.read",
+      "risk": "read-only",
+      "required_parameters": ["path"],
+      "optional_parameters": []
+    },
+    {
+      "name": "fs.write.diff",
+      "risk": "write-with-diff",
+      "required_parameters": ["path", "content_hash"],
+      "optional_parameters": ["base_hash"]
+    },
+    {
+      "name": "svc.restart",
+      "risk": "execute-with-confirmation",
+      "required_parameters": ["service"],
+      "optional_parameters": []
+    },
+    {
+      "name": "audit.show",
+      "risk": "read-only",
+      "required_parameters": ["run"],
+      "optional_parameters": []
+    },
+    {
+      "name": "rollback.trigger",
+      "risk": "execute-with-confirmation",
+      "required_parameters": ["rollback_id"],
+      "optional_parameters": []
+    }
+  ]
+}

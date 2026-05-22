@@ -1,0 +1,36 @@
+{
+  "task": "TASK-DALPHA-004",
+  "status": "completed",
+  "completed_at": "2026-05-23T08:03:00+08:00",
+  "summary": "Defined packageable Alpha defaults for policy pack, semantic tool manifest, and ModelBroker config. The defaults preserve exact approval binding, deny normal-mode shell execution, expose only typed semantic tools, and keep ModelBroker in stub/local-only mode without network or external credentials.",
+  "deliverables": {
+    "policy_pack": "packaging/agentos/rootfs/etc/agentos/policy/policy-pack.json",
+    "semantic_tools": "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+    "model_broker_config": "packaging/agentos/rootfs/etc/agentos/model-broker.toml",
+    "documentation": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json"
+  },
+  "source_inputs": [
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md",
+    "docs/model-broker.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    "crates/agentd/src/tools.rs",
+    "crates/agentd/src/policy.rs",
+    "crates/agentd/src/agent_core.rs"
+  ],
+  "acceptance_evidence": {
+    "policy_defaults": "policy-pack.json preserves read-only allow, high-risk pause, never deny, exact approval token binding, broad approval denial, and denied-no-effect semantics.",
+    "semantic_tool_manifest": "semantic-tools.json lists svc.logs, svc.status, http.check, config.test, fs.read, fs.write.diff, svc.restart, audit.show, and rollback.trigger; shell.exec is absent.",
+    "model_broker_defaults": "model-broker.toml defaults to stub/local-only mode, requires no network or credentials for stub-local, and marks remote provider disabled and optional.",
+    "secret_safety": "Config defaults contain policy labels and metadata only, not raw secrets, tokens, or provider credentials.",
+    "rootfs_mapping": "Config paths mirror /etc/agentos policy, tools, and model broker targets for later rootfs staging."
+  },
+  "verification": {
+    "json_parse": "policy-pack.json and semantic-tools.json parse with ConvertFrom-Json.",
+    "toml_parse": "model-broker.toml parses with Python tomllib.",
+    "shell_denial": "shell.exec is absent from semantic-tools.json and appears only as an explicit deny entry in policy-pack.json.",
+    "runtime_tests": "No Rust runtime code changed for this packaging task; existing safety gates remain the required downstream gate."
+  },
+  "next_task": "TASK-DALPHA-003"
+}

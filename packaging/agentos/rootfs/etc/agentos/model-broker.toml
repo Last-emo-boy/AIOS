@@ -1,0 +1,32 @@
+[model_broker]
+schema = "agentos.model-broker.v1"
+mode = "stub"
+network_required = false
+default_provider = "stub-local"
+raw_prompt_logging = false
+raw_observation_logging = false
+secret_policy = "handle-only"
+
+[bounds]
+timeout_ms = 2000
+max_output_bytes = 8192
+cancel_fails_closed = true
+timeout_fails_closed = true
+malformed_output_fails_closed = true
+oversized_output_fails_closed = true
+
+[providers.stub-local]
+kind = "stub"
+enabled = true
+model_id = "local-only"
+requires_network = false
+requires_credentials = false
+metadata_only_logs = true
+
+[providers.remote]
+kind = "remote"
+enabled = false
+optional = true
+requires_network = true
+requires_credentials = true
+required_for_acceptance = false

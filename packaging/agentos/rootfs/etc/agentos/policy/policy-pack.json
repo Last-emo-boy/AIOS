@@ -1,0 +1,65 @@
+{
+  "schema": "agentos.policy-pack.v1",
+  "policy_version": "policy-v1",
+  "mode": "normal",
+  "authority": "SecurityExecutionEngine",
+  "defaults": {
+    "external_content_trust": "untrusted",
+    "secret_policy": "handle-only",
+    "model_output_direct_execution": "forbidden",
+    "broad_approval": "deny",
+    "normal_shell": "deny"
+  },
+  "approval_token": {
+    "binding": [
+      "actor",
+      "tool",
+      "resource",
+      "parameter_hash",
+      "expires_at",
+      "policy_version"
+    ],
+    "parameter_hash": "stable-normalized-params",
+    "broad_session_approval": "forbidden"
+  },
+  "risk_decisions": [
+    {
+      "risk": "read-only",
+      "without_approval": "allow",
+      "with_exact_approval": "allow"
+    },
+    {
+      "risk": "write-with-diff",
+      "without_approval": "pause-for-approval",
+      "with_exact_approval": "allow"
+    },
+    {
+      "risk": "execute-with-confirmation",
+      "without_approval": "pause-for-approval",
+      "with_exact_approval": "allow"
+    },
+    {
+      "risk": "privileged-with-human-approval",
+      "without_approval": "pause-for-approval",
+      "with_exact_approval": "allow"
+    },
+    {
+      "risk": "never",
+      "without_approval": "deny",
+      "with_exact_approval": "deny"
+    }
+  ],
+  "deny_tools": [
+    {
+      "tool": "shell.exec",
+      "mode": "normal",
+      "reason": "Normal mode only allows typed semantic tools."
+    }
+  ],
+  "audit": {
+    "denied_decisions_write_policy_evaluated": true,
+    "denied_decisions_prepare_effect": false,
+    "record_parameter_hash": true,
+    "record_policy_version": true
+  }
+}

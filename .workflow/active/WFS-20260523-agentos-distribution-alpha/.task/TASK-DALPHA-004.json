@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-004",
   "title": "Package policy pack, semantic tool manifest, and ModelBroker defaults",
-  "status": "planned",
+  "status": "completed",
   "wave": 0,
   "priority": "P0",
   "type": "distribution",
@@ -17,7 +17,10 @@
     "Define config validation and no-secret checks."
   ],
   "deliverables": [
-    "Alpha package config files or documented fixtures",
+    "packaging/agentos/rootfs/etc/agentos/policy/policy-pack.json",
+    "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+    "packaging/agentos/rootfs/etc/agentos/model-broker.toml",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md",
     ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json"
   ],
   "acceptance_criteria": [
@@ -68,5 +71,16 @@
       "Normal-mode shell remains denied.",
       "Stub/local-only mode is validated."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T08:03:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json",
+    "documentation": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md",
+    "config_paths": [
+      "packaging/agentos/rootfs/etc/agentos/policy/policy-pack.json",
+      "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+      "packaging/agentos/rootfs/etc/agentos/model-broker.toml"
+    ],
+    "next_task": "TASK-DALPHA-003"
   }
 }
