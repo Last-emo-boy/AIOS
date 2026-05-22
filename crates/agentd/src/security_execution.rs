@@ -939,3 +939,637 @@ pub mod effect_envelope {
         }
     }
 }
+
+pub mod policy_adapter {
+    use std::fmt;
+
+    use crate::agent_core::model::{contains_secret_value, PlanStep};
+    use crate::api::{escape_json, RiskClass};
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+    use crate::policy::{
+        stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyDecision,
+        PolicyDecisionKind, PolicyEvaluator, PolicyRequest,
+    };
+    use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum StepPolicyOutcomeKind {
+        Allowed,
+        Denied,
+        AwaitingApproval,
+    }
+
+    impl StepPolicyOutcomeKind {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Allowed => "allowed",
+                Self::Denied => "denied",
+                Self::AwaitingApproval => "awaiting-approval",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct StepPolicyDiagnostic {
+        pub reason: String,
+        pub policy_version: String,
+        pub parameter_hash: String,
+        pub authoritative_risk: RiskClass,
+        pub planner_risk_hints: Vec<RiskClass>,
+    }
+
+    impl StepPolicyDiagnostic {
+        pub fn to_json(&self) -> String {
+            let hints = self
+                .planner_risk_hints
+                .iter()
+                .map(|risk| format!("\"{}\"", risk.as_str()))
+                .collect::<Vec<_>>()
+                .join(",");
+            format!(
+                "{{\"reason\":\"{}\",\"policy_version\":\"{}\",\"parameter_hash\":\"{}\",\"authoritative_risk\":\"{}\",\"planner_risk_hints\":[{}]}}",
+                escape_json(&self.reason),
+                escape_json(&self.policy_version),
+                escape_json(&self.parameter_hash),
+                self.authoritative_risk.as_str(),
+                hints
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct StepPolicyOutcome {
+        pub kind: StepPolicyOutcomeKind,
+        pub run_id: String,
+        pub step_id: String,
+        pub routed: Option<RoutedToolCall>,
+        pub request: Option<PolicyRequest>,
+        pub decision: PolicyDecision,
+        pub lease: Option<CapabilityLease>,
+        pub diagnostic: StepPolicyDiagnostic,
+    }
+
+    impl StepPolicyOutcome {
+        pub fn to_json(&self) -> String {
+            let routed = self
+                .routed
+                .as_ref()
+                .map(RoutedToolCall::to_json)
+                .unwrap_or_else(|| "null".to_string());
+            let request = self
+                .request
+                .as_ref()
+                .map(policy_request_json)
+                .unwrap_or_else(|| "null".to_string());
+            let lease = self
+                .lease
+                .as_ref()
+                .map(CapabilityLease::to_json)
+                .unwrap_or_else(|| "null".to_string());
+            format!(
+                "{{\"kind\":\"{}\",\"run_id\":\"{}\",\"step_id\":\"{}\",\"routed\":{},\"request\":{},\"decision\":{},\"lease\":{},\"diagnostic\":{}}}",
+                self.kind.as_str(),
+                escape_json(&self.run_id),
+                escape_json(&self.step_id),
+                routed,
+                request,
+                self.decision.to_json(),
+                lease,
+                self.diagnostic.to_json()
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum StepPolicyError {
+        Io(String),
+        SecretValue { field: String },
+        Lease(String),
+    }
+
+    impl StepPolicyError {
+        pub fn reason(&self) -> String {
+            match self {
+                StepPolicyError::Io(error) => error.clone(),
+                StepPolicyError::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
+                StepPolicyError::Lease(error) => error.clone(),
+            }
+        }
+    }
+
+    impl fmt::Display for StepPolicyError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl From<std::io::Error> for StepPolicyError {
+        fn from(value: std::io::Error) -> Self {
+            StepPolicyError::Io(value.to_string())
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct PlanStepPolicyAdapter {
+        router: ToolRouter,
+        evaluator: PolicyEvaluator,
+    }
+
+    impl PlanStepPolicyAdapter {
+        pub fn new(router: ToolRouter, evaluator: PolicyEvaluator) -> Self {
+            Self { router, evaluator }
+        }
+
+        pub fn evaluate_step(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            actor: &str,
+            step: &PlanStep,
+            approval: Option<&ApprovalToken>,
+        ) -> Result<StepPolicyOutcome, StepPolicyError> {
+            self.evaluate_step_at(journal, run_id, actor, step, approval, 0)
+        }
+
+        pub fn evaluate_step_at(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            actor: &str,
+            step: &PlanStep,
+            approval: Option<&ApprovalToken>,
+            now: u64,
+        ) -> Result<StepPolicyOutcome, StepPolicyError> {
+            ensure_no_secret("run_id", run_id)?;
+            ensure_no_secret("actor", actor)?;
+            ensure_no_secret("step_id", step.step_id())?;
+            let planner_risk_hints = step
+                .risk_hints()
+                .iter()
+                .map(|hint| hint.risk())
+                .collect::<Vec<_>>();
+
+            let routed = match self.router.route(step.call()) {
+                Ok(routed) => routed,
+                Err(rejection) => {
+                    return self.route_denial(
+                        journal,
+                        run_id,
+                        actor,
+                        step,
+                        rejection,
+                        planner_risk_hints,
+                    );
+                }
+            };
+
+            let mut request = PolicyRequest::from_routed(actor, &routed);
+            request.now = now;
+            let decision = self.evaluator.evaluate(&request, approval);
+            self.evaluator
+                .record_decision(journal, run_id, step.step_id(), &request, &decision)?;
+
+            let diagnostic = StepPolicyDiagnostic {
+                reason: decision.reason.clone(),
+                policy_version: request.policy_version.clone(),
+                parameter_hash: request.parameter_hash.clone(),
+                authoritative_risk: request.risk,
+                planner_risk_hints,
+            };
+
+            match decision.kind {
+                PolicyDecisionKind::Allow => {
+                    let lease = self
+                        .evaluator
+                        .acquire_lease(&request, &decision)
+                        .map_err(StepPolicyError::Lease)?;
+                    ensure_no_secret("lease", &lease.to_json())?;
+                    Ok(StepPolicyOutcome {
+                        kind: StepPolicyOutcomeKind::Allowed,
+                        run_id: run_id.to_string(),
+                        step_id: step.step_id().to_string(),
+                        routed: Some(routed),
+                        request: Some(request),
+                        decision,
+                        lease: Some(lease),
+                        diagnostic,
+                    })
+                }
+                PolicyDecisionKind::Deny => Ok(StepPolicyOutcome {
+                    kind: StepPolicyOutcomeKind::Denied,
+                    run_id: run_id.to_string(),
+                    step_id: step.step_id().to_string(),
+                    routed: Some(routed),
+                    request: Some(request),
+                    decision,
+                    lease: None,
+                    diagnostic,
+                }),
+                PolicyDecisionKind::PauseForApproval => Ok(StepPolicyOutcome {
+                    kind: StepPolicyOutcomeKind::AwaitingApproval,
+                    run_id: run_id.to_string(),
+                    step_id: step.step_id().to_string(),
+                    routed: Some(routed),
+                    request: Some(request),
+                    decision,
+                    lease: None,
+                    diagnostic,
+                }),
+            }
+        }
+
+        fn route_denial(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            actor: &str,
+            step: &PlanStep,
+            rejection: ToolRejection,
+            planner_risk_hints: Vec<RiskClass>,
+        ) -> Result<StepPolicyOutcome, StepPolicyError> {
+            ensure_no_secret("route_rejection", &rejection.reason)?;
+            let parameter_hash = stable_call_hash(step);
+            let decision = PolicyDecision {
+                kind: PolicyDecisionKind::Deny,
+                risk: RiskClass::Never,
+                reason: format!("tool routing denied before policy lease: {}", rejection.reason),
+            };
+            let diagnostic = StepPolicyDiagnostic {
+                reason: decision.reason.clone(),
+                policy_version: "policy-v1".to_string(),
+                parameter_hash: parameter_hash.clone(),
+                authoritative_risk: RiskClass::Never,
+                planner_risk_hints,
+            };
+            let mut event = AuditEvent::new(
+                AuditEventType::PolicyEvaluated,
+                run_id,
+                step.step_id(),
+                actor,
+                format!(
+                    "decision={} tool={} risk={} reason={}",
+                    decision.kind.as_str(),
+                    step.call().name,
+                    decision.risk.as_str(),
+                    decision.reason
+                ),
+            );
+            event.policy_version = diagnostic.policy_version.clone();
+            event.tool_version = "tool-router-v1".to_string();
+            event.parameter_hash = parameter_hash;
+            journal.append(&event)?;
+
+            Ok(StepPolicyOutcome {
+                kind: StepPolicyOutcomeKind::Denied,
+                run_id: run_id.to_string(),
+                step_id: step.step_id().to_string(),
+                routed: None,
+                request: None,
+                decision,
+                lease: None,
+                diagnostic,
+            })
+        }
+    }
+
+    fn policy_request_json(request: &PolicyRequest) -> String {
+        format!(
+            "{{\"actor\":\"{}\",\"tool\":\"{}\",\"resource\":\"{}\",\"risk\":\"{}\",\"parameter_hash\":\"{}\",\"policy_version\":\"{}\",\"now\":{}}}",
+            escape_json(&request.actor),
+            escape_json(&request.tool),
+            escape_json(&request.resource),
+            request.risk.as_str(),
+            escape_json(&request.parameter_hash),
+            escape_json(&request.policy_version),
+            request.now
+        )
+    }
+
+    fn stable_call_hash(step: &PlanStep) -> String {
+        let mut params = step.call().params.clone();
+        params.sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
+        stable_parameter_hash(&params)
+    }
+
+    fn ensure_no_secret(
+        field: impl Into<String>,
+        value: &str,
+    ) -> Result<(), StepPolicyError> {
+        if contains_secret_value(value) {
+            return Err(StepPolicyError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use crate::agent_core::model::{
+            ApprovalRequirement, RiskHint, RollbackRequirement, VerificationRule,
+        };
+        use crate::api::SemanticToolCall;
+        use crate::audit::extract_json_string_for_tests;
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-policy-adapter-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        fn adapter() -> PlanStepPolicyAdapter {
+            PlanStepPolicyAdapter::new(ToolRouter, PolicyEvaluator)
+        }
+
+        fn step(
+            step_id: &str,
+            tool: &str,
+            params: Vec<(&str, &str)>,
+            hint: RiskClass,
+            approval_required: bool,
+        ) -> PlanStep {
+            let approval = if approval_required {
+                ApprovalRequirement::operator_required("operator approval required")
+                    .expect("approval")
+            } else {
+                ApprovalRequirement::not_required("planner says no approval").expect("approval")
+            };
+            let rollback = if tool == "fs.write.diff" {
+                RollbackRequirement::new(
+                    true,
+                    Some(format!("rollback-{step_id}")),
+                    "write is rollback protected",
+                )
+                .expect("rollback")
+            } else {
+                RollbackRequirement::not_required("no rollback required").expect("rollback")
+            };
+            PlanStep::new(
+                step_id,
+                SemanticToolCall::new(tool, params),
+                Vec::new(),
+                Vec::new(),
+                Vec::new(),
+                VerificationRule::new(
+                    format!("verify-{step_id}"),
+                    "verification rule",
+                    tool,
+                )
+                .expect("verification"),
+                approval,
+                1,
+                vec![RiskHint::new(hint, "planner risk hint").expect("risk hint")],
+                rollback,
+            )
+            .expect("plan step")
+        }
+
+        fn exact_approval_for(outcome: &StepPolicyOutcome) -> ApprovalToken {
+            let request = outcome.request.as_ref().expect("request");
+            ApprovalToken {
+                actor: request.actor.clone(),
+                tool: request.tool.clone(),
+                resource: request.resource.clone(),
+                parameter_hash: request.parameter_hash.clone(),
+                expires_at: request.now + 60,
+                policy_version: request.policy_version.clone(),
+            }
+        }
+
+        #[test]
+        fn planner_risk_hints_cannot_downgrade_policy_risk() {
+            let journal = test_journal("risk-hint");
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ReadOnly,
+                false,
+            );
+
+            let outcome = adapter()
+                .evaluate_step(&journal, "run-policy", "operator", &restart, None)
+                .expect("evaluate");
+
+            assert_eq!(outcome.kind, StepPolicyOutcomeKind::AwaitingApproval);
+            let request = outcome.request.expect("request");
+            assert_eq!(request.risk, RiskClass::ExecuteWithConfirmation);
+            assert_eq!(outcome.decision.risk, RiskClass::ExecuteWithConfirmation);
+            assert_eq!(
+                outcome.diagnostic.planner_risk_hints,
+                vec![RiskClass::ReadOnly]
+            );
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| line.contains("PolicyEvaluated")));
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn shell_exec_and_unknown_tools_are_denied_before_effect_preparation() {
+            let journal = test_journal("route-deny");
+            let shell = step(
+                "shell",
+                "shell.exec",
+                vec![("cmd", "id")],
+                RiskClass::ReadOnly,
+                false,
+            );
+            let unknown = step(
+                "unknown",
+                "unknown.tool",
+                vec![("service", "nginx")],
+                RiskClass::ReadOnly,
+                false,
+            );
+
+            let shell_outcome = adapter()
+                .evaluate_step(&journal, "run-route", "operator", &shell, None)
+                .expect("shell route denial");
+            let unknown_outcome = adapter()
+                .evaluate_step(&journal, "run-route", "operator", &unknown, None)
+                .expect("unknown route denial");
+
+            assert_eq!(shell_outcome.kind, StepPolicyOutcomeKind::Denied);
+            assert_eq!(unknown_outcome.kind, StepPolicyOutcomeKind::Denied);
+            assert!(shell_outcome.lease.is_none());
+            assert!(unknown_outcome.lease.is_none());
+            assert!(shell_outcome.routed.is_none());
+            assert!(unknown_outcome.routed.is_none());
+            let lines = journal.event_lines().expect("journal");
+            assert_eq!(
+                lines
+                    .iter()
+                    .filter(|line| line.contains("PolicyEvaluated"))
+                    .count(),
+                2
+            );
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn paused_steps_return_awaiting_approval_without_lease_or_effect() {
+            let journal = test_journal("pause");
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+            );
+
+            let outcome = adapter()
+                .evaluate_step(&journal, "run-pause", "operator", &restart, None)
+                .expect("evaluate");
+
+            assert_eq!(outcome.kind, StepPolicyOutcomeKind::AwaitingApproval);
+            assert_eq!(outcome.decision.kind, PolicyDecisionKind::PauseForApproval);
+            assert!(outcome.lease.is_none());
+            assert!(outcome.diagnostic.reason.contains("approval token"));
+            let lines = journal.event_lines().expect("journal");
+            assert_eq!(lines.len(), 1);
+            assert!(lines[0].contains("\"event_type\":\"PolicyEvaluated\""));
+            assert!(lines[0].contains("pause-for-approval"));
+            assert!(!lines[0].contains("EffectPrepared"));
+        }
+
+        #[test]
+        fn approval_parameter_mutation_is_paused_not_allowed() {
+            let initial_journal = test_journal("approval-initial");
+            let restart_nginx = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+            );
+            let initial = adapter()
+                .evaluate_step(
+                    &initial_journal,
+                    "run-approval",
+                    "operator",
+                    &restart_nginx,
+                    None,
+                )
+                .expect("initial pause");
+            let token = exact_approval_for(&initial);
+
+            let mutation_journal = test_journal("approval-mutation");
+            let restart_apache = step(
+                "restart-apache",
+                "svc.restart",
+                vec![("service", "apache")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+            );
+            let mutated = adapter()
+                .evaluate_step(
+                    &mutation_journal,
+                    "run-approval",
+                    "operator",
+                    &restart_apache,
+                    Some(&token),
+                )
+                .expect("mutated approval rejected");
+
+            assert_eq!(mutated.kind, StepPolicyOutcomeKind::AwaitingApproval);
+            assert_eq!(mutated.decision.kind, PolicyDecisionKind::PauseForApproval);
+            assert!(mutated.lease.is_none());
+            assert_ne!(
+                token.parameter_hash,
+                mutated.request.as_ref().expect("request").parameter_hash
+            );
+            assert!(!mutation_journal
+                .event_lines()
+                .expect("journal")
+                .iter()
+                .any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn exact_approval_allows_high_risk_step_and_issues_lease() {
+            let initial_journal = test_journal("approval-exact-initial");
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+            );
+            let initial = adapter()
+                .evaluate_step(
+                    &initial_journal,
+                    "run-exact",
+                    "operator",
+                    &restart,
+                    None,
+                )
+                .expect("initial pause");
+            let token = exact_approval_for(&initial);
+
+            let approval_journal = test_journal("approval-exact");
+            let allowed = adapter()
+                .evaluate_step(
+                    &approval_journal,
+                    "run-exact",
+                    "operator",
+                    &restart,
+                    Some(&token),
+                )
+                .expect("approved step");
+
+            assert_eq!(allowed.kind, StepPolicyOutcomeKind::Allowed);
+            let lease = allowed.lease.expect("lease");
+            let request = allowed.request.expect("request");
+            assert_eq!(lease.tool, "svc.restart");
+            assert_eq!(lease.resource, "nginx");
+            assert_eq!(lease.parameter_hash, request.parameter_hash);
+            assert_eq!(lease.policy_version, "policy-v1");
+            assert_eq!(lease.risk, RiskClass::ExecuteWithConfirmation);
+        }
+
+        #[test]
+        fn allowed_read_only_step_receives_sandbox_ready_lease_and_audit_metadata() {
+            let journal = test_journal("read-only");
+            let status = step(
+                "status-nginx",
+                "svc.status",
+                vec![("service", "nginx")],
+                RiskClass::ReadOnly,
+                false,
+            );
+
+            let outcome = adapter()
+                .evaluate_step(&journal, "run-read", "operator", &status, None)
+                .expect("evaluate");
+
+            assert_eq!(outcome.kind, StepPolicyOutcomeKind::Allowed);
+            let lease = outcome.lease.as_ref().expect("lease");
+            let request = outcome.request.as_ref().expect("request");
+            assert_eq!(lease.tool, "svc.status");
+            assert_eq!(lease.resource, "nginx");
+            assert_eq!(lease.parameter_hash, request.parameter_hash);
+            assert_eq!(lease.policy_version, request.policy_version);
+            assert_eq!(lease.risk, RiskClass::ReadOnly);
+
+            let lines = journal.event_lines().expect("journal");
+            assert_eq!(lines.len(), 1);
+            assert!(lines[0].contains("\"event_type\":\"PolicyEvaluated\""));
+            assert_eq!(
+                extract_json_string_for_tests(&lines[0], "policy_version").as_deref(),
+                Some("policy-v1")
+            );
+            assert_eq!(
+                extract_json_string_for_tests(&lines[0], "parameter_hash").as_deref(),
+                Some(request.parameter_hash.as_str())
+            );
+            assert!(!lines[0].contains("EffectPrepared"));
+            assert!(outcome.to_json().contains("\"kind\":\"allowed\""));
+        }
+    }
+}

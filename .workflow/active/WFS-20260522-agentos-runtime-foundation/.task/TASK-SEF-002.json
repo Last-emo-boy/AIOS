@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-002",
   "title": "Create Agent step policy and capability adapter",
-  "status": "pending",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "security",
@@ -40,5 +40,15 @@
   ],
   "risk_notes": [
     "The adapter must not become a second policy engine; it only translates AgentCore requests into the existing evaluator."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T01:44:10+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-002-policy-adapter.json",
+    "implementation": "crates/agentd/src/security_execution.rs",
+    "tests": {
+      "cargo test -p agentd security_execution::policy_adapter": "6 passed; 0 failed",
+      "cargo test -p agentd": "90 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-003"
+  }
 }

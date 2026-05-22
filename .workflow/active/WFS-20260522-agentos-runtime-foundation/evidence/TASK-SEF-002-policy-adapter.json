@@ -1,0 +1,61 @@
+{
+  "id": "TASK-SEF-002",
+  "status": "passed",
+  "completed_at": "2026-05-23T01:44:10+08:00",
+  "summary": "PlanStepPolicyAdapter is implemented as security_execution::policy_adapter. It translates generic AgentCore PlanStep values through ToolRouter, delegates authoritative risk and approval decisions to PolicyEvaluator, records PolicyEvaluated audit events, returns allowed/denied/awaiting-approval outcomes, issues CapabilityLease only for allowed decisions, and never prepares effects on denied or paused paths.",
+  "deliverables": [
+    "crates/agentd/src/security_execution.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-002-policy-adapter.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd security_execution::policy_adapter",
+      "status": "passed",
+      "result": "6 passed; 0 failed; 84 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "90 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Planner risk hints cannot downgrade policy risk.",
+      "status": "passed",
+      "evidence": "security_execution::policy_adapter::tests::planner_risk_hints_cannot_downgrade_policy_risk marks svc.restart as ReadOnly in planner hints, but ToolRouter/PolicyEvaluator classify it as execute-with-confirmation and return AwaitingApproval."
+    },
+    {
+      "criterion": "Unknown tools and shell.exec are denied before effect preparation.",
+      "status": "passed",
+      "evidence": "security_execution::policy_adapter::tests::shell_exec_and_unknown_tools_are_denied_before_effect_preparation denies both route failures, emits PolicyEvaluated, and confirms no EffectPrepared."
+    },
+    {
+      "criterion": "Paused steps return AwaitingApproval without EffectPrepared.",
+      "status": "passed",
+      "evidence": "security_execution::policy_adapter::tests::paused_steps_return_awaiting_approval_without_lease_or_effect returns AwaitingApproval, no lease, and only PolicyEvaluated audit."
+    },
+    {
+      "criterion": "Approval parameter mutation is denied.",
+      "status": "passed",
+      "evidence": "security_execution::policy_adapter::tests::approval_parameter_mutation_is_paused_not_allowed reuses an nginx approval token for apache and receives AwaitingApproval with no lease."
+    },
+    {
+      "criterion": "Allowed steps receive lease metadata suitable for sandbox compilation and audit.",
+      "status": "passed",
+      "evidence": "security_execution::policy_adapter::tests::allowed_read_only_step_receives_sandbox_ready_lease_and_audit_metadata confirms lease tool/resource/parameter_hash/policy_version/risk and matching PolicyEvaluated audit metadata."
+    }
+  ],
+  "policy_adapter_contract": {
+    "module": "agentd::security_execution::policy_adapter",
+    "router": "ToolRouter",
+    "policy_engine": "PolicyEvaluator",
+    "lease_source": "PolicyEvaluator::acquire_lease",
+    "outcomes": [
+      "Allowed",
+      "Denied",
+      "AwaitingApproval"
+    ],
+    "side_effect_path": "none; adapter records policy decisions only and never emits EffectPrepared"
+  }
+}
