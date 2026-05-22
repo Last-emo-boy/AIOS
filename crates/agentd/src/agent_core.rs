@@ -3824,6 +3824,779 @@ pub mod model_broker {
     }
 }
 
+pub mod scheduler {
+    use std::collections::{HashMap, HashSet};
+    use std::fmt;
+
+    use crate::api::escape_json;
+    use crate::audit::AuditJournal;
+    use crate::policy::stable_parameter_hash;
+    use crate::tools::ToolRouter;
+
+    use super::model::{PlanRun, PlanSpec, PlanStep, RunState};
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum SchedulerDecisionKind {
+        Ready,
+        Complete,
+        Blocked,
+        RetryExhausted,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SchedulerDecision {
+        pub kind: SchedulerDecisionKind,
+        pub step_id: Option<String>,
+        pub terminal_state: Option<RunState>,
+        pub ready_steps: Vec<String>,
+        pub sealed_steps: Vec<String>,
+        pub blocked_by: Vec<String>,
+        explanation: String,
+    }
+
+    impl SchedulerDecision {
+        pub fn ready_step_id(&self) -> Option<&str> {
+            self.step_id.as_deref()
+        }
+
+        pub fn explanation(&self) -> &str {
+            &self.explanation
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"kind\":\"{}\",\"step_id\":{},\"terminal_state\":{},\"ready_steps\":{},\"sealed_steps\":{},\"blocked_by\":{},\"explanation\":\"{}\"}}",
+                self.kind.as_str(),
+                optional_string_json(self.step_id.as_deref()),
+                self.terminal_state
+                    .map(|state| format!("\"{}\"", state.as_str()))
+                    .unwrap_or_else(|| "null".to_string()),
+                string_array_json(&self.ready_steps),
+                string_array_json(&self.sealed_steps),
+                string_array_json(&self.blocked_by),
+                escape_json(&self.explanation)
+            )
+        }
+
+        fn ready(step_id: String, ready_steps: Vec<String>, sealed_steps: Vec<String>) -> Self {
+            let explanation = format!(
+                "ready step={step_id} ready=[{}] sealed=[{}] policy=sequential-first extension=read-only-parallelism-pending",
+                ready_steps.join(","),
+                sealed_steps.join(",")
+            );
+            Self {
+                kind: SchedulerDecisionKind::Ready,
+                step_id: Some(step_id),
+                terminal_state: None,
+                ready_steps,
+                sealed_steps,
+                blocked_by: Vec::new(),
+                explanation,
+            }
+        }
+
+        fn complete(sealed_steps: Vec<String>) -> Self {
+            let explanation = format!(
+                "complete sealed=[{}] policy=sequential-first extension=read-only-parallelism-pending",
+                sealed_steps.join(",")
+            );
+            Self {
+                kind: SchedulerDecisionKind::Complete,
+                step_id: None,
+                terminal_state: Some(RunState::Completed),
+                ready_steps: Vec::new(),
+                sealed_steps,
+                blocked_by: Vec::new(),
+                explanation,
+            }
+        }
+
+        fn blocked(step_id: String, blocked_by: Vec<String>, sealed_steps: Vec<String>) -> Self {
+            let explanation = format!(
+                "blocked step={step_id} blocked_by=[{}] sealed=[{}] terminal=FailedClosed policy=sequential-first",
+                blocked_by.join(","),
+                sealed_steps.join(",")
+            );
+            Self {
+                kind: SchedulerDecisionKind::Blocked,
+                step_id: Some(step_id),
+                terminal_state: Some(RunState::FailedClosed),
+                ready_steps: Vec::new(),
+                sealed_steps,
+                blocked_by,
+                explanation,
+            }
+        }
+
+        fn retry_exhausted(step: &PlanStep, attempts: usize, sealed_steps: Vec<String>) -> Self {
+            let step_id = step.step_id().to_string();
+            let explanation = format!(
+                "retry-exhausted step={step_id} attempts={} retry_budget={} terminal=FailedClosed sealed=[{}]",
+                attempts,
+                step.retry_budget(),
+                sealed_steps.join(",")
+            );
+            Self {
+                kind: SchedulerDecisionKind::RetryExhausted,
+                step_id: Some(step_id),
+                terminal_state: Some(RunState::FailedClosed),
+                ready_steps: Vec::new(),
+                sealed_steps,
+                blocked_by: Vec::new(),
+                explanation,
+            }
+        }
+    }
+
+    impl SchedulerDecisionKind {
+        fn as_str(self) -> &'static str {
+            match self {
+                Self::Ready => "Ready",
+                Self::Complete => "Complete",
+                Self::Blocked => "Blocked",
+                Self::RetryExhausted => "RetryExhausted",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SchedulerValidation {
+        pub step_count: usize,
+        pub root_steps: Vec<String>,
+        pub topological_order: Vec<String>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum SchedulerError {
+        DuplicateStep { step_id: String },
+        MissingDependency { step_id: String, dependency: String },
+        Cycle { steps: Vec<String> },
+        ToolRouting { step_id: String, reason: String },
+        Audit(String),
+    }
+
+    impl fmt::Display for SchedulerError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            match self {
+                Self::DuplicateStep { step_id } => {
+                    write!(formatter, "duplicate plan step id: {step_id}")
+                }
+                Self::MissingDependency {
+                    step_id,
+                    dependency,
+                } => write!(
+                    formatter,
+                    "step {step_id} depends on missing step {dependency}"
+                ),
+                Self::Cycle { steps } => {
+                    write!(
+                        formatter,
+                        "plan dependency cycle involving [{}]",
+                        steps.join(",")
+                    )
+                }
+                Self::ToolRouting { step_id, reason } => {
+                    write!(formatter, "step {step_id} cannot be routed: {reason}")
+                }
+                Self::Audit(reason) => write!(formatter, "scheduler audit error: {reason}"),
+            }
+        }
+    }
+
+    impl std::error::Error for SchedulerError {}
+
+    impl From<std::io::Error> for SchedulerError {
+        fn from(error: std::io::Error) -> Self {
+            Self::Audit(error.to_string())
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, Default)]
+    pub struct StepScheduler;
+
+    impl StepScheduler {
+        pub fn new() -> Self {
+            Self
+        }
+
+        pub fn validate_dag(&self, plan: &PlanSpec) -> Result<SchedulerValidation, SchedulerError> {
+            let mut index_by_id = HashMap::new();
+            for (index, step) in plan.steps().iter().enumerate() {
+                if index_by_id
+                    .insert(step.step_id().to_string(), index)
+                    .is_some()
+                {
+                    return Err(SchedulerError::DuplicateStep {
+                        step_id: step.step_id().to_string(),
+                    });
+                }
+            }
+
+            let step_count = plan.steps().len();
+            let mut indegree = vec![0usize; step_count];
+            let mut outgoing = vec![Vec::<usize>::new(); step_count];
+            let mut root_steps = Vec::new();
+
+            for (index, step) in plan.steps().iter().enumerate() {
+                if step.dependencies().is_empty() {
+                    root_steps.push(step.step_id().to_string());
+                }
+                let mut seen_dependencies = HashSet::new();
+                for dependency in step.dependencies() {
+                    if !seen_dependencies.insert(dependency.as_str()) {
+                        continue;
+                    }
+                    let Some(dependency_index) = index_by_id.get(dependency).copied() else {
+                        return Err(SchedulerError::MissingDependency {
+                            step_id: step.step_id().to_string(),
+                            dependency: dependency.to_string(),
+                        });
+                    };
+                    indegree[index] += 1;
+                    outgoing[dependency_index].push(index);
+                }
+            }
+
+            let mut ready = indegree
+                .iter()
+                .enumerate()
+                .filter_map(|(index, degree)| (*degree == 0).then_some(index))
+                .collect::<Vec<_>>();
+            let mut topological_order = Vec::new();
+            while let Some(index) = ready.first().copied() {
+                ready.remove(0);
+                topological_order.push(plan.steps()[index].step_id().to_string());
+                for dependent in &outgoing[index] {
+                    indegree[*dependent] -= 1;
+                    if indegree[*dependent] == 0 {
+                        ready.push(*dependent);
+                        ready.sort_unstable();
+                    }
+                }
+            }
+
+            if topological_order.len() != step_count {
+                let steps = indegree
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(index, degree)| {
+                        (*degree > 0).then(|| plan.steps()[index].step_id().to_string())
+                    })
+                    .collect::<Vec<_>>();
+                return Err(SchedulerError::Cycle { steps });
+            }
+
+            Ok(SchedulerValidation {
+                step_count,
+                root_steps,
+                topological_order,
+            })
+        }
+
+        pub fn select_next_step(
+            &self,
+            plan: &PlanSpec,
+            run: &PlanRun,
+            journal: &AuditJournal,
+        ) -> Result<SchedulerDecision, SchedulerError> {
+            let validation = self.validate_dag(plan)?;
+            let timeline = journal.run_timeline(run.run_id())?;
+            let sealed_steps = sealed_steps(plan, &timeline)?;
+            let denied_steps = denied_steps(&timeline);
+
+            if let Some(current_step_id) = run.current_step_id() {
+                let Some(current_step) = plan
+                    .steps()
+                    .iter()
+                    .find(|step| step.step_id() == current_step_id)
+                else {
+                    return Err(SchedulerError::MissingDependency {
+                        step_id: current_step_id.to_string(),
+                        dependency: "current-step-not-in-plan".to_string(),
+                    });
+                };
+                if !sealed_steps.contains(current_step_id) {
+                    if denied_steps.contains(current_step_id) {
+                        return Ok(SchedulerDecision::blocked(
+                            current_step_id.to_string(),
+                            vec![current_step_id.to_string()],
+                            ordered_subset(&validation.topological_order, &sealed_steps),
+                        ));
+                    }
+                    let blocked_by = unsealed_dependencies(current_step, &sealed_steps);
+                    if !blocked_by.is_empty() {
+                        return Ok(SchedulerDecision::blocked(
+                            current_step_id.to_string(),
+                            blocked_by,
+                            ordered_subset(&validation.topological_order, &sealed_steps),
+                        ));
+                    }
+                    let attempts = unsealed_attempts(current_step, &timeline)?;
+                    if retry_exhausted(current_step, attempts) {
+                        return Ok(SchedulerDecision::retry_exhausted(
+                            current_step,
+                            attempts,
+                            ordered_subset(&validation.topological_order, &sealed_steps),
+                        ));
+                    }
+                    return Ok(SchedulerDecision::ready(
+                        current_step_id.to_string(),
+                        vec![current_step_id.to_string()],
+                        ordered_subset(&validation.topological_order, &sealed_steps),
+                    ));
+                }
+            }
+
+            let mut ready_steps = Vec::new();
+            let mut first_blocked = None::<(String, Vec<String>)>;
+            for step_id in &validation.topological_order {
+                if sealed_steps.contains(step_id.as_str()) {
+                    continue;
+                }
+                let step = plan
+                    .steps()
+                    .iter()
+                    .find(|candidate| candidate.step_id() == step_id)
+                    .expect("validated step id");
+                if denied_steps.contains(step.step_id()) {
+                    first_blocked.get_or_insert_with(|| {
+                        (step.step_id().to_string(), vec![step.step_id().to_string()])
+                    });
+                    continue;
+                }
+                if let Some(blocked_by) = denied_dependencies(step, &denied_steps) {
+                    first_blocked.get_or_insert_with(|| (step.step_id().to_string(), blocked_by));
+                    continue;
+                }
+                if step
+                    .dependencies()
+                    .iter()
+                    .all(|dependency| sealed_steps.contains(dependency.as_str()))
+                {
+                    let attempts = unsealed_attempts(step, &timeline)?;
+                    if retry_exhausted(step, attempts) {
+                        return Ok(SchedulerDecision::retry_exhausted(
+                            step,
+                            attempts,
+                            ordered_subset(&validation.topological_order, &sealed_steps),
+                        ));
+                    }
+                    ready_steps.push(step.step_id().to_string());
+                }
+            }
+
+            let sealed_steps = ordered_subset(&validation.topological_order, &sealed_steps);
+            if let Some(step_id) = ready_steps.first().cloned() {
+                return Ok(SchedulerDecision::ready(step_id, ready_steps, sealed_steps));
+            }
+            if let Some((step_id, blocked_by)) = first_blocked {
+                return Ok(SchedulerDecision::blocked(
+                    step_id,
+                    blocked_by,
+                    sealed_steps,
+                ));
+            }
+            Ok(SchedulerDecision::complete(sealed_steps))
+        }
+    }
+
+    fn denied_dependencies(step: &PlanStep, denied_steps: &HashSet<String>) -> Option<Vec<String>> {
+        let blocked_by = step
+            .dependencies()
+            .iter()
+            .filter(|dependency| denied_steps.contains(dependency.as_str()))
+            .cloned()
+            .collect::<Vec<_>>();
+        if !blocked_by.is_empty() {
+            return Some(blocked_by);
+        }
+        None
+    }
+
+    fn unsealed_dependencies(step: &PlanStep, sealed_steps: &HashSet<String>) -> Vec<String> {
+        step.dependencies()
+            .iter()
+            .filter(|dependency| !sealed_steps.contains(dependency.as_str()))
+            .cloned()
+            .collect()
+    }
+
+    fn denied_steps(timeline: &[String]) -> HashSet<String> {
+        timeline
+            .iter()
+            .filter(|line| {
+                line.contains("\"event_type\":\"ApprovalBound\"")
+                    && line.contains("approval denied")
+            })
+            .filter_map(|line| extract_json_string(line, "step_id"))
+            .collect()
+    }
+
+    fn sealed_steps(
+        plan: &PlanSpec,
+        timeline: &[String],
+    ) -> Result<HashSet<String>, SchedulerError> {
+        let mut sealed = HashSet::new();
+        for step in plan.steps() {
+            let parameter_hash = step_parameter_hash(step)?;
+            if timeline.iter().any(|line| {
+                line_has(line, "event_type", "CommitSealed")
+                    && line_has(line, "step_id", step.step_id())
+                    && line_has(line, "parameter_hash", &parameter_hash)
+            }) {
+                sealed.insert(step.step_id().to_string());
+            }
+        }
+        Ok(sealed)
+    }
+
+    fn unsealed_attempts(step: &PlanStep, timeline: &[String]) -> Result<usize, SchedulerError> {
+        let parameter_hash = step_parameter_hash(step)?;
+        let prepared = timeline
+            .iter()
+            .filter(|line| {
+                line_has(line, "event_type", "EffectPrepared")
+                    && line_has(line, "step_id", step.step_id())
+                    && line_has(line, "parameter_hash", &parameter_hash)
+            })
+            .count();
+        let resolved = timeline
+            .iter()
+            .filter(|line| {
+                (line_has(line, "event_type", "CommitSealed")
+                    || line_has(line, "event_type", "RollbackObserved"))
+                    && line_has(line, "step_id", step.step_id())
+                    && line_has(line, "parameter_hash", &parameter_hash)
+            })
+            .count();
+        Ok(prepared.saturating_sub(resolved))
+    }
+
+    fn retry_exhausted(step: &PlanStep, attempts: usize) -> bool {
+        attempts > usize::from(step.retry_budget())
+    }
+
+    fn step_parameter_hash(step: &PlanStep) -> Result<String, SchedulerError> {
+        let routed =
+            ToolRouter
+                .route(step.call())
+                .map_err(|error| SchedulerError::ToolRouting {
+                    step_id: step.step_id().to_string(),
+                    reason: error.reason,
+                })?;
+        Ok(stable_parameter_hash(&routed.normalized_params))
+    }
+
+    fn ordered_subset(order: &[String], values: &HashSet<String>) -> Vec<String> {
+        order
+            .iter()
+            .filter(|value| values.contains(value.as_str()))
+            .cloned()
+            .collect()
+    }
+
+    fn line_has(line: &str, key: &str, value: &str) -> bool {
+        line.contains(&format!("\"{}\":\"{}\"", key, escape_json(value)))
+    }
+
+    fn extract_json_string(line: &str, key: &str) -> Option<String> {
+        let needle = format!("\"{key}\":\"");
+        let start = line.find(&needle)? + needle.len();
+        let rest = &line[start..];
+        let end = rest.find('"')?;
+        Some(rest[..end].to_string())
+    }
+
+    fn optional_string_json(value: Option<&str>) -> String {
+        value
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .unwrap_or_else(|| "null".to_string())
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        let values = values
+            .iter()
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .collect::<Vec<_>>()
+            .join(",");
+        format!("[{values}]")
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::fs;
+        use std::sync::atomic::{AtomicU64, Ordering};
+
+        use super::*;
+        use crate::agent_core::model::{
+            ApprovalRequirement, ApprovalState, IntentCtx, IntentSource, ModelEvidence,
+            ObservationRef, RecoveryMarker, RiskHint, RollbackRequirement, TrustBoundary,
+            VerificationRule,
+        };
+        use crate::agent_core::planner::Planner;
+        use crate::api::{RiskClass, SemanticToolCall};
+        use crate::audit::{AuditEvent, AuditEventType};
+
+        static JOURNAL_COUNTER: AtomicU64 = AtomicU64::new(0);
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let counter = JOURNAL_COUNTER.fetch_add(1, Ordering::SeqCst);
+            let path = std::env::temp_dir().join(format!(
+                "agentd-scheduler-{name}-{}-{counter}.jsonl",
+                std::process::id(),
+            ));
+            let _ = fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        fn intent() -> IntentCtx {
+            IntentCtx::new(
+                "operator",
+                TrustBoundary::Operator,
+                IntentSource::TestFixture,
+                "vm:test",
+                "schedule deterministic plan",
+            )
+            .expect("intent")
+        }
+
+        fn read_step(step_id: &str, dependencies: Vec<&str>, retry_budget: u8) -> PlanStep {
+            PlanStep::new(
+                step_id,
+                SemanticToolCall::new("svc.status", vec![("service", step_id)]),
+                dependencies.into_iter().map(str::to_string).collect(),
+                vec!["intent accepted".to_string()],
+                vec![format!("{step_id} observed")],
+                VerificationRule::new(
+                    format!("{step_id}-verified"),
+                    format!("{step_id} verification"),
+                    "svc.status",
+                )
+                .expect("verification"),
+                ApprovalRequirement::not_required("read-only scheduler fixture").expect("approval"),
+                retry_budget,
+                vec![RiskHint::new(RiskClass::ReadOnly, "scheduler fixture").expect("risk")],
+                RollbackRequirement::not_required("read-only").expect("rollback"),
+            )
+            .expect("step")
+        }
+
+        fn plan_with_steps(steps: Vec<PlanStep>) -> PlanSpec {
+            PlanSpec::new(
+                "plan-scheduler",
+                "scheduler-test-planner-v1",
+                intent(),
+                steps,
+                vec!["plan scheduled deterministically".to_string()],
+                ModelEvidence::stub(),
+            )
+            .expect("plan")
+        }
+
+        fn planned_run(run_id: &str, plan: &PlanSpec, current_step_id: Option<&str>) -> PlanRun {
+            PlanRun::new(
+                run_id,
+                plan.plan_id(),
+                "hash-plan",
+                RunState::Planned,
+                current_step_id,
+                ApprovalState::not_required(),
+                Vec::<ObservationRef>::new(),
+                Vec::new(),
+                RecoveryMarker::none(),
+            )
+            .expect("run")
+        }
+
+        fn append_sealed(journal: &AuditJournal, run_id: &str, step: &PlanStep) {
+            let mut event = AuditEvent::new(
+                AuditEventType::CommitSealed,
+                run_id,
+                step.step_id(),
+                "operator",
+                format!("commit sealed {}", step.step_id()),
+            );
+            event.parameter_hash = step_parameter_hash(step).expect("step hash");
+            journal.append(&event).expect("append seal");
+        }
+
+        fn append_prepared(journal: &AuditJournal, run_id: &str, step: &PlanStep) {
+            let mut event = AuditEvent::new(
+                AuditEventType::EffectPrepared,
+                run_id,
+                step.step_id(),
+                "operator",
+                format!("prepared {}", step.step_id()),
+            );
+            event.parameter_hash = step_parameter_hash(step).expect("step hash");
+            journal.append(&event).expect("append prepared");
+        }
+
+        fn append_denied(journal: &AuditJournal, run_id: &str, step_id: &str) {
+            let event = AuditEvent::new(
+                AuditEventType::ApprovalBound,
+                run_id,
+                step_id,
+                "operator",
+                "approval denied reason=test denial",
+            );
+            journal.append(&event).expect("append denial");
+        }
+
+        #[test]
+        fn linear_plan_waits_for_commit_sealed_not_observation_only() {
+            let collect = read_step("collect-status", Vec::new(), 1);
+            let diagnose = read_step("diagnose-status", vec!["collect-status"], 1);
+            let plan = plan_with_steps(vec![collect.clone(), diagnose.clone()]);
+            let journal = test_journal("linear");
+            let run = PlanRun::new(
+                "run-linear",
+                plan.plan_id(),
+                "hash-plan",
+                RunState::Planned,
+                None::<String>,
+                ApprovalState::not_required(),
+                vec![ObservationRef::new(
+                    "obs-collect-status",
+                    "collect-status",
+                    TrustBoundary::LocalSystem,
+                )
+                .expect("observation")],
+                Vec::new(),
+                RecoveryMarker::none(),
+            )
+            .expect("run");
+
+            let first = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("first decision");
+            assert_eq!(first.kind, SchedulerDecisionKind::Ready);
+            assert_eq!(first.ready_step_id(), Some("collect-status"));
+
+            append_sealed(&journal, run.run_id(), &collect);
+            let second = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("second decision");
+            assert_eq!(second.kind, SchedulerDecisionKind::Ready);
+            assert_eq!(second.ready_step_id(), Some("diagnose-status"));
+            assert_eq!(second.sealed_steps, vec!["collect-status"]);
+        }
+
+        #[test]
+        fn branched_plan_selection_is_deterministic_and_explained() {
+            let read_logs = read_step("read-logs", Vec::new(), 1);
+            let read_status = read_step("read-status", Vec::new(), 1);
+            let summarize = read_step("summarize", vec!["read-logs", "read-status"], 1);
+            let plan = plan_with_steps(vec![read_logs, read_status, summarize]);
+            let journal = test_journal("branched");
+            let run = planned_run("run-branched", &plan, None);
+
+            let decision = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("decision");
+
+            assert_eq!(decision.kind, SchedulerDecisionKind::Ready);
+            assert_eq!(decision.ready_step_id(), Some("read-logs"));
+            assert_eq!(
+                decision.to_json(),
+                "{\"kind\":\"Ready\",\"step_id\":\"read-logs\",\"terminal_state\":null,\"ready_steps\":[\"read-logs\",\"read-status\"],\"sealed_steps\":[],\"blocked_by\":[],\"explanation\":\"ready step=read-logs ready=[read-logs,read-status] sealed=[] policy=sequential-first extension=read-only-parallelism-pending\"}"
+            );
+        }
+
+        #[test]
+        fn missing_dependency_and_cycle_are_rejected() {
+            let missing = plan_with_steps(vec![read_step("dependent", vec!["missing-root"], 1)]);
+            let missing_error = StepScheduler::new()
+                .validate_dag(&missing)
+                .expect_err("missing dependency");
+            assert!(matches!(
+                missing_error,
+                SchedulerError::MissingDependency { .. }
+            ));
+
+            let cycle = plan_with_steps(vec![
+                read_step("step-a", vec!["step-b"], 1),
+                read_step("step-b", vec!["step-a"], 1),
+            ]);
+            let cycle_error = StepScheduler::new()
+                .validate_dag(&cycle)
+                .expect_err("cycle");
+            assert!(matches!(cycle_error, SchedulerError::Cycle { .. }));
+        }
+
+        #[test]
+        fn denied_dependency_blocks_dependent_step() {
+            let root = read_step("operator-gated-root", Vec::new(), 1);
+            let dependent = read_step("dependent", vec!["operator-gated-root"], 1);
+            let plan = plan_with_steps(vec![root.clone(), dependent]);
+            let journal = test_journal("denied");
+            append_denied(&journal, "run-denied", root.step_id());
+            let run = planned_run("run-denied", &plan, None);
+
+            let decision = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("decision");
+
+            assert_eq!(decision.kind, SchedulerDecisionKind::Blocked);
+            assert_eq!(decision.terminal_state, Some(RunState::FailedClosed));
+            assert_eq!(decision.blocked_by, vec!["operator-gated-root"]);
+        }
+
+        #[test]
+        fn current_step_cannot_bypass_unsealed_dependency() {
+            let root = read_step("collect-root", Vec::new(), 1);
+            let dependent = read_step("dependent", vec!["collect-root"], 1);
+            let plan = plan_with_steps(vec![root, dependent.clone()]);
+            let journal = test_journal("current-blocked");
+            let run = planned_run("run-current-blocked", &plan, Some(dependent.step_id()));
+
+            let decision = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("decision");
+
+            assert_eq!(decision.kind, SchedulerDecisionKind::Blocked);
+            assert_eq!(decision.blocked_by, vec!["collect-root"]);
+            assert_eq!(decision.terminal_state, Some(RunState::FailedClosed));
+        }
+
+        #[test]
+        fn retry_budget_exhaustion_fails_closed() {
+            let root = read_step("flaky-root", Vec::new(), 1);
+            let plan = plan_with_steps(vec![root.clone()]);
+            let journal = test_journal("retry");
+            append_prepared(&journal, "run-retry", &root);
+            let run = planned_run("run-retry", &plan, Some(root.step_id()));
+
+            let retry_allowed = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("retry decision");
+            assert_eq!(retry_allowed.kind, SchedulerDecisionKind::Ready);
+
+            append_prepared(&journal, "run-retry", &root);
+            let exhausted = StepScheduler::new()
+                .select_next_step(&plan, &run, &journal)
+                .expect("exhausted decision");
+
+            assert_eq!(exhausted.kind, SchedulerDecisionKind::RetryExhausted);
+            assert_eq!(exhausted.terminal_state, Some(RunState::FailedClosed));
+            assert!(exhausted.explanation().contains("retry-exhausted"));
+        }
+
+        #[test]
+        fn planner_validation_rejects_cyclic_plan_before_freeze() {
+            let cycle = plan_with_steps(vec![
+                read_step("step-a", vec!["step-b"], 1),
+                read_step("step-b", vec!["step-a"], 1),
+            ]);
+            let error = crate::agent_core::planner::DeterministicPlanner::stub()
+                .validate_plan(&cycle)
+                .expect_err("planner rejects cycle");
+
+            assert!(error.to_string().contains("dependency cycle"));
+        }
+    }
+}
+
 pub mod planner {
     use std::fmt;
 
@@ -3836,6 +4609,7 @@ pub mod planner {
         ModelBroker, ModelBrokerError, ModelCallBounds, PlanRequest, StubModelProvider,
         SummarizeRequest,
     };
+    use super::scheduler::StepScheduler;
 
     pub trait Planner {
         fn draft_plan(&self, request_id: &str, intent: IntentCtx)
@@ -4038,6 +4812,11 @@ pub mod planner {
                 reason: "plan contains secret-like values".to_string(),
             });
         }
+        StepScheduler::new()
+            .validate_dag(plan)
+            .map_err(|error| PlannerError::InvalidPlan {
+                reason: error.to_string(),
+            })?;
 
         let router = ToolRouter;
         let mut routed_tools = Vec::new();
@@ -4349,6 +5128,7 @@ pub mod run_loop {
     };
     use super::planner::{FrozenPlan, Planner, PlannerError};
     use super::run_store::{RunStore, RunStoreError};
+    use super::scheduler::{SchedulerDecisionKind, SchedulerError, StepScheduler};
 
     #[derive(Debug, Clone, PartialEq, Eq)]
     pub struct RunProjection {
@@ -4553,10 +5333,18 @@ pub mod run_loop {
 
             let frozen = self.frozen_plan(run_id)?;
             let run = self.store.load(run_id)?;
-            let Some(step) = next_step(&frozen.plan, &run)? else {
-                let completed = self.store.mark_terminal(run_id, RunState::Completed)?;
-                return Ok(RunProjection::from_run(&completed));
-            };
+            let decision =
+                StepScheduler::new().select_next_step(&frozen.plan, &run, &self.journal)?;
+            if decision.kind != SchedulerDecisionKind::Ready {
+                return self.apply_scheduler_terminal_decision(run_id, decision.kind);
+            }
+            let step_id = decision
+                .ready_step_id()
+                .map(str::to_string)
+                .ok_or_else(|| AgentCoreError::InconsistentState {
+                    reason: "scheduler ready decision did not include a step".to_string(),
+                })?;
+            let step = find_step(&frozen.plan, &step_id)?;
             let step_id = step.step_id().to_string();
             let approval = self
                 .approval_tokens
@@ -4872,11 +5660,37 @@ pub mod run_loop {
             )?;
 
             let run = self.store.update_state(run_id, RunState::Planned, None)?;
-            if next_step(plan, &run)?.is_some() {
-                Ok(RunProjection::from_run(&run))
-            } else {
-                let run = self.store.mark_terminal(run_id, RunState::Completed)?;
-                Ok(RunProjection::from_run(&run))
+            let decision = StepScheduler::new().select_next_step(plan, &run, &self.journal)?;
+            match decision.kind {
+                SchedulerDecisionKind::Ready => Ok(RunProjection::from_run(&run)),
+                SchedulerDecisionKind::Complete => {
+                    let run = self.store.mark_terminal(run_id, RunState::Completed)?;
+                    Ok(RunProjection::from_run(&run))
+                }
+                SchedulerDecisionKind::Blocked | SchedulerDecisionKind::RetryExhausted => {
+                    let run = self.store.mark_terminal(run_id, RunState::FailedClosed)?;
+                    Ok(RunProjection::from_run(&run))
+                }
+            }
+        }
+
+        fn apply_scheduler_terminal_decision(
+            &self,
+            run_id: &str,
+            kind: SchedulerDecisionKind,
+        ) -> Result<RunProjection, AgentCoreError> {
+            match kind {
+                SchedulerDecisionKind::Ready => Err(AgentCoreError::InconsistentState {
+                    reason: "scheduler ready decision did not include a step".to_string(),
+                }),
+                SchedulerDecisionKind::Complete => {
+                    let completed = self.store.mark_terminal(run_id, RunState::Completed)?;
+                    Ok(RunProjection::from_run(&completed))
+                }
+                SchedulerDecisionKind::Blocked | SchedulerDecisionKind::RetryExhausted => {
+                    let failed = self.store.mark_terminal(run_id, RunState::FailedClosed)?;
+                    Ok(RunProjection::from_run(&failed))
+                }
             }
         }
 
@@ -4931,6 +5745,7 @@ pub mod run_loop {
         Policy(StepPolicyError),
         Effect(EffectEnvelopeError),
         Sandbox(SandboxProfileError),
+        Scheduler(SchedulerError),
         Model(ModelValidationError),
         Io(String),
         SecretValue {
@@ -4960,6 +5775,7 @@ pub mod run_loop {
                 Self::Policy(error) => write!(formatter, "{error}"),
                 Self::Effect(error) => write!(formatter, "{error}"),
                 Self::Sandbox(error) => write!(formatter, "{error}"),
+                Self::Scheduler(error) => write!(formatter, "{error}"),
                 Self::Model(error) => write!(formatter, "{error}"),
                 Self::Io(error) => write!(formatter, "agent core io error: {error}"),
                 Self::SecretValue { field } => {
@@ -5020,6 +5836,12 @@ pub mod run_loop {
         }
     }
 
+    impl From<SchedulerError> for AgentCoreError {
+        fn from(value: SchedulerError) -> Self {
+            Self::Scheduler(value)
+        }
+    }
+
     impl From<ModelValidationError> for AgentCoreError {
         fn from(value: ModelValidationError) -> Self {
             Self::Model(value)
@@ -5030,25 +5852,6 @@ pub mod run_loop {
         fn from(value: std::io::Error) -> Self {
             Self::Io(value.to_string())
         }
-    }
-
-    fn next_step<'a>(
-        plan: &'a PlanSpec,
-        run: &PlanRun,
-    ) -> Result<Option<&'a PlanStep>, AgentCoreError> {
-        if let Some(current_step_id) = run.current_step_id() {
-            return Ok(Some(find_step(plan, current_step_id)?));
-        }
-        for step in plan.steps() {
-            if !run
-                .observation_refs()
-                .iter()
-                .any(|reference| reference.step_id() == step.step_id())
-            {
-                return Ok(Some(step));
-            }
-        }
-        Ok(None)
     }
 
     fn find_step<'a>(plan: &'a PlanSpec, step_id: &str) -> Result<&'a PlanStep, AgentCoreError> {

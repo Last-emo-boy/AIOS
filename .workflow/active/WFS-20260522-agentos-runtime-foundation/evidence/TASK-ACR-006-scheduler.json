@@ -1,0 +1,81 @@
+{
+  "id": "TASK-ACR-006",
+  "status": "passed",
+  "completed_at": "2026-05-23T02:55:34+08:00",
+  "summary": "Dependency-aware StepScheduler is implemented as agent_core::scheduler. It validates PlanSpec DAGs before freeze, rejects missing dependencies and cycles, selects deterministic ready steps from AuditJournal-backed CommitSealed evidence, keeps execution sequential-first with an explicit read-only parallelism extension point in explanations, blocks denied dependency chains, and fails closed when retry budget is exhausted.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-006-scheduler.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::scheduler",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 121 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd agent_core::run_loop",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 121 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "128 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Scheduler returns only steps whose dependencies are sealed or explicitly satisfied.",
+      "status": "passed",
+      "evidence": "agent_core::scheduler::tests::linear_plan_waits_for_commit_sealed_not_observation_only verifies observation refs alone do not satisfy dependencies; CommitSealed with matching parameter_hash is required. agent_core::scheduler::tests::current_step_cannot_bypass_unsealed_dependency verifies current_step_id cannot bypass an unsealed prerequisite."
+    },
+    {
+      "criterion": "Cyclic plans cannot freeze.",
+      "status": "passed",
+      "evidence": "agent_core::scheduler::tests::missing_dependency_and_cycle_are_rejected covers SchedulerError::Cycle, and agent_core::scheduler::tests::planner_validation_rejects_cyclic_plan_before_freeze verifies Planner validation rejects the plan before freeze."
+    },
+    {
+      "criterion": "Dependent steps do not run after denied prerequisite steps.",
+      "status": "passed",
+      "evidence": "agent_core::scheduler::tests::denied_dependency_blocks_dependent_step produces SchedulerDecisionKind::Blocked with FailedClosed terminal_state after an ApprovalBound denial for the prerequisite."
+    },
+    {
+      "criterion": "Retry budget exhaustion moves the run to Suspended or FailedClosed.",
+      "status": "passed",
+      "evidence": "agent_core::scheduler::tests::retry_budget_exhaustion_fails_closed records an unsealed EffectPrepared attempt and receives SchedulerDecisionKind::RetryExhausted with FailedClosed terminal_state."
+    },
+    {
+      "criterion": "Scheduler output is deterministic for the same PlanRun.",
+      "status": "passed",
+      "evidence": "agent_core::scheduler::tests::branched_plan_selection_is_deterministic_and_explained snapshots SchedulerDecision::to_json for a branched plan, including ready step order and explanation."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::agent_core::scheduler",
+    "core_type": "StepScheduler",
+    "public_operations": [
+      "validate_dag",
+      "select_next_step"
+    ],
+    "decision_outputs": [
+      "Ready",
+      "Complete",
+      "Blocked",
+      "RetryExhausted"
+    ],
+    "source_of_truth": [
+      "PlanSpec dependencies for DAG shape",
+      "AuditJournal CommitSealed events with matching step_id and parameter_hash for dependency satisfaction",
+      "AuditJournal ApprovalBound denial summaries for denied dependency blocking",
+      "AuditJournal EffectPrepared minus CommitSealed/RollbackObserved for retry exhaustion"
+    ],
+    "integration_points": [
+      "Planner validate_plan rejects missing dependencies and cycles before freeze",
+      "AgentCore advance_run uses SchedulerDecision before policy evaluation",
+      "AgentCore post-seal completion check uses SchedulerDecision instead of observation-only next-step selection"
+    ],
+    "execution_policy": "Sequential-first. Safe read-only parallelism is documented as an explanation extension point and is not enabled in this task."
+  },
+  "next_task": "TASK-ACR-007"
+}
