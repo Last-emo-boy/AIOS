@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-009",
   "title": "Implement write-with-diff and rollback handle flow",
-  "status": "pending",
+  "status": "completed",
   "wave": 3,
   "priority": "P0",
   "type": "rollback",
@@ -22,7 +22,8 @@
     "write-with-diff executor",
     "Rollback handle schema",
     "Diff preview integration in TUI",
-    "docs/write-diff-rollback.md"
+    "docs/write-diff-rollback.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-009-write-diff-rollback.json"
   ],
   "acceptance_criteria": [
     "No write-with-diff action mutates the target before diff review.",
@@ -35,6 +36,12 @@
     "Run stale base hash test.",
     "Run rollback test after simulated failed verification."
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-009-write-diff-rollback.json",
+    "unit_tests": "37 passed; 0 failed",
+    "write_diff_demo": "shadow diff preserved target before commit, commit sealed verified write, rollback restored previous content.",
+    "audit_chain": "EffectPrepared -> EffectObserved -> CommitSealed -> RollbackPending -> RollbackObserved"
+  },
   "risk_notes": [
     "Rollback for packages and services is not equivalent to file rollback; keep MVP flow scoped to supported file changes."
   ]

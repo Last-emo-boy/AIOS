@@ -19,6 +19,7 @@ The audit journal is append-only JSONL. It records intent, plan, approval, prepa
 - `RollbackObserved`
 - `RecoveryStarted`
 - `RecoveryCompleted`
+- `SandboxDenied`
 
 ## Integrity Fields
 

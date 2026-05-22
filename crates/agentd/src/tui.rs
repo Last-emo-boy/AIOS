@@ -1,5 +1,6 @@
 use crate::api::{escape_json, PlanSpec};
 use crate::lifecycle::Agentd;
+use crate::rollback::DiffPreview;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ApprovalDecision {
@@ -123,6 +124,16 @@ pub fn build_demo_session(agentd: &Agentd, intent: impl Into<String>, approval: 
     }
 }
 
+pub fn render_diff_preview(preview: &DiffPreview, approval: ApprovalDecision) -> String {
+    format!(
+        "{}\nApproval: {}\nAudit:\n  - DiffPreview: {}\n  - RollbackHandle: {}\n",
+        preview.render(),
+        approval.as_str(),
+        preview.target_path.display(),
+        preview.rollback_id
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -168,5 +179,22 @@ mod tests {
         assert!(audit.contains("PolicyEvaluated"));
         assert!(audit.contains("ApprovalDecision"));
         assert!(audit.contains("denied"));
+    }
+
+    #[test]
+    fn renders_write_diff_preview_with_rollback_handle() {
+        let preview = DiffPreview {
+            target_path: "target.conf".into(),
+            base_hash: "base".to_string(),
+            proposed_hash: "next".to_string(),
+            rollback_id: "rb-1".to_string(),
+            unified_diff: "--- before\n+++ after\n-old\n+new".to_string(),
+        };
+        let rendered = render_diff_preview(&preview, ApprovalDecision::Suspended);
+        assert!(rendered.contains("Diff Preview"));
+        assert!(rendered.contains("-old"));
+        assert!(rendered.contains("+new"));
+        assert!(rendered.contains("RollbackHandle: rb-1"));
+        assert!(rendered.contains("Approval: suspended"));
     }
 }

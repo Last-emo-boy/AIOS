@@ -1,5 +1,7 @@
 use std::env;
+use std::fs;
 use std::io::{self, Write};
+use std::path::PathBuf;
 use std::process;
 
 use agentd::{
@@ -8,6 +10,7 @@ use agentd::{
     lifecycle::{Agentd, LifecycleConfig},
     policy::{ApprovalToken, PolicyEvaluator, PolicyRequest, stable_parameter_hash},
     recovery::RecoveryReconciler,
+    rollback::{content_hash, WriteDiffExecutor, WriteRequest},
     sandbox::{SandboxCompiler, SandboxExecutor, SandboxOperation},
     tui::{ApprovalDecision, build_demo_session},
 };
@@ -89,6 +92,13 @@ fn main() {
                 .map(String::as_str)
                 .unwrap_or(".workflow/artifacts/sandbox/demo.jsonl");
             run_sandbox_demo(&agentd, path)
+        }
+        Some("--write-diff-demo") => {
+            let root = args
+                .get(2)
+                .map(PathBuf::from)
+                .unwrap_or_else(|| PathBuf::from(".workflow/artifacts/rollback/demo"));
+            run_write_diff_demo(&agentd, root)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -364,6 +374,80 @@ fn run_sandbox_demo(agentd: &Agentd, path: &str) -> Result<(), String> {
         fork_denied.to_json(),
         syscall_denied.to_json(),
         agentd::api::escape_json(path)
+    );
+    Ok(())
+}
+
+fn run_write_diff_demo(agentd: &Agentd, root: PathBuf) -> Result<(), String> {
+    fs::create_dir_all(&root).map_err(|error| error.to_string())?;
+    let target = root.join("target.conf");
+    fs::write(&target, "port=80\n").map_err(|error| error.to_string())?;
+    let base_hash = content_hash("port=80\n");
+    let proposed_hash = content_hash("port=8080\n");
+
+    let target_param = target.display().to_string();
+    let routed = agentd
+        .route_tool(&SemanticToolCall::new(
+            "fs.write.diff",
+            vec![
+                ("path", target_param.as_str()),
+                ("content_hash", proposed_hash.as_str()),
+                ("base_hash", base_hash.as_str()),
+            ],
+        ))
+        .map_err(|error| error.reason)?;
+    let request = PolicyRequest::from_routed("operator", &routed);
+    let evaluator = PolicyEvaluator;
+    let token = ApprovalToken {
+        actor: request.actor.clone(),
+        tool: request.tool.clone(),
+        resource: request.resource.clone(),
+        parameter_hash: request.parameter_hash.clone(),
+        expires_at: 60,
+        policy_version: request.policy_version.clone(),
+    };
+    let decision = evaluator.evaluate(&request, Some(&token));
+    let lease = evaluator
+        .acquire_lease(&request, &decision)
+        .map_err(|error| error.to_string())?;
+    let executor = WriteDiffExecutor::new(root.join("shadow"));
+    let write_request = WriteRequest {
+        run_id: "run-write-diff".to_string(),
+        step_id: "step-write".to_string(),
+        actor: "operator".to_string(),
+        target_path: target.clone(),
+        proposed_content: "port=8080\n".to_string(),
+        base_hash,
+    };
+    let mut prepared = executor
+        .prepare(&lease, write_request)
+        .map_err(|error| error.reason())?;
+    let untouched_before_commit = fs::read_to_string(&target).map_err(|error| error.to_string())?;
+    let journal = AuditJournal::new(root.join("audit.jsonl"));
+    let commit = executor
+        .commit(&journal, &mut prepared)
+        .map_err(|error| error.reason())?;
+    let after_commit = fs::read_to_string(&target).map_err(|error| error.to_string())?;
+    let rollback = executor
+        .rollback(
+            &journal,
+            &prepared.handle,
+            "run-write-diff",
+            "step-write",
+            "operator",
+        )
+        .map_err(|error| error.reason())?;
+    let after_rollback = fs::read_to_string(&target).map_err(|error| error.to_string())?;
+    println!(
+        "{{\"preview\":{},\"handle\":{},\"untouched_before_commit\":\"{}\",\"commit\":{},\"after_commit\":\"{}\",\"rollback\":{},\"after_rollback\":\"{}\",\"audit_path\":\"{}\"}}",
+        prepared.preview.to_json(),
+        prepared.handle.to_json(),
+        agentd::api::escape_json(&untouched_before_commit),
+        commit.to_json(),
+        agentd::api::escape_json(&after_commit),
+        rollback.to_json(),
+        agentd::api::escape_json(&after_rollback),
+        agentd::api::escape_json(&root.join("audit.jsonl").display().to_string())
     );
     Ok(())
 }

@@ -1,0 +1,46 @@
+{
+  "task": "TASK-AIOS-009",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:54:39+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "37 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --write-diff-demo",
+      "result": "Prepared a shadow diff without mutating target, committed after exact approval, then restored previous content via rollback handle."
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/rollback/demo/audit.jsonl",
+      "result": "Observed EffectPrepared, EffectObserved, CommitSealed, RollbackPending, and RollbackObserved with matching parameter_hash."
+    }
+  ],
+  "safety_properties": {
+    "prepare_does_not_mutate_target": true,
+    "stale_base_hash_blocks_prepare": true,
+    "stale_base_hash_blocks_commit": true,
+    "commit_records_effect_prepared_before_mutation": true,
+    "commit_records_commit_sealed_after_verification": true,
+    "rollback_restores_previous_content": true
+  },
+  "rollback_handle_fields": [
+    "rollback_id",
+    "target_path",
+    "base_hash",
+    "proposed_hash",
+    "parameter_hash",
+    "policy_version",
+    "previous_content_path",
+    "proposed_content_path",
+    "committed"
+  ],
+  "audit_chain": [
+    "EffectPrepared",
+    "EffectObserved",
+    "CommitSealed",
+    "RollbackPending",
+    "RollbackObserved"
+  ],
+  "scope_note": "MVP rollback is scoped to supported file content replacement through fs.write.diff. Package and service rollback are intentionally deferred."
+}
