@@ -1,0 +1,69 @@
+{
+  "id": "TASK-SEF-003",
+  "status": "passed",
+  "completed_at": "2026-05-23T01:52:42+08:00",
+  "summary": "Lease-derived sandbox profile hardening is implemented. SandboxProfile serialization now projects namespace, cgroup, seccomp, filesystem, Landlock, and network allowlist metadata. security_execution::sandbox_profile adds a LeaseSandboxProfileCompiler that accepts CapabilityLease as authority, ignores planner-provided weakening hints, classifies profile classes, fails closed for unsupported risk classes, and returns auditable profile bindings for EffectEnvelope integration.",
+  "deliverables": [
+    "crates/agentd/src/sandbox.rs",
+    "crates/agentd/src/security_execution.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-003-sandbox-profiles.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd sandbox::",
+      "status": "passed",
+      "result": "5 passed; 0 failed; 91 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd security_execution::sandbox_profile",
+      "status": "passed",
+      "result": "6 passed; 0 failed; 90 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "96 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Read-only leases compile to profiles with no persistent write access.",
+      "status": "passed",
+      "evidence": "security_execution::sandbox_profile::tests::read_only_lease_compiles_without_persistent_write_access confirms persistent_write_allowed=false and planner writable host paths are ignored."
+    },
+    {
+      "criterion": "Planner output cannot add writable host paths or broaden network access.",
+      "status": "passed",
+      "evidence": "planner_network_hints_cannot_broaden_http_check_allowlist confirms http.check allowlist stays bound to the lease resource, while malicious planner network hints are ignored."
+    },
+    {
+      "criterion": "Unsupported risk classes fail closed until explicitly implemented.",
+      "status": "passed",
+      "evidence": "unsupported_risk_classes_fail_closed checks write-with-diff, execute-with-confirmation, privileged, and never profile classes all return unsupported errors."
+    },
+    {
+      "criterion": "Sandbox profile metadata appears in the EffectEnvelope.",
+      "status": "passed",
+      "evidence": "sandbox_profile_metadata_appears_in_effect_envelope serializes no_new_privs, seccomp, filesystem, cgroup, network allowlist, and Landlock metadata inside EffectEnvelope."
+    },
+    {
+      "criterion": "Resource abuse fixtures still hit configured limits.",
+      "status": "passed",
+      "evidence": "resource_abuse_still_hits_configured_limits uses SandboxExecutor to deny process fanout beyond pids.max."
+    }
+  ],
+  "sandbox_profile_contract": {
+    "module": "agentd::security_execution::sandbox_profile",
+    "authority": "CapabilityLease",
+    "compiler": "LeaseSandboxProfileCompiler",
+    "baseline_compiler": "SandboxCompiler",
+    "supported_profile_class": "read-only-diagnostic",
+    "unsupported_profile_classes": [
+      "write-with-diff-preparation",
+      "execute-with-confirmation",
+      "privileged-human-approval",
+      "never"
+    ],
+    "planner_hints": "recorded as ignored and never used as authority"
+  }
+}

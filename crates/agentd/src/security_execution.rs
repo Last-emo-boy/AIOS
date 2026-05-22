@@ -1573,3 +1573,487 @@ pub mod policy_adapter {
         }
     }
 }
+
+pub mod sandbox_profile {
+    use std::fmt;
+
+    use crate::agent_core::model::contains_secret_value;
+    use crate::api::{escape_json, RiskClass};
+    use crate::policy::CapabilityLease;
+    use crate::sandbox::{SandboxCompiler, SandboxError, SandboxProfile};
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum SandboxProfileClass {
+        ReadOnlyDiagnostic,
+        WriteWithDiffPreparation,
+        ExecuteWithConfirmation,
+        PrivilegedHumanApproval,
+        Never,
+    }
+
+    impl SandboxProfileClass {
+        pub fn for_risk(risk: RiskClass) -> Self {
+            match risk {
+                RiskClass::ReadOnly => Self::ReadOnlyDiagnostic,
+                RiskClass::WriteWithDiff => Self::WriteWithDiffPreparation,
+                RiskClass::ExecuteWithConfirmation => Self::ExecuteWithConfirmation,
+                RiskClass::PrivilegedWithHumanApproval => Self::PrivilegedHumanApproval,
+                RiskClass::Never => Self::Never,
+            }
+        }
+
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::ReadOnlyDiagnostic => "read-only-diagnostic",
+                Self::WriteWithDiffPreparation => "write-with-diff-preparation",
+                Self::ExecuteWithConfirmation => "execute-with-confirmation",
+                Self::PrivilegedHumanApproval => "privileged-human-approval",
+                Self::Never => "never",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq, Default)]
+    pub struct PlannerSandboxHints {
+        pub requested_profile_name: Option<String>,
+        pub requested_writable_host_paths: Vec<String>,
+        pub requested_network_allowlist: Vec<String>,
+        pub requested_persistent_write: bool,
+    }
+
+    impl PlannerSandboxHints {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"requested_profile_name\":{},\"requested_writable_host_paths\":{},\"requested_network_allowlist\":{},\"requested_persistent_write\":{}}}",
+                optional_string_json(self.requested_profile_name.as_deref()),
+                string_array_json(&self.requested_writable_host_paths),
+                string_array_json(&self.requested_network_allowlist),
+                self.requested_persistent_write
+            )
+        }
+
+        fn ignored_reasons(&self) -> Vec<String> {
+            let mut reasons = Vec::new();
+            if let Some(name) = &self.requested_profile_name {
+                reasons.push(format!("profile_name={name} ignored"));
+            }
+            if !self.requested_writable_host_paths.is_empty() {
+                reasons.push(format!(
+                    "writable_host_paths={} ignored",
+                    self.requested_writable_host_paths.join("|")
+                ));
+            }
+            if !self.requested_network_allowlist.is_empty() {
+                reasons.push(format!(
+                    "network_allowlist={} ignored",
+                    self.requested_network_allowlist.join("|")
+                ));
+            }
+            if self.requested_persistent_write {
+                reasons.push("persistent_write=true ignored".to_string());
+            }
+            reasons
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SandboxProfileBinding {
+        pub class: SandboxProfileClass,
+        pub profile: SandboxProfile,
+        pub ignored_planner_hints: Vec<String>,
+        pub audit_summary: String,
+    }
+
+    impl SandboxProfileBinding {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"class\":\"{}\",\"profile\":{},\"ignored_planner_hints\":{},\"audit_summary\":\"{}\"}}",
+                self.class.as_str(),
+                self.profile.to_json(),
+                string_array_json(&self.ignored_planner_hints),
+                escape_json(&self.audit_summary)
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum SandboxProfileError {
+        UnsupportedClass {
+            class: SandboxProfileClass,
+            reason: String,
+        },
+        SecretValue {
+            field: String,
+        },
+        InvalidProfile {
+            reason: String,
+        },
+    }
+
+    impl SandboxProfileError {
+        pub fn reason(&self) -> String {
+            match self {
+                SandboxProfileError::UnsupportedClass { class, reason } => {
+                    format!("sandbox profile class {} is unsupported: {reason}", class.as_str())
+                }
+                SandboxProfileError::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
+                SandboxProfileError::InvalidProfile { reason } => reason.clone(),
+            }
+        }
+    }
+
+    impl fmt::Display for SandboxProfileError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl From<SandboxError> for SandboxProfileError {
+        fn from(value: SandboxError) -> Self {
+            match value {
+                SandboxError::UnsupportedRisk(risk) => SandboxProfileError::UnsupportedClass {
+                    class: SandboxProfileClass::for_risk(risk),
+                    reason: value.reason(),
+                },
+                SandboxError::EmptyResource => SandboxProfileError::InvalidProfile {
+                    reason: value.reason(),
+                },
+            }
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct LeaseSandboxProfileCompiler {
+        compiler: SandboxCompiler,
+    }
+
+    impl LeaseSandboxProfileCompiler {
+        pub fn new(compiler: SandboxCompiler) -> Self {
+            Self { compiler }
+        }
+
+        pub fn compile(
+            &self,
+            lease: &CapabilityLease,
+            planner_hints: Option<&PlannerSandboxHints>,
+        ) -> Result<SandboxProfileBinding, SandboxProfileError> {
+            ensure_no_secret("lease", &lease.to_json())?;
+            if let Some(hints) = planner_hints {
+                ensure_no_secret("planner_sandbox_hints", &hints.to_json())?;
+            }
+
+            let class = SandboxProfileClass::for_risk(lease.risk);
+            let profile = self.compiler.compile(lease)?;
+            self.validate_profile_is_lease_derived(lease, &profile)?;
+            let ignored_planner_hints = planner_hints
+                .map(PlannerSandboxHints::ignored_reasons)
+                .unwrap_or_default();
+            let audit_summary = profile_audit_summary(class, &profile, &ignored_planner_hints);
+            ensure_no_secret("sandbox_profile_audit_summary", &audit_summary)?;
+            Ok(SandboxProfileBinding {
+                class,
+                profile,
+                ignored_planner_hints,
+                audit_summary,
+            })
+        }
+
+        fn validate_profile_is_lease_derived(
+            &self,
+            lease: &CapabilityLease,
+            profile: &SandboxProfile,
+        ) -> Result<(), SandboxProfileError> {
+            if profile.lease_id != lease.lease_id
+                || profile.tool != lease.tool
+                || profile.resource != lease.resource
+                || profile.parameter_hash != lease.parameter_hash
+                || profile.policy_version != lease.policy_version
+                || profile.risk != lease.risk
+            {
+                return Err(SandboxProfileError::InvalidProfile {
+                    reason: "sandbox profile metadata must match capability lease".to_string(),
+                });
+            }
+            ensure_no_secret("sandbox_profile", &profile.to_json())?;
+            Ok(())
+        }
+    }
+
+    fn profile_audit_summary(
+        class: SandboxProfileClass,
+        profile: &SandboxProfile,
+        ignored_planner_hints: &[String],
+    ) -> String {
+        format!(
+            "sandbox_profile class={} name={} lease_id={} tool={} risk={} no_new_privs={} namespaces=user:{},mount:{},pid:{},network:{},cgroup:{} cgroup=pids_max:{},memory_max_bytes:{} seccomp=default:{},denied:{} filesystem=persistent_write_allowed:{},read_only_binds:{},writable_tmpfs:{} landlock=enabled:{},read_paths:{},write_paths:{} network=allow:{},allowlist:{} ignored_planner_hints={}",
+            class.as_str(),
+            profile.name,
+            profile.lease_id,
+            profile.tool,
+            profile.risk.as_str(),
+            profile.no_new_privs,
+            profile.namespaces.user,
+            profile.namespaces.mount,
+            profile.namespaces.pid,
+            profile.namespaces.network,
+            profile.namespaces.cgroup,
+            profile.cgroup.pids_max,
+            profile.cgroup.memory_max_bytes,
+            profile.seccomp.default_action,
+            profile.seccomp.denied_syscalls.join("|"),
+            profile.filesystem.persistent_write_allowed,
+            profile.filesystem.read_only_binds.len(),
+            profile.filesystem.writable_tmpfs.join("|"),
+            profile.landlock.enabled_when_supported,
+            profile.landlock.allowed_read_paths.join("|"),
+            profile.landlock.allowed_write_paths.join("|"),
+            profile.network.allow_network,
+            profile.network.allowlist.join("|"),
+            ignored_planner_hints.len()
+        )
+    }
+
+    fn ensure_no_secret(
+        field: impl Into<String>,
+        value: &str,
+    ) -> Result<(), SandboxProfileError> {
+        if contains_secret_value(value) {
+            return Err(SandboxProfileError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    fn optional_string_json(value: Option<&str>) -> String {
+        value
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .unwrap_or_else(|| "null".to_string())
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        let items = values
+            .iter()
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .collect::<Vec<_>>()
+            .join(",");
+        format!("[{items}]")
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use crate::audit::AuditJournal;
+        use crate::policy::{stable_parameter_hash, PolicyDecision, PolicyDecisionKind};
+        use crate::sandbox::{SandboxDecision, SandboxExecutor, SandboxOperation};
+        use crate::security_execution::effect_envelope::{EffectEnvelope, EffectEnvelopeState};
+
+        fn lease_for(
+            tool: &str,
+            resource: &str,
+            risk: RiskClass,
+            params: Vec<(&str, &str)>,
+        ) -> CapabilityLease {
+            let normalized_params = params
+                .into_iter()
+                .map(|(key, value)| (key.to_string(), value.to_string()))
+                .collect::<Vec<_>>();
+            CapabilityLease {
+                lease_id: format!("lease-{tool}-{}", stable_parameter_hash(&normalized_params)),
+                actor: "operator".to_string(),
+                tool: tool.to_string(),
+                resource: resource.to_string(),
+                parameter_hash: stable_parameter_hash(&normalized_params),
+                expires_at: 60,
+                policy_version: "policy-v1".to_string(),
+                risk,
+            }
+        }
+
+        fn compiler() -> LeaseSandboxProfileCompiler {
+            LeaseSandboxProfileCompiler::new(SandboxCompiler)
+        }
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-sandbox-profile-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        fn allow_decision(risk: RiskClass) -> PolicyDecision {
+            PolicyDecision {
+                kind: PolicyDecisionKind::Allow,
+                risk,
+                reason: "allowed by policy adapter".to_string(),
+            }
+        }
+
+        #[test]
+        fn read_only_lease_compiles_without_persistent_write_access() {
+            let lease = lease_for(
+                "fs.read",
+                "/var/log/agentd.log",
+                RiskClass::ReadOnly,
+                vec![("path", "/var/log/agentd.log")],
+            );
+            let hints = PlannerSandboxHints {
+                requested_profile_name: Some("host-write-all".to_string()),
+                requested_writable_host_paths: vec!["/etc".to_string(), "/".to_string()],
+                requested_network_allowlist: vec!["0.0.0.0/0".to_string()],
+                requested_persistent_write: true,
+            };
+
+            let binding = compiler().compile(&lease, Some(&hints)).expect("profile");
+
+            assert_eq!(binding.class, SandboxProfileClass::ReadOnlyDiagnostic);
+            assert_eq!(binding.profile.lease_id, lease.lease_id);
+            assert!(!binding.profile.filesystem.persistent_write_allowed);
+            assert!(!binding
+                .profile
+                .filesystem
+                .writable_tmpfs
+                .iter()
+                .any(|path| path == "/etc" || path == "/"));
+            assert!(!binding.profile.network.allow_network);
+            assert!(binding.profile.network.allowlist.is_empty());
+            assert_eq!(binding.ignored_planner_hints.len(), 4);
+            assert!(binding.audit_summary.contains("persistent_write_allowed:false"));
+        }
+
+        #[test]
+        fn planner_network_hints_cannot_broaden_http_check_allowlist() {
+            let lease = lease_for(
+                "http.check",
+                "https://example.test/health",
+                RiskClass::ReadOnly,
+                vec![("url", "https://example.test/health")],
+            );
+            let hints = PlannerSandboxHints {
+                requested_network_allowlist: vec![
+                    "https://evil.test".to_string(),
+                    "0.0.0.0/0".to_string(),
+                ],
+                ..PlannerSandboxHints::default()
+            };
+
+            let binding = compiler().compile(&lease, Some(&hints)).expect("profile");
+
+            assert!(binding.profile.network.allow_network);
+            assert_eq!(
+                binding.profile.network.allowlist,
+                vec!["https://example.test/health".to_string()]
+            );
+            assert!(!binding
+                .profile
+                .network
+                .allowlist
+                .iter()
+                .any(|target| target.contains("evil") || target == "0.0.0.0/0"));
+            assert_eq!(binding.ignored_planner_hints.len(), 1);
+        }
+
+        #[test]
+        fn unsupported_risk_classes_fail_closed() {
+            for (tool, risk) in [
+                ("fs.write.diff", RiskClass::WriteWithDiff),
+                ("svc.restart", RiskClass::ExecuteWithConfirmation),
+                ("host.privileged", RiskClass::PrivilegedWithHumanApproval),
+                ("shell.exec", RiskClass::Never),
+            ] {
+                let lease = lease_for(tool, tool, risk, vec![("resource", tool)]);
+                let error = compiler()
+                    .compile(&lease, None)
+                    .expect_err("unsupported profile fails closed");
+                assert!(error.reason().contains("unsupported"));
+                assert!(error.reason().contains(SandboxProfileClass::for_risk(risk).as_str()));
+            }
+        }
+
+        #[test]
+        fn sandbox_profile_metadata_appears_in_effect_envelope() {
+            let lease = lease_for(
+                "svc.status",
+                "nginx",
+                RiskClass::ReadOnly,
+                vec![("service", "nginx")],
+            );
+            let binding = compiler().compile(&lease, None).expect("profile");
+            let journal = test_journal("envelope");
+            let mut envelope = EffectEnvelope::draft(
+                "run-sandbox",
+                "status-nginx",
+                "svc.status",
+                vec![("service".to_string(), "nginx".to_string())],
+                allow_decision(RiskClass::ReadOnly),
+            )
+            .expect("draft");
+
+            envelope
+                .prepare(
+                    &journal,
+                    "operator",
+                    lease,
+                    Some(binding.profile.clone()),
+                    None,
+                )
+                .expect("prepare");
+            assert_eq!(envelope.state, EffectEnvelopeState::Prepared);
+
+            let json = envelope.to_json().expect("serialize");
+            assert!(json.contains("\"sandbox_profile\":{"));
+            assert!(json.contains("\"no_new_privs\":true"));
+            assert!(json.contains("\"allowed_syscalls\""));
+            assert!(json.contains("\"denied_syscalls\""));
+            assert!(json.contains("\"persistent_write_allowed\":false"));
+            assert!(json.contains("\"pids_max\":32"));
+            assert!(json.contains("\"allowlist\":[]"));
+            assert!(json.contains("\"landlock\""));
+        }
+
+        #[test]
+        fn resource_abuse_still_hits_configured_limits() {
+            let lease = lease_for(
+                "svc.status",
+                "agentd",
+                RiskClass::ReadOnly,
+                vec![("service", "agentd")],
+            );
+            let binding = compiler().compile(&lease, None).expect("profile");
+            let report = SandboxExecutor.evaluate(
+                &binding.profile,
+                SandboxOperation::SpawnProcesses {
+                    count: binding.profile.cgroup.pids_max + 1,
+                },
+            );
+
+            assert_eq!(report.decision, SandboxDecision::Denied);
+            assert!(report.reason.contains("pids.max"));
+            assert!(binding.audit_summary.contains("pids_max:32"));
+        }
+
+        #[test]
+        fn binding_projection_contains_profile_audit_metadata() {
+            let lease = lease_for(
+                "fs.read",
+                "/var/log/agentd.log",
+                RiskClass::ReadOnly,
+                vec![("path", "/var/log/agentd.log")],
+            );
+            let binding = compiler().compile(&lease, None).expect("profile");
+            let json = binding.to_json();
+
+            assert!(json.contains("\"class\":\"read-only-diagnostic\""));
+            assert!(json.contains("\"seccomp\""));
+            assert!(json.contains("\"writable_tmpfs\""));
+            assert!(json.contains("\"allowed_read_paths\""));
+            assert!(json.contains("\"audit_summary\""));
+            assert!(json.contains("no_new_privs=true"));
+        }
+
+    }
+}

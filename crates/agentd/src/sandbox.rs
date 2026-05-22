@@ -120,8 +120,14 @@ impl SandboxProfile {
             })
             .collect::<Vec<_>>()
             .join(",");
+        let writable_tmpfs = string_array_json(&self.filesystem.writable_tmpfs);
+        let allowed_syscalls = static_string_array_json(&self.seccomp.allowed_syscalls);
+        let denied_syscalls = static_string_array_json(&self.seccomp.denied_syscalls);
+        let landlock_read_paths = string_array_json(&self.landlock.allowed_read_paths);
+        let landlock_write_paths = string_array_json(&self.landlock.allowed_write_paths);
+        let network_allowlist = string_array_json(&self.network.allowlist);
         format!(
-            "{{\"name\":\"{}\",\"lease_id\":\"{}\",\"tool\":\"{}\",\"resource\":\"{}\",\"parameter_hash\":\"{}\",\"policy_version\":\"{}\",\"risk\":\"{}\",\"no_new_privs\":{},\"namespaces\":{{\"user\":{},\"mount\":{},\"pid\":{},\"network\":{},\"cgroup\":{}}},\"cgroup\":{{\"cpu_quota_us\":{},\"cpu_period_us\":{},\"memory_max_bytes\":{},\"io_weight\":{},\"pids_max\":{}}},\"filesystem\":{{\"persistent_write_allowed\":{},\"read_only_binds\":[{}]}},\"landlock\":{{\"enabled_when_supported\":{}}},\"network\":{{\"allow_network\":{}}}}}",
+            "{{\"name\":\"{}\",\"lease_id\":\"{}\",\"tool\":\"{}\",\"resource\":\"{}\",\"parameter_hash\":\"{}\",\"policy_version\":\"{}\",\"risk\":\"{}\",\"no_new_privs\":{},\"namespaces\":{{\"user\":{},\"mount\":{},\"pid\":{},\"network\":{},\"cgroup\":{}}},\"cgroup\":{{\"cpu_quota_us\":{},\"cpu_period_us\":{},\"memory_max_bytes\":{},\"io_weight\":{},\"pids_max\":{}}},\"seccomp\":{{\"default_action\":\"{}\",\"allowed_syscalls\":{},\"denied_syscalls\":{}}},\"filesystem\":{{\"persistent_write_allowed\":{},\"read_only_binds\":[{}],\"writable_tmpfs\":{}}},\"landlock\":{{\"enabled_when_supported\":{},\"allowed_read_paths\":{},\"allowed_write_paths\":{}}},\"network\":{{\"allow_network\":{},\"allowlist\":{}}}}}",
             escape_json(&self.name),
             escape_json(&self.lease_id),
             escape_json(&self.tool),
@@ -140,12 +146,37 @@ impl SandboxProfile {
             self.cgroup.memory_max_bytes,
             self.cgroup.io_weight,
             self.cgroup.pids_max,
+            escape_json(self.seccomp.default_action),
+            allowed_syscalls,
+            denied_syscalls,
             self.filesystem.persistent_write_allowed,
             binds,
+            writable_tmpfs,
             self.landlock.enabled_when_supported,
-            self.network.allow_network
+            landlock_read_paths,
+            landlock_write_paths,
+            self.network.allow_network,
+            network_allowlist
         )
     }
+}
+
+fn string_array_json(values: &[String]) -> String {
+    let items = values
+        .iter()
+        .map(|value| format!("\"{}\"", escape_json(value)))
+        .collect::<Vec<_>>()
+        .join(",");
+    format!("[{items}]")
+}
+
+fn static_string_array_json(values: &[&'static str]) -> String {
+    let items = values
+        .iter()
+        .map(|value| format!("\"{}\"", escape_json(value)))
+        .collect::<Vec<_>>()
+        .join(",");
+    format!("[{items}]")
 }
 
 #[derive(Debug, Default, Clone, Copy)]

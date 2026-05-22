@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-003",
   "title": "Harden lease-derived sandbox profile compilation",
-  "status": "pending",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "security",
@@ -39,5 +39,19 @@
   ],
   "risk_notes": [
     "Sandbox profiles must be compiled from authority, not from agent suggestions."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T01:52:42+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-003-sandbox-profiles.json",
+    "implementation": [
+      "crates/agentd/src/sandbox.rs",
+      "crates/agentd/src/security_execution.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd sandbox::": "5 passed; 0 failed",
+      "cargo test -p agentd security_execution::sandbox_profile": "6 passed; 0 failed",
+      "cargo test -p agentd": "96 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-004"
+  }
 }
