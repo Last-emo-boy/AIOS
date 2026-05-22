@@ -1,0 +1,38 @@
+{
+  "id": "TASK-AIOS-001",
+  "title": "Create minimal Linux boot image for agentd handoff",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "platform",
+  "source": "research.md:104",
+  "depends_on": [
+    "TASK-AIOS-000"
+  ],
+  "purpose": "Prove the MVP base can boot and hand control to an agentd entrypoint through initramfs/rootfs configuration.",
+  "scope": [
+    "Create a reproducible image build recipe for the chosen Linux base.",
+    "Support a kernel command-line path using init=/sbin/agentd or rdinit=/sbin/agentd.",
+    "Provide a QEMU or VM smoke-test script that boots the image and captures console output.",
+    "Keep the image minimal enough to debug boot failures quickly."
+  ],
+  "deliverables": [
+    "image/build recipe",
+    "scripts/boot-smoke-test",
+    "docs/boot-chain.md"
+  ],
+  "acceptance_criteria": [
+    "A local command builds the image from a clean checkout.",
+    "A local command boots the image and reaches the agentd placeholder within the agreed startup budget.",
+    "Boot logs clearly show kernel -> initramfs/rootfs -> agentd handoff.",
+    "Failure paths produce actionable console logs."
+  ],
+  "verification": [
+    "Run boot smoke test.",
+    "Archive boot log as a workflow artifact.",
+    "Confirm no manual host mutation is required to build or boot the image."
+  ],
+  "risk_notes": [
+    "PID 1 work is hard to debug; keep the first agentd binary minimal and deterministic."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "TASK-AIOS-008",
+  "title": "Add Linux sandbox executor for read-only and low-risk tools",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:192",
+  "depends_on": [
+    "TASK-AIOS-004",
+    "TASK-AIOS-007"
+  ],
+  "purpose": "Compile low-risk capability leases into Linux namespace, cgroup, seccomp, no_new_privs, and optional Landlock constraints.",
+  "scope": [
+    "Create executor profile for read-only diagnostics.",
+    "Apply CPU, memory, IO, and pids limits through cgroup v2.",
+    "Apply no_new_privs and a minimal seccomp profile for diagnostic tools.",
+    "Constrain filesystem view with mount/user namespace and read-only binds.",
+    "Add Landlock file access restrictions where the base kernel supports it."
+  ],
+  "deliverables": [
+    "Sandbox executor",
+    "Executor profile definitions",
+    "Sandbox escape regression tests",
+    "docs/linux-sandbox.md"
+  ],
+  "acceptance_criteria": [
+    "Read-only tools cannot write to persistent host paths.",
+    "A fork bomb or runaway process is limited by pids.max and CPU/memory constraints.",
+    "Denied syscalls fail predictably and are logged.",
+    "Sandbox profile selection is driven by capability lease metadata."
+  ],
+  "verification": [
+    "Run read-only diagnostic under sandbox.",
+    "Run fork bomb simulation under test limits.",
+    "Attempt write to forbidden path and confirm denial."
+  ],
+  "risk_notes": [
+    "seccomp is not a complete sandbox; it must be combined with namespace, cgroup, and filesystem policy."
+  ]
+}

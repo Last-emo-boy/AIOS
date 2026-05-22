@@ -1,0 +1,42 @@
+{
+  "id": "TASK-AIOS-012",
+  "title": "Establish MVP build, provenance, and release artifact flow",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P1",
+  "type": "release",
+  "source": "research.md:269",
+  "depends_on": [
+    "TASK-AIOS-001",
+    "TASK-AIOS-002",
+    "TASK-AIOS-005",
+    "TASK-AIOS-011"
+  ],
+  "purpose": "Make MVP artifacts reproducible enough to test, audit, and hand off without relying on local machine state.",
+  "scope": [
+    "Define build commands for agentd binary, rootfs/image, tests, and boot smoke test.",
+    "Generate basic SBOM or dependency inventory for binaries and image inputs.",
+    "Record provenance metadata: source revision or workspace hash, build time, toolchain version, image inputs.",
+    "Document artifact retention and promotion rules."
+  ],
+  "deliverables": [
+    "Build pipeline definition",
+    "Provenance metadata file",
+    "SBOM or dependency inventory",
+    "docs/release-artifacts.md"
+  ],
+  "acceptance_criteria": [
+    "A clean machine can reproduce the core MVP build steps from documented commands.",
+    "Release artifact metadata identifies source, toolchain, and image inputs.",
+    "Safety regression tests and boot smoke tests run before artifact promotion.",
+    "Secrets are not embedded in release artifacts or provenance output."
+  ],
+  "verification": [
+    "Run build pipeline locally.",
+    "Inspect provenance metadata.",
+    "Confirm clean build does not depend on untracked local state."
+  ],
+  "risk_notes": [
+    "Supply-chain discipline should start in MVP because agentd controls privileged system paths."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "TASK-AIOS-000",
+  "title": "Freeze MVP product shape and operating assumptions",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "decision",
+  "source": "research.md:21",
+  "depends_on": [],
+  "purpose": "Turn the research assumptions into explicit MVP decisions before implementation starts.",
+  "scope": [
+    "Choose first product shape: developer VM, cloud VM, or explicitly scoped dual-track.",
+    "Fix first distro target and hardware assumptions.",
+    "Decide external LLM policy for MVP: disabled, optional, or required for non-critical planning.",
+    "Record MVP non-goals so Firecracker productionization, seL4/Genode, HA, and multi-tenant work do not leak into the first slice."
+  ],
+  "deliverables": [
+    "docs/decisions/000-mvp-shape.md",
+    "Updated .workflow/state.json active_decisions",
+    "Updated TASK.md decision section"
+  ],
+  "acceptance_criteria": [
+    "The selected MVP shape names the primary user, environment, and first three workflows.",
+    "All open assumptions from research.md lines 23-31 are accepted, rejected, or deferred.",
+    "The decision document includes explicit non-goals and a change-control rule for scope expansion."
+  ],
+  "verification": [
+    "Review decision document for unresolved TODO markers.",
+    "Confirm downstream tasks reference the selected product shape."
+  ],
+  "risk_notes": [
+    "Starting implementation before this task completes will create architecture churn."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "TASK-AIOS-003",
+  "title": "Build terminal-first TUI intent and approval surface",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "tui",
+  "source": "research.md:154",
+  "depends_on": [
+    "TASK-AIOS-002"
+  ],
+  "purpose": "Provide the operator-facing terminal surface for intent input, plan preview, status, approval, denial, and audit inspection.",
+  "scope": [
+    "Render an interactive terminal shell or TUI attached to agentd.",
+    "Accept natural-language intent and show a deterministic plan preview from stub planner output.",
+    "Support approval, denial, timeout, and suspended states.",
+    "Show recent audit events and current run status."
+  ],
+  "deliverables": [
+    "TUI implementation",
+    "PTY/session management notes",
+    "Approval interaction tests",
+    "docs/tui-operator-flow.md"
+  ],
+  "acceptance_criteria": [
+    "Operator can submit an intent and receive a frozen plan preview.",
+    "High-risk placeholder steps pause for approval and record the decision.",
+    "The TUI remains responsive while a simulated tool call streams status.",
+    "All visible actions map to structured agentd API calls."
+  ],
+  "verification": [
+    "Run TUI integration test in local terminal.",
+    "Run boot image and confirm the first interactive surface is terminal-first.",
+    "Inspect audit events for approval and denial actions."
+  ],
+  "risk_notes": [
+    "Do not make UI text the security boundary; policy decisions must live in agentd/policy."
+  ]
+}

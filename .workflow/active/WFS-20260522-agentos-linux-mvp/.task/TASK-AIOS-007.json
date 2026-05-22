@@ -1,0 +1,40 @@
+{
+  "id": "TASK-AIOS-007",
+  "title": "Implement capability lease model and policy evaluator",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:163",
+  "depends_on": [
+    "TASK-AIOS-004",
+    "TASK-AIOS-005"
+  ],
+  "purpose": "Represent permissions as short-lived semantic leases that can be audited and compiled into Linux execution constraints.",
+  "scope": [
+    "Define capability levels: read-only, write-with-diff, execute-with-confirmation, privileged-with-human-approval, never.",
+    "Implement policy decisions: allow, deny, pause-for-approval.",
+    "Bind lease metadata to actor, tool, resource, parameter hash, expiration, and policy version.",
+    "Deny shell.exec, secret dump, raw block writes, and kernel module load in normal mode."
+  ],
+  "deliverables": [
+    "Capability lease schema",
+    "Policy evaluator implementation",
+    "Approval token schema",
+    "docs/capability-policy.md"
+  ],
+  "acceptance_criteria": [
+    "Each semantic tool maps to exactly one risk class before execution.",
+    "High-risk tools pause unless a matching approval token exists.",
+    "Approval tokens cannot authorize changed parameters after issuance.",
+    "Denied tools are recorded without executing."
+  ],
+  "verification": [
+    "Run policy table tests.",
+    "Attempt parameter mutation after approval and confirm denial.",
+    "Inspect audit records for decision and lease fields."
+  ],
+  "risk_notes": [
+    "Approval must bind exact action parameters, not a broad session-level grant."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "TASK-AIOS-004",
+  "title": "Define semantic tool call schema and router",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:149",
+  "depends_on": [
+    "TASK-AIOS-002"
+  ],
+  "purpose": "Replace arbitrary shell access with typed semantic tools that can be classified, approved, audited, sandboxed, and recovered.",
+  "scope": [
+    "Define schemas for svc.logs, svc.status, http.check, config.test, fs.read, fs.write.diff, svc.restart, audit.show, and rollback.trigger.",
+    "Implement a router that validates tool names and normalized parameters before dispatch.",
+    "Reject unknown tools and shell.exec in normal mode.",
+    "Record tool version, normalized parameters, and routing decision."
+  ],
+  "deliverables": [
+    "Semantic tool schema definitions",
+    "Tool router implementation",
+    "Tool validation tests",
+    "docs/semantic-tools.md"
+  ],
+  "acceptance_criteria": [
+    "Normal mode has no generic shell.exec route.",
+    "Every accepted tool call is schema-validated and canonicalized.",
+    "Rejected tool calls include a clear policy-safe reason.",
+    "At least three read-only tools and one write-with-diff tool are represented."
+  ],
+  "verification": [
+    "Run schema validation tests.",
+    "Attempt shell.exec and confirm it is denied in normal mode.",
+    "Inspect audit output for normalized tool parameters."
+  ],
+  "risk_notes": [
+    "The schema is the system's tool boundary; avoid loose passthrough fields."
+  ]
+}

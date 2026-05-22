@@ -1,0 +1,40 @@
+{
+  "id": "TASK-AIOS-005",
+  "title": "Implement append-only audit event journal",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "persistence",
+  "source": "research.md:157",
+  "depends_on": [
+    "TASK-AIOS-002",
+    "TASK-AIOS-004"
+  ],
+  "purpose": "Make every intention, decision, prepared effect, observed result, commit, and rollback traceable across crashes.",
+  "scope": [
+    "Define event types: IntentReceived, PlanFrozen, ApprovalBound, EffectPrepared, EffectObserved, CommitSealed, RollbackPending, RollbackObserved, RecoveryStarted, RecoveryCompleted.",
+    "Persist events in append-only JSONL or SQLite/WAL-backed event store.",
+    "Add event integrity fields: run_id, step_id, actor, timestamp, policy_version, tool_version, parameter_hash, parent_event.",
+    "Provide query API for latest run, run timeline, and unresolved effects."
+  ],
+  "deliverables": [
+    "Audit event schema",
+    "Audit writer and reader",
+    "Recovery query support",
+    "docs/audit-journal.md"
+  ],
+  "acceptance_criteria": [
+    "EffectPrepared is written before any side-effecting executor is invoked.",
+    "CommitSealed only appears after verification succeeds.",
+    "Unsealed effects can be listed after process restart.",
+    "Audit records do not include secret plaintext."
+  ],
+  "verification": [
+    "Run event schema tests.",
+    "Simulate a process restart after EffectPrepared and verify unresolved state is discoverable.",
+    "Run log redaction tests for secret-like input."
+  ],
+  "risk_notes": [
+    "A plan log is not enough; recovery must reason over effects that may already have happened."
+  ]
+}

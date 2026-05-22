@@ -1,0 +1,43 @@
+{
+  "id": "TASK-AIOS-010",
+  "title": "Implement first service recovery workflow",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P1",
+  "type": "workflow",
+  "source": "research.md:293",
+  "depends_on": [
+    "TASK-AIOS-003",
+    "TASK-AIOS-004",
+    "TASK-AIOS-005",
+    "TASK-AIOS-007",
+    "TASK-AIOS-008"
+  ],
+  "purpose": "Drive the MVP through a realistic operator flow such as nginx 502 diagnosis and controlled restart.",
+  "scope": [
+    "Implement read-only diagnostics: service logs, status, port/http check, config test.",
+    "Generate a plan that separates automatic diagnostics from restart approval.",
+    "Run restart or simulated restart through execute-with-confirmation policy.",
+    "Show operator summary: what was checked, what changed, and final health result."
+  ],
+  "deliverables": [
+    "Service recovery workflow implementation",
+    "Example Runbook",
+    "End-to-end workflow test",
+    "docs/runbooks/service-recovery.md"
+  ],
+  "acceptance_criteria": [
+    "Read-only diagnostics run without approval and without persistent side effects.",
+    "Restart pauses for confirmation in production-sensitive mode.",
+    "All tool calls and results appear in audit timeline.",
+    "Operator sees a final explanation grounded in observed events."
+  ],
+  "verification": [
+    "Run happy-path service recovery test.",
+    "Run denied restart path and confirm no restart effect.",
+    "Inspect audit.show last-run output."
+  ],
+  "risk_notes": [
+    "The workflow must not infer success from model output; it must verify actual service health."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "TASK-AIOS-009",
+  "title": "Implement write-with-diff and rollback handle flow",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "rollback",
+  "source": "research.md:182",
+  "depends_on": [
+    "TASK-AIOS-005",
+    "TASK-AIOS-007",
+    "TASK-AIOS-008"
+  ],
+  "purpose": "Ensure file-changing operations are inspectable and reversible before they can touch the real target.",
+  "scope": [
+    "Write changes in a shadow copy, overlay, or isolated workspace first.",
+    "Generate diff with base hash, target path, proposed content hash, and rollback metadata.",
+    "Require approval before commit for system-sensitive paths.",
+    "Persist rollback handles and verify the post-commit state."
+  ],
+  "deliverables": [
+    "write-with-diff executor",
+    "Rollback handle schema",
+    "Diff preview integration in TUI",
+    "docs/write-diff-rollback.md"
+  ],
+  "acceptance_criteria": [
+    "No write-with-diff action mutates the target before diff review.",
+    "Commit writes EffectPrepared before mutation and CommitSealed after verification.",
+    "Rollback can restore the previous content for supported file changes.",
+    "Base hash mismatch blocks stale writes."
+  ],
+  "verification": [
+    "Run file change happy path.",
+    "Run stale base hash test.",
+    "Run rollback test after simulated failed verification."
+  ],
+  "risk_notes": [
+    "Rollback for packages and services is not equivalent to file rollback; keep MVP flow scoped to supported file changes."
+  ]
+}

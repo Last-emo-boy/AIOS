@@ -1,0 +1,49 @@
+{
+  "project": "AIOS",
+  "workflow_name": "agentos-linux-mvp",
+  "current_workflow": ".workflow/active/WFS-20260522-agentos-linux-mvp",
+  "current_phase": "mvp",
+  "status": "planning",
+  "created_at": "2026-05-22T21:31:25+08:00",
+  "updated_at": "2026-05-22T21:31:25+08:00",
+  "source": "research.md",
+  "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, semantic capability runtime, audit and rollback before autonomy.",
+  "active_decisions": [
+    {
+      "id": "DEC-001",
+      "status": "open",
+      "title": "Freeze first product shape: developer VM or cloud VM",
+      "source": "research.md:33"
+    },
+    {
+      "id": "DEC-002",
+      "status": "proposed",
+      "title": "Use Linux LTS as MVP base; defer seL4/Genode to separate high-security product line",
+      "source": "research.md:100"
+    },
+    {
+      "id": "DEC-003",
+      "status": "proposed",
+      "title": "Default deny arbitrary shell; expose only semantic tools through capability leases",
+      "source": "research.md:163"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "research",
+      "path": "research.md"
+    },
+    {
+      "type": "workflow",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json"
+    },
+    {
+      "type": "plan",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/plan.json"
+    },
+    {
+      "type": "task_index",
+      "path": "TASK.md"
+    }
+  ]
+}

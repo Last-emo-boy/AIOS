@@ -1,0 +1,38 @@
+{
+  "id": "TASK-AIOS-006",
+  "title": "Implement recovery reconciler for unfinished effects",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "recovery",
+  "source": "research.md:157",
+  "depends_on": [
+    "TASK-AIOS-005"
+  ],
+  "purpose": "Allow agentd to restart and deterministically reconcile effects without asking the model to reinterpret the task.",
+  "scope": [
+    "Scan audit journal for EffectPrepared without CommitSealed or RollbackObserved.",
+    "Classify unresolved effects as safe-to-verify, needs-rollback, needs-human-review, or abandoned.",
+    "Expose recovery status in TUI and agentd health output.",
+    "Require human confirmation before continuing any ambiguous side effect."
+  ],
+  "deliverables": [
+    "Recovery reconciler implementation",
+    "Recovery state machine tests",
+    "Crash simulation harness",
+    "docs/recovery-semantics.md"
+  ],
+  "acceptance_criteria": [
+    "agentd restart does not silently discard prepared effects.",
+    "Recovery path can resume verification for read-only and simulated write effects.",
+    "Ambiguous effects are surfaced to the operator before continuation.",
+    "Recovery emits RecoveryStarted and RecoveryCompleted events."
+  ],
+  "verification": [
+    "Run crash simulation for prepared, observed, sealed, and rollback-pending states.",
+    "Boot image after injecting an unresolved effect and confirm TUI recovery prompt."
+  ],
+  "risk_notes": [
+    "Recovery logic must be deterministic and model-independent."
+  ]
+}

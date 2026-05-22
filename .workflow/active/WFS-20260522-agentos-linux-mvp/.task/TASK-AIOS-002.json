@@ -1,0 +1,39 @@
+{
+  "id": "TASK-AIOS-002",
+  "title": "Implement agentd lifecycle skeleton",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:127",
+  "depends_on": [
+    "TASK-AIOS-001"
+  ],
+  "purpose": "Create the minimal agentd process model needed for PID 1 operation, health reporting, shutdown handling, and deterministic module boundaries.",
+  "scope": [
+    "Define agentd module boundaries for planner, policy, capability, tool router, audit, rollback, model broker, and TUI.",
+    "Implement process signal handling suitable for PID 1 responsibilities.",
+    "Expose health/status endpoint over Unix domain socket or local control interface.",
+    "Stub each internal API from Plan through Recover without executing real side effects."
+  ],
+  "deliverables": [
+    "agentd skeleton source",
+    "agentd module interface definitions",
+    "agentd lifecycle tests",
+    "docs/agentd-lifecycle.md"
+  ],
+  "acceptance_criteria": [
+    "agentd starts as the boot handoff target and stays alive.",
+    "agentd can report status, module readiness, and last error.",
+    "agentd handles termination and child reaping paths deliberately.",
+    "All stub APIs return typed results and structured errors."
+  ],
+  "verification": [
+    "Run unit tests for lifecycle and API stubs.",
+    "Run image boot smoke test with agentd skeleton.",
+    "Force a controlled agentd error and verify health output."
+  ],
+  "risk_notes": [
+    "Avoid making PID 1 a large business-logic process; adapters should remain separate child services where possible."
+  ]
+}

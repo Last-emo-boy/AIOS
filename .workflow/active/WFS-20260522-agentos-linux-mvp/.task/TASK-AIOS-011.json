@@ -1,0 +1,43 @@
+{
+  "id": "TASK-AIOS-011",
+  "title": "Add adversarial and safety regression tests",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P0",
+  "type": "quality",
+  "source": "research.md:259",
+  "depends_on": [
+    "TASK-AIOS-004",
+    "TASK-AIOS-005",
+    "TASK-AIOS-007",
+    "TASK-AIOS-008",
+    "TASK-AIOS-009"
+  ],
+  "purpose": "Bake prompt injection, over-permission, tool abuse, memory poisoning, resource abuse, and rollback failures into the release gate.",
+  "scope": [
+    "Create prompt injection fixtures that attempt shell execution, data exfiltration, login, download, and policy override.",
+    "Create tool abuse tests for arbitrary shell, broad approval, secret dump, raw device write, and kernel module load.",
+    "Create resource abuse tests for fork bomb, memory pressure, and excessive output.",
+    "Create rollback failure tests for stale base hash and half-committed effect."
+  ],
+  "deliverables": [
+    "Safety regression test suite",
+    "Adversarial fixtures",
+    "CI gate configuration",
+    "docs/safety-test-matrix.md"
+  ],
+  "acceptance_criteria": [
+    "Dangerous external-content instructions cannot trigger side effects silently.",
+    "All never-class tools are denied before executor invocation.",
+    "Resource abuse tests hit configured limits.",
+    "Rollback and recovery tests are part of the default CI gate."
+  ],
+  "verification": [
+    "Run full safety test suite.",
+    "Confirm CI fails when approval binding or policy tests are disabled.",
+    "Review audit records for denied actions."
+  ],
+  "risk_notes": [
+    "Safety tests must evolve with every new tool capability; stale tests should block releases."
+  ]
+}

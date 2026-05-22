@@ -1,0 +1,153 @@
+{
+  "plan_id": "PLAN-AIOS-LINUX-MVP-20260522",
+  "workflow_id": "WFS-20260522-agentos-linux-mvp",
+  "title": "AgentOS Linux MVP Task Plan",
+  "status": "draft",
+  "source": "research.md",
+  "created_at": "2026-05-22T21:31:25+08:00",
+  "updated_at": "2026-05-22T21:31:25+08:00",
+  "objective": "Deliver the first executable Linux-based AgentOS slice with agentd boot/control plane, terminal-first UX, semantic capabilities, audit, diff/rollback, and recovery.",
+  "assumptions": [
+    "MVP targets x86_64 Linux with hardware virtualization available but not required for the first slice.",
+    "MVP is single-tenant and single-operator.",
+    "Debian/Ubuntu is the first package-management target unless DEC-001 changes scope.",
+    "External LLM usage remains optional; the system must support local-only or stub planner mode.",
+    "Firecracker is designed into interfaces but not required for MVP completion."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "Product and Architecture Freeze",
+      "purpose": "Remove ambiguity before implementation starts.",
+      "tasks": [
+        "TASK-AIOS-000"
+      ],
+      "exit_criteria": [
+        "First product shape is selected.",
+        "MVP non-goals are accepted.",
+        "Boot target and distro base are fixed."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Bootable Control Plane",
+      "purpose": "Prove Linux can hand control to agentd and that agentd can survive as the minimal control process.",
+      "tasks": [
+        "TASK-AIOS-001",
+        "TASK-AIOS-002",
+        "TASK-AIOS-003"
+      ],
+      "exit_criteria": [
+        "A minimal image boots into agentd/TUI path.",
+        "agentd has structured lifecycle and health reporting.",
+        "Operator can enter an intent and receive a deterministic plan preview."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Semantic Runtime and Audit",
+      "purpose": "Prevent arbitrary shell from becoming the system boundary.",
+      "tasks": [
+        "TASK-AIOS-004",
+        "TASK-AIOS-005",
+        "TASK-AIOS-006"
+      ],
+      "exit_criteria": [
+        "Semantic tool calls are typed and routed through policy.",
+        "Every effect is journaled before execution.",
+        "Crash recovery can distinguish prepared, observed, sealed, and rollback-pending effects."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Capability, Sandbox, and Rollback",
+      "purpose": "Make low and medium risk side effects constrained, inspectable, and reversible.",
+      "tasks": [
+        "TASK-AIOS-007",
+        "TASK-AIOS-008",
+        "TASK-AIOS-009"
+      ],
+      "exit_criteria": [
+        "Read-only tools run under Linux sandbox constraints.",
+        "File writes use shadow/overlay diff flow.",
+        "Approval tokens bind actor, tool, resource, parameter hash, expiry, and policy version."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "MVP Workflows and Quality Gates",
+      "purpose": "Drive the architecture through real workflows and regression tests.",
+      "tasks": [
+        "TASK-AIOS-010",
+        "TASK-AIOS-011",
+        "TASK-AIOS-012"
+      ],
+      "exit_criteria": [
+        "At least one real service recovery workflow runs end to end.",
+        "Prompt injection, over-permission, fork bomb, and rollback tests exist.",
+        "CI produces reproducible artifacts with basic provenance metadata."
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-AIOS-000",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-000.json"
+    },
+    {
+      "id": "TASK-AIOS-001",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-001.json"
+    },
+    {
+      "id": "TASK-AIOS-002",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-002.json"
+    },
+    {
+      "id": "TASK-AIOS-003",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-003.json"
+    },
+    {
+      "id": "TASK-AIOS-004",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-004.json"
+    },
+    {
+      "id": "TASK-AIOS-005",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-005.json"
+    },
+    {
+      "id": "TASK-AIOS-006",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-006.json"
+    },
+    {
+      "id": "TASK-AIOS-007",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-007.json"
+    },
+    {
+      "id": "TASK-AIOS-008",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-008.json"
+    },
+    {
+      "id": "TASK-AIOS-009",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-009.json"
+    },
+    {
+      "id": "TASK-AIOS-010",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-010.json"
+    },
+    {
+      "id": "TASK-AIOS-011",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-011.json"
+    },
+    {
+      "id": "TASK-AIOS-012",
+      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-012.json"
+    }
+  ],
+  "risk_policy": {
+    "default_shell": "forbidden",
+    "write_requires_diff": true,
+    "high_risk_requires_approval": true,
+    "external_content_trust": "untrusted",
+    "secret_policy": "handle-only"
+  }
+}
