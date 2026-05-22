@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-005",
   "title": "Assemble runtime-aware initramfs and rootfs image path",
-  "status": "planned",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "platform",
@@ -17,8 +17,9 @@
     "Document any deliberate deferrals as blocking Alpha risks."
   ],
   "deliverables": [
-    "Runtime-aware image/rootfs assembly update",
-    "Image manifest update with runtime artifact records",
+    "image/build-alpha-rootfs.ps1",
+    "image/build-initramfs.ps1",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-aware-image-assembly.md",
     ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json"
   ],
   "acceptance_criteria": [
@@ -73,5 +74,19 @@
       "Manifest validation is mandatory.",
       "Boot dependency check still passes."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T08:43:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json",
+    "builder": "image/build-alpha-rootfs.ps1",
+    "initramfs_builder": "image/build-initramfs.ps1",
+    "documentation": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-aware-image-assembly.md",
+    "verification": {
+      "alpha_rootfs_assembly": "passed",
+      "initramfs_build": "passed",
+      "boot_dependency_check": "passed",
+      "missing_model_broker_fail_closed": "passed"
+    },
+    "next_task": "TASK-DALPHA-006"
   }
 }

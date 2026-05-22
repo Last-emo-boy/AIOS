@@ -1,6 +1,8 @@
 param(
     [string]$OutDir = "image/out",
     [string]$SourceDir = "image/initramfs",
+    [string]$AlphaRootfsPath = "packaging/agentos/rootfs",
+    [switch]$SkipAlphaRootfsAssembly,
     [switch]$Clean
 )
 
@@ -204,6 +206,23 @@ if ($Clean -and (Test-Path -LiteralPath $outRoot)) {
 }
 
 New-Item -ItemType Directory -Force -Path $sourceRoot, $outRoot | Out-Null
+
+$alphaRootfsManifest = $null
+if (-not $SkipAlphaRootfsAssembly) {
+    & pwsh -NoProfile -ExecutionPolicy Bypass -File "image/build-alpha-rootfs.ps1" `
+        -SourceRootfs $AlphaRootfsPath `
+        -OutDir $OutDir `
+        -Clean:$Clean
+    if ($LASTEXITCODE -ne 0) {
+        throw "image/build-alpha-rootfs.ps1 failed with exit code $LASTEXITCODE"
+    }
+    $alphaRootfsManifestPath = Join-Path $outRoot "agentos-alpha-rootfs.manifest.json"
+    if (-not (Test-Path -LiteralPath $alphaRootfsManifestPath)) {
+        throw "Alpha rootfs manifest was not produced: $alphaRootfsManifestPath"
+    }
+    $alphaRootfsManifest = Get-Content -LiteralPath $alphaRootfsManifestPath -Raw | ConvertFrom-Json
+}
+
 foreach ($dir in @("bin", "dev", "etc", "proc", "sbin", "sys", "tmp")) {
     New-Item -ItemType Directory -Force -Path (Join-Path $sourceRoot $dir) | Out-Null
 }
@@ -224,6 +243,25 @@ $manifest = [ordered]@{
     generated_agentd_sha256 = $agentdHash
     boot_args = "console=ttyS0 rdinit=/sbin/agentd panic=-1"
     handoff_marker = "AGENTD_HANDOFF_OK"
+    alpha_rootfs = if ($alphaRootfsManifest) {
+        [ordered]@{
+            manifest = "image/out/agentos-alpha-rootfs.manifest.json"
+            source_rootfs = $alphaRootfsManifest.source_rootfs
+            staged_rootfs = $alphaRootfsManifest.staged_rootfs
+            validation_result = $alphaRootfsManifest.validation_result
+            rootfs_runtime_manifest = $alphaRootfsManifest.rootfs_runtime_manifest
+            rootfs_runtime_manifest_sha256 = $alphaRootfsManifest.rootfs_runtime_manifest_sha256
+            artifacts = $alphaRootfsManifest.artifacts
+            blocking_alpha_risks = @(
+                "FullRootfs validation and QEMU runtime smoke are required before Alpha promotion."
+            )
+        }
+    } else {
+        [ordered]@{
+            skipped = $true
+            reason = "SkipAlphaRootfsAssembly was set"
+        }
+    }
     constraints = @(
         "Developer VM first, Cloud VM compatible",
         "x86_64 Linux VM",

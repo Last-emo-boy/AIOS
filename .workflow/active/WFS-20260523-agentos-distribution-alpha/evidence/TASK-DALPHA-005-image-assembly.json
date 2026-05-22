@@ -1,0 +1,91 @@
+{
+  "task": "TASK-DALPHA-005",
+  "status": "completed",
+  "completed_at": "2026-05-23T08:43:00+08:00",
+  "summary": "Added a runtime-aware Alpha rootfs assembly step and wired it into the initramfs builder. The assembly now runs the Alpha rootfs validator before staging, records runtime artifact hashes, writes a rootfs runtime manifest, embeds the Alpha rootfs projection into the initramfs manifest, preserves /sbin/agentd boot handoff, and fails closed when required runtime artifacts are missing.",
+  "deliverables": {
+    "alpha_rootfs_builder": "image/build-alpha-rootfs.ps1",
+    "initramfs_builder_update": "image/build-initramfs.ps1",
+    "documentation": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-aware-image-assembly.md",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json"
+  },
+  "source_inputs": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md",
+    "scripts/validate-alpha-rootfs.ps1",
+    "docs/boot-chain.md",
+    "docs/release-artifacts.md"
+  ],
+  "generated_outputs": {
+    "ignored_outputs": [
+      "image/out/agentos-alpha-rootfs/",
+      "image/out/agentos-alpha-rootfs.validation.json",
+      "image/out/agentos-alpha-rootfs.manifest.json",
+      "image/out/agentos-alpha-rootfs/usr/lib/agentos/release/rootfs-runtime-manifest.json",
+      "image/out/agentos-initramfs.cpio.gz",
+      "image/out/agentos-initramfs.manifest.json",
+      ".workflow/artifacts/alpha-image-assembly/"
+    ],
+    "tracked_outputs": [
+      "image/build-alpha-rootfs.ps1",
+      "image/build-initramfs.ps1",
+      ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-aware-image-assembly.md",
+      ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json"
+    ]
+  },
+  "verification": {
+    "alpha_rootfs_assembly": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-alpha-rootfs.ps1 -Clean",
+      "status": "passed",
+      "manifest": "image/out/agentos-alpha-rootfs.manifest.json",
+      "runtime_manifest": "image/out/agentos-alpha-rootfs/usr/lib/agentos/release/rootfs-runtime-manifest.json",
+      "rootfs_runtime_manifest_sha256": "69a1f9023a600b1fae80654bc3c141877adbce7c84970f6f89aa51ebccbcaefd",
+      "validated_artifacts": [
+        "policy.pack",
+        "tools.semantic",
+        "model_broker.config",
+        "state.runs",
+        "state.audit",
+        "state.rollback",
+        "state.memory"
+      ]
+    },
+    "initramfs_build": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1 -Clean",
+      "status": "passed",
+      "manifest": "image/out/agentos-initramfs.manifest.json",
+      "initramfs_sha256": "741e8a6bd8d4a00981743d711c59f720bffe0cc0212bcc73f7f2e079f542228d",
+      "generated_agentd": "sbin/agentd",
+      "generated_agentd_sha256": "a589a9ce737cef59b040cdc9c64778e82dbf6e59e26ea0a5e33c42548d07252c",
+      "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+      "handoff_marker": "AGENTD_HANDOFF_OK",
+      "alpha_rootfs_embedded": true
+    },
+    "boot_dependency_check": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -DependencyCheckOnly",
+      "status": "passed"
+    },
+    "fail_closed_assembly": {
+      "command": "Run image/build-alpha-rootfs.ps1 against a temporary rootfs missing etc/agentos/model-broker.toml",
+      "status": "passed",
+      "expected_result": "non-zero exit",
+      "failed_ids": [
+        "model_broker.config"
+      ],
+      "generated_result": ".workflow/artifacts/alpha-image-assembly/out/agentos-alpha-rootfs.validation.json"
+    }
+  },
+  "acceptance_evidence": {
+    "assembly_requires_validation": "image/build-alpha-rootfs.ps1 runs scripts/validate-alpha-rootfs.ps1 before staging and throws when validation fails.",
+    "manifest_records_runtime_artifacts": "agentos-alpha-rootfs.manifest.json and the embedded initramfs alpha_rootfs projection record policy, tools, ModelBroker config, and persistent state artifact IDs with hashes where applicable.",
+    "boot_handoff_preserved": "image/out/agentos-initramfs.manifest.json keeps generated_agentd=sbin/agentd, boot_args=console=ttyS0 rdinit=/sbin/agentd panic=-1, and handoff_marker=AGENTD_HANDOFF_OK.",
+    "generated_artifact_hygiene": "Generated rootfs, initramfs, validation, and temporary failing fixture outputs remain under ignored image/out/ or .workflow/artifacts/ paths."
+  },
+  "blocking_alpha_risks_remaining": [
+    "FullRootfs validation still requires installed agentd.boot, agentd.runtime, release.provenance, and release.rootfs_manifest.",
+    "QEMU runtime smoke is still required before Alpha promotion.",
+    "Packaged AgentCore service recovery smoke remains TASK-DALPHA-006."
+  ],
+  "next_task": "TASK-DALPHA-006"
+}
