@@ -22,7 +22,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 必须先冻结的决策
 
-1. 首发产品形态：开发者 VM、Cloud VM，还是明确收窄的双轨。
+1. 首发产品形态：**已冻结为 Developer VM first, Cloud VM compatible**，见 `docs/decisions/000-mvp-shape.md`。
 2. MVP 发行版：建议先固定 Debian/Ubuntu。
 3. 外部 LLM 策略：禁用、可选增强，还是仅限非关键规划路径。
 4. 首个真实 Runbook：建议从 nginx/service recovery、仓库自举、Cloud VM 诊断三选一。
@@ -112,4 +112,4 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 下一步
 
-先完成 `TASK-AIOS-000`，写出 `docs/decisions/000-mvp-shape.md`。确认首发形态后，从 `TASK-AIOS-001` 开始做最小可启动镜像。
+继续完成 `TASK-AIOS-000B`，冻结 MVP 运行假设。Wave 0 完成后，从 `TASK-AIOS-001` 开始做最小可启动镜像。
