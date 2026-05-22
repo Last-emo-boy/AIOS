@@ -28,7 +28,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-DALPHA-001` 已完成：rootfs runtime artifact install manifest 已定义，覆盖 boot/runtime `agentd`、policy pack、semantic tool manifest、ModelBroker config、run/audit/rollback/memory persistent directories、release provenance 和 rootfs manifest metadata，并提供后续 validator 可消费的 artifact ID 与 validation labels。
 - `TASK-DALPHA-002` 已完成：runtime state directory and permission validation 已定义，覆盖 `/var/lib/agentos/runs/`、`/var/log/agentos/audit/`、`/var/lib/agentos/rollback/` 和 `/var/lib/agentos/memory/` 的 `root:root` / `0700` 初始权限、runtime authority、secret-safety、restart-survival、audit projection、recovery truth 和 evidence schema。
 - `TASK-DALPHA-004` 已完成：packageable policy pack、semantic tool manifest 和 ModelBroker defaults 已写入 `packaging/agentos/rootfs/etc/agentos/`，保留 exact approval binding，normal-mode `shell.exec` 只作为 deny policy 出现且不在 semantic tool manifest 中，ModelBroker 默认 stub/local-only 且不需要 network 或 external credentials。
-- 下一步正在执行 `TASK-DALPHA-003`：实现 rootfs staging and manifest validation，消费 `TASK-DALPHA-001`、`TASK-DALPHA-002` 和 `TASK-DALPHA-004` 的 artifact/path/permission/config 契约。
+- `TASK-DALPHA-003` 已完成：新增 `scripts/validate-alpha-rootfs.ps1`，可在 `PackageDefaults` 阶段验证 `policy.pack`、`tools.semantic`、`model_broker.config` 和四个 persistent state directories，输出稳定 JSON；缺失 `model_broker.config` 的 fixture 已验证 fail-closed。
+- 下一步正在执行 `TASK-DALPHA-005`：assemble runtime-aware initramfs and rootfs image path，把 rootfs validator 接到 image/initramfs assembly 与 manifest/provenance 输入。
 - Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
 - `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
@@ -105,8 +106,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Distribution Alpha Wave 1：runtime-aware image assembly
 
-- `TASK-DALPHA-003`：实现 rootfs staging and manifest validation（in progress）
-- `TASK-DALPHA-005`：assemble runtime-aware initramfs and rootfs image path（planned）
+- `TASK-DALPHA-003`：实现 rootfs staging and manifest validation（completed）
+- `TASK-DALPHA-005`：assemble runtime-aware initramfs and rootfs image path（in progress）
 
 退出标准：
 
@@ -359,4 +360,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-执行 `TASK-DALPHA-003`：实现 rootfs staging and manifest validation，验证 `TASK-DALPHA-001` manifest、`TASK-DALPHA-002` state permission contract 和 `TASK-DALPHA-004` package defaults，并输出 fail-closed 的结构化 evidence。
+执行 `TASK-DALPHA-005`：assemble runtime-aware initramfs and rootfs image path，要求 image assembly 在 promotion 前运行 Alpha rootfs validator，并把 runtime artifact hashes、state directory contracts 和 packaging defaults 写入 manifest / provenance 输入。

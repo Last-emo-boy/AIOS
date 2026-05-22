@@ -1,0 +1,62 @@
+{
+  "task": "TASK-DALPHA-003",
+  "status": "completed",
+  "completed_at": "2026-05-23T08:24:00+08:00",
+  "summary": "Implemented a fail-closed Alpha rootfs validator for package-default staging. The validator checks policy pack, semantic tool manifest, ModelBroker config, and persistent runtime state directories, emits stable JSON, records artifact IDs and host paths, verifies owner/mode intent, checks hashes for files, rejects secret-like values, and fails when required artifacts are missing.",
+  "deliverables": {
+    "validator": "scripts/validate-alpha-rootfs.ps1",
+    "state_directory_placeholders": [
+      "packaging/agentos/rootfs/var/lib/agentos/runs/.gitkeep",
+      "packaging/agentos/rootfs/var/log/agentos/audit/.gitkeep",
+      "packaging/agentos/rootfs/var/lib/agentos/rollback/.gitkeep",
+      "packaging/agentos/rootfs/var/lib/agentos/memory/.gitkeep"
+    ],
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json"
+  },
+  "source_inputs": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md",
+    "packaging/agentos/rootfs/etc/agentos/policy/policy-pack.json",
+    "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+    "packaging/agentos/rootfs/etc/agentos/model-broker.toml"
+  ],
+  "validation_modes": {
+    "PackageDefaults": "Validates source-controlled Alpha package defaults and persistent state directory placeholders.",
+    "FullRootfs": "Adds future full-image checks for agentd boot/runtime paths and release metadata."
+  },
+  "verification": {
+    "pass_fixture_command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1 -RootfsPath packaging/agentos/rootfs -Stage PackageDefaults -OutputPath .workflow/artifacts/alpha-rootfs-validation/pass.json",
+    "pass_fixture_result": {
+      "result": "passed",
+      "total": 7,
+      "failed": 0,
+      "artifacts": [
+        "policy.pack",
+        "tools.semantic",
+        "model_broker.config",
+        "state.runs",
+        "state.audit",
+        "state.rollback",
+        "state.memory"
+      ],
+      "generated_result": ".workflow/artifacts/alpha-rootfs-validation/pass.json"
+    },
+    "fail_fixture_command": "copy packaging/agentos/rootfs to .workflow/artifacts/alpha-rootfs-validation/missing-model-rootfs, remove etc/agentos/model-broker.toml, then run scripts/validate-alpha-rootfs.ps1",
+    "fail_fixture_result": {
+      "result": "failed",
+      "failed_ids": [
+        "model_broker.config"
+      ],
+      "generated_result": ".workflow/artifacts/alpha-rootfs-validation/fail-missing-model.json"
+    },
+    "generated_artifacts_policy": "Validation output and temporary failing fixtures stay under .workflow/artifacts/ and are not committed."
+  },
+  "acceptance_evidence": {
+    "fail_closed_missing_artifacts": "Missing model_broker.config produces a failed validation result with failed_ids=[model_broker.config].",
+    "stable_json": "The validator writes agentos.alpha-rootfs-validation.v1 JSON with artifact IDs, paths, checks, summary, and result.",
+    "offline": "PackageDefaults validation uses only local files and does not require network or external LLM access.",
+    "no_generated_commit": "Generated pass/fail outputs remain under .workflow/artifacts/."
+  },
+  "next_task": "TASK-DALPHA-005"
+}

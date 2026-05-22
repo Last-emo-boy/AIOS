@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-003",
   "title": "Implement rootfs staging and manifest validation",
-  "status": "planned",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "distribution",
@@ -19,7 +19,11 @@
     "Keep generated staging outputs ignored."
   ],
   "deliverables": [
-    "scripts or image helper for Alpha rootfs validation",
+    "scripts/validate-alpha-rootfs.ps1",
+    "packaging/agentos/rootfs/var/lib/agentos/runs/.gitkeep",
+    "packaging/agentos/rootfs/var/log/agentos/audit/.gitkeep",
+    "packaging/agentos/rootfs/var/lib/agentos/rollback/.gitkeep",
+    "packaging/agentos/rootfs/var/lib/agentos/memory/.gitkeep",
     ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json"
   ],
   "acceptance_criteria": [
@@ -68,5 +72,16 @@
       "Pass/fail fixture evidence exists.",
       "Generated outputs are not staged."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T08:24:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json",
+    "validator": "scripts/validate-alpha-rootfs.ps1",
+    "verification": {
+      "pass_fixture": ".workflow/artifacts/alpha-rootfs-validation/pass.json",
+      "fail_fixture": ".workflow/artifacts/alpha-rootfs-validation/fail-missing-model.json",
+      "fail_closed_missing": "model_broker.config"
+    },
+    "next_task": "TASK-DALPHA-005"
   }
 }
