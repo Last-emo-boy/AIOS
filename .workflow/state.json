@@ -5,7 +5,7 @@
   "current_phase": "mvp",
   "status": "planning",
   "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-22T21:46:00+08:00",
+  "updated_at": "2026-05-22T21:49:00+08:00",
   "source": "research.md",
   "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, semantic capability runtime, audit and rollback before autonomy.",
   "active_decisions": [
@@ -23,9 +23,9 @@
     },
     {
       "id": "DEC-003",
-      "status": "proposed",
-      "title": "Default deny arbitrary shell; expose only semantic tools through capability leases",
-      "source": "research.md:163"
+      "status": "accepted",
+      "title": "MVP scope control locks deferred product lines and forbids arbitrary root shell in normal mode",
+      "source": "docs/decisions/002-mvp-scope-control.md"
     }
   ],
   "artifacts": [
@@ -52,6 +52,10 @@
     {
       "type": "decision",
       "path": "docs/decisions/001-mvp-operating-assumptions.md"
+    },
+    {
+      "type": "decision",
+      "path": "docs/decisions/002-mvp-scope-control.md"
     }
   ]
 }

@@ -25,7 +25,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 1. 首发产品形态：**已冻结为 Developer VM first, Cloud VM compatible**，见 `docs/decisions/000-mvp-shape.md`。
 2. MVP 运行假设：**已冻结为 x86_64 Linux VM、Debian/Ubuntu、single-tenant/single-operator、TUI-first、external LLM optional-only**，见 `docs/decisions/001-mvp-operating-assumptions.md`。
 3. 外部 LLM 策略：**已冻结为 optional-only；local-only 或 stub planner mode 必须可运行**。
-4. 首个真实 Runbook：建议从 nginx/service recovery、仓库自举、Cloud VM 诊断三选一。
+4. Scope control：**已锁定 MVP non-goals 与回流规则**，见 `docs/decisions/002-mvp-scope-control.md`。
+5. 首个真实 Runbook：已收窄为 service recovery，具体 fixture 留给 Wave 1/Wave 4 决策。
 
 对应任务：`.workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-000.json`
 
@@ -100,6 +101,9 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - 不做 seL4/Genode 高安全版。
 - 不做默认 GUI；GUI 只能作为 terminal 状态投影。
 - 不做在线自改 `agentd`，升级策略留到 Beta 的 A/B rootfs。
+- 不做 normal mode 下的任意 root shell。
+
+新增或恢复任何 deferred item 前，必须先写 accepted decision，更新 `TASK.md`、`plan.json`、受影响 task JSON 和验证门，并单独 commit。
 
 ## 安全底线
 
@@ -112,4 +116,4 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 下一步
 
-继续完成 `TASK-AIOS-000C`，锁定 MVP non-goals 与 scope change control。Wave 0 完成后，从 `TASK-AIOS-001` 开始做最小可启动镜像。
+继续完成 `TASK-AIOS-000D`，把 Wave 0 决策传播到 Wave 1 入口条件。Wave 0 完成后，从 `TASK-AIOS-001` 开始做最小可启动镜像。
