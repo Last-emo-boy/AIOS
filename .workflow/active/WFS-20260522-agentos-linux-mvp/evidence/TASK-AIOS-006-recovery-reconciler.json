@@ -1,0 +1,29 @@
+{
+  "task": "TASK-AIOS-006",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:42:00+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "21 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --recovery-demo .workflow/artifacts/recovery/demo.jsonl",
+      "result": "Reported step-read as safe-to-verify, step-write as needs-rollback, requires_human_confirmation=true."
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/recovery/demo.jsonl",
+      "result": "RecoveryStarted and RecoveryCompleted events persisted after unresolved EffectPrepared events."
+    }
+  ],
+  "classifications": [
+    "safe-to-verify",
+    "needs-rollback",
+    "needs-human-review",
+    "abandoned"
+  ],
+  "human_confirmation_required_for": [
+    "needs-rollback",
+    "needs-human-review"
+  ]
+}

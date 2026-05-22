@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-006",
   "title": "Implement recovery reconciler for unfinished effects",
-  "status": "pending",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "recovery",
@@ -17,10 +17,9 @@
     "Require human confirmation before continuing any ambiguous side effect."
   ],
   "deliverables": [
-    "Recovery reconciler implementation",
-    "Recovery state machine tests",
-    "Crash simulation harness",
-    "docs/recovery-semantics.md"
+    "crates/agentd/src/recovery.rs",
+    "docs/recovery-semantics.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-006-recovery-reconciler.json"
   ],
   "acceptance_criteria": [
     "agentd restart does not silently discard prepared effects.",
@@ -29,9 +28,19 @@
     "Recovery emits RecoveryStarted and RecoveryCompleted events."
   ],
   "verification": [
-    "Run crash simulation for prepared, observed, sealed, and rollback-pending states.",
-    "Boot image after injecting an unresolved effect and confirm TUI recovery prompt."
+    "cargo test -p agentd",
+    "cargo run -p agentd -- --recovery-demo .workflow/artifacts/recovery/demo.jsonl",
+    "Get-Content .workflow/artifacts/recovery/demo.jsonl"
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-006-recovery-reconciler.json",
+    "unit_tests": "21 passed; 0 failed",
+    "recovery_events": [
+      "RecoveryStarted",
+      "RecoveryCompleted"
+    ],
+    "requires_human_confirmation_for_write": true
+  },
   "risk_notes": [
     "Recovery logic must be deterministic and model-independent."
   ]

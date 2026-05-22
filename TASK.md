@@ -29,7 +29,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-003` 已完成：terminal-first TUI surface 支持 intent、plan preview、approval/denial/timeout/suspended 和 audit projection。
 - `TASK-AIOS-004` 已完成：semantic tool schema/router 支持 normalized params、`fs.write.diff` 风险分类，并拒绝 normal-mode `shell.exec`。
 - `TASK-AIOS-005` 已完成：append-only JSONL audit journal 支持核心事件、未封口 effect 查询和 secret-like summary redaction。
-- 下一执行任务：`TASK-AIOS-006`。
+- `TASK-AIOS-006` 已完成：recovery reconciler 可分类未完成 effect，写入 RecoveryStarted/Completed，并为写入类 effect 要求人工确认。
+- 下一执行任务：`TASK-AIOS-007`。
 
 ## 必须先冻结的决策
 
@@ -81,7 +82,7 @@ Wave 1 入口约束：
 
 - `TASK-AIOS-004`：定义 semantic tool call schema 和 router（completed）
 - `TASK-AIOS-005`：实现 append-only audit event journal（completed）
-- `TASK-AIOS-006`：实现 unfinished effects recovery reconciler
+- `TASK-AIOS-006`：实现 unfinished effects recovery reconciler（completed）
 
 退出标准：
 

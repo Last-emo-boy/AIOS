@@ -6,6 +6,7 @@ use agentd::{
     api::SemanticToolCall,
     audit::{AuditEvent, AuditEventType, AuditJournal},
     lifecycle::{Agentd, LifecycleConfig},
+    recovery::RecoveryReconciler,
     tui::{build_demo_session, ApprovalDecision},
 };
 
@@ -65,6 +66,13 @@ fn main() {
                 .map(String::as_str)
                 .unwrap_or(".workflow/artifacts/audit/demo.jsonl");
             run_audit_demo(path)
+        }
+        Some("--recovery-demo") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/recovery/demo.jsonl");
+            run_recovery_demo(path)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -177,6 +185,34 @@ fn run_audit_demo(path: &str) -> Result<(), String> {
             .map_err(|error| error.to_string())?
             .len()
     );
+    Ok(())
+}
+
+fn run_recovery_demo(path: &str) -> Result<(), String> {
+    let journal = AuditJournal::new(path);
+    journal
+        .append(&AuditEvent::new(
+            AuditEventType::EffectPrepared,
+            "run-recovery",
+            "step-read",
+            "operator",
+            "prepared read-only svc.status",
+        ))
+        .map_err(|error| error.to_string())?;
+    journal
+        .append(&AuditEvent::new(
+            AuditEventType::EffectPrepared,
+            "run-recovery",
+            "step-write",
+            "operator",
+            "prepared fs.write.diff",
+        ))
+        .map_err(|error| error.to_string())?;
+    let report = RecoveryReconciler
+        .reconcile(&journal, "run-recovery")
+        .map_err(|error| error.to_string())?;
+    println!("{}", report.to_json());
+    println!("{}", report.render_prompt());
     Ok(())
 }
 
