@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-001",
   "title": "Create minimal Linux boot image for agentd handoff",
-  "status": "pending",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "platform",
@@ -28,9 +28,10 @@
     "Keep the image minimal enough to debug boot failures quickly."
   ],
   "deliverables": [
-    "image/build recipe",
-    "scripts/boot-smoke-test",
-    "docs/boot-chain.md"
+    "image/build-initramfs.ps1",
+    "scripts/boot-smoke-test.ps1",
+    "docs/boot-chain.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-001-boot-smoke.json"
   ],
   "acceptance_criteria": [
     "A local command builds the image from a clean checkout.",
@@ -40,10 +41,17 @@
     "The smoke test runs without remote LLM access and without Firecracker."
   ],
   "verification": [
-    "Run boot smoke test.",
-    "Archive boot log as a workflow artifact.",
-    "Confirm no manual host mutation is required to build or boot the image."
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1 -Clean",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -DependencyCheckOnly",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -TimeoutSeconds 30",
+    "Select-String -Path .workflow/artifacts/boot/boot-smoke.log -Pattern AGENTD_HANDOFF_OK"
   ],
+  "completed_evidence": {
+    "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe",
+    "kernel_source": "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/netboot/vmlinuz-virt",
+    "handoff_marker": "AGENTD_HANDOFF_OK",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-001-boot-smoke.json"
+  },
   "risk_notes": [
     "PID 1 work is hard to debug; keep the first agentd binary minimal and deterministic."
   ]

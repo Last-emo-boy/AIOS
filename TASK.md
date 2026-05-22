@@ -23,7 +23,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 ## 当前进度
 
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
-- 下一执行任务：`TASK-AIOS-001`。
+- `TASK-AIOS-001` 已完成：最小 initramfs 通过 `E:\qemu\qemu-system-x86_64.exe` 启动，并观察到 `/sbin/agentd` 输出 `AGENTD_HANDOFF_OK`。
+- 下一执行任务：`TASK-AIOS-002`。
 
 ## 必须先冻结的决策
 
@@ -53,7 +54,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Wave 1：可启动控制面
 
-- `TASK-AIOS-001`：创建最小 Linux boot image，并验证 `agentd` handoff
+- `TASK-AIOS-001`：创建最小 Linux boot image，并验证 `agentd` handoff（completed）
 - `TASK-AIOS-002`：实现 `agentd` lifecycle skeleton
 - `TASK-AIOS-003`：构建 terminal-first TUI intent / approval surface
 

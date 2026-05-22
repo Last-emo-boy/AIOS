@@ -1,0 +1,16 @@
+{
+  "task": "TASK-AIOS-001",
+  "status": "completed",
+  "observed_marker": true,
+  "marker": "AGENTD_HANDOFF_OK",
+  "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe",
+  "kernel_source": "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/netboot/vmlinuz-virt",
+  "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+  "boot_log_key_lines": [
+    "[    0.000000] Linux version 6.18.22-0-virt (buildozer@build-3-23-x86_64) (cc (Alpine 15.2.0) 15.2.0, GNU ld (GNU Binutils) 2.45.1) #1-Alpine SMP PREEMPT_DYNAMIC 2026-04-11 15:53:25",
+    "[    0.874612] Run /sbin/agentd as init process",
+    "AGENTD_HANDOFF_OK"
+  ],
+  "artifact_policy": "Kernel, initramfs, and raw boot logs are local generated artifacts under ignored paths; this evidence file records the completion proof.",
+  "verified_at": "2026-05-22T22:08:11+08:00"
+}
