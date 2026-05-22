@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-006",
   "title": "Implement generic SecurityExecutionEngine bridge",
-  "status": "pending",
+  "status": "completed",
   "wave": 3,
   "priority": "P0",
   "type": "security",
@@ -41,5 +41,21 @@
   ],
   "risk_notes": [
     "This bridge is the choke point that keeps generic Agent execution from becoming generic shell execution."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T03:48:22+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-006-execution-engine.json",
+    "implementation": [
+      "crates/agentd/src/security_execution.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd security_execution::engine": "5 passed; 0 failed; 137 filtered out",
+      "cargo test -p agentd security_execution::policy_adapter": "6 passed; 0 failed; 136 filtered out",
+      "cargo test -p agentd security_execution::sandbox_profile": "6 passed; 0 failed; 136 filtered out",
+      "cargo test -p agentd rollback::": "5 passed; 0 failed; 137 filtered out",
+      "cargo test -p agentd audit::": "5 passed; 0 failed; 137 filtered out",
+      "cargo test -p agentd": "142 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-007"
+  }
 }

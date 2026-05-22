@@ -1,0 +1,106 @@
+{
+  "id": "TASK-SEF-006",
+  "status": "passed",
+  "completed_at": "2026-05-23T03:48:22+08:00",
+  "summary": "Generic SecurityExecutionEngine bridge is implemented as security_execution::engine. It provides a single prepare, execute, observe, verify, seal, rollback, and explain API over ToolRouter, PolicyEvaluator, CapabilityLease, lease-derived sandbox profiles, EffectEnvelope, AuditJournal, and write-with-diff rollback preparation.",
+  "deliverables": [
+    "crates/agentd/src/security_execution.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-006-execution-engine.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd security_execution::engine",
+      "status": "passed",
+      "result": "5 passed; 0 failed; 137 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd security_execution::policy_adapter",
+      "status": "passed",
+      "result": "6 passed; 0 failed; 136 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd security_execution::sandbox_profile",
+      "status": "passed",
+      "result": "6 passed; 0 failed; 136 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd rollback::",
+      "status": "passed",
+      "result": "5 passed; 0 failed; 137 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd audit::",
+      "status": "passed",
+      "result": "5 passed; 0 failed; 137 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "142 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "AgentCore has one execution API for all effects.",
+      "status": "passed",
+      "evidence": "security_execution::engine::SecurityExecutionEngine exposes prepare, execute, observe, verify, seal, rollback, and explain; DefaultSecurityExecutionEngine implements the API over existing safety components."
+    },
+    {
+      "criterion": "Denied and paused steps do not prepare effects.",
+      "status": "passed",
+      "evidence": "security_execution::engine::tests::denied_and_paused_steps_do_not_prepare_effects verifies denied shell.exec and paused svc.restart return no EffectEnvelope and no EffectPrepared audit entry."
+    },
+    {
+      "criterion": "Prepared write steps include rollback handles.",
+      "status": "passed",
+      "evidence": "security_execution::engine::tests::write_with_diff_prepares_rollback_handle_and_rolls_back_failed_verification verifies fs.write.diff prepare creates PreparedWrite and EffectEnvelope rollback_handle before execution."
+    },
+    {
+      "criterion": "Read-only steps run under sandbox profile.",
+      "status": "passed",
+      "evidence": "security_execution::engine::tests::read_only_step_runs_under_sandbox_and_seals verifies read-only svc.status compiles a sandbox binding, executes through SandboxExecutor, and seals after verification."
+    },
+    {
+      "criterion": "Execution errors are auditable and recoverable.",
+      "status": "passed",
+      "evidence": "SecurityExecutionError exposes failure_class mappings, write base/hash mismatch maps to rollback-pending/fail-closed classes, sandbox denied reports are recorded, and rollback path emits RollbackPending and RollbackObserved."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::security_execution::engine",
+    "trait": "SecurityExecutionEngine",
+    "implementation": "DefaultSecurityExecutionEngine",
+    "operations": [
+      "prepare",
+      "execute",
+      "observe",
+      "verify",
+      "seal",
+      "rollback",
+      "explain"
+    ],
+    "prepare_pipeline": [
+      "ToolRouter routes PlanStep semantic tool call",
+      "PolicyEvaluator records PolicyEvaluated and issues CapabilityLease only for allow decisions",
+      "Denied and awaiting-approval outcomes return without EffectEnvelope",
+      "Read-only leases compile sandbox profiles from leases",
+      "Write-with-diff leases prepare shadow diff and rollback handle before EffectEnvelope prepare",
+      "EffectEnvelope prepare writes EffectPrepared only after policy, lease, sandbox, and rollback prerequisites are satisfied"
+    ],
+    "safety_ordering": [
+      "execute rejects calls without a prepared envelope",
+      "read-only execution uses SandboxExecutor and produces no persistent write path",
+      "write-with-diff execution requires matching path, base_hash, and content_hash",
+      "verify failure for write-with-diff enters RollbackPending",
+      "seal requires successful verification",
+      "rollback restores from rollback handle and records RollbackObserved"
+    ],
+    "failure_classes": [
+      "Suspended",
+      "Denied",
+      "RollbackPending",
+      "FailedClosed"
+    ]
+  },
+  "next_task": "TASK-SEF-007"
+}

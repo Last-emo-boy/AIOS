@@ -42,6 +42,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-ACR-006` 已完成：新增 `agent_core::scheduler`，实现 dependency-aware `StepScheduler`、DAG 校验、CommitSealed-backed ready-step selection、denied dependency blocking、retry budget fail-closed 和 deterministic scheduler explanation；Planner freeze 前会拒绝 missing dependency / cycle，AgentCore run loop 已改用 scheduler decision，`cargo test -p agentd` 128 passed。
 - `TASK-ACR-007` 已完成：新增 `agent_core::observation`，实现 `ObservationProcessor`、observation trust labels、secret-like redaction、untrusted content sanitization、policy flag extraction、direct action source-to-sink denial 和 run loop observation ref 接入；observation 文本只能生成 sanitized replanning hint，不能直接创建 tool call，`cargo test -p agentd` 132 passed。
 - `TASK-ACR-008` 已完成：新增 `agent_core::memory`，实现 `MemoryStore` trait、`InMemoryMemoryStore`、session/run/audit-derived/quarantined scopes、entry metadata、TTL expiry、bounded Planner context、secret-like redaction 和 suspicious/untrusted quarantine；memory poisoning 不能把 policy override、capability lease 或 approval claim 注入 Planner context，`cargo test -p agentd` 137 passed。
+- `TASK-SEF-006` 已完成：新增 `security_execution::engine`，实现 `SecurityExecutionEngine` trait 和 `DefaultSecurityExecutionEngine`，统一 prepare / execute / observe / verify / seal / rollback / explain API；prepare 贯通 ToolRouter、PolicyEvaluator、CapabilityLease、lease-derived sandbox profile、EffectEnvelope、AuditJournal 和 write-with-diff rollback handle，denied / paused 不准备 effect，`cargo test -p agentd` 142 passed。
 - Runtime Foundation Wave 1 已完成：Agent Core Contracts 的数据模型、RunStore、ModelBroker 和 Planner 均已验证。
 - Runtime Foundation Wave 2 已完成：EffectEnvelope、policy adapter、lease-derived sandbox profile、source-to-sink policy 和 secret handle lease rules 均已验证。
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
@@ -62,7 +63,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：`TASK-SEF-006`，实现 generic SecurityExecutionEngine bridge。
+- 下一执行任务：`TASK-SEF-007`，集成 recovery reconciler 与 Agent run state。
 
 ## Runtime Foundation 任务计划
 
@@ -129,7 +130,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-ACR-006`：实现 dependency-aware StepScheduler（completed）
 - `TASK-ACR-007`：实现 ObservationProcessor 和 trust boundary handling（completed）
 - `TASK-ACR-008`：实现最小 Agent memory layer（completed）
-- `TASK-SEF-006`：实现 generic SecurityExecutionEngine bridge（pending）
+- `TASK-SEF-006`：实现 generic SecurityExecutionEngine bridge（completed）
 - `TASK-SEF-007`：集成 recovery reconciler 与 Agent run state（pending）
 
 退出标准：
@@ -268,4 +269,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-Runtime Foundation 当前执行到 Wave 3。下一步继续 `TASK-SEF-006`，把 generic Agent step 接入 Security Execution Foundation bridge，确保所有 side effect 仍经过 policy、capability lease、sandbox profile、EffectEnvelope、audit、verification 和 rollback/recovery 语义。
+Runtime Foundation 当前执行到 Wave 3。下一步继续 `TASK-SEF-007`，把 recovery reconciler 与 Agent run state 集成，确保 crash/restart 后可以从 RunStore + AuditJournal 恢复或协调 in-flight Agent run。

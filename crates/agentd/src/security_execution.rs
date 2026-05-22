@@ -2058,6 +2058,1210 @@ pub mod sandbox_profile {
     }
 }
 
+pub mod engine {
+    use std::fmt;
+    use std::fs;
+    use std::path::PathBuf;
+
+    use crate::agent_core::model::{contains_secret_value, PlanStep};
+    use crate::api::{escape_json, CommitId, RiskClass, VerificationResult};
+    use crate::audit::AuditJournal;
+    use crate::policy::{ApprovalToken, PolicyEvaluator};
+    use crate::rollback::{
+        content_hash, PreparedWrite, RollbackReport, WriteDiffError, WriteDiffExecutor,
+        WriteRequest,
+    };
+    use crate::sandbox::{SandboxCompiler, SandboxDecision, SandboxExecutor, SandboxOperation, SandboxReport};
+    use crate::tools::ToolRouter;
+
+    use super::effect_envelope::{EffectEnvelope, EffectEnvelopeError, EffectEnvelopeState};
+    use super::policy_adapter::{
+        PlanStepPolicyAdapter, StepPolicyError, StepPolicyOutcome, StepPolicyOutcomeKind,
+    };
+    use super::sandbox_profile::{
+        LeaseSandboxProfileCompiler, PlannerSandboxHints, SandboxProfileBinding,
+        SandboxProfileError,
+    };
+
+    pub trait SecurityExecutionEngine {
+        fn prepare(
+            &self,
+            journal: &AuditJournal,
+            request: StepExecutionRequest,
+        ) -> Result<PreparedStepExecution, SecurityExecutionError>;
+        fn execute(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+        ) -> Result<ExecutionReport, SecurityExecutionError>;
+        fn observe(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            report: &ExecutionReport,
+        ) -> Result<(), SecurityExecutionError>;
+        fn verify(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            result: VerificationResult,
+        ) -> Result<(), SecurityExecutionError>;
+        fn seal(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            commit_id: CommitId,
+        ) -> Result<(), SecurityExecutionError>;
+        fn rollback(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            reason: &str,
+        ) -> Result<RollbackReport, SecurityExecutionError>;
+        fn explain(&self, prepared: &PreparedStepExecution) -> Result<String, SecurityExecutionError>;
+    }
+
+    #[derive(Debug, Clone)]
+    pub struct DefaultSecurityExecutionEngine {
+        policy_adapter: PlanStepPolicyAdapter,
+        sandbox_compiler: LeaseSandboxProfileCompiler,
+        sandbox_executor: SandboxExecutor,
+        write_executor: WriteDiffExecutor,
+    }
+
+    impl DefaultSecurityExecutionEngine {
+        pub fn new(write_shadow_root: impl Into<PathBuf>) -> Self {
+            Self {
+                policy_adapter: PlanStepPolicyAdapter::new(ToolRouter, PolicyEvaluator),
+                sandbox_compiler: LeaseSandboxProfileCompiler::new(SandboxCompiler),
+                sandbox_executor: SandboxExecutor,
+                write_executor: WriteDiffExecutor::new(write_shadow_root),
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct WriteDiffInput {
+        pub target_path: PathBuf,
+        pub base_hash: String,
+        pub proposed_content: String,
+    }
+
+    impl WriteDiffInput {
+        pub fn new(
+            target_path: impl Into<PathBuf>,
+            base_hash: impl Into<String>,
+            proposed_content: impl Into<String>,
+        ) -> Result<Self, SecurityExecutionError> {
+            let input = Self {
+                target_path: target_path.into(),
+                base_hash: base_hash.into(),
+                proposed_content: proposed_content.into(),
+            };
+            ensure_no_secret("write_input.target_path", &input.target_path.display().to_string())?;
+            ensure_no_secret("write_input.base_hash", &input.base_hash)?;
+            ensure_no_secret("write_input.proposed_content", &input.proposed_content)?;
+            Ok(input)
+        }
+    }
+
+    #[derive(Debug, Clone)]
+    pub struct StepExecutionRequest {
+        pub run_id: String,
+        pub actor: String,
+        pub step: PlanStep,
+        pub approval: Option<ApprovalToken>,
+        pub now: u64,
+        pub write_input: Option<WriteDiffInput>,
+        pub sandbox_hints: Option<PlannerSandboxHints>,
+    }
+
+    impl StepExecutionRequest {
+        pub fn new(
+            run_id: impl Into<String>,
+            actor: impl Into<String>,
+            step: PlanStep,
+        ) -> Result<Self, SecurityExecutionError> {
+            let request = Self {
+                run_id: run_id.into(),
+                actor: actor.into(),
+                step,
+                approval: None,
+                now: 0,
+                write_input: None,
+                sandbox_hints: None,
+            };
+            request.validate()?;
+            Ok(request)
+        }
+
+        pub fn with_approval(mut self, approval: ApprovalToken) -> Self {
+            self.approval = Some(approval);
+            self
+        }
+
+        pub fn at(mut self, now: u64) -> Self {
+            self.now = now;
+            self
+        }
+
+        pub fn with_write_input(mut self, input: WriteDiffInput) -> Self {
+            self.write_input = Some(input);
+            self
+        }
+
+        pub fn with_sandbox_hints(mut self, hints: PlannerSandboxHints) -> Self {
+            self.sandbox_hints = Some(hints);
+            self
+        }
+
+        fn validate(&self) -> Result<(), SecurityExecutionError> {
+            ensure_no_secret("execution_request.run_id", &self.run_id)?;
+            ensure_no_secret("execution_request.actor", &self.actor)?;
+            ensure_no_secret("execution_request.step_id", self.step.step_id())?;
+            if let Some(approval) = &self.approval {
+                ensure_no_secret("execution_request.approval_actor", &approval.actor)?;
+                ensure_no_secret("execution_request.approval_tool", &approval.tool)?;
+                ensure_no_secret("execution_request.approval_resource", &approval.resource)?;
+                ensure_no_secret("execution_request.approval_hash", &approval.parameter_hash)?;
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum PreparedExecutionStatus {
+        Prepared,
+        Denied,
+        AwaitingApproval,
+    }
+
+    impl PreparedExecutionStatus {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Prepared => "prepared",
+                Self::Denied => "denied",
+                Self::AwaitingApproval => "awaiting-approval",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone)]
+    pub struct PreparedStepExecution {
+        pub status: PreparedExecutionStatus,
+        pub run_id: String,
+        pub step_id: String,
+        pub actor: String,
+        pub outcome: StepPolicyOutcome,
+        pub envelope: Option<EffectEnvelope>,
+        pub sandbox_binding: Option<SandboxProfileBinding>,
+        pub prepared_write: Option<PreparedWrite>,
+        pub execution_report: Option<ExecutionReport>,
+    }
+
+    impl PreparedStepExecution {
+        pub fn to_json(&self) -> Result<String, SecurityExecutionError> {
+            let envelope = self
+                .envelope
+                .as_ref()
+                .map(EffectEnvelope::to_json)
+                .transpose()?
+                .unwrap_or_else(|| "null".to_string());
+            let sandbox_binding = self
+                .sandbox_binding
+                .as_ref()
+                .map(SandboxProfileBinding::to_json)
+                .unwrap_or_else(|| "null".to_string());
+            let rollback_handle = self
+                .prepared_write
+                .as_ref()
+                .map(|prepared| prepared.handle.to_json())
+                .unwrap_or_else(|| "null".to_string());
+            let execution_report = self
+                .execution_report
+                .as_ref()
+                .map(ExecutionReport::to_json)
+                .unwrap_or_else(|| "null".to_string());
+            Ok(format!(
+                "{{\"status\":\"{}\",\"run_id\":\"{}\",\"step_id\":\"{}\",\"actor\":\"{}\",\"outcome\":{},\"envelope\":{},\"sandbox_binding\":{},\"rollback_handle\":{},\"execution_report\":{}}}",
+                self.status.as_str(),
+                escape_json(&self.run_id),
+                escape_json(&self.step_id),
+                escape_json(&self.actor),
+                self.outcome.to_json(),
+                envelope,
+                sandbox_binding,
+                rollback_handle,
+                execution_report
+            ))
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum ExecutionReportKind {
+        ReadOnlySandbox,
+        WriteWithDiff,
+        ControlledEffect,
+    }
+
+    impl ExecutionReportKind {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::ReadOnlySandbox => "read-only-sandbox",
+                Self::WriteWithDiff => "write-with-diff",
+                Self::ControlledEffect => "controlled-effect",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct ExecutionReport {
+        pub kind: ExecutionReportKind,
+        pub tool: String,
+        pub success: bool,
+        pub summary: String,
+        pub sandbox_report: Option<SandboxReport>,
+        pub rollback_id: Option<String>,
+    }
+
+    impl ExecutionReport {
+        pub fn to_json(&self) -> String {
+            let sandbox_report = self
+                .sandbox_report
+                .as_ref()
+                .map(SandboxReport::to_json)
+                .unwrap_or_else(|| "null".to_string());
+            format!(
+                "{{\"kind\":\"{}\",\"tool\":\"{}\",\"success\":{},\"summary\":\"{}\",\"sandbox_report\":{},\"rollback_id\":{}}}",
+                self.kind.as_str(),
+                escape_json(&self.tool),
+                self.success,
+                escape_json(&self.summary),
+                sandbox_report,
+                optional_string_json(self.rollback_id.as_deref())
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum ExecutionFailureClass {
+        Suspended,
+        Denied,
+        RollbackPending,
+        FailedClosed,
+    }
+
+    impl ExecutionFailureClass {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Suspended => "Suspended",
+                Self::Denied => "Denied",
+                Self::RollbackPending => "RollbackPending",
+                Self::FailedClosed => "FailedClosed",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum SecurityExecutionError {
+        Policy(StepPolicyError),
+        Effect(EffectEnvelopeError),
+        SandboxProfile(SandboxProfileError),
+        WriteDiff(WriteDiffError),
+        SandboxDenied { report: SandboxReport },
+        InvalidState { action: &'static str, reason: String },
+        SecretValue { field: String },
+        Io(String),
+    }
+
+    impl SecurityExecutionError {
+        pub fn failure_class(&self) -> ExecutionFailureClass {
+            match self {
+                Self::Policy(_) | Self::SandboxDenied { .. } => ExecutionFailureClass::Denied,
+                Self::InvalidState { action, .. } if *action == "prepare-approval" => {
+                    ExecutionFailureClass::Suspended
+                }
+                Self::Effect(error) if error.reason().contains("RollbackPending") => {
+                    ExecutionFailureClass::RollbackPending
+                }
+                Self::WriteDiff(WriteDiffError::BaseHashMismatch { .. }) => {
+                    ExecutionFailureClass::RollbackPending
+                }
+                _ => ExecutionFailureClass::FailedClosed,
+            }
+        }
+
+        pub fn reason(&self) -> String {
+            match self {
+                Self::Policy(error) => error.reason(),
+                Self::Effect(error) => error.reason(),
+                Self::SandboxProfile(error) => error.reason(),
+                Self::WriteDiff(error) => error.reason(),
+                Self::SandboxDenied { report } => report.reason.clone(),
+                Self::InvalidState { action, reason } => {
+                    format!("invalid security execution state for {action}: {reason}")
+                }
+                Self::SecretValue { field } => format!("secret-like value is not allowed in {field}"),
+                Self::Io(error) => error.clone(),
+            }
+        }
+    }
+
+    impl fmt::Display for SecurityExecutionError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl std::error::Error for SecurityExecutionError {}
+
+    impl From<StepPolicyError> for SecurityExecutionError {
+        fn from(value: StepPolicyError) -> Self {
+            Self::Policy(value)
+        }
+    }
+
+    impl From<EffectEnvelopeError> for SecurityExecutionError {
+        fn from(value: EffectEnvelopeError) -> Self {
+            Self::Effect(value)
+        }
+    }
+
+    impl From<SandboxProfileError> for SecurityExecutionError {
+        fn from(value: SandboxProfileError) -> Self {
+            Self::SandboxProfile(value)
+        }
+    }
+
+    impl From<WriteDiffError> for SecurityExecutionError {
+        fn from(value: WriteDiffError) -> Self {
+            Self::WriteDiff(value)
+        }
+    }
+
+    impl From<std::io::Error> for SecurityExecutionError {
+        fn from(value: std::io::Error) -> Self {
+            Self::Io(value.to_string())
+        }
+    }
+
+    impl SecurityExecutionEngine for DefaultSecurityExecutionEngine {
+        fn prepare(
+            &self,
+            journal: &AuditJournal,
+            request: StepExecutionRequest,
+        ) -> Result<PreparedStepExecution, SecurityExecutionError> {
+            request.validate()?;
+            let outcome = self.policy_adapter.evaluate_step_at(
+                journal,
+                &request.run_id,
+                &request.actor,
+                &request.step,
+                request.approval.as_ref(),
+                request.now,
+            )?;
+
+            match outcome.kind {
+                StepPolicyOutcomeKind::Denied => {
+                    return Ok(prepared_without_envelope(
+                        PreparedExecutionStatus::Denied,
+                        request,
+                        outcome,
+                    ));
+                }
+                StepPolicyOutcomeKind::AwaitingApproval => {
+                    return Ok(prepared_without_envelope(
+                        PreparedExecutionStatus::AwaitingApproval,
+                        request,
+                        outcome,
+                    ));
+                }
+                StepPolicyOutcomeKind::Allowed => {}
+            }
+
+            let routed = outcome
+                .routed
+                .as_ref()
+                .ok_or_else(|| invalid("prepare", "allowed policy outcome is missing routed tool"))?;
+            let lease = outcome
+                .lease
+                .as_ref()
+                .ok_or_else(|| invalid("prepare", "allowed policy outcome is missing capability lease"))?;
+            let mut envelope = EffectEnvelope::draft(
+                &request.run_id,
+                request.step.step_id(),
+                routed.tool,
+                routed.normalized_params.clone(),
+                outcome.decision.clone(),
+            )?;
+
+            let mut sandbox_binding = None;
+            let mut prepared_write = None;
+            let mut rollback_handle = None;
+
+            if lease.risk == RiskClass::ReadOnly {
+                let binding = self
+                    .sandbox_compiler
+                    .compile(lease, request.sandbox_hints.as_ref())?;
+                sandbox_binding = Some(binding);
+            } else if lease.risk == RiskClass::WriteWithDiff {
+                if !request.step.rollback().required() {
+                    return Err(invalid(
+                        "prepare",
+                        "write-with-diff steps require a rollback requirement",
+                    ));
+                }
+                let input = request
+                    .write_input
+                    .as_ref()
+                    .ok_or_else(|| invalid("prepare", "write-with-diff requires write input"))?;
+                validate_write_input(&request.step, &routed.normalized_params, input)?;
+                let write = self.write_executor.prepare(
+                    lease,
+                    WriteRequest {
+                        run_id: request.run_id.clone(),
+                        step_id: request.step.step_id().to_string(),
+                        actor: request.actor.clone(),
+                        target_path: input.target_path.clone(),
+                        proposed_content: input.proposed_content.clone(),
+                        base_hash: input.base_hash.clone(),
+                    },
+                )?;
+                rollback_handle = Some(write.handle.clone());
+                prepared_write = Some(write);
+            }
+
+            envelope.prepare(
+                journal,
+                &request.actor,
+                lease.clone(),
+                sandbox_binding.as_ref().map(|binding| binding.profile.clone()),
+                rollback_handle,
+            )?;
+
+            Ok(PreparedStepExecution {
+                status: PreparedExecutionStatus::Prepared,
+                run_id: request.run_id,
+                step_id: request.step.step_id().to_string(),
+                actor: request.actor,
+                outcome,
+                envelope: Some(envelope),
+                sandbox_binding,
+                prepared_write,
+                execution_report: None,
+            })
+        }
+
+        fn execute(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+        ) -> Result<ExecutionReport, SecurityExecutionError> {
+            let envelope = prepared_envelope(prepared, "execute")?;
+            if envelope.state != EffectEnvelopeState::Prepared {
+                return Err(invalid("execute", "execute requires a prepared envelope"));
+            }
+            let lease = prepared
+                .outcome
+                .lease
+                .as_ref()
+                .ok_or_else(|| invalid("execute", "prepared execution is missing lease"))?;
+            let report = match lease.risk {
+                RiskClass::ReadOnly => {
+                    let binding = prepared
+                        .sandbox_binding
+                        .as_ref()
+                        .ok_or_else(|| invalid("execute", "read-only execution is missing sandbox binding"))?;
+                    let sandbox_report = self.sandbox_executor.evaluate(
+                        &binding.profile,
+                        sandbox_operation_for(&binding.profile.tool, &binding.profile.resource),
+                    );
+                    self.sandbox_executor.record_report(
+                        journal,
+                        prepared.run_id.as_str(),
+                        prepared.step_id.as_str(),
+                        &sandbox_report,
+                    )?;
+                    if sandbox_report.decision == SandboxDecision::Denied {
+                        return Err(SecurityExecutionError::SandboxDenied {
+                            report: sandbox_report,
+                        });
+                    }
+                    ExecutionReport {
+                        kind: ExecutionReportKind::ReadOnlySandbox,
+                        tool: lease.tool.clone(),
+                        success: true,
+                        summary: format!("read-only sandbox allowed {}", sandbox_report.reason),
+                        sandbox_report: Some(sandbox_report),
+                        rollback_id: None,
+                    }
+                }
+                RiskClass::WriteWithDiff => {
+                    let write = prepared
+                        .prepared_write
+                        .as_ref()
+                        .ok_or_else(|| invalid("execute", "write-with-diff execution is missing prepared write"))?;
+                    let proposed = fs::read_to_string(&write.handle.proposed_content_path)?;
+                    fs::write(&write.handle.target_path, proposed.as_bytes())?;
+                    let final_content = fs::read_to_string(&write.handle.target_path)?;
+                    let final_hash = content_hash(&final_content);
+                    ExecutionReport {
+                        kind: ExecutionReportKind::WriteWithDiff,
+                        tool: lease.tool.clone(),
+                        success: final_hash == write.handle.proposed_hash,
+                        summary: format!(
+                            "write-with-diff target={} rollback_id={} final_hash={}",
+                            write.handle.target_path.display(),
+                            write.handle.rollback_id,
+                            final_hash
+                        ),
+                        sandbox_report: None,
+                        rollback_id: Some(write.handle.rollback_id.clone()),
+                    }
+                }
+                RiskClass::ExecuteWithConfirmation | RiskClass::PrivilegedWithHumanApproval => {
+                    ExecutionReport {
+                        kind: ExecutionReportKind::ControlledEffect,
+                        tool: lease.tool.clone(),
+                        success: true,
+                        summary: format!(
+                            "controlled effect executed tool={} resource={} parameter_hash={}",
+                            lease.tool, lease.resource, lease.parameter_hash
+                        ),
+                        sandbox_report: None,
+                        rollback_id: None,
+                    }
+                }
+                RiskClass::Never => {
+                    return Err(invalid("execute", "never-risk execution cannot be prepared"));
+                }
+            };
+            ensure_no_secret("execution_report", &report.to_json())?;
+            prepared.execution_report = Some(report.clone());
+            Ok(report)
+        }
+
+        fn observe(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            report: &ExecutionReport,
+        ) -> Result<(), SecurityExecutionError> {
+            ensure_no_secret("execution_report", &report.to_json())?;
+            let actor = prepared.actor.clone();
+            let envelope = prepared_envelope_mut(prepared, "observe")?;
+            envelope.observe(journal, &actor, report.summary.clone())?;
+            Ok(())
+        }
+
+        fn verify(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            result: VerificationResult,
+        ) -> Result<(), SecurityExecutionError> {
+            let actor = prepared.actor.clone();
+            let envelope = prepared_envelope_mut(prepared, "verify")?;
+            envelope.verify(journal, &actor, result)?;
+            Ok(())
+        }
+
+        fn seal(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            commit_id: CommitId,
+        ) -> Result<(), SecurityExecutionError> {
+            let actor = prepared.actor.clone();
+            let envelope = prepared_envelope_mut(prepared, "seal")?;
+            envelope.seal(journal, &actor, commit_id)?;
+            Ok(())
+        }
+
+        fn rollback(
+            &self,
+            journal: &AuditJournal,
+            prepared: &mut PreparedStepExecution,
+            reason: &str,
+        ) -> Result<RollbackReport, SecurityExecutionError> {
+            ensure_no_secret("rollback_reason", reason)?;
+            let actor = prepared.actor.clone();
+            let run_id = prepared.run_id.clone();
+            let step_id = prepared.step_id.clone();
+            let envelope = prepared_envelope_mut(prepared, "rollback")?;
+            if envelope.state != EffectEnvelopeState::RollbackPending {
+                envelope.mark_rollback_pending(journal, &actor, reason)?;
+            }
+            let handle = envelope
+                .rollback_handle
+                .as_ref()
+                .cloned()
+                .ok_or_else(|| invalid("rollback", "rollback requires a rollback handle"))?;
+            let previous = fs::read_to_string(&handle.previous_content_path)?;
+            fs::write(&handle.target_path, previous.as_bytes())?;
+            let restored = fs::read_to_string(&handle.target_path)?;
+            let restored_hash = content_hash(&restored);
+            let report = RollbackReport {
+                restored: restored_hash == handle.base_hash,
+                target_path: handle.target_path.clone(),
+                rollback_id: handle.rollback_id.clone(),
+                restored_hash,
+            };
+            envelope.mark_rolled_back(
+                journal,
+                &actor,
+                format!(
+                    "run={} step={} rollback_id={} restored={}",
+                    run_id, step_id, report.rollback_id, report.restored
+                ),
+            )?;
+            Ok(report)
+        }
+
+        fn explain(&self, prepared: &PreparedStepExecution) -> Result<String, SecurityExecutionError> {
+            let envelope_state = prepared
+                .envelope
+                .as_ref()
+                .map(|envelope| envelope.state.as_str())
+                .unwrap_or("none");
+            let lease_risk = prepared
+                .outcome
+                .lease
+                .as_ref()
+                .map(|lease| lease.risk.as_str())
+                .unwrap_or("none");
+            let explanation = format!(
+                "security-execution status={} run={} step={} policy={} risk={} envelope={} sandbox={} rollback_handle={}",
+                prepared.status.as_str(),
+                prepared.run_id,
+                prepared.step_id,
+                prepared.outcome.kind.as_str(),
+                lease_risk,
+                envelope_state,
+                prepared.sandbox_binding.is_some(),
+                prepared.prepared_write.is_some()
+            );
+            ensure_no_secret("execution_explanation", &explanation)?;
+            Ok(explanation)
+        }
+    }
+
+    fn prepared_without_envelope(
+        status: PreparedExecutionStatus,
+        request: StepExecutionRequest,
+        outcome: StepPolicyOutcome,
+    ) -> PreparedStepExecution {
+        PreparedStepExecution {
+            status,
+            run_id: request.run_id,
+            step_id: request.step.step_id().to_string(),
+            actor: request.actor,
+            outcome,
+            envelope: None,
+            sandbox_binding: None,
+            prepared_write: None,
+            execution_report: None,
+        }
+    }
+
+    fn prepared_envelope<'a>(
+        prepared: &'a PreparedStepExecution,
+        action: &'static str,
+    ) -> Result<&'a EffectEnvelope, SecurityExecutionError> {
+        if prepared.status != PreparedExecutionStatus::Prepared {
+            return Err(invalid(action, "security execution was not prepared"));
+        }
+        prepared
+            .envelope
+            .as_ref()
+            .ok_or_else(|| invalid(action, "prepared execution is missing envelope"))
+    }
+
+    fn prepared_envelope_mut<'a>(
+        prepared: &'a mut PreparedStepExecution,
+        action: &'static str,
+    ) -> Result<&'a mut EffectEnvelope, SecurityExecutionError> {
+        if prepared.status != PreparedExecutionStatus::Prepared {
+            return Err(invalid(action, "security execution was not prepared"));
+        }
+        prepared
+            .envelope
+            .as_mut()
+            .ok_or_else(|| invalid(action, "prepared execution is missing envelope"))
+    }
+
+    fn validate_write_input(
+        step: &PlanStep,
+        normalized_params: &[(String, String)],
+        input: &WriteDiffInput,
+    ) -> Result<(), SecurityExecutionError> {
+        let path = param_value(normalized_params, "path")
+            .ok_or_else(|| invalid("prepare", "fs.write.diff requires path parameter"))?;
+        let content_hash_param = param_value(normalized_params, "content_hash")
+            .ok_or_else(|| invalid("prepare", "fs.write.diff requires content_hash parameter"))?;
+        let expected_hash = content_hash(&input.proposed_content);
+        if content_hash_param != expected_hash {
+            return Err(invalid(
+                "prepare",
+                "write input proposed content must match content_hash parameter",
+            ));
+        }
+        if path != input.target_path.display().to_string() {
+            return Err(invalid("prepare", "write input target path must match step path"));
+        }
+        if let Some(base_hash) = param_value(normalized_params, "base_hash") {
+            if base_hash != input.base_hash {
+                return Err(invalid("prepare", "write input base hash must match step base_hash"));
+            }
+        }
+        if !step.rollback().required() {
+            return Err(invalid("prepare", "fs.write.diff step must require rollback"));
+        }
+        Ok(())
+    }
+
+    fn sandbox_operation_for(tool: &str, resource: &str) -> SandboxOperation {
+        match tool {
+            "http.check" => SandboxOperation::NetworkConnect {
+                target: resource.to_string(),
+            },
+            _ => SandboxOperation::ReadDiagnostic {
+                label: resource.to_string(),
+            },
+        }
+    }
+
+    fn param_value(params: &[(String, String)], key: &str) -> Option<String> {
+        params
+            .iter()
+            .find(|(candidate, _)| candidate == key)
+            .map(|(_, value)| value.clone())
+    }
+
+    fn invalid(action: &'static str, reason: impl Into<String>) -> SecurityExecutionError {
+        SecurityExecutionError::InvalidState {
+            action,
+            reason: reason.into(),
+        }
+    }
+
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), SecurityExecutionError> {
+        if contains_secret_value(value) {
+            return Err(SecurityExecutionError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    fn optional_string_json(value: Option<&str>) -> String {
+        value
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .unwrap_or_else(|| "null".to_string())
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::path::{Path, PathBuf};
+
+        use super::*;
+        use crate::agent_core::model::{
+            ApprovalRequirement, RiskHint, RollbackRequirement, VerificationRule,
+        };
+        use crate::api::SemanticToolCall;
+        use crate::audit::extract_json_string_for_tests;
+
+        fn temp_dir(name: &str) -> PathBuf {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-security-engine-{name}-{}",
+                std::process::id()
+            ));
+            let _ = fs::remove_dir_all(&path);
+            fs::create_dir_all(&path).expect("temp dir");
+            path
+        }
+
+        fn test_journal(root: &Path) -> AuditJournal {
+            AuditJournal::new(root.join("audit.jsonl"))
+        }
+
+        fn engine(root: &Path) -> DefaultSecurityExecutionEngine {
+            DefaultSecurityExecutionEngine::new(root.join("shadow"))
+        }
+
+        fn step(
+            step_id: &str,
+            tool: &str,
+            params: Vec<(&str, &str)>,
+            hint: RiskClass,
+            approval_required: bool,
+            rollback_required: bool,
+        ) -> PlanStep {
+            let approval = if approval_required {
+                ApprovalRequirement::operator_required("operator approval required")
+                    .expect("approval")
+            } else {
+                ApprovalRequirement::not_required("planner says no approval").expect("approval")
+            };
+            let rollback = if rollback_required {
+                RollbackRequirement::new(
+                    true,
+                    Some(format!("rollback-{step_id}")),
+                    "write is rollback protected",
+                )
+                .expect("rollback")
+            } else {
+                RollbackRequirement::not_required("no rollback required").expect("rollback")
+            };
+            PlanStep::new(
+                step_id,
+                SemanticToolCall::new(tool, params),
+                Vec::new(),
+                Vec::new(),
+                Vec::new(),
+                VerificationRule::new(format!("verify-{step_id}"), "verify output", tool)
+                    .expect("verification"),
+                approval,
+                1,
+                vec![RiskHint::new(hint, "planner risk hint").expect("risk")],
+                rollback,
+            )
+            .expect("step")
+        }
+
+        fn approval_for(prepared: &PreparedStepExecution) -> ApprovalToken {
+            let request = prepared.outcome.request.as_ref().expect("policy request");
+            ApprovalToken {
+                actor: request.actor.clone(),
+                tool: request.tool.clone(),
+                resource: request.resource.clone(),
+                parameter_hash: request.parameter_hash.clone(),
+                expires_at: request.now + 60,
+                policy_version: request.policy_version.clone(),
+            }
+        }
+
+        #[test]
+        fn read_only_step_runs_under_sandbox_and_seals() {
+            let root = temp_dir("read-only");
+            let journal = test_journal(&root);
+            let status = step(
+                "status-nginx",
+                "svc.status",
+                vec![("service", "nginx")],
+                RiskClass::ReadOnly,
+                false,
+                false,
+            );
+
+            let mut prepared = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-read", "operator", status).expect("request"),
+                )
+                .expect("prepare");
+
+            assert_eq!(prepared.status, PreparedExecutionStatus::Prepared);
+            assert!(prepared.sandbox_binding.is_some());
+            assert_eq!(
+                prepared.envelope.as_ref().expect("envelope").state,
+                EffectEnvelopeState::Prepared
+            );
+
+            let report = engine(&root)
+                .execute(&journal, &mut prepared)
+                .expect("execute");
+            assert_eq!(report.kind, ExecutionReportKind::ReadOnlySandbox);
+            assert!(report.sandbox_report.is_some());
+            engine(&root)
+                .observe(&journal, &mut prepared, &report)
+                .expect("observe");
+            engine(&root)
+                .verify(
+                    &journal,
+                    &mut prepared,
+                    VerificationResult {
+                        success: true,
+                        reason: "diagnostic matched expected state".to_string(),
+                    },
+                )
+                .expect("verify");
+            engine(&root)
+                .seal(
+                    &journal,
+                    &mut prepared,
+                    CommitId("commit-run-read-status-nginx".to_string()),
+                )
+                .expect("seal");
+
+            assert_eq!(
+                prepared.envelope.as_ref().expect("envelope").state,
+                EffectEnvelopeState::Sealed
+            );
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
+            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
+            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"EffectObserved\"")));
+            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"CommitSealed\"")));
+        }
+
+        #[test]
+        fn denied_and_paused_steps_do_not_prepare_effects() {
+            let root = temp_dir("denied-paused");
+            let journal = test_journal(&root);
+            let shell = step(
+                "shell",
+                "shell.exec",
+                vec![("cmd", "id")],
+                RiskClass::ReadOnly,
+                false,
+                false,
+            );
+            let denied = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-denied", "operator", shell).expect("request"),
+                )
+                .expect("denied");
+            assert_eq!(denied.status, PreparedExecutionStatus::Denied);
+            assert!(denied.envelope.is_none());
+
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+                false,
+            );
+            let paused = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-paused", "operator", restart).expect("request"),
+                )
+                .expect("paused");
+            assert_eq!(paused.status, PreparedExecutionStatus::AwaitingApproval);
+            assert!(paused.envelope.is_none());
+
+            let error = engine(&root)
+                .execute(&journal, &mut paused.clone())
+                .expect_err("execute without prepare rejected");
+            assert_eq!(error.failure_class(), ExecutionFailureClass::FailedClosed);
+
+            let lines = journal.event_lines().expect("journal");
+            assert_eq!(
+                lines
+                    .iter()
+                    .filter(|line| line.contains("\"event_type\":\"PolicyEvaluated\""))
+                    .count(),
+                2
+            );
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn execute_with_confirmation_requires_exact_approval_before_prepare() {
+            let root = temp_dir("execute-approved");
+            let journal = test_journal(&root);
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+                false,
+            );
+            let initial = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-restart", "operator", restart.clone())
+                        .expect("request"),
+                )
+                .expect("initial pause");
+            assert_eq!(initial.status, PreparedExecutionStatus::AwaitingApproval);
+            let token = approval_for(&initial);
+
+            let mut prepared = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-restart", "operator", restart)
+                        .expect("request")
+                        .with_approval(token),
+                )
+                .expect("approved prepare");
+            assert_eq!(prepared.status, PreparedExecutionStatus::Prepared);
+            assert!(prepared.sandbox_binding.is_none());
+            assert_eq!(
+                prepared.outcome.lease.as_ref().expect("lease").risk,
+                RiskClass::ExecuteWithConfirmation
+            );
+
+            let report = engine(&root)
+                .execute(&journal, &mut prepared)
+                .expect("execute");
+            assert_eq!(report.kind, ExecutionReportKind::ControlledEffect);
+            engine(&root)
+                .observe(&journal, &mut prepared, &report)
+                .expect("observe");
+            engine(&root)
+                .verify(
+                    &journal,
+                    &mut prepared,
+                    VerificationResult {
+                        success: true,
+                        reason: "service reached active state".to_string(),
+                    },
+                )
+                .expect("verify");
+            engine(&root)
+                .seal(
+                    &journal,
+                    &mut prepared,
+                    CommitId("commit-run-restart".to_string()),
+                )
+                .expect("seal");
+            assert!(engine(&root).explain(&prepared).expect("explain").contains("envelope=Sealed"));
+        }
+
+        #[test]
+        fn write_with_diff_prepares_rollback_handle_and_rolls_back_failed_verification() {
+            let root = temp_dir("write-rollback");
+            let target = root.join("nginx.conf");
+            fs::write(&target, "port=80\n").expect("write target");
+            let base_hash = content_hash("port=80\n");
+            let proposed = "port=8080\n";
+            let proposed_hash = content_hash(proposed);
+            let target_string = target.display().to_string();
+            let write_step = step(
+                "write-nginx",
+                "fs.write.diff",
+                vec![
+                    ("path", target_string.as_str()),
+                    ("content_hash", proposed_hash.as_str()),
+                    ("base_hash", base_hash.as_str()),
+                ],
+                RiskClass::WriteWithDiff,
+                true,
+                true,
+            );
+            let journal = test_journal(&root);
+            let initial = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-write", "operator", write_step.clone())
+                        .expect("request"),
+                )
+                .expect("initial pause");
+            assert_eq!(initial.status, PreparedExecutionStatus::AwaitingApproval);
+            let token = approval_for(&initial);
+            let mut prepared = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-write", "operator", write_step)
+                        .expect("request")
+                        .with_approval(token)
+                        .with_write_input(
+                            WriteDiffInput::new(&target, base_hash.clone(), proposed)
+                                .expect("write input"),
+                        ),
+                )
+                .expect("prepare write");
+
+            assert!(prepared.prepared_write.is_some());
+            assert!(prepared
+                .envelope
+                .as_ref()
+                .expect("envelope")
+                .rollback_handle
+                .is_some());
+            assert_eq!(fs::read_to_string(&target).expect("read target"), "port=80\n");
+
+            let report = engine(&root)
+                .execute(&journal, &mut prepared)
+                .expect("execute write");
+            assert!(report.success);
+            assert_eq!(fs::read_to_string(&target).expect("read target"), proposed);
+            engine(&root)
+                .observe(&journal, &mut prepared, &report)
+                .expect("observe write");
+            engine(&root)
+                .verify(
+                    &journal,
+                    &mut prepared,
+                    VerificationResult {
+                        success: false,
+                        reason: "config test failed".to_string(),
+                    },
+                )
+                .expect("failed verification enters rollback pending");
+            assert_eq!(
+                prepared.envelope.as_ref().expect("envelope").state,
+                EffectEnvelopeState::RollbackPending
+            );
+
+            let rollback = engine(&root)
+                .rollback(&journal, &mut prepared, "verification failed")
+                .expect("rollback");
+            assert!(rollback.restored);
+            assert_eq!(fs::read_to_string(&target).expect("read target"), "port=80\n");
+            assert_eq!(
+                prepared.envelope.as_ref().expect("envelope").state,
+                EffectEnvelopeState::RolledBack
+            );
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"RollbackPending\"")));
+            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"RollbackObserved\"")));
+            assert!(!lines.iter().any(|line| {
+                extract_json_string_for_tests(line, "event_type").as_deref() == Some("CommitSealed")
+            }));
+        }
+
+        #[test]
+        fn write_input_must_match_plan_hashes() {
+            let root = temp_dir("write-mismatch");
+            let target = root.join("app.conf");
+            fs::write(&target, "a=1\n").expect("write target");
+            let base_hash = content_hash("a=1\n");
+            let target_string = target.display().to_string();
+            let write_step = step(
+                "write-app",
+                "fs.write.diff",
+                vec![
+                    ("path", target_string.as_str()),
+                    ("content_hash", "wrong-hash"),
+                    ("base_hash", base_hash.as_str()),
+                ],
+                RiskClass::WriteWithDiff,
+                true,
+                true,
+            );
+            let initial_journal = test_journal(&root);
+            let initial = engine(&root)
+                .prepare(
+                    &initial_journal,
+                    StepExecutionRequest::new("run-mismatch", "operator", write_step.clone())
+                        .expect("request"),
+                )
+                .expect("initial pause");
+            let token = approval_for(&initial);
+            let error = engine(&root)
+                .prepare(
+                    &initial_journal,
+                    StepExecutionRequest::new("run-mismatch", "operator", write_step)
+                        .expect("request")
+                        .with_approval(token)
+                        .with_write_input(
+                            WriteDiffInput::new(&target, base_hash, "a=2\n")
+                                .expect("write input"),
+                        ),
+                )
+                .expect_err("hash mismatch rejected");
+            assert_eq!(error.failure_class(), ExecutionFailureClass::FailedClosed);
+            assert!(error.reason().contains("content_hash"));
+        }
+    }
+}
+
 pub mod source_to_sink {
     use std::fmt;
 
