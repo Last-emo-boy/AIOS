@@ -54,5 +54,53 @@
       "cargo test -p agentd": "104 passed; 0 failed"
     },
     "next_task": "TASK-SEF-005"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-002.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-007.json",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/safety.rs"
+  ],
+  "implementation_steps": [
+    "Define source labels for operator, local-system, sandboxed tool, external, model, memory, audit-derived, and sanitized content.",
+    "Define sink classes for read, write, execute, privileged, network, and secret access.",
+    "Deny model, external, or untrusted direct access to execute, privileged, secret, and exfiltration-capable network sinks.",
+    "Allow sanitized summaries to inform planning without granting authority.",
+    "Preserve source labels through sanitization and replanning hints.",
+    "Audit denied source-to-sink attempts without EffectPrepared."
+  ],
+  "failure_modes": [
+    "Webpage text triggers command execution or package install.",
+    "Model-origin content reads secrets or posts data.",
+    "Sanitization erases trust boundary or grants authority.",
+    "Denied source-to-sink attempt prepares an effect.",
+    "Audit projection cannot explain source and sink class."
+  ],
+  "verification_matrix": [
+    {
+      "case": "prompt injection safety",
+      "command": "cargo test -p agentd safety::prompt_injection",
+      "expected": "external content cannot prepare shell, exfiltration, login-download, or policy-override effects"
+    },
+    {
+      "case": "source-to-sink policy",
+      "command": "cargo test -p agentd security_execution::source_to_sink",
+      "expected": "source labels, sink classes, denied paths, and sanitized summaries behave as specified"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "source-to-sink checks do not break legitimate operator-approved paths"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-005",
+    "blocked_until": [
+      "Untrusted content cannot drive high-risk sinks.",
+      "Denied paths have no EffectPrepared.",
+      "Source labels survive sanitization."
+    ]
   }
 }

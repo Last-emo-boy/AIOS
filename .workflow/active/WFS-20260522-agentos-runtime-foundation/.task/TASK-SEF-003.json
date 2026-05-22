@@ -53,5 +53,53 @@
       "cargo test -p agentd": "96 passed; 0 failed"
     },
     "next_task": "TASK-SEF-004"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-002.json",
+    "crates/agentd/src/sandbox.rs",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/safety.rs"
+  ],
+  "implementation_steps": [
+    "Compile namespace, cgroup, seccomp/no_new_privs, filesystem, Landlock placeholder, and network constraints exclusively from CapabilityLease and policy metadata.",
+    "Ignore or audit planner-provided sandbox weakening hints.",
+    "Define profile classes for read-only diagnostics, write-with-diff preparation, execute-with-confirmation, privileged, and never.",
+    "Fail closed when required sandbox profile class is unsupported.",
+    "Attach stable sandbox profile summaries to EffectEnvelope and audit projection.",
+    "Preserve MVP read-only persistent write denial and resource limits."
+  ],
+  "failure_modes": [
+    "Planner adds writable host path or network egress through sandbox hints.",
+    "Read-only lease receives persistent write permission.",
+    "Unsupported risk class defaults to permissive behavior.",
+    "Sandbox profile metadata is absent from EffectEnvelope or audit projection.",
+    "Resource abuse fixtures bypass configured limits."
+  ],
+  "verification_matrix": [
+    {
+      "case": "sandbox regression",
+      "command": "cargo test -p agentd sandbox::",
+      "expected": "read-only denial, resource limits, and profile compilation tests pass"
+    },
+    {
+      "case": "lease-derived profile coverage",
+      "command": "cargo test -p agentd security_execution::sandbox_profile",
+      "expected": "lease authority, ignored planner hints, unsupported risk, and profile summary tests pass"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "sandbox hardening does not regress AgentCore or safety suites"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-004",
+    "blocked_until": [
+      "Sandbox profile authority comes from leases.",
+      "Planner cannot weaken sandbox constraints.",
+      "Unsupported classes fail closed."
+    ]
   }
 }

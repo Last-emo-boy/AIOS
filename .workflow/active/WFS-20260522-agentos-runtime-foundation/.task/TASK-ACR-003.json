@@ -52,5 +52,52 @@
       "cargo test -p agentd": "70 passed; 0 failed"
     },
     "next_task": "TASK-ACR-004"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    "docs/model-broker.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-001.json",
+    "crates/agentd/src/agent_core.rs"
+  ],
+  "implementation_steps": [
+    "Define ModelBroker trait for plan, classify, summarize, and sanitize requests.",
+    "Define request and response envelopes with provider id, model id, template version, timeout, output bound, confidence, latency, and digest metadata.",
+    "Implement deterministic StubModelProvider for offline acceptance and CI tests.",
+    "Validate bounded structured output before Planner can consume it.",
+    "Handle invalid JSON, oversized output, timeout, cancellation, and provider failure as fail-closed outcomes.",
+    "Log only model metadata and reject raw secret values at the broker boundary."
+  ],
+  "failure_modes": [
+    "Malformed or oversized provider output reaches Planner as valid structure.",
+    "Provider timeout or cancellation advances into tool execution.",
+    "Model output containing shell commands becomes a tool call.",
+    "Raw secrets are sent to provider context or stored in model call logs.",
+    "A module other than ModelBroker directly calls model providers."
+  ],
+  "verification_matrix": [
+    {
+      "case": "model broker unit coverage",
+      "command": "cargo test -p agentd model_broker::",
+      "expected": "stub, validation, bounded output, timeout, cancellation, and metadata-only logging tests pass"
+    },
+    {
+      "case": "direct provider call search",
+      "command": "rg \"ModelProvider|provider\\.plan|provider\\.classify|provider\\.summarize\" crates/agentd/src",
+      "expected": "provider usage is contained by ModelBroker or tests"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "no external LLM is required"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-004",
+    "blocked_until": [
+      "Stub provider can plan offline.",
+      "Malformed output is rejected before Planner.",
+      "Model logs are metadata-only."
+    ]
   }
 }

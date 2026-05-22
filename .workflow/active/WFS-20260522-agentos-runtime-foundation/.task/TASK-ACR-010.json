@@ -59,5 +59,57 @@
       "cargo test -p agentd": "158 passed; 0 failed"
     },
     "next_task": "TASK-SEF-008"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-007.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-008.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-009.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/safety.rs",
+    ".github/workflows/safety.yml",
+    ".github/workflows/release.yml",
+    "scripts/build-release.ps1"
+  ],
+  "implementation_steps": [
+    "Add prompt-injection fixtures during planning.",
+    "Add observation-injection fixtures after read-only tool output.",
+    "Add memory-poisoning fixtures across runs.",
+    "Add approval parameter mutation fixtures.",
+    "Add malformed model output and model-generated shell command fixtures.",
+    "Wire agent_core::adversarial into CI and release scripts."
+  ],
+  "failure_modes": [
+    "Abuse path creates EffectPrepared before denial.",
+    "Approval mutation passes after parameter hash changes.",
+    "Memory poisoning changes policy, lease, or approval behavior.",
+    "Malformed model output reaches Planner as a valid plan.",
+    "CI or release gate omits the adversarial suite."
+  ],
+  "verification_matrix": [
+    {
+      "case": "runtime adversarial suite",
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "expected": "planning injection, observation injection, memory poisoning, approval mutation, and malformed output fail closed"
+    },
+    {
+      "case": "safety substrate suite",
+      "command": "cargo test -p agentd safety::",
+      "expected": "MVP safety invariants remain release-blocking"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "adversarial additions do not regress runtime behavior"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-008",
+    "blocked_until": [
+      "Adversarial tests exercise the full runtime path.",
+      "Denied actions have no EffectPrepared.",
+      "CI and release scripts include the runtime suite."
+    ]
   }
 }

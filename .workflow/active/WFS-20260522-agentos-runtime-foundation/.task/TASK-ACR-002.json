@@ -48,5 +48,53 @@
       "cargo test -p agentd": "63 passed; 0 failed"
     },
     "next_task": "TASK-ACR-003"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-001.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/audit.rs"
+  ],
+  "implementation_steps": [
+    "Define RunStore trait with create, load, update_state, append_observation_ref, attach_approval, mark_terminal, and list_recoverable_runs.",
+    "Implement deterministic file-backed PlanRun snapshots using temp-write plus rename semantics.",
+    "Persist plan hash, state cursor, approval state, observation refs, memory refs, and recovery marker.",
+    "Persist hashes for frozen plans and observation refs so stale or tampered recovery can fail closed.",
+    "Cross-check effect references with AuditJournal seal evidence without turning RunStore into a second audit journal.",
+    "Add recoverable-run listing for startup reconciliation."
+  ],
+  "failure_modes": [
+    "Partial state write leaves a corrupt snapshot that is treated as valid.",
+    "Snapshot tampering or plan-hash mismatch is not detected.",
+    "Completed runs are listed as recoverable and can be re-executed.",
+    "RunStore claims an effect is sealed without matching audit evidence.",
+    "Secret-like values are persisted in run-state JSON."
+  ],
+  "verification_matrix": [
+    {
+      "case": "run store unit coverage",
+      "command": "cargo test -p agentd agent_core::run_store",
+      "expected": "create, load, update, recoverable listing, tamper detection, and redaction tests pass"
+    },
+    {
+      "case": "interrupted write simulation",
+      "command": "cargo test -p agentd agent_core::run_store",
+      "expected": "either old state or new state remains valid; no partial state is accepted"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "no regression in audit or safety suites"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-003",
+    "blocked_until": [
+      "Run state survives restart.",
+      "Recoverable runs can be listed by state.",
+      "RunStore does not duplicate effect truth from AuditJournal."
+    ]
   }
 }

@@ -54,5 +54,55 @@
       "cargo test -p agentd": "132 passed; 0 failed"
     },
     "next_task": "TASK-ACR-008"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-003.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-005.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-004.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/safety.rs"
+  ],
+  "implementation_steps": [
+    "Normalize tool output and external content into Observation records with explicit source labels.",
+    "Mark external and model-origin content untrusted until sanitized.",
+    "Redact secret-like values while preserving secret handles.",
+    "Extract policy flags such as suggested command, credential request, exfiltration hint, privilege escalation, source mismatch, and policy override.",
+    "Emit sanitized replanning hints only, never direct tool calls.",
+    "Persist observation refs in RunStore and audit summaries for projection."
+  ],
+  "failure_modes": [
+    "Observation text directly creates a high-risk tool call.",
+    "External output loses untrusted source label.",
+    "Secret value enters memory, audit, model context, CLI, or TUI.",
+    "Sanitized hint is treated as authority.",
+    "Observation flags are unavailable to source-to-sink policy checks."
+  ],
+  "verification_matrix": [
+    {
+      "case": "observation unit coverage",
+      "command": "cargo test -p agentd agent_core::observation",
+      "expected": "trust labels, redaction, flags, and no-direct-tool-call tests pass"
+    },
+    {
+      "case": "prompt injection guard",
+      "command": "cargo test -p agentd safety::prompt_injection",
+      "expected": "untrusted observations cannot prepare high-risk effects"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "observation handling does not weaken safety gate"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-008",
+    "blocked_until": [
+      "Observation injection cannot schedule tools.",
+      "Source labels and policy flags are preserved.",
+      "Secrets are redacted before downstream surfaces."
+    ]
   }
 }

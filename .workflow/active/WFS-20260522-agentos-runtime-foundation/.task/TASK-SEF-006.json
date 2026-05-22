@@ -57,5 +57,58 @@
       "cargo test -p agentd": "142 passed; 0 failed"
     },
     "next_task": "TASK-SEF-007"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-001.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-002.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-003.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-005.json",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/tools.rs",
+    "crates/agentd/src/policy.rs",
+    "crates/agentd/src/rollback.rs",
+    "crates/agentd/src/audit.rs"
+  ],
+  "implementation_steps": [
+    "Define SecurityExecutionEngine trait with prepare, execute, observe, verify, seal, rollback, and explain operations.",
+    "Implement the default engine over ToolRouter, PolicyEvaluator, CapabilityLease, SandboxProfile, EffectEnvelope, AuditJournal, and rollback handles.",
+    "Return denied or paused results without preparing effects.",
+    "Prepare write-with-diff rollback handles before execution.",
+    "Run read-only tools under lease-derived sandbox profiles.",
+    "Return structured errors that AgentCore can map to Suspended, Denied, RollbackPending, or FailedClosed."
+  ],
+  "failure_modes": [
+    "execute can be called without a prepared envelope.",
+    "Write effect lacks rollback handle before execution.",
+    "Denied or paused path prepares effect.",
+    "Engine error loses audit or recovery evidence.",
+    "AgentCore has more than one side-effect API."
+  ],
+  "verification_matrix": [
+    {
+      "case": "execution engine unit coverage",
+      "command": "cargo test -p agentd security_execution::engine",
+      "expected": "prepare, execute, observe, verify, seal, rollback, denied, paused, and explain tests pass"
+    },
+    {
+      "case": "substrate regression",
+      "command": "cargo test -p agentd security_execution::policy_adapter && cargo test -p agentd security_execution::sandbox_profile && cargo test -p agentd rollback:: && cargo test -p agentd audit::",
+      "expected": "policy, sandbox, rollback, and audit contracts remain compatible"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "AgentCore can only execute through SecurityExecutionEngine"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-007",
+    "blocked_until": [
+      "AgentCore has one generic execution API.",
+      "Denied and paused steps prepare no effect.",
+      "Write steps include rollback handles before execution."
+    ]
   }
 }

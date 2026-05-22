@@ -54,5 +54,54 @@
       "cargo test -p agentd": "137 passed; 0 failed"
     },
     "next_task": "TASK-SEF-006"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-002.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-007.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-005.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/security_execution.rs"
+  ],
+  "implementation_steps": [
+    "Define MemoryStore trait with write_entry, read_context, search_recent, expire, and quarantine operations.",
+    "Separate session, run, audit-derived, operator-pinned, and quarantined memory scopes.",
+    "Attach source, trust label, TTL, run refs, redaction state, and integrity hash to each entry.",
+    "Reject or redact raw secrets before memory write and preserve secret handles.",
+    "Quarantine suspicious untrusted instructions and policy-like claims.",
+    "Build bounded planner context from allowlisted memory entries with source references."
+  ],
+  "failure_modes": [
+    "Memory grants policy, approval, lease, or capability authority.",
+    "Expired memory enters planner context.",
+    "Secret-like value is stored as normal memory.",
+    "Untrusted memory becomes trusted operator input.",
+    "Planner receives raw unbounded memory dump."
+  ],
+  "verification_matrix": [
+    {
+      "case": "memory unit coverage",
+      "command": "cargo test -p agentd agent_core::memory",
+      "expected": "scope, TTL, redaction, quarantine, and bounded context tests pass"
+    },
+    {
+      "case": "memory poisoning gate",
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "expected": "memory poisoning cannot alter policy, approval, or leases"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "memory does not weaken ModelBroker or secret policy"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-006",
+    "blocked_until": [
+      "Memory context is bounded and source-labeled.",
+      "Secret-like values are rejected or redacted.",
+      "Memory poisoning cannot grant authority."
+    ]
   }
 }

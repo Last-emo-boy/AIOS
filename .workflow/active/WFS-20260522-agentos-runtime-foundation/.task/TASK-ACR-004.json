@@ -51,5 +51,54 @@
       "cargo test -p agentd": "78 passed; 0 failed"
     },
     "next_task": "TASK-SEF-001"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-001.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-003.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/tools.rs",
+    "crates/agentd/src/audit.rs"
+  ],
+  "implementation_steps": [
+    "Define Planner trait with draft_plan, validate_plan, freeze_plan, and explain_plan operations.",
+    "Consume only IntentCtx, bounded runtime context, and ModelBroker structured output.",
+    "Validate every tool name and normalized parameter shape through the semantic tool manifest.",
+    "Validate dependency graph, retry budget, approval requirement, verification rule, rollback requirement, and success criteria.",
+    "Reject shell.exec, unknown tools, direct secret content, and writes without rollback requirements.",
+    "Emit IntentReceived and PlanFrozen only after successful validation and stable freeze hash computation."
+  ],
+  "failure_modes": [
+    "Planner executes or prepares an effect during planning.",
+    "Planner risk hint downgrades a high-risk policy class.",
+    "Cycle, missing dependency, unknown tool, or missing verification freezes successfully.",
+    "Frozen plan mutates without hash change.",
+    "PlanFrozen appears after EffectPrepared for the same run."
+  ],
+  "verification_matrix": [
+    {
+      "case": "planner unit coverage",
+      "command": "cargo test -p agentd planner::",
+      "expected": "allowed, rejected, hash, audit-order, and service recovery plan tests pass"
+    },
+    {
+      "case": "planning has no side effects",
+      "command": "cargo test -p agentd planner::",
+      "expected": "IntentReceived and PlanFrozen are emitted without EffectPrepared"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "ToolRouter, policy, and safety tests remain green"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-001",
+    "blocked_until": [
+      "Frozen PlanSpec is deterministic.",
+      "Planner cannot execute effects.",
+      "Invalid tools and secret-like content fail closed."
+    ]
   }
 }

@@ -50,14 +50,16 @@ It never trusts model output as authority.
 
 Detailed worker-facing implementation slices, convergence checks, failure
 modes, and verification matrices are maintained in
-`docs/runtime-implementation-tasks.md`.
+`docs/runtime-implementation-tasks.md`. The per-task Maestro execution
+contracts are expanded in `docs/agent-core-sef-detailed-tasks.md` and mirrored
+into each `TASK-ACR-*` and `TASK-SEF-*` JSON file.
 
 That blueprint is the authoritative expansion for:
 
 - `TASK-ACR-001` to `TASK-ACR-010`: bottom Agent Core Runtime.
 - `TASK-SEF-001` to `TASK-SEF-010`: AgentOS Security Execution Foundation.
-- `TASK-SEF-009`: next pending runtime audit projection work.
-- `TASK-SEF-010`: final security execution verification gate before
+- `TASK-SEF-009`: runtime audit projection and explainability chain.
+- `TASK-SEF-010`: completed security execution verification gate before
   Distribution Alpha entry.
 
 The blueprint makes the bottom Agent concrete as a typed pipeline:

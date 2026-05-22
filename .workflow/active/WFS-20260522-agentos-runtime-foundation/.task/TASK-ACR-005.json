@@ -54,5 +54,58 @@
       "cargo test -p agentd": "121 passed; 0 failed"
     },
     "next_task": "TASK-ACR-006"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-002.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-004.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-001.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-002.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "implementation_steps": [
+    "Implement accept_intent, plan_run, advance_run, approve_step, deny_step, suspend_run, and recover_run operations.",
+    "Persist state transitions through RunStore before invoking any external effect path.",
+    "Call SecurityExecutionEngine for every side-effecting PlanStep and reject any alternate execution path.",
+    "Pause approval-required steps before EffectPrepared and bind exact approval before retrying advancement.",
+    "Map planner, policy, executor, audit, rollback, and recovery inconsistencies to Suspended, RollbackPending, or FailedClosed.",
+    "Expose compact CLI/TUI run-state projection without raw secret values."
+  ],
+  "failure_modes": [
+    "Approval timeout or denial prepares an effect.",
+    "AgentCore calls ToolRouter, executor, or shell directly instead of SecurityExecutionEngine.",
+    "Crash after transition cannot be recovered from RunStore.",
+    "Policy, audit, or EffectEnvelope mismatch is ignored.",
+    "TUI or CLI projection leaks secret-like data."
+  ],
+  "verification_matrix": [
+    {
+      "case": "run loop unit coverage",
+      "command": "cargo test -p agentd agent_core::run_loop",
+      "expected": "read-only, approval pause, denial, timeout, and failed-closed transitions pass"
+    },
+    {
+      "case": "runtime state projection",
+      "command": "cargo test -p agentd tui::",
+      "expected": "projection reflects current run state without secret leakage"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "all existing safety and recovery tests pass"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-006",
+    "blocked_until": [
+      "Read-only steps can seal through SEF.",
+      "High-risk steps pause before EffectPrepared.",
+      "Denied or timed-out approval never executes."
+    ]
   }
 }

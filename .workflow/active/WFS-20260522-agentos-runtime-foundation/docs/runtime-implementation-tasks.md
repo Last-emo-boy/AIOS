@@ -2,7 +2,7 @@
 
 Source: `research.md`
 Workflow: `WFS-20260522-agentos-runtime-foundation`
-Updated: `2026-05-23T05:12:03+08:00`
+Updated: `2026-05-23T06:24:00+08:00`
 
 ## Purpose
 
@@ -10,6 +10,12 @@ This document expands the Maestro task plan for the bottom Agent runtime and the
 AgentOS Security Execution Foundation. It is the worker-facing blueprint for
 turning the completed MVP safety substrate into a distribution-grade AgentOS
 control plane.
+
+Detailed per-task worker contracts are maintained in
+`docs/agent-core-sef-detailed-tasks.md`. That companion document is the
+authoritative expansion for each `TASK-ACR-*` and `TASK-SEF-*`
+`read_first`, implementation step, failure-mode, verification-matrix, and
+handoff requirement.
 
 The design is intentionally split into two layers:
 

@@ -55,5 +55,58 @@
       "cargo test -p agentd": "158 passed; 0 failed"
     },
     "next_task": "TASK-SEF-009"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-004.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-005.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-006.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-007.json",
+    "crates/agentd/src/safety.rs",
+    "crates/agentd/src/agent_core.rs",
+    ".github/workflows/safety.yml",
+    ".github/workflows/release.yml",
+    "scripts/build-release.ps1"
+  ],
+  "implementation_steps": [
+    "Extend the safety manifest from MVP substrate scenarios to generic Agent execution scenarios.",
+    "Require model output injection, observation injection, memory poisoning, approval mutation, source-to-sink abuse, secret misuse, and recovery abuse cases.",
+    "Assert denied paths do not emit EffectPrepared.",
+    "Assert half-committed paths enter Recovery, RollbackPending, or FailedClosed.",
+    "Wire safety:: and agent_core::adversarial commands into CI and release scripts.",
+    "Record scenario names, commands, and expected gate behavior in evidence."
+  ],
+  "failure_modes": [
+    "CI or release omits runtime adversarial suite.",
+    "Safety gate only covers isolated substrate functions and misses generic runtime bypasses.",
+    "Denied path prepares effect.",
+    "Half-executed effect has no recovery classification.",
+    "Gate output is too vague to identify planning, policy, memory, approval, or execution failure domain."
+  ],
+  "verification_matrix": [
+    {
+      "case": "safety substrate suite",
+      "command": "cargo test -p agentd safety::",
+      "expected": "prompt injection, tool abuse, resource abuse, secret, rollback, and recovery gates pass"
+    },
+    {
+      "case": "runtime adversarial suite",
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "expected": "model, observation, memory, approval, and malformed output abuse cases fail closed"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "expanded gates do not regress valid AgentCore flows"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-009",
+    "blocked_until": [
+      "Runtime abuse cases are release-blocking.",
+      "Denied paths have no EffectPrepared.",
+      "CI and release scripts include safety and adversarial suites."
+    ]
   }
 }

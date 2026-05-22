@@ -52,5 +52,52 @@
       "cargo test -p agentd": "128 passed; 0 failed"
     },
     "next_task": "TASK-ACR-007"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-001.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-005.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/audit.rs"
+  ],
+  "implementation_steps": [
+    "Validate DAG structure before plan freeze, including missing dependency, self-dependency, and cycle cases.",
+    "Select only steps whose dependencies have sealed success evidence or explicit alternative-path satisfaction.",
+    "Block dependents after denied, failed-closed, rollback-pending, or exhausted prerequisite states.",
+    "Keep retry budget state in PlanRun rather than model memory.",
+    "Return deterministic scheduler decisions and explanations for audit and TUI projection.",
+    "Document where safe read-only parallelism can be added later without changing current sequential semantics."
+  ],
+  "failure_modes": [
+    "Cyclic plan freezes successfully.",
+    "Denied dependency allows downstream write or execute step.",
+    "Retry budget exhaustion loops forever.",
+    "Scheduler ordering changes nondeterministically.",
+    "Model memory can alter retry or dependency state."
+  ],
+  "verification_matrix": [
+    {
+      "case": "scheduler unit coverage",
+      "command": "cargo test -p agentd agent_core::scheduler",
+      "expected": "linear, branched, cyclic, denied-dependency, and retry-exhausted cases pass"
+    },
+    {
+      "case": "run loop integration",
+      "command": "cargo test -p agentd agent_core::run_loop",
+      "expected": "run loop uses scheduler decisions for ready-step selection"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "no ordering or recovery regression"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-007",
+    "blocked_until": [
+      "Dependency validation blocks bad DAGs.",
+      "Ready-step selection is deterministic.",
+      "Denied dependencies block downstream steps."
+    ]
   }
 }

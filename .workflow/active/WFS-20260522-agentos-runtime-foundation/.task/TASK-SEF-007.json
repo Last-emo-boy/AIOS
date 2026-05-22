@@ -54,5 +54,56 @@
       "cargo test -p agentd": "150 passed; 0 failed"
     },
     "next_task": "TASK-ACR-009"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-002.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-001.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-006.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/recovery.rs",
+    "crates/agentd/src/audit.rs"
+  ],
+  "implementation_steps": [
+    "Join RunStore recoverable runs with AuditJournal prepared, observed, sealed, rollback-pending, and unresolved effects.",
+    "Classify runs as safe-to-verify, needs-rollback, needs-human-review, abandoned, completed, or failed-closed.",
+    "Restore AgentCore state to Recovering, Suspended, RollbackPending, Completed, or FailedClosed based on durable evidence.",
+    "Prevent replanning from hiding unresolved effects.",
+    "Emit RecoveryStarted and RecoveryCompleted events linked to run_id and step_id.",
+    "Expose recovery projection for CLI and TUI."
+  ],
+  "failure_modes": [
+    "Recovery asks the model whether an effect happened.",
+    "Prepared write without seal is marked completed.",
+    "Observed but unsealed read-only effect cannot be safely reconciled.",
+    "Inconsistent RunStore and audit state proceeds without fail-closed classification.",
+    "Recovery events omit run or step evidence source."
+  ],
+  "verification_matrix": [
+    {
+      "case": "legacy recovery regression",
+      "command": "cargo test -p agentd recovery::",
+      "expected": "MVP recovery reconciler behavior remains intact"
+    },
+    {
+      "case": "AgentCore recovery coverage",
+      "command": "cargo test -p agentd agent_core::recovery",
+      "expected": "safe-to-verify, needs-rollback, needs-human-review, abandoned, completed, and failed-closed cases pass"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "recovery integration does not create model replay or duplicate audit truth"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-009",
+    "blocked_until": [
+      "Recovery uses RunStore plus AuditJournal.",
+      "Prepared/observed/unsealed effects are classified.",
+      "No recovery path asks the model what happened."
+    ]
   }
 }

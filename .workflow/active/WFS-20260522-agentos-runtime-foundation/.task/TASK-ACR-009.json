@@ -61,5 +61,55 @@
       "cargo run -p agentd -- --audit-show <path> latest": "passed; latest dynamic AgentCore run timeline includes generic runtime events"
     },
     "next_task": "TASK-ACR-010"
+  },
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-005.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-006.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-007.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/service_recovery.rs",
+    "crates/agentd/src/main.rs"
+  ],
+  "implementation_steps": [
+    "Encode nginx service recovery as IntentCtx to PlanSpec to PlanRun rather than a dedicated workflow state machine.",
+    "Run read-only diagnostics automatically through AgentCore and SecurityExecutionEngine.",
+    "Pause restart or write steps until exact approval is bound.",
+    "Execute restart and verification through the generic engine, audit, and effect envelope path.",
+    "Keep legacy CLI behavior by wrapping the generic AgentCore path.",
+    "Remove duplicate orchestration ownership from ServiceRecoveryWorkflow."
+  ],
+  "failure_modes": [
+    "Legacy service workflow bypasses AgentCore for execution.",
+    "Denied restart prepares a protected effect.",
+    "Final summary relies on model claims instead of observations.",
+    "Audit timeline misses intent, plan, policy, approval, lease, effect, observation, verification, or seal events.",
+    "Compatibility wrapper duplicates policy or execution logic."
+  ],
+  "verification_matrix": [
+    {
+      "case": "generic service recovery",
+      "command": "cargo test -p agentd agent_core::service_recovery",
+      "expected": "approved path seals and denied path prepares no protected effect"
+    },
+    {
+      "case": "legacy compatibility",
+      "command": "cargo test -p agentd service_recovery::",
+      "expected": "legacy tests pass through AgentCore wrapper"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "runtime migration does not regress safety or recovery"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-010",
+    "blocked_until": [
+      "Service recovery is a generic PlanRun.",
+      "Legacy path delegates instead of bypassing.",
+      "Approved and denied paths produce expected audit evidence."
+    ]
   }
 }

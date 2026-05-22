@@ -52,5 +52,55 @@
       "cargo test -p agentd": "56 passed; 0 failed"
     },
     "next_task": "TASK-ACR-002"
+  },
+  "read_first": [
+    "research.md",
+    "TASK.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-module-ownership.md",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/lib.rs"
+  ],
+  "implementation_steps": [
+    "Define versioned runtime IDs and data structs for IntentCtx, PlanSpec, PlanStep, PlanRun, Observation, and RunState.",
+    "Encode PlanStep dependencies, semantic tool request, preconditions, expected observations, verification rule, approval requirement, retry budget, and rollback need.",
+    "Encode PlanRun with frozen plan hash, state cursor, approval state, observation refs, memory refs, and recovery marker.",
+    "Add deterministic JSON serialization suitable for audit events and persisted run-state snapshots.",
+    "Add constructors or validators that reject secret-like values and direct executor command surfaces.",
+    "Prove nginx service recovery can be represented as a PlanSpec without preparing or executing any effect."
+  ],
+  "failure_modes": [
+    "Secret-like values are accepted into intent, plan, observation, or run snapshot fields.",
+    "PlanStep can name raw shell or unknown tools without validation failure.",
+    "Write-capable steps can omit verification or rollback metadata.",
+    "Runtime JSON is non-deterministic across test runs.",
+    "Risk hints are modeled as permissions rather than advisory metadata."
+  ],
+  "verification_matrix": [
+    {
+      "case": "runtime model unit coverage",
+      "command": "cargo test -p agentd agent_core::model",
+      "expected": "IntentCtx, PlanSpec, PlanRun, Observation, serialization, redaction, and advisory risk hint tests pass"
+    },
+    {
+      "case": "service recovery representability",
+      "command": "cargo test -p agentd agent_core::model",
+      "expected": "service recovery PlanSpec can be built without EffectPrepared or tool execution"
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "expected": "existing MVP safety substrate remains intact"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-ACR-002",
+    "blocked_until": [
+      "Runtime model fields are versioned and serializable.",
+      "Secret-like fields are rejected or redacted.",
+      "Service recovery can be modeled without side effects."
+    ]
   }
 }
