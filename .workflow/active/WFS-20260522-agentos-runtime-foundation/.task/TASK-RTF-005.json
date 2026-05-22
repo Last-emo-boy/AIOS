@@ -1,7 +1,7 @@
 {
   "id": "TASK-RTF-005",
   "title": "Complete Runtime Foundation final audit",
-  "status": "pending",
+  "status": "completed",
   "wave": 5,
   "priority": "P0",
   "type": "verification",
@@ -43,5 +43,19 @@
   ],
   "risk_notes": [
     "Do not mark this task complete merely because the task files exist; it requires implemented runtime behavior and fresh verification."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T06:40:53+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json",
+    "tests": {
+      "workflow JSON parse": "54 workflow JSON files parsed successfully",
+      "cargo test -p agentd": "163 passed; 0 failed",
+      "cargo test -p agentd safety::": "16 passed; 0 failed",
+      "cargo test -p agentd agent_core::": "68 passed; 0 failed",
+      "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1": "passed; full tests, safety gate, AgentCore adversarial, release build, initramfs build, QEMU dependency check",
+      "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30": "passed; observed AGENTD_HANDOFF_OK"
+    },
+    "workflow_status": "completed",
+    "next_workflow": "Distribution Alpha planning"
+  }
 }

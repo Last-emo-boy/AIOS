@@ -1,0 +1,101 @@
+{
+  "workflow": "WFS-20260522-agentos-runtime-foundation",
+  "task": "TASK-RTF-005",
+  "status": "passed",
+  "completed_at": "2026-05-23T06:40:53+08:00",
+  "summary": "Runtime Foundation final audit passed. All non-final Runtime Foundation tasks were completed before the audit; the final audit then verified workflow JSON, full agentd regression, safety gate, AgentCore runtime suite, release/provenance generation, QEMU dependency check, full QEMU boot smoke, Distribution Alpha entry criteria, and artifact hygiene.",
+  "task_completion": {
+    "total_runtime_foundation_tasks": 26,
+    "completed_before_final_task": 25,
+    "non_final_pending_count": 0,
+    "final_task": "TASK-RTF-005",
+    "final_task_status_after_audit": "completed"
+  },
+  "verification": {
+    "workflow_json_parse": "54 workflow JSON files parsed successfully before final audit status updates.",
+    "cargo test -p agentd": "163 passed; 0 failed; 0 ignored",
+    "cargo test -p agentd safety::": "16 passed; 0 failed; 147 filtered out",
+    "cargo test -p agentd agent_core::": "68 passed; 0 failed; 95 filtered out",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1": "passed; reran cargo test -p agentd, safety::, agent_core::adversarial, release build, image/build-initramfs.ps1, and boot smoke dependency check",
+    "scripts/build-release.ps1 agent_core::adversarial": "5 passed; 0 failed; 158 filtered out",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30": "passed; observed AGENTD_HANDOFF_OK",
+    "git status --ignored --short": "tracked Rust WIP remains unstaged; generated artifacts are under .workflow/artifacts, image/out, image/cache, image/initramfs, and target"
+  },
+  "qemu_boot_smoke": {
+    "status": "completed",
+    "observed_marker": true,
+    "marker": "AGENTD_HANDOFF_OK",
+    "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe",
+    "timeout_seconds": 30,
+    "result_file": ".workflow/artifacts/boot/boot-smoke-result.json",
+    "log_file": ".workflow/artifacts/boot/boot-smoke.log"
+  },
+  "release_artifacts": {
+    "provenance": ".workflow/artifacts/release/provenance.json",
+    "dependency_inventory": ".workflow/artifacts/release/dependency-inventory.json",
+    "initramfs": "image/out/agentos-initramfs.cpio.gz",
+    "initramfs_sha256": "741e8a6bd8d4a00981743d711c59f720bffe0cc0212bcc73f7f2e079f542228d",
+    "agentd_release_binary": "target/release/agentd.exe",
+    "provenance_source_commit_before_final_audit_commit": "0a807ed079c12a54edffced83d6223f3e3a2f142"
+  },
+  "runtime_contract_evidence": {
+    "agentcore_generic_run_loop": "TASK-ACR-005 through TASK-ACR-009 completed; cargo test -p agentd agent_core:: passed with service recovery, run loop, scheduler, recovery, observation, memory, planner, ModelBroker, and RunStore coverage.",
+    "service_recovery_migration": "TASK-ACR-009 completed; agent_core::service_recovery tests are included in cargo test -p agentd agent_core:: and prove approved recovery runs through AgentCore while denied restart prepares no effect.",
+    "security_execution_foundation": "TASK-SEF-001 through TASK-SEF-010 completed; safety:: and release gate passed, proving semantic tools, policy, capability, sandbox, audit, verification, rollback, recovery, source-to-sink, and secret handling remain mandatory.",
+    "runtime_audit_projection": "TASK-SEF-009 completed; cargo test -p agentd included audit projection and TUI projection tests.",
+    "distribution_alpha_entry": "TASK-RTF-004 completed; .workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md blocks Distribution Alpha from starting from only the MVP skeleton and requires runtime artifacts, persistent directories, safety gates, release/provenance, and QEMU gates."
+  },
+  "distribution_alpha_gate": {
+    "entry_criteria_document": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    "status_after_final_audit": "Runtime Foundation handoff is ready for future Distribution Alpha planning.",
+    "must_inherit": [
+      "generic AgentCore runtime",
+      "SecurityExecutionEngine as the only side-effect path",
+      "policy pack",
+      "semantic tool manifest",
+      "run-state directory",
+      "audit directory",
+      "rollback directory",
+      "runtime memory directory",
+      "ModelBroker config",
+      "release/provenance metadata",
+      "runtime safety gates",
+      "QEMU boot and runtime smoke gates"
+    ]
+  },
+  "artifact_hygiene": {
+    "tracked_generated_artifacts_staged": false,
+    "existing_unstaged_tracked_wip": [
+      "crates/agentd/src/audit.rs",
+      "crates/agentd/src/lib.rs",
+      "crates/agentd/src/lifecycle.rs",
+      "crates/agentd/src/main.rs",
+      "crates/agentd/src/recovery.rs",
+      "crates/agentd/src/rollback.rs",
+      "crates/agentd/src/sandbox.rs",
+      "crates/agentd/src/tools.rs",
+      "crates/agentd/src/tui.rs"
+    ],
+    "untracked_generated_root": ".workflow/artifacts/",
+    "ignored_generated_paths": [
+      ".workflow/artifacts/audit/",
+      ".workflow/artifacts/boot/",
+      ".workflow/artifacts/policy/",
+      ".workflow/artifacts/recovery/",
+      ".workflow/artifacts/release/",
+      ".workflow/artifacts/rollback/",
+      ".workflow/artifacts/sandbox/",
+      ".workflow/artifacts/service-recovery/",
+      "image/cache/",
+      "image/initramfs/",
+      "image/out/",
+      "target/"
+    ],
+    "commit_rule": "Final audit commit must stage only workflow/task/evidence/TASK.md files, not Rust WIP or generated artifacts."
+  },
+  "result": {
+    "runtime_foundation_status": "completed",
+    "next_recommended_workflow": "Distribution Alpha planning",
+    "goal_note": "This closes the Runtime Foundation task plan. It does not implement the future Distribution Alpha itself."
+  }
+}
