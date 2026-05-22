@@ -93,3 +93,27 @@ through the generic Agent Core Runtime, not through a dedicated hard-coded
 workflow path. The audit timeline must still show intent, frozen plan, policy
 decision, approval, lease, prepared effect, observed effect, verification, and
 sealed commit.
+
+## Detailed TASK Map
+
+The detailed Maestro implementation blueprint is maintained in
+`docs/runtime-implementation-tasks.md`. Agent Core Runtime is decomposed into
+the following executable chain:
+
+| Task | Runtime responsibility | Must prove |
+|---|---|---|
+| `TASK-ACR-001` | Versioned runtime data model for `IntentCtx`, `PlanSpec`, `PlanStep`, `PlanRun`, and `Observation`. | Service recovery can be represented without executing tools; secrets cannot enter model surfaces. |
+| `TASK-ACR-002` | Persistent `RunStore` for crash-safe `PlanRun` snapshots. | In-flight runs can be recovered without model replay; tampered snapshots fail closed. |
+| `TASK-ACR-003` | `ModelBroker` trait and deterministic stub provider. | Tests require no external LLM; malformed model output is rejected before planning. |
+| `TASK-ACR-004` | Planner and frozen `PlanSpec` validator. | Planning emits `IntentReceived` and `PlanFrozen` only; no side-effect event is created. |
+| `TASK-ACR-005` | AgentCore run loop state machine. | Read-only steps can seal; high-risk steps pause before `EffectPrepared`. |
+| `TASK-ACR-006` | Dependency-aware `StepScheduler`. | Dependencies require sealed success events; failed dependency blocks downstream work. |
+| `TASK-ACR-007` | `ObservationProcessor` trust-boundary handling. | Observation text cannot directly create a tool call. |
+| `TASK-ACR-008` | Minimal Agent memory layer. | Memory helps context but cannot authorize policy, approval, lease, or tool use. |
+| `TASK-ACR-009` | Service recovery migration onto generic AgentCore. | The legacy workflow becomes a wrapper, not a second orchestration path. |
+| `TASK-ACR-010` | AgentCore adversarial runtime tests. | Prompt injection, observation injection, memory poisoning, approval mutation, and malformed model output fail closed. |
+
+The bottom Agent implementation is therefore not a single "agent loop" hidden
+behind a prompt. It is a typed pipeline where the model proposes bounded
+structure, AgentCore persists and schedules deterministic state, and the
+Security Execution Foundation remains the only side-effect authority.

@@ -40,6 +40,102 @@
     "Snapshot a service recovery AgentCore timeline.",
     "Inspect projection for redaction and evidence ordering."
   ],
+  "read_first": [
+    "crates/agentd/src/audit.rs",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-implementation-tasks.md"
+  ],
+  "implementation_steps": [
+    "Add a RuntimeAuditProjection model in the audit module or a directly adjacent observability module.",
+    "Build the projection from AuditJournal::latest_run and AuditJournal::run_timeline without changing raw audit event storage.",
+    "Group events by run_id and step_id while preserving original event ordering for replay and evidence.",
+    "Extract and expose plan hash, planner/model metadata, policy decision, approval binding, lease id, sandbox profile summary, effect state, observation trust/source labels, verification result, rollback state, recovery state, and final summary.",
+    "Apply existing audit redaction to every user-facing summary and add tests for token/password/API-key-like strings.",
+    "Expose a CLI query mode for latest and explicit run-id projection while preserving the existing raw audit display path.",
+    "Expose a TUI render helper for the same projection instead of creating a second projection format.",
+    "Create stable snapshot or golden-style tests using the generic service recovery AgentCore timeline.",
+    "Write task evidence with command output summaries, touched files, projection sample shape, and redaction notes."
+  ],
+  "projection_contract": {
+    "source_of_truth": "AuditJournal event timeline, with RunStore state used only when already available through runtime recovery evidence.",
+    "ordering": "Projection must preserve durable audit event order and may additionally group by step for readability.",
+    "query_modes": [
+      "latest",
+      "run_id"
+    ],
+    "required_event_families": [
+      "IntentReceived",
+      "PlanFrozen",
+      "PolicyEvaluated",
+      "ApprovalBound or approval denial/timeout when applicable",
+      "EffectPrepared",
+      "EffectObserved",
+      "VerificationCompleted or equivalent verification result",
+      "CommitSealed or RollbackPending or FailedClosed",
+      "RecoveryStarted and RecoveryCompleted when applicable"
+    ],
+    "redaction": "No projection field may expose raw token, password, API key, bearer credential, or secret value; secret handles and source labels must remain visible.",
+    "operator_question": "For each step, answer: why was it eligible, what policy decided, what lease/sandbox constrained it, what evidence came back, and why it sealed, paused, denied, rolled back, or failed closed."
+  },
+  "failure_modes": [
+    "Missing run id returns a clear not-found error without falling back to another run.",
+    "Malformed audit lines are skipped or surfaced as projection warnings without corrupting valid timeline events.",
+    "Prepared-but-unsealed effects are shown as unresolved and never presented as completed.",
+    "Denied or paused policy decisions explicitly show that no effect was prepared.",
+    "Recovery events name their evidence source so operators can distinguish run-store recovery from model replanning.",
+    "Redaction failure is treated as a test-blocking defect."
+  ],
+  "verification_matrix": [
+    {
+      "case": "latest service recovery timeline",
+      "command": "cargo test -p agentd agent_core::service_recovery",
+      "must_show": [
+        "IntentReceived",
+        "PlanFrozen",
+        "PolicyEvaluated",
+        "EffectPrepared",
+        "EffectObserved",
+        "CommitSealed"
+      ]
+    },
+    {
+      "case": "audit projection unit tests",
+      "command": "cargo test -p agentd audit::",
+      "must_show": [
+        "latest and run-id query behavior",
+        "stable event ordering",
+        "secret redaction"
+      ]
+    },
+    {
+      "case": "TUI projection render",
+      "command": "cargo test -p agentd tui::",
+      "must_show": [
+        "step status",
+        "policy reason",
+        "observation source",
+        "verification or recovery state"
+      ]
+    },
+    {
+      "case": "full regression",
+      "command": "cargo test -p agentd",
+      "must_show": [
+        "no regression in AgentCore or safety suites"
+      ]
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-SEF-010",
+    "blocked_until": [
+      "Projection exists for latest and explicit run-id.",
+      "Projection can explain approved, denied, and recovery-relevant paths.",
+      "Projection tests prove stable ordering and redaction."
+    ]
+  },
   "risk_notes": [
     "Without an explainable audit projection, users cannot distinguish controlled autonomy from hidden automation."
   ]

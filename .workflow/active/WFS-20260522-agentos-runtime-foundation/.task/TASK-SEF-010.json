@@ -40,6 +40,90 @@
     "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
     "git status --ignored --short"
   ],
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-implementation-tasks.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-008.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-009.json",
+    "crates/agentd/src/safety.rs",
+    ".github/workflows/safety.yml",
+    ".github/workflows/release.yml",
+    "scripts/build-release.ps1"
+  ],
+  "implementation_steps": [
+    "Load TASK-SEF-008 and TASK-SEF-009 evidence and confirm the safety gate manifest and audit projection are current.",
+    "Run the full agentd test suite and record exact pass/fail counts.",
+    "Run safety:: and agent_core::adversarial subsets independently so failures can be attributed to substrate gates or runtime abuse handling.",
+    "Run approved and denied service recovery paths through generic AgentCore and confirm denied high-risk actions prepare no effect.",
+    "Run recovery-oriented tests or fixtures for interrupted PlanRun states and unresolved effects.",
+    "Run the release/provenance script and confirm the runtime adversarial gate remains included.",
+    "Inspect git status, ignored artifacts, and generated outputs so final evidence distinguishes tracked deliverables from build byproducts.",
+    "Write TASK-SEF-010 final verification evidence with commands, results, artifact paths, open risks, and Distribution Alpha gate status.",
+    "Update workflow-session, plan, TASK.md, and .workflow/state.json only after evidence is complete."
+  ],
+  "final_gate_contract": {
+    "distribution_alpha_status": "blocked until this task passes",
+    "must_verify": [
+      "AgentCore cannot execute a side effect outside SecurityExecutionEngine.",
+      "Policy denial and approval pause paths create no EffectPrepared.",
+      "CapabilityLease remains the sandbox profile authority.",
+      "Untrusted/model-origin content cannot drive high-risk sinks.",
+      "Secret handling stays handle-only.",
+      "Prepared or observed effects reach CommitSealed, RollbackPending, or FailedClosed.",
+      "Recovery uses RunStore plus AuditJournal, not model replay.",
+      "Runtime audit projection can explain the final evidence chain."
+    ],
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json"
+  },
+  "failure_modes": [
+    "Any failing safety or adversarial test blocks task completion even if the full suite mostly passes.",
+    "Missing runtime adversarial command in CI or release scripts blocks completion.",
+    "A denied high-risk action with EffectPrepared is a P0 release blocker.",
+    "Unresolved effects without recovery, rollback-pending, or human-review classification block completion.",
+    "Build artifacts accidentally staged as source changes block completion until explicitly classified.",
+    "Stale evidence from a previous commit or previous task cannot be reused as final verification."
+  ],
+  "verification_matrix": [
+    {
+      "case": "full runtime regression",
+      "command": "cargo test -p agentd",
+      "expected": "all tests pass"
+    },
+    {
+      "case": "MVP safety substrate",
+      "command": "cargo test -p agentd safety::",
+      "expected": "prompt injection, tool abuse, resource abuse, secret, rollback, and recovery gates pass"
+    },
+    {
+      "case": "generic AgentCore abuse suite",
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "expected": "planning injection, observation injection, memory poisoning, approval mutation, and malformed model output fail closed"
+    },
+    {
+      "case": "generic runtime service recovery",
+      "command": "cargo test -p agentd agent_core::service_recovery",
+      "expected": "approved path seals; denied path prepares no protected effect"
+    },
+    {
+      "case": "release and provenance gate",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "expected": "release build includes safety and runtime adversarial checks"
+    },
+    {
+      "case": "artifact hygiene",
+      "command": "git status --ignored --short",
+      "expected": "generated artifacts are ignored or intentionally tracked; no unrelated WIP staged"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-RTF-004",
+    "blocked_until": [
+      "TASK-SEF-009 projection evidence exists.",
+      "All final gate commands pass on the current worktree.",
+      "Final evidence records Distribution Alpha as allowed to enter only after Runtime Foundation final audit."
+    ]
+  },
   "risk_notes": [
     "This task gates distribution work; do not mark complete on partial or stale test evidence."
   ]

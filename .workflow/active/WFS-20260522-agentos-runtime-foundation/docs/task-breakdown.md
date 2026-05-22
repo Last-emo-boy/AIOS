@@ -46,6 +46,30 @@ Security Execution Foundation owns constrained effects:
 
 It never trusts model output as authority.
 
+## Implementation Blueprint
+
+Detailed worker-facing implementation slices, convergence checks, failure
+modes, and verification matrices are maintained in
+`docs/runtime-implementation-tasks.md`.
+
+That blueprint is the authoritative expansion for:
+
+- `TASK-ACR-001` to `TASK-ACR-010`: bottom Agent Core Runtime.
+- `TASK-SEF-001` to `TASK-SEF-010`: AgentOS Security Execution Foundation.
+- `TASK-SEF-009`: next pending runtime audit projection work.
+- `TASK-SEF-010`: final security execution verification gate before
+  Distribution Alpha entry.
+
+The blueprint makes the bottom Agent concrete as a typed pipeline:
+
+```text
+IntentCtx -> ModelBroker -> Planner -> PlanSpec -> RunStore
+  -> StepScheduler -> SecurityExecutionEngine
+  -> PolicyAdapter -> CapabilityLease -> SandboxProfile
+  -> EffectPrepared -> EffectObserved -> VerificationResult
+  -> CommitSealed | RollbackPending | FailedClosed
+```
+
 ## Wave Summary
 
 | Wave | Name | Purpose | Tasks |
