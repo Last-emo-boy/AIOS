@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-010",
   "title": "Run Security Execution Foundation final verification",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P0",
   "type": "verification",
@@ -123,6 +123,23 @@
       "All final gate commands pass on the current worktree.",
       "Final evidence records Distribution Alpha as allowed to enter only after Runtime Foundation final audit."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T06:01:02+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json",
+    "tests": {
+      "cargo test -p agentd": "163 passed; 0 failed",
+      "cargo test -p agentd safety::": "16 passed; 0 failed",
+      "cargo test -p agentd agent_core::adversarial": "5 passed; 0 failed",
+      "cargo test -p agentd agent_core::service_recovery": "3 passed; 0 failed",
+      "cargo test -p agentd agent_core::": "68 passed; 0 failed",
+      "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1": "passed; release build, initramfs build, provenance, and boot smoke dependency check completed"
+    },
+    "smoke": {
+      "approved_service_recovery": "restart executed and CommitSealed projection verified",
+      "denied_service_recovery": "restart-service denied with effect_prepared=false and effect_state=none"
+    },
+    "next_task": "TASK-RTF-004"
   },
   "risk_notes": [
     "This task gates distribution work; do not mark complete on partial or stale test evidence."

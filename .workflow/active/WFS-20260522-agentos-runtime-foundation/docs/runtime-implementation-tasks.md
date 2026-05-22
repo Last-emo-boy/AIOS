@@ -496,28 +496,34 @@ Convergence checks:
 
 ## Pending Execution Pointer
 
-Current next task: `TASK-SEF-009`.
+Current next task: `TASK-RTF-004`.
 
-The next implementation should start in `crates/agentd/src/audit.rs` because
-the journal already owns event loading, latest-run lookup, run timelines, and
-summary redaction. CLI/TUI integration should be added after the projection
-type is stable and tested.
+Runtime Foundation Wave 4 is complete. `TASK-SEF-010` passed the Security
+Execution Foundation final verification across full agentd regression, safety
+gate, AgentCore adversarial tests, service recovery approved/denied smoke,
+runtime audit projection, release/provenance generation, initramfs build, and
+QEMU dependency check.
 
-Minimum read-first set for `TASK-SEF-009`:
+The next implementation should define Distribution Alpha entry criteria from
+the completed runtime foundation. It must translate the runtime contract into
+distribution gates for installed `agentd`, policy packs, semantic tool
+manifests, run-state persistence, audit projection, rollback/recovery
+artifacts, and ModelBroker configuration.
 
-- `crates/agentd/src/audit.rs`
-- `crates/agentd/src/agent_core.rs`
-- `crates/agentd/src/security_execution.rs`
-- `crates/agentd/src/main.rs`
-- `crates/agentd/src/tui.rs`
-- `.workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-009.json`
+Minimum read-first set for `TASK-RTF-004`:
 
-Minimum verification for `TASK-SEF-009`:
+- `TASK.md`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-004.json`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md`
+- `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md`
 
-- `cargo test -p agentd audit::`
-- `cargo test -p agentd tui::`
-- `cargo test -p agentd agent_core::service_recovery`
-- `cargo test -p agentd`
+Minimum verification for `TASK-RTF-004`:
+
+- JSON parse of updated workflow artifacts
+- Cross-check that Distribution Alpha remains blocked until `TASK-RTF-005`
+- Confirm no generated release or smoke artifacts are staged
 
 ## Distribution Bridge Requirement
 

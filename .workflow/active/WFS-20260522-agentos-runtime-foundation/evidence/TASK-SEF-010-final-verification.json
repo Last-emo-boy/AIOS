@@ -1,0 +1,53 @@
+{
+  "task": "TASK-SEF-010",
+  "status": "completed",
+  "completed_at": "2026-05-23T06:01:02+08:00",
+  "summary": "Security Execution Foundation final verification passed on the generic AgentCore runtime path. The gate covered full agentd regression, MVP safety scenarios, AgentCore adversarial abuse cases, AgentCore recovery and service recovery subsets, approved and denied service recovery CLI smoke, runtime audit projection, release/provenance generation, initramfs build, QEMU dependency check, and artifact hygiene.",
+  "verified_contract": {
+    "agentcore_effect_path": "AgentCore side effects are covered by SecurityExecutionEngine, semantic tools, policy, capability, audit, verification, rollback, and recovery tests.",
+    "denied_high_risk_no_effect": "Denied service recovery restart projected restart-service with status=denied, effect_prepared=false, effect_state=none, and only PolicyEvaluated plus ApprovalBound events.",
+    "approval_binding": "Approved service recovery restart required exact approval before EffectPrepared and reached CommitSealed.",
+    "recovery_truth": "agent_core::recovery and safety rollback tests verified RunStore plus AuditJournal recovery without model replay.",
+    "audit_projection": "RuntimeAuditProjection explained approved and denied service recovery journals, including plan hash, policy, approval, effects, observation source/trust, verification, and final summaries.",
+    "release_gate": "scripts/build-release.ps1 ran full tests, safety gate, AgentCore adversarial gate, release build, initramfs build, and boot smoke dependency check."
+  },
+  "commands": {
+    "cargo test -p agentd": "163 passed; 0 failed; 0 ignored",
+    "cargo test -p agentd safety::": "16 passed; 0 failed; 147 filtered out",
+    "cargo test -p agentd agent_core::adversarial": "5 passed; 0 failed; 158 filtered out",
+    "cargo test -p agentd agent_core::service_recovery": "3 passed; 0 failed; 160 filtered out",
+    "cargo test -p agentd agent_core::": "68 passed; 0 failed; 95 filtered out",
+    "cargo run -p agentd -- --service-recovery-demo approved .workflow/artifacts/TASK-SEF-010/service-recovery-approved.jsonl": "restart_policy_decision=allow; restart_executed=true; final_health_ok=true",
+    "cargo run -p agentd -- --service-recovery-demo denied .workflow/artifacts/TASK-SEF-010/service-recovery-denied.jsonl": "restart_policy_decision=pause-for-approval; restart_executed=false; final_health_ok=false; summary states no restart effect was prepared",
+    "cargo run -p agentd -- --audit-project .workflow/artifacts/TASK-SEF-010/service-recovery-approved.jsonl latest": "projected 41 events; restart-service sealed with EffectPrepared, EffectObserved, and CommitSealed",
+    "cargo run -p agentd -- --audit-project .workflow/artifacts/TASK-SEF-010/service-recovery-denied.jsonl latest": "projected 25 events; restart-service denied with effect_prepared=false and effect_state=none",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1": "passed; reran full tests, safety gate, AgentCore adversarial gate, release build, image/build-initramfs.ps1, and boot smoke dependency check",
+    "git status --ignored --short": "tracked Rust WIP remains unstaged; generated artifacts appear under .workflow/artifacts, image/out, image/cache, image/initramfs, and target"
+  },
+  "generated_artifacts": [
+    ".workflow/artifacts/TASK-SEF-010/service-recovery-approved.jsonl",
+    ".workflow/artifacts/TASK-SEF-010/service-recovery-denied.jsonl",
+    ".workflow/artifacts/release/dependency-inventory.json",
+    ".workflow/artifacts/release/provenance.json",
+    "image/out/agentos-initramfs.cpio.gz",
+    "image/out/agentos-initramfs.manifest.json",
+    "target/release/agentd.exe"
+  ],
+  "artifact_hygiene": {
+    "status": "accepted",
+    "notes": [
+      "Generated release and smoke artifacts were not staged for source commit.",
+      "Existing Rust WIP in crates/agentd/src remains outside this verification evidence commit.",
+      ".workflow/artifacts is still untracked at top level, with ignored generated subdirectories listed by git status --ignored --short."
+    ]
+  },
+  "distribution_alpha_gate": {
+    "runtime_foundation_requirement": "Security Execution Foundation final verification passed.",
+    "next_task": "TASK-RTF-004",
+    "status": "ready to define Distribution Alpha entry criteria; final Runtime Foundation audit remains pending until TASK-RTF-005"
+  },
+  "open_risks": [
+    "Current worktree contains pre-existing Rust WIP not produced by TASK-SEF-010; it was intentionally left unstaged.",
+    ".workflow/artifacts/ is untracked at top level even though generated subdirectories are ignored; do not stage generated smoke/release outputs."
+  ]
+}
