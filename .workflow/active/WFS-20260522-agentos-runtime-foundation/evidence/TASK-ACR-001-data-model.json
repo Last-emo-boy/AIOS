@@ -1,0 +1,58 @@
+{
+  "id": "TASK-ACR-001",
+  "status": "passed",
+  "completed_at": "2026-05-23T00:43:50+08:00",
+  "summary": "Agent runtime data model is implemented as a versioned agent_core::model contract with deterministic JSON, secret-like value rejection, advisory risk hints, and serializable PlanRun snapshots.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/lib.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-001-data-model.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::model",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 49 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "56 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "A service recovery intent can be represented as a PlanSpec without executing any tool.",
+      "status": "passed",
+      "evidence": "agent_core::model::tests::service_recovery_intent_builds_plan_without_effects builds a nginx recovery PlanSpec containing svc.logs and svc.restart while asserting no EffectPrepared, EffectObserved, or CommitSealed event appears."
+    },
+    {
+      "criterion": "PlanSpec includes enough metadata to re-evaluate risk after restart.",
+      "status": "passed",
+      "evidence": "PlanSpec includes schema_version, planner_version, IntentCtx, PlanStep dependencies, verification rules, approval requirements, risk_hints, rollback requirements, success_criteria, and ModelEvidence."
+    },
+    {
+      "criterion": "PlanRun can be serialized and loaded without losing state.",
+      "status": "passed",
+      "evidence": "agent_core::model::tests::plan_run_round_trips_without_losing_state serializes and reloads AwaitingApproval state, current step, approval state, observation refs, memory refs, and recovery marker."
+    },
+    {
+      "criterion": "Risk hints are represented as hints, not authoritative decisions.",
+      "status": "passed",
+      "evidence": "RiskHint is stored separately from approval and policy decision fields; tests assert plan JSON has risk_hints and approval requirements but no policy_decision or decision authority."
+    },
+    {
+      "criterion": "Secret values cannot be stored in IntentCtx, PlanSpec, PlanRun, or Observation fields.",
+      "status": "passed",
+      "evidence": "constructors validate secret-like values such as password= and token=; secret:// handles remain allowed."
+    }
+  ],
+  "model_contract": {
+    "module": "agentd::agent_core::model",
+    "plan_schema_version": "agent-core-plan/v1",
+    "run_schema_version": "agent-core-run/v1",
+    "observation_schema_version": "agent-core-observation/v1",
+    "side_effect_path": "none; this task only defines data contracts",
+    "risk_authority": "PolicyEvaluator remains authoritative; planner RiskHint is advisory only"
+  }
+}

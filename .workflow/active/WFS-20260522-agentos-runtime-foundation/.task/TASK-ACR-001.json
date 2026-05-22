@@ -1,7 +1,7 @@
 {
   "id": "TASK-ACR-001",
   "title": "Define Agent runtime data model",
-  "status": "pending",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "runtime",
@@ -41,5 +41,16 @@
   ],
   "risk_notes": [
     "If PlanSpec is too weak, downstream runtime code will fall back to ad hoc workflow-specific state."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T00:43:50+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-001-data-model.json",
+    "implementation": "crates/agentd/src/agent_core.rs",
+    "module_export": "crates/agentd/src/lib.rs",
+    "tests": {
+      "cargo test -p agentd agent_core::model": "7 passed; 0 failed",
+      "cargo test -p agentd": "56 passed; 0 failed"
+    },
+    "next_task": "TASK-ACR-002"
+  }
 }

@@ -1,3 +1,4 @@
+pub mod agent_core;
 pub mod api;
 pub mod audit;
 pub mod lifecycle;
