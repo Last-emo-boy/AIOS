@@ -35,6 +35,29 @@ fn main() {
             println!("{}", effect.to_json());
             Ok(())
         }
+        Some("--route-tool") => {
+            let Some(tool) = args.get(2) else {
+                return finish(Err("missing tool name".to_string()));
+            };
+            let params = match parse_params(&args[3..]) {
+                Ok(params) => params,
+                Err(error) => return finish(Err(error)),
+            };
+            let call = SemanticToolCall {
+                name: tool.to_string(),
+                params,
+            };
+            match agentd.route_tool(&call) {
+                Ok(routed) => {
+                    println!("{}", routed.to_json());
+                    Ok(())
+                }
+                Err(rejection) => {
+                    println!("{}", rejection.to_json());
+                    Err(rejection.reason)
+                }
+            }
+        }
         Some("--tui-demo") => {
             let intent = args
                 .get(2)
@@ -113,4 +136,15 @@ fn run_interactive(agentd: &Agentd) -> Result<(), String> {
         print!("{}", session.render());
     }
     Ok(())
+}
+
+fn parse_params(args: &[String]) -> Result<Vec<(String, String)>, String> {
+    let mut params = Vec::new();
+    for arg in args {
+        let Some((key, value)) = arg.split_once('=') else {
+            return Err(format!("parameter must be key=value: {arg}"));
+        };
+        params.push((key.to_string(), value.to_string()));
+    }
+    Ok(params)
 }

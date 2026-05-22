@@ -27,7 +27,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-001` 已完成：最小 initramfs 通过 `E:\qemu\qemu-system-x86_64.exe` 启动，并观察到 `/sbin/agentd` 输出 `AGENTD_HANDOFF_OK`。
 - `TASK-AIOS-002` 已完成：Rust `agentd` lifecycle skeleton 提供 local-only/stub 模式、健康状态、模块边界和 typed stub APIs。
 - `TASK-AIOS-003` 已完成：terminal-first TUI surface 支持 intent、plan preview、approval/denial/timeout/suspended 和 audit projection。
-- 下一执行任务：`TASK-AIOS-004`。
+- `TASK-AIOS-004` 已完成：semantic tool schema/router 支持 normalized params、`fs.write.diff` 风险分类，并拒绝 normal-mode `shell.exec`。
+- 下一执行任务：`TASK-AIOS-005`。
 
 ## 必须先冻结的决策
 
@@ -77,7 +78,7 @@ Wave 1 入口约束：
 
 ### Wave 2：语义运行时与审计
 
-- `TASK-AIOS-004`：定义 semantic tool call schema 和 router
+- `TASK-AIOS-004`：定义 semantic tool call schema 和 router（completed）
 - `TASK-AIOS-005`：实现 append-only audit event journal
 - `TASK-AIOS-006`：实现 unfinished effects recovery reconciler
 

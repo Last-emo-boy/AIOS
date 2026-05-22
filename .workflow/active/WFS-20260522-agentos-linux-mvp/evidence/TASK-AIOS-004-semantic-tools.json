@@ -1,0 +1,35 @@
+{
+  "task": "TASK-AIOS-004",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:31:00+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "13 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --route-tool svc.logs service=nginx last=200",
+      "result": "{\"tool\":\"svc.logs\",\"version\":\"v1\",\"risk\":\"read-only\",\"decision\":\"allow\",\"normalized_params\":{\"last\":\"200\",\"service\":\"nginx\"}}"
+    },
+    {
+      "command": "cargo run -p agentd -- --route-tool fs.write.diff path=/etc/nginx/nginx.conf content_hash=abc",
+      "result": "{\"tool\":\"fs.write.diff\",\"version\":\"v1\",\"risk\":\"write-with-diff\",\"decision\":\"allow\",\"normalized_params\":{\"content_hash\":\"abc\",\"path\":\"/etc/nginx/nginx.conf\"}}"
+    },
+    {
+      "command": "cargo run -p agentd -- --route-tool shell.exec cmd=id",
+      "result": "{\"tool\":\"shell.exec\",\"decision\":\"deny\",\"reason\":\"normal mode denies arbitrary shell\"}"
+    }
+  ],
+  "schemas": [
+    "svc.logs",
+    "svc.status",
+    "http.check",
+    "config.test",
+    "fs.read",
+    "fs.write.diff",
+    "svc.restart",
+    "audit.show",
+    "rollback.trigger"
+  ],
+  "normal_mode_shell": "denied"
+}

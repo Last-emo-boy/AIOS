@@ -3,6 +3,7 @@ use crate::api::{
     ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult,
 };
 use crate::modules::{ModuleKind, ModuleStatus};
+use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LifecycleConfig {
@@ -174,6 +175,10 @@ impl Agentd {
             tool: call.name,
             summary: "stub effect only; no persistent side effects".to_string(),
         }
+    }
+
+    pub fn route_tool(&self, call: &SemanticToolCall) -> Result<RoutedToolCall, ToolRejection> {
+        ToolRouter.route(call)
     }
 
     pub fn verify(&self, effect: &Effect) -> VerificationResult {

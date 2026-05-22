@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-004",
   "title": "Define semantic tool call schema and router",
-  "status": "pending",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "runtime",
@@ -17,10 +17,9 @@
     "Record tool version, normalized parameters, and routing decision."
   ],
   "deliverables": [
-    "Semantic tool schema definitions",
-    "Tool router implementation",
-    "Tool validation tests",
-    "docs/semantic-tools.md"
+    "crates/agentd/src/tools.rs",
+    "docs/semantic-tools.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-004-semantic-tools.json"
   ],
   "acceptance_criteria": [
     "Normal mode has no generic shell.exec route.",
@@ -29,10 +28,17 @@
     "At least three read-only tools and one write-with-diff tool are represented."
   ],
   "verification": [
-    "Run schema validation tests.",
-    "Attempt shell.exec and confirm it is denied in normal mode.",
-    "Inspect audit output for normalized tool parameters."
+    "cargo test -p agentd",
+    "cargo run -p agentd -- --route-tool svc.logs service=nginx last=200",
+    "cargo run -p agentd -- --route-tool fs.write.diff path=/etc/nginx/nginx.conf content_hash=abc",
+    "cargo run -p agentd -- --route-tool shell.exec cmd=id"
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-004-semantic-tools.json",
+    "unit_tests": "13 passed; 0 failed",
+    "normal_mode_shell": "denied",
+    "write_with_diff_tool": "fs.write.diff"
+  },
   "risk_notes": [
     "The schema is the system's tool boundary; avoid loose passthrough fields."
   ]
