@@ -1,0 +1,49 @@
+{
+  "task": "TASK-DALPHA-001",
+  "status": "completed",
+  "completed_at": "2026-05-23T07:28:00+08:00",
+  "summary": "Defined the Distribution Alpha rootfs runtime artifact install manifest. The contract covers boot and managed agentd paths, policy pack, semantic tool manifest, ModelBroker config, persistent run/audit/rollback/memory directories, release provenance, and rootfs manifest metadata with validation labels for later automation.",
+  "deliverables": {
+    "manifest_document": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-001-rootfs-manifest.json"
+  },
+  "source_inputs": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json",
+    "docs/release-artifacts.md",
+    "docs/boot-chain.md",
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md",
+    "docs/model-broker.md",
+    "scripts/build-release.ps1",
+    "image/build-initramfs.ps1"
+  ],
+  "artifact_coverage": [
+    "agentd.boot",
+    "agentd.runtime",
+    "policy.pack",
+    "tools.semantic",
+    "model_broker.config",
+    "state.runs",
+    "state.audit",
+    "state.rollback",
+    "state.memory",
+    "release.provenance",
+    "release.rootfs_manifest"
+  ],
+  "acceptance_evidence": {
+    "mandatory_artifact_coverage": "The manifest includes every mandatory artifact class from the Distribution Alpha entry criteria.",
+    "secret_safety": "Every artifact carries no-secret-values or handle-metadata-only policy; ModelBroker config forbids raw credentials.",
+    "boot_vs_runtime_path": "The manifest distinguishes /sbin/agentd boot handoff from /usr/lib/agentos/agentd managed runtime path.",
+    "validator_consumable": "The schema defines stable artifact IDs and validation labels for TASK-DALPHA-003 automation.",
+    "shell_denial": "Semantic tool manifest rules explicitly exclude normal-mode shell.exec and require policy denial.",
+    "offline_model_mode": "ModelBroker config defaults to stub/local-only mode without network or external credentials."
+  },
+  "verification": {
+    "document_review": "rootfs-runtime-install-manifest.md maps each artifact to path, kind, owner, mode, persistence, validation, source proof, and consuming future task.",
+    "no_code_changes": "This task is a contract/documentation task and does not modify Rust runtime code.",
+    "generated_artifacts": "No generated image, boot, target, cache, or release artifacts are part of this task."
+  },
+  "next_task": "TASK-DALPHA-002"
+}
