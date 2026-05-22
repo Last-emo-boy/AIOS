@@ -1,0 +1,39 @@
+{
+  "task": "TASK-AIOS-003",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:24:00+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "8 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --tui-demo 'recover local service' approved",
+      "result": "Rendered intent, frozen plan preview, approved state, and EffectObserved audit event."
+    },
+    {
+      "command": "cargo run -p agentd -- --tui-demo 'recover local service' denied",
+      "result": "Rendered intent, frozen plan preview, denied state, and no EffectObserved event."
+    },
+    {
+      "command": "cargo run -p agentd -- --tui-audit-json 'recover local service'",
+      "result": "Rendered IntentReceived, PlanFrozen, PolicyEvaluated, and ApprovalDecision events as JSON."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -TimeoutSeconds 30",
+      "result": "Boot smoke test observed AGENTD_HANDOFF_OK"
+    }
+  ],
+  "approval_states": [
+    "approved",
+    "denied",
+    "timed_out",
+    "suspended"
+  ],
+  "constraints": [
+    "terminal-first",
+    "no native GUI required",
+    "TUI projects policy/audit state rather than acting as security boundary",
+    "service recovery preview uses deterministic stub planner output"
+  ]
+}

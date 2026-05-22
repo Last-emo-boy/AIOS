@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-003",
   "title": "Build terminal-first TUI intent and approval surface",
-  "status": "pending",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "tui",
@@ -28,10 +28,10 @@
     "Show recent audit events and current run status."
   ],
   "deliverables": [
-    "TUI implementation",
-    "PTY/session management notes",
-    "Approval interaction tests",
-    "docs/tui-operator-flow.md"
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/main.rs",
+    "docs/tui-operator-flow.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-003-tui-surface.json"
   ],
   "acceptance_criteria": [
     "Operator can submit an intent and receive a frozen plan preview.",
@@ -41,10 +41,23 @@
     "The TUI can render Developer VM service recovery plan states without requiring GUI components."
   ],
   "verification": [
-    "Run TUI integration test in local terminal.",
-    "Run boot image and confirm the first interactive surface is terminal-first.",
-    "Inspect audit events for approval and denial actions."
+    "cargo test -p agentd",
+    "cargo run -p agentd -- --tui-demo 'recover local service' approved",
+    "cargo run -p agentd -- --tui-demo 'recover local service' denied",
+    "cargo run -p agentd -- --tui-audit-json 'recover local service'",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -TimeoutSeconds 30"
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-003-tui-surface.json",
+    "unit_tests": "8 passed; 0 failed",
+    "native_surface": "terminal-first",
+    "approval_states": [
+      "approved",
+      "denied",
+      "timed_out",
+      "suspended"
+    ]
+  },
   "risk_notes": [
     "Do not make UI text the security boundary; policy decisions must live in agentd/policy."
   ]

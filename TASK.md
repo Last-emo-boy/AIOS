@@ -25,7 +25,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
 - `TASK-AIOS-001` 已完成：最小 initramfs 通过 `E:\qemu\qemu-system-x86_64.exe` 启动，并观察到 `/sbin/agentd` 输出 `AGENTD_HANDOFF_OK`。
 - `TASK-AIOS-002` 已完成：Rust `agentd` lifecycle skeleton 提供 local-only/stub 模式、健康状态、模块边界和 typed stub APIs。
-- 下一执行任务：`TASK-AIOS-003`。
+- `TASK-AIOS-003` 已完成：terminal-first TUI surface 支持 intent、plan preview、approval/denial/timeout/suspended 和 audit projection。
+- 下一执行任务：`TASK-AIOS-004`。
 
 ## 必须先冻结的决策
 
@@ -57,7 +58,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 - `TASK-AIOS-001`：创建最小 Linux boot image，并验证 `agentd` handoff（completed）
 - `TASK-AIOS-002`：实现 `agentd` lifecycle skeleton（completed）
-- `TASK-AIOS-003`：构建 terminal-first TUI intent / approval surface
+- `TASK-AIOS-003`：构建 terminal-first TUI intent / approval surface（completed）
 
 Wave 1 入口约束：
 
