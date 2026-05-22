@@ -4,5 +4,6 @@ pub mod lifecycle;
 pub mod modules;
 pub mod policy;
 pub mod recovery;
+pub mod sandbox;
 pub mod tools;
 pub mod tui;

@@ -17,6 +17,7 @@ pub enum AuditEventType {
     RollbackObserved,
     RecoveryStarted,
     RecoveryCompleted,
+    SandboxDenied,
 }
 
 impl AuditEventType {
@@ -33,6 +34,7 @@ impl AuditEventType {
             AuditEventType::RollbackObserved => "RollbackObserved",
             AuditEventType::RecoveryStarted => "RecoveryStarted",
             AuditEventType::RecoveryCompleted => "RecoveryCompleted",
+            AuditEventType::SandboxDenied => "SandboxDenied",
         }
     }
 
@@ -49,6 +51,7 @@ impl AuditEventType {
             "RollbackObserved" => Self::RollbackObserved,
             "RecoveryStarted" => Self::RecoveryStarted,
             "RecoveryCompleted" => Self::RecoveryCompleted,
+            "SandboxDenied" => Self::SandboxDenied,
             _ => return None,
         })
     }

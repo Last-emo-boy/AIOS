@@ -1,0 +1,53 @@
+{
+  "task": "TASK-AIOS-008",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:45:38+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "31 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --sandbox-demo",
+      "result": "Compiled an fs.read read-only lease into read-only-diagnostic-v1, allowed the read diagnostic, denied persistent write, denied pids.max overflow, and denied mount syscall."
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/sandbox/demo.jsonl",
+      "result": "Three SandboxDenied audit records persisted for persistent write, process fanout, and denied syscall."
+    }
+  ],
+  "profile": {
+    "name": "read-only-diagnostic-v1",
+    "driven_by_lease_metadata": true,
+    "no_new_privs": true,
+    "namespaces": [
+      "user",
+      "mount",
+      "pid",
+      "network",
+      "cgroup"
+    ],
+    "cgroup_limits": {
+      "cpu_quota_us": 50000,
+      "cpu_period_us": 100000,
+      "memory_max_bytes": 134217728,
+      "io_weight": 100,
+      "pids_max": 32
+    },
+    "filesystem": {
+      "persistent_write_allowed": false,
+      "writable_tmpfs": [
+        "/tmp/agentd-sandbox"
+      ]
+    },
+    "landlock_enabled_when_supported": true,
+    "seccomp_default_action": "errno"
+  },
+  "regression_checks": {
+    "persistent_host_write_denied": true,
+    "fork_bomb_limited_by_pids_max": true,
+    "denied_syscall_logged": true,
+    "non_read_only_leases_rejected": true
+  },
+  "host_note": "Development host is Windows, so tests validate the deterministic profile compiler and executor guard. The profile fields are the Linux execution contract for namespace, cgroup v2, no_new_privs, seccomp, and optional Landlock."
+}

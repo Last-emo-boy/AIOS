@@ -8,6 +8,7 @@ use agentd::{
     lifecycle::{Agentd, LifecycleConfig},
     policy::{ApprovalToken, PolicyEvaluator, PolicyRequest, stable_parameter_hash},
     recovery::RecoveryReconciler,
+    sandbox::{SandboxCompiler, SandboxExecutor, SandboxOperation},
     tui::{ApprovalDecision, build_demo_session},
 };
 
@@ -81,6 +82,13 @@ fn main() {
                 .map(String::as_str)
                 .unwrap_or(".workflow/artifacts/policy/demo.jsonl");
             run_policy_demo(&agentd, path)
+        }
+        Some("--sandbox-demo") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/sandbox/demo.jsonl");
+            run_sandbox_demo(&agentd, path)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -298,6 +306,63 @@ fn run_policy_demo(agentd: &Agentd, path: &str) -> Result<(), String> {
         allowed.to_json(),
         denied.to_json(),
         lease.to_json(),
+        agentd::api::escape_json(path)
+    );
+    Ok(())
+}
+
+fn run_sandbox_demo(agentd: &Agentd, path: &str) -> Result<(), String> {
+    let routed = agentd
+        .route_tool(&SemanticToolCall::new("fs.read", vec![("path", "/var/log/agentd.log")]))
+        .map_err(|error| error.reason)?;
+    let request = PolicyRequest::from_routed("operator", &routed);
+    let evaluator = PolicyEvaluator;
+    let decision = evaluator.evaluate(&request, None);
+    let lease = evaluator
+        .acquire_lease(&request, &decision)
+        .map_err(|error| error.to_string())?;
+    let profile = SandboxCompiler
+        .compile(&lease)
+        .map_err(|error| error.reason())?;
+    let executor = SandboxExecutor;
+    let read = executor.evaluate(
+        &profile,
+        SandboxOperation::ReadDiagnostic {
+            label: "fs.read /var/log/agentd.log".to_string(),
+        },
+    );
+    let write_denied = executor.evaluate(
+        &profile,
+        SandboxOperation::WritePersistentPath {
+            path: "/etc/passwd".to_string(),
+        },
+    );
+    let fork_denied = executor.evaluate(&profile, SandboxOperation::SpawnProcesses { count: 1024 });
+    let syscall_denied = executor.evaluate(
+        &profile,
+        SandboxOperation::Syscall {
+            name: "mount".to_string(),
+        },
+    );
+
+    let journal = AuditJournal::new(path);
+    executor
+        .record_report(&journal, "run-sandbox", "step-write", &write_denied)
+        .map_err(|error| error.to_string())?;
+    executor
+        .record_report(&journal, "run-sandbox", "step-fork", &fork_denied)
+        .map_err(|error| error.to_string())?;
+    executor
+        .record_report(&journal, "run-sandbox", "step-syscall", &syscall_denied)
+        .map_err(|error| error.to_string())?;
+
+    println!(
+        "{{\"profile\":{},\"read\":{},\"write_denied\":{},\"fork_denied\":{},\"syscall_denied\":{},\"audit_path\":\"{}\"}}",
+        profile.to_json(),
+        read.to_json(),
+        write_denied.to_json(),
+        fork_denied.to_json(),
+        syscall_denied.to_json(),
         agentd::api::escape_json(path)
     );
     Ok(())
