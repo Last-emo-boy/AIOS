@@ -1,0 +1,95 @@
+{
+  "id": "TASK-ACR-008",
+  "status": "passed",
+  "completed_at": "2026-05-23T03:33:38+08:00",
+  "summary": "Minimal Agent memory layer is implemented as agent_core::memory. It provides MemoryStore, InMemoryMemoryStore, MemoryEntry metadata, bounded Planner context summaries, deterministic recent search, TTL expiry, secret redaction, and quarantine for suspicious or untrusted content. Planner-facing context excludes quarantined memory and preserves source refs, trust labels, and integrity hashes.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::memory",
+      "status": "passed",
+      "result": "5 passed; 0 failed; 132 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd agent_core::observation",
+      "status": "passed",
+      "result": "4 passed; 0 failed; 133 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "137 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Planner can receive a bounded memory summary with source references.",
+      "status": "passed",
+      "evidence": "agent_core::memory::tests::safe_run_memory_is_bounded_for_planner_context verifies MemoryContext::to_planner_summary includes source_ref, trust label, and hash while remaining bounded and avoiding raw dumps."
+    },
+    {
+      "criterion": "Secret-like values cannot be stored as normal memory entries.",
+      "status": "passed",
+      "evidence": "agent_core::memory::tests::secret_like_memory_is_redacted_before_storage verifies token-like values are redacted before MemoryEntry JSON serialization and secret handles remain handle-only."
+    },
+    {
+      "criterion": "Untrusted external content is either summarized with trust label or quarantined.",
+      "status": "passed",
+      "evidence": "agent_core::memory::tests::malicious_external_instruction_is_quarantined verifies prompt injection and suggested command content enters MemoryScope::Quarantined and is excluded from Planner context."
+    },
+    {
+      "criterion": "Memory entries expire or remain scoped according to TTL.",
+      "status": "passed",
+      "evidence": "agent_core::memory::tests::ttl_entries_expire_deterministically verifies TTL-bound entries remain before expiry and are removed once now reaches expires_at."
+    },
+    {
+      "criterion": "Memory poisoning fixtures cannot alter policy, capability, or approval behavior.",
+      "status": "passed",
+      "evidence": "agent_core::memory::tests::memory_poisoning_cannot_enter_planner_context_as_authority verifies policy override, capability lease, and approval-granted claims are quarantined and absent from Planner context."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::agent_core::memory",
+    "store_trait": "MemoryStore",
+    "minimal_store": "InMemoryMemoryStore",
+    "operations": [
+      "write_entry",
+      "read_context",
+      "search_recent",
+      "expire",
+      "quarantine"
+    ],
+    "scopes": [
+      "session",
+      "run",
+      "audit-derived",
+      "quarantined"
+    ],
+    "entry_metadata": [
+      "entry_id",
+      "scope",
+      "run_id",
+      "step_id",
+      "source",
+      "trust_label",
+      "ttl_seconds",
+      "created_at",
+      "redaction_status",
+      "summary",
+      "source_ref",
+      "policy_flags",
+      "integrity_hash"
+    ],
+    "safety_ordering": [
+      "MemoryWrite metadata is validated before write",
+      "Secret-like content is redacted before normal storage",
+      "Prompt-injection, suggested-command, privilege escalation, policy override, and approval claim flags trigger quarantine",
+      "Planner context excludes quarantined memory",
+      "Planner context exposes bounded summaries with source refs and integrity hashes rather than raw dumps"
+    ]
+  },
+  "next_task": "TASK-SEF-006"
+}

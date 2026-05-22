@@ -1,7 +1,7 @@
 {
   "id": "TASK-ACR-008",
   "title": "Implement minimal Agent memory layer",
-  "status": "pending",
+  "status": "completed",
   "wave": 3,
   "priority": "P0",
   "type": "runtime",
@@ -41,5 +41,18 @@
   ],
   "risk_notes": [
     "Long-lived memory can become delayed prompt injection if it lacks source and trust metadata."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T03:33:38+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json",
+    "implementation": [
+      "crates/agentd/src/agent_core.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd agent_core::memory": "5 passed; 0 failed; 132 filtered out",
+      "cargo test -p agentd agent_core::observation": "4 passed; 0 failed; 133 filtered out",
+      "cargo test -p agentd": "137 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-006"
+  }
 }
