@@ -1,7 +1,7 @@
 {
   "id": "TASK-ACR-004",
   "title": "Implement Planner that freezes structured PlanSpec",
-  "status": "pending",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "runtime",
@@ -41,5 +41,15 @@
   ],
   "risk_notes": [
     "Planner output must stay reviewable; it must not be treated as permission."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T01:22:21+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-004-planner.json",
+    "implementation": "crates/agentd/src/agent_core.rs",
+    "tests": {
+      "cargo test -p agentd planner::": "8 passed; 0 failed",
+      "cargo test -p agentd": "78 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-001"
+  }
 }

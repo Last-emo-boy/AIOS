@@ -1,0 +1,60 @@
+{
+  "id": "TASK-ACR-004",
+  "status": "passed",
+  "completed_at": "2026-05-23T01:22:21+08:00",
+  "summary": "Planner is implemented as agent_core::planner with draft_plan, validate_plan, freeze_plan, and explain_plan. It uses ModelBroker only for structured drafting and summary, validates semantic tools through ToolRouter, rejects unsafe plans, freezes deterministic plan hashes, and emits IntentReceived/PlanFrozen without preparing effects.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-004-planner.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd planner::",
+      "status": "passed",
+      "result": "8 passed; 0 failed; 70 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "78 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "A service recovery intent produces a frozen plan with diagnostic steps and a gated restart step.",
+      "status": "passed",
+      "evidence": "agent_core::planner::tests::service_recovery_intent_freezes_reviewable_plan drafts through StubModelProvider, validates svc.status and svc.restart, and marks restart-service as approval-gated."
+    },
+    {
+      "criterion": "Planner cannot freeze a plan containing shell.exec or unknown tools.",
+      "status": "passed",
+      "evidence": "agent_core::planner::tests::planner_rejects_shell_exec_and_unknown_tools rejects both shell.exec and unknown.tool via ToolRouter before freeze."
+    },
+    {
+      "criterion": "Planner cannot freeze a write step without rollback requirement.",
+      "status": "passed",
+      "evidence": "agent_core::planner::tests::planner_rejects_write_without_rollback rejects fs.write.diff when rollback.required is false."
+    },
+    {
+      "criterion": "PlanFrozen appears in audit before any EffectPrepared for that run.",
+      "status": "passed",
+      "evidence": "agent_core::planner::tests::audit_order_has_plan_frozen_before_any_effect_prepared checks IntentReceived then PlanFrozen and absence of EffectPrepared during planning."
+    },
+    {
+      "criterion": "Freezing the same deterministic plan produces the same plan hash.",
+      "status": "passed",
+      "evidence": "agent_core::planner::tests::freezing_same_plan_produces_same_hash freezes the same PlanSpec twice and compares hashes."
+    }
+  ],
+  "planner_contract": {
+    "module": "agentd::agent_core::planner",
+    "planner": "DeterministicPlanner",
+    "model_boundary": "ModelBroker only",
+    "validator": "ToolRouter plus verification, rollback, and secret-like value checks",
+    "audit_events": [
+      "IntentReceived",
+      "PlanFrozen"
+    ],
+    "side_effect_path": "none; Planner freezes PlanSpec and never emits EffectPrepared"
+  }
+}

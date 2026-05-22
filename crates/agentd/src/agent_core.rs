@@ -438,6 +438,18 @@ pub mod model {
             Self::new(false, None::<String>, reason)
         }
 
+        pub fn required(&self) -> bool {
+            self.required
+        }
+
+        pub fn rollback_id(&self) -> Option<&str> {
+            self.rollback_id.as_deref()
+        }
+
+        pub fn reason(&self) -> &str {
+            &self.reason
+        }
+
         fn validate(&self) -> Result<(), ModelValidationError> {
             ensure_no_secret_value("rollback.reason", &self.reason)?;
             if let Some(rollback_id) = &self.rollback_id {
@@ -476,6 +488,18 @@ pub mod model {
             };
             rule.validate()?;
             Ok(rule)
+        }
+
+        pub fn rule_id(&self) -> &str {
+            &self.rule_id
+        }
+
+        pub fn description(&self) -> &str {
+            &self.description
+        }
+
+        pub fn evidence_source(&self) -> &str {
+            &self.evidence_source
         }
 
         fn validate(&self) -> Result<(), ModelValidationError> {
@@ -527,6 +551,14 @@ pub mod model {
 
         pub fn required(&self) -> bool {
             self.required
+        }
+
+        pub fn reason(&self) -> &str {
+            &self.reason
+        }
+
+        pub fn approver_hint(&self) -> Option<&str> {
+            self.approver_hint.as_deref()
         }
 
         fn validate(&self) -> Result<(), ModelValidationError> {
@@ -599,8 +631,36 @@ pub mod model {
             &self.call
         }
 
+        pub fn dependencies(&self) -> &[String] {
+            &self.dependencies
+        }
+
+        pub fn preconditions(&self) -> &[String] {
+            &self.preconditions
+        }
+
+        pub fn expected_observations(&self) -> &[String] {
+            &self.expected_observations
+        }
+
+        pub fn verification(&self) -> &VerificationRule {
+            &self.verification
+        }
+
+        pub fn approval(&self) -> &ApprovalRequirement {
+            &self.approval
+        }
+
+        pub fn retry_budget(&self) -> u8 {
+            self.retry_budget
+        }
+
         pub fn risk_hints(&self) -> &[RiskHint] {
             &self.risk_hints
+        }
+
+        pub fn rollback(&self) -> &RollbackRequirement {
+            &self.rollback
         }
 
         fn validate(&self) -> Result<(), ModelValidationError> {
@@ -678,8 +738,24 @@ pub mod model {
             &self.plan_id
         }
 
+        pub fn planner_version(&self) -> &str {
+            &self.planner_version
+        }
+
+        pub fn intent(&self) -> &IntentCtx {
+            &self.intent
+        }
+
         pub fn steps(&self) -> &[PlanStep] {
             &self.steps
+        }
+
+        pub fn success_criteria(&self) -> &[String] {
+            &self.success_criteria
+        }
+
+        pub fn model_evidence(&self) -> &ModelEvidence {
+            &self.model_evidence
         }
 
         pub fn to_json(&self) -> String {
@@ -3676,6 +3752,504 @@ pub mod model_broker {
                 sanitized.sanitized_text,
                 "sanitized: untrusted instructions removed"
             );
+        }
+    }
+}
+
+pub mod planner {
+    use std::fmt;
+
+    use crate::api::RiskClass;
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+    use crate::tools::ToolRouter;
+
+    use super::model::{contains_secret_value, IntentCtx, PlanSpec};
+    use super::model_broker::{
+        ModelBroker, ModelBrokerError, ModelCallBounds, PlanRequest, StubModelProvider,
+        SummarizeRequest,
+    };
+
+    pub trait Planner {
+        fn draft_plan(&self, request_id: &str, intent: IntentCtx)
+            -> Result<PlanSpec, PlannerError>;
+        fn validate_plan(&self, plan: &PlanSpec) -> Result<PlanValidationReport, PlannerError>;
+        fn freeze_plan(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            actor: &str,
+            plan: &PlanSpec,
+        ) -> Result<FrozenPlan, PlannerError>;
+        fn explain_plan(&self, plan: &PlanSpec) -> Result<String, PlannerError>;
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct PlanValidationReport {
+        pub step_count: usize,
+        pub routed_tools: Vec<String>,
+        pub approval_required_steps: Vec<String>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct FrozenPlan {
+        pub plan: PlanSpec,
+        pub plan_hash: String,
+        pub validation: PlanValidationReport,
+    }
+
+    impl FrozenPlan {
+        pub fn to_json(&self) -> String {
+            let routed_tools = string_array_json(&self.validation.routed_tools);
+            let approval_required_steps =
+                string_array_json(&self.validation.approval_required_steps);
+            format!(
+                "{{\"plan_hash\":\"{}\",\"plan\":{},\"validation\":{{\"step_count\":{},\"routed_tools\":{},\"approval_required_steps\":{}}}}}",
+                self.plan_hash,
+                self.plan.to_json(),
+                self.validation.step_count,
+                routed_tools,
+                approval_required_steps
+            )
+        }
+    }
+
+    #[derive(Debug, Clone)]
+    pub struct DeterministicPlanner<B> {
+        broker: B,
+        planner_version: String,
+        bounds: ModelCallBounds,
+    }
+
+    impl DeterministicPlanner<StubModelProvider> {
+        pub fn stub() -> Self {
+            Self::new(
+                StubModelProvider::new(),
+                "agent-core-planner-v1",
+                ModelCallBounds::new(100, 8192).expect("static bounds"),
+            )
+        }
+    }
+
+    impl<B: ModelBroker> DeterministicPlanner<B> {
+        pub fn new(broker: B, planner_version: impl Into<String>, bounds: ModelCallBounds) -> Self {
+            Self {
+                broker,
+                planner_version: planner_version.into(),
+                bounds,
+            }
+        }
+    }
+
+    impl<B: ModelBroker> Planner for DeterministicPlanner<B> {
+        fn draft_plan(
+            &self,
+            request_id: &str,
+            intent: IntentCtx,
+        ) -> Result<PlanSpec, PlannerError> {
+            let request = PlanRequest::new(
+                request_id,
+                intent,
+                self.planner_version.clone(),
+                self.bounds,
+            )?;
+            let response = self.broker.plan(&request)?;
+            self.validate_plan(&response.plan)?;
+            Ok(response.plan)
+        }
+
+        fn validate_plan(&self, plan: &PlanSpec) -> Result<PlanValidationReport, PlannerError> {
+            validate_plan_spec(plan)
+        }
+
+        fn freeze_plan(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            actor: &str,
+            plan: &PlanSpec,
+        ) -> Result<FrozenPlan, PlannerError> {
+            let validation = self.validate_plan(plan)?;
+            let plan_json = plan.to_json();
+            if contains_secret_value(&plan_json) {
+                return Err(PlannerError::InvalidPlan {
+                    reason: "plan contains secret-like values".to_string(),
+                });
+            }
+            let plan_hash = stable_hash(&plan_json);
+
+            journal.append(&AuditEvent::new(
+                AuditEventType::IntentReceived,
+                run_id,
+                "intent",
+                actor,
+                format!(
+                    "intent accepted plan_id={} requested_outcome={}",
+                    plan.plan_id(),
+                    plan.intent().requested_outcome()
+                ),
+            ))?;
+
+            let mut event = AuditEvent::new(
+                AuditEventType::PlanFrozen,
+                run_id,
+                "plan",
+                actor,
+                format!(
+                    "plan frozen plan_id={} plan_hash={plan_hash}",
+                    plan.plan_id()
+                ),
+            );
+            event.parameter_hash = plan_hash.clone();
+            journal.append(&event)?;
+
+            Ok(FrozenPlan {
+                plan: plan.clone(),
+                plan_hash,
+                validation,
+            })
+        }
+
+        fn explain_plan(&self, plan: &PlanSpec) -> Result<String, PlannerError> {
+            self.validate_plan(plan)?;
+            let request = SummarizeRequest::new(
+                format!("explain-{}", plan.plan_id()),
+                format!(
+                    "plan {} has {} steps and {} approval-gated steps",
+                    plan.plan_id(),
+                    plan.steps().len(),
+                    plan.steps()
+                        .iter()
+                        .filter(|step| step.approval().required())
+                        .count()
+                ),
+                self.bounds,
+            )?;
+            Ok(self.broker.summarize(&request)?.summary)
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum PlannerError {
+        Model(ModelBrokerError),
+        InvalidPlan { reason: String },
+        Audit(String),
+    }
+
+    impl fmt::Display for PlannerError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            match self {
+                Self::Model(error) => write!(formatter, "model broker error: {error}"),
+                Self::InvalidPlan { reason } => write!(formatter, "invalid plan: {reason}"),
+                Self::Audit(reason) => write!(formatter, "planner audit error: {reason}"),
+            }
+        }
+    }
+
+    impl std::error::Error for PlannerError {}
+
+    impl From<ModelBrokerError> for PlannerError {
+        fn from(error: ModelBrokerError) -> Self {
+            Self::Model(error)
+        }
+    }
+
+    impl From<std::io::Error> for PlannerError {
+        fn from(error: std::io::Error) -> Self {
+            Self::Audit(error.to_string())
+        }
+    }
+
+    fn validate_plan_spec(plan: &PlanSpec) -> Result<PlanValidationReport, PlannerError> {
+        if plan.steps().is_empty() {
+            return Err(PlannerError::InvalidPlan {
+                reason: "plan must include at least one step".to_string(),
+            });
+        }
+        if contains_secret_value(&plan.to_json()) {
+            return Err(PlannerError::InvalidPlan {
+                reason: "plan contains secret-like values".to_string(),
+            });
+        }
+
+        let router = ToolRouter;
+        let mut routed_tools = Vec::new();
+        let mut approval_required_steps = Vec::new();
+        for step in plan.steps() {
+            let routed = router
+                .route(step.call())
+                .map_err(|error| PlannerError::InvalidPlan {
+                    reason: format!(
+                        "step {} rejected by ToolRouter: {}",
+                        step.step_id(),
+                        error.reason
+                    ),
+                })?;
+            if step.verification().rule_id().is_empty()
+                || step.verification().description().is_empty()
+                || step.verification().evidence_source().is_empty()
+            {
+                return Err(PlannerError::InvalidPlan {
+                    reason: format!("step {} missing verification rule", step.step_id()),
+                });
+            }
+            if routed.risk == RiskClass::WriteWithDiff && !step.rollback().required() {
+                return Err(PlannerError::InvalidPlan {
+                    reason: format!("step {} write-with-diff missing rollback", step.step_id()),
+                });
+            }
+            if step.approval().required() {
+                approval_required_steps.push(step.step_id().to_string());
+            }
+            routed_tools.push(routed.tool.to_string());
+        }
+
+        Ok(PlanValidationReport {
+            step_count: plan.steps().len(),
+            routed_tools,
+            approval_required_steps,
+        })
+    }
+
+    fn stable_hash(value: &str) -> String {
+        let mut hash: u64 = 0xcbf29ce484222325;
+        for byte in value.bytes() {
+            hash ^= u64::from(byte);
+            hash = hash.wrapping_mul(0x100000001b3);
+        }
+        format!("{hash:016x}")
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        let values = values
+            .iter()
+            .map(|value| format!("\"{}\"", crate::api::escape_json(value)))
+            .collect::<Vec<_>>()
+            .join(",");
+        format!("[{values}]")
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::fs;
+
+        use super::*;
+        use crate::agent_core::model::{
+            ApprovalRequirement, IntentSource, ModelEvidence, PlanStep, RiskHint,
+            RollbackRequirement, TrustBoundary, VerificationRule,
+        };
+        use crate::api::SemanticToolCall;
+        use crate::audit::extract_json_string_for_tests;
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-planner-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        fn intent() -> IntentCtx {
+            IntentCtx::new(
+                "operator",
+                TrustBoundary::Operator,
+                IntentSource::Tui,
+                "vm:dev",
+                "recover nginx service",
+            )
+            .expect("intent")
+        }
+
+        fn plan_with_step(step: PlanStep) -> PlanSpec {
+            PlanSpec::new(
+                "plan-test",
+                "planner-test",
+                intent(),
+                vec![step],
+                vec!["test criterion".to_string()],
+                ModelEvidence::stub(),
+            )
+            .expect("plan")
+        }
+
+        fn step_for_tool(tool: &str, params: Vec<(&str, &str)>) -> PlanStep {
+            PlanStep::new(
+                "step-1",
+                SemanticToolCall::new(tool, params),
+                Vec::new(),
+                vec!["precondition".to_string()],
+                vec!["observation".to_string()],
+                VerificationRule::new("verify-1", "verify output", tool).expect("verification"),
+                ApprovalRequirement::not_required("test approval").expect("approval"),
+                1,
+                vec![RiskHint::new(RiskClass::ReadOnly, "test risk").expect("risk")],
+                RollbackRequirement::not_required("no rollback").expect("rollback"),
+            )
+            .expect("step")
+        }
+
+        #[test]
+        fn service_recovery_intent_freezes_reviewable_plan() {
+            let planner = DeterministicPlanner::stub();
+            let plan = planner
+                .draft_plan("req-nginx", intent())
+                .expect("draft service recovery");
+            let frozen = planner
+                .freeze_plan(&test_journal("service"), "run-nginx", "operator", &plan)
+                .expect("freeze");
+
+            assert_eq!(frozen.validation.step_count, 2);
+            assert!(frozen
+                .validation
+                .routed_tools
+                .contains(&"svc.status".to_string()));
+            assert!(frozen
+                .validation
+                .routed_tools
+                .contains(&"svc.restart".to_string()));
+            assert_eq!(
+                frozen.validation.approval_required_steps,
+                vec!["restart-service"]
+            );
+            assert!(frozen.to_json().contains("\"plan_hash\":\""));
+        }
+
+        #[test]
+        fn planner_rejects_shell_exec_and_unknown_tools() {
+            let planner = DeterministicPlanner::stub();
+            let shell = plan_with_step(step_for_tool("shell.exec", vec![("cmd", "id")]));
+            let shell_error = planner.validate_plan(&shell).expect_err("shell rejected");
+            assert!(format!("{shell_error}").contains("normal mode denies arbitrary shell"));
+
+            let unknown = plan_with_step(step_for_tool("unknown.tool", vec![]));
+            let unknown_error = planner
+                .validate_plan(&unknown)
+                .expect_err("unknown rejected");
+            assert!(format!("{unknown_error}").contains("unknown semantic tool"));
+        }
+
+        #[test]
+        fn planner_rejects_write_without_rollback() {
+            let planner = DeterministicPlanner::stub();
+            let write = PlanStep::new(
+                "write-config",
+                SemanticToolCall::new(
+                    "fs.write.diff",
+                    vec![("path", "/etc/nginx/nginx.conf"), ("content_hash", "abc")],
+                ),
+                Vec::new(),
+                vec!["diff reviewed".to_string()],
+                vec!["write prepared".to_string()],
+                VerificationRule::new("verify-write", "verify write", "fs.read")
+                    .expect("verification"),
+                ApprovalRequirement::operator_required("write requires approval")
+                    .expect("approval"),
+                1,
+                vec![RiskHint::new(RiskClass::WriteWithDiff, "write changes file").expect("risk")],
+                RollbackRequirement::not_required("missing rollback").expect("rollback"),
+            )
+            .expect("write step");
+            let error = planner
+                .validate_plan(&plan_with_step(write))
+                .expect_err("missing rollback rejected");
+            assert!(format!("{error}").contains("write-with-diff missing rollback"));
+        }
+
+        #[test]
+        fn planner_rejects_missing_verification_and_direct_secrets() {
+            let planner = DeterministicPlanner::stub();
+            let missing_verification = PlanStep::new(
+                "step-empty-verify",
+                SemanticToolCall::new("svc.status", vec![("service", "nginx")]),
+                Vec::new(),
+                vec!["precondition".to_string()],
+                vec!["observation".to_string()],
+                VerificationRule::new("", "", "").expect("verification"),
+                ApprovalRequirement::not_required("read only").expect("approval"),
+                1,
+                vec![RiskHint::new(RiskClass::ReadOnly, "read only").expect("risk")],
+                RollbackRequirement::not_required("no rollback").expect("rollback"),
+            )
+            .expect("step");
+            let error = planner
+                .validate_plan(&plan_with_step(missing_verification))
+                .expect_err("missing verification rejected");
+            assert!(format!("{error}").contains("missing verification"));
+
+            let secret_intent = IntentCtx::new(
+                "operator",
+                TrustBoundary::Operator,
+                IntentSource::Tui,
+                "vm:dev",
+                "recover nginx token=abc123",
+            );
+            assert!(secret_intent.is_err());
+        }
+
+        #[test]
+        fn audit_order_has_plan_frozen_before_any_effect_prepared() {
+            let planner = DeterministicPlanner::stub();
+            let journal = test_journal("audit-order");
+            let plan = planner
+                .draft_plan("req-audit", intent())
+                .expect("draft service recovery");
+            planner
+                .freeze_plan(&journal, "run-audit", "operator", &plan)
+                .expect("freeze");
+
+            let lines = journal.event_lines().expect("read audit");
+            assert_eq!(
+                extract_json_string_for_tests(&lines[0], "event_type").as_deref(),
+                Some("IntentReceived")
+            );
+            assert_eq!(
+                extract_json_string_for_tests(&lines[1], "event_type").as_deref(),
+                Some("PlanFrozen")
+            );
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn freezing_same_plan_produces_same_hash() {
+            let planner = DeterministicPlanner::stub();
+            let plan = planner
+                .draft_plan("req-hash", intent())
+                .expect("draft service recovery");
+            let left = planner
+                .freeze_plan(&test_journal("hash-left"), "run-left", "operator", &plan)
+                .expect("freeze left");
+            let right = planner
+                .freeze_plan(&test_journal("hash-right"), "run-right", "operator", &plan)
+                .expect("freeze right");
+            assert_eq!(left.plan_hash, right.plan_hash);
+        }
+
+        #[test]
+        fn frozen_nginx_plan_snapshot_is_stable() {
+            let planner = DeterministicPlanner::stub();
+            let plan = planner
+                .draft_plan("req-snapshot", intent())
+                .expect("draft service recovery");
+            let frozen = planner
+                .freeze_plan(&test_journal("snapshot"), "run-snapshot", "operator", &plan)
+                .expect("freeze");
+            assert!(frozen.to_json().contains("\"plan_hash\":\""));
+            assert!(frozen.to_json().contains("\"name\":\"svc.status\""));
+            assert!(frozen.to_json().contains("\"name\":\"svc.restart\""));
+            assert!(frozen
+                .to_json()
+                .contains("\"approval_required_steps\":[\"restart-service\"]"));
+        }
+
+        #[test]
+        fn explain_plan_uses_model_broker_summary_path() {
+            let planner = DeterministicPlanner::stub();
+            let plan = planner
+                .draft_plan("req-explain", intent())
+                .expect("draft service recovery");
+            let explanation = planner.explain_plan(&plan).expect("explain");
+            assert!(explanation.starts_with("summary:"));
+            assert!(explanation.contains("approval-gated steps"));
         }
     }
 }
