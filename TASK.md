@@ -26,7 +26,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - 当前 Maestro 计划已切到 Distribution Alpha：`.workflow/active/WFS-20260523-agentos-distribution-alpha`。
 - `TASK-DALPHA-000` 已完成：Distribution Alpha scope 和任务图已冻结，新的 workflow、plan、context、task plan、`TASK-DALPHA-001` 到 `TASK-DALPHA-012` 均已写入 `.workflow/active/WFS-20260523-agentos-distribution-alpha`。
 - `TASK-DALPHA-001` 已完成：rootfs runtime artifact install manifest 已定义，覆盖 boot/runtime `agentd`、policy pack、semantic tool manifest、ModelBroker config、run/audit/rollback/memory persistent directories、release provenance 和 rootfs manifest metadata，并提供后续 validator 可消费的 artifact ID 与 validation labels。
-- 下一步正在执行 `TASK-DALPHA-002`：定义 runtime state directory and permission validation，消费 `TASK-DALPHA-001` 的 `state.runs`、`state.audit`、`state.rollback` 和 `state.memory` 契约。
+- `TASK-DALPHA-002` 已完成：runtime state directory and permission validation 已定义，覆盖 `/var/lib/agentos/runs/`、`/var/log/agentos/audit/`、`/var/lib/agentos/rollback/` 和 `/var/lib/agentos/memory/` 的 `root:root` / `0700` 初始权限、runtime authority、secret-safety、restart-survival、audit projection、recovery truth 和 evidence schema。
+- 下一步正在执行 `TASK-DALPHA-004`：package policy pack、semantic tool manifest 和 ModelBroker defaults，消费 `TASK-DALPHA-001` 的 `policy.pack`、`tools.semantic` 和 `model_broker.config` 契约。
 - Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
 - `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
@@ -92,8 +93,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 - `TASK-DALPHA-000`：冻结 Distribution Alpha scope and task graph（completed）
 - `TASK-DALPHA-001`：定义 rootfs runtime artifact install manifest（completed）
-- `TASK-DALPHA-002`：定义 runtime state directory and permission validation（in progress）
-- `TASK-DALPHA-004`：package policy pack、semantic tool manifest 和 ModelBroker defaults（planned）
+- `TASK-DALPHA-002`：定义 runtime state directory and permission validation（completed）
+- `TASK-DALPHA-004`：package policy pack、semantic tool manifest 和 ModelBroker defaults（in progress）
 
 退出标准：
 
@@ -357,4 +358,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-执行 `TASK-DALPHA-002`：定义 runtime state directory and permission validation，明确 `/var/lib/agentos/runs/`、`/var/log/agentos/audit/`、`/var/lib/agentos/rollback/` 和 `/var/lib/agentos/memory/` 的 owner/mode、persistence、secret-safety、restart-survival 和后续验证证据格式。
+执行 `TASK-DALPHA-004`：定义 packageable policy pack、semantic tool manifest 和 ModelBroker defaults，确保 normal-mode `shell.exec` 仍被拒绝、exact approval binding 保留、stub/local-only ModelBroker 是默认验收路径，且配置文件不包含 raw secrets。

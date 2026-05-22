@@ -1,0 +1,37 @@
+{
+  "task": "TASK-DALPHA-002",
+  "status": "completed",
+  "completed_at": "2026-05-23T07:45:00+08:00",
+  "summary": "Defined the Distribution Alpha runtime state directory permission contract. The document specifies persistent run, audit, rollback, and memory directories with root:root 0700 authority, secret-safety checks, restart-survival expectations, audit projection requirements, recovery classification requirements, and a validator evidence schema.",
+  "deliverables": {
+    "permissions_document": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-002-state-permissions.json"
+  },
+  "source_inputs": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    "docs/recovery-semantics.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-007-run-recovery.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json"
+  ],
+  "directory_coverage": [
+    "/var/lib/agentos/runs/",
+    "/var/log/agentos/audit/",
+    "/var/lib/agentos/rollback/",
+    "/var/lib/agentos/memory/"
+  ],
+  "acceptance_evidence": {
+    "directory_contract": "The document defines owner, mode, persistence, writer, reader, and validation checks for all four persistent state directories.",
+    "secret_safety": "The document defines a fail-closed secret scan and handle-metadata-only allowance.",
+    "runtime_authority": "Initial Alpha runtime authority is root:root with 0700 runtime-writable persistent state directories.",
+    "restart_validation": "Each state directory has restart-survival validation requirements.",
+    "audit_projection": "Audit state requires latest-run and explicit-run-ID projection checks.",
+    "recovery_truth": "Recovery validation requires RunStore plus AuditJournal truth and forbids model replay."
+  },
+  "verification": {
+    "document_review": "runtime-state-permissions.md covers runs, audit, rollback, and memory with concrete permissions and validation labels.",
+    "no_code_changes": "This task is a contract/documentation task and does not modify Rust runtime code.",
+    "generated_artifacts": "No generated image, boot, target, cache, or release artifacts are part of this task."
+  },
+  "next_task": "TASK-DALPHA-004"
+}
