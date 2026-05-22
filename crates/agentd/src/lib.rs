@@ -6,6 +6,7 @@ pub mod policy;
 pub mod recovery;
 pub mod rollback;
 pub mod sandbox;
+pub mod safety;
 pub mod service_recovery;
 pub mod tools;
 pub mod tui;

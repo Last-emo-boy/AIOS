@@ -1,0 +1,38 @@
+{
+  "task": "TASK-AIOS-011",
+  "status": "completed",
+  "verified_at": "2026-05-22T23:07:27+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd safety::",
+      "result": "8 passed; 0 failed"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "result": "49 passed; 0 failed"
+    },
+    {
+      "command": "Review .github/workflows/safety.yml",
+      "result": "CI gate runs cargo test -p agentd safety:: on push and pull_request."
+    }
+  ],
+  "covered_scenarios": [
+    "prompt-injection-shell",
+    "prompt-injection-exfiltration",
+    "prompt-injection-login-download",
+    "prompt-injection-policy-override",
+    "never-class-tool-abuse",
+    "broad-approval-rejected",
+    "secret-handle-only-redaction",
+    "resource-fork-bomb",
+    "resource-denied-syscall",
+    "rollback-stale-base",
+    "recovery-half-committed-effect"
+  ],
+  "release_gate": {
+    "name": "agentd-safety-regression-v1",
+    "command": "cargo test -p agentd safety::",
+    "fail_closed": true
+  },
+  "denied_actions_audited_without_effect_prepared": true
+}

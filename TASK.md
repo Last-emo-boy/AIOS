@@ -36,7 +36,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-008` 已完成：read-only lease 可编译为 Linux sandbox profile，persistent write、fork fanout 和 denied syscall 均被 guard 拦截并记录。
 - `TASK-AIOS-009` 已完成：`fs.write.diff` 先生成 shadow diff 和 rollback handle，commit 写入完整 audit 链，rollback 可恢复旧内容。
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
-- 下一执行任务：`TASK-AIOS-011`。
+- `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
+- 下一执行任务：`TASK-AIOS-012`。
 
 ## 必须先冻结的决策
 
@@ -111,7 +112,7 @@ Wave 1 入口约束：
 ### Wave 4：真实 workflow 与质量门
 
 - `TASK-AIOS-010`：实现第一个 service recovery workflow（completed）
-- `TASK-AIOS-011`：加入 adversarial / safety regression tests
+- `TASK-AIOS-011`：加入 adversarial / safety regression tests（completed）
 - `TASK-AIOS-012`：建立 MVP build、provenance 和 release artifact flow
 
 退出标准：

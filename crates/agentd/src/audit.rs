@@ -198,6 +198,10 @@ pub fn redact_summary(summary: &str) -> String {
     let mut output = Vec::new();
     for token in summary.split_whitespace() {
         let lower = token.to_ascii_lowercase();
+        if lower.starts_with("secret://") {
+            output.push(token);
+            continue;
+        }
         let key = lower
             .split_once('=')
             .map(|(key, _)| key)
@@ -220,6 +224,11 @@ fn extract_json_string(line: &str, key: &str) -> Option<String> {
     let rest = &line[start..];
     let end = rest.find('"')?;
     Some(rest[..end].to_string())
+}
+
+#[cfg(test)]
+pub fn extract_json_string_for_tests(line: &str, key: &str) -> Option<String> {
+    extract_json_string(line, key)
 }
 
 #[cfg(test)]

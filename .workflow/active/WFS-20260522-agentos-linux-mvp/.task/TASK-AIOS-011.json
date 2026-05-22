@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-011",
   "title": "Add adversarial and safety regression tests",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P0",
   "type": "quality",
@@ -24,7 +24,8 @@
     "Safety regression test suite",
     "Adversarial fixtures",
     "CI gate configuration",
-    "docs/safety-test-matrix.md"
+    "docs/safety-test-matrix.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-011-safety-regression.json"
   ],
   "acceptance_criteria": [
     "Dangerous external-content instructions cannot trigger side effects silently.",
@@ -37,6 +38,12 @@
     "Confirm CI fails when approval binding or policy tests are disabled.",
     "Review audit records for denied actions."
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-011-safety-regression.json",
+    "safety_gate": "cargo test -p agentd safety:: -> 8 passed; 0 failed",
+    "full_tests": "cargo test -p agentd -> 49 passed; 0 failed",
+    "ci_gate": ".github/workflows/safety.yml runs the safety gate on push and pull_request."
+  },
   "risk_notes": [
     "Safety tests must evolve with every new tool capability; stale tests should block releases."
   ]
