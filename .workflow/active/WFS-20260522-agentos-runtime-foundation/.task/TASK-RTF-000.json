@@ -1,7 +1,7 @@
 {
   "id": "TASK-RTF-000",
   "title": "Freeze Agent Core and Security Execution Foundation boundary",
-  "status": "pending",
+  "status": "completed",
   "wave": 0,
   "priority": "P0",
   "type": "architecture",
@@ -36,5 +36,12 @@
   ],
   "risk_notes": [
     "If this boundary is vague, later distribution work will accidentally ship hand-written workflows instead of a reusable agent runtime."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T00:01:05+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-000-boundary.json",
+    "decision": "docs/decisions/003-agent-core-runtime-boundary.md",
+    "boundary": "AgentCore is deterministic orchestration; Security Execution Foundation is the only side-effect path.",
+    "distribution_alpha_blocked": true
+  }
 }

@@ -1,0 +1,49 @@
+{
+  "id": "TASK-RTF-000",
+  "status": "passed",
+  "completed_at": "2026-05-23T00:01:05+08:00",
+  "summary": "Agent Core Runtime and Security Execution Foundation boundary is frozen as an accepted architecture decision.",
+  "deliverables": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    "docs/decisions/003-agent-core-runtime-boundary.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-000-boundary.json"
+  ],
+  "boundary_decisions": {
+    "agent_core": "Deterministic orchestration inside agentd; not the model and not an executor.",
+    "security_execution_foundation": "Only allowed path for side-effecting work: semantic tools, policy, capability leases, sandboxing, audit, verification, rollback, and recovery.",
+    "initial_process_boundary": "In-process inside agentd for the first runtime implementation; future Unix socket boundary deferred until API stabilization.",
+    "distribution_alpha_gate": "Blocked until generic AgentCore runtime and runtime safety gates pass."
+  },
+  "acceptance": [
+    {
+      "criterion": "Agent Core responsibilities and non-responsibilities are explicit.",
+      "status": "passed",
+      "evidence": "docs/decisions/003-agent-core-runtime-boundary.md#ownership and .workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md#boundary"
+    },
+    {
+      "criterion": "Security Execution Foundation remains the only way to prepare, execute, verify, seal, or roll back effects.",
+      "status": "passed",
+      "evidence": "docs/decisions/003-agent-core-runtime-boundary.md#decision and .workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md#runtime-integration"
+    },
+    {
+      "criterion": "The boundary references existing MVP modules rather than inventing parallel paths.",
+      "status": "passed",
+      "evidence": "docs/decisions/003-agent-core-runtime-boundary.md#existing-mvp-module-mapping"
+    },
+    {
+      "criterion": "Distribution Alpha is marked as blocked until the generic Agent run loop is available.",
+      "status": "passed",
+      "evidence": "docs/decisions/003-agent-core-runtime-boundary.md#distribution-alpha-gate"
+    }
+  ],
+  "forbidden_paths": [
+    "model output directly invoking a tool",
+    "planner invoking raw shell or host commands",
+    "Agent Core preparing EffectPrepared without Security Execution Foundation",
+    "Agent Core sealing commits without verification",
+    "tool observations directly creating follow-up high-risk actions",
+    "memory storing raw secret values or untrusted instructions without labels",
+    "sandbox profiles being weakened by planner or model hints"
+  ]
+}

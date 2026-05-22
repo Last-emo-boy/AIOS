@@ -3,9 +3,9 @@
   "workflow_name": "agentos-runtime-foundation",
   "current_workflow": ".workflow/active/WFS-20260522-agentos-runtime-foundation",
   "current_phase": "runtime-foundation",
-  "status": "planned",
+  "status": "executing",
   "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-22T23:41:29+08:00",
+  "updated_at": "2026-05-23T00:01:05+08:00",
   "source": "research.md",
   "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy.",
   "active_decisions": [
@@ -26,6 +26,12 @@
       "status": "accepted",
       "title": "MVP scope control locks deferred product lines and forbids arbitrary root shell in normal mode",
       "source": "docs/decisions/002-mvp-scope-control.md"
+    },
+    {
+      "id": "DEC-004",
+      "status": "accepted",
+      "title": "Agent Core Runtime is deterministic orchestration and Security Execution Foundation is the only side-effect path",
+      "source": "docs/decisions/003-agent-core-runtime-boundary.md"
     }
   ],
   "artifacts": [
@@ -148,6 +154,14 @@
     {
       "type": "task_breakdown",
       "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/task-breakdown.md"
+    },
+    {
+      "type": "decision",
+      "path": "docs/decisions/003-agent-core-runtime-boundary.md"
+    },
+    {
+      "type": "task_evidence",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-000-boundary.json"
     }
   ]
 }
