@@ -24,6 +24,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
 - Wave 1 已完成：boot handoff、`agentd` lifecycle skeleton 和 terminal-first TUI surface 均已验证。
+- Wave 2 已完成：semantic tool routing、append-only audit journal 和 recovery reconciler 均已验证。
 - `TASK-AIOS-001` 已完成：最小 initramfs 通过 `E:\qemu\qemu-system-x86_64.exe` 启动，并观察到 `/sbin/agentd` 输出 `AGENTD_HANDOFF_OK`。
 - `TASK-AIOS-002` 已完成：Rust `agentd` lifecycle skeleton 提供 local-only/stub 模式、健康状态、模块边界和 typed stub APIs。
 - `TASK-AIOS-003` 已完成：terminal-first TUI surface 支持 intent、plan preview、approval/denial/timeout/suspended 和 audit projection。
