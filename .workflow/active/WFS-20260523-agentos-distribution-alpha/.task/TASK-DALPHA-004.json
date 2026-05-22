@@ -1,0 +1,72 @@
+{
+  "id": "TASK-DALPHA-004",
+  "title": "Package policy pack, semantic tool manifest, and ModelBroker defaults",
+  "status": "planned",
+  "wave": 0,
+  "priority": "P0",
+  "type": "distribution",
+  "source": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md:77",
+  "depends_on": [
+    "TASK-DALPHA-001"
+  ],
+  "purpose": "Create packageable default configs for Alpha policy, semantic tools, and ModelBroker without weakening runtime safety.",
+  "scope": [
+    "Define /etc/agentos/policy defaults with approval binding, denied shell, and high-risk pause rules.",
+    "Define /etc/agentos/tools/semantic-tools.json with allowed semantic tools and no normal-mode shell.exec.",
+    "Define /etc/agentos/model-broker.toml with stub/local-only default mode and optional remote providers disabled.",
+    "Define config validation and no-secret checks."
+  ],
+  "deliverables": [
+    "Alpha package config files or documented fixtures",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json"
+  ],
+  "acceptance_criteria": [
+    "Policy defaults preserve exact approval token binding.",
+    "Semantic tool manifest excludes shell.exec in normal mode.",
+    "ModelBroker default works without network or external credentials.",
+    "Config files do not contain raw secrets."
+  ],
+  "verification": [
+    "Run semantic tool route tests or manifest validation.",
+    "Run policy gate tests or config validation.",
+    "Confirm ModelBroker stub/local-only mode is the default."
+  ],
+  "risk_notes": [
+    "Packaging defaults can accidentally become the authority layer; they must reflect existing runtime code, not bypass it."
+  ],
+  "read_first": [
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md",
+    "docs/model-broker.md",
+    "crates/agentd/src/tools.rs",
+    "crates/agentd/src/policy.rs",
+    "crates/agentd/src/agent_core.rs"
+  ],
+  "implementation_steps": [
+    "Define packageable config contents from existing docs and runtime behavior.",
+    "Add validation checks for denied shell, high-risk pause, and stub/local-only model mode.",
+    "Add evidence linking config defaults to runtime tests.",
+    "Ensure config contains handles and metadata only, not secrets."
+  ],
+  "failure_modes": [
+    "Config grants broad approval.",
+    "Semantic tool manifest includes shell.exec.",
+    "ModelBroker config requires remote credentials.",
+    "Config diverges from runtime code behavior."
+  ],
+  "verification_matrix": [
+    {
+      "case": "runtime config safety",
+      "command": "cargo test -p agentd safety:: && cargo test -p agentd agent_core::adversarial",
+      "expected": "Safety and abuse gates still pass after config packaging"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-003",
+    "blocked_until": [
+      "Policy, tools, and ModelBroker package defaults are defined.",
+      "Normal-mode shell remains denied.",
+      "Stub/local-only mode is validated."
+    ]
+  }
+}

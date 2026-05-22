@@ -1,0 +1,70 @@
+{
+  "id": "TASK-DALPHA-011",
+  "title": "Add untrusted content runtime workflow",
+  "status": "planned",
+  "wave": 3,
+  "priority": "P1",
+  "type": "workflow",
+  "source": "research.md:451",
+  "depends_on": [
+    "TASK-DALPHA-009"
+  ],
+  "purpose": "Create the Alpha workflow contract for fetching, sanitizing, summarizing, and auditing untrusted external content.",
+  "scope": [
+    "Define net/content semantic workflow steps for untrusted webpages or documents.",
+    "Apply source-to-sink policy before any high-risk action.",
+    "Ensure content summary cannot become direct tool execution.",
+    "Record denied actions and risk flags in audit projection."
+  ],
+  "deliverables": [
+    "Untrusted content workflow design or initial implementation",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json"
+  ],
+  "acceptance_criteria": [
+    "External content is labeled untrusted by default.",
+    "Untrusted/model-origin content cannot directly drive shell, login, secret, privileged, or network exfiltration sinks.",
+    "Sanitized summary can produce replanning hints but not direct effects.",
+    "Denied actions are visible in runtime audit projection."
+  ],
+  "verification": [
+    "Run source-to-sink or prompt-injection safety tests.",
+    "Run a fixture where webpage text asks to execute shell and confirm denial.",
+    "Confirm audit projection records the denial without preparing effects."
+  ],
+  "risk_notes": [
+    "Untrusted content is the main prompt-injection path for AgentOS workflows."
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-004-untrusted-content.json",
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/security_execution.rs",
+    "docs/semantic-tools.md"
+  ],
+  "implementation_steps": [
+    "Define untrusted content workflow steps.",
+    "Route source labels into source-to-sink policy.",
+    "Capture denied action audit projection.",
+    "Add smoke or safety fixture evidence."
+  ],
+  "failure_modes": [
+    "External content is treated as operator-trusted.",
+    "Sanitized summary can create direct tool calls.",
+    "Denied high-risk sink still prepares an effect.",
+    "Audit projection hides the source label."
+  ],
+  "verification_matrix": [
+    {
+      "case": "prompt injection/source-to-sink",
+      "command": "cargo test -p agentd safety::prompt_injection",
+      "expected": "Untrusted content cannot trigger high-risk sinks"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-012",
+    "blocked_until": [
+      "Untrusted content workflow contract exists.",
+      "Source-to-sink denial evidence exists.",
+      "Audit projection shows denied action context."
+    ]
+  }
+}

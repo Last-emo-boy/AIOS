@@ -1,13 +1,13 @@
 {
   "project": "AIOS",
-  "workflow_name": "agentos-runtime-foundation",
-  "current_workflow": ".workflow/active/WFS-20260522-agentos-runtime-foundation",
-  "current_phase": "runtime-foundation",
-  "status": "completed",
+  "workflow_name": "agentos-distribution-alpha",
+  "current_workflow": ".workflow/active/WFS-20260523-agentos-distribution-alpha",
+  "current_phase": "distribution-alpha",
+  "status": "active",
   "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-23T06:40:53+08:00",
+  "updated_at": "2026-05-23T07:05:00+08:00",
   "source": "research.md",
-  "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy.",
+  "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy; current phase packages the runtime foundation into a Distribution Alpha rootfs and VM image path.",
   "active_decisions": [
     {
       "id": "DEC-001",
@@ -314,6 +314,22 @@
     {
       "type": "final_audit",
       "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json"
+    },
+    {
+      "type": "workflow",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/workflow-session.json"
+    },
+    {
+      "type": "plan",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json"
+    },
+    {
+      "type": "distribution_alpha_doc",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/distribution-alpha-task-plan.md"
+    },
+    {
+      "type": "task_evidence",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json"
     }
   ]
 }

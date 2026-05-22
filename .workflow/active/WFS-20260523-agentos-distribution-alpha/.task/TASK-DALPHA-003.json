@@ -1,0 +1,72 @@
+{
+  "id": "TASK-DALPHA-003",
+  "title": "Implement rootfs staging and manifest validation",
+  "status": "planned",
+  "wave": 1,
+  "priority": "P0",
+  "type": "distribution",
+  "source": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md:164",
+  "depends_on": [
+    "TASK-DALPHA-001",
+    "TASK-DALPHA-002",
+    "TASK-DALPHA-004"
+  ],
+  "purpose": "Create a local staging validator that proves an Alpha rootfs contains the runtime manifest artifacts before image assembly.",
+  "scope": [
+    "Add a validation script or deterministic command for the Alpha rootfs manifest.",
+    "Check existence, path, mode intent, hash availability, and no-secret policy where feasible on the host.",
+    "Emit structured evidence for later image factory and release provenance tasks.",
+    "Keep generated staging outputs ignored."
+  ],
+  "deliverables": [
+    "scripts or image helper for Alpha rootfs validation",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json"
+  ],
+  "acceptance_criteria": [
+    "Validator fails closed when required runtime artifacts are missing.",
+    "Validator reports artifact IDs and paths in stable JSON.",
+    "Validator does not require external LLM or network access.",
+    "Validator does not stage generated rootfs outputs into git."
+  ],
+  "verification": [
+    "Run the validator against a minimal fixture that passes.",
+    "Run the validator against a fixture missing policy or ModelBroker config and confirm failure.",
+    "Run git status --short and confirm generated outputs are not staged."
+  ],
+  "risk_notes": [
+    "A non-failing validator is worse than no validator because it gives false promotion evidence."
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md",
+    "scripts/build-release.ps1",
+    "image/build-initramfs.ps1"
+  ],
+  "implementation_steps": [
+    "Choose the smallest validation surface that fits existing PowerShell tooling.",
+    "Implement stable JSON result emission.",
+    "Add pass and fail fixture checks.",
+    "Record evidence under the Alpha workflow evidence directory."
+  ],
+  "failure_modes": [
+    "Validator only checks directories but not required config files.",
+    "Validator emits free-form logs without machine-readable evidence.",
+    "Validator mutates source-controlled files during checks.",
+    "Validator passes when a required artifact is absent."
+  ],
+  "verification_matrix": [
+    {
+      "case": "missing artifact fail closed",
+      "command": "Alpha rootfs validator against incomplete fixture",
+      "expected": "Non-zero exit or explicit failed status with missing artifact IDs"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-005",
+    "blocked_until": [
+      "Manifest validation command exists.",
+      "Pass/fail fixture evidence exists.",
+      "Generated outputs are not staged."
+    ]
+  }
+}

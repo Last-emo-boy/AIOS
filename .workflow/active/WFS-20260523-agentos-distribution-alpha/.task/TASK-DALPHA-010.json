@@ -1,0 +1,70 @@
+{
+  "id": "TASK-DALPHA-010",
+  "title": "Add package install isolation workflow",
+  "status": "planned",
+  "wave": 3,
+  "priority": "P1",
+  "type": "workflow",
+  "source": "research.md:399",
+  "depends_on": [
+    "TASK-DALPHA-009"
+  ],
+  "purpose": "Create the Alpha workflow contract for validating third-party package installs in isolation before host promotion.",
+  "scope": [
+    "Define semantic tools and risk classes for package install validation.",
+    "Run or design isolated package install smoke in Firecracker or a fail-closed stub profile.",
+    "Require approval before host promotion.",
+    "Define rollback and artifact retention semantics."
+  ],
+  "deliverables": [
+    "Package install isolation workflow design or initial implementation",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json"
+  ],
+  "acceptance_criteria": [
+    "Package install cannot run directly on host without policy approval.",
+    "Isolation profile or explicit blocking risk is recorded.",
+    "Host promotion uses write-with-diff, package transaction, or accepted rollback semantics.",
+    "Failure artifacts are retained without leaking secrets."
+  ],
+  "verification": [
+    "Run package workflow tests or smoke fixture.",
+    "Confirm denied host promotion prepares no effect.",
+    "Confirm approval binds exact package and parameters."
+  ],
+  "risk_notes": [
+    "Package installs combine code execution and supply-chain risk; they must not reuse generic shell."
+  ],
+  "read_first": [
+    "research.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-009.json",
+    "docs/capability-policy.md",
+    "docs/write-diff-rollback.md"
+  ],
+  "implementation_steps": [
+    "Define package install semantic workflow steps.",
+    "Map validation to isolation profile and policy decision.",
+    "Define host promotion approval and rollback handle.",
+    "Add smoke or explicit blocking-risk evidence."
+  ],
+  "failure_modes": [
+    "Workflow falls back to shell.exec.",
+    "Host install happens before validation.",
+    "Approval token is broad or parameter-agnostic.",
+    "Rollback handle is missing for host changes."
+  ],
+  "verification_matrix": [
+    {
+      "case": "approval binding",
+      "command": "cargo test -p agentd safety::",
+      "expected": "Approval mutation and high-risk bypass tests continue to fail closed"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-011",
+    "blocked_until": [
+      "Package install workflow has isolation contract.",
+      "Host promotion requires exact approval.",
+      "Rollback semantics are defined."
+    ]
+  }
+}

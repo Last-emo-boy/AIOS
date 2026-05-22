@@ -1,0 +1,69 @@
+{
+  "id": "TASK-DALPHA-002",
+  "title": "Define runtime state directory and permission validation",
+  "status": "planned",
+  "wave": 0,
+  "priority": "P0",
+  "type": "distribution",
+  "source": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md:80",
+  "depends_on": [
+    "TASK-DALPHA-001"
+  ],
+  "purpose": "Define how packaged AgentOS validates persistent run, audit, rollback, and memory directories before promotion.",
+  "scope": [
+    "Define directory creation, owner, mode, persistence, and runtime authority expectations.",
+    "Define secret-safety checks for run state, audit projection, rollback handles, and memory.",
+    "Define restart-survival validation for state directories.",
+    "Define how permission evidence is written into Alpha promotion evidence."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-002-state-permissions.json"
+  ],
+  "acceptance_criteria": [
+    "Directory contract covers /var/lib/agentos/runs, /var/log/agentos/audit, /var/lib/agentos/rollback, and /var/lib/agentos/memory.",
+    "No raw secret values are allowed in state, audit, rollback metadata, or memory.",
+    "Only the runtime authority can write persistent state.",
+    "Restart validation requirements are explicit."
+  ],
+  "verification": [
+    "Review against TASK-DALPHA-001 manifest.",
+    "Confirm permissions are concrete enough for later script validation.",
+    "Confirm audit projection can read latest and explicit run IDs."
+  ],
+  "risk_notes": [
+    "Bad state permissions turn runtime recovery into best-effort file scraping instead of an OS contract."
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md",
+    "docs/recovery-semantics.md"
+  ],
+  "implementation_steps": [
+    "Translate runtime state contract into rootfs directory expectations.",
+    "Document owner/mode and persistence rules.",
+    "Define restart-survival and no-secret validation cases.",
+    "Link validation outputs to future QEMU and provenance gates."
+  ],
+  "failure_modes": [
+    "State directories are world-writable.",
+    "Audit and rollback paths are temporary only.",
+    "Memory path accepts untrusted or secret-like content without labels.",
+    "Recovery cannot distinguish run-store truth from audit truth."
+  ],
+  "verification_matrix": [
+    {
+      "case": "directory coverage",
+      "command": "rg \"/var/lib/agentos/runs|/var/log/agentos/audit|/var/lib/agentos/rollback|/var/lib/agentos/memory\" .workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md",
+      "expected": "All persistent state paths are defined"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-004",
+    "blocked_until": [
+      "State directory permission contract exists.",
+      "Secret-safety validation is defined.",
+      "Restart-survival validation is defined."
+    ]
+  }
+}

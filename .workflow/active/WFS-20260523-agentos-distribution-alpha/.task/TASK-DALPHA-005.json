@@ -1,0 +1,77 @@
+{
+  "id": "TASK-DALPHA-005",
+  "title": "Assemble runtime-aware initramfs and rootfs image path",
+  "status": "planned",
+  "wave": 1,
+  "priority": "P0",
+  "type": "platform",
+  "source": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md:109",
+  "depends_on": [
+    "TASK-DALPHA-003"
+  ],
+  "purpose": "Extend the boot/image pipeline so Alpha assembly includes runtime artifacts and not only the handoff stub.",
+  "scope": [
+    "Integrate rootfs manifest validation with image or initramfs assembly.",
+    "Record runtime artifact hashes and image inputs.",
+    "Preserve QEMU boot handoff compatibility.",
+    "Document any deliberate deferrals as blocking Alpha risks."
+  ],
+  "deliverables": [
+    "Runtime-aware image/rootfs assembly update",
+    "Image manifest update with runtime artifact records",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json"
+  ],
+  "acceptance_criteria": [
+    "Assembly fails when rootfs runtime manifest validation fails.",
+    "Assembly records runtime artifacts in a manifest.",
+    "Boot handoff path remains /sbin/agentd or an accepted equivalent.",
+    "Generated images and caches remain untracked."
+  ],
+  "verification": [
+    "Run image/rootfs assembly command.",
+    "Inspect manifest for runtime artifact hashes.",
+    "Run boot smoke dependency check."
+  ],
+  "risk_notes": [
+    "Image factory work can hide missing runtime artifacts unless manifest validation is mandatory."
+  ],
+  "read_first": [
+    "docs/boot-chain.md",
+    "docs/release-artifacts.md",
+    "image/build-initramfs.ps1",
+    "scripts/boot-smoke-test.ps1",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
+  ],
+  "implementation_steps": [
+    "Add the smallest runtime-aware assembly step compatible with current tooling.",
+    "Wire manifest validation before image promotion.",
+    "Emit artifact hash metadata.",
+    "Run dependency and boot compatibility checks."
+  ],
+  "failure_modes": [
+    "Assembly creates a bootable image without runtime policy/config/state.",
+    "Manifest records paths but not hashes.",
+    "Boot handoff is broken by path changes.",
+    "Generated image outputs are committed."
+  ],
+  "verification_matrix": [
+    {
+      "case": "assembly gate",
+      "command": "image/runtime-aware assembly command",
+      "expected": "Fails closed on invalid manifest and emits manifest on success"
+    },
+    {
+      "case": "boot dependency",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -DependencyCheckOnly",
+      "expected": "QEMU and image dependencies are present"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-006",
+    "blocked_until": [
+      "Runtime-aware image assembly exists.",
+      "Manifest validation is mandatory.",
+      "Boot dependency check still passes."
+    ]
+  }
+}

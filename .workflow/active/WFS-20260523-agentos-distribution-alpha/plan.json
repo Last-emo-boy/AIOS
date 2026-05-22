@@ -1,0 +1,177 @@
+{
+  "plan_id": "PLAN-AIOS-DISTRIBUTION-ALPHA-20260523",
+  "workflow_id": "WFS-20260523-agentos-distribution-alpha",
+  "title": "AgentOS Distribution Alpha Task Plan",
+  "status": "active",
+  "source": "research.md",
+  "created_at": "2026-05-23T07:05:00+08:00",
+  "updated_at": "2026-05-23T07:05:00+08:00",
+  "objective": "Turn the completed runtime foundation into a distribution Alpha with packaged runtime artifacts, persistent state, runtime-aware image assembly, QEMU runtime smoke, release provenance, and first Alpha isolation workstreams.",
+  "entry_criteria": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+  "assumptions": [
+    "Runtime Foundation final audit has completed and is the mandatory prerequisite for Alpha work.",
+    "The Alpha base is Developer VM first and Cloud VM compatible.",
+    "The packaged runtime must remain runnable in stub/local-only ModelBroker mode.",
+    "The Alpha image path may start from the current initramfs machinery but must validate rootfs runtime artifacts before promotion.",
+    "Firecracker work belongs behind SecurityExecutionEngine and cannot bypass policy, capability, EffectEnvelope, audit, rollback, or recovery.",
+    "Generated build, boot, target, cache, and artifact outputs must not be committed."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "Alpha Scope and Packaging Contract",
+      "purpose": "Freeze the Distribution Alpha scope and create the install contracts that later image work must satisfy.",
+      "tasks": [
+        "TASK-DALPHA-000",
+        "TASK-DALPHA-001",
+        "TASK-DALPHA-002",
+        "TASK-DALPHA-004"
+      ],
+      "exit_criteria": [
+        "Alpha scope depends on Runtime Foundation final audit and rejects MVP skeleton-only promotion.",
+        "Rootfs runtime artifact manifest lists every required runtime file, path, owner/mode expectation, and validation.",
+        "Runtime state directories for runs, audit, rollback, and memory have persistence and secret-safety contracts.",
+        "Policy pack, semantic tool manifest, and ModelBroker config have packageable defaults."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Runtime-Aware Image Assembly",
+      "purpose": "Create an image/rootfs assembly path that installs runtime contracts before boot smoke promotion.",
+      "tasks": [
+        "TASK-DALPHA-003",
+        "TASK-DALPHA-005"
+      ],
+      "exit_criteria": [
+        "A local validation command can reject missing or malformed Alpha runtime artifacts.",
+        "Image assembly records agentd, policy, tools, ModelBroker config, persistent directories, and release metadata in a manifest.",
+        "QEMU handoff remains compatible with the existing boot smoke path."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Packaged Runtime Proofs",
+      "purpose": "Prove the packaged runtime still executes through AgentCore and Security Execution Foundation.",
+      "tasks": [
+        "TASK-DALPHA-006",
+        "TASK-DALPHA-007",
+        "TASK-DALPHA-008"
+      ],
+      "exit_criteria": [
+        "Approved and denied service recovery smoke runs from packaged runtime artifacts.",
+        "QEMU boot smoke proves handoff plus runtime availability.",
+        "Release provenance records runtime gate commands, image inputs, and artifact hashes."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Alpha Isolation Workstreams",
+      "purpose": "Add the first high-risk Alpha workstreams without creating a parallel side-effect path.",
+      "tasks": [
+        "TASK-DALPHA-009",
+        "TASK-DALPHA-010",
+        "TASK-DALPHA-011"
+      ],
+      "exit_criteria": [
+        "Firecracker executor profile is represented behind SecurityExecutionEngine.",
+        "Package install isolation workflow uses policy, capability, audit, and rollback semantics.",
+        "Untrusted content workflow enforces source-to-sink policy and cannot directly drive high-risk tools."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Alpha Promotion Audit",
+      "purpose": "Decide whether the Distribution Alpha image can be promoted or which risks block promotion.",
+      "tasks": [
+        "TASK-DALPHA-012"
+      ],
+      "exit_criteria": [
+        "All planned Alpha gate commands have direct evidence.",
+        "Generated artifacts remain untracked or intentionally documented.",
+        "The workflow records either an Alpha promotion decision or explicit blocking risks."
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-DALPHA-000",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-000.json"
+    },
+    {
+      "id": "TASK-DALPHA-001",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-001.json"
+    },
+    {
+      "id": "TASK-DALPHA-002",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-002.json"
+    },
+    {
+      "id": "TASK-DALPHA-003",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-003.json"
+    },
+    {
+      "id": "TASK-DALPHA-004",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-004.json"
+    },
+    {
+      "id": "TASK-DALPHA-005",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-005.json"
+    },
+    {
+      "id": "TASK-DALPHA-006",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-006.json"
+    },
+    {
+      "id": "TASK-DALPHA-007",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-007.json"
+    },
+    {
+      "id": "TASK-DALPHA-008",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-008.json"
+    },
+    {
+      "id": "TASK-DALPHA-009",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-009.json"
+    },
+    {
+      "id": "TASK-DALPHA-010",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json"
+    },
+    {
+      "id": "TASK-DALPHA-011",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-011.json"
+    },
+    {
+      "id": "TASK-DALPHA-012",
+      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-012.json"
+    }
+  ],
+  "inherited_gates": {
+    "full_runtime_regression": "cargo test -p agentd",
+    "safety_substrate": "cargo test -p agentd safety::",
+    "agent_core_suite": "cargo test -p agentd agent_core::",
+    "runtime_abuse_suite": "cargo test -p agentd agent_core::adversarial",
+    "release_provenance": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "qemu_smoke": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  },
+  "risk_policy": {
+    "model_output_direct_execution": "forbidden",
+    "default_shell": "forbidden",
+    "write_requires_diff": true,
+    "high_risk_requires_approval": true,
+    "external_content_trust": "untrusted",
+    "secret_policy": "handle-only",
+    "firecracker_side_effect_path": "must-be-behind-security-execution-engine",
+    "promotion_without_qemu_runtime_smoke": "forbidden"
+  },
+  "confidence": {
+    "overall": 0.82,
+    "requirements_coverage": 0.9,
+    "task_quality": 0.82,
+    "dependency_correctness": 0.84,
+    "estimation_accuracy": 0.72,
+    "collision_safety": 0.82,
+    "weakest_dimension": "estimation_accuracy",
+    "notes": "Plan is grounded in the Runtime Foundation Alpha entry contract, but exact rootfs/image implementation may change once the install manifest is written."
+  }
+}

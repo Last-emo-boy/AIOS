@@ -1,0 +1,99 @@
+{
+  "id": "TASK-DALPHA-000",
+  "title": "Freeze Distribution Alpha scope and task graph",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "planning",
+  "source": "research.md:216",
+  "depends_on": [
+    "TASK-RTF-004",
+    "TASK-RTF-005",
+    "TASK-SEF-010",
+    "TASK-ACR-009"
+  ],
+  "purpose": "Start the Distribution Alpha workflow from the completed runtime foundation and decompose the next distribution-grade TASK chain.",
+  "scope": [
+    "Create the Distribution Alpha workflow directory.",
+    "Create plan.json, context.md, task plan documentation, and TASK-DALPHA task JSON files.",
+    "Mark MVP skeleton-only promotion as out of scope.",
+    "Carry forward runtime, safety, release, and QEMU gates.",
+    "Identify the next executable task as the rootfs runtime artifact install manifest."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/workflow-session.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/context.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/distribution-alpha-task-plan.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json",
+    "TASK.md update",
+    ".workflow/state.json update"
+  ],
+  "acceptance_criteria": [
+    "Distribution Alpha plan includes the six required task areas from the runtime foundation entry criteria.",
+    "Plan explicitly depends on Runtime Foundation final audit.",
+    "Firecracker is represented as an Alpha executor profile behind SecurityExecutionEngine.",
+    "Only planning artifacts and task index/state files are touched."
+  ],
+  "verification": [
+    "Parse all new workflow JSON files.",
+    "Review TASK.md current workflow and next-step section.",
+    "Run git status --short and confirm no Rust WIP is staged."
+  ],
+  "risk_notes": [
+    "If this task is vague, later image work can regress into boot-only artifact promotion."
+  ],
+  "read_first": [
+    "research.md",
+    "TASK.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json",
+    "docs/release-artifacts.md",
+    "docs/boot-chain.md",
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md"
+  ],
+  "implementation_steps": [
+    "Create the Distribution Alpha workflow session.",
+    "Create plan.json with waves, task graph, inherited gates, and confidence score.",
+    "Create one TASK-DALPHA JSON per planned task.",
+    "Create human-readable Alpha task plan documentation.",
+    "Update TASK.md and .workflow/state.json to point to the new active workflow."
+  ],
+  "failure_modes": [
+    "Plan omits runtime state, policy/tool/model config, service recovery smoke, QEMU runtime smoke, or release provenance gates.",
+    "Plan allows Alpha promotion from the MVP boot skeleton alone.",
+    "Plan makes Firecracker a parallel side-effect path.",
+    "Planning commit stages unrelated Rust WIP."
+  ],
+  "verification_matrix": [
+    {
+      "case": "workflow JSON parse",
+      "command": "PowerShell ConvertFrom-Json over .workflow/active/WFS-20260523-agentos-distribution-alpha/**/*.json",
+      "expected": "All workflow, plan, task, and evidence JSON files parse"
+    },
+    {
+      "case": "required Alpha task areas",
+      "command": "rg \"TASK-DALPHA-00[1-8]|QEMU|provenance|rootfs|service recovery\" .workflow/active/WFS-20260523-agentos-distribution-alpha",
+      "expected": "Required entry-criteria task areas are represented"
+    },
+    {
+      "case": "git hygiene",
+      "command": "git status --short",
+      "expected": "Only Alpha planning files plus TASK.md/.workflow/state.json are staged for this commit"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-001",
+    "blocked_until": [
+      "New workflow is active.",
+      "TASK-DALPHA task graph exists.",
+      "TASK.md and .workflow/state.json point to the Alpha workflow."
+    ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T07:05:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json",
+    "next_task": "TASK-DALPHA-001"
+  }
+}

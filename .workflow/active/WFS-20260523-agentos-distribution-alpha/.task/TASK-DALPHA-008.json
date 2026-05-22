@@ -1,0 +1,70 @@
+{
+  "id": "TASK-DALPHA-008",
+  "title": "Add Distribution Alpha release and provenance promotion gate",
+  "status": "planned",
+  "wave": 2,
+  "priority": "P0",
+  "type": "release",
+  "source": "docs/release-artifacts.md",
+  "depends_on": [
+    "TASK-DALPHA-007"
+  ],
+  "purpose": "Upgrade release provenance so Alpha promotion records runtime manifest, image inputs, gate commands, and QEMU smoke evidence.",
+  "scope": [
+    "Extend release metadata to include Alpha rootfs/runtime manifest hash.",
+    "Record runtime gate commands and results.",
+    "Record image inputs and QEMU smoke evidence link.",
+    "Reject promotion if runtime manifest, safety gates, or QEMU runtime smoke are missing."
+  ],
+  "deliverables": [
+    "Release/provenance gate update",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json"
+  ],
+  "acceptance_criteria": [
+    "Provenance includes source revision, toolchain, dependency inventory, artifact hashes, runtime manifest hash, and image inputs.",
+    "Promotion gate includes cargo, safety, AgentCore, adversarial, release, and QEMU runtime checks.",
+    "Provenance stores hashes and paths, not raw secrets.",
+    "Generated provenance remains ignored unless intentionally promoted through evidence."
+  ],
+  "verification": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "Inspect provenance metadata for Alpha runtime fields.",
+    "Confirm generated artifacts are not staged."
+  ],
+  "risk_notes": [
+    "Without Alpha-specific provenance, a boot artifact can be promoted without proving runtime content."
+  ],
+  "read_first": [
+    "docs/release-artifacts.md",
+    "scripts/build-release.ps1",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
+  ],
+  "implementation_steps": [
+    "Add Alpha runtime manifest metadata to release provenance.",
+    "Add or document promotion checks for runtime gates and QEMU smoke.",
+    "Run release script and inspect metadata.",
+    "Write task evidence summarizing generated artifact paths and hashes."
+  ],
+  "failure_modes": [
+    "Provenance omits rootfs runtime manifest.",
+    "Provenance includes raw secrets.",
+    "Promotion succeeds without QEMU runtime smoke.",
+    "Generated release artifacts are committed."
+  ],
+  "verification_matrix": [
+    {
+      "case": "release gate",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "expected": "Release gate passes and provenance includes Alpha runtime fields"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-009",
+    "blocked_until": [
+      "Alpha provenance gate exists.",
+      "Runtime manifest and QEMU smoke are promotion inputs.",
+      "Generated artifacts remain ignored."
+    ]
+  }
+}

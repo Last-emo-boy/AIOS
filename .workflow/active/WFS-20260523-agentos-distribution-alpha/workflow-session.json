@@ -1,0 +1,46 @@
+{
+  "workflow_id": "WFS-20260523-agentos-distribution-alpha",
+  "name": "AgentOS Distribution Alpha",
+  "status": "active",
+  "created_at": "2026-05-23T07:05:00+08:00",
+  "updated_at": "2026-05-23T07:05:00+08:00",
+  "source": "research.md",
+  "previous_workflow": ".workflow/active/WFS-20260522-agentos-runtime-foundation",
+  "goal": "Produce the first distribution-grade AgentOS Alpha path: runtime artifacts installed into rootfs, persistent runtime state, runtime-aware image assembly, packaged service recovery smoke, QEMU runtime smoke, release provenance, and initial high-risk isolation workstreams.",
+  "core_thesis": "Distribution Alpha must package the completed Agent Core Runtime and Security Execution Foundation into a bootable and promotable VM image; a handoff-only initramfs is not an Alpha distribution.",
+  "entry_contract": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+  "non_goals": [
+    "Do not restart from only the MVP initramfs skeleton.",
+    "Do not weaken semantic tool, policy, capability, audit, rollback, or recovery gates for packaging convenience.",
+    "Do not require external LLM credentials, network access, or remote model providers for acceptance.",
+    "Do not expose normal-mode arbitrary shell execution.",
+    "Do not treat Firecracker as a replacement for Security Execution Foundation.",
+    "Do not promote an Alpha image without release provenance and QEMU runtime smoke evidence."
+  ],
+  "primary_acceptance": [
+    "The rootfs contract installs agentd, policy pack, semantic tool manifest, ModelBroker config, runtime state directories, audit path, rollback path, memory path, and release metadata.",
+    "A runtime-aware image assembly path validates the install manifest before boot promotion.",
+    "The packaged runtime can run approved and denied service recovery paths through AgentCore.",
+    "QEMU smoke proves boot handoff and runtime availability from packaged artifacts.",
+    "Release provenance records source revision, toolchain, dependency inventory, artifact hashes, runtime gate commands, and image inputs.",
+    "Firecracker, package install isolation, and untrusted content workflows are represented behind SecurityExecutionEngine rather than as parallel effect paths."
+  ],
+  "completed_tasks": [
+    {
+      "task": "TASK-DALPHA-000",
+      "completed_at": "2026-05-23T07:05:00+08:00",
+      "evidence": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json",
+      "commit": null
+    }
+  ],
+  "plan": ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json",
+  "task_dir": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task",
+  "docs": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/distribution-alpha-task-plan.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    "docs/release-artifacts.md",
+    "docs/boot-chain.md",
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "id": "TASK-DALPHA-012",
+  "title": "Complete Distribution Alpha final audit and promotion decision",
+  "status": "planned",
+  "wave": 4,
+  "priority": "P0",
+  "type": "audit",
+  "source": ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json",
+  "depends_on": [
+    "TASK-DALPHA-008",
+    "TASK-DALPHA-010",
+    "TASK-DALPHA-011"
+  ],
+  "purpose": "Audit all Distribution Alpha gates and decide whether the Alpha image can be promoted or must remain blocked.",
+  "scope": [
+    "Verify every TASK-DALPHA task has evidence.",
+    "Run inherited runtime, safety, AgentCore, adversarial, release, and QEMU gates.",
+    "Verify rootfs runtime manifest and release provenance coverage.",
+    "Verify generated artifacts are ignored or intentionally documented.",
+    "Record promotion decision or blocking risks."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json",
+    "TASK.md update",
+    ".workflow/state.json update"
+  ],
+  "acceptance_criteria": [
+    "All Alpha TASK JSON statuses are completed or explicitly deferred with blocking risks.",
+    "Required gates have direct command output evidence.",
+    "QEMU smoke verifies boot and runtime availability.",
+    "Release provenance includes runtime manifest and image inputs.",
+    "No unrelated WIP or generated artifacts are committed."
+  ],
+  "verification": [
+    "cargo test -p agentd",
+    "cargo test -p agentd safety::",
+    "cargo test -p agentd agent_core::",
+    "cargo test -p agentd agent_core::adversarial",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+    "git status --short"
+  ],
+  "risk_notes": [
+    "Final audit must prove completion from current evidence, not infer it from passing narrow tests."
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/*.json",
+    "docs/release-artifacts.md",
+    "docs/boot-chain.md"
+  ],
+  "implementation_steps": [
+    "Parse workflow JSON and task statuses.",
+    "Run inherited gates.",
+    "Inspect release and QEMU evidence.",
+    "Check git hygiene.",
+    "Write final audit and promotion decision."
+  ],
+  "failure_modes": [
+    "Final audit treats dependency checks as full QEMU smoke.",
+    "Final audit ignores generated artifact drift.",
+    "Final audit promotes despite missing rootfs manifest evidence.",
+    "Final audit marks Alpha complete while isolation tasks remain unproven."
+  ],
+  "verification_matrix": [
+    {
+      "case": "full Alpha gate",
+      "command": "cargo test -p agentd && cargo test -p agentd safety:: && cargo test -p agentd agent_core:: && cargo test -p agentd agent_core::adversarial && pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "expected": "All inherited runtime and release gates pass"
+    },
+    {
+      "case": "full QEMU smoke",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "expected": "Boot and packaged runtime markers are observed"
+    }
+  ],
+  "handoff": {
+    "next_task": "post-alpha planning",
+    "blocked_until": [
+      "All Alpha evidence is present.",
+      "All gates pass or blocking risks are explicit.",
+      "Promotion decision is recorded."
+    ]
+  }
+}

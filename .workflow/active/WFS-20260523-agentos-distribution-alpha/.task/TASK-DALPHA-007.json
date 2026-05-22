@@ -1,0 +1,67 @@
+{
+  "id": "TASK-DALPHA-007",
+  "title": "Add QEMU boot and runtime smoke gate",
+  "status": "planned",
+  "wave": 2,
+  "priority": "P0",
+  "type": "platform",
+  "source": "docs/boot-chain.md",
+  "depends_on": [
+    "TASK-DALPHA-006"
+  ],
+  "purpose": "Extend QEMU smoke from handoff-only evidence to boot plus packaged runtime availability evidence.",
+  "scope": [
+    "Use E:\\qemu\\qemu-system-x86_64.exe as the default full smoke QEMU path.",
+    "Preserve AGENTD_HANDOFF_OK or accepted equivalent handoff marker.",
+    "Add runtime availability marker or command evidence from packaged runtime.",
+    "Record structured smoke result under Alpha evidence."
+  ],
+  "deliverables": [
+    "QEMU runtime smoke update or documented smoke procedure",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
+  ],
+  "acceptance_criteria": [
+    "Full QEMU smoke observes boot handoff.",
+    "Smoke proves runtime artifacts are available, not only a stub executable.",
+    "Failure logs are actionable.",
+    "Generated boot logs remain untracked."
+  ],
+  "verification": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "risk_notes": [
+    "A QEMU check that only sees AGENTD_HANDOFF_OK cannot prove Distribution Alpha readiness by itself."
+  ],
+  "read_first": [
+    "docs/boot-chain.md",
+    "scripts/boot-smoke-test.ps1",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
+  ],
+  "implementation_steps": [
+    "Define the runtime marker or CLI probe that can run during smoke.",
+    "Wire the smoke result into Alpha evidence.",
+    "Run full QEMU smoke with the configured QEMU path.",
+    "Keep generated boot artifacts ignored."
+  ],
+  "failure_modes": [
+    "Smoke passes from the old handoff stub only.",
+    "Runtime marker is not tied to rootfs manifest artifacts.",
+    "QEMU path is not configurable.",
+    "Boot logs are staged."
+  ],
+  "verification_matrix": [
+    {
+      "case": "full QEMU smoke",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "expected": "Boot handoff and runtime marker are observed"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-008",
+    "blocked_until": [
+      "Full QEMU smoke evidence exists.",
+      "Runtime availability is proved from packaged artifacts.",
+      "Generated boot artifacts remain untracked."
+    ]
+  }
+}

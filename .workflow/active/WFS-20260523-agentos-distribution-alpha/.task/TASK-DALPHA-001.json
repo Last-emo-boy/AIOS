@@ -1,0 +1,79 @@
+{
+  "id": "TASK-DALPHA-001",
+  "title": "Define rootfs runtime artifact install manifest",
+  "status": "planned",
+  "wave": 0,
+  "priority": "P0",
+  "type": "distribution",
+  "source": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md:70",
+  "depends_on": [
+    "TASK-DALPHA-000"
+  ],
+  "purpose": "Create the authoritative rootfs install manifest contract for all runtime artifacts required by Distribution Alpha.",
+  "scope": [
+    "Define required rootfs paths for agentd, policy pack, semantic tool manifest, ModelBroker config, run-state, audit, rollback, memory, and release metadata.",
+    "Define owner, mode, persistence, hash, secret-safety, and validation expectations for every artifact.",
+    "Map each artifact back to Runtime Foundation proof and future image assembly consumer.",
+    "Define a machine-readable manifest format that can be validated before image promotion."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-001-rootfs-manifest.json"
+  ],
+  "acceptance_criteria": [
+    "Manifest includes every mandatory artifact from Distribution Alpha entry criteria.",
+    "Manifest rejects raw secret values in installed config, memory, audit, and provenance.",
+    "Manifest distinguishes boot handoff path from managed runtime binary path.",
+    "Manifest can be consumed by later rootfs staging and release provenance tasks."
+  ],
+  "verification": [
+    "Review manifest table against distribution-alpha-entry-criteria.md.",
+    "Confirm semantic tool manifest excludes normal-mode shell.exec.",
+    "Confirm ModelBroker config defaults to stub/local-only mode.",
+    "Confirm no generated artifacts are committed."
+  ],
+  "risk_notes": [
+    "Without a manifest contract, image assembly can silently omit runtime safety artifacts."
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    "docs/release-artifacts.md",
+    "docs/boot-chain.md",
+    "docs/semantic-tools.md",
+    "docs/capability-policy.md",
+    "scripts/build-release.ps1",
+    "image/build-initramfs.ps1"
+  ],
+  "implementation_steps": [
+    "Inventory mandatory runtime artifacts and paths from the Alpha entry criteria.",
+    "Define a manifest schema with artifact ID, path, kind, owner, mode, persistence, validation, and source proof.",
+    "Document secret-safety and provenance rules for installed config and metadata.",
+    "Add handoff notes for TASK-DALPHA-002, TASK-DALPHA-003, TASK-DALPHA-004, and TASK-DALPHA-008."
+  ],
+  "failure_modes": [
+    "Manifest only lists agentd and omits policy, tools, ModelBroker config, or runtime state.",
+    "Manifest requires remote model credentials for acceptance.",
+    "Manifest allows normal-mode shell.exec.",
+    "Manifest has no validation fields for later automation."
+  ],
+  "verification_matrix": [
+    {
+      "case": "entry criteria coverage",
+      "command": "rg \"agentd|Policy pack|Semantic tool manifest|Run-state|Audit|Rollback|ModelBroker|memory|provenance\" .workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+      "expected": "All mandatory artifact classes are present"
+    },
+    {
+      "case": "stub/local model mode",
+      "command": "rg \"stub|local-only|external.*optional\" .workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+      "expected": "ModelBroker acceptance is offline-capable"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-002",
+    "blocked_until": [
+      "Rootfs artifact manifest exists.",
+      "Validation fields are concrete enough for automation.",
+      "Manifest maps to later image assembly and provenance tasks."
+    ]
+  }
+}

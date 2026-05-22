@@ -1,0 +1,69 @@
+{
+  "id": "TASK-DALPHA-006",
+  "title": "Run packaged AgentCore service recovery smoke",
+  "status": "planned",
+  "wave": 2,
+  "priority": "P0",
+  "type": "runtime-smoke",
+  "source": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md:116",
+  "depends_on": [
+    "TASK-DALPHA-005"
+  ],
+  "purpose": "Prove the packaged runtime can execute approved and denied service recovery through generic AgentCore.",
+  "scope": [
+    "Run service recovery approved path from packaged or staged runtime artifacts.",
+    "Run service recovery denied path and confirm no effect is prepared.",
+    "Capture runtime audit projection for both paths.",
+    "Fail if the old dedicated workflow path bypasses AgentCore."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
+  ],
+  "acceptance_criteria": [
+    "Approved path reaches CommitSealed or equivalent successful runtime terminal state.",
+    "Denied path records PolicyEvaluated without EffectPrepared.",
+    "Audit projection explains plan, policy, approval/denial, effect, verification, and terminal state.",
+    "No raw secrets appear in smoke evidence."
+  ],
+  "verification": [
+    "cargo test -p agentd agent_core::service_recovery",
+    "Run approved service recovery CLI smoke.",
+    "Run denied service recovery CLI smoke.",
+    "Run audit projection over smoke logs."
+  ],
+  "risk_notes": [
+    "A bootable image without packaged runtime smoke can still be missing the real AgentCore path."
+  ],
+  "read_first": [
+    "docs/runbooks/service-recovery.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
+  ],
+  "implementation_steps": [
+    "Identify the packaged or staged agentd invocation path.",
+    "Run approved and denied service recovery smokes.",
+    "Capture and redact audit projection evidence.",
+    "Record whether the smoke ran from host target, staged runtime, or full image."
+  ],
+  "failure_modes": [
+    "Smoke uses old workflow wrapper without proving AgentCore.",
+    "Denied path prepares or observes an effect.",
+    "Audit projection omits policy or verification context.",
+    "Smoke requires external LLM access."
+  ],
+  "verification_matrix": [
+    {
+      "case": "generic service recovery",
+      "command": "cargo test -p agentd agent_core::service_recovery",
+      "expected": "Generic AgentCore service recovery tests pass"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-007",
+    "blocked_until": [
+      "Packaged runtime smoke has approved and denied evidence.",
+      "Audit projection is captured.",
+      "No external LLM is required."
+    ]
+  }
+}

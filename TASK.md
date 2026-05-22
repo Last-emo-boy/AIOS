@@ -1,8 +1,8 @@
 # AIOS TASK
 
 Source: `research.md`  
-Workflow: `.workflow/active/WFS-20260522-agentos-runtime-foundation`
-Previous workflow: `.workflow/active/WFS-20260522-agentos-linux-mvp`
+Workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
+Previous workflow: `.workflow/active/WFS-20260522-agentos-runtime-foundation`
 Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 目标
@@ -23,8 +23,10 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 当前进度
 
-- 当前 Maestro 计划已切到 Runtime Foundation：`.workflow/active/WFS-20260522-agentos-runtime-foundation`。
-- Runtime Foundation 已完成详细 TASK 展开，状态为 `planned`：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
+- 当前 Maestro 计划已切到 Distribution Alpha：`.workflow/active/WFS-20260523-agentos-distribution-alpha`。
+- `TASK-DALPHA-000` 已完成：Distribution Alpha scope 和任务图已冻结，新的 workflow、plan、context、task plan、`TASK-DALPHA-001` 到 `TASK-DALPHA-012` 均已写入 `.workflow/active/WFS-20260523-agentos-distribution-alpha`。
+- 下一步正在执行 `TASK-DALPHA-001`：定义 rootfs runtime artifact install manifest，作为后续 runtime state permission、config packaging、image assembly、QEMU runtime smoke 和 Alpha provenance 的输入契约。
+- Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
 - `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
 - `TASK-RTF-002` 已完成：runtime module ownership、integration points、audit write rules、CLI/TUI entry points 和 duplicate-stack prohibition 已冻结。
@@ -71,7 +73,77 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
 - `TASK-RTF-004` 已完成：Distribution Alpha entry criteria 已定义，明确 Alpha 不能只从 MVP skeleton 启动，必须继承 generic AgentCore、Security Execution Foundation、rootfs runtime artifacts、persistent runtime directories、release/provenance 和 QEMU gates。
 - `TASK-RTF-005` 已完成：Runtime Foundation final audit 已通过，覆盖 54 个 workflow JSON 解析、`cargo test -p agentd` 163 passed、`safety::` 16 passed、`agent_core::` 68 passed、release/provenance gate 和 `E:\qemu\qemu-system-x86_64.exe` 完整 QEMU boot smoke。
-- Runtime Foundation workflow 已完成；下一阶段应启动 Distribution Alpha planning。
+- Runtime Foundation workflow 已完成；Distribution Alpha planning 已启动并完成 `TASK-DALPHA-000`。
+
+## Distribution Alpha 任务计划
+
+目标：把已完成的 Agent Core Runtime 和 Security Execution Foundation 装进可发行的 AgentOS Alpha rootfs / VM image 路径。Alpha 不能只复用 MVP handoff skeleton，必须安装并验证 `agentd`、policy pack、semantic tool manifest、ModelBroker config、run/audit/rollback/memory persistent directories、release/provenance metadata 和 QEMU runtime smoke。
+
+关键约束：
+
+- Distribution Alpha 依赖 `TASK-RTF-005` Runtime Foundation final audit。
+- Stub/local-only ModelBroker mode 必须可运行；外部 LLM 不能成为验收依赖。
+- Firecracker 是 Alpha executor profile，必须位于 `SecurityExecutionEngine` 后面，不能成为并行 side-effect path。
+- 所有 promotion gate 必须继承 runtime、safety、AgentCore、adversarial、release 和 QEMU 验证。
+- 生成的 image、cache、release artifact 和 boot log 不能进入提交。
+
+### Distribution Alpha Wave 0：Alpha scope 与 packaging contract
+
+- `TASK-DALPHA-000`：冻结 Distribution Alpha scope and task graph（completed）
+- `TASK-DALPHA-001`：定义 rootfs runtime artifact install manifest（in progress）
+- `TASK-DALPHA-002`：定义 runtime state directory and permission validation（planned）
+- `TASK-DALPHA-004`：package policy pack、semantic tool manifest 和 ModelBroker defaults（planned）
+
+退出标准：
+
+- Alpha scope 明确拒绝 MVP skeleton-only promotion。
+- rootfs manifest 覆盖 `agentd`、policy、tools、ModelBroker、run-state、audit、rollback、memory 和 release metadata。
+- state directory permission、secret-safety 和 restart-survival 验证可被后续脚本消费。
+
+### Distribution Alpha Wave 1：runtime-aware image assembly
+
+- `TASK-DALPHA-003`：实现 rootfs staging and manifest validation（planned）
+- `TASK-DALPHA-005`：assemble runtime-aware initramfs and rootfs image path（planned）
+
+退出标准：
+
+- image/rootfs assembly 必须先通过 runtime manifest validation。
+- assembly manifest 记录 runtime artifact hashes 和 image inputs。
+- QEMU handoff 仍兼容 `/sbin/agentd` 或 accepted equivalent。
+
+### Distribution Alpha Wave 2：packaged runtime proofs
+
+- `TASK-DALPHA-006`：运行 packaged AgentCore service recovery smoke（planned）
+- `TASK-DALPHA-007`：增加 QEMU boot and runtime smoke gate（planned）
+- `TASK-DALPHA-008`：增加 Distribution Alpha release/provenance promotion gate（planned）
+
+退出标准：
+
+- packaged runtime 能跑 approved / denied service recovery。
+- QEMU smoke 证明 boot handoff 和 packaged runtime availability。
+- provenance 记录 runtime manifest、image inputs、artifact hashes 和 gate commands。
+
+### Distribution Alpha Wave 3：Alpha isolation workstreams
+
+- `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面（planned）
+- `TASK-DALPHA-010`：增加 package install isolation workflow（planned）
+- `TASK-DALPHA-011`：增加 untrusted content runtime workflow（planned）
+
+退出标准：
+
+- Firecracker 不绕过 semantic tools、policy、capability、EffectEnvelope、audit、rollback 或 recovery。
+- package install 不能未经验证和精确审批直接落到 host。
+- untrusted content 不能直接驱动 shell、secret、privileged 或 exfiltration sink。
+
+### Distribution Alpha Wave 4：Alpha promotion audit
+
+- `TASK-DALPHA-012`：完成 Distribution Alpha final audit and promotion decision（planned）
+
+退出标准：
+
+- 所有 Alpha evidence 可追溯。
+- runtime、safety、AgentCore、adversarial、release 和 QEMU gates 均有直接证据。
+- 明确记录 promotion decision 或 blocking risks。
 
 ## Runtime Foundation 任务计划
 
@@ -284,4 +356,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-Runtime Foundation Wave 5 已完成 `TASK-RTF-005`：final audit 已通过，generic AgentCore runtime、安全执行底座、runtime audit projection、service recovery、release/provenance 和 QEMU boot smoke 均已验证。Runtime Foundation workflow 已关闭，下一步应基于 `docs/distribution-alpha-entry-criteria.md` 启动 Distribution Alpha planning。
+执行 `TASK-DALPHA-001`：写入 rootfs runtime artifact install manifest，并为后续 `TASK-DALPHA-002` state permission validation、`TASK-DALPHA-003` rootfs staging validator、`TASK-DALPHA-004` config packaging 和 `TASK-DALPHA-008` Alpha provenance gate 提供机器可验证的契约。

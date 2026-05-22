@@ -1,0 +1,70 @@
+{
+  "id": "TASK-DALPHA-009",
+  "title": "Add Firecracker executor profile behind SecurityExecutionEngine",
+  "status": "planned",
+  "wave": 3,
+  "priority": "P1",
+  "type": "isolation",
+  "source": "research.md:262",
+  "depends_on": [
+    "TASK-DALPHA-008"
+  ],
+  "purpose": "Represent Firecracker as a high-risk executor/sandbox profile without creating a direct execution bypass.",
+  "scope": [
+    "Define Firecracker executor profile fields behind SecurityExecutionEngine.",
+    "Map profile inputs from CapabilityLease and SandboxProfile authority.",
+    "Define fail-closed behavior when KVM, kernel, jailer, guest image, or policy inputs are missing.",
+    "Document snapshot and host trust limitations."
+  ],
+  "deliverables": [
+    "Firecracker executor profile design or stub implementation",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-009-firecracker-profile.json"
+  ],
+  "acceptance_criteria": [
+    "Firecracker cannot execute outside SecurityExecutionEngine.",
+    "Planner output cannot weaken Firecracker profile constraints.",
+    "Missing Firecracker dependencies fail closed.",
+    "Audit records profile selection and policy reason without secrets."
+  ],
+  "verification": [
+    "Run relevant security_execution tests.",
+    "Run safety/adversarial gates if execution policy changed.",
+    "Document dependency-check behavior on hosts without Firecracker."
+  ],
+  "risk_notes": [
+    "Firecracker improves isolation but does not replace policy, capability, audit, rollback, or recovery."
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md",
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/sandbox.rs"
+  ],
+  "implementation_steps": [
+    "Define Firecracker profile data contract.",
+    "Bind profile derivation to CapabilityLease and SecurityExecutionEngine.",
+    "Add fail-closed dependency checks.",
+    "Add audit/explainability projection for profile selection."
+  ],
+  "failure_modes": [
+    "Firecracker helper accepts raw shell commands.",
+    "Profile can be weakened by model/planner text.",
+    "Missing dependency silently falls back to host execution.",
+    "Snapshot claims exceed documented trust boundaries."
+  ],
+  "verification_matrix": [
+    {
+      "case": "SEF boundary",
+      "command": "cargo test -p agentd security_execution::",
+      "expected": "Firecracker profile is only reachable through SecurityExecutionEngine"
+    }
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-010",
+    "blocked_until": [
+      "Firecracker profile is behind SEF.",
+      "Dependency failure is fail-closed.",
+      "Audit records profile selection."
+    ]
+  }
+}
