@@ -44,6 +44,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-ACR-008` 已完成：新增 `agent_core::memory`，实现 `MemoryStore` trait、`InMemoryMemoryStore`、session/run/audit-derived/quarantined scopes、entry metadata、TTL expiry、bounded Planner context、secret-like redaction 和 suspicious/untrusted quarantine；memory poisoning 不能把 policy override、capability lease 或 approval claim 注入 Planner context，`cargo test -p agentd` 137 passed。
 - `TASK-SEF-006` 已完成：新增 `security_execution::engine`，实现 `SecurityExecutionEngine` trait 和 `DefaultSecurityExecutionEngine`，统一 prepare / execute / observe / verify / seal / rollback / explain API；prepare 贯通 ToolRouter、PolicyEvaluator、CapabilityLease、lease-derived sandbox profile、EffectEnvelope、AuditJournal 和 write-with-diff rollback handle，denied / paused 不准备 effect，`cargo test -p agentd` 142 passed。
 - `TASK-SEF-007` 已完成：新增 `agent_core::recovery`，实现 `AgentRunRecoveryCoordinator`，把 RunStore recoverable runs 与 AuditJournal durable effect truth 联合分类为 safe-to-verify、needs-rollback、needs-human-review、abandoned、failed-closed 或 completed，并恢复到 Recovering、Suspended、RollbackPending、Completed 或 FailedClosed；恢复 projection 明确 source=run-store+audit 且 no-model-replay，`cargo test -p agentd` 150 passed。
+- `TASK-ACR-009` 已完成：service recovery 已迁移到 generic AgentCore runtime，Planner 产出完整 nginx recovery DAG，旧 `ServiceRecoveryWorkflow` 仅作为兼容 wrapper 委托到 `agent_core::service_recovery`，approved/denied CLI demo 和 latest audit timeline 均通过，`cargo test -p agentd` 153 passed。
 - Runtime Foundation Wave 1 已完成：Agent Core Contracts 的数据模型、RunStore、ModelBroker 和 Planner 均已验证。
 - Runtime Foundation Wave 2 已完成：EffectEnvelope、policy adapter、lease-derived sandbox profile、source-to-sink policy 和 secret handle lease rules 均已验证。
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
@@ -64,7 +65,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：`TASK-ACR-009`，把 service recovery 迁移到 generic AgentCore runtime。
+- 下一执行任务：`TASK-ACR-010`，加入 AgentCore adversarial runtime tests。
 
 ## Runtime Foundation 任务计划
 
@@ -143,7 +144,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Runtime Foundation Wave 4：workflow 迁移与安全门
 
-- `TASK-ACR-009`：把 service recovery 迁移到 generic AgentCore runtime（pending）
+- `TASK-ACR-009`：把 service recovery 迁移到 generic AgentCore runtime（completed）
 - `TASK-ACR-010`：加入 AgentCore adversarial runtime tests（pending）
 - `TASK-SEF-008`：扩展 generic Agent execution safety gate（pending）
 - `TASK-SEF-009`：构建 runtime audit projection 和 explainability chain（pending）
@@ -270,4 +271,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-Runtime Foundation Wave 3 已完成。下一步进入 Wave 4，执行 `TASK-ACR-009`，把 service recovery 迁移到 generic AgentCore runtime，验证 nginx recovery 不再依赖专用手写 workflow。
+Runtime Foundation Wave 4 已完成首个 proof：`TASK-ACR-009` 已把 service recovery 迁移到 generic AgentCore runtime。下一步执行 `TASK-ACR-010`，加入 AgentCore adversarial runtime tests，覆盖 planning、observation、memory、approval 和 model-output abuse cases。

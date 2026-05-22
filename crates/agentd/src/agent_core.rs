@@ -4346,12 +4346,34 @@ pub mod model_broker {
                 plan_id: format!("plan-{}", request.request_id()),
                 steps: vec![
                     RawPlanStep {
-                        step_id: "check-service-status".to_string(),
+                        step_id: "diagnose-logs".to_string(),
+                        tool: "svc.logs".to_string(),
+                        params: vec![
+                            ("last".to_string(), "200".to_string()),
+                            ("service".to_string(), "nginx".to_string()),
+                        ],
+                        dependencies: Vec::new(),
+                        preconditions: vec!["operator intent accepted".to_string()],
+                        expected_observations: vec!["recent service logs captured".to_string()],
+                        verification_rule: "logs-captured".to_string(),
+                        verification_description: "recent logs are available for diagnosis"
+                            .to_string(),
+                        verification_source: "svc.logs".to_string(),
+                        approval_required: false,
+                        approval_reason: "read-only diagnostic".to_string(),
+                        risk: RiskClass::ReadOnly,
+                        risk_reason: "log inspection is read-only".to_string(),
+                        rollback_required: false,
+                        rollback_id: None,
+                        rollback_reason: "no effect to roll back".to_string(),
+                    },
+                    RawPlanStep {
+                        step_id: "diagnose-status".to_string(),
                         tool: "svc.status".to_string(),
                         params: vec![("service".to_string(), "nginx".to_string())],
                         dependencies: Vec::new(),
                         preconditions: vec!["operator intent accepted".to_string()],
-                        expected_observations: vec!["current service status".to_string()],
+                        expected_observations: vec!["current service status captured".to_string()],
                         verification_rule: "status-captured".to_string(),
                         verification_description: "status output is available".to_string(),
                         verification_source: "svc.status".to_string(),
@@ -4364,10 +4386,53 @@ pub mod model_broker {
                         rollback_reason: "no effect to roll back".to_string(),
                     },
                     RawPlanStep {
+                        step_id: "diagnose-http".to_string(),
+                        tool: "http.check".to_string(),
+                        params: vec![("url".to_string(), "http://127.0.0.1/healthz".to_string())],
+                        dependencies: Vec::new(),
+                        preconditions: vec!["operator intent accepted".to_string()],
+                        expected_observations: vec!["health endpoint result captured".to_string()],
+                        verification_rule: "http-health-captured".to_string(),
+                        verification_description: "http health check output is available"
+                            .to_string(),
+                        verification_source: "http.check".to_string(),
+                        approval_required: false,
+                        approval_reason: "read-only diagnostic".to_string(),
+                        risk: RiskClass::ReadOnly,
+                        risk_reason: "health check is read-only".to_string(),
+                        rollback_required: false,
+                        rollback_id: None,
+                        rollback_reason: "no effect to roll back".to_string(),
+                    },
+                    RawPlanStep {
+                        step_id: "diagnose-config".to_string(),
+                        tool: "config.test".to_string(),
+                        params: vec![("service".to_string(), "nginx".to_string())],
+                        dependencies: Vec::new(),
+                        preconditions: vec!["operator intent accepted".to_string()],
+                        expected_observations: vec!["configuration test result captured".to_string()],
+                        verification_rule: "config-test-captured".to_string(),
+                        verification_description: "configuration test output is available"
+                            .to_string(),
+                        verification_source: "config.test".to_string(),
+                        approval_required: false,
+                        approval_reason: "read-only diagnostic".to_string(),
+                        risk: RiskClass::ReadOnly,
+                        risk_reason: "configuration validation is read-only".to_string(),
+                        rollback_required: false,
+                        rollback_id: None,
+                        rollback_reason: "no effect to roll back".to_string(),
+                    },
+                    RawPlanStep {
                         step_id: "restart-service".to_string(),
                         tool: "svc.restart".to_string(),
                         params: vec![("service".to_string(), "nginx".to_string())],
-                        dependencies: vec!["check-service-status".to_string()],
+                        dependencies: vec![
+                            "diagnose-logs".to_string(),
+                            "diagnose-status".to_string(),
+                            "diagnose-http".to_string(),
+                            "diagnose-config".to_string(),
+                        ],
                         preconditions: vec!["operator approval is bound".to_string()],
                         expected_observations: vec!["restart attempt observed".to_string()],
                         verification_rule: "service-active-after-restart".to_string(),
@@ -4382,9 +4447,49 @@ pub mod model_broker {
                         rollback_id: Some("rollback-service-restart".to_string()),
                         rollback_reason: "restart requires recovery reconciliation".to_string(),
                     },
+                    RawPlanStep {
+                        step_id: "verify-status".to_string(),
+                        tool: "svc.status".to_string(),
+                        params: vec![("service".to_string(), "nginx".to_string())],
+                        dependencies: vec!["restart-service".to_string()],
+                        preconditions: vec!["restart effect sealed".to_string()],
+                        expected_observations: vec!["post-restart service status captured".to_string()],
+                        verification_rule: "post-restart-status-captured".to_string(),
+                        verification_description: "status output is available after restart"
+                            .to_string(),
+                        verification_source: "svc.status".to_string(),
+                        approval_required: false,
+                        approval_reason: "read-only verification".to_string(),
+                        risk: RiskClass::ReadOnly,
+                        risk_reason: "post-restart status check is read-only".to_string(),
+                        rollback_required: false,
+                        rollback_id: None,
+                        rollback_reason: "no effect to roll back".to_string(),
+                    },
+                    RawPlanStep {
+                        step_id: "verify-http".to_string(),
+                        tool: "http.check".to_string(),
+                        params: vec![("url".to_string(), "http://127.0.0.1/healthz".to_string())],
+                        dependencies: vec!["restart-service".to_string()],
+                        preconditions: vec!["restart effect sealed".to_string()],
+                        expected_observations: vec!["post-restart health endpoint captured".to_string()],
+                        verification_rule: "post-restart-http-captured".to_string(),
+                        verification_description: "health endpoint output is available after restart"
+                            .to_string(),
+                        verification_source: "http.check".to_string(),
+                        approval_required: false,
+                        approval_reason: "read-only verification".to_string(),
+                        risk: RiskClass::ReadOnly,
+                        risk_reason: "post-restart health check is read-only".to_string(),
+                        rollback_required: false,
+                        rollback_id: None,
+                        rollback_reason: "no effect to roll back".to_string(),
+                    },
                 ],
                 success_criteria: vec![
                     "service status is known".to_string(),
+                    "diagnostics are sealed before restart".to_string(),
+                    "post-restart verification is grounded in observations".to_string(),
                     format!(
                         "requested outcome addressed: {}",
                         request.intent().requested_outcome()
@@ -4667,7 +4772,7 @@ pub mod model_broker {
         use super::*;
 
         fn bounds() -> ModelCallBounds {
-            ModelCallBounds::new(100, 4096).expect("bounds")
+            ModelCallBounds::new(100, 8192).expect("bounds")
         }
 
         fn recovery_request(id: &str) -> PlanRequest {
@@ -7651,11 +7756,23 @@ pub mod planner {
                 .freeze_plan(&test_journal("service"), "run-nginx", "operator", &plan)
                 .expect("freeze");
 
-            assert_eq!(frozen.validation.step_count, 2);
+            assert_eq!(frozen.validation.step_count, 7);
+            assert!(frozen
+                .validation
+                .routed_tools
+                .contains(&"svc.logs".to_string()));
             assert!(frozen
                 .validation
                 .routed_tools
                 .contains(&"svc.status".to_string()));
+            assert!(frozen
+                .validation
+                .routed_tools
+                .contains(&"http.check".to_string()));
+            assert!(frozen
+                .validation
+                .routed_tools
+                .contains(&"config.test".to_string()));
             assert!(frozen
                 .validation
                 .routed_tools
@@ -7803,6 +7920,490 @@ pub mod planner {
             let explanation = planner.explain_plan(&plan).expect("explain");
             assert!(explanation.starts_with("summary:"));
             assert!(explanation.contains("approval-gated steps"));
+        }
+    }
+}
+
+pub mod service_recovery {
+    use std::path::{Path, PathBuf};
+
+    use crate::api::escape_json;
+    use crate::audit::AuditJournal;
+
+    use super::model::{IntentCtx, IntentSource, RunState, TrustBoundary};
+    use super::model_broker::{ModelCallBounds, StubModelProvider};
+    use super::planner::DeterministicPlanner;
+    use super::run_loop::{AgentCore, RunProjection};
+    use super::run_store::FileRunStore;
+
+    const ACTOR: &str = "operator";
+    const WORKING_SCOPE: &str = "vm:dev";
+    const RESTART_STEP_ID: &str = "restart-service";
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum AgentRestartApproval {
+        Approved,
+        Denied,
+    }
+
+    impl AgentRestartApproval {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Approved => "approved",
+                Self::Denied => "denied",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct AgentServiceRecoveryObservation {
+        pub step_id: String,
+        pub tool: String,
+        pub result: String,
+    }
+
+    impl AgentServiceRecoveryObservation {
+        fn to_json(&self) -> String {
+            format!(
+                "{{\"step_id\":\"{}\",\"tool\":\"{}\",\"result\":\"{}\"}}",
+                escape_json(&self.step_id),
+                escape_json(&self.tool),
+                escape_json(&self.result)
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct AgentServiceRecoveryReport {
+        pub run_id: String,
+        pub service: String,
+        pub runtime: String,
+        pub restart_policy_decision: String,
+        pub restart_executed: bool,
+        pub final_health_ok: bool,
+        pub final_state: RunState,
+        pub observations: Vec<AgentServiceRecoveryObservation>,
+        pub summary: String,
+    }
+
+    impl AgentServiceRecoveryReport {
+        pub fn to_json(&self) -> String {
+            let observations = self
+                .observations
+                .iter()
+                .map(AgentServiceRecoveryObservation::to_json)
+                .collect::<Vec<_>>()
+                .join(",");
+            format!(
+                "{{\"run_id\":\"{}\",\"service\":\"{}\",\"runtime\":\"{}\",\"restart_policy_decision\":\"{}\",\"restart_executed\":{},\"final_health_ok\":{},\"final_state\":\"{}\",\"observations\":[{}],\"summary\":\"{}\"}}",
+                escape_json(&self.run_id),
+                escape_json(&self.service),
+                escape_json(&self.runtime),
+                escape_json(&self.restart_policy_decision),
+                self.restart_executed,
+                self.final_health_ok,
+                self.final_state.as_str(),
+                observations,
+                escape_json(&self.summary)
+            )
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct AgentCoreServiceRecovery;
+
+    impl AgentCoreServiceRecovery {
+        pub fn run(
+            &self,
+            journal: &AuditJournal,
+            service: &str,
+            approval: AgentRestartApproval,
+        ) -> Result<AgentServiceRecoveryReport, String> {
+            let request_id = next_request_id(journal, service, approval)?;
+            let run_root = run_root_for(journal.path());
+            self.run_with_root(journal, run_root, &request_id, service, approval)
+        }
+
+        pub fn run_with_root(
+            &self,
+            journal: &AuditJournal,
+            run_root: impl Into<PathBuf>,
+            request_id: &str,
+            service: &str,
+            approval: AgentRestartApproval,
+        ) -> Result<AgentServiceRecoveryReport, String> {
+            if service != "nginx" {
+                return Err(format!(
+                    "generic service recovery planner currently supports nginx, got {service}"
+                ));
+            }
+            let runtime_journal = AuditJournal::new(journal.path().to_path_buf());
+            let core = AgentCore::new(
+                FileRunStore::new(run_root),
+                DeterministicPlanner::new(
+                    StubModelProvider::new(),
+                    "agent-core-planner-v1",
+                    ModelCallBounds::new(100, 8192).map_err(|error| error.to_string())?,
+                ),
+                runtime_journal,
+            );
+            let intent = IntentCtx::new(
+                ACTOR,
+                TrustBoundary::Operator,
+                IntentSource::Cli,
+                WORKING_SCOPE,
+                format!("recover {service} service and explain observed changes"),
+            )
+            .map_err(|error| error.to_string())?;
+
+            let accepted = core
+                .accept_intent(request_id, intent)
+                .map_err(|error| error.to_string())?;
+            core.plan_run(&accepted.run_id)
+                .map_err(|error| error.to_string())?;
+            let gated = advance_until_gate_or_terminal(&core, &accepted.run_id)?;
+            let final_projection = match (gated.state, approval) {
+                (RunState::AwaitingApproval, AgentRestartApproval::Denied) => core
+                    .deny_step(
+                        &accepted.run_id,
+                        RESTART_STEP_ID,
+                        ACTOR,
+                        "restart approval denied; no svc.restart effect prepared",
+                    )
+                    .map_err(|error| error.to_string())?,
+                (RunState::AwaitingApproval, AgentRestartApproval::Approved) => {
+                    core.approve_step(&accepted.run_id, RESTART_STEP_ID, ACTOR)
+                        .map_err(|error| error.to_string())?;
+                    advance_until_terminal(&core, &accepted.run_id)?
+                }
+                _ => gated,
+            };
+
+            build_report(journal, &accepted.run_id, service, final_projection)
+        }
+    }
+
+    fn advance_until_gate_or_terminal<S, P>(
+        core: &AgentCore<S, P>,
+        run_id: &str,
+    ) -> Result<RunProjection, String>
+    where
+        S: super::run_store::RunStore,
+        P: super::planner::Planner,
+    {
+        for _ in 0..32 {
+            let projection = core
+                .advance_run(run_id)
+                .map_err(|error| error.to_string())?;
+            if matches!(
+                projection.state,
+                RunState::AwaitingApproval
+                    | RunState::Completed
+                    | RunState::Denied
+                    | RunState::Suspended
+                    | RunState::FailedClosed
+                    | RunState::RollbackPending
+            ) {
+                return Ok(projection);
+            }
+        }
+        Err("agent core service recovery did not reach approval gate".to_string())
+    }
+
+    fn advance_until_terminal<S, P>(
+        core: &AgentCore<S, P>,
+        run_id: &str,
+    ) -> Result<RunProjection, String>
+    where
+        S: super::run_store::RunStore,
+        P: super::planner::Planner,
+    {
+        for _ in 0..32 {
+            let projection = core
+                .advance_run(run_id)
+                .map_err(|error| error.to_string())?;
+            if matches!(
+                projection.state,
+                RunState::Completed
+                    | RunState::Denied
+                    | RunState::Suspended
+                    | RunState::FailedClosed
+                    | RunState::RollbackPending
+            ) {
+                return Ok(projection);
+            }
+            if projection.state == RunState::AwaitingApproval {
+                return Err(format!(
+                    "agent core service recovery reached unexpected approval gate at {}",
+                    projection.current_step_id.as_deref().unwrap_or("-")
+                ));
+            }
+        }
+        Err("agent core service recovery did not reach terminal state".to_string())
+    }
+
+    fn build_report(
+        journal: &AuditJournal,
+        run_id: &str,
+        service: &str,
+        projection: RunProjection,
+    ) -> Result<AgentServiceRecoveryReport, String> {
+        let timeline = journal
+            .run_timeline(run_id)
+            .map_err(|error| error.to_string())?;
+        let observations = effect_observations(&timeline);
+        let restart_executed = observations
+            .iter()
+            .any(|observation| observation.step_id == RESTART_STEP_ID && observation.tool == "svc.restart");
+        let final_health_ok = projection.state == RunState::Completed && restart_executed;
+        let restart_policy_decision = restart_policy_decision(&timeline, restart_executed);
+        let observed_tools = observations
+            .iter()
+            .map(|observation| observation.tool.as_str())
+            .collect::<Vec<_>>()
+            .join("/");
+        let summary = if restart_executed {
+            format!(
+                "Checked logs/status/http/config for {service}; restart was approved and executed through AgentCore; final status and http check show healthy. Observed tools: {observed_tools}."
+            )
+        } else {
+            format!(
+                "Checked logs/status/http/config for {service}; restart paused for approval and was denied, so no restart effect was prepared. Observed tools: {observed_tools}."
+            )
+        };
+
+        Ok(AgentServiceRecoveryReport {
+            run_id: run_id.to_string(),
+            service: service.to_string(),
+            runtime: "agent-core".to_string(),
+            restart_policy_decision,
+            restart_executed,
+            final_health_ok,
+            final_state: projection.state,
+            observations,
+            summary,
+        })
+    }
+
+    fn effect_observations(timeline: &[String]) -> Vec<AgentServiceRecoveryObservation> {
+        timeline
+            .iter()
+            .filter(|line| json_string(line, "event_type").as_deref() == Some("EffectObserved"))
+            .filter_map(|line| {
+                let step_id = json_string(line, "step_id")?;
+                let result = json_string(line, "summary")?;
+                if !result.starts_with("observed tool=") {
+                    return None;
+                }
+                let tool = tool_from_summary(&result)?;
+                Some(AgentServiceRecoveryObservation {
+                    step_id,
+                    tool,
+                    result,
+                })
+            })
+            .collect()
+    }
+
+    fn restart_policy_decision(timeline: &[String], restart_executed: bool) -> String {
+        if restart_executed {
+            return "allow".to_string();
+        }
+        timeline
+            .iter()
+            .filter(|line| json_string(line, "step_id").as_deref() == Some(RESTART_STEP_ID))
+            .filter_map(|line| json_string(line, "summary"))
+            .find_map(|summary| {
+                summary
+                    .split_whitespace()
+                    .find_map(|token| token.strip_prefix("decision=").map(str::to_string))
+            })
+            .unwrap_or_else(|| "pause-for-approval".to_string())
+    }
+
+    fn tool_from_summary(summary: &str) -> Option<String> {
+        summary
+            .split_whitespace()
+            .find_map(|token| token.strip_prefix("tool="))
+            .map(|tool| tool.trim_matches(|ch| ch == ',' || ch == ';').to_string())
+    }
+
+    fn next_request_id(
+        journal: &AuditJournal,
+        service: &str,
+        approval: AgentRestartApproval,
+    ) -> Result<String, String> {
+        let line_count = journal
+            .event_lines()
+            .map_err(|error| error.to_string())?
+            .len();
+        Ok(format!(
+            "service-recovery-{service}-{}-{line_count}",
+            approval.as_str()
+        ))
+    }
+
+    fn run_root_for(audit_path: &Path) -> PathBuf {
+        audit_path.with_extension("runs")
+    }
+
+    fn json_string(line: &str, key: &str) -> Option<String> {
+        let needle = format!("\"{key}\":\"");
+        let start = line.find(&needle)? + needle.len();
+        parse_json_string(&line[start..])
+    }
+
+    fn parse_json_string(value: &str) -> Option<String> {
+        let mut escaped = false;
+        let mut output = String::new();
+        for ch in value.chars() {
+            if escaped {
+                match ch {
+                    '"' => output.push('"'),
+                    '\\' => output.push('\\'),
+                    'n' => output.push('\n'),
+                    'r' => output.push('\r'),
+                    _ => output.push(ch),
+                }
+                escaped = false;
+                continue;
+            }
+            match ch {
+                '\\' => escaped = true,
+                '"' => return Some(output),
+                _ => output.push(ch),
+            }
+        }
+        None
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::fs;
+        use std::path::{Path, PathBuf};
+
+        use super::*;
+        use crate::audit::extract_json_string_for_tests;
+
+        fn temp_root(name: &str) -> PathBuf {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-agentcore-service-recovery-{name}-{}",
+                std::process::id()
+            ));
+            let _ = fs::remove_dir_all(&path);
+            fs::create_dir_all(&path).expect("temp root");
+            path
+        }
+
+        fn journal(root: &Path) -> AuditJournal {
+            AuditJournal::new(root.join("audit.jsonl"))
+        }
+
+        #[test]
+        fn approved_recovery_runs_full_plan_through_agent_core() {
+            let root = temp_root("approved");
+            let journal = journal(&root);
+            let report = AgentCoreServiceRecovery
+                .run_with_root(
+                    &journal,
+                    root.join("runs"),
+                    "req-approved",
+                    "nginx",
+                    AgentRestartApproval::Approved,
+                )
+                .expect("run");
+
+            assert_eq!(report.runtime, "agent-core");
+            assert_eq!(report.final_state, RunState::Completed);
+            assert!(report.restart_executed);
+            assert!(report.final_health_ok);
+            for tool in [
+                "svc.logs",
+                "svc.status",
+                "http.check",
+                "config.test",
+                "svc.restart",
+            ] {
+                assert!(
+                    report
+                        .observations
+                        .iter()
+                        .any(|observation| observation.tool == tool),
+                    "missing {tool}"
+                );
+            }
+
+            let lines = journal.event_lines().expect("journal");
+            for expected in [
+                "IntentReceived",
+                "PlanFrozen",
+                "PolicyEvaluated",
+                "ApprovalBound",
+                "EffectPrepared",
+                "EffectObserved",
+                "CommitSealed",
+            ] {
+                assert!(
+                    lines.iter().any(|line| line.contains(expected)),
+                    "missing {expected}"
+                );
+            }
+            assert!(lines.iter().any(|line| {
+                extract_json_string_for_tests(line, "event_type").as_deref()
+                    == Some("EffectPrepared")
+                    && extract_json_string_for_tests(line, "step_id").as_deref()
+                        == Some(RESTART_STEP_ID)
+            }));
+        }
+
+        #[test]
+        fn denied_recovery_prepares_no_restart_effect() {
+            let root = temp_root("denied");
+            let journal = journal(&root);
+            let report = AgentCoreServiceRecovery
+                .run_with_root(
+                    &journal,
+                    root.join("runs"),
+                    "req-denied",
+                    "nginx",
+                    AgentRestartApproval::Denied,
+                )
+                .expect("run");
+
+            assert_eq!(report.final_state, RunState::Denied);
+            assert!(!report.restart_executed);
+            assert!(!report.final_health_ok);
+            assert_eq!(report.restart_policy_decision, "pause-for-approval");
+            assert!(report.summary.contains("no restart effect was prepared"));
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| line.contains("pause-for-approval")));
+            assert!(lines.iter().any(|line| line.contains("approval denied")));
+            assert!(!lines.iter().any(|line| {
+                line.contains("\"event_type\":\"EffectPrepared\"")
+                    && line.contains("\"step_id\":\"restart-service\"")
+            }));
+        }
+
+        #[test]
+        fn final_explanation_is_grounded_in_observed_effects() {
+            let root = temp_root("grounded");
+            let journal = journal(&root);
+            let report = AgentCoreServiceRecovery
+                .run_with_root(
+                    &journal,
+                    root.join("runs"),
+                    "req-grounded",
+                    "nginx",
+                    AgentRestartApproval::Approved,
+                )
+                .expect("run");
+
+            assert!(report.summary.contains("Observed tools:"));
+            assert!(!report.summary.to_ascii_lowercase().contains("model claims"));
+            assert!(report.observations.iter().all(|observation| {
+                observation.result.contains("observed tool=")
+                    || observation.result.contains("controlled effect executed")
+            }));
         }
     }
 }
@@ -8665,6 +9266,51 @@ pub mod run_loop {
             )
         }
 
+        fn advance_to_restart_gate(
+            core: &AgentCore<FileRunStore, DeterministicPlanner<StubModelProvider>>,
+            run_id: &str,
+        ) -> RunProjection {
+            for _ in 0..32 {
+                let projection = core.advance_run(run_id).expect("advance to gate");
+                if projection.state == RunState::AwaitingApproval {
+                    assert_eq!(projection.current_step_id.as_deref(), Some("restart-service"));
+                    return projection;
+                }
+                assert!(
+                    !matches!(
+                        projection.state,
+                        RunState::Completed
+                            | RunState::Denied
+                            | RunState::Suspended
+                            | RunState::FailedClosed
+                    ),
+                    "run reached terminal state before restart gate: {}",
+                    projection.state.as_str()
+                );
+            }
+            panic!("run did not reach restart approval gate");
+        }
+
+        fn advance_to_terminal(
+            core: &AgentCore<FileRunStore, DeterministicPlanner<StubModelProvider>>,
+            run_id: &str,
+        ) -> RunProjection {
+            for _ in 0..32 {
+                let projection = core.advance_run(run_id).expect("advance to terminal");
+                if matches!(
+                    projection.state,
+                    RunState::Completed
+                        | RunState::Denied
+                        | RunState::Suspended
+                        | RunState::FailedClosed
+                        | RunState::RollbackPending
+                ) {
+                    return projection;
+                }
+            }
+            panic!("run did not reach terminal state");
+        }
+
         fn read_only_plan(intent: IntentCtx) -> PlanSpec {
             PlanSpec::new(
                 "plan-read-only",
@@ -8790,10 +9436,7 @@ pub mod run_loop {
                 .accept_intent("req-approval", intent())
                 .expect("accept");
             core.plan_run(&accepted.run_id).expect("plan");
-            let after_read = core.advance_run(&accepted.run_id).expect("read step");
-            assert_eq!(after_read.state, RunState::Planned);
-
-            let paused = core.advance_run(&accepted.run_id).expect("pause restart");
+            let paused = advance_to_restart_gate(&core, &accepted.run_id);
             assert_eq!(paused.state, RunState::AwaitingApproval);
             assert_eq!(paused.current_step_id.as_deref(), Some("restart-service"));
             assert_eq!(paused.approval_status, ApprovalStatus::Pending);
@@ -8816,8 +9459,7 @@ pub mod run_loop {
             let core = service_core(&root);
             let accepted = core.accept_intent("req-deny", intent()).expect("accept");
             core.plan_run(&accepted.run_id).expect("plan");
-            core.advance_run(&accepted.run_id).expect("read");
-            core.advance_run(&accepted.run_id).expect("pause");
+            advance_to_restart_gate(&core, &accepted.run_id);
 
             let denied = core
                 .deny_step(
@@ -8846,8 +9488,7 @@ pub mod run_loop {
                 .accept_intent("req-timeout", intent())
                 .expect("accept");
             timeout_core.plan_run(&accepted.run_id).expect("plan");
-            timeout_core.advance_run(&accepted.run_id).expect("read");
-            timeout_core.advance_run(&accepted.run_id).expect("pause");
+            advance_to_restart_gate(&timeout_core, &accepted.run_id);
             let suspended = timeout_core
                 .suspend_run(&accepted.run_id, "approval timed out")
                 .expect("suspend");
@@ -8861,15 +9502,14 @@ pub mod run_loop {
             let core = service_core(&root);
             let accepted = core.accept_intent("req-approve", intent()).expect("accept");
             core.plan_run(&accepted.run_id).expect("plan");
-            core.advance_run(&accepted.run_id).expect("read");
-            core.advance_run(&accepted.run_id).expect("pause");
+            advance_to_restart_gate(&core, &accepted.run_id);
 
             let approved = core
                 .approve_step(&accepted.run_id, "restart-service", "operator")
                 .expect("approve");
             assert_eq!(approved.state, RunState::Planned);
             assert_eq!(approved.approval_status, ApprovalStatus::Granted);
-            let completed = core.advance_run(&accepted.run_id).expect("execute");
+            let completed = advance_to_terminal(&core, &accepted.run_id);
             assert_eq!(completed.state, RunState::Completed);
             assert!(core
                 .journal()
@@ -8888,8 +9528,7 @@ pub mod run_loop {
             let core = service_core(&root);
             let accepted = core.accept_intent("req-recover", intent()).expect("accept");
             core.plan_run(&accepted.run_id).expect("plan");
-            core.advance_run(&accepted.run_id).expect("read");
-            let paused = core.advance_run(&accepted.run_id).expect("pause");
+            let paused = advance_to_restart_gate(&core, &accepted.run_id);
             assert_eq!(paused.state, RunState::AwaitingApproval);
 
             let recovered = core.recover_run(&accepted.run_id).expect("recover");

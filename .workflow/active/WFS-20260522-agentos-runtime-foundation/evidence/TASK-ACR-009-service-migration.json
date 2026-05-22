@@ -1,0 +1,93 @@
+{
+  "id": "TASK-ACR-009",
+  "status": "passed",
+  "completed_at": "2026-05-23T04:27:50+08:00",
+  "summary": "Service recovery now runs through generic AgentCore PlanRun instead of a hand-coded workflow owner. The stub planner emits a full nginx recovery DAG with diagnostics, approval-gated restart, post-restart verification, and observation-grounded summary. The compatibility ServiceRecoveryWorkflow delegates to agent_core::service_recovery, and CLI audit-show now follows the latest dynamic AgentCore run id by default.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/service_recovery.rs",
+    "crates/agentd/src/main.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::service_recovery",
+      "status": "passed",
+      "result": "3 passed; 0 failed; 150 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd service_recovery::",
+      "status": "passed",
+      "result": "6 passed; 0 failed; 147 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "153 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --service-recovery-demo approved .workflow/artifacts/service-recovery/task-acr-009-approved-latest.jsonl",
+      "status": "passed",
+      "result": "AgentCore report returned restart_executed=true and final_health_ok=true"
+    },
+    {
+      "command": "cargo run -p agentd -- --service-recovery-demo denied .workflow/artifacts/service-recovery/task-acr-009-denied-latest.jsonl",
+      "status": "passed",
+      "result": "AgentCore report returned restart_executed=false and no restart effect was prepared"
+    },
+    {
+      "command": "cargo run -p agentd -- --audit-show .workflow/artifacts/service-recovery/task-acr-009-approved-latest.jsonl latest",
+      "status": "passed",
+      "result": "Timeline includes IntentReceived, PlanFrozen, PolicyEvaluated, ApprovalBound, EffectPrepared, EffectObserved, CommitSealed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Existing service recovery happy-path tests pass through AgentCore.",
+      "status": "passed",
+      "evidence": "service_recovery::tests::happy_path_runs_diagnostics_restart_and_verified_summary calls ServiceRecoveryWorkflow, which delegates to AgentCoreServiceRecovery."
+    },
+    {
+      "criterion": "Denied restart path prepares no restart effect.",
+      "status": "passed",
+      "evidence": "agent_core::service_recovery::tests::denied_recovery_prepares_no_restart_effect and service_recovery::tests::denied_restart_path_prepares_no_restart_effect assert no EffectPrepared for restart-service."
+    },
+    {
+      "criterion": "Audit timeline includes generic runtime events.",
+      "status": "passed",
+      "evidence": "Approved CLI demo audit-show latest includes IntentReceived, PlanFrozen, PolicyEvaluated, ApprovalBound, EffectPrepared, EffectObserved, and CommitSealed for the dynamic AgentCore run id."
+    },
+    {
+      "criterion": "The final operator explanation is grounded in observations, not model claims.",
+      "status": "passed",
+      "evidence": "agent_core::service_recovery::tests::final_explanation_is_grounded_in_observed_effects asserts the report summary uses observed tools and excludes model-claim language."
+    },
+    {
+      "criterion": "No workflow-specific code bypasses AgentCore for tool execution.",
+      "status": "passed",
+      "evidence": "ServiceRecoveryWorkflow now converts compatibility inputs and delegates to AgentCoreServiceRecovery; hand-coded policy, sandbox, restart, and effect append orchestration was removed."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::agent_core::service_recovery",
+    "compatibility_wrapper": "agentd::service_recovery::ServiceRecoveryWorkflow",
+    "planner_plan": [
+      "diagnose-logs -> svc.logs",
+      "diagnose-status -> svc.status",
+      "diagnose-http -> http.check",
+      "diagnose-config -> config.test",
+      "restart-service -> svc.restart, approval required",
+      "verify-status -> svc.status",
+      "verify-http -> http.check"
+    ],
+    "safety_ordering": [
+      "Planner emits PlanSpec only; no side effects during planning",
+      "StepScheduler waits for CommitSealed diagnostics before restart-service",
+      "PolicyEvaluator pauses restart without approval and no EffectPrepared is written",
+      "Approved restart binds exact approval token before EffectPrepared",
+      "Post-restart verification steps are read-only AgentCore steps",
+      "Report is projected from EffectObserved audit summaries"
+    ]
+  },
+  "next_task": "TASK-ACR-010"
+}

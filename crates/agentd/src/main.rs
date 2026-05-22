@@ -118,10 +118,7 @@ fn main() {
                 .get(2)
                 .map(String::as_str)
                 .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
-            let run_id = args
-                .get(3)
-                .map(String::as_str)
-                .unwrap_or("run-service-recovery");
+            let run_id = args.get(3).map(String::as_str);
             run_audit_show(path, run_id)
         }
         Some("--tui-demo") => {
@@ -483,8 +480,19 @@ fn run_service_recovery_demo(path: &str, approval: RestartApproval) -> Result<()
     Ok(())
 }
 
-fn run_audit_show(path: &str, run_id: &str) -> Result<(), String> {
+fn run_audit_show(path: &str, run_id: Option<&str>) -> Result<(), String> {
     let journal = AuditJournal::new(path);
+    let latest_run;
+    let run_id = match run_id {
+        Some("latest") | None => {
+            latest_run = journal
+                .latest_run()
+                .map_err(|error| error.to_string())?
+                .ok_or_else(|| "audit journal has no runs".to_string())?;
+            latest_run.as_str()
+        }
+        Some(run_id) => run_id,
+    };
     let lines = journal
         .run_timeline(run_id)
         .map_err(|error| error.to_string())?;
