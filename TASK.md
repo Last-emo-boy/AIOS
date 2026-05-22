@@ -28,7 +28,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-002` 已完成：Rust `agentd` lifecycle skeleton 提供 local-only/stub 模式、健康状态、模块边界和 typed stub APIs。
 - `TASK-AIOS-003` 已完成：terminal-first TUI surface 支持 intent、plan preview、approval/denial/timeout/suspended 和 audit projection。
 - `TASK-AIOS-004` 已完成：semantic tool schema/router 支持 normalized params、`fs.write.diff` 风险分类，并拒绝 normal-mode `shell.exec`。
-- 下一执行任务：`TASK-AIOS-005`。
+- `TASK-AIOS-005` 已完成：append-only JSONL audit journal 支持核心事件、未封口 effect 查询和 secret-like summary redaction。
+- 下一执行任务：`TASK-AIOS-006`。
 
 ## 必须先冻结的决策
 
@@ -79,7 +80,7 @@ Wave 1 入口约束：
 ### Wave 2：语义运行时与审计
 
 - `TASK-AIOS-004`：定义 semantic tool call schema 和 router（completed）
-- `TASK-AIOS-005`：实现 append-only audit event journal
+- `TASK-AIOS-005`：实现 append-only audit event journal（completed）
 - `TASK-AIOS-006`：实现 unfinished effects recovery reconciler
 
 退出标准：

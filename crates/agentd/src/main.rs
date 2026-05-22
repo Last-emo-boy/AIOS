@@ -4,6 +4,7 @@ use std::process;
 
 use agentd::{
     api::SemanticToolCall,
+    audit::{AuditEvent, AuditEventType, AuditJournal},
     lifecycle::{Agentd, LifecycleConfig},
     tui::{build_demo_session, ApprovalDecision},
 };
@@ -57,6 +58,13 @@ fn main() {
                     Err(rejection.reason)
                 }
             }
+        }
+        Some("--audit-demo") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/audit/demo.jsonl");
+            run_audit_demo(path)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -135,6 +143,40 @@ fn run_interactive(agentd: &Agentd) -> Result<(), String> {
         let session = build_demo_session(agentd, intent, ApprovalDecision::Suspended);
         print!("{}", session.render());
     }
+    Ok(())
+}
+
+fn run_audit_demo(path: &str) -> Result<(), String> {
+    let journal = AuditJournal::new(path);
+    journal
+        .append(&AuditEvent::new(
+            AuditEventType::IntentReceived,
+            "run-demo",
+            "step-001",
+            "operator",
+            "recover local service",
+        ))
+        .map_err(|error| error.to_string())?;
+    journal
+        .append(&AuditEvent::new(
+            AuditEventType::EffectPrepared,
+            "run-demo",
+            "step-001",
+            "operator",
+            "prepared svc.restart password=should-not-log",
+        ))
+        .map_err(|error| error.to_string())?;
+    println!(
+        "{{\"latest_run\":\"{}\",\"unresolved_effects\":{}}}",
+        journal
+            .latest_run()
+            .map_err(|error| error.to_string())?
+            .unwrap_or_default(),
+        journal
+            .unresolved_effects()
+            .map_err(|error| error.to_string())?
+            .len()
+    );
     Ok(())
 }
 

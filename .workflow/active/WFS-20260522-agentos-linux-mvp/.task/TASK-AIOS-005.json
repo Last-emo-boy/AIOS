@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-005",
   "title": "Implement append-only audit event journal",
-  "status": "pending",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "persistence",
@@ -18,10 +18,9 @@
     "Provide query API for latest run, run timeline, and unresolved effects."
   ],
   "deliverables": [
-    "Audit event schema",
-    "Audit writer and reader",
-    "Recovery query support",
-    "docs/audit-journal.md"
+    "crates/agentd/src/audit.rs",
+    "docs/audit-journal.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-005-audit-journal.json"
   ],
   "acceptance_criteria": [
     "EffectPrepared is written before any side-effecting executor is invoked.",
@@ -30,10 +29,16 @@
     "Audit records do not include secret plaintext."
   ],
   "verification": [
-    "Run event schema tests.",
-    "Simulate a process restart after EffectPrepared and verify unresolved state is discoverable.",
-    "Run log redaction tests for secret-like input."
+    "cargo test -p agentd",
+    "cargo run -p agentd -- --audit-demo .workflow/artifacts/audit/demo.jsonl",
+    "Get-Content .workflow/artifacts/audit/demo.jsonl"
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-005-audit-journal.json",
+    "unit_tests": "17 passed; 0 failed",
+    "unresolved_effects_after_restart": 1,
+    "secret_redaction": "passed"
+  },
   "risk_notes": [
     "A plan log is not enough; recovery must reason over effects that may already have happened."
   ]

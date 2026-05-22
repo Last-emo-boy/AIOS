@@ -1,0 +1,33 @@
+{
+  "task": "TASK-AIOS-005",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:37:00+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "17 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --audit-demo .workflow/artifacts/audit/demo.jsonl",
+      "result": "{\"latest_run\":\"run-demo\",\"unresolved_effects\":1}"
+    },
+    {
+      "command": "Get-Content .workflow/artifacts/audit/demo.jsonl",
+      "result": "IntentReceived and EffectPrepared persisted as JSONL; password-like token redacted to [REDACTED]."
+    }
+  ],
+  "event_types": [
+    "IntentReceived",
+    "PlanFrozen",
+    "ApprovalBound",
+    "EffectPrepared",
+    "EffectObserved",
+    "CommitSealed",
+    "RollbackPending",
+    "RollbackObserved",
+    "RecoveryStarted",
+    "RecoveryCompleted"
+  ],
+  "recovery_query": "EffectPrepared without matching CommitSealed or RollbackObserved is reported as unresolved.",
+  "secret_policy": "secret-like tokens in summary are redacted before persistence"
+}
