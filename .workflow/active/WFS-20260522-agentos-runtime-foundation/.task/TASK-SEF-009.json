@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-009",
   "title": "Build runtime audit projection and explainability chain",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P1",
   "type": "observability",
@@ -135,6 +135,23 @@
       "Projection can explain approved, denied, and recovery-relevant paths.",
       "Projection tests prove stable ordering and redaction."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T05:31:51+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-009-audit-projection.json",
+    "implementation": [
+      "crates/agentd/src/audit.rs",
+      "crates/agentd/src/main.rs",
+      "crates/agentd/src/tui.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd audit::": "9 passed; 0 failed",
+      "cargo test -p agentd tui::": "5 passed; 0 failed",
+      "cargo test -p agentd agent_core::service_recovery": "3 passed; 0 failed",
+      "cargo test -p agentd": "163 passed; 0 failed",
+      "cargo run -p agentd -- --audit-project .workflow/artifacts/TASK-SEF-009/service-recovery-approved.jsonl latest": "projected approved AgentCore service recovery audit timeline"
+    },
+    "next_task": "TASK-SEF-010"
   },
   "risk_notes": [
     "Without an explainable audit projection, users cannot distinguish controlled autonomy from hidden automation."

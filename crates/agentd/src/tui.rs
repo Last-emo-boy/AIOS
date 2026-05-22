@@ -1,4 +1,5 @@
 use crate::api::{escape_json, PlanSpec};
+use crate::audit::RuntimeAuditProjection;
 use crate::lifecycle::Agentd;
 use crate::rollback::DiffPreview;
 
@@ -134,6 +135,13 @@ pub fn render_diff_preview(preview: &DiffPreview, approval: ApprovalDecision) ->
     )
 }
 
+pub fn render_runtime_audit_projection(projection: &RuntimeAuditProjection) -> String {
+    format!(
+        "Runtime Audit Projection\n{}\n",
+        projection.to_cli_lines().join("\n")
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -196,5 +204,40 @@ mod tests {
         assert!(rendered.contains("+new"));
         assert!(rendered.contains("RollbackHandle: rb-1"));
         assert!(rendered.contains("Approval: suspended"));
+    }
+
+    #[test]
+    fn renders_runtime_audit_projection() {
+        let journal = crate::audit::AuditJournal::new(
+            std::env::temp_dir().join(format!("agentd-tui-projection-{}.jsonl", std::process::id())),
+        );
+        let _ = std::fs::remove_file(journal.path());
+        journal
+            .append(&crate::audit::AuditEvent::new(
+                crate::audit::AuditEventType::PolicyEvaluated,
+                "run-tui",
+                "step-read",
+                "operator",
+                "decision=allow tool=svc.status resource=nginx risk=read-only reason=diagnostic",
+            ))
+            .expect("policy");
+        journal
+            .append(&crate::audit::AuditEvent::new(
+                crate::audit::AuditEventType::EffectObserved,
+                "run-tui",
+                "step-read",
+                "operator",
+                "observation processed source=semantic-tool trust=sandboxed-tool summary=ok",
+            ))
+            .expect("observed");
+        let projection = journal
+            .project_runtime_run("run-tui")
+            .expect("projection")
+            .expect("run");
+        let rendered = render_runtime_audit_projection(&projection);
+        assert!(rendered.contains("Runtime Audit Projection"));
+        assert!(rendered.contains("run=run-tui"));
+        assert!(rendered.contains("step=step-read"));
+        assert!(rendered.contains("trust=sandboxed-tool"));
     }
 }

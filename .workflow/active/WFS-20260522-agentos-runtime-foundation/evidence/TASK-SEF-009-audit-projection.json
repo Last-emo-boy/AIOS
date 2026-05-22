@@ -1,0 +1,38 @@
+{
+  "task": "TASK-SEF-009",
+  "status": "completed",
+  "completed_at": "2026-05-23T05:31:51+08:00",
+  "summary": "Added a RuntimeAuditProjection over AuditJournal timelines, exposed latest/run-id projection through CLI and TUI render paths, and covered stable ordering, redaction, denied/no-effect, recovery-source, and malformed-line warning behavior.",
+  "implementation": [
+    "crates/agentd/src/audit.rs",
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "projection_contract": {
+    "source_of_truth": "AuditJournal event timeline",
+    "query_modes": [
+      "latest",
+      "run_id"
+    ],
+    "cli_surface": "--audit-project <path> [run-id|latest]",
+    "tui_surface": "render_runtime_audit_projection",
+    "raw_audit_surface_preserved": "--audit-show still returns the raw run timeline JSON array",
+    "redaction": "Projection uses audit redaction, preserves secret:// handles, and redacts password/token/api-key-like values."
+  },
+  "verification": {
+    "cargo test -p agentd audit::": "9 passed; 0 failed",
+    "cargo test -p agentd tui::": "5 passed; 0 failed",
+    "cargo test -p agentd agent_core::service_recovery": "3 passed; 0 failed",
+    "cargo test -p agentd": "163 passed; 0 failed",
+    "cargo run -p agentd -- --service-recovery-demo approved .workflow/artifacts/TASK-SEF-009/service-recovery-approved.jsonl": "generated approved generic AgentCore service recovery audit journal",
+    "cargo run -p agentd -- --audit-project .workflow/artifacts/TASK-SEF-009/service-recovery-approved.jsonl latest": "projected 41 events with IntentReceived, PlanFrozen, PolicyEvaluated, ApprovalBound, EffectPrepared, EffectObserved, CommitSealed, source=semantic-tool, and trust=sandboxed-tool"
+  },
+  "acceptance": [
+    "Operators can see why each step ran, paused, denied, recovered, rolled back, or sealed.",
+    "Projection ties model-assisted planning events to deterministic policy/effect audit events.",
+    "Projection includes observation source and trust labels when present.",
+    "Projection does not leak raw secret-like values.",
+    "Projection output is stable enough for unit and CLI smoke verification."
+  ],
+  "next_task": "TASK-SEF-010"
+}

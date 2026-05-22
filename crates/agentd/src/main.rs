@@ -121,6 +121,14 @@ fn main() {
             let run_id = args.get(3).map(String::as_str);
             run_audit_show(path, run_id)
         }
+        Some("--audit-project") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
+            let run_id = args.get(3).map(String::as_str);
+            run_audit_project(path, run_id)
+        }
         Some("--tui-demo") => {
             let intent = args
                 .get(2)
@@ -497,6 +505,22 @@ fn run_audit_show(path: &str, run_id: Option<&str>) -> Result<(), String> {
         .run_timeline(run_id)
         .map_err(|error| error.to_string())?;
     println!("[{}]", lines.join(","));
+    Ok(())
+}
+
+fn run_audit_project(path: &str, run_id: Option<&str>) -> Result<(), String> {
+    let journal = AuditJournal::new(path);
+    let projection = match run_id {
+        Some("latest") | None => journal
+            .project_latest_runtime_run()
+            .map_err(|error| error.to_string())?
+            .ok_or_else(|| "audit journal has no runs".to_string())?,
+        Some(run_id) => journal
+            .project_runtime_run(run_id)
+            .map_err(|error| error.to_string())?
+            .ok_or_else(|| format!("audit journal has no run: {run_id}"))?,
+    };
+    println!("{}", projection.to_json());
     Ok(())
 }
 
