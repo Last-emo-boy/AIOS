@@ -1,0 +1,64 @@
+{
+  "task": "TASK-ACR-010",
+  "title": "Add AgentCore adversarial runtime tests",
+  "completed_at": "2026-05-23T04:56:01+08:00",
+  "status": "completed",
+  "implementation": [
+    {
+      "path": "crates/agentd/src/agent_core.rs",
+      "summary": "Added agent_core::adversarial runtime tests that exercise AgentCore planning, observation handling, memory, approval binding, policy evaluation, and model output validation."
+    },
+    {
+      "path": ".github/workflows/safety.yml",
+      "summary": "Added cargo test -p agentd agent_core::adversarial to the safety workflow."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "summary": "Added the AgentCore adversarial runtime subset to the release metadata workflow."
+    },
+    {
+      "path": "scripts/build-release.ps1",
+      "summary": "Added the AgentCore adversarial runtime subset to release verification commands and provenance policy metadata."
+    }
+  ],
+  "runtime_scenarios": [
+    {
+      "id": "planning-prompt-injection",
+      "coverage": "A malicious planner attempt to mark svc.restart as no-approval still pauses at AgentCore policy evaluation and prepares no restart effect."
+    },
+    {
+      "id": "observation-injection-command",
+      "coverage": "External observation text suggesting command execution becomes a sanitized replanning hint and source-to-sink denial, with no EffectPrepared for the injected step."
+    },
+    {
+      "id": "memory-poisoning-capability",
+      "coverage": "Cross-run memory claiming approval or capability grants is quarantined and omitted from planner context; runtime restart still requires exact approval."
+    },
+    {
+      "id": "approval-parameter-mutation",
+      "coverage": "A token generated for svc.restart service=nginx cannot authorize mutated parameters service=ssh; policy remains pause-for-approval and prepares no effect."
+    },
+    {
+      "id": "model-output-shell-or-secret",
+      "coverage": "Model output containing shell.exec is rejected by ToolRouter before PlanSpec freeze, and secret-like model output fails closed before effects."
+    }
+  ],
+  "acceptance": {
+    "prompt_injection_cannot_add_high_risk_tool_without_validation": true,
+    "observation_injection_cannot_directly_execute_commands": true,
+    "memory_poisoning_cannot_grant_policy_or_capability": true,
+    "approval_parameter_mutation_remains_denied": true,
+    "denied_actions_have_no_effect_prepared": true
+  },
+  "verification": {
+    "cargo test -p agentd agent_core::adversarial": "5 passed; 0 failed; 153 filtered out",
+    "cargo test -p agentd safety::": "16 passed; 0 failed; 142 filtered out",
+    "cargo test -p agentd": "158 passed; 0 failed",
+    "ci_gate": "safety.yml, release.yml, and scripts/build-release.ps1 include cargo test -p agentd agent_core::adversarial"
+  },
+  "audit_checks": [
+    "Runtime denied and paused paths assert absence of EffectPrepared for protected or injected steps.",
+    "PolicyEvaluated records are inspected for pause-for-approval, source-to-sink denial, and authoritative runtime risk."
+  ],
+  "next_task": "TASK-SEF-008"
+}

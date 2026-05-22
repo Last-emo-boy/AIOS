@@ -5,7 +5,7 @@
   "current_phase": "runtime-foundation",
   "status": "executing",
   "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-23T04:27:50+08:00",
+  "updated_at": "2026-05-23T04:56:01+08:00",
   "source": "research.md",
   "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy.",
   "active_decisions": [
@@ -262,6 +262,22 @@
     {
       "type": "task_evidence",
       "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json"
+    },
+    {
+      "type": "task_evidence",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-010-adversarial.json"
+    },
+    {
+      "type": "ci_gate",
+      "path": ".github/workflows/safety.yml"
+    },
+    {
+      "type": "ci_gate",
+      "path": ".github/workflows/release.yml"
+    },
+    {
+      "type": "release_gate",
+      "path": "scripts/build-release.ps1"
     }
   ]
 }

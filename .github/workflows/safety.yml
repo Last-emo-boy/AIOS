@@ -12,3 +12,5 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Run safety regression gate
         run: cargo test -p agentd safety::
+      - name: Run AgentCore adversarial runtime gate
+        run: cargo test -p agentd agent_core::adversarial

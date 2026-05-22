@@ -76,6 +76,7 @@ New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
 if (-not $SkipTests) {
     Invoke-Checked "cargo test -p agentd" { cargo test -p agentd }
     Invoke-Checked "cargo test -p agentd safety::" { cargo test -p agentd safety:: }
+    Invoke-Checked "cargo test -p agentd agent_core::adversarial" { cargo test -p agentd agent_core::adversarial }
 }
 
 Invoke-Checked "cargo build -p agentd --release" { cargo build -p agentd --release }
@@ -121,6 +122,7 @@ $provenance = [ordered]@{
     commands = @(
         "cargo test -p agentd",
         "cargo test -p agentd safety::",
+        "cargo test -p agentd agent_core::adversarial",
         "cargo build -p agentd --release",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -DependencyCheckOnly"
@@ -141,7 +143,7 @@ $provenance = [ordered]@{
         }
     }
     policy = [ordered]@{
-        safety_gate = "cargo test -p agentd safety::"
+        safety_gate = "cargo test -p agentd safety::; cargo test -p agentd agent_core::adversarial"
         boot_gate = "scripts/boot-smoke-test.ps1"
         secret_policy = "handle-only; release metadata stores hashes and paths, not secret values"
         promotion = "Promote only after tests, safety gate, dependency inventory, provenance, and boot smoke dependency check pass."

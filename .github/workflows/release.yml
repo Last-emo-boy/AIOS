@@ -14,6 +14,8 @@ jobs:
         run: cargo test -p agentd
       - name: Run safety gate
         run: cargo test -p agentd safety::
+      - name: Run AgentCore adversarial runtime gate
+        run: cargo test -p agentd agent_core::adversarial
       - name: Build release binary
         run: cargo build -p agentd --release
       - name: Generate dependency inventory

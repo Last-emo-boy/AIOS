@@ -1,7 +1,7 @@
 {
   "id": "TASK-ACR-010",
   "title": "Add AgentCore adversarial runtime tests",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P0",
   "type": "quality",
@@ -43,5 +43,21 @@
   ],
   "risk_notes": [
     "Runtime safety tests must exercise the complete loop, not only isolated policy functions."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T04:56:01+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-010-adversarial.json",
+    "implementation": [
+      "crates/agentd/src/agent_core.rs",
+      ".github/workflows/safety.yml",
+      ".github/workflows/release.yml",
+      "scripts/build-release.ps1"
+    ],
+    "tests": {
+      "cargo test -p agentd agent_core::adversarial": "5 passed; 0 failed; 153 filtered out",
+      "cargo test -p agentd safety::": "16 passed; 0 failed; 142 filtered out",
+      "cargo test -p agentd": "158 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-008"
+  }
 }
