@@ -21,8 +21,17 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
 - Firecracker is an Alpha executor profile behind SecurityExecutionEngine, not
   a replacement for semantic tools, policy, capability, audit, rollback, or recovery.
 
+## Current Progress
+
+- `TASK-DALPHA-006` is complete: `scripts/alpha-service-recovery-smoke.ps1`
+  validates staged Alpha runtime contracts, runs approved and denied generic
+  AgentCore service recovery, projects both audit journals, and fails closed if
+  denied restart prepares an effect.
+- The smoke keeps generated journals, reports, projections, and result JSON
+  under `.workflow/artifacts/alpha-service-recovery/`.
+
 ## Next Task
 
-Execute `TASK-DALPHA-001`: define the rootfs runtime artifact install manifest.
-That manifest becomes the contract consumed by state directory validation,
-packaging defaults, image assembly, QEMU runtime smoke, and release provenance.
+Execute `TASK-DALPHA-007`: add the QEMU boot and runtime smoke gate. The gate
+must prove boot handoff plus packaged runtime availability from Alpha artifacts,
+using `E:\qemu\qemu-system-x86_64.exe` for the full smoke path.

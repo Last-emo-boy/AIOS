@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-006",
   "title": "Run packaged AgentCore service recovery smoke",
-  "status": "planned",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "runtime-smoke",
@@ -17,6 +17,7 @@
     "Fail if the old dedicated workflow path bypasses AgentCore."
   ],
   "deliverables": [
+    "scripts/alpha-service-recovery-smoke.ps1",
     ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
   ],
   "acceptance_criteria": [
@@ -65,5 +66,28 @@
       "Audit projection is captured.",
       "No external LLM is required."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T08:58:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json",
+    "smoke_script": "scripts/alpha-service-recovery-smoke.ps1",
+    "artifact_result": ".workflow/artifacts/alpha-service-recovery/result.json",
+    "execution_surface": "host cargo binary against staged Alpha rootfs runtime contracts",
+    "verification": {
+      "alpha_rootfs_assembly": "passed",
+      "agent_core_service_recovery_tests": "passed",
+      "approved_service_recovery_demo": "passed",
+      "denied_service_recovery_demo": "passed",
+      "approved_audit_projection": "passed",
+      "denied_audit_projection": "passed"
+    },
+    "acceptance": {
+      "approved_restart_commit_sealed": true,
+      "denied_restart_policy_without_effect": true,
+      "projection_explains_plan_policy_approval_effect_verification_terminal_state": true,
+      "no_external_llm_required": true,
+      "no_raw_secrets_detected": true
+    },
+    "next_task": "TASK-DALPHA-007"
   }
 }

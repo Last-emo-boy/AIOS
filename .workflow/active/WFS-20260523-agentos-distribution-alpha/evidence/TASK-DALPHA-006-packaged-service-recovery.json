@@ -1,0 +1,112 @@
+{
+  "task": "TASK-DALPHA-006",
+  "status": "completed",
+  "completed_at": "2026-05-23T08:58:00+08:00",
+  "summary": "Added and ran a scripted Alpha packaged AgentCore service recovery smoke. The smoke rebuilds the staged Alpha rootfs contract, confirms the packaged ModelBroker defaults are stub/local-only, runs generic AgentCore service recovery tests, executes approved and denied service recovery CLI paths, projects both audit journals, and fails closed if denied restart prepares an effect or if required projection fields are missing.",
+  "deliverables": {
+    "smoke_script": "scripts/alpha-service-recovery-smoke.ps1",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
+  },
+  "source_inputs": [
+    "docs/runbooks/service-recovery.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    "image/build-alpha-rootfs.ps1",
+    "packaging/agentos/rootfs/etc/agentos/model-broker.toml"
+  ],
+  "execution_surface": {
+    "mode": "host cargo binary against staged Alpha rootfs runtime contracts",
+    "staged_rootfs": "image/out/agentos-alpha-rootfs",
+    "rootfs_manifest": "image/out/agentos-alpha-rootfs.manifest.json",
+    "model_broker": {
+      "mode": "stub",
+      "network_required": false,
+      "credentials_required": false
+    },
+    "external_llm_required": false
+  },
+  "generated_outputs": {
+    "ignored_outputs": [
+      ".workflow/artifacts/alpha-service-recovery/approved.jsonl",
+      ".workflow/artifacts/alpha-service-recovery/denied.jsonl",
+      ".workflow/artifacts/alpha-service-recovery/approved-report.json",
+      ".workflow/artifacts/alpha-service-recovery/denied-report.json",
+      ".workflow/artifacts/alpha-service-recovery/approved-projection.json",
+      ".workflow/artifacts/alpha-service-recovery/denied-projection.json",
+      ".workflow/artifacts/alpha-service-recovery/result.json",
+      "image/out/agentos-alpha-rootfs.manifest.json",
+      "image/out/agentos-alpha-rootfs/"
+    ],
+    "tracked_outputs": [
+      "scripts/alpha-service-recovery-smoke.ps1",
+      ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
+    ]
+  },
+  "verification": {
+    "alpha_service_recovery_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1",
+      "status": "passed",
+      "result": ".workflow/artifacts/alpha-service-recovery/result.json"
+    },
+    "alpha_rootfs_assembly": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-alpha-rootfs.ps1 -Clean",
+      "status": "passed",
+      "rootfs_manifest": "image/out/agentos-alpha-rootfs.manifest.json"
+    },
+    "agent_core_service_recovery_tests": {
+      "command": "cargo test -p agentd agent_core::service_recovery",
+      "status": "passed",
+      "result": "3 passed; 0 failed"
+    },
+    "approved_service_recovery_demo": {
+      "command": "cargo run -q -p agentd -- --service-recovery-demo approved .workflow/artifacts/alpha-service-recovery/approved.jsonl",
+      "status": "passed",
+      "result": "restart_executed=true; final_health_ok=true; restart-service projected as sealed"
+    },
+    "denied_service_recovery_demo": {
+      "command": "cargo run -q -p agentd -- --service-recovery-demo denied .workflow/artifacts/alpha-service-recovery/denied.jsonl",
+      "status": "passed",
+      "result": "restart_executed=false; restart-service projected as denied"
+    },
+    "approved_audit_projection": {
+      "command": "cargo run -q -p agentd -- --audit-project .workflow/artifacts/alpha-service-recovery/approved.jsonl latest",
+      "status": "passed",
+      "result": "restart-service effect_prepared=true, effect_observed=true, commit_sealed=true"
+    },
+    "denied_audit_projection": {
+      "command": "cargo run -q -p agentd -- --audit-project .workflow/artifacts/alpha-service-recovery/denied.jsonl latest",
+      "status": "passed",
+      "result": "restart-service has PolicyEvaluated, status=denied, effect_prepared=false, effect_state=none"
+    }
+  },
+  "acceptance_evidence": {
+    "approved_terminal_state": "Approved restart-service reached sealed runtime state with EffectPrepared, EffectObserved, and CommitSealed in the audit projection.",
+    "denied_policy_without_effect": "Denied restart-service recorded PolicyEvaluated and approval denial while raw journal validation counted zero EffectPrepared events for restart-service.",
+    "audit_projection_coverage": "The smoke asserts plan freeze, policy summary, approval or denial summary, effect state, verification summary for the approved path, and terminal state for both paths.",
+    "agentcore_path": "The test gate runs cargo test -p agentd agent_core::service_recovery, and the CLI report summary confirms execution through AgentCore.",
+    "local_only_model_broker": "The staged rootfs ModelBroker config is stub mode with network_required=false and credentials_required=false.",
+    "secret_hygiene": "The smoke scans reports, journals, and projections for raw secret-like patterns and passed."
+  },
+  "assertions": {
+    "approved_restart_executed": true,
+    "approved_final_health_ok": true,
+    "approved_restart_status": "sealed",
+    "approved_restart_effect_prepared": true,
+    "approved_restart_commit_sealed": true,
+    "denied_restart_executed": false,
+    "denied_restart_status": "denied",
+    "denied_restart_policy_events": 1,
+    "denied_restart_effect_prepared_events": 0,
+    "denied_restart_effect_prepared": false,
+    "denied_restart_effect_state": "none",
+    "projection_explains_plan_policy_approval_effect_verification_terminal_state": true,
+    "no_external_llm_required": true,
+    "no_raw_secrets_detected": true
+  },
+  "blocking_alpha_risks_remaining": [
+    "QEMU runtime smoke is still required before Alpha promotion.",
+    "Distribution Alpha release/provenance promotion gate is still required.",
+    "FullRootfs validation still requires installed agentd.boot, agentd.runtime, release.provenance, and release.rootfs_manifest."
+  ],
+  "next_task": "TASK-DALPHA-007"
+}
