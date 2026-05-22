@@ -1,0 +1,43 @@
+{
+  "id": "TASK-SEF-003",
+  "title": "Harden lease-derived sandbox profile compilation",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:194",
+  "depends_on": [
+    "TASK-SEF-002"
+  ],
+  "purpose": "Ensure AgentCore execution cannot weaken sandbox constraints chosen from capability leases.",
+  "scope": [
+    "Compile sandbox profiles exclusively from CapabilityLease and policy metadata.",
+    "Ignore planner-provided sandbox weakening hints.",
+    "Define profile classes for read-only diagnostics, write-with-diff preparation, execute-with-confirmation, and never.",
+    "Keep read-only persistent write denial and resource limits from the MVP.",
+    "Add profile audit summaries with namespace, cgroup, seccomp/no_new_privs, Landlock placeholder, and network allowlist fields.",
+    "Fail closed when the required sandbox class is unsupported."
+  ],
+  "deliverables": [
+    "Updated SandboxCompiler contract",
+    "Lease-derived profile tests",
+    "Profile audit projection",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-003-sandbox-profiles.json"
+  ],
+  "acceptance_criteria": [
+    "Read-only leases compile to profiles with no persistent write access.",
+    "Planner output cannot add writable host paths or broaden network access.",
+    "Unsupported risk classes fail closed until explicitly implemented.",
+    "Sandbox profile metadata appears in the EffectEnvelope.",
+    "Resource abuse fixtures still hit configured limits."
+  ],
+  "verification": [
+    "Run cargo test -p agentd sandbox::.",
+    "Run cargo test -p agentd security_execution::sandbox_profile.",
+    "Attempt planner-provided writable path injection and confirm it is ignored or denied.",
+    "Inspect audit output for profile metadata."
+  ],
+  "risk_notes": [
+    "Sandbox profiles must be compiled from authority, not from agent suggestions."
+  ]
+}

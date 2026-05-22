@@ -1,0 +1,45 @@
+{
+  "id": "TASK-SEF-006",
+  "title": "Implement generic SecurityExecutionEngine bridge",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:134",
+  "depends_on": [
+    "TASK-SEF-001",
+    "TASK-SEF-002",
+    "TASK-SEF-003",
+    "TASK-SEF-005"
+  ],
+  "purpose": "Provide a single API AgentCore can call to prepare, execute, observe, verify, seal, or roll back a step.",
+  "scope": [
+    "Define SecurityExecutionEngine trait with prepare, execute, observe, verify, seal, rollback, and explain operations.",
+    "Wire prepare through ToolRouter, PolicyEvaluator, CapabilityLease, SandboxCompiler, AuditJournal, and rollback preparation as needed.",
+    "Ensure execute can only run after a valid prepared envelope.",
+    "Ensure write-with-diff steps prepare shadow diff and rollback handle before commit.",
+    "Ensure read-only steps use sandbox executor and zero persistent side effects.",
+    "Return structured errors that AgentCore can map to Suspended, Denied, RollbackPending, or FailedClosed."
+  ],
+  "deliverables": [
+    "SecurityExecutionEngine trait and implementation",
+    "Bridge tests covering read-only, write-with-diff, execute-with-confirmation, denied, and paused steps",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-006-execution-engine.json"
+  ],
+  "acceptance_criteria": [
+    "AgentCore has one execution API for all effects.",
+    "Denied and paused steps do not prepare effects.",
+    "Prepared write steps include rollback handles.",
+    "Read-only steps run under sandbox profile.",
+    "Execution errors are auditable and recoverable."
+  ],
+  "verification": [
+    "Run cargo test -p agentd security_execution::engine.",
+    "Run existing policy, sandbox, rollback, and audit tests.",
+    "Attempt to call execute without prepare and confirm rejection.",
+    "Inspect EffectEnvelope lifecycle for each risk class."
+  ],
+  "risk_notes": [
+    "This bridge is the choke point that keeps generic Agent execution from becoming generic shell execution."
+  ]
+}

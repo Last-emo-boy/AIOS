@@ -1,0 +1,42 @@
+{
+  "id": "TASK-ACR-002",
+  "title": "Implement persistent PlanRun store",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:157",
+  "depends_on": [
+    "TASK-ACR-001"
+  ],
+  "purpose": "Create a durable run-state store so AgentCore can resume after crash without relying on model replay.",
+  "scope": [
+    "Define RunStore trait with create, load, update_state, append_observation_ref, attach_approval, mark_terminal, and list_recoverable_runs.",
+    "Implement a deterministic file-backed store for MVP continuity, with a documented migration path to SQLite/WAL.",
+    "Write state snapshots atomically using temp file plus rename or equivalent durable update.",
+    "Store hashes for frozen plans and observations to detect tampering or stale recovery.",
+    "Keep audit journal as the source of truth for effects while RunStore tracks scheduling state."
+  ],
+  "deliverables": [
+    "RunStore trait and file-backed implementation",
+    "Run state persistence tests",
+    "Recovery listing helper",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-002-run-store.json"
+  ],
+  "acceptance_criteria": [
+    "PlanRun state survives process restart in tests.",
+    "Partial state writes do not produce a silently corrupted run.",
+    "Recoverable runs can be listed by state.",
+    "RunStore never claims an effect is sealed unless the audit journal contains the matching seal event.",
+    "Secret-like values are redacted or rejected before persistence."
+  ],
+  "verification": [
+    "Run cargo test -p agentd agent_core::run_store.",
+    "Simulate interrupted write and confirm either old state or new state is valid.",
+    "Compare RunStore effect references against AuditJournal entries.",
+    "Inspect persisted JSON for secret-like content."
+  ],
+  "risk_notes": [
+    "RunStore must not become a second audit journal; effect truth remains in the audit chain."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "TASK-RTF-003",
+  "title": "Carry forward MVP safety invariants as runtime gates",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "quality",
+  "source": "TASK.md:139",
+  "depends_on": [
+    "TASK-RTF-000",
+    "TASK-RTF-001",
+    "TASK-RTF-002"
+  ],
+  "purpose": "Convert completed MVP safety constraints into entry and exit gates for Agent Core Runtime implementation.",
+  "scope": [
+    "List all invariants from the completed MVP final audit.",
+    "Map invariants to tests that must keep passing during AgentCore changes.",
+    "Define new runtime-specific gates for model output, memory writes, observation processing, and approval pauses.",
+    "Define regression commands required before each wave completion.",
+    "Record that shell.exec remains denied in normal mode."
+  ],
+  "deliverables": [
+    "Runtime safety gate checklist",
+    "Regression command list",
+    "Updated safety fixture inventory",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-003-runtime-gates.json"
+  ],
+  "acceptance_criteria": [
+    "Existing safety tests remain mandatory.",
+    "New runtime tasks cannot be completed if they bypass semantic tools, policy, audit, or rollback.",
+    "Secret, memory, and observation-specific risks have explicit regression fixtures.",
+    "Release readiness requires both old MVP safety gates and new AgentCore gates."
+  ],
+  "verification": [
+    "Run cargo test -p agentd before runtime implementation starts.",
+    "Inspect safety fixture list for prompt injection, tool abuse, resource abuse, secret handle, rollback, observation injection, and memory poisoning.",
+    "Confirm future task acceptance criteria reference the gate checklist."
+  ],
+  "risk_notes": [
+    "Adding AgentCore increases autonomy pressure; the completed MVP constraints must become stronger, not optional."
+  ]
+}

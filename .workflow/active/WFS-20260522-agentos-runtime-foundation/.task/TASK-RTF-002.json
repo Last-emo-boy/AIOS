@@ -1,0 +1,40 @@
+{
+  "id": "TASK-RTF-002",
+  "title": "Define module ownership and runtime integration points",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "source": "research.md:143",
+  "depends_on": [
+    "TASK-RTF-000"
+  ],
+  "purpose": "Create a module map that makes each runtime responsibility testable and prevents duplicate execution stacks.",
+  "scope": [
+    "Map AgentCore, Planner, ModelBroker, Memory, Scheduler, ObservationProcessor, ToolRouter, PolicyEvaluator, CapabilityManager, SandboxExecutor, AuditJournal, RollbackManager, RecoveryReconciler, and TUI.",
+    "Define stable Rust module locations and public interfaces.",
+    "Define which modules may write audit events and which may only request event writes.",
+    "Define CLI/API integration points for running, inspecting, approving, and recovering Agent runs.",
+    "Identify modules that remain stubbed in this workflow versus implemented."
+  ],
+  "deliverables": [
+    "Runtime module ownership matrix",
+    "Integration point diagram",
+    "Public interface sketch for new modules",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-002-module-map.json"
+  ],
+  "acceptance_criteria": [
+    "Each planned runtime module has one owner and one integration point.",
+    "Existing MVP modules are reused instead of forked.",
+    "The plan clearly separates in-process library calls from future IPC boundaries.",
+    "Testing responsibility is assigned per module."
+  ],
+  "verification": [
+    "Compare module map against crates/agentd/src modules.",
+    "Confirm no task introduces a second policy engine, audit journal, or tool router.",
+    "Confirm CLI/TUI tasks depend on AgentCore rather than service-specific workflow code."
+  ],
+  "risk_notes": [
+    "Duplicate modules would make security behavior inconsistent across workflows."
+  ]
+}

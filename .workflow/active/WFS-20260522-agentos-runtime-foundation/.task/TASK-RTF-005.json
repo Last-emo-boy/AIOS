@@ -1,0 +1,47 @@
+{
+  "id": "TASK-RTF-005",
+  "title": "Complete Runtime Foundation final audit",
+  "status": "pending",
+  "wave": 5,
+  "priority": "P0",
+  "type": "verification",
+  "source": "research.md:222",
+  "depends_on": [
+    "TASK-RTF-004",
+    "TASK-SEF-010"
+  ],
+  "purpose": "Close the AgentOS Runtime Foundation workflow with evidence that AgentCore and the Security Execution Foundation are ready for Distribution Alpha.",
+  "scope": [
+    "Verify every TASK-RTF, TASK-ACR, and TASK-SEF task is completed.",
+    "Verify workflow JSON and task JSON parse successfully.",
+    "Run full test and release gates required by TASK-SEF-010.",
+    "Run QEMU boot smoke if runtime changes affect boot artifacts.",
+    "Confirm git status contains no tracked generated artifacts.",
+    "Write final audit evidence and update workflow status."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json",
+    "Updated workflow-session.json",
+    "Updated plan.json",
+    "Updated TASK.md",
+    "Final commit"
+  ],
+  "acceptance_criteria": [
+    "All runtime foundation tasks are completed.",
+    "Final audit status is passed.",
+    "AgentCore generic run loop is proven by service recovery migration.",
+    "Security Execution Foundation gates pass.",
+    "Distribution Alpha entry criteria are clear and blocked on this audit."
+  ],
+  "verification": [
+    "Parse all .workflow/**/*.json files.",
+    "cargo test -p agentd",
+    "cargo test -p agentd safety::",
+    "cargo test -p agentd agent_core::",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "git status --ignored --short"
+  ],
+  "risk_notes": [
+    "Do not mark this task complete merely because the task files exist; it requires implemented runtime behavior and fresh verification."
+  ]
+}

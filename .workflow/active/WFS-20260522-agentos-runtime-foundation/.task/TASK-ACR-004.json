@@ -1,0 +1,45 @@
+{
+  "id": "TASK-ACR-004",
+  "title": "Implement Planner that freezes structured PlanSpec",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:147",
+  "depends_on": [
+    "TASK-ACR-001",
+    "TASK-ACR-003"
+  ],
+  "purpose": "Build the planning layer that converts operator intent into a reviewable frozen plan without producing side effects.",
+  "scope": [
+    "Implement Planner trait with draft_plan, validate_plan, freeze_plan, and explain_plan.",
+    "Use ModelBroker only for structured plan drafting and summaries.",
+    "Validate all planned tools through ToolRouter before the plan can freeze.",
+    "Annotate each step with risk hints and required verification, but leave final risk classification to PolicyEvaluator.",
+    "Reject plans with unknown tools, raw shell commands, missing verification rules, missing rollback requirements for writes, or direct secret values.",
+    "Emit IntentReceived and PlanFrozen audit events only after successful validation."
+  ],
+  "deliverables": [
+    "Planner trait and deterministic implementation",
+    "Plan validator",
+    "Plan freeze hash",
+    "Unit tests for allowed and rejected plans",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-004-planner.json"
+  ],
+  "acceptance_criteria": [
+    "A service recovery intent produces a frozen plan with diagnostic steps and a gated restart step.",
+    "Planner cannot freeze a plan containing shell.exec or unknown tools.",
+    "Planner cannot freeze a write step without rollback requirement.",
+    "PlanFrozen appears in audit before any EffectPrepared for that run.",
+    "Freezing the same deterministic plan produces the same plan hash."
+  ],
+  "verification": [
+    "Run cargo test -p agentd planner::.",
+    "Inspect audit order for IntentReceived, PlanFrozen, and absence of EffectPrepared during planning.",
+    "Attempt malformed, unknown-tool, raw-shell, and secret-containing plans.",
+    "Snapshot-test the frozen nginx recovery plan."
+  ],
+  "risk_notes": [
+    "Planner output must stay reviewable; it must not be treated as permission."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "TASK-ACR-003",
+  "title": "Implement ModelBroker trait and stub provider",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:155",
+  "depends_on": [
+    "TASK-RTF-000",
+    "TASK-ACR-001"
+  ],
+  "purpose": "Create the only allowed model access boundary for AgentCore while preserving local-only and testable execution.",
+  "scope": [
+    "Define ModelBroker trait for plan, classify, summarize, and sanitize requests.",
+    "Define structured request and response types with provider id, model id, digest, latency, confidence, and bounded output.",
+    "Implement StubModelProvider that deterministically returns valid structured responses for tests.",
+    "Add timeout, cancellation, max-output-size, and fail-closed behavior.",
+    "Prevent ModelBroker from receiving raw secret values; only secret handles and redacted summaries are allowed.",
+    "Document future provider slots for local model runtime and optional remote model runtime."
+  ],
+  "deliverables": [
+    "ModelBroker trait",
+    "StubModelProvider",
+    "Model response validation",
+    "docs/model-broker.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-003-model-broker.json"
+  ],
+  "acceptance_criteria": [
+    "AgentCore can plan through StubModelProvider without network access.",
+    "Invalid model output is rejected before it becomes a PlanSpec.",
+    "Timeouts and provider failures degrade to Suspended or FailedClosed, not tool execution.",
+    "ModelBroker calls are logged with metadata but not raw secret values.",
+    "No module except ModelBroker directly calls model providers."
+  ],
+  "verification": [
+    "Run cargo test -p agentd model_broker::.",
+    "Feed malformed provider output and confirm rejection.",
+    "Simulate provider timeout and confirm no EffectPrepared event is produced.",
+    "Search source for direct provider calls outside ModelBroker."
+  ],
+  "risk_notes": [
+    "A weak ModelBroker boundary would let model integrations leak into policy or executor code."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "TASK-SEF-005",
+  "title": "Implement secret handle lease rules for Agent runtime",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:208",
+  "depends_on": [
+    "TASK-SEF-002",
+    "TASK-ACR-008"
+  ],
+  "purpose": "Extend the MVP handle-only secret policy into concrete runtime rules for planning, memory, audit, and execution.",
+  "scope": [
+    "Define SecretHandle metadata allowed in PlanSpec, Observation, Memory, and Audit.",
+    "Define forbidden secret value paths: model context, planner output, memory entries, audit summaries, CLI projection, and TUI projection.",
+    "Define secret-use capability lease with narrow tool, actor, resource, expiry, and one-shot semantics.",
+    "Add helper boundary placeholder for future keyring or narrow helper resolution.",
+    "Redact secret-like values while preserving secret://handle references.",
+    "Audit secret handle use without revealing values."
+  ],
+  "deliverables": [
+    "Secret runtime policy",
+    "Secret redaction and handle validation tests",
+    "Secret-use lease schema placeholder",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-005-secret-handles.json"
+  ],
+  "acceptance_criteria": [
+    "secret://handle references remain visible where needed.",
+    "Raw secret-like values are rejected or redacted before model, memory, and audit summaries.",
+    "Secret-use requires an explicit capability lease.",
+    "Secret-use cannot be granted by broad approval tokens.",
+    "Secret fixtures remain covered by safety gate."
+  ],
+  "verification": [
+    "Run cargo test -p agentd safety::secret.",
+    "Run redaction tests for token/password/key patterns.",
+    "Attempt to place secret value into memory and confirm rejection or redaction.",
+    "Inspect audit output for handle-only behavior."
+  ],
+  "risk_notes": [
+    "Secrets are a runtime concern, not a logging concern; every module boundary must preserve handle-only behavior."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "TASK-RTF-004",
+  "title": "Define Distribution Alpha entry criteria from runtime foundation",
+  "status": "pending",
+  "wave": 5,
+  "priority": "P1",
+  "type": "planning",
+  "source": "research.md:216",
+  "depends_on": [
+    "TASK-ACR-009",
+    "TASK-SEF-010"
+  ],
+  "purpose": "Create the handoff contract that blocks AgentOS distribution work until the bottom Agent runtime and security substrate are real.",
+  "scope": [
+    "Define Distribution Alpha prerequisites from AgentCore and SEF completion.",
+    "Mark generic Agent run loop as required before VM image factory work.",
+    "Define which runtime artifacts must be installed into future rootfs: agentd, policy pack, tool manifest, run-state directory, audit directory, rollback directory, and model broker config.",
+    "Define QEMU E2E gates that Distribution Alpha must inherit.",
+    "Update TASK.md with the runtime-foundation-to-distribution bridge."
+  ],
+  "deliverables": [
+    "Distribution Alpha entry criteria document",
+    "TASK.md update",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json"
+  ],
+  "acceptance_criteria": [
+    "Distribution Alpha cannot start from only the MVP skeleton.",
+    "Entry criteria explicitly require generic service recovery through AgentCore.",
+    "Entry criteria explicitly require runtime safety gates.",
+    "Entry criteria specify persistent runtime directories and release artifacts."
+  ],
+  "verification": [
+    "Review TASK.md next-step section.",
+    "Review future Distribution Alpha task dependencies.",
+    "Confirm runtime foundation final audit is listed as a prerequisite."
+  ],
+  "risk_notes": [
+    "Without this bridge, distro work can produce a bootable image that lacks a real agent runtime."
+  ]
+}

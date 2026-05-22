@@ -1,0 +1,46 @@
+{
+  "id": "TASK-SEF-010",
+  "title": "Run Security Execution Foundation final verification",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P0",
+  "type": "verification",
+  "source": "research.md:266",
+  "depends_on": [
+    "TASK-ACR-009",
+    "TASK-ACR-010",
+    "TASK-SEF-008",
+    "TASK-SEF-009"
+  ],
+  "purpose": "Verify that the hardened security substrate still satisfies all MVP invariants when driven by the generic Agent runtime.",
+  "scope": [
+    "Run full agentd test suite.",
+    "Run safety subset and AgentCore adversarial subset.",
+    "Run service recovery through generic runtime in approved and denied modes.",
+    "Run recovery tests for interrupted PlanRun states.",
+    "Run release/provenance checks where applicable.",
+    "Record final SEF verification evidence."
+  ],
+  "deliverables": [
+    "Final SEF verification evidence",
+    "Updated release/safety gate notes",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json"
+  ],
+  "acceptance_criteria": [
+    "All required tests pass.",
+    "No generic Agent path bypasses semantic tools, policy, capability, audit, rollback, or recovery.",
+    "Denied high-risk actions have no EffectPrepared.",
+    "Half-executed actions are recoverable or rollback-pending.",
+    "Generated artifacts remain ignored and untracked."
+  ],
+  "verification": [
+    "cargo test -p agentd",
+    "cargo test -p agentd safety::",
+    "cargo test -p agentd agent_core::",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "git status --ignored --short"
+  ],
+  "risk_notes": [
+    "This task gates distribution work; do not mark complete on partial or stale test evidence."
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "TASK-ACR-010",
+  "title": "Add AgentCore adversarial runtime tests",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P0",
+  "type": "quality",
+  "source": "research.md:269",
+  "depends_on": [
+    "TASK-ACR-007",
+    "TASK-ACR-008",
+    "TASK-ACR-009",
+    "TASK-SEF-008",
+    "TASK-SEF-009"
+  ],
+  "purpose": "Expand the safety gate from execution substrate tests to full Agent runtime abuse cases.",
+  "scope": [
+    "Add fixtures for prompt injection during planning.",
+    "Add fixtures for observation injection after read-only tool output.",
+    "Add fixtures for memory poisoning across runs.",
+    "Add fixtures for approval bypass through modified parameters.",
+    "Add fixtures for model output containing shell commands or secret requests.",
+    "Ensure all fixtures fail closed before side effects or with rollback/recovery semantics when effects were already prepared."
+  ],
+  "deliverables": [
+    "AgentCore adversarial fixture suite",
+    "Runtime safety tests",
+    "CI gate update",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-010-adversarial.json"
+  ],
+  "acceptance_criteria": [
+    "Prompt injection cannot add high-risk tool calls without validation and approval.",
+    "Observation injection cannot directly execute commands.",
+    "Memory poisoning cannot change policy decisions or grant capabilities.",
+    "Approval parameter mutation remains denied.",
+    "All denied actions are audited without EffectPrepared for the denied step."
+  ],
+  "verification": [
+    "Run cargo test -p agentd safety::.",
+    "Run cargo test -p agentd agent_core::adversarial.",
+    "Confirm CI includes the new runtime safety subset.",
+    "Inspect denied audit records for absence of prepared effects."
+  ],
+  "risk_notes": [
+    "Runtime safety tests must exercise the complete loop, not only isolated policy functions."
+  ]
+}

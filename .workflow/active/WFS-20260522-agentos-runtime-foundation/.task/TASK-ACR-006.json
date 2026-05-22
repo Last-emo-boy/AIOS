@@ -1,0 +1,43 @@
+{
+  "id": "TASK-ACR-006",
+  "title": "Implement dependency-aware StepScheduler",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:130",
+  "depends_on": [
+    "TASK-ACR-001",
+    "TASK-ACR-005"
+  ],
+  "purpose": "Schedule plan steps deterministically according to dependencies, risk gates, retry budget, and observation requirements.",
+  "scope": [
+    "Implement ready-step selection for a PlanRun DAG.",
+    "Reject cycles and missing dependencies at plan validation time.",
+    "Support sequential execution first; document where safe read-only parallelism can be added later.",
+    "Respect retry budgets and fail closed on repeated verification failure.",
+    "Produce scheduler explanations for TUI and audit summaries.",
+    "Ensure a skipped or denied dependency blocks dependent steps unless the plan explicitly marks an alternative path."
+  ],
+  "deliverables": [
+    "StepScheduler implementation",
+    "DAG validation tests",
+    "Retry and dependency failure tests",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-006-scheduler.json"
+  ],
+  "acceptance_criteria": [
+    "Scheduler returns only steps whose dependencies are sealed or explicitly satisfied.",
+    "Cyclic plans cannot freeze.",
+    "Dependent steps do not run after denied prerequisite steps.",
+    "Retry budget exhaustion moves the run to Suspended or FailedClosed.",
+    "Scheduler output is deterministic for the same PlanRun."
+  ],
+  "verification": [
+    "Run cargo test -p agentd agent_core::scheduler.",
+    "Test linear, branched, cyclic, denied-dependency, and retry-exhausted plans.",
+    "Snapshot scheduler explanation output."
+  ],
+  "risk_notes": [
+    "Hidden scheduler nondeterminism makes audit and recovery hard to reason about."
+  ]
+}

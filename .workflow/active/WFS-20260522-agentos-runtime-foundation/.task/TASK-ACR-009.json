@@ -1,0 +1,47 @@
+{
+  "id": "TASK-ACR-009",
+  "title": "Migrate service recovery to generic AgentCore runtime",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P0",
+  "type": "workflow",
+  "source": "research.md:293",
+  "depends_on": [
+    "TASK-ACR-005",
+    "TASK-ACR-006",
+    "TASK-ACR-007",
+    "TASK-ACR-008",
+    "TASK-SEF-006",
+    "TASK-SEF-007"
+  ],
+  "purpose": "Prove the runtime foundation by replacing the hand-coded service recovery orchestration path with a generic AgentCore PlanRun.",
+  "scope": [
+    "Represent nginx service recovery as a PlanSpec produced by Planner.",
+    "Run diagnostics, restart approval, restart execution, verification, and summary through AgentCore.",
+    "Keep existing semantic tools, policy decisions, leases, sandbox profiles, audit events, and verification behavior.",
+    "Deprecate or wrap the old ServiceRecoveryWorkflow so it uses AgentCore instead of owning orchestration.",
+    "Keep denied restart path and read-only diagnostics behavior unchanged."
+  ],
+  "deliverables": [
+    "AgentCore-backed service recovery implementation",
+    "Compatibility tests for existing service recovery behavior",
+    "Updated runbook documentation",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json"
+  ],
+  "acceptance_criteria": [
+    "Existing service recovery happy-path tests pass through AgentCore.",
+    "Denied restart path prepares no restart effect.",
+    "Audit timeline includes IntentReceived, PlanFrozen, policy decisions, approval, lease, EffectPrepared, EffectObserved, CommitSealed, and final summary.",
+    "The final operator explanation is grounded in observations, not model claims.",
+    "No workflow-specific code bypasses AgentCore for tool execution."
+  ],
+  "verification": [
+    "Run cargo test -p agentd service_recovery::.",
+    "Run cargo test -p agentd agent_core::service_recovery.",
+    "Run CLI service recovery demo in approved and denied modes.",
+    "Inspect audit.show last-run for generic runtime events."
+  ],
+  "risk_notes": [
+    "This is the main proof that AgentOS has a reusable bottom agent rather than a set of scripts."
+  ]
+}

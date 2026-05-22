@@ -1,0 +1,239 @@
+{
+  "plan_id": "PLAN-AIOS-RUNTIME-FOUNDATION-20260522",
+  "workflow_id": "WFS-20260522-agentos-runtime-foundation",
+  "title": "AgentOS Runtime Foundation Task Plan",
+  "status": "planned",
+  "source": "research.md",
+  "created_at": "2026-05-22T23:41:29+08:00",
+  "updated_at": "2026-05-22T23:41:29+08:00",
+  "objective": "Implement the bottom Agent Core Runtime and harden the AgentOS Security Execution Foundation so the future distribution has a real agent control plane rather than hand-written workflows.",
+  "assumptions": [
+    "The completed Linux MVP safety substrate remains the baseline and must not be bypassed.",
+    "Agent Core is deterministic orchestration around model output, not the model itself.",
+    "ModelBroker starts with a stub provider and must support local-only execution.",
+    "External LLM usage remains optional and cannot be required by acceptance tests.",
+    "Service recovery remains the first migration workflow because it already exercises diagnostics, approval, audit, and verification.",
+    "Distribution Alpha is blocked until this workflow proves a generic Agent run loop."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "Runtime Boundary Freeze",
+      "purpose": "Define the contract between Agent Core Runtime and the Security Execution Foundation before implementation starts.",
+      "tasks": [
+        "TASK-RTF-000",
+        "TASK-RTF-001",
+        "TASK-RTF-002",
+        "TASK-RTF-003"
+      ],
+      "exit_criteria": [
+        "AgentCore, ModelBroker, Memory, Planner, Scheduler, Policy, Capability, Audit, Rollback, and Recovery ownership is explicit.",
+        "Plan and effect state transitions are written as deterministic contracts.",
+        "No module can directly execute model-generated text.",
+        "Security substrate invariants from the MVP are preserved."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Agent Core Contracts",
+      "purpose": "Create the typed data model and model abstraction needed by a real Agent runtime.",
+      "tasks": [
+        "TASK-ACR-001",
+        "TASK-ACR-002",
+        "TASK-ACR-003",
+        "TASK-ACR-004"
+      ],
+      "exit_criteria": [
+        "IntentCtx, PlanSpec, PlanStep, PlanRun, Observation, and RunState are versioned and serializable.",
+        "ModelBroker trait can serve stub/local providers with bounded, structured outputs.",
+        "Planner can produce a frozen PlanSpec without side effects.",
+        "Risk hints are advisory only and policy remains authoritative."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Security Execution Foundation Hardening",
+      "purpose": "Turn the MVP safety substrate into a reusable execution foundation for all Agent plans.",
+      "tasks": [
+        "TASK-SEF-001",
+        "TASK-SEF-002",
+        "TASK-SEF-003",
+        "TASK-SEF-004",
+        "TASK-SEF-005"
+      ],
+      "exit_criteria": [
+        "Every effect has a transaction envelope from prepare to seal or rollback.",
+        "Policy and capability checks are reusable by generic Agent steps.",
+        "Sandbox profiles are derived from leases and cannot be weakened by planner output.",
+        "Secret handles have explicit lease and redaction rules."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Generic Agent Run Loop",
+      "purpose": "Implement the deterministic loop that schedules, executes, observes, verifies, and persists Agent runs.",
+      "tasks": [
+        "TASK-ACR-005",
+        "TASK-ACR-006",
+        "TASK-ACR-007",
+        "TASK-ACR-008",
+        "TASK-SEF-006",
+        "TASK-SEF-007"
+      ],
+      "exit_criteria": [
+        "PlanRun can advance through Accepted, Planned, AwaitingApproval, Executing, Verifying, Completed, Suspended, and RollbackPending.",
+        "Step scheduling honors dependencies and risk gates.",
+        "Observation processing cannot create direct tool execution.",
+        "Run memory persists useful context while excluding secret values.",
+        "Crash recovery can reconstruct an in-flight run."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Workflow Migration and Safety Gates",
+      "purpose": "Prove the generic runtime by migrating service recovery and adding adversarial gates.",
+      "tasks": [
+        "TASK-ACR-009",
+        "TASK-ACR-010",
+        "TASK-SEF-008",
+        "TASK-SEF-009",
+        "TASK-SEF-010"
+      ],
+      "exit_criteria": [
+        "Service recovery uses the generic Agent run loop rather than a dedicated orchestration path.",
+        "Prompt injection, observation injection, memory poisoning, approval bypass, and tool abuse regressions fail closed.",
+        "Audit timeline shows intent, plan, policy decisions, leases, effects, observations, verification, and final summary.",
+        "The release gate can distinguish runtime failures from model-planning failures."
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Distribution Readiness Bridge",
+      "purpose": "Define the handoff from runtime foundation to the future AgentOS distribution workflow.",
+      "tasks": [
+        "TASK-RTF-004",
+        "TASK-RTF-005"
+      ],
+      "exit_criteria": [
+        "Distribution Alpha entry criteria are updated to require Agent Core Runtime completion.",
+        "The runtime foundation has a final audit with tests, QEMU smoke where applicable, and no tracked generated artifacts."
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-RTF-000",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-000.json"
+    },
+    {
+      "id": "TASK-RTF-001",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-001.json"
+    },
+    {
+      "id": "TASK-RTF-002",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-002.json"
+    },
+    {
+      "id": "TASK-RTF-003",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-003.json"
+    },
+    {
+      "id": "TASK-ACR-001",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-001.json"
+    },
+    {
+      "id": "TASK-ACR-002",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-002.json"
+    },
+    {
+      "id": "TASK-ACR-003",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-003.json"
+    },
+    {
+      "id": "TASK-ACR-004",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-004.json"
+    },
+    {
+      "id": "TASK-SEF-001",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-001.json"
+    },
+    {
+      "id": "TASK-SEF-002",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-002.json"
+    },
+    {
+      "id": "TASK-SEF-003",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-003.json"
+    },
+    {
+      "id": "TASK-SEF-004",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-004.json"
+    },
+    {
+      "id": "TASK-SEF-005",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-005.json"
+    },
+    {
+      "id": "TASK-ACR-005",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-005.json"
+    },
+    {
+      "id": "TASK-ACR-006",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-006.json"
+    },
+    {
+      "id": "TASK-ACR-007",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-007.json"
+    },
+    {
+      "id": "TASK-ACR-008",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-008.json"
+    },
+    {
+      "id": "TASK-SEF-006",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-006.json"
+    },
+    {
+      "id": "TASK-SEF-007",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-007.json"
+    },
+    {
+      "id": "TASK-ACR-009",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-009.json"
+    },
+    {
+      "id": "TASK-ACR-010",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-ACR-010.json"
+    },
+    {
+      "id": "TASK-SEF-008",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-008.json"
+    },
+    {
+      "id": "TASK-SEF-009",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-009.json"
+    },
+    {
+      "id": "TASK-SEF-010",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-SEF-010.json"
+    },
+    {
+      "id": "TASK-RTF-004",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-004.json"
+    },
+    {
+      "id": "TASK-RTF-005",
+      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task/TASK-RTF-005.json"
+    }
+  ],
+  "risk_policy": {
+    "model_output_direct_execution": "forbidden",
+    "default_shell": "forbidden",
+    "write_requires_diff": true,
+    "high_risk_requires_approval": true,
+    "external_content_trust": "untrusted",
+    "secret_policy": "handle-only",
+    "memory_secret_retention": "forbidden",
+    "recovery_source_of_truth": "audit-and-run-state"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "TASK-SEF-007",
+  "title": "Integrate recovery reconciler with Agent run state",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "recovery",
+  "source": "research.md:138",
+  "depends_on": [
+    "TASK-ACR-002",
+    "TASK-SEF-001",
+    "TASK-SEF-006"
+  ],
+  "purpose": "Make crash recovery reconcile both scheduling state and effect truth without model replay.",
+  "scope": [
+    "Extend recovery scan to join RunStore recoverable runs with AuditJournal unresolved effects.",
+    "Classify each run as safe-to-verify, needs-rollback, needs-human-review, abandoned, or failed-closed.",
+    "Restore AgentCore state to Recovering, Suspended, RollbackPending, or Completed based on durable evidence.",
+    "Prevent replanning from hiding unresolved effects.",
+    "Write RecoveryStarted and RecoveryCompleted events linked to run_id and step_id.",
+    "Expose recovery prompt/projection for TUI."
+  ],
+  "deliverables": [
+    "Run recovery integration",
+    "Recovery classification tests",
+    "TUI/CLI recovery projection",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-007-run-recovery.json"
+  ],
+  "acceptance_criteria": [
+    "A run interrupted after EffectPrepared is recoverable from persisted state.",
+    "Write effects without seal are classified for rollback or human review.",
+    "Read-only unresolved effects can be verified and sealed when safe.",
+    "Recovery never relies on asking the model what happened.",
+    "Recovery events are written to audit."
+  ],
+  "verification": [
+    "Run cargo test -p agentd recovery::.",
+    "Run cargo test -p agentd agent_core::recovery.",
+    "Simulate crash after prepare, after observe, and after verification failure.",
+    "Inspect recovery report and audit events."
+  ],
+  "risk_notes": [
+    "Recovery is the line between an agent runtime and a chat script; effect truth must be durable."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "TASK-ACR-007",
+  "title": "Implement ObservationProcessor and trust boundary handling",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:206",
+  "depends_on": [
+    "TASK-ACR-003",
+    "TASK-ACR-005",
+    "TASK-SEF-004"
+  ],
+  "purpose": "Convert tool output and external content into structured observations without letting untrusted text trigger direct actions.",
+  "scope": [
+    "Define observation trust labels: local-system, sandboxed-tool, external-untrusted, model-summary, operator-approved.",
+    "Sanitize and summarize untrusted observations through ModelBroker or deterministic sanitizer.",
+    "Extract policy-relevant flags such as suggested command, secret-like content, external URL, credential request, or privilege escalation request.",
+    "Prevent observations from adding PlanSteps directly; they can only inform Planner replanning through validation and policy gates.",
+    "Record observation summaries and redaction status in RunStore and AuditJournal.",
+    "Add explicit handling for prompt injection and observation injection fixtures."
+  ],
+  "deliverables": [
+    "ObservationProcessor implementation",
+    "Observation trust labels",
+    "Sanitization and flag extraction tests",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-007-observations.json"
+  ],
+  "acceptance_criteria": [
+    "External content is marked untrusted by default.",
+    "Observation text that asks the agent to run commands cannot create a direct tool call.",
+    "Secret-like output is redacted before memory or model context.",
+    "Policy-relevant flags are visible in audit and run-state projection.",
+    "Replanning after observation still goes through Planner validation and PolicyEvaluator."
+  ],
+  "verification": [
+    "Run cargo test -p agentd agent_core::observation.",
+    "Feed prompt injection fixtures and confirm no EffectPrepared is emitted.",
+    "Feed secret-like output and inspect redaction.",
+    "Confirm audit entries include trust labels and flags."
+  ],
+  "risk_notes": [
+    "Tool output is part of the attack surface; treating it as instructions would break the OS boundary."
+  ]
+}

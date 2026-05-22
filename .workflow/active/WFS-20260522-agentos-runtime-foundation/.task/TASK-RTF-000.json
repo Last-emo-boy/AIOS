@@ -1,0 +1,40 @@
+{
+  "id": "TASK-RTF-000",
+  "title": "Freeze Agent Core and Security Execution Foundation boundary",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "source": "research.md:127",
+  "depends_on": [
+    "TASK-AIOS-012"
+  ],
+  "purpose": "Define the runtime ownership model before implementation so Agent Core orchestration cannot bypass the completed safety substrate.",
+  "scope": [
+    "Define Agent Core as deterministic orchestration, not the model itself.",
+    "Define Security Execution Foundation as the only path for side effects.",
+    "Map existing MVP modules to their runtime responsibilities.",
+    "Document forbidden paths: model-to-tool direct execution, raw shell execution, untracked writes, and secret value retention.",
+    "Decide whether AgentCore is initially in-process inside agentd or behind a local Unix socket boundary."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    "docs/decisions/003-agent-core-runtime-boundary.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-000-boundary.json"
+  ],
+  "acceptance_criteria": [
+    "Agent Core responsibilities and non-responsibilities are explicit.",
+    "Security Execution Foundation remains the only way to prepare, execute, verify, seal, or roll back effects.",
+    "The boundary references existing MVP modules rather than inventing parallel paths.",
+    "Distribution Alpha is marked as blocked until the generic Agent run loop is available."
+  ],
+  "verification": [
+    "Review architecture docs for direct model-to-tool or planner-to-shell paths.",
+    "Confirm all future Agent execution tasks depend on this boundary task.",
+    "Run JSON validation for workflow and task files."
+  ],
+  "risk_notes": [
+    "If this boundary is vague, later distribution work will accidentally ship hand-written workflows instead of a reusable agent runtime."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "TASK-SEF-009",
+  "title": "Build runtime audit projection and explainability chain",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P1",
+  "type": "observability",
+  "source": "research.md:143",
+  "depends_on": [
+    "TASK-ACR-005",
+    "TASK-SEF-001",
+    "TASK-SEF-006",
+    "TASK-SEF-007"
+  ],
+  "purpose": "Make AgentCore behavior inspectable from the terminal by projecting plan, policy, lease, effect, observation, verification, and recovery events.",
+  "scope": [
+    "Add audit projection for a PlanRun timeline.",
+    "Include planner metadata, plan hash, step status, policy reason, lease id, sandbox profile summary, effect events, observation summaries, verification result, and rollback/recovery status.",
+    "Expose projection through CLI and TUI surfaces.",
+    "Redact secret-like fields while preserving handles and source references.",
+    "Support last-run and run-id query modes.",
+    "Make projection stable enough for tests."
+  ],
+  "deliverables": [
+    "Runtime audit projection",
+    "TUI/CLI query path",
+    "Projection snapshot tests",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-009-audit-projection.json"
+  ],
+  "acceptance_criteria": [
+    "Operator can see why each step ran, paused, denied, or rolled back.",
+    "Projection ties model-assisted planning to deterministic policy decisions.",
+    "Projection includes evidence source labels for observations.",
+    "Projection does not leak secret values.",
+    "Projection can be used in final workflow evidence."
+  ],
+  "verification": [
+    "Run cargo test -p agentd tui::.",
+    "Run cargo test -p agentd audit::.",
+    "Snapshot a service recovery AgentCore timeline.",
+    "Inspect projection for redaction and evidence ordering."
+  ],
+  "risk_notes": [
+    "Without an explainable audit projection, users cannot distinguish controlled autonomy from hidden automation."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "TASK-ACR-008",
+  "title": "Implement minimal Agent memory layer",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:147",
+  "depends_on": [
+    "TASK-ACR-002",
+    "TASK-ACR-007",
+    "TASK-SEF-005"
+  ],
+  "purpose": "Provide useful run and session memory without creating a secret-retention or memory-poisoning channel.",
+  "scope": [
+    "Define MemoryStore trait with write_entry, read_context, search_recent, expire, and quarantine operations.",
+    "Separate session memory, run memory, audit-derived memory, and quarantined memory.",
+    "Attach source, trust label, TTL, run_id, step_id, redaction status, and integrity hash to every memory entry.",
+    "Reject or redact secret-like values and raw external instructions before memory write.",
+    "Support memory summaries for Planner context while preserving source references.",
+    "Add quarantine path for suspicious or untrusted content."
+  ],
+  "deliverables": [
+    "MemoryStore trait and minimal implementation",
+    "Memory entry schema",
+    "Memory redaction and poisoning tests",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json"
+  ],
+  "acceptance_criteria": [
+    "Planner can receive a bounded memory summary with source references.",
+    "Secret-like values cannot be stored as normal memory entries.",
+    "Untrusted external content is either summarized with trust label or quarantined.",
+    "Memory entries expire or remain scoped according to TTL.",
+    "Memory poisoning fixtures cannot alter policy, capability, or approval behavior."
+  ],
+  "verification": [
+    "Run cargo test -p agentd agent_core::memory.",
+    "Attempt to store secret values and confirm rejection or redaction.",
+    "Inject malicious external instruction into memory and confirm it is quarantined or labeled untrusted.",
+    "Inspect Planner context for bounded summaries rather than raw memory dumps."
+  ],
+  "risk_notes": [
+    "Long-lived memory can become delayed prompt injection if it lacks source and trust metadata."
+  ]
+}

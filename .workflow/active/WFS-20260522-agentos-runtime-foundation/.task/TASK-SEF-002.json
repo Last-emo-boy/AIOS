@@ -1,0 +1,44 @@
+{
+  "id": "TASK-SEF-002",
+  "title": "Create Agent step policy and capability adapter",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:163",
+  "depends_on": [
+    "TASK-ACR-001",
+    "TASK-SEF-001"
+  ],
+  "purpose": "Adapt generic PlanStep execution into the existing ToolRouter, PolicyEvaluator, approval token, and capability lease flow.",
+  "scope": [
+    "Translate PlanStep into SemanticToolCall and PolicyRequest.",
+    "Route tool names and normalized params through ToolRouter before policy evaluation.",
+    "Use PolicyEvaluator as authoritative risk classifier, regardless of planner risk hints.",
+    "Bind approval tokens to exact actor, tool, resource, parameter hash, expiry, and policy version.",
+    "Return allowed, denied, or pause-for-approval decisions to AgentCore without preparing effects on denial or pause.",
+    "Expose reusable diagnostics for why a step was denied or paused."
+  ],
+  "deliverables": [
+    "PlanStepPolicyAdapter",
+    "Capability acquisition bridge",
+    "Approval binding tests",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-002-policy-adapter.json"
+  ],
+  "acceptance_criteria": [
+    "Planner risk hints cannot downgrade policy risk.",
+    "Unknown tools and shell.exec are denied before effect preparation.",
+    "Paused steps return AwaitingApproval without EffectPrepared.",
+    "Approval parameter mutation is denied.",
+    "Allowed steps receive lease metadata suitable for sandbox compilation and audit."
+  ],
+  "verification": [
+    "Run cargo test -p agentd security_execution::policy_adapter.",
+    "Attempt to mark shell.exec as read-only and confirm denial.",
+    "Attempt to reuse approval with changed params and confirm denial.",
+    "Inspect audit records for policy version and parameter hash."
+  ],
+  "risk_notes": [
+    "The adapter must not become a second policy engine; it only translates AgentCore requests into the existing evaluator."
+  ]
+}

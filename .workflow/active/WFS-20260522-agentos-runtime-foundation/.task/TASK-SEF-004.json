@@ -1,0 +1,44 @@
+{
+  "id": "TASK-SEF-004",
+  "title": "Define untrusted content source-to-sink policy",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:206",
+  "depends_on": [
+    "TASK-SEF-002",
+    "TASK-ACR-007"
+  ],
+  "purpose": "Prevent external webpages, documents, API responses, and tool observations from directly driving dangerous tools.",
+  "scope": [
+    "Define source labels for operator input, local system output, external untrusted content, model output, and sanitized summary.",
+    "Define sink classes for read-only, write-with-diff, execute-with-confirmation, privileged, network egress, and secret access.",
+    "Implement policy checks that block untrusted source content from directly triggering high-risk sinks.",
+    "Require sanitize/summarize/classify before untrusted content can influence replanning.",
+    "Audit denied source-to-sink attempts with reason and source label.",
+    "Add fixtures for webpages that instruct the agent to run commands or exfiltrate data."
+  ],
+  "deliverables": [
+    "Source-to-sink policy table",
+    "Untrusted content policy checks",
+    "Prompt injection fixtures",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-004-untrusted-content.json"
+  ],
+  "acceptance_criteria": [
+    "External content defaults to untrusted.",
+    "Untrusted text cannot directly create execute, privileged, network exfiltration, or secret-use actions.",
+    "Sanitized summaries retain source labels and do not erase trust boundaries.",
+    "Denied source-to-sink attempts are audited without EffectPrepared.",
+    "Operator-approved actions still require exact approval token binding."
+  ],
+  "verification": [
+    "Run cargo test -p agentd safety::prompt_injection.",
+    "Run source-to-sink policy fixture tests.",
+    "Inspect denied audit records for source label and sink class.",
+    "Confirm no high-risk EffectPrepared exists for untrusted content fixtures."
+  ],
+  "risk_notes": [
+    "This is the primary guard against prompt injection becoming OS-level action."
+  ]
+}

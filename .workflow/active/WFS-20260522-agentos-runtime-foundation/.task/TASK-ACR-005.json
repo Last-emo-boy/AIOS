@@ -1,0 +1,46 @@
+{
+  "id": "TASK-ACR-005",
+  "title": "Implement AgentCore run loop state machine",
+  "status": "pending",
+  "wave": 3,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:112",
+  "depends_on": [
+    "TASK-ACR-002",
+    "TASK-ACR-004",
+    "TASK-SEF-001",
+    "TASK-SEF-002"
+  ],
+  "purpose": "Implement the deterministic orchestration loop that advances a PlanRun through planning, execution, observation, verification, approval pauses, and terminal states.",
+  "scope": [
+    "Create AgentCore with accept_intent, plan_run, advance_run, approve_step, deny_step, suspend_run, and recover_run operations.",
+    "Persist every state transition through RunStore before external effects are attempted.",
+    "Delegate all side-effecting work to the Security Execution Foundation.",
+    "Pause on high-risk policy decisions until exact approval is attached.",
+    "Fail closed if the planner, model broker, policy, executor, audit, or rollback layer returns inconsistent state.",
+    "Expose a compact run-state projection for TUI and CLI."
+  ],
+  "deliverables": [
+    "AgentCore implementation",
+    "Run state transition tests",
+    "CLI demo for --agent-run or equivalent",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-005-run-loop.json"
+  ],
+  "acceptance_criteria": [
+    "AgentCore can accept an intent and produce a persisted Planned state.",
+    "Read-only steps can advance automatically through verification and sealing.",
+    "Execute-with-confirmation steps pause and do not prepare effects before approval.",
+    "Denied or timed-out approvals move to Denied or Suspended without execution.",
+    "Crash-safe state updates are visible through RunStore."
+  ],
+  "verification": [
+    "Run cargo test -p agentd agent_core::run_loop.",
+    "Run CLI demo for a read-only diagnostic plan.",
+    "Run approval-required plan and confirm AwaitingApproval state.",
+    "Inspect audit timeline for valid event ordering."
+  ],
+  "risk_notes": [
+    "This is the central runtime component; it must remain boring and deterministic."
+  ]
+}

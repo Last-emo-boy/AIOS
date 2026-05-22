@@ -1,0 +1,40 @@
+{
+  "workflow_id": "WFS-20260522-agentos-runtime-foundation",
+  "name": "AgentOS Runtime Foundation",
+  "status": "planned",
+  "created_at": "2026-05-22T23:41:29+08:00",
+  "updated_at": "2026-05-22T23:41:29+08:00",
+  "source": "research.md",
+  "previous_workflow": ".workflow/active/WFS-20260522-agentos-linux-mvp",
+  "goal": "Turn the completed AgentOS MVP safety substrate into a real bottom Agent runtime: deterministic orchestration, model-brokered planning, persistent memory, policy-gated tool execution, and recovery-safe workflow execution.",
+  "core_thesis": "Agent Core decides and schedules intention; Security Execution Foundation constrains, records, verifies, and recovers every effect.",
+  "non_goals": [
+    "Do not expose arbitrary shell execution in normal mode.",
+    "Do not let model output directly execute tools.",
+    "Do not store secret values in planner, memory, audit summaries, or model context.",
+    "Do not replace the completed safety substrate with a parallel execution path.",
+    "Do not start distribution image work before Agent Core Runtime has a generic run loop.",
+    "Do not require external LLM access for acceptance."
+  ],
+  "open_decisions": [
+    "Which local model runtime will be the first non-stub ModelBroker provider.",
+    "Whether persistent Agent memory starts as SQLite/WAL or append-only JSONL plus indexes.",
+    "Whether AgentCore lives inside agentd initially or behind a local Unix socket boundary.",
+    "Which subset of Linux sandbox mechanisms must be active in the first real host executor."
+  ],
+  "primary_acceptance": [
+    "An operator intent is converted into a frozen PlanSpec without executing side effects.",
+    "A generic Agent run loop can execute the nginx recovery workflow without a hand-coded workflow path.",
+    "All side effects pass through semantic tools, policy, capability leases, audit, verification, and rollback/recovery semantics.",
+    "Observation text from tools or untrusted content cannot directly trigger a new high-risk tool call.",
+    "Agent memory persists useful run context without retaining secret values.",
+    "Crash/restart can resume or reconcile an in-flight Agent run from persisted state."
+  ],
+  "plan": ".workflow/active/WFS-20260522-agentos-runtime-foundation/plan.json",
+  "task_dir": ".workflow/active/WFS-20260522-agentos-runtime-foundation/.task",
+  "docs": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/task-breakdown.md"
+  ]
+}

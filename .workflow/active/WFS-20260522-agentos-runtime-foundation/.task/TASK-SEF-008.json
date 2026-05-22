@@ -1,0 +1,46 @@
+{
+  "id": "TASK-SEF-008",
+  "title": "Expand safety gate for generic Agent execution",
+  "status": "pending",
+  "wave": 4,
+  "priority": "P0",
+  "type": "quality",
+  "source": "research.md:269",
+  "depends_on": [
+    "TASK-SEF-004",
+    "TASK-SEF-005",
+    "TASK-SEF-006",
+    "TASK-SEF-007"
+  ],
+  "purpose": "Upgrade the existing safety regression gate so it validates generic Agent execution paths, not only isolated substrate modules.",
+  "scope": [
+    "Add end-to-end runtime safety scenarios to safety gate manifest.",
+    "Cover model output injection, observation injection, memory poisoning, approval bypass, source-to-sink abuse, and recovery abuse.",
+    "Assert that denied paths do not emit EffectPrepared.",
+    "Assert that half-committed paths enter Recovery or RollbackPending.",
+    "Add CI workflow updates for the new runtime safety subset.",
+    "Record safety scenario coverage in evidence."
+  ],
+  "deliverables": [
+    "Expanded safety gate manifest",
+    "Runtime safety tests",
+    "CI workflow update",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-008-runtime-safety-gate.json"
+  ],
+  "acceptance_criteria": [
+    "The safety gate fails if AgentCore can bypass ToolRouter or PolicyEvaluator.",
+    "The safety gate fails if untrusted content can trigger high-risk tools directly.",
+    "The safety gate fails if secret values are stored in memory or model context.",
+    "The safety gate fails if approval parameter mutation is accepted.",
+    "The safety gate fails if recovery cannot classify half-executed effects."
+  ],
+  "verification": [
+    "Run cargo test -p agentd safety::.",
+    "Run cargo test -p agentd agent_core::adversarial.",
+    "Run CI workflow locally where possible.",
+    "Inspect safety evidence JSON."
+  ],
+  "risk_notes": [
+    "Safety gates must reflect the actual runtime path users will exercise."
+  ]
+}

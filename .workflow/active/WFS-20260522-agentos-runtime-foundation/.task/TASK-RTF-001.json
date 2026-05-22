@@ -1,0 +1,40 @@
+{
+  "id": "TASK-RTF-001",
+  "title": "Define runtime state transitions and event mapping",
+  "status": "pending",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "source": "research.md:104",
+  "depends_on": [
+    "TASK-RTF-000"
+  ],
+  "purpose": "Turn the research state diagram into a concrete state/event contract for generic Agent runs.",
+  "scope": [
+    "Define run states: Accepted, Planning, Planned, AwaitingApproval, Executing, Observing, Verifying, Completed, Denied, Suspended, RollbackPending, Recovering, FailedClosed.",
+    "Map each state transition to required audit events and persisted run-state updates.",
+    "Define idempotency rules for repeating a transition after crash/restart.",
+    "Define failure handling for model errors, tool errors, policy denial, approval timeout, verification failure, and rollback failure.",
+    "Define which transitions are allowed to be triggered by TUI/API input."
+  ],
+  "deliverables": [
+    "Runtime state transition table",
+    "Audit event mapping table",
+    "Run-state persistence contract",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-001-state-contract.json"
+  ],
+  "acceptance_criteria": [
+    "Every state transition has a durable source of truth.",
+    "No transition can erase earlier audit evidence.",
+    "Recovery behavior is deterministic when a run stops in each non-terminal state.",
+    "Approval timeout and denial do not produce EffectPrepared for the protected step."
+  ],
+  "verification": [
+    "Table-review all states against research.md state diagram.",
+    "Check that each non-terminal state has a recovery policy.",
+    "Add state-transition test cases to the downstream AgentCore task list."
+  ],
+  "risk_notes": [
+    "The core risk is creating a runtime that can advance based on memory-only state and lose truth after restart."
+  ]
+}

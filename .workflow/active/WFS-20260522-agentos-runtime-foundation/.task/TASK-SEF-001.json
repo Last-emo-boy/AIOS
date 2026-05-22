@@ -1,0 +1,43 @@
+{
+  "id": "TASK-SEF-001",
+  "title": "Define generic EffectEnvelope contract",
+  "status": "pending",
+  "wave": 2,
+  "priority": "P0",
+  "type": "security",
+  "source": "research.md:157",
+  "depends_on": [
+    "TASK-RTF-001",
+    "TASK-ACR-001"
+  ],
+  "purpose": "Create the transaction envelope that every AgentCore side effect must pass through from prepare to seal or rollback.",
+  "scope": [
+    "Define EffectEnvelope with run_id, step_id, tool, normalized params, policy decision, lease, sandbox profile, prepared event, observed event, verification result, rollback handle, and commit id.",
+    "Define allowed envelope states: Draft, Prepared, Observed, Verified, Sealed, RollbackPending, RolledBack, FailedClosed.",
+    "Bind envelope state transitions to AuditJournal events.",
+    "Prevent AgentCore from fabricating sealed effects without Security Execution Foundation validation.",
+    "Define serialization and redaction rules for envelope fields."
+  ],
+  "deliverables": [
+    "EffectEnvelope data type",
+    "Envelope state transition validator",
+    "Audit event mapping tests",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-001-effect-envelope.json"
+  ],
+  "acceptance_criteria": [
+    "Every side-effecting Agent step can be represented by an EffectEnvelope.",
+    "EffectPrepared must precede EffectObserved for any observed effect.",
+    "CommitSealed requires a successful verification result.",
+    "RollbackPending cannot be skipped for failed write-with-diff verification.",
+    "Envelope serialization excludes secret values."
+  ],
+  "verification": [
+    "Run cargo test -p agentd security_execution::effect_envelope.",
+    "Test invalid transition sequences and confirm rejection.",
+    "Inspect serialized envelopes for redaction.",
+    "Compare envelope events with AuditJournal unresolved effect queries."
+  ],
+  "risk_notes": [
+    "This contract is what prevents AgentCore from treating an attempted action as a completed action."
+  ]
+}

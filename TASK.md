@@ -1,12 +1,13 @@
 # AIOS TASK
 
 Source: `research.md`  
-Workflow: `.workflow/active/WFS-20260522-agentos-linux-mvp`  
+Workflow: `.workflow/active/WFS-20260522-agentos-runtime-foundation`
+Previous workflow: `.workflow/active/WFS-20260522-agentos-linux-mvp`
 Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 目标
 
-构建第一个 Linux-based AgentOS MVP：用 Linux LTS 作为确定性底座，让 `agentd` 成为启动后的第一控制面，提供 terminal-first 交互、语义工具、capability lease、审计链、diff/rollback 和崩溃恢复语义。
+构建 Linux-based AgentOS：先完成可启动 MVP，再补齐底层 Agent Core Runtime 和安全执行底座，最终推进到可发行的 AgentOS distribution。
 
 一句话边界：
 
@@ -22,6 +23,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 当前进度
 
+- 当前 Maestro 计划已切到 Runtime Foundation：`.workflow/active/WFS-20260522-agentos-runtime-foundation`。
+- Runtime Foundation 已完成详细 TASK 展开，状态为 `planned`：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
 - Wave 1 已完成：boot handoff、`agentd` lifecycle skeleton 和 terminal-first TUI surface 均已验证。
 - Wave 2 已完成：semantic tool routing、append-only audit journal 和 recovery reconciler 均已验证。
@@ -40,7 +43,107 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：无，MVP 任务计划已完成。
+- 下一执行任务：`TASK-RTF-000`，冻结 Agent Core 和 Security Execution Foundation 的边界。
+
+## Runtime Foundation 任务计划
+
+目标：把已完成的 AgentOS MVP 安全底座，推进成真正的底层 Agent runtime。也就是让 `agentd` 不再只是 lifecycle skeleton、stub planner 和手写 workflow，而是具备通用的 Agent Core：接收 intent、生成冻结计划、调度步骤、处理观察、更新 memory、暂停审批、执行受控工具、恢复中断 run。
+
+### 两层边界
+
+- Agent Core Runtime：负责 intent、PlanSpec、PlanRun、ModelBroker、Planner、StepScheduler、ObservationProcessor、Memory 和 TUI/API run-state projection。
+- Security Execution Foundation：负责 semantic tool、policy、capability lease、sandbox、EffectEnvelope、audit、verification、rollback 和 recovery。
+
+关键约束：
+
+- Model output 只能提出结构化计划或摘要，不能直接执行 tool。
+- 所有 side effect 必须经过 Security Execution Foundation。
+- Planner 的 risk hint 不是权限，PolicyEvaluator 才是权威。
+- Observation 和 external content 默认不可信，不能直接触发高风险 sink。
+- Memory 不允许保存 secret 明文或未经标记的不可信指令。
+- Distribution Alpha 在 Runtime Foundation final audit 通过前不得启动。
+
+### Runtime Foundation Wave 0：边界冻结
+
+- `TASK-RTF-000`：冻结 Agent Core 和 Security Execution Foundation 边界（pending）
+- `TASK-RTF-001`：定义 runtime state transitions 和 audit event mapping（pending）
+- `TASK-RTF-002`：定义模块 ownership 与 runtime integration points（pending）
+- `TASK-RTF-003`：把 MVP safety invariants 继承为 runtime gates（pending）
+
+退出标准：
+
+- AgentCore、ModelBroker、Memory、Planner、Scheduler、Policy、Capability、Audit、Rollback、Recovery 的职责明确。
+- 没有 model-to-tool direct execution、planner-to-shell 或未记账写入路径。
+- 已完成 MVP 的安全约束变成新 runtime 的入场门。
+
+### Runtime Foundation Wave 1：Agent Core Contracts
+
+- `TASK-ACR-001`：定义 Agent runtime data model（pending）
+- `TASK-ACR-002`：实现 persistent PlanRun store（pending）
+- `TASK-ACR-003`：实现 ModelBroker trait 和 stub provider（pending）
+- `TASK-ACR-004`：实现 Planner，冻结结构化 PlanSpec（pending）
+
+退出标准：
+
+- `IntentCtx`、`PlanSpec`、`PlanStep`、`PlanRun`、`Observation`、`RunState` 可序列化、可恢复、可审计。
+- `ModelBroker` 是唯一模型边界，并支持 local-only stub provider。
+- Planner 只能冻结计划，不能执行 side effect。
+
+### Runtime Foundation Wave 2：安全执行底座强化
+
+- `TASK-SEF-001`：定义 generic EffectEnvelope contract（pending）
+- `TASK-SEF-002`：创建 Agent step policy / capability adapter（pending）
+- `TASK-SEF-003`：强化 lease-derived sandbox profile compilation（pending）
+- `TASK-SEF-004`：定义 untrusted content source-to-sink policy（pending）
+- `TASK-SEF-005`：实现 secret handle lease rules for Agent runtime（pending）
+
+退出标准：
+
+- 每个 side effect 都有 `EffectEnvelope`，从 prepare 到 seal / rollback 可追踪。
+- AgentCore 只能通过 policy adapter 申请执行。
+- Sandbox profile 从 capability lease 编译，不能由 planner 降级。
+- untrusted content 和 secret handle 有明确 source-to-sink 约束。
+
+### Runtime Foundation Wave 3：Generic Agent Run Loop
+
+- `TASK-ACR-005`：实现 AgentCore run loop state machine（pending）
+- `TASK-ACR-006`：实现 dependency-aware StepScheduler（pending）
+- `TASK-ACR-007`：实现 ObservationProcessor 和 trust boundary handling（pending）
+- `TASK-ACR-008`：实现最小 Agent memory layer（pending）
+- `TASK-SEF-006`：实现 generic SecurityExecutionEngine bridge（pending）
+- `TASK-SEF-007`：集成 recovery reconciler 与 Agent run state（pending）
+
+退出标准：
+
+- `PlanRun` 可经过 Accepted、Planning、Planned、AwaitingApproval、Executing、Observing、Verifying、Completed、Suspended、RollbackPending、Recovering。
+- read-only step 可以自动执行并 seal，高风险 step 必须暂停审批。
+- observation 不能直接变成 tool call。
+- crash/restart 可以从 RunStore + AuditJournal 恢复状态。
+
+### Runtime Foundation Wave 4：workflow 迁移与安全门
+
+- `TASK-ACR-009`：把 service recovery 迁移到 generic AgentCore runtime（pending）
+- `TASK-ACR-010`：加入 AgentCore adversarial runtime tests（pending）
+- `TASK-SEF-008`：扩展 generic Agent execution safety gate（pending）
+- `TASK-SEF-009`：构建 runtime audit projection 和 explainability chain（pending）
+- `TASK-SEF-010`：运行 Security Execution Foundation final verification（pending）
+
+退出标准：
+
+- nginx service recovery 不再依赖专用手写 workflow，而是通过 generic AgentCore `PlanRun`。
+- prompt injection、observation injection、memory poisoning、approval bypass、tool abuse、secret leak、half-committed effect 都进入 safety gate。
+- TUI/CLI 可以解释每一步为什么运行、暂停、拒绝、回滚或 seal。
+
+### Runtime Foundation Wave 5：发行版入口桥接
+
+- `TASK-RTF-004`：定义 Distribution Alpha entry criteria from runtime foundation（pending）
+- `TASK-RTF-005`：完成 Runtime Foundation final audit（pending）
+
+退出标准：
+
+- Distribution Alpha 明确依赖 AgentCore 和 Security Execution Foundation final audit。
+- 后续发行版任务必须安装并验证 `agentd`、policy pack、tool manifest、run-state、audit、rollback、ModelBroker config。
+- 所有 Runtime Foundation tests、safety gates、release/provenance checks 通过。
 
 ## 必须先冻结的决策
 

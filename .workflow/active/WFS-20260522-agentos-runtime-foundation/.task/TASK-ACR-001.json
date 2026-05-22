@@ -1,0 +1,45 @@
+{
+  "id": "TASK-ACR-001",
+  "title": "Define Agent runtime data model",
+  "status": "pending",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "source": "research.md:130",
+  "depends_on": [
+    "TASK-RTF-001",
+    "TASK-RTF-002"
+  ],
+  "purpose": "Replace lifecycle skeleton types with a versioned runtime data model that can represent real Agent plans and runs.",
+  "scope": [
+    "Define IntentCtx with actor, trust boundary, source, current working scope, and requested outcome.",
+    "Define PlanSpec with plan_id, planner version, steps, dependencies, success criteria, risk hints, rollback requirements, and model evidence metadata.",
+    "Define PlanStep with semantic tool call, dependency list, preconditions, expected observations, verification rule, approval requirement, and retry budget.",
+    "Define PlanRun with run_id, frozen_plan_hash, state, current step cursor, approval state, observation references, memory references, and recovery marker.",
+    "Define Observation with source, trust label, normalized result, summary, redaction status, and policy-relevant flags.",
+    "Add deterministic JSON serialization suitable for audit and persisted run-state snapshots."
+  ],
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs or equivalent runtime model module",
+    "Versioned runtime structs",
+    "Serialization helpers",
+    "Unit tests for PlanSpec and PlanRun serialization",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-001-data-model.json"
+  ],
+  "acceptance_criteria": [
+    "A service recovery intent can be represented as a PlanSpec without executing any tool.",
+    "PlanSpec includes enough metadata to re-evaluate risk after restart.",
+    "PlanRun can be serialized and loaded without losing state.",
+    "Risk hints are represented as hints, not authoritative decisions.",
+    "Secret values cannot be stored in IntentCtx, PlanSpec, PlanRun, or Observation fields."
+  ],
+  "verification": [
+    "Run cargo test -p agentd agent_core::model.",
+    "Snapshot-test a service recovery PlanSpec JSON.",
+    "Attempt to construct a model containing password/token-like values and confirm redaction or rejection.",
+    "Confirm no side-effect audit events are emitted by model construction."
+  ],
+  "risk_notes": [
+    "If PlanSpec is too weak, downstream runtime code will fall back to ad hoc workflow-specific state."
+  ]
+}
