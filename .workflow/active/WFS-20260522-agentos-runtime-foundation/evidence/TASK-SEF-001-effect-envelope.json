@@ -1,0 +1,71 @@
+{
+  "id": "TASK-SEF-001",
+  "status": "passed",
+  "completed_at": "2026-05-23T01:36:17+08:00",
+  "summary": "Generic EffectEnvelope contract is implemented as security_execution::effect_envelope. It represents each side-effecting Agent step from Draft through Prepared, Observed, Verified, Sealed, RollbackPending, RolledBack, or FailedClosed; binds lifecycle transitions to AuditJournal events; requires successful verification before CommitSealed; routes failed write-with-diff verification to RollbackPending; and rejects secret-like serialized values.",
+  "deliverables": [
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/lib.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-001-effect-envelope.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd security_execution::effect_envelope",
+      "status": "passed",
+      "result": "6 passed; 0 failed; 78 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "84 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Every side-effecting Agent step can be represented by an EffectEnvelope.",
+      "status": "passed",
+      "evidence": "EffectEnvelope stores run_id, step_id, tool, normalized_params, policy_decision, lease, sandbox_profile, prepared_event, observed_event, verification_result, rollback_handle, commit_id, and state."
+    },
+    {
+      "criterion": "EffectPrepared must precede EffectObserved for any observed effect.",
+      "status": "passed",
+      "evidence": "security_execution::effect_envelope::tests::rejects_observed_before_prepared rejects observe from Draft, while side_effecting_restart_moves_from_prepare_to_seal confirms prepared < observed < sealed in AuditJournal."
+    },
+    {
+      "criterion": "CommitSealed requires a successful verification result.",
+      "status": "passed",
+      "evidence": "security_execution::effect_envelope::tests::rejects_commit_sealed_without_successful_verification rejects seal before Verified and confirms failed verification does not emit CommitSealed."
+    },
+    {
+      "criterion": "RollbackPending cannot be skipped for failed write-with-diff verification.",
+      "status": "passed",
+      "evidence": "security_execution::effect_envelope::tests::failed_write_with_diff_verification_enters_rollback_pending asserts failed fs.write.diff verification enters RollbackPending, emits RollbackPending, rejects seal, and rejects fail_closed skip."
+    },
+    {
+      "criterion": "Envelope serialization excludes secret values.",
+      "status": "passed",
+      "evidence": "security_execution::effect_envelope::tests::serialization_rejects_secret_values_but_allows_secret_handles rejects raw token/password values and allows secret:// handles."
+    }
+  ],
+  "effect_envelope_contract": {
+    "module": "agentd::security_execution::effect_envelope",
+    "states": [
+      "Draft",
+      "Prepared",
+      "Observed",
+      "Verified",
+      "Sealed",
+      "RollbackPending",
+      "RolledBack",
+      "FailedClosed"
+    ],
+    "audit_events": [
+      "EffectPrepared",
+      "EffectObserved",
+      "CommitSealed",
+      "RollbackPending",
+      "RollbackObserved"
+    ],
+    "secret_policy": "Reject raw secret-like values; allow secret:// handles only."
+  }
+}
