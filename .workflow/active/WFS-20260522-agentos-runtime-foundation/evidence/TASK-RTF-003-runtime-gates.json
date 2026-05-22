@@ -1,0 +1,57 @@
+{
+  "id": "TASK-RTF-003",
+  "status": "passed",
+  "completed_at": "2026-05-23T00:19:00+08:00",
+  "summary": "MVP safety invariants are carried forward as Runtime Foundation entry and exit gates, with new runtime-specific scenarios for model output, observations, memory, approvals, and recovery.",
+  "deliverables": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-003-runtime-gates.json"
+  ],
+  "baseline_verification": [
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "49 passed; 0 failed"
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "status": "passed",
+      "result": "8 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Existing safety tests remain mandatory.",
+      "status": "passed",
+      "evidence": "runtime-safety-gates.md keeps the existing safety.rs scenario list mandatory for every runtime wave."
+    },
+    {
+      "criterion": "New runtime tasks cannot be completed if they bypass semantic tools, policy, audit, or rollback.",
+      "status": "passed",
+      "evidence": "runtime-safety-gates.md defines completion rules that block direct model-to-tool, planner-to-shell, SecurityExecutionEngine bypass, and duplicate safety stacks."
+    },
+    {
+      "criterion": "Secret, memory, and observation-specific risks have explicit regression fixtures.",
+      "status": "passed",
+      "evidence": "runtime-safety-gates.md defines observation-injection, observation-secret-redaction, memory-poisoning-policy-override, and memory-secret-retention runtime scenarios."
+    },
+    {
+      "criterion": "Release readiness requires both old MVP safety gates and new AgentCore gates.",
+      "status": "passed",
+      "evidence": "runtime-safety-gates.md wave regression table requires MVP tests plus AgentCore, safety, and release checks for later waves."
+    }
+  ],
+  "runtime_scenarios_required": [
+    "model-output-shell-command",
+    "model-output-unknown-tool",
+    "observation-injection-command",
+    "observation-secret-redaction",
+    "memory-poisoning-policy-override",
+    "memory-secret-retention",
+    "approval-timeout-no-effect",
+    "runstore-recovery-half-step",
+    "planner-risk-hint-downgrade",
+    "agentcore-bypass-security-engine"
+  ],
+  "normal_mode_shell_exec": "forbidden"
+}

@@ -1,7 +1,7 @@
 {
   "id": "TASK-RTF-003",
   "title": "Carry forward MVP safety invariants as runtime gates",
-  "status": "pending",
+  "status": "completed",
   "wave": 0,
   "priority": "P0",
   "type": "quality",
@@ -38,5 +38,15 @@
   ],
   "risk_notes": [
     "Adding AgentCore increases autonomy pressure; the completed MVP constraints must become stronger, not optional."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T00:19:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-003-runtime-gates.json",
+    "gate_checklist": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md",
+    "baseline_tests": {
+      "cargo test -p agentd": "49 passed; 0 failed",
+      "cargo test -p agentd safety::": "8 passed; 0 failed"
+    },
+    "normal_mode_shell_exec": "forbidden"
+  }
 }
