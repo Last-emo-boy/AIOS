@@ -1,0 +1,55 @@
+{
+  "task": "TASK-SEF-008",
+  "title": "Expand safety gate for generic Agent execution",
+  "completed_at": "2026-05-23T05:03:01+08:00",
+  "status": "completed",
+  "implementation": [
+    {
+      "path": "crates/agentd/src/safety.rs",
+      "summary": "Expanded SafetyGateConfig so the generic Agent execution gate requires both cargo test -p agentd safety:: and cargo test -p agentd agent_core::adversarial."
+    }
+  ],
+  "runtime_gate_manifest": {
+    "command": "cargo test -p agentd safety:: && cargo test -p agentd agent_core::adversarial",
+    "runtime_scenarios": [
+      "runtime-model-output-injection",
+      "runtime-observation-injection-command",
+      "runtime-memory-poisoning-policy-override",
+      "runtime-approval-parameter-mutation",
+      "runtime-source-to-sink-abuse",
+      "runtime-recovery-half-committed-effect"
+    ],
+    "legacy_scenarios_preserved": [
+      "prompt-injection-shell",
+      "prompt-injection-exfiltration",
+      "prompt-injection-login-download",
+      "prompt-injection-policy-override",
+      "never-class-tool-abuse",
+      "broad-approval-rejected",
+      "secret-handle-only-redaction",
+      "resource-fork-bomb",
+      "resource-denied-syscall",
+      "rollback-stale-base",
+      "recovery-half-committed-effect"
+    ]
+  },
+  "acceptance": {
+    "agentcore_bypass_of_toolrouter_or_policy_evaluator_is_gated": true,
+    "untrusted_content_direct_high_risk_tools_are_gated": true,
+    "secret_memory_or_model_context_abuse_is_gated": true,
+    "approval_parameter_mutation_is_gated": true,
+    "half_executed_effect_recovery_classification_remains_gated": true
+  },
+  "verification": {
+    "cargo test -p agentd safety::": "16 passed; 0 failed; 142 filtered out",
+    "cargo test -p agentd agent_core::adversarial": "5 passed; 0 failed; 153 filtered out",
+    "cargo test -p agentd": "158 passed; 0 failed",
+    "ci_workflow": ".github/workflows/safety.yml already runs cargo test -p agentd agent_core::adversarial",
+    "release_workflow": ".github/workflows/release.yml and scripts/build-release.ps1 already run cargo test -p agentd agent_core::adversarial"
+  },
+  "notes": [
+    "TASK-ACR-010 added the runtime adversarial test implementation; TASK-SEF-008 promotes that subset into the safety gate manifest.",
+    "Denied and paused runtime paths are covered by the AgentCore adversarial tests and continue to assert absence of EffectPrepared for protected or injected steps."
+  ],
+  "next_task": "TASK-SEF-009"
+}

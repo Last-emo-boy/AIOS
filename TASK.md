@@ -46,6 +46,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-SEF-007` 已完成：新增 `agent_core::recovery`，实现 `AgentRunRecoveryCoordinator`，把 RunStore recoverable runs 与 AuditJournal durable effect truth 联合分类为 safe-to-verify、needs-rollback、needs-human-review、abandoned、failed-closed 或 completed，并恢复到 Recovering、Suspended、RollbackPending、Completed 或 FailedClosed；恢复 projection 明确 source=run-store+audit 且 no-model-replay，`cargo test -p agentd` 150 passed。
 - `TASK-ACR-009` 已完成：service recovery 已迁移到 generic AgentCore runtime，Planner 产出完整 nginx recovery DAG，旧 `ServiceRecoveryWorkflow` 仅作为兼容 wrapper 委托到 `agent_core::service_recovery`，approved/denied CLI demo 和 latest audit timeline 均通过，`cargo test -p agentd` 153 passed。
 - `TASK-ACR-010` 已完成：新增 `agent_core::adversarial` runtime abuse suite，覆盖 planning prompt injection、observation injection、memory poisoning、approval parameter mutation 和 malformed model output；CI safety / release gate 已加入 `cargo test -p agentd agent_core::adversarial`，`cargo test -p agentd` 158 passed。
+- `TASK-SEF-008` 已完成：`SafetyGateConfig` 已升级为 generic Agent execution gate，required scenarios 纳入 model output injection、observation injection、memory poisoning、approval mutation、source-to-sink abuse 和 runtime recovery abuse，并要求同时运行 `cargo test -p agentd safety::` 与 `cargo test -p agentd agent_core::adversarial`，`cargo test -p agentd` 158 passed。
 - Runtime Foundation Wave 1 已完成：Agent Core Contracts 的数据模型、RunStore、ModelBroker 和 Planner 均已验证。
 - Runtime Foundation Wave 2 已完成：EffectEnvelope、policy adapter、lease-derived sandbox profile、source-to-sink policy 和 secret handle lease rules 均已验证。
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
@@ -66,7 +67,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：`TASK-SEF-008`，扩展 generic Agent execution safety gate。
+- 下一执行任务：`TASK-SEF-009`，构建 runtime audit projection 和 explainability chain。
 
 ## Runtime Foundation 任务计划
 
@@ -147,7 +148,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 - `TASK-ACR-009`：把 service recovery 迁移到 generic AgentCore runtime（completed）
 - `TASK-ACR-010`：加入 AgentCore adversarial runtime tests（completed）
-- `TASK-SEF-008`：扩展 generic Agent execution safety gate（pending）
+- `TASK-SEF-008`：扩展 generic Agent execution safety gate（completed）
 - `TASK-SEF-009`：构建 runtime audit projection 和 explainability chain（pending）
 - `TASK-SEF-010`：运行 Security Execution Foundation final verification（pending）
 
@@ -272,4 +273,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-Runtime Foundation Wave 4 已完成 `TASK-ACR-010`：AgentCore adversarial runtime tests 已覆盖 planning、observation、memory、approval 和 model-output abuse cases，并接入 CI / release gate。下一步执行 `TASK-SEF-008`，把这些 runtime adversarial scenarios 纳入 generic Agent execution safety gate manifest。
+Runtime Foundation Wave 4 已完成 `TASK-SEF-008`：generic Agent execution safety gate manifest 已纳入 runtime adversarial scenarios，并要求同时运行 `safety::` 与 `agent_core::adversarial`。下一步执行 `TASK-SEF-009`，构建 runtime audit projection 和 explainability chain。

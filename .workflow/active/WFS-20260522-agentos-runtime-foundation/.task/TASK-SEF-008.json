@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-008",
   "title": "Expand safety gate for generic Agent execution",
-  "status": "pending",
+  "status": "completed",
   "wave": 4,
   "priority": "P0",
   "type": "quality",
@@ -42,5 +42,18 @@
   ],
   "risk_notes": [
     "Safety gates must reflect the actual runtime path users will exercise."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T05:03:01+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-008-runtime-safety-gate.json",
+    "implementation": [
+      "crates/agentd/src/safety.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd safety::": "16 passed; 0 failed; 142 filtered out",
+      "cargo test -p agentd agent_core::adversarial": "5 passed; 0 failed; 153 filtered out",
+      "cargo test -p agentd": "158 passed; 0 failed"
+    },
+    "next_task": "TASK-SEF-009"
+  }
 }

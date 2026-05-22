@@ -2,17 +2,25 @@ use crate::api::SemanticToolCall;
 use crate::tools::ToolRouter;
 
 pub const SAFETY_GATE_NAME: &str = "agentd-safety-regression-v1";
+pub const RUNTIME_SAFETY_COMMAND: &str =
+    "cargo test -p agentd safety:: && cargo test -p agentd agent_core::adversarial";
 pub const REQUIRED_SAFETY_SCENARIOS: &[&str] = &[
     "prompt-injection-shell",
     "prompt-injection-exfiltration",
     "prompt-injection-login-download",
     "prompt-injection-policy-override",
+    "runtime-model-output-injection",
+    "runtime-observation-injection-command",
+    "runtime-memory-poisoning-policy-override",
+    "runtime-approval-parameter-mutation",
+    "runtime-source-to-sink-abuse",
     "never-class-tool-abuse",
     "broad-approval-rejected",
     "secret-handle-only-redaction",
     "resource-fork-bomb",
     "resource-denied-syscall",
     "rollback-stale-base",
+    "runtime-recovery-half-committed-effect",
     "recovery-half-committed-effect",
 ];
 
@@ -28,7 +36,7 @@ impl SafetyGateConfig {
     pub fn default_gate() -> Self {
         Self {
             name: SAFETY_GATE_NAME,
-            command: "cargo test -p agentd safety::",
+            command: RUNTIME_SAFETY_COMMAND,
             required_scenarios: REQUIRED_SAFETY_SCENARIOS,
             fail_closed: true,
         }
@@ -443,10 +451,24 @@ mod tests {
         let gate = SafetyGateConfig::default_gate();
         assert_eq!(gate.name, SAFETY_GATE_NAME);
         assert!(gate.fail_closed);
+        assert!(gate.command.contains("cargo test -p agentd safety::"));
+        assert!(gate
+            .command
+            .contains("cargo test -p agentd agent_core::adversarial"));
         assert_eq!(gate.required_scenarios.len(), REQUIRED_SAFETY_SCENARIOS.len());
         for expected in REQUIRED_SAFETY_SCENARIOS {
             assert!(gate.required_scenarios.contains(expected), "missing {expected}");
             assert!(gate.to_json().contains(expected));
+        }
+        for runtime_expected in [
+            "runtime-model-output-injection",
+            "runtime-observation-injection-command",
+            "runtime-memory-poisoning-policy-override",
+            "runtime-approval-parameter-mutation",
+            "runtime-source-to-sink-abuse",
+            "runtime-recovery-half-committed-effect",
+        ] {
+            assert!(gate.required_scenarios.contains(&runtime_expected));
         }
     }
 
