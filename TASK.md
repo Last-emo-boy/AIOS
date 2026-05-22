@@ -23,8 +23,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 ## 必须先冻结的决策
 
 1. 首发产品形态：**已冻结为 Developer VM first, Cloud VM compatible**，见 `docs/decisions/000-mvp-shape.md`。
-2. MVP 发行版：建议先固定 Debian/Ubuntu。
-3. 外部 LLM 策略：禁用、可选增强，还是仅限非关键规划路径。
+2. MVP 运行假设：**已冻结为 x86_64 Linux VM、Debian/Ubuntu、single-tenant/single-operator、TUI-first、external LLM optional-only**，见 `docs/decisions/001-mvp-operating-assumptions.md`。
+3. 外部 LLM 策略：**已冻结为 optional-only；local-only 或 stub planner mode 必须可运行**。
 4. 首个真实 Runbook：建议从 nginx/service recovery、仓库自举、Cloud VM 诊断三选一。
 
 对应任务：`.workflow/active/WFS-20260522-agentos-linux-mvp/.task/TASK-AIOS-000.json`
@@ -112,4 +112,4 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 下一步
 
-继续完成 `TASK-AIOS-000B`，冻结 MVP 运行假设。Wave 0 完成后，从 `TASK-AIOS-001` 开始做最小可启动镜像。
+继续完成 `TASK-AIOS-000C`，锁定 MVP non-goals 与 scope change control。Wave 0 完成后，从 `TASK-AIOS-001` 开始做最小可启动镜像。

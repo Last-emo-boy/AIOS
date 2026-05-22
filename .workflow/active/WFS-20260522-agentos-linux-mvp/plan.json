@@ -5,13 +5,15 @@
   "status": "draft",
   "source": "research.md",
   "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-22T21:31:25+08:00",
+  "updated_at": "2026-05-22T21:46:00+08:00",
   "objective": "Deliver the first executable Linux-based AgentOS slice with agentd boot/control plane, terminal-first UX, semantic capabilities, audit, diff/rollback, and recovery.",
   "assumptions": [
-    "MVP targets x86_64 Linux with hardware virtualization available but not required for the first slice.",
+    "MVP shape is Developer VM first, Cloud VM compatible.",
+    "MVP targets an x86_64 Linux VM; hardware virtualization should be available but Firecracker is not required for Wave 1.",
     "MVP is single-tenant and single-operator.",
-    "Debian/Ubuntu is the first package-management target unless DEC-001 changes scope.",
-    "External LLM usage remains optional; the system must support local-only or stub planner mode.",
+    "Debian/Ubuntu is the first package-management target.",
+    "External LLM usage is optional only; local-only or stub planner mode must work.",
+    "Untrusted tasks default to no network or allowlisted egress through controlled fetch/sanitize paths.",
     "Firecracker is designed into interfaces but not required for MVP completion."
   ],
   "waves": [

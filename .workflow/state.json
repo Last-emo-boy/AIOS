@@ -5,7 +5,7 @@
   "current_phase": "mvp",
   "status": "planning",
   "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-22T21:31:25+08:00",
+  "updated_at": "2026-05-22T21:46:00+08:00",
   "source": "research.md",
   "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, semantic capability runtime, audit and rollback before autonomy.",
   "active_decisions": [
@@ -17,9 +17,9 @@
     },
     {
       "id": "DEC-002",
-      "status": "proposed",
-      "title": "Use Linux LTS as MVP base; defer seL4/Genode to separate high-security product line",
-      "source": "research.md:100"
+      "status": "accepted",
+      "title": "MVP operating assumptions frozen for Developer VM first path",
+      "source": "docs/decisions/001-mvp-operating-assumptions.md"
     },
     {
       "id": "DEC-003",
@@ -48,6 +48,10 @@
     {
       "type": "decision",
       "path": "docs/decisions/000-mvp-shape.md"
+    },
+    {
+      "type": "decision",
+      "path": "docs/decisions/001-mvp-operating-assumptions.md"
     }
   ]
 }
