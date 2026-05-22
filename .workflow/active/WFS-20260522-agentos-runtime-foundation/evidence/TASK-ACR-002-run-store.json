@@ -1,0 +1,58 @@
+{
+  "id": "TASK-ACR-002",
+  "status": "passed",
+  "completed_at": "2026-05-23T01:01:22+08:00",
+  "summary": "Persistent PlanRun store is implemented as agent_core::run_store with a RunStore trait, file-backed snapshots, temp-file write staging, recoverable run listing, observation hashes, tamper detection, and AuditJournal-based effect seal checks.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-002-run-store.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::run_store",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 56 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "63 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "PlanRun state survives process restart in tests.",
+      "status": "passed",
+      "evidence": "agent_core::run_store::tests::plan_run_state_survives_reopened_store creates a run, updates AwaitingApproval/current_step_id, reopens FileRunStore, and reloads the same state."
+    },
+    {
+      "criterion": "Partial state writes do not produce a silently corrupted run.",
+      "status": "passed",
+      "evidence": "agent_core::run_store::tests::interrupted_temp_write_is_ignored_in_favor_of_latest_valid_snapshot writes a malformed .json.tmp and verifies the latest valid .json snapshot is loaded."
+    },
+    {
+      "criterion": "Recoverable runs can be listed by state.",
+      "status": "passed",
+      "evidence": "agent_core::run_store::tests::list_recoverable_runs_excludes_terminal_runs lists non-terminal runs and excludes Completed runs."
+    },
+    {
+      "criterion": "RunStore never claims an effect is sealed unless the audit journal contains the matching seal event.",
+      "status": "passed",
+      "evidence": "agent_core::run_store::tests::audit_journal_remains_source_of_truth_for_sealed_effects returns false before CommitSealed, true only when run_id, step_id, and parameter_hash match AuditJournal."
+    },
+    {
+      "criterion": "Secret-like values are redacted or rejected before persistence.",
+      "status": "passed",
+      "evidence": "agent_core::run_store::tests::secret_like_values_are_rejected_before_persistence rejects token-like current_step_id updates and verifies persisted snapshots do not contain the secret value."
+    }
+  ],
+  "run_store_contract": {
+    "module": "agentd::agent_core::run_store",
+    "store_schema_version": "agent-core-run-store/v1",
+    "implementation": "FileRunStore",
+    "snapshot_strategy": "monotonic JSON snapshots; write .json.tmp then rename to .json; recovery ignores .tmp files",
+    "tamper_detection": "snapshot_hash over embedded PlanRun JSON",
+    "effect_truth": "AuditJournal remains source of truth for CommitSealed; RunStore only queries audit timeline"
+  },
+  "migration_note": "The RunStore trait isolates create/load/update/list/effect-seal queries so FileRunStore can be replaced by SQLite/WAL later without changing AgentCore scheduling semantics."
+}

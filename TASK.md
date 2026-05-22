@@ -30,6 +30,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-RTF-002` 已完成：runtime module ownership、integration points、audit write rules、CLI/TUI entry points 和 duplicate-stack prohibition 已冻结。
 - `TASK-RTF-003` 已完成：MVP safety invariants 已提升为 Runtime Foundation gate，`cargo test -p agentd` 49 passed，`cargo test -p agentd safety::` 8 passed。
 - `TASK-ACR-001` 已完成：新增 `agent_core::model` 版本化 runtime 数据模型，覆盖 `IntentCtx`、`PlanSpec`、`PlanStep`、`PlanRun`、`Observation`、稳定 JSON、secret-like 拒绝和 advisory risk hints，`cargo test -p agentd` 56 passed。
+- `TASK-ACR-002` 已完成：新增 `agent_core::run_store`，提供 `RunStore` trait、`FileRunStore` 快照持久化、recoverable run 查询、observation hash、tamper detection 和 AuditJournal seal 对照，`cargo test -p agentd` 63 passed。
 - Wave 0 已完成：产品形态、运行假设、scope control 和 Wave 1 入口约束均已冻结。
 - Wave 1 已完成：boot handoff、`agentd` lifecycle skeleton 和 terminal-first TUI surface 均已验证。
 - Wave 2 已完成：semantic tool routing、append-only audit journal 和 recovery reconciler 均已验证。
@@ -48,7 +49,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-AIOS-010` 已完成：nginx service recovery fixture 可端到端运行，restart 需确认，denied 路径不准备 restart effect。
 - `TASK-AIOS-011` 已完成：safety gate 覆盖 prompt injection、tool abuse、resource abuse、secret handle、rollback/recovery failure，并接入 CI。
 - `TASK-AIOS-012` 已完成：release pipeline 可生成 agentd release build、initramfs、dependency inventory 和 provenance metadata。
-- 下一执行任务：`TASK-ACR-002`，实现 persistent PlanRun store。
+- 下一执行任务：`TASK-ACR-003`，实现 ModelBroker trait 和 stub provider。
 
 ## Runtime Foundation 任务计划
 
@@ -84,7 +85,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 ### Runtime Foundation Wave 1：Agent Core Contracts
 
 - `TASK-ACR-001`：定义 Agent runtime data model（completed）
-- `TASK-ACR-002`：实现 persistent PlanRun store（pending）
+- `TASK-ACR-002`：实现 persistent PlanRun store（completed）
 - `TASK-ACR-003`：实现 ModelBroker trait 和 stub provider（pending）
 - `TASK-ACR-004`：实现 Planner，冻结结构化 PlanSpec（pending）
 

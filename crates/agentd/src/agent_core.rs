@@ -1,7 +1,7 @@
 pub mod model {
     use std::fmt;
 
-    use crate::api::{RiskClass, SemanticToolCall, escape_json};
+    use crate::api::{escape_json, RiskClass, SemanticToolCall};
 
     pub const PLAN_SCHEMA_VERSION: &str = "agent-core-plan/v1";
     pub const RUN_SCHEMA_VERSION: &str = "agent-core-run/v1";
@@ -878,6 +878,7 @@ pub mod model {
         observation_id: String,
         step_id: String,
         trust_label: TrustBoundary,
+        observation_hash: String,
     }
 
     impl ObservationRef {
@@ -890,23 +891,58 @@ pub mod model {
                 observation_id: observation_id.into(),
                 step_id: step_id.into(),
                 trust_label,
+                observation_hash: "unset".to_string(),
             };
             reference.validate()?;
             Ok(reference)
         }
 
+        pub fn with_hash(
+            observation_id: impl Into<String>,
+            step_id: impl Into<String>,
+            trust_label: TrustBoundary,
+            observation_hash: impl Into<String>,
+        ) -> Result<Self, ModelValidationError> {
+            let reference = Self {
+                observation_id: observation_id.into(),
+                step_id: step_id.into(),
+                trust_label,
+                observation_hash: observation_hash.into(),
+            };
+            reference.validate()?;
+            Ok(reference)
+        }
+
+        pub fn observation_id(&self) -> &str {
+            &self.observation_id
+        }
+
+        pub fn step_id(&self) -> &str {
+            &self.step_id
+        }
+
+        pub fn trust_label(&self) -> TrustBoundary {
+            self.trust_label
+        }
+
+        pub fn observation_hash(&self) -> &str {
+            &self.observation_hash
+        }
+
         fn validate(&self) -> Result<(), ModelValidationError> {
             ensure_no_secret_value("observation_ref.observation_id", &self.observation_id)?;
             ensure_no_secret_value("observation_ref.step_id", &self.step_id)?;
+            ensure_no_secret_value("observation_ref.observation_hash", &self.observation_hash)?;
             Ok(())
         }
 
         fn to_json(&self) -> String {
             format!(
-                "{{\"observation_id\":\"{}\",\"step_id\":\"{}\",\"trust_label\":\"{}\"}}",
+                "{{\"observation_id\":\"{}\",\"step_id\":\"{}\",\"trust_label\":\"{}\",\"observation_hash\":\"{}\"}}",
                 escape_json(&self.observation_id),
                 escape_json(&self.step_id),
-                self.trust_label.as_str()
+                self.trust_label.as_str(),
+                escape_json(&self.observation_hash)
             )
         }
 
@@ -915,11 +951,26 @@ pub mod model {
                 .ok_or_else(|| {
                     ModelValidationError::new("observation_ref.trust_label", "unknown trust label")
                 })?;
+            let observation_hash = if field_value_start(json, "observation_hash").is_some() {
+                required_json_string(json, "observation_hash")?
+            } else {
+                "unset".to_string()
+            };
             Self::new(
                 required_json_string(json, "observation_id")?,
                 required_json_string(json, "step_id")?,
                 trust_label,
-            )
+            )?
+            .with_observation_hash(observation_hash)
+        }
+
+        fn with_observation_hash(
+            mut self,
+            observation_hash: impl Into<String>,
+        ) -> Result<Self, ModelValidationError> {
+            self.observation_hash = observation_hash.into();
+            self.validate()?;
+            Ok(self)
         }
     }
 
@@ -988,8 +1039,90 @@ pub mod model {
             self.state
         }
 
+        pub fn run_id(&self) -> &str {
+            &self.run_id
+        }
+
+        pub fn plan_id(&self) -> &str {
+            &self.plan_id
+        }
+
+        pub fn frozen_plan_hash(&self) -> &str {
+            &self.frozen_plan_hash
+        }
+
         pub fn current_step_id(&self) -> Option<&str> {
             self.current_step_id.as_deref()
+        }
+
+        pub fn approval_state(&self) -> &ApprovalState {
+            &self.approval_state
+        }
+
+        pub fn observation_refs(&self) -> &[ObservationRef] {
+            &self.observation_refs
+        }
+
+        pub fn memory_refs(&self) -> &[String] {
+            &self.memory_refs
+        }
+
+        pub fn recovery_marker(&self) -> &RecoveryMarker {
+            &self.recovery_marker
+        }
+
+        pub fn is_terminal(&self) -> bool {
+            matches!(
+                self.state,
+                RunState::Completed | RunState::Denied | RunState::FailedClosed
+            )
+        }
+
+        pub fn is_recoverable(&self) -> bool {
+            !self.is_terminal()
+        }
+
+        pub fn set_state(
+            &mut self,
+            state: RunState,
+            current_step_id: Option<impl Into<String>>,
+        ) -> Result<(), ModelValidationError> {
+            self.state = state;
+            self.current_step_id = current_step_id.map(Into::into);
+            self.validate()
+        }
+
+        pub fn set_approval_state(
+            &mut self,
+            approval_state: ApprovalState,
+        ) -> Result<(), ModelValidationError> {
+            self.approval_state = approval_state;
+            self.validate()
+        }
+
+        pub fn push_observation_ref(
+            &mut self,
+            observation_ref: ObservationRef,
+        ) -> Result<(), ModelValidationError> {
+            observation_ref.validate()?;
+            self.observation_refs.push(observation_ref);
+            self.validate()
+        }
+
+        pub fn push_memory_ref(
+            &mut self,
+            memory_ref: impl Into<String>,
+        ) -> Result<(), ModelValidationError> {
+            self.memory_refs.push(memory_ref.into());
+            self.validate()
+        }
+
+        pub fn set_recovery_marker(
+            &mut self,
+            recovery_marker: RecoveryMarker,
+        ) -> Result<(), ModelValidationError> {
+            self.recovery_marker = recovery_marker;
+            self.validate()
         }
 
         pub fn to_json(&self) -> String {
@@ -1474,10 +1607,8 @@ pub mod model {
                         ApprovalRequirement::not_required("read-only diagnostic")
                             .expect("approval"),
                         1,
-                        vec![
-                            RiskHint::new(RiskClass::ReadOnly, "diagnostic only")
-                                .expect("risk hint"),
-                        ],
+                        vec![RiskHint::new(RiskClass::ReadOnly, "diagnostic only")
+                            .expect("risk hint")],
                         RollbackRequirement::not_required("no effect to roll back")
                             .expect("rollback"),
                     )
@@ -1499,13 +1630,11 @@ pub mod model {
                         )
                         .expect("approval"),
                         1,
-                        vec![
-                            RiskHint::new(
-                                RiskClass::ExecuteWithConfirmation,
-                                "restart changes service process state",
-                            )
-                            .expect("risk hint"),
-                        ],
+                        vec![RiskHint::new(
+                            RiskClass::ExecuteWithConfirmation,
+                            "restart changes service process state",
+                        )
+                        .expect("risk hint")],
                         RollbackRequirement::new(
                             true,
                             Some("rollback-nginx-restart"),
@@ -1558,14 +1687,12 @@ pub mod model {
                     "waiting for operator confirmation",
                 )
                 .expect("approval state"),
-                vec![
-                    ObservationRef::new(
-                        "obs-nginx-logs",
-                        "read-nginx-logs",
-                        TrustBoundary::LocalSystem,
-                    )
-                    .expect("observation ref"),
-                ],
+                vec![ObservationRef::new(
+                    "obs-nginx-logs",
+                    "read-nginx-logs",
+                    TrustBoundary::LocalSystem,
+                )
+                .expect("observation ref")],
                 vec!["mem:nginx:last-diagnosis".to_string()],
                 RecoveryMarker::new(
                     RecoveryStatus::ResumeFromStep,
@@ -1604,16 +1731,14 @@ pub mod model {
 
         #[test]
         fn secret_values_are_rejected_but_handles_allowed() {
-            assert!(
-                IntentCtx::new(
-                    "operator",
-                    TrustBoundary::Operator,
-                    IntentSource::Tui,
-                    "vm:dev",
-                    "restart service with password=hunter2",
-                )
-                .is_err()
-            );
+            assert!(IntentCtx::new(
+                "operator",
+                TrustBoundary::Operator,
+                IntentSource::Tui,
+                "vm:dev",
+                "restart service with password=hunter2",
+            )
+            .is_err());
 
             let bad_observation = Observation::new(
                 "obs-1",
@@ -1666,6 +1791,625 @@ pub mod model {
                 Some(RiskClass::ExecuteWithConfirmation)
             );
             assert_eq!(risk_from_str("unknown"), None);
+        }
+    }
+}
+
+pub mod run_store {
+    use std::fmt;
+    use std::fs::{self, OpenOptions};
+    use std::io::Write;
+    use std::path::{Path, PathBuf};
+
+    use crate::api::escape_json;
+    use crate::audit::AuditJournal;
+
+    use super::model::{
+        contains_secret_value, ApprovalState, ModelValidationError, ObservationRef, PlanRun,
+        RunState,
+    };
+
+    pub const RUN_STORE_SCHEMA_VERSION: &str = "agent-core-run-store/v1";
+
+    pub trait RunStore {
+        fn create(&self, run: &PlanRun) -> Result<(), RunStoreError>;
+        fn load(&self, run_id: &str) -> Result<PlanRun, RunStoreError>;
+        fn update_state(
+            &self,
+            run_id: &str,
+            state: RunState,
+            current_step_id: Option<&str>,
+        ) -> Result<PlanRun, RunStoreError>;
+        fn append_observation_ref(
+            &self,
+            run_id: &str,
+            observation_ref: ObservationRef,
+        ) -> Result<PlanRun, RunStoreError>;
+        fn attach_approval(
+            &self,
+            run_id: &str,
+            approval_state: ApprovalState,
+        ) -> Result<PlanRun, RunStoreError>;
+        fn mark_terminal(&self, run_id: &str, state: RunState) -> Result<PlanRun, RunStoreError>;
+        fn list_recoverable_runs(&self) -> Result<Vec<PlanRun>, RunStoreError>;
+        fn effect_sealed_by_audit(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            step_id: &str,
+            parameter_hash: &str,
+        ) -> Result<bool, RunStoreError>;
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum RunStoreError {
+        Io(String),
+        Validation(String),
+        NotFound(String),
+        AlreadyExists(String),
+        CorruptSnapshot { path: String, reason: String },
+    }
+
+    impl RunStoreError {
+        fn validation(reason: impl Into<String>) -> Self {
+            Self::Validation(reason.into())
+        }
+
+        fn corrupt(path: &Path, reason: impl Into<String>) -> Self {
+            Self::CorruptSnapshot {
+                path: path.display().to_string(),
+                reason: reason.into(),
+            }
+        }
+    }
+
+    impl fmt::Display for RunStoreError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            match self {
+                Self::Io(reason) => write!(formatter, "run store io error: {reason}"),
+                Self::Validation(reason) => {
+                    write!(formatter, "run store validation error: {reason}")
+                }
+                Self::NotFound(run_id) => write!(formatter, "run not found: {run_id}"),
+                Self::AlreadyExists(run_id) => write!(formatter, "run already exists: {run_id}"),
+                Self::CorruptSnapshot { path, reason } => {
+                    write!(formatter, "corrupt run snapshot {path}: {reason}")
+                }
+            }
+        }
+    }
+
+    impl std::error::Error for RunStoreError {}
+
+    impl From<std::io::Error> for RunStoreError {
+        fn from(error: std::io::Error) -> Self {
+            Self::Io(error.to_string())
+        }
+    }
+
+    impl From<ModelValidationError> for RunStoreError {
+        fn from(error: ModelValidationError) -> Self {
+            Self::Validation(error.to_string())
+        }
+    }
+
+    #[derive(Debug, Clone)]
+    pub struct FileRunStore {
+        root: PathBuf,
+    }
+
+    impl FileRunStore {
+        pub fn new(root: impl Into<PathBuf>) -> Self {
+            Self { root: root.into() }
+        }
+
+        pub fn root(&self) -> &Path {
+            &self.root
+        }
+
+        fn mutate_run(
+            &self,
+            run_id: &str,
+            mutate: impl FnOnce(&mut PlanRun) -> Result<(), RunStoreError>,
+        ) -> Result<PlanRun, RunStoreError> {
+            let mut run = self.load(run_id)?;
+            mutate(&mut run)?;
+            self.write_next_snapshot(&run)?;
+            Ok(run)
+        }
+
+        fn write_next_snapshot(&self, run: &PlanRun) -> Result<(), RunStoreError> {
+            validate_run_id(run.run_id())?;
+            let run_dir = self.run_dir(run.run_id())?;
+            fs::create_dir_all(&run_dir)?;
+            let next_sequence = latest_sequence(&run_dir)?.unwrap_or(0) + 1;
+            self.write_snapshot(&run_dir, next_sequence, run)
+        }
+
+        fn write_snapshot(
+            &self,
+            run_dir: &Path,
+            sequence: u64,
+            run: &PlanRun,
+        ) -> Result<(), RunStoreError> {
+            let run_json = run.to_json();
+            if contains_secret_value(&run_json) {
+                return Err(RunStoreError::validation(
+                    "PlanRun snapshot contains secret-like values",
+                ));
+            }
+
+            let snapshot = snapshot_json(sequence, &run_json);
+            let tmp_path = run_dir.join(format!("{sequence:020}.json.tmp"));
+            let final_path = run_dir.join(format!("{sequence:020}.json"));
+            let mut file = OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .open(&tmp_path)?;
+            file.write_all(snapshot.as_bytes())?;
+            file.write_all(b"\n")?;
+            file.sync_all()?;
+            drop(file);
+            fs::rename(&tmp_path, &final_path)?;
+            Ok(())
+        }
+
+        fn run_dir(&self, run_id: &str) -> Result<PathBuf, RunStoreError> {
+            validate_run_id(run_id)?;
+            Ok(self.root.join(run_id))
+        }
+    }
+
+    impl RunStore for FileRunStore {
+        fn create(&self, run: &PlanRun) -> Result<(), RunStoreError> {
+            validate_run_id(run.run_id())?;
+            let run_dir = self.run_dir(run.run_id())?;
+            if latest_snapshot_path(&run_dir)?.is_some() {
+                return Err(RunStoreError::AlreadyExists(run.run_id().to_string()));
+            }
+            fs::create_dir_all(&run_dir)?;
+            self.write_snapshot(&run_dir, 1, run)
+        }
+
+        fn load(&self, run_id: &str) -> Result<PlanRun, RunStoreError> {
+            let run_dir = self.run_dir(run_id)?;
+            let snapshot_path = latest_snapshot_path(&run_dir)?
+                .ok_or_else(|| RunStoreError::NotFound(run_id.to_string()))?;
+            let snapshot = fs::read_to_string(&snapshot_path)?;
+            parse_snapshot(&snapshot_path, &snapshot)
+        }
+
+        fn update_state(
+            &self,
+            run_id: &str,
+            state: RunState,
+            current_step_id: Option<&str>,
+        ) -> Result<PlanRun, RunStoreError> {
+            self.mutate_run(run_id, |run| {
+                run.set_state(state, current_step_id.map(str::to_string))?;
+                Ok(())
+            })
+        }
+
+        fn append_observation_ref(
+            &self,
+            run_id: &str,
+            observation_ref: ObservationRef,
+        ) -> Result<PlanRun, RunStoreError> {
+            self.mutate_run(run_id, |run| {
+                run.push_observation_ref(observation_ref)?;
+                Ok(())
+            })
+        }
+
+        fn attach_approval(
+            &self,
+            run_id: &str,
+            approval_state: ApprovalState,
+        ) -> Result<PlanRun, RunStoreError> {
+            self.mutate_run(run_id, |run| {
+                run.set_approval_state(approval_state)?;
+                Ok(())
+            })
+        }
+
+        fn mark_terminal(&self, run_id: &str, state: RunState) -> Result<PlanRun, RunStoreError> {
+            if !matches!(
+                state,
+                RunState::Completed | RunState::Denied | RunState::FailedClosed
+            ) {
+                return Err(RunStoreError::validation(
+                    "mark_terminal requires Completed, Denied, or FailedClosed",
+                ));
+            }
+            self.update_state(run_id, state, None)
+        }
+
+        fn list_recoverable_runs(&self) -> Result<Vec<PlanRun>, RunStoreError> {
+            if !self.root.exists() {
+                return Ok(Vec::new());
+            }
+            let mut runs = Vec::new();
+            for entry in fs::read_dir(&self.root)? {
+                let entry = entry?;
+                if !entry.file_type()?.is_dir() {
+                    continue;
+                }
+                let run_id = entry.file_name().to_string_lossy().to_string();
+                let run = self.load(&run_id)?;
+                if run.is_recoverable() {
+                    runs.push(run);
+                }
+            }
+            runs.sort_by(|left, right| left.run_id().cmp(right.run_id()));
+            Ok(runs)
+        }
+
+        fn effect_sealed_by_audit(
+            &self,
+            journal: &AuditJournal,
+            run_id: &str,
+            step_id: &str,
+            parameter_hash: &str,
+        ) -> Result<bool, RunStoreError> {
+            validate_run_id(run_id)?;
+            let step_fragment = format!("\"step_id\":\"{}\"", escape_json(step_id));
+            let hash_fragment = format!("\"parameter_hash\":\"{}\"", escape_json(parameter_hash));
+            Ok(journal.run_timeline(run_id)?.iter().any(|line| {
+                line.contains("\"event_type\":\"CommitSealed\"")
+                    && line.contains(&step_fragment)
+                    && line.contains(&hash_fragment)
+            }))
+        }
+    }
+
+    fn validate_run_id(run_id: &str) -> Result<(), RunStoreError> {
+        if run_id.is_empty()
+            || run_id.contains('/')
+            || run_id.contains('\\')
+            || run_id.contains("..")
+            || contains_secret_value(run_id)
+        {
+            return Err(RunStoreError::validation(
+                "run_id must be a bounded non-secret path segment",
+            ));
+        }
+        Ok(())
+    }
+
+    fn latest_snapshot_path(run_dir: &Path) -> Result<Option<PathBuf>, RunStoreError> {
+        if !run_dir.exists() {
+            return Ok(None);
+        }
+        let mut snapshots = fs::read_dir(run_dir)?
+            .filter_map(|entry| entry.ok().map(|entry| entry.path()))
+            .filter(|path| path.extension().and_then(|value| value.to_str()) == Some("json"))
+            .collect::<Vec<_>>();
+        snapshots.sort();
+        Ok(snapshots.pop())
+    }
+
+    fn latest_sequence(run_dir: &Path) -> Result<Option<u64>, RunStoreError> {
+        let Some(path) = latest_snapshot_path(run_dir)? else {
+            return Ok(None);
+        };
+        let sequence = path
+            .file_stem()
+            .and_then(|value| value.to_str())
+            .and_then(|value| value.parse::<u64>().ok())
+            .ok_or_else(|| RunStoreError::corrupt(&path, "snapshot file name is not numeric"))?;
+        Ok(Some(sequence))
+    }
+
+    fn snapshot_json(sequence: u64, run_json: &str) -> String {
+        format!(
+            "{{\"store_schema_version\":\"{}\",\"sequence\":{},\"snapshot_hash\":\"{}\",\"run\":{}}}",
+            RUN_STORE_SCHEMA_VERSION,
+            sequence,
+            stable_hash(run_json),
+            run_json
+        )
+    }
+
+    fn parse_snapshot(path: &Path, snapshot: &str) -> Result<PlanRun, RunStoreError> {
+        let schema = required_json_string(snapshot, "store_schema_version")
+            .ok_or_else(|| RunStoreError::corrupt(path, "missing store schema version"))?;
+        if schema != RUN_STORE_SCHEMA_VERSION {
+            return Err(RunStoreError::corrupt(
+                path,
+                "unsupported run store schema version",
+            ));
+        }
+        let expected_hash = required_json_string(snapshot, "snapshot_hash")
+            .ok_or_else(|| RunStoreError::corrupt(path, "missing snapshot hash"))?;
+        let run_json = object_field(snapshot, "run")
+            .ok_or_else(|| RunStoreError::corrupt(path, "missing run object"))?;
+        let actual_hash = stable_hash(&run_json);
+        if expected_hash != actual_hash {
+            return Err(RunStoreError::corrupt(path, "snapshot hash mismatch"));
+        }
+        if contains_secret_value(&run_json) {
+            return Err(RunStoreError::corrupt(
+                path,
+                "snapshot contains secret-like values",
+            ));
+        }
+        PlanRun::from_json(&run_json).map_err(RunStoreError::from)
+    }
+
+    fn stable_hash(value: &str) -> String {
+        let mut hash: u64 = 0xcbf29ce484222325;
+        for byte in value.bytes() {
+            hash ^= u64::from(byte);
+            hash = hash.wrapping_mul(0x100000001b3);
+        }
+        format!("{hash:016x}")
+    }
+
+    fn required_json_string(json: &str, key: &str) -> Option<String> {
+        let start = field_value_start(json, key)?;
+        let rest = &json[start..];
+        parse_json_string(rest).map(|(value, _)| value)
+    }
+
+    fn object_field(json: &str, key: &str) -> Option<String> {
+        let start = field_value_start(json, key)?;
+        slice_balanced(&json[start..], '{', '}')
+    }
+
+    fn field_value_start(json: &str, key: &str) -> Option<usize> {
+        let needle = format!("\"{key}\":");
+        let start = json.find(&needle)? + needle.len();
+        Some(skip_json_ws(json, start))
+    }
+
+    fn skip_json_ws(json: &str, mut index: usize) -> usize {
+        while let Some(ch) = json[index..].chars().next() {
+            if !ch.is_whitespace() {
+                break;
+            }
+            index += ch.len_utf8();
+        }
+        index
+    }
+
+    fn parse_json_string(value: &str) -> Option<(String, usize)> {
+        let mut escaped = false;
+        let mut output = String::new();
+        let mut consumed = 1;
+        let mut chars = value.chars();
+        if chars.next()? != '"' {
+            return None;
+        }
+        for ch in chars {
+            consumed += ch.len_utf8();
+            if escaped {
+                match ch {
+                    '"' => output.push('"'),
+                    '\\' => output.push('\\'),
+                    'n' => output.push('\n'),
+                    'r' => output.push('\r'),
+                    _ => output.push(ch),
+                }
+                escaped = false;
+                continue;
+            }
+            match ch {
+                '\\' => escaped = true,
+                '"' => return Some((output, consumed)),
+                _ => output.push(ch),
+            }
+        }
+        None
+    }
+
+    fn slice_balanced(input: &str, open: char, close: char) -> Option<String> {
+        if !input.starts_with(open) {
+            return None;
+        }
+        let mut depth = 0usize;
+        let mut in_string = false;
+        let mut escaped = false;
+        for (index, ch) in input.char_indices() {
+            if in_string {
+                if escaped {
+                    escaped = false;
+                    continue;
+                }
+                match ch {
+                    '\\' => escaped = true,
+                    '"' => in_string = false,
+                    _ => {}
+                }
+                continue;
+            }
+            match ch {
+                '"' => in_string = true,
+                ch if ch == open => depth += 1,
+                ch if ch == close => {
+                    depth -= 1;
+                    if depth == 0 {
+                        return Some(input[..=index].to_string());
+                    }
+                }
+                _ => {}
+            }
+        }
+        None
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::super::model::TrustBoundary;
+        use super::*;
+        use crate::audit::{AuditEvent, AuditEventType};
+
+        fn temp_dir(name: &str) -> PathBuf {
+            let path = std::env::temp_dir()
+                .join(format!("agentd-run-store-{name}-{}", std::process::id()));
+            let _ = fs::remove_dir_all(&path);
+            fs::create_dir_all(&path).expect("temp dir");
+            path
+        }
+
+        fn accepted_run(run_id: &str) -> PlanRun {
+            PlanRun::accepted(run_id, "plan-nginx-recovery", "sha256:frozen-plan")
+                .expect("accepted run")
+        }
+
+        #[test]
+        fn plan_run_state_survives_reopened_store() {
+            let root = temp_dir("survives");
+            let store = FileRunStore::new(&root);
+            let run = accepted_run("run-nginx-1");
+            store.create(&run).expect("create");
+            let updated = store
+                .update_state(
+                    "run-nginx-1",
+                    RunState::AwaitingApproval,
+                    Some("restart-nginx"),
+                )
+                .expect("update");
+            assert_eq!(updated.state(), RunState::AwaitingApproval);
+
+            let reopened = FileRunStore::new(&root);
+            let loaded = reopened.load("run-nginx-1").expect("load");
+            assert_eq!(loaded.state(), RunState::AwaitingApproval);
+            assert_eq!(loaded.current_step_id(), Some("restart-nginx"));
+            assert_eq!(loaded.frozen_plan_hash(), "sha256:frozen-plan");
+        }
+
+        #[test]
+        fn interrupted_temp_write_is_ignored_in_favor_of_latest_valid_snapshot() {
+            let root = temp_dir("tmp-ignore");
+            let store = FileRunStore::new(&root);
+            store.create(&accepted_run("run-nginx-2")).expect("create");
+            let updated = store
+                .update_state("run-nginx-2", RunState::Executing, Some("restart-nginx"))
+                .expect("update");
+            assert_eq!(updated.state(), RunState::Executing);
+
+            let run_dir = root.join("run-nginx-2");
+            fs::write(run_dir.join("00000000000000000003.json.tmp"), "{bad json")
+                .expect("write temp");
+            let loaded = FileRunStore::new(&root)
+                .load("run-nginx-2")
+                .expect("load ignores tmp");
+            assert_eq!(loaded.state(), RunState::Executing);
+            assert_eq!(loaded.current_step_id(), Some("restart-nginx"));
+        }
+
+        #[test]
+        fn list_recoverable_runs_excludes_terminal_runs() {
+            let root = temp_dir("recoverable");
+            let store = FileRunStore::new(&root);
+            store
+                .create(&accepted_run("run-active"))
+                .expect("create active");
+            store
+                .create(&accepted_run("run-done"))
+                .expect("create done");
+            store
+                .mark_terminal("run-done", RunState::Completed)
+                .expect("terminal");
+
+            let recoverable = store.list_recoverable_runs().expect("list");
+            let ids = recoverable
+                .iter()
+                .map(|run| run.run_id())
+                .collect::<Vec<_>>();
+            assert_eq!(ids, vec!["run-active"]);
+        }
+
+        #[test]
+        fn observation_refs_persist_with_hashes_for_stale_detection() {
+            let root = temp_dir("observations");
+            let store = FileRunStore::new(&root);
+            store.create(&accepted_run("run-nginx-3")).expect("create");
+            let updated = store
+                .append_observation_ref(
+                    "run-nginx-3",
+                    ObservationRef::with_hash(
+                        "obs-logs",
+                        "read-nginx-logs",
+                        TrustBoundary::LocalSystem,
+                        "sha256:obs-logs",
+                    )
+                    .expect("observation ref"),
+                )
+                .expect("append");
+            assert_eq!(
+                updated.observation_refs()[0].observation_hash(),
+                "sha256:obs-logs"
+            );
+            let loaded = store.load("run-nginx-3").expect("load");
+            assert_eq!(loaded.observation_refs()[0].observation_id(), "obs-logs");
+            assert_eq!(
+                loaded.observation_refs()[0].observation_hash(),
+                "sha256:obs-logs"
+            );
+        }
+
+        #[test]
+        fn audit_journal_remains_source_of_truth_for_sealed_effects() {
+            let root = temp_dir("audit-source");
+            let store = FileRunStore::new(&root);
+            store.create(&accepted_run("run-audit")).expect("create");
+            let journal = AuditJournal::new(root.join("audit.jsonl"));
+            assert!(!store
+                .effect_sealed_by_audit(&journal, "run-audit", "restart-nginx", "hash-1")
+                .expect("query"));
+
+            let mut event = AuditEvent::new(
+                AuditEventType::CommitSealed,
+                "run-audit",
+                "restart-nginx",
+                "operator",
+                "verified svc.restart",
+            );
+            event.parameter_hash = "hash-1".to_string();
+            journal.append(&event).expect("append");
+
+            assert!(store
+                .effect_sealed_by_audit(&journal, "run-audit", "restart-nginx", "hash-1")
+                .expect("query"));
+            assert!(!store
+                .effect_sealed_by_audit(&journal, "run-audit", "restart-nginx", "wrong")
+                .expect("query"));
+        }
+
+        #[test]
+        fn secret_like_values_are_rejected_before_persistence() {
+            let root = temp_dir("secret-reject");
+            let store = FileRunStore::new(&root);
+            store.create(&accepted_run("run-secret")).expect("create");
+            let error = store
+                .update_state("run-secret", RunState::Executing, Some("token=abc123"))
+                .expect_err("secret cursor rejected");
+            assert!(matches!(error, RunStoreError::Validation(_)));
+            let loaded = store.load("run-secret").expect("load");
+            assert_eq!(loaded.current_step_id(), None);
+
+            let run_dir = root.join("run-secret");
+            let persisted = fs::read_dir(&run_dir)
+                .expect("read run dir")
+                .filter_map(|entry| fs::read_to_string(entry.ok()?.path()).ok())
+                .collect::<Vec<_>>()
+                .join("\n");
+            assert!(!persisted.contains("abc123"));
+        }
+
+        #[test]
+        fn tampered_snapshot_hash_fails_closed() {
+            let root = temp_dir("tamper");
+            let store = FileRunStore::new(&root);
+            store.create(&accepted_run("run-tamper")).expect("create");
+            let path = root.join("run-tamper").join("00000000000000000001.json");
+            let mut snapshot = fs::read_to_string(&path).expect("read snapshot");
+            snapshot = snapshot.replace("sha256:frozen-plan", "sha256:mutated-plan");
+            fs::write(&path, snapshot).expect("tamper");
+            let error = store.load("run-tamper").expect_err("tamper rejected");
+            assert!(matches!(error, RunStoreError::CorruptSnapshot { .. }));
         }
     }
 }
