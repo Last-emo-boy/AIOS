@@ -20,24 +20,29 @@ function Convert-ToUnixPath {
 }
 
 function Write-AgentdElf {
-    param([Parameter(Mandatory = $true)][string]$Path)
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$Message
+    )
 
-    # x86_64 Linux static ELF. It writes AGENTD_HANDOFF_OK, then exits.
-    $message = [Text.Encoding]::ASCII.GetBytes("AGENTD_HANDOFF_OK`n")
-    $code = [byte[]]@(
+    # x86_64 Linux static ELF. It writes the configured boot markers, then exits.
+    $messageBytes = [Text.Encoding]::ASCII.GetBytes($Message)
+    $messageLength = [BitConverter]::GetBytes([UInt32]$messageBytes.Length)
+    $code = [byte[]](([byte[]]@(
         0x48, 0x31, 0xc0,                         # xor rax, rax
         0xb0, 0x01,                               # mov al, 1 ; write
         0x48, 0xc7, 0xc7, 0x01, 0x00, 0x00, 0x00, # mov rdi, 1 ; stdout
         0x48, 0x8d, 0x35, 0x15, 0x00, 0x00, 0x00, # lea rsi, [rip + message]
-        0x48, 0xc7, 0xc2, 0x12, 0x00, 0x00, 0x00, # mov rdx, 18
+        0x48, 0xc7, 0xc2                          # mov rdx, message length
+    )) + ([byte[]]$messageLength) + ([byte[]]@(
         0x0f, 0x05,                               # syscall
         0x48, 0xc7, 0xc0, 0x3c, 0x00, 0x00, 0x00, # mov rax, 60 ; exit
         0x48, 0x31, 0xff,                         # xor rdi, rdi
         0x0f, 0x05                                # syscall
-    )
+    )))
 
     $entryOffset = 0x78
-    $fileSize = $entryOffset + $code.Length + $message.Length
+    $fileSize = $entryOffset + $code.Length + $messageBytes.Length
     $entryAddress = 0x400000 + $entryOffset
     $bytes = New-Object byte[] $fileSize
 
@@ -48,20 +53,20 @@ function Write-AgentdElf {
 
     function Write-U16 {
         param([int]$Offset, [UInt16]$Value)
-        Write-Bytes $Offset ([BitConverter]::GetBytes($Value))
+        Write-Bytes -Offset $Offset -Data ([BitConverter]::GetBytes($Value))
     }
 
     function Write-U32 {
         param([int]$Offset, [UInt32]$Value)
-        Write-Bytes $Offset ([BitConverter]::GetBytes($Value))
+        Write-Bytes -Offset $Offset -Data ([BitConverter]::GetBytes($Value))
     }
 
     function Write-U64 {
         param([int]$Offset, [UInt64]$Value)
-        Write-Bytes $Offset ([BitConverter]::GetBytes($Value))
+        Write-Bytes -Offset $Offset -Data ([BitConverter]::GetBytes($Value))
     }
 
-    Write-Bytes 0x00 ([byte[]](0x7f, 0x45, 0x4c, 0x46, 0x02, 0x01, 0x01, 0x00))
+    Write-Bytes -Offset 0x00 -Data ([byte[]](0x7f, 0x45, 0x4c, 0x46, 0x02, 0x01, 0x01, 0x00))
     Write-U16 0x10 2
     Write-U16 0x12 0x3e
     Write-U32 0x14 1
@@ -80,8 +85,8 @@ function Write-AgentdElf {
     Write-U64 0x68 ([UInt64]$fileSize)
     Write-U64 0x70 0x1000
 
-    Write-Bytes $entryOffset $code
-    Write-Bytes ($entryOffset + $code.Length) $message
+    Write-Bytes -Offset $entryOffset -Data $code
+    Write-Bytes -Offset ($entryOffset + $code.Length) -Data $messageBytes
     [IO.File]::WriteAllBytes($Path, $bytes)
 }
 
@@ -228,7 +233,27 @@ foreach ($dir in @("bin", "dev", "etc", "proc", "sbin", "sys", "tmp")) {
 }
 
 $agentdPath = Join-Path $sourceRoot "sbin/agentd"
-Write-AgentdElf -Path $agentdPath
+$handoffMarker = "AGENTD_HANDOFF_OK"
+$runtimeMarker = "AGENTOS_RUNTIME_ARTIFACTS_OK"
+$runtimeManifestMarker = $null
+$runtimeArtifactIds = @()
+if ($alphaRootfsManifest) {
+    $runtimeArtifactIds = @($alphaRootfsManifest.artifacts | ForEach-Object { $_.id })
+    $runtimeManifestMarker = "AGENTOS_RUNTIME_MANIFEST_SHA256=$($alphaRootfsManifest.rootfs_runtime_manifest_sha256)"
+    $agentdMessageLines = @(
+        $handoffMarker,
+        $runtimeMarker,
+        $runtimeManifestMarker,
+        "AGENTOS_RUNTIME_ARTIFACT_COUNT=$($runtimeArtifactIds.Count)"
+    )
+} else {
+    $agentdMessageLines = @(
+        $handoffMarker,
+        "AGENTOS_RUNTIME_ARTIFACTS_SKIPPED"
+    )
+}
+$agentdMessage = ($agentdMessageLines -join "`n") + "`n"
+Write-AgentdElf -Path $agentdPath -Message $agentdMessage
 
 $archivePath = Join-Path $outRoot "agentos-initramfs.cpio.gz"
 New-InitramfsArchive -SourceRoot $sourceRoot -ArchivePath $archivePath
@@ -242,7 +267,11 @@ $manifest = [ordered]@{
     generated_agentd = "sbin/agentd"
     generated_agentd_sha256 = $agentdHash
     boot_args = "console=ttyS0 rdinit=/sbin/agentd panic=-1"
-    handoff_marker = "AGENTD_HANDOFF_OK"
+    handoff_marker = $handoffMarker
+    runtime_marker = if ($alphaRootfsManifest) { $runtimeMarker } else { $null }
+    runtime_manifest_marker = $runtimeManifestMarker
+    boot_markers = @($agentdMessageLines)
+    runtime_artifact_ids = $runtimeArtifactIds
     alpha_rootfs = if ($alphaRootfsManifest) {
         [ordered]@{
             manifest = "image/out/agentos-alpha-rootfs.manifest.json"

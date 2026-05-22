@@ -15,10 +15,27 @@ This task does not require Firecracker, remote LLM credentials, fleet orchestrat
 ## Artifacts
 
 - `image/build-initramfs.ps1` builds `image/out/agentos-initramfs.cpio.gz`.
-- `image/out/agentos-initramfs.manifest.json` records the build hash, boot args, and MVP constraints.
+- `image/out/agentos-initramfs.manifest.json` records the build hash, boot args, MVP constraints, Alpha runtime artifact IDs, and boot markers.
 - `scripts/boot-smoke-test.ps1` runs or diagnoses the QEMU smoke test.
 - `.workflow/artifacts/boot/boot-smoke.log` stores boot output.
 - `.workflow/artifacts/boot/boot-smoke-result.json` stores the structured result.
+
+## Distribution Alpha Runtime Smoke
+
+For Distribution Alpha, the smoke is no longer handoff-only. The initramfs
+builder first stages and validates the Alpha rootfs contract, then embeds
+runtime availability markers into the generated early `/sbin/agentd`:
+
+```text
+AGENTD_HANDOFF_OK
+AGENTOS_RUNTIME_ARTIFACTS_OK
+AGENTOS_RUNTIME_MANIFEST_SHA256=<rootfs-runtime-manifest-sha256>
+```
+
+The boot smoke test reads `image/out/agentos-initramfs.manifest.json`, confirms
+the Alpha runtime artifact IDs are present and passed, then requires QEMU serial
+output to contain all required markers. Use `-AllowHandoffOnly` only for legacy
+MVP handoff diagnosis; Alpha promotion must not use it.
 
 ## QEMU
 
@@ -71,3 +88,5 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1
 ```
 
 The test passes only when `AGENTD_HANDOFF_OK` appears in the QEMU serial output.
+For Distribution Alpha, it also requires the runtime artifact marker and rootfs
+runtime manifest hash marker.

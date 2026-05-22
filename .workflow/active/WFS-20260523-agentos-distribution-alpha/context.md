@@ -29,9 +29,13 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
   denied restart prepares an effect.
 - The smoke keeps generated journals, reports, projections, and result JSON
   under `.workflow/artifacts/alpha-service-recovery/`.
+- `TASK-DALPHA-007` is complete: `image/build-initramfs.ps1` now embeds Alpha
+  runtime markers into early `/sbin/agentd`, and `scripts/boot-smoke-test.ps1`
+  requires QEMU serial output to include both `AGENTD_HANDOFF_OK` and
+  `AGENTOS_RUNTIME_ARTIFACTS_OK` plus the rootfs runtime manifest hash marker.
 
 ## Next Task
 
-Execute `TASK-DALPHA-007`: add the QEMU boot and runtime smoke gate. The gate
-must prove boot handoff plus packaged runtime availability from Alpha artifacts,
-using `E:\qemu\qemu-system-x86_64.exe` for the full smoke path.
+Execute `TASK-DALPHA-008`: add the Distribution Alpha release/provenance
+promotion gate. It must record runtime manifest hashes, image inputs, gate
+commands, generated artifact hashes, and remaining Alpha blockers.

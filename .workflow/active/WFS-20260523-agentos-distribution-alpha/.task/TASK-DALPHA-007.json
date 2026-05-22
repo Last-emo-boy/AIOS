@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-007",
   "title": "Add QEMU boot and runtime smoke gate",
-  "status": "planned",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "platform",
@@ -17,7 +17,9 @@
     "Record structured smoke result under Alpha evidence."
   ],
   "deliverables": [
-    "QEMU runtime smoke update or documented smoke procedure",
+    "scripts/boot-smoke-test.ps1",
+    "image/build-initramfs.ps1",
+    "docs/boot-chain.md",
     ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
   ],
   "acceptance_criteria": [
@@ -63,5 +65,24 @@
       "Runtime availability is proved from packaged artifacts.",
       "Generated boot artifacts remain untracked."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T09:15:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json",
+    "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe",
+    "boot_smoke_script": "scripts/boot-smoke-test.ps1",
+    "initramfs_builder": "image/build-initramfs.ps1",
+    "documentation": "docs/boot-chain.md",
+    "verification": {
+      "initramfs_build": "passed",
+      "dependency_check": "passed",
+      "full_qemu_runtime_smoke": "passed"
+    },
+    "observed_markers": [
+      "AGENTD_HANDOFF_OK",
+      "AGENTOS_RUNTIME_ARTIFACTS_OK",
+      "AGENTOS_RUNTIME_MANIFEST_SHA256=409c32b14eb8f272be66258ecbea942045d2ea1a1c15e1d19e9c23dd5db4592e"
+    ],
+    "next_task": "TASK-DALPHA-008"
   }
 }

@@ -1,0 +1,94 @@
+{
+  "task": "TASK-DALPHA-007",
+  "status": "completed",
+  "completed_at": "2026-05-23T09:15:00+08:00",
+  "summary": "Upgraded the QEMU boot smoke from handoff-only to runtime-aware. The initramfs builder now embeds Alpha runtime markers derived from the staged rootfs manifest into the early /sbin/agentd output, and the boot smoke gate requires QEMU serial output to contain the handoff marker, runtime artifact marker, and rootfs runtime manifest hash marker.",
+  "deliverables": {
+    "initramfs_builder": "image/build-initramfs.ps1",
+    "qemu_smoke_script": "scripts/boot-smoke-test.ps1",
+    "documentation": "docs/boot-chain.md",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
+  },
+  "source_inputs": [
+    "docs/boot-chain.md",
+    "scripts/boot-smoke-test.ps1",
+    "image/build-initramfs.ps1",
+    "image/build-alpha-rootfs.ps1",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
+  ],
+  "runtime_markers": {
+    "handoff_marker": "AGENTD_HANDOFF_OK",
+    "runtime_marker": "AGENTOS_RUNTIME_ARTIFACTS_OK",
+    "runtime_manifest_marker": "AGENTOS_RUNTIME_MANIFEST_SHA256=409c32b14eb8f272be66258ecbea942045d2ea1a1c15e1d19e9c23dd5db4592e"
+  },
+  "runtime_artifacts": {
+    "ids": [
+      "policy.pack",
+      "tools.semantic",
+      "model_broker.config",
+      "state.runs",
+      "state.audit",
+      "state.rollback",
+      "state.memory"
+    ],
+    "missing_ids": [],
+    "failed_ids": []
+  },
+  "generated_outputs": {
+    "ignored_outputs": [
+      ".workflow/artifacts/boot/dependency-check.json",
+      ".workflow/artifacts/boot/boot-smoke.log",
+      ".workflow/artifacts/boot/boot-smoke-result.json",
+      "image/out/agentos-initramfs.cpio.gz",
+      "image/out/agentos-initramfs.manifest.json",
+      "image/out/agentos-alpha-rootfs/",
+      "image/out/agentos-alpha-rootfs.manifest.json",
+      "image/cache/vmlinuz-virt"
+    ],
+    "tracked_outputs": [
+      "image/build-initramfs.ps1",
+      "scripts/boot-smoke-test.ps1",
+      "docs/boot-chain.md",
+      ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
+    ]
+  },
+  "verification": {
+    "initramfs_build": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1 -Clean",
+      "status": "passed",
+      "initramfs_sha256": "b03e53b9443dc6ee41e6001497eaddcacba17595f3193332b934d8ebb6d85f15",
+      "rootfs_runtime_manifest_sha256": "409c32b14eb8f272be66258ecbea942045d2ea1a1c15e1d19e9c23dd5db4592e"
+    },
+    "dependency_check": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -DependencyCheckOnly -QemuPath E:\\qemu\\qemu-system-x86_64.exe",
+      "status": "passed",
+      "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe",
+      "missing": []
+    },
+    "full_qemu_runtime_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "status": "passed",
+      "result": ".workflow/artifacts/boot/boot-smoke-result.json",
+      "observed_all_markers": true,
+      "observed_markers": [
+        "AGENTD_HANDOFF_OK",
+        "AGENTOS_RUNTIME_ARTIFACTS_OK",
+        "AGENTOS_RUNTIME_MANIFEST_SHA256=409c32b14eb8f272be66258ecbea942045d2ea1a1c15e1d19e9c23dd5db4592e"
+      ]
+    }
+  },
+  "acceptance_evidence": {
+    "boot_handoff_observed": "Full QEMU smoke observed AGENTD_HANDOFF_OK on the serial output.",
+    "runtime_availability_observed": "Full QEMU smoke observed AGENTOS_RUNTIME_ARTIFACTS_OK and the rootfs runtime manifest hash marker on the serial output.",
+    "manifest_tied_to_runtime_artifacts": "boot-smoke-test.ps1 reads image/out/agentos-initramfs.manifest.json, checks policy/tools/ModelBroker/run/audit/rollback/memory artifact IDs, and fails when IDs are missing or failed.",
+    "failure_logs_actionable": "The smoke records dependency-check.json, boot-smoke.log, and boot-smoke-result.json under .workflow/artifacts/boot/.",
+    "generated_artifact_hygiene": "Boot logs, cached kernel, initramfs, staged rootfs, and generated manifests remain under ignored artifact/image/cache paths."
+  },
+  "blocking_alpha_risks_remaining": [
+    "Distribution Alpha release/provenance promotion gate is still required.",
+    "FullRootfs validation still requires installed agentd.boot, agentd.runtime, release.provenance, and release.rootfs_manifest.",
+    "Firecracker, package install isolation, and untrusted content workstreams remain planned."
+  ],
+  "next_task": "TASK-DALPHA-008"
+}

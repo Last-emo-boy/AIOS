@@ -31,7 +31,8 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-DALPHA-003` 已完成：新增 `scripts/validate-alpha-rootfs.ps1`，可在 `PackageDefaults` 阶段验证 `policy.pack`、`tools.semantic`、`model_broker.config` 和四个 persistent state directories，输出稳定 JSON；缺失 `model_broker.config` 的 fixture 已验证 fail-closed。
 - `TASK-DALPHA-005` 已完成：新增 `image/build-alpha-rootfs.ps1`，并让 `image/build-initramfs.ps1` 默认执行 Alpha rootfs validation / staging；生成的 initramfs manifest 已嵌入 Alpha rootfs manifest、runtime artifact hashes、rootfs runtime manifest hash 和 blocking Alpha risks，boot handoff 仍保持 `/sbin/agentd` / `AGENTD_HANDOFF_OK`。
 - `TASK-DALPHA-006` 已完成：新增 `scripts/alpha-service-recovery-smoke.ps1`，从 staged Alpha rootfs runtime contracts 运行 approved / denied generic AgentCore service recovery；approved restart-service 投影为 sealed 且 `CommitSealed=true`，denied restart-service 记录 `PolicyEvaluated` 且 `EffectPrepared=0`，ModelBroker 保持 stub/local-only，无需外部 LLM。
-- 下一步正在执行 `TASK-DALPHA-007`：增加 QEMU boot and runtime smoke gate，证明 boot handoff 之外 packaged runtime artifacts 也可用。
+- `TASK-DALPHA-007` 已完成：`image/build-initramfs.ps1` 会把 `AGENTOS_RUNTIME_ARTIFACTS_OK` 和 rootfs runtime manifest hash marker 嵌入 early `/sbin/agentd`，`scripts/boot-smoke-test.ps1` 已从 handoff-only gate 升级为 runtime-aware QEMU gate；完整 QEMU smoke 观察到 `AGENTD_HANDOFF_OK`、runtime marker 和 runtime manifest hash marker。
+- 下一步正在执行 `TASK-DALPHA-008`：增加 Distribution Alpha release/provenance promotion gate，记录 runtime manifest、image inputs、artifact hashes 和 gate commands。
 - Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
 - `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
@@ -120,7 +121,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 ### Distribution Alpha Wave 2：packaged runtime proofs
 
 - `TASK-DALPHA-006`：运行 packaged AgentCore service recovery smoke（completed）
-- `TASK-DALPHA-007`：增加 QEMU boot and runtime smoke gate（planned）
+- `TASK-DALPHA-007`：增加 QEMU boot and runtime smoke gate（completed）
 - `TASK-DALPHA-008`：增加 Distribution Alpha release/provenance promotion gate（planned）
 
 退出标准：
@@ -362,4 +363,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-执行 `TASK-DALPHA-007`：增加 QEMU boot and runtime smoke gate，使用 `E:\qemu\qemu-system-x86_64.exe` 验证 boot handoff，并增加 packaged runtime availability marker / probe，避免只证明旧 handoff stub。
+执行 `TASK-DALPHA-008`：增加 Distribution Alpha release/provenance promotion gate，记录 rootfs runtime manifest、initramfs manifest、artifact hashes、runtime gate commands 和 remaining Alpha blockers。
