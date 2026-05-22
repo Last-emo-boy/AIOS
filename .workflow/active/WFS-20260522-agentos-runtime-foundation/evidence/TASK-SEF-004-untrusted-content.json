@@ -1,0 +1,75 @@
+{
+  "id": "TASK-SEF-004",
+  "status": "passed",
+  "completed_at": "2026-05-23T02:02:23+08:00",
+  "summary": "Untrusted content source-to-sink policy is implemented as security_execution::source_to_sink. It defines source labels, sink classes, trust boundary preserving sanitized summaries, denial rules for untrusted or model-origin content driving high-risk sinks, and PolicyEvaluated audit records for denied attempts without preparing effects. safety::prompt_injection now directly validates prompt-injection fixtures against the same policy.",
+  "deliverables": [
+    "crates/agentd/src/security_execution.rs",
+    "crates/agentd/src/safety.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-004-untrusted-content.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd safety::prompt_injection",
+      "status": "passed",
+      "result": "3 passed; 0 failed; 101 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd security_execution::source_to_sink",
+      "status": "passed",
+      "result": "5 passed; 0 failed; 99 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "104 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "External content defaults to untrusted.",
+      "status": "passed",
+      "evidence": "security_execution::source_to_sink::tests::external_content_defaults_to_untrusted creates external content with SourceLabel::ExternalUntrustedContent and TrustBoundary::ExternalUntrusted."
+    },
+    {
+      "criterion": "Untrusted text cannot directly create execute, privileged, network exfiltration, or secret-use actions.",
+      "status": "passed",
+      "evidence": "untrusted_text_cannot_directly_create_dangerous_sinks blocks svc.restart, fs.write.diff, privileged host action, http/network egress, and secret.read sinks from external content."
+    },
+    {
+      "criterion": "Sanitized summaries retain source labels and do not erase trust boundaries.",
+      "status": "passed",
+      "evidence": "sanitized_summary_retains_origin_and_does_not_erase_trust_boundary keeps original_trust_boundary=ExternalUntrusted while allowing read-only influence and denying execute influence."
+    },
+    {
+      "criterion": "Denied source-to-sink attempts are audited without EffectPrepared.",
+      "status": "passed",
+      "evidence": "denied_source_to_sink_attempts_are_audited_without_effect_prepared emits one PolicyEvaluated event with source label and sink class, and no EffectPrepared."
+    },
+    {
+      "criterion": "Operator-approved actions still require exact approval token binding.",
+      "status": "passed",
+      "evidence": "operator_approved_actions_still_require_exact_approval_token_binding allows operator source through source-to-sink policy, then verifies PlanStepPolicyAdapter pauses without token and only issues a lease after exact approval."
+    }
+  ],
+  "source_to_sink_contract": {
+    "module": "agentd::security_execution::source_to_sink",
+    "source_labels": [
+      "operator-input",
+      "local-system-output",
+      "external-untrusted-content",
+      "model-output",
+      "sanitized-summary"
+    ],
+    "sink_classes": [
+      "read-only",
+      "write-with-diff",
+      "execute-with-confirmation",
+      "privileged",
+      "network-egress",
+      "secret-access"
+    ],
+    "audit_event_for_denial": "PolicyEvaluated",
+    "effect_prepared_on_denial": false
+  }
+}

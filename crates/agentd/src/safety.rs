@@ -101,6 +101,154 @@ pub fn assess_external_content(fixture: &AdversarialFixture) -> InjectionAssessm
 }
 
 #[cfg(test)]
+mod prompt_injection {
+    use super::*;
+    use crate::api::RiskClass;
+    use crate::audit::{extract_json_string_for_tests, AuditJournal};
+    use crate::security_execution::source_to_sink::{
+        ContentSource, SinkDescriptor, SourceToSinkDecisionKind, SourceToSinkPolicy,
+        SourceToSinkRequest,
+    };
+
+    fn test_journal(name: &str) -> AuditJournal {
+        let path = std::env::temp_dir().join(format!(
+            "agentd-safety-prompt-injection-{name}-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        AuditJournal::new(path)
+    }
+
+    fn sink_for_tool(tool: &str) -> SinkDescriptor {
+        match tool {
+            "net.exfiltrate" | "net.download" => SinkDescriptor::for_tool(
+                tool,
+                RiskClass::ReadOnly,
+                "https://evil.invalid",
+                vec![("url".to_string(), "https://evil.invalid".to_string())],
+            ),
+            "secret.dump" => SinkDescriptor::for_tool(
+                tool,
+                RiskClass::ReadOnly,
+                "secret://prod/db",
+                vec![("secret".to_string(), "secret://prod/db".to_string())],
+            ),
+            "shell.exec" | "auth.login" | "policy.override" | "approval.broad" => {
+                SinkDescriptor::for_tool(
+                    tool,
+                    RiskClass::Never,
+                    "host",
+                    vec![("resource".to_string(), "host".to_string())],
+                )
+            }
+            other => SinkDescriptor::for_tool(
+                other,
+                RiskClass::PrivilegedWithHumanApproval,
+                "host",
+                vec![("resource".to_string(), "host".to_string())],
+            ),
+        }
+        .expect("sink")
+    }
+
+    #[test]
+    fn external_prompt_injection_cannot_drive_forbidden_sinks() {
+        for fixture in PROMPT_INJECTION_FIXTURES {
+            let source = ContentSource::external_content(fixture.id).expect("source");
+            for forbidden_tool in fixture.forbidden_tools {
+                let request = SourceToSinkRequest::new(
+                    "run-prompt-injection",
+                    fixture.id,
+                    "operator",
+                    source.clone(),
+                    sink_for_tool(forbidden_tool),
+                )
+                .expect("request");
+                let decision = SourceToSinkPolicy.evaluate(&request).expect("decision");
+                assert_eq!(decision.kind, SourceToSinkDecisionKind::Denied);
+                assert!(decision.requires_sanitized_replanning);
+            }
+        }
+    }
+
+    #[test]
+    fn denied_prompt_injection_is_audited_without_effect_prepared() {
+        let journal = test_journal("audit");
+        let source = ContentSource::external_content("prompt-injection-shell").expect("source");
+        let request = SourceToSinkRequest::new(
+            "run-prompt-injection",
+            "shell-from-webpage",
+            "operator",
+            source,
+            sink_for_tool("shell.exec"),
+        )
+        .expect("request");
+        let decision = SourceToSinkPolicy
+            .evaluate_and_audit(&journal, &request)
+            .expect("decision");
+        assert_eq!(decision.kind, SourceToSinkDecisionKind::Denied);
+
+        let lines = journal.event_lines().expect("journal");
+        assert_eq!(lines.len(), 1);
+        assert_eq!(
+            extract_json_string_for_tests(&lines[0], "event_type").as_deref(),
+            Some("PolicyEvaluated")
+        );
+        assert!(lines[0].contains("source_label=external-untrusted-content"));
+        assert!(lines[0].contains("sink_class=privileged"));
+        assert!(!lines[0].contains("EffectPrepared"));
+    }
+
+    #[test]
+    fn sanitized_summary_keeps_external_origin_for_replanning() {
+        let source = ContentSource::external_content("webpage-replan").expect("source");
+        let sanitized =
+            ContentSource::sanitized_summary(&source, "summary-webpage-replan").expect("summary");
+
+        let read_only = SourceToSinkPolicy
+            .evaluate(
+                &SourceToSinkRequest::new(
+                    "run-replan",
+                    "status-from-summary",
+                    "operator",
+                    sanitized.clone(),
+                    SinkDescriptor::for_tool(
+                        "svc.status",
+                        RiskClass::ReadOnly,
+                        "nginx",
+                        vec![("service".to_string(), "nginx".to_string())],
+                    )
+                    .expect("read-only sink"),
+                )
+                .expect("request"),
+            )
+            .expect("read-only decision");
+        assert_eq!(read_only.kind, SourceToSinkDecisionKind::Allowed);
+
+        let execute = SourceToSinkPolicy
+            .evaluate(
+                &SourceToSinkRequest::new(
+                    "run-replan",
+                    "restart-from-summary",
+                    "operator",
+                    sanitized,
+                    SinkDescriptor::for_tool(
+                        "svc.restart",
+                        RiskClass::ExecuteWithConfirmation,
+                        "nginx",
+                        vec![("service".to_string(), "nginx".to_string())],
+                    )
+                    .expect("execute sink"),
+                )
+                .expect("request"),
+            )
+            .expect("execute decision");
+        assert_eq!(execute.kind, SourceToSinkDecisionKind::Denied);
+        assert!(execute.to_json().contains("\"original_trust_boundary\":\"external-untrusted\""));
+    }
+}
+
+#[cfg(test)]
 mod tests {
     use std::fs;
     use std::path::{Path, PathBuf};

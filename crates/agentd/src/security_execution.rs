@@ -2057,3 +2057,726 @@ pub mod sandbox_profile {
 
     }
 }
+
+pub mod source_to_sink {
+    use std::fmt;
+
+    use crate::agent_core::model::{contains_secret_value, TrustBoundary};
+    use crate::api::{escape_json, RiskClass};
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+    use crate::policy::stable_parameter_hash;
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum SourceLabel {
+        OperatorInput,
+        LocalSystemOutput,
+        ExternalUntrustedContent,
+        ModelOutput,
+        SanitizedSummary,
+    }
+
+    impl SourceLabel {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::OperatorInput => "operator-input",
+                Self::LocalSystemOutput => "local-system-output",
+                Self::ExternalUntrustedContent => "external-untrusted-content",
+                Self::ModelOutput => "model-output",
+                Self::SanitizedSummary => "sanitized-summary",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct ContentSource {
+        pub label: SourceLabel,
+        pub trust_boundary: TrustBoundary,
+        pub original_trust_boundary: TrustBoundary,
+        pub content_id: String,
+        pub sanitized: bool,
+    }
+
+    impl ContentSource {
+        pub fn operator_input(content_id: impl Into<String>) -> Result<Self, SourceToSinkError> {
+            Self::new(
+                SourceLabel::OperatorInput,
+                TrustBoundary::Operator,
+                TrustBoundary::Operator,
+                content_id,
+                false,
+            )
+        }
+
+        pub fn local_system_output(content_id: impl Into<String>) -> Result<Self, SourceToSinkError> {
+            Self::new(
+                SourceLabel::LocalSystemOutput,
+                TrustBoundary::LocalSystem,
+                TrustBoundary::LocalSystem,
+                content_id,
+                false,
+            )
+        }
+
+        pub fn external_content(content_id: impl Into<String>) -> Result<Self, SourceToSinkError> {
+            Self::new(
+                SourceLabel::ExternalUntrustedContent,
+                TrustBoundary::ExternalUntrusted,
+                TrustBoundary::ExternalUntrusted,
+                content_id,
+                false,
+            )
+        }
+
+        pub fn model_output(content_id: impl Into<String>) -> Result<Self, SourceToSinkError> {
+            Self::new(
+                SourceLabel::ModelOutput,
+                TrustBoundary::ModelOutput,
+                TrustBoundary::ModelOutput,
+                content_id,
+                false,
+            )
+        }
+
+        pub fn sanitized_summary(
+            source: &ContentSource,
+            content_id: impl Into<String>,
+        ) -> Result<Self, SourceToSinkError> {
+            Self::new(
+                SourceLabel::SanitizedSummary,
+                TrustBoundary::SanitizedSummary,
+                source.original_trust_boundary,
+                content_id,
+                true,
+            )
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"label\":\"{}\",\"trust_boundary\":\"{}\",\"original_trust_boundary\":\"{}\",\"content_id\":\"{}\",\"sanitized\":{}}}",
+                self.label.as_str(),
+                self.trust_boundary.as_str(),
+                self.original_trust_boundary.as_str(),
+                escape_json(&self.content_id),
+                self.sanitized
+            )
+        }
+
+        fn new(
+            label: SourceLabel,
+            trust_boundary: TrustBoundary,
+            original_trust_boundary: TrustBoundary,
+            content_id: impl Into<String>,
+            sanitized: bool,
+        ) -> Result<Self, SourceToSinkError> {
+            let source = Self {
+                label,
+                trust_boundary,
+                original_trust_boundary,
+                content_id: content_id.into(),
+                sanitized,
+            };
+            ensure_no_secret("content_source", &source.to_json())?;
+            Ok(source)
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum SinkClass {
+        ReadOnly,
+        WriteWithDiff,
+        ExecuteWithConfirmation,
+        Privileged,
+        NetworkEgress,
+        SecretAccess,
+    }
+
+    impl SinkClass {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::ReadOnly => "read-only",
+                Self::WriteWithDiff => "write-with-diff",
+                Self::ExecuteWithConfirmation => "execute-with-confirmation",
+                Self::Privileged => "privileged",
+                Self::NetworkEgress => "network-egress",
+                Self::SecretAccess => "secret-access",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SinkDescriptor {
+        pub tool: String,
+        pub class: SinkClass,
+        pub risk: RiskClass,
+        pub resource: String,
+        pub normalized_params: Vec<(String, String)>,
+    }
+
+    impl SinkDescriptor {
+        pub fn for_tool(
+            tool: impl Into<String>,
+            risk: RiskClass,
+            resource: impl Into<String>,
+            normalized_params: Vec<(String, String)>,
+        ) -> Result<Self, SourceToSinkError> {
+            let tool = tool.into();
+            let resource = resource.into();
+            let mut normalized_params = normalized_params;
+            normalized_params.sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
+            let class = classify_sink(&tool, risk, &resource, &normalized_params);
+            let sink = Self {
+                tool,
+                class,
+                risk,
+                resource,
+                normalized_params,
+            };
+            ensure_no_secret("sink_descriptor", &sink.to_json())?;
+            Ok(sink)
+        }
+
+        pub fn to_json(&self) -> String {
+            let params = self
+                .normalized_params
+                .iter()
+                .map(|(key, value)| {
+                    format!(
+                        "{{\"key\":\"{}\",\"value\":\"{}\"}}",
+                        escape_json(key),
+                        escape_json(value)
+                    )
+                })
+                .collect::<Vec<_>>()
+                .join(",");
+            format!(
+                "{{\"tool\":\"{}\",\"class\":\"{}\",\"risk\":\"{}\",\"resource\":\"{}\",\"normalized_params\":[{}]}}",
+                escape_json(&self.tool),
+                self.class.as_str(),
+                self.risk.as_str(),
+                escape_json(&self.resource),
+                params
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SourceToSinkRequest {
+        pub run_id: String,
+        pub step_id: String,
+        pub actor: String,
+        pub source: ContentSource,
+        pub sink: SinkDescriptor,
+    }
+
+    impl SourceToSinkRequest {
+        pub fn new(
+            run_id: impl Into<String>,
+            step_id: impl Into<String>,
+            actor: impl Into<String>,
+            source: ContentSource,
+            sink: SinkDescriptor,
+        ) -> Result<Self, SourceToSinkError> {
+            let request = Self {
+                run_id: run_id.into(),
+                step_id: step_id.into(),
+                actor: actor.into(),
+                source,
+                sink,
+            };
+            request.validate()?;
+            Ok(request)
+        }
+
+        fn validate(&self) -> Result<(), SourceToSinkError> {
+            ensure_no_secret("run_id", &self.run_id)?;
+            ensure_no_secret("step_id", &self.step_id)?;
+            ensure_no_secret("actor", &self.actor)?;
+            ensure_no_secret("source", &self.source.to_json())?;
+            ensure_no_secret("sink", &self.sink.to_json())?;
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum SourceToSinkDecisionKind {
+        Allowed,
+        Denied,
+    }
+
+    impl SourceToSinkDecisionKind {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Allowed => "allowed",
+                Self::Denied => "denied",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SourceToSinkDecision {
+        pub kind: SourceToSinkDecisionKind,
+        pub reason: String,
+        pub source_label: SourceLabel,
+        pub source_trust_boundary: TrustBoundary,
+        pub original_trust_boundary: TrustBoundary,
+        pub sink_class: SinkClass,
+        pub requires_sanitized_replanning: bool,
+    }
+
+    impl SourceToSinkDecision {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"decision\":\"{}\",\"reason\":\"{}\",\"source_label\":\"{}\",\"source_trust_boundary\":\"{}\",\"original_trust_boundary\":\"{}\",\"sink_class\":\"{}\",\"requires_sanitized_replanning\":{}}}",
+                self.kind.as_str(),
+                escape_json(&self.reason),
+                self.source_label.as_str(),
+                self.source_trust_boundary.as_str(),
+                self.original_trust_boundary.as_str(),
+                self.sink_class.as_str(),
+                self.requires_sanitized_replanning
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum SourceToSinkError {
+        SecretValue { field: String },
+        Io(String),
+    }
+
+    impl SourceToSinkError {
+        pub fn reason(&self) -> String {
+            match self {
+                SourceToSinkError::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
+                SourceToSinkError::Io(error) => error.clone(),
+            }
+        }
+    }
+
+    impl fmt::Display for SourceToSinkError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl From<std::io::Error> for SourceToSinkError {
+        fn from(value: std::io::Error) -> Self {
+            SourceToSinkError::Io(value.to_string())
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct SourceToSinkPolicy;
+
+    impl SourceToSinkPolicy {
+        pub fn evaluate(
+            &self,
+            request: &SourceToSinkRequest,
+        ) -> Result<SourceToSinkDecision, SourceToSinkError> {
+            request.validate()?;
+            let requires_sanitized_replanning = matches!(
+                request.source.original_trust_boundary,
+                TrustBoundary::ExternalUntrusted | TrustBoundary::ModelOutput
+            ) && !request.source.sanitized;
+
+            let deny_reason = blocked_reason(&request.source, &request.sink);
+            let (kind, reason) = if let Some(reason) = deny_reason {
+                (SourceToSinkDecisionKind::Denied, reason)
+            } else {
+                (
+                    SourceToSinkDecisionKind::Allowed,
+                    format!(
+                        "source {} may influence {} sink; policy adapter still owns approval and capability binding",
+                        request.source.label.as_str(),
+                        request.sink.class.as_str()
+                    ),
+                )
+            };
+
+            Ok(SourceToSinkDecision {
+                kind,
+                reason,
+                source_label: request.source.label,
+                source_trust_boundary: request.source.trust_boundary,
+                original_trust_boundary: request.source.original_trust_boundary,
+                sink_class: request.sink.class,
+                requires_sanitized_replanning,
+            })
+        }
+
+        pub fn evaluate_and_audit(
+            &self,
+            journal: &AuditJournal,
+            request: &SourceToSinkRequest,
+        ) -> Result<SourceToSinkDecision, SourceToSinkError> {
+            let decision = self.evaluate(request)?;
+            if decision.kind == SourceToSinkDecisionKind::Denied {
+                let mut event = AuditEvent::new(
+                    AuditEventType::PolicyEvaluated,
+                    request.run_id.as_str(),
+                    request.step_id.as_str(),
+                    request.actor.as_str(),
+                    format!(
+                        "decision=deny source_label={} source_trust={} original_trust={} sink_class={} tool={} reason={}",
+                        decision.source_label.as_str(),
+                        decision.source_trust_boundary.as_str(),
+                        decision.original_trust_boundary.as_str(),
+                        decision.sink_class.as_str(),
+                        request.sink.tool,
+                        decision.reason
+                    ),
+                );
+                event.policy_version = "source-to-sink-v1".to_string();
+                event.tool_version = "source-to-sink-v1".to_string();
+                event.parameter_hash = source_to_sink_hash(request);
+                journal.append(&event)?;
+            }
+            Ok(decision)
+        }
+    }
+
+    fn classify_sink(
+        tool: &str,
+        risk: RiskClass,
+        resource: &str,
+        normalized_params: &[(String, String)],
+    ) -> SinkClass {
+        if is_secret_sink(tool, resource, normalized_params) {
+            return SinkClass::SecretAccess;
+        }
+        if tool == "http.check" || tool.starts_with("net.") {
+            return SinkClass::NetworkEgress;
+        }
+        match risk {
+            RiskClass::ReadOnly => SinkClass::ReadOnly,
+            RiskClass::WriteWithDiff => SinkClass::WriteWithDiff,
+            RiskClass::ExecuteWithConfirmation => SinkClass::ExecuteWithConfirmation,
+            RiskClass::PrivilegedWithHumanApproval => SinkClass::Privileged,
+            RiskClass::Never => SinkClass::Privileged,
+        }
+    }
+
+    fn is_secret_sink(tool: &str, resource: &str, normalized_params: &[(String, String)]) -> bool {
+        tool.starts_with("secret.")
+            || resource.starts_with("secret://")
+            || normalized_params.iter().any(|(key, value)| {
+                matches!(
+                    key.to_ascii_lowercase().as_str(),
+                    "secret" | "password" | "token" | "apikey" | "api_key"
+                ) || value.starts_with("secret://")
+            })
+    }
+
+    fn blocked_reason(source: &ContentSource, sink: &SinkDescriptor) -> Option<String> {
+        if source.label == SourceLabel::OperatorInput {
+            return None;
+        }
+        if sink.class == SinkClass::ReadOnly {
+            return None;
+        }
+        let source_name = source.label.as_str();
+        let origin = source.original_trust_boundary.as_str();
+        Some(format!(
+            "{source_name} with original_trust={origin} cannot directly drive {} sink; require sanitized summary, replanning, and exact operator approval before capability binding",
+            sink.class.as_str()
+        ))
+    }
+
+    fn source_to_sink_hash(request: &SourceToSinkRequest) -> String {
+        let mut params = vec![
+            ("source_label".to_string(), request.source.label.as_str().to_string()),
+            (
+                "source_trust".to_string(),
+                request.source.trust_boundary.as_str().to_string(),
+            ),
+            (
+                "original_trust".to_string(),
+                request.source.original_trust_boundary.as_str().to_string(),
+            ),
+            ("content_id".to_string(), request.source.content_id.clone()),
+            ("sink_class".to_string(), request.sink.class.as_str().to_string()),
+            ("tool".to_string(), request.sink.tool.clone()),
+            ("resource".to_string(), request.sink.resource.clone()),
+        ];
+        params.extend(request.sink.normalized_params.clone());
+        params.sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
+        stable_parameter_hash(&params)
+    }
+
+    fn ensure_no_secret(
+        field: impl Into<String>,
+        value: &str,
+    ) -> Result<(), SourceToSinkError> {
+        if contains_secret_value(value) {
+            return Err(SourceToSinkError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use crate::agent_core::model::{
+            ApprovalRequirement, PlanStep, RiskHint, RollbackRequirement, VerificationRule,
+        };
+        use crate::api::SemanticToolCall;
+        use crate::audit::extract_json_string_for_tests;
+        use crate::policy::{ApprovalToken, PolicyDecisionKind, PolicyEvaluator};
+        use crate::security_execution::policy_adapter::{
+            PlanStepPolicyAdapter, StepPolicyOutcome, StepPolicyOutcomeKind,
+        };
+        use crate::tools::ToolRouter;
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-source-to-sink-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        fn sink(
+            tool: &str,
+            risk: RiskClass,
+            resource: &str,
+            params: Vec<(&str, &str)>,
+        ) -> SinkDescriptor {
+            SinkDescriptor::for_tool(
+                tool,
+                risk,
+                resource,
+                params
+                    .into_iter()
+                    .map(|(key, value)| (key.to_string(), value.to_string()))
+                    .collect(),
+            )
+            .expect("sink")
+        }
+
+        fn request(
+            source: ContentSource,
+            sink: SinkDescriptor,
+        ) -> SourceToSinkRequest {
+            SourceToSinkRequest::new("run-source", "step-source", "operator", source, sink)
+                .expect("request")
+        }
+
+        fn restart_step() -> PlanStep {
+            PlanStep::new(
+                "restart-nginx",
+                SemanticToolCall::new("svc.restart", vec![("service", "nginx")]),
+                Vec::new(),
+                Vec::new(),
+                Vec::new(),
+                VerificationRule::new(
+                    "nginx-active-after-restart",
+                    "nginx reports active after restart",
+                    "svc.status",
+                )
+                .expect("verification"),
+                ApprovalRequirement::operator_required("service restart needs approval")
+                    .expect("approval"),
+                1,
+                vec![RiskHint::new(
+                    RiskClass::ExecuteWithConfirmation,
+                    "restart changes process state",
+                )
+                .expect("risk")],
+                RollbackRequirement::new(
+                    true,
+                    Some("rollback-nginx-restart"),
+                    "restart requires reconciliation",
+                )
+                .expect("rollback"),
+            )
+            .expect("step")
+        }
+
+        fn exact_approval_for(outcome: &StepPolicyOutcome) -> ApprovalToken {
+            let request = outcome.request.as_ref().expect("request");
+            ApprovalToken {
+                actor: request.actor.clone(),
+                tool: request.tool.clone(),
+                resource: request.resource.clone(),
+                parameter_hash: request.parameter_hash.clone(),
+                expires_at: request.now + 60,
+                policy_version: request.policy_version.clone(),
+            }
+        }
+
+        #[test]
+        fn external_content_defaults_to_untrusted() {
+            let source = ContentSource::external_content("webpage-1").expect("source");
+            assert_eq!(source.label, SourceLabel::ExternalUntrustedContent);
+            assert_eq!(source.trust_boundary, TrustBoundary::ExternalUntrusted);
+            assert_eq!(source.original_trust_boundary, TrustBoundary::ExternalUntrusted);
+            assert!(!source.sanitized);
+            assert!(source.to_json().contains("external-untrusted"));
+        }
+
+        #[test]
+        fn untrusted_text_cannot_directly_create_dangerous_sinks() {
+            let source = ContentSource::external_content("webpage-danger").expect("source");
+            let dangerous = [
+                sink(
+                    "svc.restart",
+                    RiskClass::ExecuteWithConfirmation,
+                    "nginx",
+                    vec![("service", "nginx")],
+                ),
+                sink(
+                    "fs.write.diff",
+                    RiskClass::WriteWithDiff,
+                    "/etc/agentd.conf",
+                    vec![("path", "/etc/agentd.conf"), ("content_hash", "new")],
+                ),
+                sink(
+                    "host.privileged",
+                    RiskClass::PrivilegedWithHumanApproval,
+                    "host",
+                    vec![("resource", "host")],
+                ),
+                sink(
+                    "http.check",
+                    RiskClass::ReadOnly,
+                    "https://evil.invalid/exfil",
+                    vec![("url", "https://evil.invalid/exfil")],
+                ),
+                sink(
+                    "secret.read",
+                    RiskClass::ReadOnly,
+                    "secret://prod/db",
+                    vec![("secret", "secret://prod/db")],
+                ),
+            ];
+
+            for sink in dangerous {
+                let decision = SourceToSinkPolicy
+                    .evaluate(&request(source.clone(), sink))
+                    .expect("decision");
+                assert_eq!(decision.kind, SourceToSinkDecisionKind::Denied);
+                assert!(decision.reason.contains("cannot directly drive"));
+                assert!(decision.requires_sanitized_replanning);
+            }
+        }
+
+        #[test]
+        fn sanitized_summary_retains_origin_and_does_not_erase_trust_boundary() {
+            let source = ContentSource::external_content("webpage-2").expect("source");
+            let sanitized =
+                ContentSource::sanitized_summary(&source, "summary-webpage-2").expect("summary");
+
+            assert_eq!(sanitized.label, SourceLabel::SanitizedSummary);
+            assert_eq!(sanitized.trust_boundary, TrustBoundary::SanitizedSummary);
+            assert_eq!(
+                sanitized.original_trust_boundary,
+                TrustBoundary::ExternalUntrusted
+            );
+            assert!(sanitized.sanitized);
+
+            let read_only = SourceToSinkPolicy
+                .evaluate(&request(
+                    sanitized.clone(),
+                    sink(
+                        "svc.status",
+                        RiskClass::ReadOnly,
+                        "nginx",
+                        vec![("service", "nginx")],
+                    ),
+                ))
+                .expect("read-only");
+            assert_eq!(read_only.kind, SourceToSinkDecisionKind::Allowed);
+
+            let execute = SourceToSinkPolicy
+                .evaluate(&request(
+                    sanitized,
+                    sink(
+                        "svc.restart",
+                        RiskClass::ExecuteWithConfirmation,
+                        "nginx",
+                        vec![("service", "nginx")],
+                    ),
+                ))
+                .expect("execute");
+            assert_eq!(execute.kind, SourceToSinkDecisionKind::Denied);
+            assert_eq!(execute.original_trust_boundary, TrustBoundary::ExternalUntrusted);
+        }
+
+        #[test]
+        fn denied_source_to_sink_attempts_are_audited_without_effect_prepared() {
+            let journal = test_journal("audit-deny");
+            let source = ContentSource::external_content("webpage-shell").expect("source");
+            let request = SourceToSinkRequest::new(
+                "run-injection",
+                "restart-from-webpage",
+                "operator",
+                source,
+                sink(
+                    "svc.restart",
+                    RiskClass::ExecuteWithConfirmation,
+                    "nginx",
+                    vec![("service", "nginx")],
+                ),
+            )
+            .expect("request");
+            let decision = SourceToSinkPolicy
+                .evaluate_and_audit(&journal, &request)
+                .expect("decision");
+
+            assert_eq!(decision.kind, SourceToSinkDecisionKind::Denied);
+            let lines = journal.event_lines().expect("journal");
+            assert_eq!(lines.len(), 1);
+            assert_eq!(
+                extract_json_string_for_tests(&lines[0], "event_type").as_deref(),
+                Some("PolicyEvaluated")
+            );
+            assert!(lines[0].contains("source_label=external-untrusted-content"));
+            assert!(lines[0].contains("sink_class=execute-with-confirmation"));
+            assert!(!lines[0].contains("EffectPrepared"));
+        }
+
+        #[test]
+        fn operator_approved_actions_still_require_exact_approval_token_binding() {
+            let source = ContentSource::operator_input("operator-intent").expect("source");
+            let decision = SourceToSinkPolicy
+                .evaluate(&request(
+                    source,
+                    sink(
+                        "svc.restart",
+                        RiskClass::ExecuteWithConfirmation,
+                        "nginx",
+                        vec![("service", "nginx")],
+                    ),
+                ))
+                .expect("source decision");
+            assert_eq!(decision.kind, SourceToSinkDecisionKind::Allowed);
+
+            let step = restart_step();
+            let journal = test_journal("approval");
+            let adapter = PlanStepPolicyAdapter::new(ToolRouter, PolicyEvaluator);
+            let paused = adapter
+                .evaluate_step(&journal, "run-approval", "operator", &step, None)
+                .expect("pause");
+            assert_eq!(paused.kind, StepPolicyOutcomeKind::AwaitingApproval);
+            assert_eq!(paused.decision.kind, PolicyDecisionKind::PauseForApproval);
+            assert!(paused.lease.is_none());
+
+            let token = exact_approval_for(&paused);
+            let approved = adapter
+                .evaluate_step(&journal, "run-approval", "operator", &step, Some(&token))
+                .expect("approved");
+            assert_eq!(approved.kind, StepPolicyOutcomeKind::Allowed);
+            assert!(approved.lease.is_some());
+
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| line.contains("pause-for-approval")));
+            assert!(lines.iter().any(|line| line.contains("decision=allow")));
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+    }
+}
