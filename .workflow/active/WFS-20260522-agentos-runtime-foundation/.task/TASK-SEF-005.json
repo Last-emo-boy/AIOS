@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-005",
   "title": "Implement secret handle lease rules for Agent runtime",
-  "status": "pending",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "security",
@@ -40,5 +40,19 @@
   ],
   "risk_notes": [
     "Secrets are a runtime concern, not a logging concern; every module boundary must preserve handle-only behavior."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T02:10:03+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-005-secret-handles.json",
+    "implementation": [
+      "crates/agentd/src/security_execution.rs",
+      "crates/agentd/src/safety.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd safety::secret": "5 passed; 0 failed",
+      "cargo test -p agentd security_execution::secret_runtime": "5 passed; 0 failed",
+      "cargo test -p agentd": "114 passed; 0 failed"
+    },
+    "next_task": "TASK-ACR-005"
+  }
 }

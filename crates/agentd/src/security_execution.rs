@@ -2780,3 +2780,616 @@ pub mod source_to_sink {
         }
     }
 }
+
+pub mod secret_runtime {
+    use std::fmt;
+
+    use crate::agent_core::model::contains_secret_value;
+    use crate::api::{escape_json, RiskClass};
+    use crate::audit::{redact_summary, AuditEvent, AuditEventType, AuditJournal};
+    use crate::policy::{stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyRequest};
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum SecretSurface {
+        PlanSpec,
+        Observation,
+        MemoryEntry,
+        AuditSummary,
+        ModelContext,
+        PlannerOutput,
+        CliProjection,
+        TuiProjection,
+    }
+
+    impl SecretSurface {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::PlanSpec => "plan-spec",
+                Self::Observation => "observation",
+                Self::MemoryEntry => "memory-entry",
+                Self::AuditSummary => "audit-summary",
+                Self::ModelContext => "model-context",
+                Self::PlannerOutput => "planner-output",
+                Self::CliProjection => "cli-projection",
+                Self::TuiProjection => "tui-projection",
+            }
+        }
+
+        fn redacts_raw_values(self) -> bool {
+            matches!(
+                self,
+                Self::AuditSummary | Self::CliProjection | Self::TuiProjection
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum BoundaryDisposition {
+        Accepted,
+        Redacted,
+        Rejected,
+    }
+
+    impl BoundaryDisposition {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Accepted => "accepted",
+                Self::Redacted => "redacted",
+                Self::Rejected => "rejected",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct BoundaryText {
+        pub surface: SecretSurface,
+        pub disposition: BoundaryDisposition,
+        pub text: String,
+        pub handle_refs: Vec<String>,
+    }
+
+    impl BoundaryText {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"surface\":\"{}\",\"disposition\":\"{}\",\"text\":\"{}\",\"handle_refs\":{}}}",
+                self.surface.as_str(),
+                self.disposition.as_str(),
+                escape_json(&self.text),
+                string_array_json(&self.handle_refs)
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SecretHandle {
+        pub uri: String,
+        pub actor: String,
+        pub allowed_tool: String,
+        pub resource: String,
+        pub purpose: String,
+    }
+
+    impl SecretHandle {
+        pub fn new(
+            uri: impl Into<String>,
+            actor: impl Into<String>,
+            allowed_tool: impl Into<String>,
+            resource: impl Into<String>,
+            purpose: impl Into<String>,
+        ) -> Result<Self, SecretRuntimeError> {
+            let handle = Self {
+                uri: uri.into(),
+                actor: actor.into(),
+                allowed_tool: allowed_tool.into(),
+                resource: resource.into(),
+                purpose: purpose.into(),
+            };
+            handle.validate()?;
+            Ok(handle)
+        }
+
+        pub fn required_parameter_hash(&self) -> String {
+            stable_parameter_hash(&[
+                ("actor".to_string(), self.actor.clone()),
+                ("secret_handle".to_string(), self.uri.clone()),
+                ("tool".to_string(), self.allowed_tool.clone()),
+                ("resource".to_string(), self.resource.clone()),
+            ])
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"uri\":\"{}\",\"actor\":\"{}\",\"allowed_tool\":\"{}\",\"resource\":\"{}\",\"purpose\":\"{}\"}}",
+                escape_json(&self.uri),
+                escape_json(&self.actor),
+                escape_json(&self.allowed_tool),
+                escape_json(&self.resource),
+                escape_json(&self.purpose)
+            )
+        }
+
+        fn validate(&self) -> Result<(), SecretRuntimeError> {
+            if !is_secret_handle(&self.uri) {
+                return Err(SecretRuntimeError::InvalidHandle {
+                    reason: "secret handles must be single-token secret:// references".to_string(),
+                });
+            }
+            ensure_no_secret("secret_handle.actor", &self.actor)?;
+            ensure_no_secret("secret_handle.allowed_tool", &self.allowed_tool)?;
+            ensure_no_secret("secret_handle.resource", &self.resource)?;
+            ensure_no_secret("secret_handle.purpose", &self.purpose)?;
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct SecretUseLease {
+        pub lease_id: String,
+        pub actor: String,
+        pub tool: String,
+        pub resource: String,
+        pub handle: SecretHandle,
+        pub parameter_hash: String,
+        pub policy_version: String,
+        pub expires_at: u64,
+        pub one_shot: bool,
+        pub consumed: bool,
+    }
+
+    impl SecretUseLease {
+        pub fn consume(&mut self, now: u64) -> Result<(), SecretRuntimeError> {
+            if self.consumed {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease is one-shot and already consumed".to_string(),
+                });
+            }
+            if self.expires_at < now {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease expired".to_string(),
+                });
+            }
+            self.consumed = true;
+            Ok(())
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"lease_id\":\"{}\",\"actor\":\"{}\",\"tool\":\"{}\",\"resource\":\"{}\",\"handle\":{},\"parameter_hash\":\"{}\",\"policy_version\":\"{}\",\"expires_at\":{},\"one_shot\":{},\"consumed\":{}}}",
+                escape_json(&self.lease_id),
+                escape_json(&self.actor),
+                escape_json(&self.tool),
+                escape_json(&self.resource),
+                self.handle.to_json(),
+                escape_json(&self.parameter_hash),
+                escape_json(&self.policy_version),
+                self.expires_at,
+                self.one_shot,
+                self.consumed
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct RuntimeMemoryEntry {
+        pub key: String,
+        pub value: String,
+        pub handle_refs: Vec<String>,
+    }
+
+    impl RuntimeMemoryEntry {
+        pub fn new(
+            key: impl Into<String>,
+            value: impl Into<String>,
+        ) -> Result<Self, SecretRuntimeError> {
+            let key = key.into();
+            let value = value.into();
+            ensure_no_secret("memory.key", &key)?;
+            let boundary = SecretRuntimePolicy::inspect_boundary(SecretSurface::MemoryEntry, &value)?;
+            if boundary.disposition != BoundaryDisposition::Accepted {
+                return Err(SecretRuntimeError::ForbiddenRawSecret {
+                    surface: SecretSurface::MemoryEntry,
+                    reason: "memory entries cannot retain raw secret-like values".to_string(),
+                });
+            }
+            Ok(Self {
+                key,
+                value: boundary.text,
+                handle_refs: boundary.handle_refs,
+            })
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum SecretRuntimeError {
+        InvalidHandle {
+            reason: String,
+        },
+        ForbiddenRawSecret {
+            surface: SecretSurface,
+            reason: String,
+        },
+        LeaseDenied {
+            reason: String,
+        },
+        SecretValue {
+            field: String,
+        },
+        Io(String),
+    }
+
+    impl SecretRuntimeError {
+        pub fn reason(&self) -> String {
+            match self {
+                Self::InvalidHandle { reason }
+                | Self::ForbiddenRawSecret { reason, .. }
+                | Self::LeaseDenied { reason } => reason.clone(),
+                Self::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
+                Self::Io(error) => error.clone(),
+            }
+        }
+    }
+
+    impl fmt::Display for SecretRuntimeError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl From<std::io::Error> for SecretRuntimeError {
+        fn from(value: std::io::Error) -> Self {
+            Self::Io(value.to_string())
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct SecretRuntimePolicy;
+
+    impl SecretRuntimePolicy {
+        pub fn inspect_boundary(
+            surface: SecretSurface,
+            text: &str,
+        ) -> Result<BoundaryText, SecretRuntimeError> {
+            let handles = extract_secret_handles(text)?;
+            if contains_secret_value(text) {
+                if surface.redacts_raw_values() {
+                    let redacted = redact_summary(text);
+                    return Ok(BoundaryText {
+                        surface,
+                        disposition: BoundaryDisposition::Redacted,
+                        handle_refs: handles,
+                        text: redacted,
+                    });
+                }
+                return Err(SecretRuntimeError::ForbiddenRawSecret {
+                    surface,
+                    reason: format!("raw secret-like values cannot enter {}", surface.as_str()),
+                });
+            }
+            Ok(BoundaryText {
+                surface,
+                disposition: BoundaryDisposition::Accepted,
+                handle_refs: handles,
+                text: text.to_string(),
+            })
+        }
+
+        pub fn require_secret_use_lease(
+            capability: Option<&CapabilityLease>,
+            handle: &SecretHandle,
+            now: u64,
+        ) -> Result<SecretUseLease, SecretRuntimeError> {
+            let capability = capability.ok_or_else(|| SecretRuntimeError::LeaseDenied {
+                reason: "secret-use requires an explicit capability lease".to_string(),
+            })?;
+            handle.validate()?;
+            reject_wildcards(capability)?;
+            if capability.actor != handle.actor {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease actor must match handle actor".to_string(),
+                });
+            }
+            if capability.tool != handle.allowed_tool {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease tool must match handle allowed_tool".to_string(),
+                });
+            }
+            if capability.resource != handle.uri {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease resource must be the exact secret handle".to_string(),
+                });
+            }
+            if capability.risk != RiskClass::PrivilegedWithHumanApproval {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease requires privileged human approval risk".to_string(),
+                });
+            }
+            if capability.parameter_hash != handle.required_parameter_hash() {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease parameter hash must bind actor, tool, resource, and handle".to_string(),
+                });
+            }
+            if capability.expires_at < now {
+                return Err(SecretRuntimeError::LeaseDenied {
+                    reason: "secret-use lease expired".to_string(),
+                });
+            }
+            Ok(SecretUseLease {
+                lease_id: capability.lease_id.clone(),
+                actor: capability.actor.clone(),
+                tool: capability.tool.clone(),
+                resource: capability.resource.clone(),
+                handle: handle.clone(),
+                parameter_hash: capability.parameter_hash.clone(),
+                policy_version: capability.policy_version.clone(),
+                expires_at: capability.expires_at,
+                one_shot: true,
+                consumed: false,
+            })
+        }
+
+        pub fn approval_token_matches_secret_use(
+            request: &PolicyRequest,
+            token: &ApprovalToken,
+        ) -> bool {
+            token.matches(request)
+                && token.actor != "*"
+                && token.tool != "*"
+                && token.resource != "*"
+                && token.parameter_hash != "*"
+                && token.policy_version != "*"
+        }
+
+        pub fn record_secret_use(
+            journal: &AuditJournal,
+            run_id: &str,
+            step_id: &str,
+            lease: &SecretUseLease,
+            outcome: &str,
+        ) -> Result<(), SecretRuntimeError> {
+            ensure_no_secret("secret_use.outcome", outcome)?;
+            let mut event = AuditEvent::new(
+                AuditEventType::PolicyEvaluated,
+                run_id,
+                step_id,
+                lease.actor.as_str(),
+                format!(
+                    "secret-use outcome={} handle={} lease_id={} one_shot={} consumed={}",
+                    outcome, lease.handle.uri, lease.lease_id, lease.one_shot, lease.consumed
+                ),
+            );
+            event.policy_version = lease.policy_version.clone();
+            event.tool_version = "secret-runtime-v1".to_string();
+            event.parameter_hash = lease.parameter_hash.clone();
+            journal.append(&event)?;
+            Ok(())
+        }
+    }
+
+    fn reject_wildcards(capability: &CapabilityLease) -> Result<(), SecretRuntimeError> {
+        if capability.actor == "*"
+            || capability.tool == "*"
+            || capability.resource == "*"
+            || capability.parameter_hash == "*"
+            || capability.policy_version == "*"
+        {
+            return Err(SecretRuntimeError::LeaseDenied {
+                reason: "secret-use leases cannot contain wildcard approval scope".to_string(),
+            });
+        }
+        ensure_no_secret("capability_lease", &capability.to_json())
+    }
+
+    fn extract_secret_handles(text: &str) -> Result<Vec<String>, SecretRuntimeError> {
+        let mut handles = Vec::new();
+        for token in text.split_whitespace() {
+            let trimmed = token.trim_matches(|ch: char| {
+                !ch.is_ascii_alphanumeric() && !matches!(ch, ':' | '/' | '_' | '-' | '.')
+            });
+            if trimmed.starts_with("secret://") {
+                if !is_secret_handle(trimmed) {
+                    return Err(SecretRuntimeError::InvalidHandle {
+                        reason: "secret handles must be single-token secret:// references".to_string(),
+                    });
+                }
+                handles.push(trimmed.to_string());
+            }
+        }
+        handles.sort();
+        handles.dedup();
+        Ok(handles)
+    }
+
+    fn is_secret_handle(value: &str) -> bool {
+        value.starts_with("secret://")
+            && value.len() > "secret://".len()
+            && !value.contains(char::is_whitespace)
+            && !value.contains('=')
+            && !value.contains('"')
+            && !value.contains('\'')
+            && !value.contains('`')
+    }
+
+    fn ensure_no_secret(
+        field: impl Into<String>,
+        value: &str,
+    ) -> Result<(), SecretRuntimeError> {
+        if contains_secret_value(value) {
+            return Err(SecretRuntimeError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        let items = values
+            .iter()
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .collect::<Vec<_>>()
+            .join(",");
+        format!("[{items}]")
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        fn handle() -> SecretHandle {
+            SecretHandle::new(
+                "secret://prod/db",
+                "operator",
+                "secret.read",
+                "database-password",
+                "database credential lookup",
+            )
+            .expect("handle")
+        }
+
+        fn capability_for(handle: &SecretHandle, expires_at: u64) -> CapabilityLease {
+            CapabilityLease {
+                lease_id: "lease-secret-read-prod-db".to_string(),
+                actor: handle.actor.clone(),
+                tool: handle.allowed_tool.clone(),
+                resource: handle.uri.clone(),
+                parameter_hash: handle.required_parameter_hash(),
+                expires_at,
+                policy_version: "policy-v1".to_string(),
+                risk: RiskClass::PrivilegedWithHumanApproval,
+            }
+        }
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-secret-runtime-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        #[test]
+        fn secret_handles_remain_visible_on_allowed_surfaces() {
+            let handle = handle();
+            assert!(handle.to_json().contains("secret://prod/db"));
+            let plan_text = SecretRuntimePolicy::inspect_boundary(
+                SecretSurface::PlanSpec,
+                "connect using secret://prod/db",
+            )
+            .expect("plan surface");
+            assert_eq!(plan_text.disposition, BoundaryDisposition::Accepted);
+            assert_eq!(plan_text.handle_refs, vec!["secret://prod/db".to_string()]);
+            assert!(plan_text.to_json().contains("secret://prod/db"));
+        }
+
+        #[test]
+        fn raw_secret_values_are_rejected_or_redacted_before_boundaries() {
+            let model = SecretRuntimePolicy::inspect_boundary(
+                SecretSurface::ModelContext,
+                "token=abc123",
+            )
+            .expect_err("model raw secret rejected");
+            assert!(model.reason().contains("model-context"));
+
+            let memory = RuntimeMemoryEntry::new("session", "password=hunter2")
+                .expect_err("memory raw secret rejected");
+            assert!(memory.reason().contains("memory"));
+
+            let audit = SecretRuntimePolicy::inspect_boundary(
+                SecretSurface::AuditSummary,
+                "using secret://prod/db password=hunter2 token=abc123",
+            )
+            .expect("audit redacted");
+            assert_eq!(audit.disposition, BoundaryDisposition::Redacted);
+            assert!(audit.text.contains("secret://prod/db"));
+            assert!(!audit.text.contains("hunter2"));
+            assert!(!audit.text.contains("token=abc123"));
+        }
+
+        #[test]
+        fn secret_use_requires_explicit_narrow_capability_lease() {
+            let handle = handle();
+            let missing = SecretRuntimePolicy::require_secret_use_lease(None, &handle, 0)
+                .expect_err("missing lease rejected");
+            assert!(missing.reason().contains("explicit capability lease"));
+
+            let capability = capability_for(&handle, 60);
+            let mut lease = SecretRuntimePolicy::require_secret_use_lease(
+                Some(&capability),
+                &handle,
+                0,
+            )
+            .expect("secret use lease");
+            assert!(lease.one_shot);
+            assert!(!lease.consumed);
+            lease.consume(1).expect("consume");
+            assert!(lease.consumed);
+            assert!(lease.consume(2).is_err());
+        }
+
+        #[test]
+        fn broad_approval_and_wildcard_lease_cannot_grant_secret_use() {
+            let handle = handle();
+            let request = PolicyRequest {
+                actor: handle.actor.clone(),
+                tool: handle.allowed_tool.clone(),
+                resource: handle.uri.clone(),
+                risk: RiskClass::PrivilegedWithHumanApproval,
+                parameter_hash: handle.required_parameter_hash(),
+                policy_version: "policy-v1".to_string(),
+                now: 0,
+            };
+            let broad_token = ApprovalToken {
+                actor: request.actor.clone(),
+                tool: request.tool.clone(),
+                resource: "*".to_string(),
+                parameter_hash: "*".to_string(),
+                expires_at: 60,
+                policy_version: request.policy_version.clone(),
+            };
+            assert!(!SecretRuntimePolicy::approval_token_matches_secret_use(
+                &request,
+                &broad_token
+            ));
+
+            let mut wildcard = capability_for(&handle, 60);
+            wildcard.resource = "*".to_string();
+            let error = SecretRuntimePolicy::require_secret_use_lease(
+                Some(&wildcard),
+                &handle,
+                0,
+            )
+            .expect_err("wildcard rejected");
+            assert!(error.reason().contains("wildcard"));
+        }
+
+        #[test]
+        fn secret_use_audit_is_handle_only() {
+            let handle = handle();
+            let capability = capability_for(&handle, 60);
+            let lease = SecretRuntimePolicy::require_secret_use_lease(
+                Some(&capability),
+                &handle,
+                0,
+            )
+            .expect("secret use lease");
+            let journal = test_journal("audit");
+            SecretRuntimePolicy::record_secret_use(
+                &journal,
+                "run-secret",
+                "step-secret",
+                &lease,
+                "authorized",
+            )
+            .expect("record");
+            let lines = journal.event_lines().expect("journal");
+            assert_eq!(lines.len(), 1);
+            assert!(lines[0].contains("secret://prod/db"));
+            assert!(lines[0].contains("lease-secret-read-prod-db"));
+            assert!(!lines[0].contains("hunter2"));
+            assert!(!lines[0].contains("password="));
+            assert!(!lines[0].contains("token="));
+        }
+    }
+}

@@ -249,6 +249,166 @@ mod prompt_injection {
 }
 
 #[cfg(test)]
+mod secret {
+    use crate::api::RiskClass;
+    use crate::audit::{redact_summary, AuditJournal};
+    use crate::policy::{ApprovalToken, CapabilityLease, PolicyRequest};
+    use crate::security_execution::secret_runtime::{
+        BoundaryDisposition, RuntimeMemoryEntry, SecretHandle, SecretRuntimePolicy, SecretSurface,
+    };
+
+    fn handle() -> SecretHandle {
+        SecretHandle::new(
+            "secret://prod/db",
+            "operator",
+            "secret.read",
+            "database-password",
+            "database credential lookup",
+        )
+        .expect("handle")
+    }
+
+    fn capability_for(handle: &SecretHandle) -> CapabilityLease {
+        CapabilityLease {
+            lease_id: "lease-secret-read-prod-db".to_string(),
+            actor: handle.actor.clone(),
+            tool: handle.allowed_tool.clone(),
+            resource: handle.uri.clone(),
+            parameter_hash: handle.required_parameter_hash(),
+            expires_at: 60,
+            policy_version: "policy-v1".to_string(),
+            risk: RiskClass::PrivilegedWithHumanApproval,
+        }
+    }
+
+    fn test_journal(name: &str) -> AuditJournal {
+        let path = std::env::temp_dir().join(format!(
+            "agentd-safety-secret-{name}-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        AuditJournal::new(path)
+    }
+
+    #[test]
+    fn secret_handles_remain_visible_but_raw_values_do_not() {
+        let plan = SecretRuntimePolicy::inspect_boundary(
+            SecretSurface::PlanSpec,
+            "use secret://prod/db for database health check",
+        )
+        .expect("plan boundary");
+        assert_eq!(plan.disposition, BoundaryDisposition::Accepted);
+        assert_eq!(plan.handle_refs, vec!["secret://prod/db".to_string()]);
+
+        let tui = SecretRuntimePolicy::inspect_boundary(
+            SecretSurface::TuiProjection,
+            "handle secret://prod/db password=hunter2 token=abc",
+        )
+        .expect("tui projection redacts");
+        assert_eq!(tui.disposition, BoundaryDisposition::Redacted);
+        assert!(tui.text.contains("secret://prod/db"));
+        assert!(!tui.text.contains("hunter2"));
+        assert!(!tui.text.contains("token=abc"));
+    }
+
+    #[test]
+    fn raw_secret_values_are_blocked_from_model_and_memory() {
+        let model = SecretRuntimePolicy::inspect_boundary(
+            SecretSurface::ModelContext,
+            "api_key=abc123",
+        )
+        .expect_err("model context rejects raw secret");
+        assert!(model.reason().contains("model-context"));
+
+        let memory = RuntimeMemoryEntry::new("session", "token=abc123")
+            .expect_err("memory rejects raw secret");
+        assert!(memory.reason().contains("memory"));
+
+        let memory_handle = RuntimeMemoryEntry::new("session", "use secret://prod/db")
+            .expect("memory can retain handle ref");
+        assert_eq!(memory_handle.handle_refs, vec!["secret://prod/db".to_string()]);
+    }
+
+    #[test]
+    fn secret_use_requires_exact_one_shot_capability_lease() {
+        let handle = handle();
+        let capability = capability_for(&handle);
+        let mut lease = SecretRuntimePolicy::require_secret_use_lease(
+            Some(&capability),
+            &handle,
+            0,
+        )
+        .expect("secret use lease");
+        assert!(lease.one_shot);
+        assert!(!lease.consumed);
+        lease.consume(1).expect("consume once");
+        assert!(lease.consume(2).is_err());
+
+        let missing = SecretRuntimePolicy::require_secret_use_lease(None, &handle, 0)
+            .expect_err("missing lease rejected");
+        assert!(missing.reason().contains("explicit capability lease"));
+    }
+
+    #[test]
+    fn broad_approval_tokens_cannot_grant_secret_use() {
+        let handle = handle();
+        let request = PolicyRequest {
+            actor: handle.actor.clone(),
+            tool: handle.allowed_tool.clone(),
+            resource: handle.uri.clone(),
+            risk: RiskClass::PrivilegedWithHumanApproval,
+            parameter_hash: handle.required_parameter_hash(),
+            policy_version: "policy-v1".to_string(),
+            now: 0,
+        };
+        let broad_token = ApprovalToken {
+            actor: request.actor.clone(),
+            tool: request.tool.clone(),
+            resource: "*".to_string(),
+            parameter_hash: "*".to_string(),
+            expires_at: 60,
+            policy_version: request.policy_version.clone(),
+        };
+        assert!(!SecretRuntimePolicy::approval_token_matches_secret_use(
+            &request,
+            &broad_token
+        ));
+    }
+
+    #[test]
+    fn secret_use_audit_is_handle_only() {
+        let handle = handle();
+        let capability = capability_for(&handle);
+        let lease = SecretRuntimePolicy::require_secret_use_lease(
+            Some(&capability),
+            &handle,
+            0,
+        )
+        .expect("secret use lease");
+        let journal = test_journal("audit");
+        SecretRuntimePolicy::record_secret_use(
+            &journal,
+            "run-secret",
+            "step-secret",
+            &lease,
+            "authorized",
+        )
+        .expect("audit secret use");
+        let lines = journal.event_lines().expect("journal");
+        assert_eq!(lines.len(), 1);
+        assert!(lines[0].contains("secret://prod/db"));
+        assert!(!lines[0].contains("hunter2"));
+        assert!(!lines[0].contains("password="));
+        assert!(!lines[0].contains("token="));
+
+        let redacted = redact_summary("secret://prod/db password=hunter2 token=abc");
+        assert!(redacted.contains("secret://prod/db"));
+        assert!(!redacted.contains("hunter2"));
+        assert!(!redacted.contains("token=abc"));
+    }
+}
+
+#[cfg(test)]
 mod tests {
     use std::fs;
     use std::path::{Path, PathBuf};
