@@ -2605,6 +2605,979 @@ pub mod run_store {
     }
 }
 
+pub mod recovery {
+    use std::collections::BTreeMap;
+    use std::fmt;
+
+    use crate::api::escape_json;
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+
+    use super::model::{
+        contains_secret_value, ModelValidationError, PlanRun, RecoveryMarker, RecoveryStatus,
+        RunState,
+    };
+    use super::run_store::{RunStore, RunStoreError};
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum RunRecoveryClass {
+        SafeToVerify,
+        NeedsRollback,
+        NeedsHumanReview,
+        Abandoned,
+        FailedClosed,
+        Completed,
+    }
+
+    impl RunRecoveryClass {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::SafeToVerify => "safe-to-verify",
+                Self::NeedsRollback => "needs-rollback",
+                Self::NeedsHumanReview => "needs-human-review",
+                Self::Abandoned => "abandoned",
+                Self::FailedClosed => "failed-closed",
+                Self::Completed => "completed",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct UnresolvedEffectTruth {
+        pub step_id: String,
+        pub parameter_hash: String,
+        pub summary: String,
+        pub prepared: bool,
+        pub observed: bool,
+        pub rollback_pending: bool,
+    }
+
+    impl UnresolvedEffectTruth {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"step_id\":\"{}\",\"parameter_hash\":\"{}\",\"summary\":\"{}\",\"prepared\":{},\"observed\":{},\"rollback_pending\":{}}}",
+                escape_json(&self.step_id),
+                escape_json(&self.parameter_hash),
+                escape_json(&self.summary),
+                self.prepared,
+                self.observed,
+                self.rollback_pending
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct RunRecoveryProjection {
+        pub run_id: String,
+        pub step_id: Option<String>,
+        pub previous_state: RunState,
+        pub restored_state: RunState,
+        pub classification: RunRecoveryClass,
+        pub recovery_status: RecoveryStatus,
+        pub unresolved_effects: Vec<UnresolvedEffectTruth>,
+        pub reason: String,
+        pub prompt: String,
+    }
+
+    impl RunRecoveryProjection {
+        pub fn to_json(&self) -> String {
+            let unresolved = self
+                .unresolved_effects
+                .iter()
+                .map(UnresolvedEffectTruth::to_json)
+                .collect::<Vec<_>>()
+                .join(",");
+            format!(
+                "{{\"run_id\":\"{}\",\"step_id\":{},\"previous_state\":\"{}\",\"restored_state\":\"{}\",\"classification\":\"{}\",\"recovery_status\":\"{}\",\"unresolved_effects\":[{}],\"reason\":\"{}\",\"prompt\":\"{}\"}}",
+                escape_json(&self.run_id),
+                optional_string_json(self.step_id.as_deref()),
+                self.previous_state.as_str(),
+                self.restored_state.as_str(),
+                self.classification.as_str(),
+                self.recovery_status.as_str(),
+                unresolved,
+                escape_json(&self.reason),
+                escape_json(&self.prompt)
+            )
+        }
+
+        pub fn to_cli_line(&self) -> String {
+            format!(
+                "run={} state={} recovery={} unresolved={} reason={}",
+                self.run_id,
+                self.restored_state.as_str(),
+                self.classification.as_str(),
+                self.unresolved_effects.len(),
+                self.reason
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct RunRecoveryReport {
+        pub projections: Vec<RunRecoveryProjection>,
+    }
+
+    impl RunRecoveryReport {
+        pub fn to_json(&self) -> String {
+            let projections = self
+                .projections
+                .iter()
+                .map(RunRecoveryProjection::to_json)
+                .collect::<Vec<_>>()
+                .join(",");
+            format!("{{\"projections\":[{}]}}", projections)
+        }
+
+        pub fn to_cli_lines(&self) -> Vec<String> {
+            self.projections
+                .iter()
+                .map(RunRecoveryProjection::to_cli_line)
+                .collect()
+        }
+    }
+
+    pub struct AgentRunRecoveryCoordinator<'a, S> {
+        store: &'a S,
+        journal: &'a AuditJournal,
+    }
+
+    impl<'a, S: RunStore> AgentRunRecoveryCoordinator<'a, S> {
+        pub fn new(store: &'a S, journal: &'a AuditJournal) -> Self {
+            Self { store, journal }
+        }
+
+        pub fn scan(&self) -> Result<RunRecoveryReport, AgentRunRecoveryError> {
+            let mut projections = Vec::new();
+            for run in self.store.list_recoverable_runs()? {
+                projections.push(self.project_run(&run)?);
+            }
+            Ok(RunRecoveryReport { projections })
+        }
+
+        pub fn recover_all(&self) -> Result<RunRecoveryReport, AgentRunRecoveryError> {
+            let mut projections = Vec::new();
+            for run in self.store.list_recoverable_runs()? {
+                projections.push(self.recover_run(run.run_id())?);
+            }
+            Ok(RunRecoveryReport { projections })
+        }
+
+        pub fn recover_run(
+            &self,
+            run_id: &str,
+        ) -> Result<RunRecoveryProjection, AgentRunRecoveryError> {
+            ensure_no_secret("recovery.run_id", run_id)?;
+            let run = self.store.load(run_id)?;
+            if run.is_terminal() {
+                return self.project_terminal_run(&run);
+            }
+            let planned = self.project_run(&run)?;
+            self.append_recovery_event(AuditEventType::RecoveryStarted, &planned)?;
+
+            self.store.update_state(
+                run_id,
+                RunState::Recovering,
+                planned.step_id.as_deref(),
+            )?;
+            let marker = RecoveryMarker::new(
+                planned.recovery_status,
+                planned.step_id.clone(),
+                rollback_id_for(&planned),
+                planned.reason.clone(),
+            )?;
+            self.store.attach_recovery_marker(run_id, marker)?;
+
+            let restored = match planned.restored_state {
+                RunState::Completed | RunState::FailedClosed => {
+                    self.store.mark_terminal(run_id, planned.restored_state)?
+                }
+                RunState::Suspended | RunState::RollbackPending | RunState::Recovering => {
+                    self.store.update_state(
+                        run_id,
+                        planned.restored_state,
+                        planned.step_id.as_deref(),
+                    )?
+                }
+                _ => {
+                    return Err(AgentRunRecoveryError::InvalidRecovery {
+                        run_id: run_id.to_string(),
+                        reason: format!(
+                            "invalid target recovery state {}",
+                            planned.restored_state.as_str()
+                        ),
+                    });
+                }
+            };
+
+            let recovered = self.project_from_restored(&planned, &restored);
+            self.append_recovery_event(AuditEventType::RecoveryCompleted, &recovered)?;
+            Ok(recovered)
+        }
+
+        fn project_terminal_run(
+            &self,
+            run: &PlanRun,
+        ) -> Result<RunRecoveryProjection, AgentRunRecoveryError> {
+            let projection = RunRecoveryProjection {
+                run_id: run.run_id().to_string(),
+                step_id: run.current_step_id().map(str::to_string),
+                previous_state: run.state(),
+                restored_state: run.state(),
+                classification: RunRecoveryClass::Completed,
+                recovery_status: RecoveryStatus::None,
+                unresolved_effects: Vec::new(),
+                reason: "run is already terminal".to_string(),
+                prompt: "terminal run does not require model replay".to_string(),
+            };
+            validate_projection(&projection)?;
+            Ok(projection)
+        }
+
+        fn project_run(
+            &self,
+            run: &PlanRun,
+        ) -> Result<RunRecoveryProjection, AgentRunRecoveryError> {
+            let timeline = self.journal.run_timeline(run.run_id())?;
+            let effects = effect_truth_from_timeline(&timeline);
+            let unresolved = unresolved_effects(&effects);
+            let has_plan_or_intent = timeline.iter().any(|line| {
+                event_type(line).is_some_and(|kind| {
+                    kind == "IntentReceived"
+                        || kind == "PlanFrozen"
+                        || kind == "PolicyEvaluated"
+                })
+            });
+            let has_commit = effects.values().any(|effect| effect.sealed);
+            let has_rollback_pending = effects.values().any(|effect| effect.rollback_pending)
+                || run.state() == RunState::RollbackPending;
+            let all_unresolved_read_only =
+                !unresolved.is_empty() && unresolved.iter().all(effect_looks_read_only);
+            let any_unresolved_write = unresolved.iter().any(effect_needs_rollback);
+
+            let (classification, restored_state, recovery_status, reason) = if has_rollback_pending
+                || any_unresolved_write
+            {
+                (
+                    RunRecoveryClass::NeedsRollback,
+                    RunState::RollbackPending,
+                    RecoveryStatus::RollbackRequired,
+                    "durable audit contains write or rollback-pending effect truth".to_string(),
+                )
+            } else if all_unresolved_read_only {
+                (
+                    RunRecoveryClass::SafeToVerify,
+                    RunState::Recovering,
+                    RecoveryStatus::ReconcileEffects,
+                    "read-only unresolved effect can be verified from audit evidence".to_string(),
+                )
+            } else if !unresolved.is_empty() {
+                (
+                    RunRecoveryClass::NeedsHumanReview,
+                    RunState::Suspended,
+                    RecoveryStatus::ReconcileEffects,
+                    "unresolved effect is not safe to auto-verify or roll back".to_string(),
+                )
+            } else if matches!(run.state(), RunState::AwaitingApproval | RunState::Suspended) {
+                (
+                    RunRecoveryClass::NeedsHumanReview,
+                    RunState::Suspended,
+                    RecoveryStatus::ResumeFromStep,
+                    "run was waiting for operator decision".to_string(),
+                )
+            } else if has_commit && run.current_step_id().is_none() {
+                (
+                    RunRecoveryClass::Completed,
+                    RunState::Completed,
+                    RecoveryStatus::None,
+                    "audit shows sealed effects and no active step remains".to_string(),
+                )
+            } else if matches!(
+                run.state(),
+                RunState::Executing | RunState::Observing | RunState::Verifying
+            ) && effects.is_empty()
+            {
+                (
+                    RunRecoveryClass::FailedClosed,
+                    RunState::FailedClosed,
+                    RecoveryStatus::None,
+                    "run was mid-effect but audit has no durable effect truth".to_string(),
+                )
+            } else if !has_plan_or_intent && run.state() == RunState::Accepted {
+                (
+                    RunRecoveryClass::Abandoned,
+                    RunState::Suspended,
+                    RecoveryStatus::ResumeFromStep,
+                    "accepted run has no durable planning or policy evidence".to_string(),
+                )
+            } else {
+                (
+                    RunRecoveryClass::NeedsHumanReview,
+                    RunState::Suspended,
+                    RecoveryStatus::ResumeFromStep,
+                    "durable evidence is insufficient for autonomous recovery".to_string(),
+                )
+            };
+
+            let prompt = recovery_prompt(
+                run,
+                classification,
+                restored_state,
+                recovery_status,
+                &unresolved,
+                &reason,
+            );
+            let projection = RunRecoveryProjection {
+                run_id: run.run_id().to_string(),
+                step_id: run
+                    .current_step_id()
+                    .map(str::to_string)
+                    .or_else(|| unresolved.first().map(|effect| effect.step_id.clone())),
+                previous_state: run.state(),
+                restored_state,
+                classification,
+                recovery_status,
+                unresolved_effects: unresolved,
+                reason,
+                prompt,
+            };
+            validate_projection(&projection)?;
+            Ok(projection)
+        }
+
+        fn project_from_restored(
+            &self,
+            planned: &RunRecoveryProjection,
+            restored: &PlanRun,
+        ) -> RunRecoveryProjection {
+            let mut projection = planned.clone();
+            projection.restored_state = restored.state();
+            projection.step_id = restored
+                .current_step_id()
+                .map(str::to_string)
+                .or_else(|| planned.step_id.clone());
+            projection
+        }
+
+        fn append_recovery_event(
+            &self,
+            event_type: AuditEventType,
+            projection: &RunRecoveryProjection,
+        ) -> Result<(), AgentRunRecoveryError> {
+            let mut event = AuditEvent::new(
+                event_type,
+                projection.run_id.as_str(),
+                projection.step_id.as_deref().unwrap_or("run"),
+                "agent-core-recovery",
+                format!(
+                    "agent run recovery class={} previous_state={} restored_state={} recovery_status={} unresolved={} reason={}",
+                    projection.classification.as_str(),
+                    projection.previous_state.as_str(),
+                    projection.restored_state.as_str(),
+                    projection.recovery_status.as_str(),
+                    projection.unresolved_effects.len(),
+                    projection.reason
+                ),
+            );
+            event.policy_version = "agent-core-recovery-v1".to_string();
+            event.tool_version = "run-store+audit-v1".to_string();
+            event.parameter_hash = stable_hash(&projection.to_json());
+            self.journal.append(&event)?;
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum AgentRunRecoveryError {
+        Store(RunStoreError),
+        Model(ModelValidationError),
+        Io(String),
+        SecretValue { field: String },
+        InvalidRecovery { run_id: String, reason: String },
+    }
+
+    impl fmt::Display for AgentRunRecoveryError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            match self {
+                Self::Store(error) => write!(formatter, "{error}"),
+                Self::Model(error) => write!(formatter, "{error}"),
+                Self::Io(error) => write!(formatter, "agent run recovery io error: {error}"),
+                Self::SecretValue { field } => {
+                    write!(formatter, "secret-like value is not allowed in {field}")
+                }
+                Self::InvalidRecovery { run_id, reason } => {
+                    write!(formatter, "invalid recovery for {run_id}: {reason}")
+                }
+            }
+        }
+    }
+
+    impl std::error::Error for AgentRunRecoveryError {}
+
+    impl From<RunStoreError> for AgentRunRecoveryError {
+        fn from(value: RunStoreError) -> Self {
+            Self::Store(value)
+        }
+    }
+
+    impl From<ModelValidationError> for AgentRunRecoveryError {
+        fn from(value: ModelValidationError) -> Self {
+            Self::Model(value)
+        }
+    }
+
+    impl From<std::io::Error> for AgentRunRecoveryError {
+        fn from(value: std::io::Error) -> Self {
+            Self::Io(value.to_string())
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    struct EffectTruth {
+        step_id: String,
+        parameter_hash: String,
+        summary: String,
+        prepared: bool,
+        observed: bool,
+        sealed: bool,
+        rollback_pending: bool,
+        rolled_back: bool,
+    }
+
+    fn effect_truth_from_timeline(lines: &[String]) -> BTreeMap<String, EffectTruth> {
+        let mut effects = BTreeMap::new();
+        for line in lines {
+            let Some(kind) = event_type(line) else {
+                continue;
+            };
+            if !matches!(
+                kind.as_str(),
+                "EffectPrepared"
+                    | "EffectObserved"
+                    | "CommitSealed"
+                    | "RollbackPending"
+                    | "RollbackObserved"
+            ) {
+                continue;
+            }
+            let step_id = json_string(line, "step_id").unwrap_or_else(|| "unknown".to_string());
+            let effect = effects
+                .entry(step_id.clone())
+                .or_insert_with(|| EffectTruth {
+                    step_id,
+                    ..EffectTruth::default()
+                });
+            if let Some(parameter_hash) = json_string(line, "parameter_hash") {
+                if parameter_hash != "unset" {
+                    effect.parameter_hash = parameter_hash;
+                }
+            }
+            if let Some(summary) = json_string(line, "summary") {
+                if !summary.is_empty() {
+                    effect.summary = summary;
+                }
+            }
+            match kind.as_str() {
+                "EffectPrepared" => effect.prepared = true,
+                "EffectObserved" => effect.observed = true,
+                "CommitSealed" => effect.sealed = true,
+                "RollbackPending" => effect.rollback_pending = true,
+                "RollbackObserved" => effect.rolled_back = true,
+                _ => {}
+            }
+        }
+        effects
+    }
+
+    fn unresolved_effects(effects: &BTreeMap<String, EffectTruth>) -> Vec<UnresolvedEffectTruth> {
+        effects
+            .values()
+            .filter(|effect| effect.prepared && !effect.sealed && !effect.rolled_back)
+            .map(|effect| UnresolvedEffectTruth {
+                step_id: effect.step_id.clone(),
+                parameter_hash: effect.parameter_hash.clone(),
+                summary: effect.summary.clone(),
+                prepared: effect.prepared,
+                observed: effect.observed,
+                rollback_pending: effect.rollback_pending,
+            })
+            .collect()
+    }
+
+    fn effect_looks_read_only(effect: &UnresolvedEffectTruth) -> bool {
+        let lower = effect.summary.to_ascii_lowercase();
+        lower.contains("read-only")
+            || lower.contains("svc.status")
+            || lower.contains("svc.logs")
+            || lower.contains("http.check")
+            || lower.contains("fs.read")
+            || lower.contains("config.test")
+    }
+
+    fn effect_needs_rollback(effect: &UnresolvedEffectTruth) -> bool {
+        let lower = effect.summary.to_ascii_lowercase();
+        effect.rollback_pending
+            || lower.contains("fs.write.diff")
+            || lower.contains("write-with-diff")
+            || lower.contains(" rollback")
+            || lower.contains("rollback_id")
+    }
+
+    fn rollback_id_for(projection: &RunRecoveryProjection) -> Option<String> {
+        if projection.classification != RunRecoveryClass::NeedsRollback {
+            return None;
+        }
+        projection
+            .unresolved_effects
+            .iter()
+            .find_map(|effect| extract_rollback_id(&effect.summary))
+            .or_else(|| {
+                projection
+                    .unresolved_effects
+                    .first()
+                    .map(|effect| format!("recovery-{}", stable_hash(&effect.step_id)))
+            })
+    }
+
+    fn extract_rollback_id(summary: &str) -> Option<String> {
+        summary.split_whitespace().find_map(|token| {
+            token
+                .strip_prefix("rollback_id=")
+                .map(|value| value.trim_matches(|ch: char| ch == ',' || ch == ';').to_string())
+        })
+    }
+
+    fn recovery_prompt(
+        run: &PlanRun,
+        classification: RunRecoveryClass,
+        restored_state: RunState,
+        recovery_status: RecoveryStatus,
+        unresolved: &[UnresolvedEffectTruth],
+        reason: &str,
+    ) -> String {
+        let steps = unresolved
+            .iter()
+            .map(|effect| effect.step_id.as_str())
+            .collect::<Vec<_>>()
+            .join(",");
+        format!(
+            "recover run={} previous_state={} target_state={} class={} recovery_status={} unresolved_steps=[{}] source=run-store+audit no-model-replay reason={}",
+            run.run_id(),
+            run.state().as_str(),
+            restored_state.as_str(),
+            classification.as_str(),
+            recovery_status.as_str(),
+            steps,
+            reason
+        )
+    }
+
+    fn validate_projection(projection: &RunRecoveryProjection) -> Result<(), AgentRunRecoveryError> {
+        ensure_no_secret("recovery_projection.run_id", &projection.run_id)?;
+        if let Some(step_id) = &projection.step_id {
+            ensure_no_secret("recovery_projection.step_id", step_id)?;
+        }
+        ensure_no_secret("recovery_projection.reason", &projection.reason)?;
+        ensure_no_secret("recovery_projection.prompt", &projection.prompt)?;
+        for effect in &projection.unresolved_effects {
+            ensure_no_secret("recovery_projection.effect.step_id", &effect.step_id)?;
+            ensure_no_secret(
+                "recovery_projection.effect.parameter_hash",
+                &effect.parameter_hash,
+            )?;
+            ensure_no_secret("recovery_projection.effect.summary", &effect.summary)?;
+        }
+        Ok(())
+    }
+
+    fn event_type(line: &str) -> Option<String> {
+        json_string(line, "event_type")
+    }
+
+    fn json_string(line: &str, key: &str) -> Option<String> {
+        let needle = format!("\"{key}\":\"");
+        let start = line.find(&needle)? + needle.len();
+        parse_json_string(&line[start..])
+    }
+
+    fn parse_json_string(value: &str) -> Option<String> {
+        let mut escaped = false;
+        let mut output = String::new();
+        for ch in value.chars() {
+            if escaped {
+                match ch {
+                    '"' => output.push('"'),
+                    '\\' => output.push('\\'),
+                    'n' => output.push('\n'),
+                    'r' => output.push('\r'),
+                    _ => output.push(ch),
+                }
+                escaped = false;
+                continue;
+            }
+            match ch {
+                '\\' => escaped = true,
+                '"' => return Some(output),
+                _ => output.push(ch),
+            }
+        }
+        None
+    }
+
+    fn stable_hash(value: &str) -> String {
+        let mut hash: u64 = 0xcbf29ce484222325;
+        for byte in value.bytes() {
+            hash ^= u64::from(byte);
+            hash = hash.wrapping_mul(0x100000001b3);
+        }
+        format!("{hash:016x}")
+    }
+
+    fn optional_string_json(value: Option<&str>) -> String {
+        value
+            .map(|inner| format!("\"{}\"", escape_json(inner)))
+            .unwrap_or_else(|| "null".to_string())
+    }
+
+    fn ensure_no_secret(
+        field: impl Into<String>,
+        value: &str,
+    ) -> Result<(), AgentRunRecoveryError> {
+        if contains_secret_value(value) {
+            return Err(AgentRunRecoveryError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::fs;
+        use std::path::{Path, PathBuf};
+
+        use super::*;
+        use crate::audit::extract_json_string_for_tests;
+        use crate::agent_core::model::RecoveryMarker;
+        use crate::agent_core::run_store::FileRunStore;
+
+        fn temp_dir(name: &str) -> PathBuf {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-agent-core-recovery-{name}-{}",
+                std::process::id()
+            ));
+            let _ = fs::remove_dir_all(&path);
+            fs::create_dir_all(&path).expect("temp dir");
+            path
+        }
+
+        fn store(root: &Path) -> FileRunStore {
+            FileRunStore::new(root.join("runs"))
+        }
+
+        fn journal(root: &Path) -> AuditJournal {
+            AuditJournal::new(root.join("audit.jsonl"))
+        }
+
+        fn accepted_run(run_id: &str) -> PlanRun {
+            PlanRun::accepted(run_id, "plan-recovery", "hash-plan").expect("run")
+        }
+
+        fn append_event(
+            journal: &AuditJournal,
+            event_type: AuditEventType,
+            run_id: &str,
+            step_id: &str,
+            summary: &str,
+            parameter_hash: &str,
+        ) {
+            let mut event = AuditEvent::new(event_type, run_id, step_id, "operator", summary);
+            event.parameter_hash = parameter_hash.to_string();
+            journal.append(&event).expect("append event");
+        }
+
+        #[test]
+        fn read_only_unresolved_effect_recovers_to_reconciling_state() {
+            let root = temp_dir("read-only");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-read")).expect("create");
+            store
+                .update_state("run-read", RunState::Observing, Some("status-nginx"))
+                .expect("observing");
+            append_event(
+                &journal,
+                AuditEventType::EffectPrepared,
+                "run-read",
+                "status-nginx",
+                "prepared tool=svc.status risk=read-only parameter_hash=hash-read",
+                "hash-read",
+            );
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-read")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::SafeToVerify);
+            assert_eq!(recovered.restored_state, RunState::Recovering);
+            assert_eq!(recovered.recovery_status, RecoveryStatus::ReconcileEffects);
+            assert!(recovered.prompt.contains("no-model-replay"));
+            let loaded = store.load("run-read").expect("load");
+            assert_eq!(loaded.state(), RunState::Recovering);
+            assert_eq!(
+                loaded.recovery_marker().status(),
+                RecoveryStatus::ReconcileEffects
+            );
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| {
+                extract_json_string_for_tests(line, "event_type").as_deref()
+                    == Some("RecoveryStarted")
+            }));
+            assert!(lines.iter().any(|line| {
+                extract_json_string_for_tests(line, "event_type").as_deref()
+                    == Some("RecoveryCompleted")
+            }));
+        }
+
+        #[test]
+        fn write_effect_without_seal_recovers_to_rollback_pending() {
+            let root = temp_dir("write");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-write")).expect("create");
+            store
+                .update_state("run-write", RunState::Executing, Some("write-config"))
+                .expect("executing");
+            append_event(
+                &journal,
+                AuditEventType::EffectPrepared,
+                "run-write",
+                "write-config",
+                "prepared tool=fs.write.diff rollback_id=rb-1 target=/tmp/nginx.conf",
+                "hash-write",
+            );
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-write")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::NeedsRollback);
+            assert_eq!(recovered.restored_state, RunState::RollbackPending);
+            assert_eq!(recovered.recovery_status, RecoveryStatus::RollbackRequired);
+            assert_eq!(recovered.unresolved_effects.len(), 1);
+            let loaded = store.load("run-write").expect("load");
+            assert_eq!(loaded.state(), RunState::RollbackPending);
+            assert_eq!(
+                loaded.recovery_marker().status(),
+                RecoveryStatus::RollbackRequired
+            );
+            assert_eq!(loaded.recovery_marker().rollback_id(), Some("rb-1"));
+            assert!(!recovered.prompt.contains("replan"));
+        }
+
+        #[test]
+        fn read_only_observed_before_crash_still_recovers_to_safe_verify() {
+            let root = temp_dir("observed-read");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-observed")).expect("create");
+            store
+                .update_state("run-observed", RunState::Verifying, Some("status-nginx"))
+                .expect("verifying");
+            append_event(
+                &journal,
+                AuditEventType::EffectPrepared,
+                "run-observed",
+                "status-nginx",
+                "prepared tool=svc.status risk=read-only parameter_hash=hash-read",
+                "hash-read",
+            );
+            append_event(
+                &journal,
+                AuditEventType::EffectObserved,
+                "run-observed",
+                "status-nginx",
+                "observed tool=svc.status read-only diagnostic completed",
+                "hash-read",
+            );
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-observed")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::SafeToVerify);
+            assert_eq!(recovered.restored_state, RunState::Recovering);
+            assert!(recovered.unresolved_effects[0].observed);
+            let loaded = store.load("run-observed").expect("load");
+            assert_eq!(loaded.state(), RunState::Recovering);
+        }
+
+        #[test]
+        fn verification_failure_rollback_pending_recovers_without_model_replay() {
+            let root = temp_dir("verification-failure");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-verify-failed")).expect("create");
+            store
+                .update_state(
+                    "run-verify-failed",
+                    RunState::RollbackPending,
+                    Some("write-config"),
+                )
+                .expect("rollback pending");
+            append_event(
+                &journal,
+                AuditEventType::EffectPrepared,
+                "run-verify-failed",
+                "write-config",
+                "prepared tool=fs.write.diff rollback_id=rb-verify target=/tmp/app.conf",
+                "hash-write",
+            );
+            append_event(
+                &journal,
+                AuditEventType::EffectObserved,
+                "run-verify-failed",
+                "write-config",
+                "observed fs.write.diff target=/tmp/app.conf rollback_id=rb-verify",
+                "hash-write",
+            );
+            append_event(
+                &journal,
+                AuditEventType::RollbackPending,
+                "run-verify-failed",
+                "write-config",
+                "rollback pending write-with-diff verification failed rollback_id=rb-verify",
+                "hash-write",
+            );
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-verify-failed")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::NeedsRollback);
+            assert_eq!(recovered.restored_state, RunState::RollbackPending);
+            assert_eq!(recovered.recovery_status, RecoveryStatus::RollbackRequired);
+            assert!(recovered.prompt.contains("no-model-replay"));
+            let loaded = store.load("run-verify-failed").expect("load");
+            assert_eq!(loaded.recovery_marker().rollback_id(), Some("rb-verify"));
+        }
+
+        #[test]
+        fn awaiting_approval_recovers_to_suspended_human_review() {
+            let root = temp_dir("approval");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-approval")).expect("create");
+            store
+                .attach_recovery_marker(
+                    "run-approval",
+                    RecoveryMarker::none(),
+                )
+                .expect("marker");
+            store
+                .update_state(
+                    "run-approval",
+                    RunState::AwaitingApproval,
+                    Some("restart-nginx"),
+                )
+                .expect("awaiting");
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-approval")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::NeedsHumanReview);
+            assert_eq!(recovered.restored_state, RunState::Suspended);
+            let loaded = store.load("run-approval").expect("load");
+            assert_eq!(loaded.state(), RunState::Suspended);
+            assert_eq!(
+                loaded.recovery_marker().status(),
+                RecoveryStatus::ResumeFromStep
+            );
+        }
+
+        #[test]
+        fn mid_effect_without_audit_truth_fails_closed() {
+            let root = temp_dir("missing-audit");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-missing")).expect("create");
+            store
+                .update_state("run-missing", RunState::Executing, Some("restart-nginx"))
+                .expect("executing");
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-missing")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::FailedClosed);
+            assert_eq!(recovered.restored_state, RunState::FailedClosed);
+            let loaded = store.load("run-missing").expect("load");
+            assert_eq!(loaded.state(), RunState::FailedClosed);
+        }
+
+        #[test]
+        fn sealed_run_without_active_step_recovers_to_completed() {
+            let root = temp_dir("completed");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-complete")).expect("create");
+            store
+                .update_state("run-complete", RunState::Planned, None)
+                .expect("planned");
+            append_event(
+                &journal,
+                AuditEventType::CommitSealed,
+                "run-complete",
+                "status-nginx",
+                "commit sealed tool=svc.status commit_id=commit-read",
+                "hash-read",
+            );
+
+            let recovered = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .recover_run("run-complete")
+                .expect("recover");
+
+            assert_eq!(recovered.classification, RunRecoveryClass::Completed);
+            assert_eq!(recovered.restored_state, RunState::Completed);
+            let loaded = store.load("run-complete").expect("load");
+            assert_eq!(loaded.state(), RunState::Completed);
+        }
+
+        #[test]
+        fn scan_joins_recoverable_runs_with_audit_truth_without_mutation() {
+            let root = temp_dir("scan");
+            let store = store(&root);
+            let journal = journal(&root);
+            store.create(&accepted_run("run-scan")).expect("create");
+            store
+                .update_state("run-scan", RunState::Observing, Some("status-nginx"))
+                .expect("observing");
+            append_event(
+                &journal,
+                AuditEventType::EffectPrepared,
+                "run-scan",
+                "status-nginx",
+                "prepared tool=svc.status risk=read-only",
+                "hash-read",
+            );
+
+            let report = AgentRunRecoveryCoordinator::new(&store, &journal)
+                .scan()
+                .expect("scan");
+
+            assert_eq!(report.projections.len(), 1);
+            assert_eq!(
+                report.projections[0].classification,
+                RunRecoveryClass::SafeToVerify
+            );
+            assert!(report.to_json().contains("\"classification\":\"safe-to-verify\""));
+            assert!(report.to_cli_lines()[0].contains("run=run-scan"));
+            let loaded = store.load("run-scan").expect("load");
+            assert_eq!(loaded.state(), RunState::Observing);
+        }
+    }
+}
+
 pub mod model_broker {
     use std::fmt;
 

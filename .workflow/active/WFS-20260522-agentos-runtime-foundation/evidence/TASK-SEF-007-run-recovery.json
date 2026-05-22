@@ -1,0 +1,93 @@
+{
+  "id": "TASK-SEF-007",
+  "status": "passed",
+  "completed_at": "2026-05-23T03:58:29+08:00",
+  "summary": "Agent run recovery integration is implemented as agent_core::recovery. AgentRunRecoveryCoordinator joins RunStore recoverable runs with AuditJournal effect truth, classifies durable recovery state, restores runs to Recovering, Suspended, RollbackPending, Completed, or FailedClosed without model replay, emits RecoveryStarted and RecoveryCompleted events, and exposes JSON/CLI projections for TUI/CLI use.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-007-run-recovery.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::recovery",
+      "status": "passed",
+      "result": "8 passed; 0 failed; 142 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd recovery::",
+      "status": "passed",
+      "result": "15 passed; 0 failed; 135 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "150 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "A run interrupted after EffectPrepared is recoverable from persisted state.",
+      "status": "passed",
+      "evidence": "agent_core::recovery::tests::read_only_unresolved_effect_recovers_to_reconciling_state and write_effect_without_seal_recovers_to_rollback_pending recover from RunStore snapshots plus EffectPrepared audit entries."
+    },
+    {
+      "criterion": "Write effects without seal are classified for rollback or human review.",
+      "status": "passed",
+      "evidence": "agent_core::recovery::tests::write_effect_without_seal_recovers_to_rollback_pending classifies fs.write.diff without CommitSealed as needs-rollback and restores RunState::RollbackPending."
+    },
+    {
+      "criterion": "Read-only unresolved effects can be verified and sealed when safe.",
+      "status": "passed",
+      "evidence": "agent_core::recovery::tests::read_only_observed_before_crash_still_recovers_to_safe_verify classifies observed read-only effect truth as safe-to-verify and restores RunState::Recovering."
+    },
+    {
+      "criterion": "Recovery never relies on asking the model what happened.",
+      "status": "passed",
+      "evidence": "RunRecoveryProjection prompt includes source=run-store+audit and no-model-replay; tests assert prompt does not route through replanning."
+    },
+    {
+      "criterion": "Recovery events are written to audit.",
+      "status": "passed",
+      "evidence": "agent_core::recovery::tests::read_only_unresolved_effect_recovers_to_reconciling_state verifies RecoveryStarted and RecoveryCompleted audit events."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::agent_core::recovery",
+    "coordinator": "AgentRunRecoveryCoordinator<S>",
+    "inputs": [
+      "RunStore::list_recoverable_runs",
+      "RunStore::load",
+      "AuditJournal::run_timeline"
+    ],
+    "outputs": [
+      "RunRecoveryReport",
+      "RunRecoveryProjection",
+      "RecoveryStarted audit event",
+      "RecoveryCompleted audit event"
+    ],
+    "classifications": [
+      "safe-to-verify",
+      "needs-rollback",
+      "needs-human-review",
+      "abandoned",
+      "failed-closed",
+      "completed"
+    ],
+    "state_mapping": [
+      "read-only unresolved effect -> Recovering + ReconcileEffects",
+      "write or rollback-pending unresolved effect -> RollbackPending + RollbackRequired",
+      "awaiting approval or ambiguous evidence -> Suspended + ResumeFromStep/ReconcileEffects",
+      "mid-effect without durable effect truth -> FailedClosed",
+      "sealed run with no active step -> Completed"
+    ],
+    "safety_ordering": [
+      "Recovery scans durable RunStore snapshots before mutation",
+      "Recovery derives effect truth only from AuditJournal events",
+      "Recovery writes Recovering before final recovered state",
+      "Recovery attaches RecoveryMarker before final projection",
+      "Recovery prompt explicitly forbids model replay as source of truth"
+    ],
+    "wip_constraint": "Implementation was placed in crates/agentd/src/agent_core.rs to avoid overwriting existing uncommitted changes in audit.rs and recovery.rs."
+  },
+  "next_task": "TASK-ACR-009"
+}

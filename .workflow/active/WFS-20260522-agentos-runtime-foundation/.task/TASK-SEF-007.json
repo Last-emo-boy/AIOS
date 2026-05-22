@@ -1,7 +1,7 @@
 {
   "id": "TASK-SEF-007",
   "title": "Integrate recovery reconciler with Agent run state",
-  "status": "pending",
+  "status": "completed",
   "wave": 3,
   "priority": "P0",
   "type": "recovery",
@@ -41,5 +41,18 @@
   ],
   "risk_notes": [
     "Recovery is the line between an agent runtime and a chat script; effect truth must be durable."
-  ]
+  ],
+  "completed_evidence": {
+    "completed_at": "2026-05-23T03:58:29+08:00",
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-007-run-recovery.json",
+    "implementation": [
+      "crates/agentd/src/agent_core.rs"
+    ],
+    "tests": {
+      "cargo test -p agentd agent_core::recovery": "8 passed; 0 failed; 142 filtered out",
+      "cargo test -p agentd recovery::": "15 passed; 0 failed; 135 filtered out",
+      "cargo test -p agentd": "150 passed; 0 failed"
+    },
+    "next_task": "TASK-ACR-009"
+  }
 }
