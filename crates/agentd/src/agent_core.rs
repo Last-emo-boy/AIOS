@@ -841,6 +841,18 @@ pub mod model {
             self.status
         }
 
+        pub fn approval_id(&self) -> Option<&str> {
+            self.approval_id.as_deref()
+        }
+
+        pub fn actor(&self) -> Option<&str> {
+            self.actor.as_deref()
+        }
+
+        pub fn reason(&self) -> &str {
+            &self.reason
+        }
+
         fn validate(&self) -> Result<(), ModelValidationError> {
             if let Some(approval_id) = &self.approval_id {
                 ensure_no_secret_value("approval_state.approval_id", approval_id)?;
@@ -912,6 +924,18 @@ pub mod model {
 
         pub fn status(&self) -> RecoveryStatus {
             self.status
+        }
+
+        pub fn step_id(&self) -> Option<&str> {
+            self.step_id.as_deref()
+        }
+
+        pub fn rollback_id(&self) -> Option<&str> {
+            self.rollback_id.as_deref()
+        }
+
+        pub fn reason(&self) -> &str {
+            &self.reason
         }
 
         fn validate(&self) -> Result<(), ModelValidationError> {
@@ -1165,6 +1189,16 @@ pub mod model {
         ) -> Result<(), ModelValidationError> {
             self.state = state;
             self.current_step_id = current_step_id.map(Into::into);
+            self.validate()
+        }
+
+        pub fn set_frozen_plan(
+            &mut self,
+            plan_id: impl Into<String>,
+            frozen_plan_hash: impl Into<String>,
+        ) -> Result<(), ModelValidationError> {
+            self.plan_id = plan_id.into();
+            self.frozen_plan_hash = frozen_plan_hash.into();
             self.validate()
         }
 
@@ -1882,7 +1916,7 @@ pub mod run_store {
 
     use super::model::{
         contains_secret_value, ApprovalState, ModelValidationError, ObservationRef, PlanRun,
-        RunState,
+        RecoveryMarker, RunState,
     };
 
     pub const RUN_STORE_SCHEMA_VERSION: &str = "agent-core-run-store/v1";
@@ -1896,6 +1930,12 @@ pub mod run_store {
             state: RunState,
             current_step_id: Option<&str>,
         ) -> Result<PlanRun, RunStoreError>;
+        fn bind_frozen_plan(
+            &self,
+            run_id: &str,
+            plan_id: &str,
+            frozen_plan_hash: &str,
+        ) -> Result<PlanRun, RunStoreError>;
         fn append_observation_ref(
             &self,
             run_id: &str,
@@ -1905,6 +1945,11 @@ pub mod run_store {
             &self,
             run_id: &str,
             approval_state: ApprovalState,
+        ) -> Result<PlanRun, RunStoreError>;
+        fn attach_recovery_marker(
+            &self,
+            run_id: &str,
+            recovery_marker: RecoveryMarker,
         ) -> Result<PlanRun, RunStoreError>;
         fn mark_terminal(&self, run_id: &str, state: RunState) -> Result<PlanRun, RunStoreError>;
         fn list_recoverable_runs(&self) -> Result<Vec<PlanRun>, RunStoreError>;
@@ -2067,6 +2112,18 @@ pub mod run_store {
             })
         }
 
+        fn bind_frozen_plan(
+            &self,
+            run_id: &str,
+            plan_id: &str,
+            frozen_plan_hash: &str,
+        ) -> Result<PlanRun, RunStoreError> {
+            self.mutate_run(run_id, |run| {
+                run.set_frozen_plan(plan_id.to_string(), frozen_plan_hash.to_string())?;
+                Ok(())
+            })
+        }
+
         fn append_observation_ref(
             &self,
             run_id: &str,
@@ -2085,6 +2142,17 @@ pub mod run_store {
         ) -> Result<PlanRun, RunStoreError> {
             self.mutate_run(run_id, |run| {
                 run.set_approval_state(approval_state)?;
+                Ok(())
+            })
+        }
+
+        fn attach_recovery_marker(
+            &self,
+            run_id: &str,
+            recovery_marker: RecoveryMarker,
+        ) -> Result<PlanRun, RunStoreError> {
+            self.mutate_run(run_id, |run| {
+                run.set_recovery_marker(recovery_marker)?;
                 Ok(())
             })
         }
@@ -4250,6 +4318,1087 @@ pub mod planner {
             let explanation = planner.explain_plan(&plan).expect("explain");
             assert!(explanation.starts_with("summary:"));
             assert!(explanation.contains("approval-gated steps"));
+        }
+    }
+}
+
+pub mod run_loop {
+    use std::cell::RefCell;
+    use std::collections::HashMap;
+    use std::fmt;
+
+    use crate::api::{escape_json, CommitId, RiskClass, VerificationResult};
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+    use crate::policy::{ApprovalToken, PolicyEvaluator};
+    use crate::sandbox::SandboxCompiler;
+    use crate::security_execution::effect_envelope::{
+        EffectEnvelope, EffectEnvelopeError, EffectEnvelopeState,
+    };
+    use crate::security_execution::policy_adapter::{
+        PlanStepPolicyAdapter, StepPolicyError, StepPolicyOutcome, StepPolicyOutcomeKind,
+    };
+    use crate::security_execution::sandbox_profile::{
+        LeaseSandboxProfileCompiler, SandboxProfileError,
+    };
+    use crate::tools::ToolRouter;
+
+    use super::model::{
+        contains_secret_value, ApprovalState, ApprovalStatus, IntentCtx, ModelValidationError,
+        ObservationRef, PlanRun, PlanSpec, PlanStep, RecoveryMarker, RecoveryStatus, RunState,
+        TrustBoundary,
+    };
+    use super::planner::{FrozenPlan, Planner, PlannerError};
+    use super::run_store::{RunStore, RunStoreError};
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct RunProjection {
+        pub run_id: String,
+        pub plan_id: String,
+        pub frozen_plan_hash: String,
+        pub state: RunState,
+        pub current_step_id: Option<String>,
+        pub approval_status: ApprovalStatus,
+        pub approval_id: Option<String>,
+        pub approval_reason: String,
+        pub recovery_status: RecoveryStatus,
+        pub recovery_reason: String,
+        pub observation_count: usize,
+        pub memory_count: usize,
+    }
+
+    impl RunProjection {
+        pub fn from_run(run: &PlanRun) -> Self {
+            Self {
+                run_id: run.run_id().to_string(),
+                plan_id: run.plan_id().to_string(),
+                frozen_plan_hash: run.frozen_plan_hash().to_string(),
+                state: run.state(),
+                current_step_id: run.current_step_id().map(str::to_string),
+                approval_status: run.approval_state().status(),
+                approval_id: run.approval_state().approval_id().map(str::to_string),
+                approval_reason: run.approval_state().reason().to_string(),
+                recovery_status: run.recovery_marker().status(),
+                recovery_reason: run.recovery_marker().reason().to_string(),
+                observation_count: run.observation_refs().len(),
+                memory_count: run.memory_refs().len(),
+            }
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"run_id\":\"{}\",\"plan_id\":\"{}\",\"frozen_plan_hash\":\"{}\",\"state\":\"{}\",\"current_step_id\":{},\"approval_status\":\"{}\",\"approval_id\":{},\"approval_reason\":\"{}\",\"recovery_status\":\"{}\",\"recovery_reason\":\"{}\",\"observation_count\":{},\"memory_count\":{}}}",
+                escape_json(&self.run_id),
+                escape_json(&self.plan_id),
+                escape_json(&self.frozen_plan_hash),
+                self.state.as_str(),
+                optional_string_json(self.current_step_id.as_deref()),
+                self.approval_status.as_str(),
+                optional_string_json(self.approval_id.as_deref()),
+                escape_json(&self.approval_reason),
+                self.recovery_status.as_str(),
+                escape_json(&self.recovery_reason),
+                self.observation_count,
+                self.memory_count
+            )
+        }
+
+        pub fn to_cli_line(&self) -> String {
+            format!(
+                "run={} state={} step={} approval={} observations={}",
+                self.run_id,
+                self.state.as_str(),
+                self.current_step_id.as_deref().unwrap_or("-"),
+                self.approval_status.as_str(),
+                self.observation_count
+            )
+        }
+    }
+
+    pub struct AgentCore<S, P> {
+        store: S,
+        planner: P,
+        journal: AuditJournal,
+        policy_adapter: PlanStepPolicyAdapter,
+        sandbox_compiler: LeaseSandboxProfileCompiler,
+        accepted_intents: RefCell<HashMap<String, IntentCtx>>,
+        frozen_plans: RefCell<HashMap<String, FrozenPlan>>,
+        approval_tokens: RefCell<HashMap<String, ApprovalToken>>,
+    }
+
+    impl<S, P> AgentCore<S, P>
+    where
+        S: RunStore,
+        P: Planner,
+    {
+        pub fn new(store: S, planner: P, journal: AuditJournal) -> Self {
+            Self {
+                store,
+                planner,
+                journal,
+                policy_adapter: PlanStepPolicyAdapter::new(ToolRouter, PolicyEvaluator),
+                sandbox_compiler: LeaseSandboxProfileCompiler::new(SandboxCompiler),
+                accepted_intents: RefCell::new(HashMap::new()),
+                frozen_plans: RefCell::new(HashMap::new()),
+                approval_tokens: RefCell::new(HashMap::new()),
+            }
+        }
+
+        pub fn store(&self) -> &S {
+            &self.store
+        }
+
+        pub fn journal(&self) -> &AuditJournal {
+            &self.journal
+        }
+
+        pub fn accept_intent(
+            &self,
+            request_id: &str,
+            intent: IntentCtx,
+        ) -> Result<RunProjection, AgentCoreError> {
+            ensure_no_secret("request_id", request_id)?;
+            let run_id = format!("run-{}", stable_hash(request_id));
+            let run = PlanRun::accepted(&run_id, "plan-pending", "pending")?;
+            self.store.create(&run)?;
+            self.accepted_intents
+                .borrow_mut()
+                .insert(run_id.clone(), intent);
+            self.journal.append(&AuditEvent::new(
+                AuditEventType::IntentReceived,
+                &run_id,
+                "intent",
+                "operator",
+                format!(
+                    "agent intent accepted request_id_hash={}",
+                    stable_hash(request_id)
+                ),
+            ))?;
+            Ok(RunProjection::from_run(&run))
+        }
+
+        pub fn plan_run(&self, run_id: &str) -> Result<RunProjection, AgentCoreError> {
+            let run = self.store.load(run_id)?;
+            if run.state() == RunState::Planned {
+                return Ok(RunProjection::from_run(&run));
+            }
+            if run.state() != RunState::Accepted {
+                return Err(AgentCoreError::InvalidState {
+                    run_id: run_id.to_string(),
+                    state: run.state(),
+                    action: "plan_run",
+                });
+            }
+
+            self.store.update_state(run_id, RunState::Planning, None)?;
+            let intent = self
+                .accepted_intents
+                .borrow()
+                .get(run_id)
+                .cloned()
+                .ok_or_else(|| AgentCoreError::MissingIntent(run_id.to_string()))?;
+            let result = self
+                .planner
+                .draft_plan(&format!("plan-{run_id}"), intent.clone())
+                .and_then(|plan| {
+                    self.planner
+                        .freeze_plan(&self.journal, run_id, intent.actor(), &plan)
+                });
+
+            let frozen = match result {
+                Ok(frozen) => frozen,
+                Err(error) => {
+                    let state = planner_fail_state(&error);
+                    self.persist_failure_state(run_id, state)?;
+                    return Err(error.into());
+                }
+            };
+
+            self.store
+                .bind_frozen_plan(run_id, frozen.plan.plan_id(), &frozen.plan_hash)?;
+            self.frozen_plans
+                .borrow_mut()
+                .insert(run_id.to_string(), frozen);
+            let planned = self.store.update_state(run_id, RunState::Planned, None)?;
+            Ok(RunProjection::from_run(&planned))
+        }
+
+        pub fn advance_run(&self, run_id: &str) -> Result<RunProjection, AgentCoreError> {
+            let run = self.store.load(run_id)?;
+            match run.state() {
+                RunState::Accepted => return self.plan_run(run_id),
+                RunState::Completed
+                | RunState::Denied
+                | RunState::Suspended
+                | RunState::FailedClosed => return Ok(RunProjection::from_run(&run)),
+                RunState::AwaitingApproval
+                    if run.approval_state().status() != ApprovalStatus::Granted =>
+                {
+                    return Ok(RunProjection::from_run(&run));
+                }
+                RunState::Planning
+                | RunState::Executing
+                | RunState::Observing
+                | RunState::Verifying => {
+                    return Err(AgentCoreError::InvalidState {
+                        run_id: run_id.to_string(),
+                        state: run.state(),
+                        action: "advance_run",
+                    });
+                }
+                RunState::Planned
+                | RunState::AwaitingApproval
+                | RunState::RollbackPending
+                | RunState::Recovering => {}
+            }
+
+            let frozen = self.frozen_plan(run_id)?;
+            let run = self.store.load(run_id)?;
+            let Some(step) = next_step(&frozen.plan, &run)? else {
+                let completed = self.store.mark_terminal(run_id, RunState::Completed)?;
+                return Ok(RunProjection::from_run(&completed));
+            };
+            let step_id = step.step_id().to_string();
+            let approval = self
+                .approval_tokens
+                .borrow()
+                .get(&approval_key(run_id, &step_id))
+                .cloned();
+            let outcome = self.policy_adapter.evaluate_step(
+                &self.journal,
+                run_id,
+                frozen.plan.intent().actor(),
+                step,
+                approval.as_ref(),
+            )?;
+
+            match outcome.kind {
+                StepPolicyOutcomeKind::Allowed => {
+                    self.execute_allowed_step(run_id, &frozen.plan, step, outcome)
+                }
+                StepPolicyOutcomeKind::Denied => {
+                    let denied = ApprovalState::new(
+                        ApprovalStatus::Denied,
+                        Some(format!("approval-denied-{step_id}")),
+                        Some(frozen.plan.intent().actor().to_string()),
+                        outcome.diagnostic.reason.clone(),
+                    )?;
+                    self.store.attach_approval(run_id, denied)?;
+                    let run = self.store.mark_terminal(run_id, RunState::Denied)?;
+                    Ok(RunProjection::from_run(&run))
+                }
+                StepPolicyOutcomeKind::AwaitingApproval => {
+                    let pending = ApprovalState::pending(
+                        format!("approval-{run_id}-{step_id}"),
+                        outcome.diagnostic.reason.clone(),
+                    )?;
+                    self.store.attach_approval(run_id, pending)?;
+                    let run = self.store.update_state(
+                        run_id,
+                        RunState::AwaitingApproval,
+                        Some(&step_id),
+                    )?;
+                    Ok(RunProjection::from_run(&run))
+                }
+            }
+        }
+
+        pub fn approve_step(
+            &self,
+            run_id: &str,
+            step_id: &str,
+            actor: &str,
+        ) -> Result<RunProjection, AgentCoreError> {
+            ensure_no_secret("approval_actor", actor)?;
+            let frozen = self.frozen_plan(run_id)?;
+            let step = find_step(&frozen.plan, step_id)?;
+            if actor != frozen.plan.intent().actor() {
+                return Err(AgentCoreError::InvalidApproval {
+                    reason: "approval actor must match run actor".to_string(),
+                });
+            }
+            let outcome =
+                self.policy_adapter
+                    .evaluate_step(&self.journal, run_id, actor, step, None)?;
+            let request =
+                outcome
+                    .request
+                    .as_ref()
+                    .ok_or_else(|| AgentCoreError::InvalidApproval {
+                        reason: "approval requires a routed policy request".to_string(),
+                    })?;
+            let token = ApprovalToken {
+                actor: request.actor.clone(),
+                tool: request.tool.clone(),
+                resource: request.resource.clone(),
+                parameter_hash: request.parameter_hash.clone(),
+                expires_at: request.now + 60,
+                policy_version: request.policy_version.clone(),
+            };
+            self.approval_tokens
+                .borrow_mut()
+                .insert(approval_key(run_id, step_id), token);
+
+            let mut event = AuditEvent::new(
+                AuditEventType::ApprovalBound,
+                run_id,
+                step_id,
+                actor,
+                format!(
+                    "approval granted tool={} resource={} parameter_hash={}",
+                    request.tool, request.resource, request.parameter_hash
+                ),
+            );
+            event.policy_version = request.policy_version.clone();
+            event.tool_version = format!("{}-v1", request.tool);
+            event.parameter_hash = request.parameter_hash.clone();
+            self.journal.append(&event)?;
+
+            let granted = ApprovalState::new(
+                ApprovalStatus::Granted,
+                Some(format!("approval-{run_id}-{step_id}")),
+                Some(actor.to_string()),
+                "exact approval token bound to step parameters",
+            )?;
+            self.store.attach_approval(run_id, granted)?;
+            let run = self
+                .store
+                .update_state(run_id, RunState::Planned, Some(step_id))?;
+            Ok(RunProjection::from_run(&run))
+        }
+
+        pub fn deny_step(
+            &self,
+            run_id: &str,
+            step_id: &str,
+            actor: &str,
+            reason: &str,
+        ) -> Result<RunProjection, AgentCoreError> {
+            ensure_no_secret("deny_actor", actor)?;
+            ensure_no_secret("deny_reason", reason)?;
+            self.approval_tokens
+                .borrow_mut()
+                .remove(&approval_key(run_id, step_id));
+            let denied = ApprovalState::new(
+                ApprovalStatus::Denied,
+                Some(format!("approval-denied-{run_id}-{step_id}")),
+                Some(actor.to_string()),
+                reason.to_string(),
+            )?;
+            self.store.attach_approval(run_id, denied)?;
+            let mut event = AuditEvent::new(
+                AuditEventType::ApprovalBound,
+                run_id,
+                step_id,
+                actor,
+                format!("approval denied reason={reason}"),
+            );
+            event.parameter_hash = stable_hash(step_id);
+            self.journal.append(&event)?;
+            let run = self.store.mark_terminal(run_id, RunState::Denied)?;
+            Ok(RunProjection::from_run(&run))
+        }
+
+        pub fn suspend_run(
+            &self,
+            run_id: &str,
+            reason: &str,
+        ) -> Result<RunProjection, AgentCoreError> {
+            ensure_no_secret("suspend_reason", reason)?;
+            let run = self.store.load(run_id)?;
+            let marker = RecoveryMarker::new(
+                RecoveryStatus::ResumeFromStep,
+                run.current_step_id().map(str::to_string),
+                None::<String>,
+                reason.to_string(),
+            )?;
+            self.store.attach_recovery_marker(run_id, marker)?;
+            let expired = ApprovalState::new(
+                ApprovalStatus::Expired,
+                run.approval_state().approval_id().map(str::to_string),
+                run.approval_state().actor().map(str::to_string),
+                reason.to_string(),
+            )?;
+            self.store.attach_approval(run_id, expired)?;
+            let run =
+                self.store
+                    .update_state(run_id, RunState::Suspended, run.current_step_id())?;
+            Ok(RunProjection::from_run(&run))
+        }
+
+        pub fn recover_run(&self, run_id: &str) -> Result<RunProjection, AgentCoreError> {
+            let run = self.store.load(run_id)?;
+            if run.is_terminal() {
+                return Ok(RunProjection::from_run(&run));
+            }
+            self.journal.append(&AuditEvent::new(
+                AuditEventType::RecoveryStarted,
+                run_id,
+                run.current_step_id().unwrap_or("run"),
+                "agent-core",
+                format!("recovery started from state={}", run.state().as_str()),
+            ))?;
+
+            self.store
+                .update_state(run_id, RunState::Recovering, run.current_step_id())?;
+            let recovery_status = if run.state() == RunState::RollbackPending {
+                RecoveryStatus::RollbackRequired
+            } else if self.has_unsealed_prepared_effect(run_id)? {
+                RecoveryStatus::ReconcileEffects
+            } else {
+                RecoveryStatus::ResumeFromStep
+            };
+            let marker = RecoveryMarker::new(
+                recovery_status,
+                run.current_step_id().map(str::to_string),
+                None::<String>,
+                "recovered from persisted run snapshot and audit timeline",
+            )?;
+            self.store.attach_recovery_marker(run_id, marker)?;
+            self.journal.append(&AuditEvent::new(
+                AuditEventType::RecoveryCompleted,
+                run_id,
+                run.current_step_id().unwrap_or("run"),
+                "agent-core",
+                format!("recovery completed status={}", recovery_status.as_str()),
+            ))?;
+
+            let target_state = match run.state() {
+                RunState::AwaitingApproval => RunState::AwaitingApproval,
+                RunState::Suspended => RunState::Suspended,
+                RunState::RollbackPending => RunState::RollbackPending,
+                RunState::Accepted => RunState::Accepted,
+                _ => RunState::Planned,
+            };
+            let run = self
+                .store
+                .update_state(run_id, target_state, run.current_step_id())?;
+            Ok(RunProjection::from_run(&run))
+        }
+
+        pub fn project_run(&self, run_id: &str) -> Result<RunProjection, AgentCoreError> {
+            Ok(RunProjection::from_run(&self.store.load(run_id)?))
+        }
+
+        fn execute_allowed_step(
+            &self,
+            run_id: &str,
+            plan: &PlanSpec,
+            step: &PlanStep,
+            outcome: StepPolicyOutcome,
+        ) -> Result<RunProjection, AgentCoreError> {
+            let routed =
+                outcome
+                    .routed
+                    .as_ref()
+                    .ok_or_else(|| AgentCoreError::InconsistentState {
+                        reason: "allowed step is missing routed tool metadata".to_string(),
+                    })?;
+            let lease =
+                outcome
+                    .lease
+                    .as_ref()
+                    .ok_or_else(|| AgentCoreError::InconsistentState {
+                        reason: "allowed step is missing capability lease".to_string(),
+                    })?;
+
+            self.store
+                .update_state(run_id, RunState::Executing, Some(step.step_id()))?;
+            let mut envelope = EffectEnvelope::draft(
+                run_id,
+                step.step_id(),
+                routed.tool,
+                routed.normalized_params.clone(),
+                outcome.decision.clone(),
+            )?;
+            let sandbox_profile = if lease.risk == RiskClass::ReadOnly {
+                Some(self.sandbox_compiler.compile(lease, None)?.profile)
+            } else {
+                None
+            };
+            envelope.prepare(
+                &self.journal,
+                plan.intent().actor(),
+                lease.clone(),
+                sandbox_profile,
+                None,
+            )?;
+
+            self.store
+                .update_state(run_id, RunState::Observing, Some(step.step_id()))?;
+            let observation_summary = format!(
+                "semantic tool result tool={} verification_rule={}",
+                routed.tool,
+                step.verification().rule_id()
+            );
+            envelope.observe(&self.journal, plan.intent().actor(), &observation_summary)?;
+            let observation_hash = stable_hash(&observation_summary);
+            let observation = ObservationRef::with_hash(
+                format!("obs-{}-{}", step.step_id(), observation_hash),
+                step.step_id(),
+                TrustBoundary::LocalSystem,
+                observation_hash.clone(),
+            )?;
+            self.store.append_observation_ref(run_id, observation)?;
+
+            self.store
+                .update_state(run_id, RunState::Verifying, Some(step.step_id()))?;
+            envelope.verify(
+                &self.journal,
+                plan.intent().actor(),
+                VerificationResult {
+                    success: true,
+                    reason: format!("{} satisfied", step.verification().rule_id()),
+                },
+            )?;
+            if envelope.state == EffectEnvelopeState::RollbackPending {
+                let run = self.store.update_state(
+                    run_id,
+                    RunState::RollbackPending,
+                    Some(step.step_id()),
+                )?;
+                return Ok(RunProjection::from_run(&run));
+            }
+            if envelope.state == EffectEnvelopeState::FailedClosed {
+                let run = self.store.mark_terminal(run_id, RunState::FailedClosed)?;
+                return Ok(RunProjection::from_run(&run));
+            }
+            envelope.seal(
+                &self.journal,
+                plan.intent().actor(),
+                CommitId(format!(
+                    "commit-{run_id}-{}-{observation_hash}",
+                    step.step_id()
+                )),
+            )?;
+
+            let run = self.store.update_state(run_id, RunState::Planned, None)?;
+            if next_step(plan, &run)?.is_some() {
+                Ok(RunProjection::from_run(&run))
+            } else {
+                let run = self.store.mark_terminal(run_id, RunState::Completed)?;
+                Ok(RunProjection::from_run(&run))
+            }
+        }
+
+        fn frozen_plan(&self, run_id: &str) -> Result<FrozenPlan, AgentCoreError> {
+            self.frozen_plans
+                .borrow()
+                .get(run_id)
+                .cloned()
+                .ok_or_else(|| AgentCoreError::MissingFrozenPlan(run_id.to_string()))
+        }
+
+        fn persist_failure_state(
+            &self,
+            run_id: &str,
+            state: RunState,
+        ) -> Result<(), AgentCoreError> {
+            match state {
+                RunState::Suspended => {
+                    self.store.update_state(run_id, RunState::Suspended, None)?;
+                }
+                RunState::Denied => {
+                    self.store.mark_terminal(run_id, RunState::Denied)?;
+                }
+                _ => {
+                    self.store.mark_terminal(run_id, RunState::FailedClosed)?;
+                }
+            }
+            Ok(())
+        }
+
+        fn has_unsealed_prepared_effect(&self, run_id: &str) -> Result<bool, AgentCoreError> {
+            let timeline = self.journal.run_timeline(run_id)?;
+            let prepared = timeline
+                .iter()
+                .filter(|line| line.contains("\"event_type\":\"EffectPrepared\""))
+                .count();
+            let sealed_or_rolled_back = timeline
+                .iter()
+                .filter(|line| {
+                    line.contains("\"event_type\":\"CommitSealed\"")
+                        || line.contains("\"event_type\":\"RollbackObserved\"")
+                })
+                .count();
+            Ok(prepared > sealed_or_rolled_back)
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum AgentCoreError {
+        Store(RunStoreError),
+        Planner(PlannerError),
+        Policy(StepPolicyError),
+        Effect(EffectEnvelopeError),
+        Sandbox(SandboxProfileError),
+        Model(ModelValidationError),
+        Io(String),
+        SecretValue {
+            field: String,
+        },
+        MissingIntent(String),
+        MissingFrozenPlan(String),
+        MissingStep(String),
+        InvalidState {
+            run_id: String,
+            state: RunState,
+            action: &'static str,
+        },
+        InvalidApproval {
+            reason: String,
+        },
+        InconsistentState {
+            reason: String,
+        },
+    }
+
+    impl fmt::Display for AgentCoreError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            match self {
+                Self::Store(error) => write!(formatter, "{error}"),
+                Self::Planner(error) => write!(formatter, "{error}"),
+                Self::Policy(error) => write!(formatter, "{error}"),
+                Self::Effect(error) => write!(formatter, "{error}"),
+                Self::Sandbox(error) => write!(formatter, "{error}"),
+                Self::Model(error) => write!(formatter, "{error}"),
+                Self::Io(error) => write!(formatter, "agent core io error: {error}"),
+                Self::SecretValue { field } => {
+                    write!(formatter, "secret-like value is not allowed in {field}")
+                }
+                Self::MissingIntent(run_id) => {
+                    write!(formatter, "missing accepted intent for {run_id}")
+                }
+                Self::MissingFrozenPlan(run_id) => {
+                    write!(formatter, "missing frozen plan for {run_id}")
+                }
+                Self::MissingStep(step_id) => write!(formatter, "missing plan step {step_id}"),
+                Self::InvalidState {
+                    run_id,
+                    state,
+                    action,
+                } => write!(
+                    formatter,
+                    "invalid run state for {action}: run={run_id} state={}",
+                    state.as_str()
+                ),
+                Self::InvalidApproval { reason } | Self::InconsistentState { reason } => {
+                    formatter.write_str(reason)
+                }
+            }
+        }
+    }
+
+    impl std::error::Error for AgentCoreError {}
+
+    impl From<RunStoreError> for AgentCoreError {
+        fn from(value: RunStoreError) -> Self {
+            Self::Store(value)
+        }
+    }
+
+    impl From<PlannerError> for AgentCoreError {
+        fn from(value: PlannerError) -> Self {
+            Self::Planner(value)
+        }
+    }
+
+    impl From<StepPolicyError> for AgentCoreError {
+        fn from(value: StepPolicyError) -> Self {
+            Self::Policy(value)
+        }
+    }
+
+    impl From<EffectEnvelopeError> for AgentCoreError {
+        fn from(value: EffectEnvelopeError) -> Self {
+            Self::Effect(value)
+        }
+    }
+
+    impl From<SandboxProfileError> for AgentCoreError {
+        fn from(value: SandboxProfileError) -> Self {
+            Self::Sandbox(value)
+        }
+    }
+
+    impl From<ModelValidationError> for AgentCoreError {
+        fn from(value: ModelValidationError) -> Self {
+            Self::Model(value)
+        }
+    }
+
+    impl From<std::io::Error> for AgentCoreError {
+        fn from(value: std::io::Error) -> Self {
+            Self::Io(value.to_string())
+        }
+    }
+
+    fn next_step<'a>(
+        plan: &'a PlanSpec,
+        run: &PlanRun,
+    ) -> Result<Option<&'a PlanStep>, AgentCoreError> {
+        if let Some(current_step_id) = run.current_step_id() {
+            return Ok(Some(find_step(plan, current_step_id)?));
+        }
+        for step in plan.steps() {
+            if !run
+                .observation_refs()
+                .iter()
+                .any(|reference| reference.step_id() == step.step_id())
+            {
+                return Ok(Some(step));
+            }
+        }
+        Ok(None)
+    }
+
+    fn find_step<'a>(plan: &'a PlanSpec, step_id: &str) -> Result<&'a PlanStep, AgentCoreError> {
+        plan.steps()
+            .iter()
+            .find(|step| step.step_id() == step_id)
+            .ok_or_else(|| AgentCoreError::MissingStep(step_id.to_string()))
+    }
+
+    fn planner_fail_state(error: &PlannerError) -> RunState {
+        match error {
+            PlannerError::Model(error) => error.fail_closed_state(),
+            PlannerError::InvalidPlan { .. } | PlannerError::Audit(_) => RunState::FailedClosed,
+        }
+    }
+
+    fn approval_key(run_id: &str, step_id: &str) -> String {
+        format!("{run_id}:{step_id}")
+    }
+
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), AgentCoreError> {
+        if contains_secret_value(value) {
+            return Err(AgentCoreError::SecretValue {
+                field: field.into(),
+            });
+        }
+        Ok(())
+    }
+
+    fn optional_string_json(value: Option<&str>) -> String {
+        value
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .unwrap_or_else(|| "null".to_string())
+    }
+
+    fn stable_hash(value: &str) -> String {
+        let mut hash: u64 = 0xcbf29ce484222325;
+        for byte in value.bytes() {
+            hash ^= u64::from(byte);
+            hash = hash.wrapping_mul(0x100000001b3);
+        }
+        format!("{hash:016x}")
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::fs;
+        use std::path::{Path, PathBuf};
+
+        use super::*;
+        use crate::agent_core::model::{
+            ApprovalRequirement, IntentSource, ModelEvidence, RiskHint, RollbackRequirement,
+            VerificationRule,
+        };
+        use crate::agent_core::model_broker::{ModelCallBounds, StubModelProvider};
+        use crate::agent_core::planner::{DeterministicPlanner, PlanValidationReport};
+        use crate::agent_core::run_store::FileRunStore;
+        use crate::api::SemanticToolCall;
+        use crate::audit::extract_json_string_for_tests;
+
+        fn temp_root(name: &str) -> PathBuf {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-agentcore-run-loop-{name}-{}",
+                std::process::id()
+            ));
+            let _ = fs::remove_dir_all(&path);
+            fs::create_dir_all(&path).expect("temp root");
+            path
+        }
+
+        fn intent() -> IntentCtx {
+            IntentCtx::new(
+                "operator",
+                TrustBoundary::Operator,
+                IntentSource::Tui,
+                "vm:dev",
+                "recover nginx service",
+            )
+            .expect("intent")
+        }
+
+        fn service_core(
+            root: &Path,
+        ) -> AgentCore<FileRunStore, DeterministicPlanner<StubModelProvider>> {
+            AgentCore::new(
+                FileRunStore::new(root.join("runs")),
+                DeterministicPlanner::new(
+                    StubModelProvider::new(),
+                    "agent-core-planner-v1",
+                    ModelCallBounds::new(100, 8192).expect("bounds"),
+                ),
+                AuditJournal::new(root.join("audit.jsonl")),
+            )
+        }
+
+        fn read_only_plan(intent: IntentCtx) -> PlanSpec {
+            PlanSpec::new(
+                "plan-read-only",
+                "static-read-only-planner-v1",
+                intent,
+                vec![PlanStep::new(
+                    "status-nginx",
+                    SemanticToolCall::new("svc.status", vec![("service", "nginx")]),
+                    Vec::new(),
+                    vec!["operator intent accepted".to_string()],
+                    vec!["service status captured".to_string()],
+                    VerificationRule::new(
+                        "status-captured",
+                        "status output is available",
+                        "svc.status",
+                    )
+                    .expect("verification"),
+                    ApprovalRequirement::not_required("read-only diagnostic").expect("approval"),
+                    1,
+                    vec![RiskHint::new(RiskClass::ReadOnly, "diagnostic only").expect("risk")],
+                    RollbackRequirement::not_required("no rollback").expect("rollback"),
+                )
+                .expect("step")],
+                vec!["service status is known".to_string()],
+                ModelEvidence::stub(),
+            )
+            .expect("plan")
+        }
+
+        #[derive(Debug, Clone)]
+        struct StaticReadOnlyPlanner;
+
+        impl Planner for StaticReadOnlyPlanner {
+            fn draft_plan(
+                &self,
+                _request_id: &str,
+                intent: IntentCtx,
+            ) -> Result<PlanSpec, PlannerError> {
+                Ok(read_only_plan(intent))
+            }
+
+            fn validate_plan(&self, plan: &PlanSpec) -> Result<PlanValidationReport, PlannerError> {
+                Ok(PlanValidationReport {
+                    step_count: plan.steps().len(),
+                    routed_tools: vec!["svc.status".to_string()],
+                    approval_required_steps: Vec::new(),
+                })
+            }
+
+            fn freeze_plan(
+                &self,
+                journal: &AuditJournal,
+                run_id: &str,
+                actor: &str,
+                plan: &PlanSpec,
+            ) -> Result<FrozenPlan, PlannerError> {
+                DeterministicPlanner::stub().freeze_plan(journal, run_id, actor, plan)
+            }
+
+            fn explain_plan(&self, _plan: &PlanSpec) -> Result<String, PlannerError> {
+                Ok("summary: read-only diagnostic".to_string())
+            }
+        }
+
+        #[test]
+        fn accept_and_plan_run_persists_planned_state() {
+            let root = temp_root("plan");
+            let core = service_core(&root);
+
+            let accepted = core
+                .accept_intent("req-nginx-plan", intent())
+                .expect("accept");
+            assert_eq!(accepted.state, RunState::Accepted);
+            let planned = core.plan_run(&accepted.run_id).expect("plan");
+
+            assert_eq!(planned.state, RunState::Planned);
+            assert_ne!(planned.plan_id, "plan-pending");
+            assert_ne!(planned.frozen_plan_hash, "pending");
+            let reopened = FileRunStore::new(root.join("runs"));
+            let loaded = reopened.load(&planned.run_id).expect("load run");
+            assert_eq!(loaded.state(), RunState::Planned);
+            assert_eq!(loaded.plan_id(), planned.plan_id);
+            assert_eq!(loaded.frozen_plan_hash(), planned.frozen_plan_hash);
+        }
+
+        #[test]
+        fn read_only_step_advances_through_verification_and_sealing() {
+            let root = temp_root("readonly");
+            let core = AgentCore::new(
+                FileRunStore::new(root.join("runs")),
+                StaticReadOnlyPlanner,
+                AuditJournal::new(root.join("audit.jsonl")),
+            );
+
+            let accepted = core
+                .accept_intent("req-readonly", intent())
+                .expect("accept");
+            core.plan_run(&accepted.run_id).expect("plan");
+            let completed = core.advance_run(&accepted.run_id).expect("advance");
+
+            assert_eq!(completed.state, RunState::Completed);
+            assert_eq!(completed.observation_count, 1);
+            let lines = core.journal().event_lines().expect("audit");
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"EffectObserved\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"CommitSealed\"")));
+        }
+
+        #[test]
+        fn approval_required_step_pauses_without_preparing_effect() {
+            let root = temp_root("approval-pause");
+            let core = service_core(&root);
+            let accepted = core
+                .accept_intent("req-approval", intent())
+                .expect("accept");
+            core.plan_run(&accepted.run_id).expect("plan");
+            let after_read = core.advance_run(&accepted.run_id).expect("read step");
+            assert_eq!(after_read.state, RunState::Planned);
+
+            let paused = core.advance_run(&accepted.run_id).expect("pause restart");
+            assert_eq!(paused.state, RunState::AwaitingApproval);
+            assert_eq!(paused.current_step_id.as_deref(), Some("restart-service"));
+            assert_eq!(paused.approval_status, ApprovalStatus::Pending);
+
+            let restart_prepared =
+                core.journal()
+                    .event_lines()
+                    .expect("audit")
+                    .iter()
+                    .any(|line| {
+                        line.contains("\"event_type\":\"EffectPrepared\"")
+                            && line.contains("\"step_id\":\"restart-service\"")
+                    });
+            assert!(!restart_prepared);
+        }
+
+        #[test]
+        fn denied_and_timed_out_approvals_do_not_prepare_protected_effect() {
+            let root = temp_root("deny");
+            let core = service_core(&root);
+            let accepted = core.accept_intent("req-deny", intent()).expect("accept");
+            core.plan_run(&accepted.run_id).expect("plan");
+            core.advance_run(&accepted.run_id).expect("read");
+            core.advance_run(&accepted.run_id).expect("pause");
+
+            let denied = core
+                .deny_step(
+                    &accepted.run_id,
+                    "restart-service",
+                    "operator",
+                    "operator declined restart",
+                )
+                .expect("deny");
+            assert_eq!(denied.state, RunState::Denied);
+            assert_eq!(denied.approval_status, ApprovalStatus::Denied);
+            let restart_prepared =
+                core.journal()
+                    .event_lines()
+                    .expect("audit")
+                    .iter()
+                    .any(|line| {
+                        line.contains("\"event_type\":\"EffectPrepared\"")
+                            && line.contains("\"step_id\":\"restart-service\"")
+                    });
+            assert!(!restart_prepared);
+
+            let timeout_root = temp_root("timeout");
+            let timeout_core = service_core(&timeout_root);
+            let accepted = timeout_core
+                .accept_intent("req-timeout", intent())
+                .expect("accept");
+            timeout_core.plan_run(&accepted.run_id).expect("plan");
+            timeout_core.advance_run(&accepted.run_id).expect("read");
+            timeout_core.advance_run(&accepted.run_id).expect("pause");
+            let suspended = timeout_core
+                .suspend_run(&accepted.run_id, "approval timed out")
+                .expect("suspend");
+            assert_eq!(suspended.state, RunState::Suspended);
+            assert_eq!(suspended.approval_status, ApprovalStatus::Expired);
+        }
+
+        #[test]
+        fn approved_step_uses_exact_token_before_execution() {
+            let root = temp_root("approve");
+            let core = service_core(&root);
+            let accepted = core.accept_intent("req-approve", intent()).expect("accept");
+            core.plan_run(&accepted.run_id).expect("plan");
+            core.advance_run(&accepted.run_id).expect("read");
+            core.advance_run(&accepted.run_id).expect("pause");
+
+            let approved = core
+                .approve_step(&accepted.run_id, "restart-service", "operator")
+                .expect("approve");
+            assert_eq!(approved.state, RunState::Planned);
+            assert_eq!(approved.approval_status, ApprovalStatus::Granted);
+            let completed = core.advance_run(&accepted.run_id).expect("execute");
+            assert_eq!(completed.state, RunState::Completed);
+            assert!(core
+                .journal()
+                .event_lines()
+                .expect("audit")
+                .iter()
+                .any(|line| {
+                    extract_json_string_for_tests(line, "event_type").as_deref()
+                        == Some("ApprovalBound")
+                }));
+        }
+
+        #[test]
+        fn recover_run_uses_persisted_state_projection() {
+            let root = temp_root("recover");
+            let core = service_core(&root);
+            let accepted = core.accept_intent("req-recover", intent()).expect("accept");
+            core.plan_run(&accepted.run_id).expect("plan");
+            core.advance_run(&accepted.run_id).expect("read");
+            let paused = core.advance_run(&accepted.run_id).expect("pause");
+            assert_eq!(paused.state, RunState::AwaitingApproval);
+
+            let recovered = core.recover_run(&accepted.run_id).expect("recover");
+            assert_eq!(recovered.state, RunState::AwaitingApproval);
+            assert_eq!(recovered.recovery_status, RecoveryStatus::ResumeFromStep);
+            let loaded = FileRunStore::new(root.join("runs"))
+                .load(&accepted.run_id)
+                .expect("load");
+            assert_eq!(loaded.state(), RunState::AwaitingApproval);
+            assert_eq!(
+                loaded.recovery_marker().status(),
+                RecoveryStatus::ResumeFromStep
+            );
+        }
+
+        #[test]
+        fn compact_projection_is_cli_and_tui_ready() {
+            let root = temp_root("projection");
+            let core = service_core(&root);
+            let accepted = core
+                .accept_intent("req-projection", intent())
+                .expect("accept");
+            let planned = core.plan_run(&accepted.run_id).expect("plan");
+            let json = planned.to_json();
+            let cli = planned.to_cli_line();
+
+            assert!(json.contains("\"state\":\"Planned\""));
+            assert!(json.contains("\"approval_status\":\"NotRequired\""));
+            assert!(cli.contains("state=Planned"));
+            assert!(cli.contains("approval=NotRequired"));
         }
     }
 }

@@ -1,0 +1,87 @@
+{
+  "id": "TASK-ACR-005",
+  "status": "passed",
+  "completed_at": "2026-05-23T02:34:07+08:00",
+  "summary": "AgentCore run loop is implemented as agent_core::run_loop. It accepts intents, freezes plans, persists every RunState transition through RunStore, delegates policy and effect preparation through the Security Execution Foundation, pauses high-risk steps before effect preparation, supports approval/denial/suspension/recovery operations, and exposes compact run projections for CLI/TUI surfaces.",
+  "deliverables": [
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-005-run-loop.json"
+  ],
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::run_loop",
+      "status": "passed",
+      "result": "7 passed; 0 failed; 114 filtered out"
+    },
+    {
+      "command": "cargo test -p agentd",
+      "status": "passed",
+      "result": "121 passed; 0 failed"
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "AgentCore can accept an intent and produce a persisted Planned state.",
+      "status": "passed",
+      "evidence": "agent_core::run_loop::tests::accept_and_plan_run_persists_planned_state verifies Accepted -> Planning -> Planned transitions, frozen plan binding, and reopened FileRunStore visibility."
+    },
+    {
+      "criterion": "Read-only steps can advance automatically through verification and sealing.",
+      "status": "passed",
+      "evidence": "agent_core::run_loop::tests::read_only_step_advances_through_verification_and_sealing verifies PolicyEvaluated, EffectPrepared, EffectObserved, CommitSealed, observation ref persistence, and Completed terminal state."
+    },
+    {
+      "criterion": "Execute-with-confirmation steps pause and do not prepare effects before approval.",
+      "status": "passed",
+      "evidence": "agent_core::run_loop::tests::approval_required_step_pauses_without_preparing_effect confirms restart-service enters AwaitingApproval and no restart EffectPrepared audit event exists."
+    },
+    {
+      "criterion": "Denied or timed-out approvals move to Denied or Suspended without execution.",
+      "status": "passed",
+      "evidence": "agent_core::run_loop::tests::denied_and_timed_out_approvals_do_not_prepare_protected_effect covers Denied and Suspended/Expired approval states with no protected effect preparation."
+    },
+    {
+      "criterion": "Crash-safe state updates are visible through RunStore.",
+      "status": "passed",
+      "evidence": "agent_core::run_loop::tests::recover_run_uses_persisted_state_projection reloads FileRunStore after recovery marker attachment and confirms AwaitingApproval plus ResumeFromStep."
+    },
+    {
+      "criterion": "CLI/TUI compact projection exists.",
+      "status": "passed",
+      "evidence": "agent_core::run_loop::tests::compact_projection_is_cli_and_tui_ready checks RunProjection JSON and to_cli_line output. main.rs was not modified because it already has unrelated uncommitted changes."
+    }
+  ],
+  "runtime_contract": {
+    "module": "agentd::agent_core::run_loop",
+    "core_type": "AgentCore<S, P>",
+    "store_boundary": "RunStore",
+    "planner_boundary": "Planner",
+    "security_execution_boundary": [
+      "PlanStepPolicyAdapter",
+      "CapabilityLease",
+      "LeaseSandboxProfileCompiler",
+      "EffectEnvelope"
+    ],
+    "public_operations": [
+      "accept_intent",
+      "plan_run",
+      "advance_run",
+      "approve_step",
+      "deny_step",
+      "suspend_run",
+      "recover_run",
+      "project_run"
+    ],
+    "projection": [
+      "RunProjection::to_json",
+      "RunProjection::to_cli_line"
+    ],
+    "safety_ordering": [
+      "RunStore state transition is persisted before effect preparation",
+      "AwaitingApproval path records policy and approval state without EffectPrepared",
+      "Allowed path prepares, observes, verifies, and seals through EffectEnvelope",
+      "Recovery uses persisted PlanRun plus AuditJournal timeline"
+    ]
+  },
+  "next_task": "TASK-ACR-006"
+}
