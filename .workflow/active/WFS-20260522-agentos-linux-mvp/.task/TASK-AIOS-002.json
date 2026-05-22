@@ -1,7 +1,7 @@
 {
   "id": "TASK-AIOS-002",
   "title": "Implement agentd lifecycle skeleton",
-  "status": "pending",
+  "status": "completed",
   "wave": 1,
   "priority": "P0",
   "type": "runtime",
@@ -28,10 +28,13 @@
     "Stub each internal API from Plan through Recover without executing real side effects."
   ],
   "deliverables": [
-    "agentd skeleton source",
-    "agentd module interface definitions",
-    "agentd lifecycle tests",
-    "docs/agentd-lifecycle.md"
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/lib.rs",
+    "crates/agentd/src/api.rs",
+    "crates/agentd/src/lifecycle.rs",
+    "crates/agentd/src/modules.rs",
+    "docs/agentd-lifecycle.md",
+    ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-002-agentd-lifecycle.json"
   ],
   "acceptance_criteria": [
     "agentd starts as the boot handoff target and stays alive.",
@@ -41,10 +44,18 @@
     "agentd lifecycle tests pass with local-only or stub planner mode."
   ],
   "verification": [
-    "Run unit tests for lifecycle and API stubs.",
-    "Run image boot smoke test with agentd skeleton.",
-    "Force a controlled agentd error and verify health output."
+    "cargo test -p agentd",
+    "cargo run -p agentd -- --health",
+    "cargo run -p agentd -- --simulate-error",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -TimeoutSeconds 30"
   ],
+  "completed_evidence": {
+    "evidence_file": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-002-agentd-lifecycle.json",
+    "unit_tests": "5 passed; 0 failed",
+    "run_mode": "local-only",
+    "planner_mode": "stub",
+    "arbitrary_shell_enabled": false
+  },
   "risk_notes": [
     "Avoid making PID 1 a large business-logic process; adapters should remain separate child services where possible."
   ]

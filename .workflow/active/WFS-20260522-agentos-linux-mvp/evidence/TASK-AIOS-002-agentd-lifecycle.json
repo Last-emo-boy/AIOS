@@ -1,0 +1,39 @@
+{
+  "task": "TASK-AIOS-002",
+  "status": "completed",
+  "verified_at": "2026-05-22T22:18:00+08:00",
+  "checks": [
+    {
+      "command": "cargo test -p agentd",
+      "result": "5 passed; 0 failed"
+    },
+    {
+      "command": "cargo run -p agentd -- --health",
+      "result": "{\"state\":\"running\",\"run_mode\":\"local-only\",\"planner_mode\":\"stub\",\"arbitrary_shell_enabled\":false,\"module_count\":8,\"last_error\":null}"
+    },
+    {
+      "command": "cargo run -p agentd -- --simulate-error",
+      "result": "{\"state\":\"running\",\"run_mode\":\"local-only\",\"planner_mode\":\"stub\",\"arbitrary_shell_enabled\":false,\"module_count\":8,\"last_error\":\"simulated controlled agentd error\"}"
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -TimeoutSeconds 30",
+      "result": "Boot smoke test observed AGENTD_HANDOFF_OK"
+    }
+  ],
+  "module_boundaries": [
+    "planner",
+    "policy",
+    "capability",
+    "tool_router",
+    "audit",
+    "rollback",
+    "model_broker",
+    "tui"
+  ],
+  "constraints": [
+    "local-only",
+    "stub planner",
+    "no remote LLM required",
+    "normal mode denies arbitrary shell"
+  ]
+}
