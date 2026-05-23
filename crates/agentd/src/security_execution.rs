@@ -2457,7 +2457,7 @@ pub mod engine {
     use std::fs;
     use std::path::PathBuf;
 
-    use crate::agent_core::model::{contains_secret_value, PlanStep};
+    use crate::agent_core::model::contains_secret_value;
     use crate::api::{escape_json, CommitId, RiskClass, VerificationResult};
     use crate::audit::AuditJournal;
     use crate::policy::{ApprovalToken, PolicyEvaluator};
@@ -2465,6 +2465,7 @@ pub mod engine {
         content_hash, PreparedWrite, RollbackReport, WriteDiffError, WriteDiffExecutor,
         WriteRequest,
     };
+    use crate::runtime_contracts::{ExecutionStep, ExecutionStepSnapshot};
     use crate::sandbox::{
         SandboxCompiler, SandboxDecision, SandboxExecutor, SandboxOperation, SandboxReport,
     };
@@ -2571,7 +2572,7 @@ pub mod engine {
     pub struct StepExecutionRequest {
         pub run_id: String,
         pub actor: String,
-        pub step: PlanStep,
+        pub step: ExecutionStepSnapshot,
         pub approval: Option<ApprovalToken>,
         pub now: u64,
         pub write_input: Option<WriteDiffInput>,
@@ -2583,12 +2584,12 @@ pub mod engine {
         pub fn new(
             run_id: impl Into<String>,
             actor: impl Into<String>,
-            step: PlanStep,
+            step: impl ExecutionStep,
         ) -> Result<Self, SecurityExecutionError> {
             let request = Self {
                 run_id: run_id.into(),
                 actor: actor.into(),
-                step,
+                step: ExecutionStepSnapshot::from_step(&step),
                 approval: None,
                 now: 0,
                 write_input: None,
@@ -2935,7 +2936,7 @@ pub mod engine {
                     .compile(lease, request.sandbox_hints.as_ref())?;
                 sandbox_binding = Some(binding);
             } else if lease.risk == RiskClass::WriteWithDiff {
-                if !request.step.rollback().required() {
+                if !request.step.rollback_required() {
                     return Err(invalid(
                         "prepare",
                         "write-with-diff steps require a rollback requirement",
@@ -3256,7 +3257,7 @@ pub mod engine {
     }
 
     fn validate_write_input(
-        step: &PlanStep,
+        step: &impl ExecutionStep,
         normalized_params: &[(String, String)],
         input: &WriteDiffInput,
     ) -> Result<(), SecurityExecutionError> {
@@ -3285,7 +3286,7 @@ pub mod engine {
                 ));
             }
         }
-        if !step.rollback().required() {
+        if !step.rollback_required() {
             return Err(invalid(
                 "prepare",
                 "fs.write.diff step must require rollback",
@@ -3343,7 +3344,7 @@ pub mod engine {
 
         use super::*;
         use crate::agent_core::model::{
-            ApprovalRequirement, RiskHint, RollbackRequirement, VerificationRule,
+            ApprovalRequirement, PlanStep, RiskHint, RollbackRequirement, VerificationRule,
         };
         use crate::api::SemanticToolCall;
         use crate::audit::extract_json_string_for_tests;
