@@ -3,7 +3,8 @@ param(
     [string]$QemuPath = "E:\qemu\qemu-system-x86_64.exe",
     [int]$QemuTimeoutSeconds = 30,
     [switch]$SkipBootSmoke,
-    [switch]$SkipTests
+    [switch]$SkipTests,
+    [switch]$RequireProductionSignatures
 )
 
 $ErrorActionPreference = "Stop"
@@ -532,6 +533,15 @@ if (-not (Test-SecretFreeContent $provenancePath)) {
 foreach ($path in @($sbomPath, $updateMetadataPath, "$inventoryPath.sig.json", "$sbomPath.sig.json", "$updateMetadataPath.sig.json", "$provenancePath.sig.json")) {
     if (-not (Test-SecretFreeContent $path)) {
         throw "Release artifact contains secret-like content: $path"
+    }
+}
+
+if ($RequireProductionSignatures) {
+    Invoke-Checked "production signature verification" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1 -ProvenancePath $provenancePath -FailOnBlocked" {
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/verify-production-signatures.ps1" `
+            -ProvenancePath $provenancePath `
+            -OutputPath ".workflow/artifacts/production-signature-verification/result.json" `
+            -FailOnBlocked
     }
 }
 
