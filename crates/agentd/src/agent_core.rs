@@ -3,9 +3,7 @@ pub use agent_core_crate::*;
 #[cfg(test)]
 mod compatibility {
     use super::model::{IntentCtx, IntentSource, ModelEvidence, PlanSpec, TrustBoundary};
-    use super::model_broker::{
-        ModelBroker, ModelCallBounds, StubModelProvider, SummarizeRequest,
-    };
+    use super::model_broker::{ModelBroker, ModelCallBounds, StubModelProvider, SummarizeRequest};
     use super::planner::{DeterministicPlanner, Planner};
     use runtime_contracts::SemanticToolCall;
 
@@ -63,21 +61,60 @@ mod compatibility {
         let call = SemanticToolCall::new("svc.status", vec![("service", "agentd")]);
         assert_eq!(call.name, "svc.status");
     }
+
+    #[test]
+    fn facade_exports_host_promotion_paths() {
+        let request = super::host_promotion::HostPromotionRequest::new(
+            "operator",
+            "run-host-promotion-facade",
+            "promote-package-to-host",
+            "pkg.host.install",
+            "nginx-agent-plugin@1.2.3",
+            "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+            "sha256:0123456789abcdef",
+            "package-manager",
+            "adapter-v1",
+        )
+        .expect("request")
+        .with_rollback_handle("rollback-package-nginx-agent-plugin-1.2.3");
+        let verification = super::host_promotion::HostPromotionVerificationEvidence::from_report(
+            "host-package-active",
+            false,
+            "host package smoke failed",
+        )
+        .expect("verification");
+        let approval = request.exact_approval(&verification, 0);
+        let path = std::env::temp_dir().join(format!(
+            "agentd-host-promotion-facade-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        let journal = crate::security_execution::audit::AuditJournal::new(path);
+
+        let decision = super::host_promotion::HostPromotionWorkflow
+            .evaluate_and_audit(&journal, &request, verification, Some(&approval), 0)
+            .expect("decision");
+
+        assert_eq!(
+            decision.kind,
+            super::host_promotion::HostPromotionDecisionKind::RollbackPending
+        );
+        let projection = decision.audit_projection.expect("projection");
+        assert!(projection.steps.iter().any(|step| {
+            step.step_id == "promote-package-to-host" && step.effect_state == "rollback-pending"
+        }));
+    }
 }
 
 #[cfg(test)]
 mod adversarial {
-    use super::model::{
-        ApprovalRequirement, RiskHint, RollbackRequirement, VerificationRule,
-    };
     use super::model::PlanStep;
-    use runtime_contracts::{RiskClass, SemanticToolCall};
+    use super::model::{ApprovalRequirement, RiskHint, RollbackRequirement, VerificationRule};
     use crate::security_execution::audit::AuditJournal;
     use crate::security_execution::policy::PolicyEvaluator;
-    use crate::security_execution::policy_adapter::{
-        PlanStepPolicyAdapter, StepPolicyOutcomeKind,
-    };
+    use crate::security_execution::policy_adapter::{PlanStepPolicyAdapter, StepPolicyOutcomeKind};
     use crate::security_execution::tools::ToolRouter;
+    use runtime_contracts::{RiskClass, SemanticToolCall};
 
     #[test]
     fn planner_risk_downgrade_still_pauses_before_effects() {
@@ -103,8 +140,11 @@ mod adversarial {
                 .expect("approval"),
             1,
             vec![
-                RiskHint::new(RiskClass::ReadOnly, "planner tried to downgrade restart risk")
-                    .expect("risk"),
+                RiskHint::new(
+                    RiskClass::ReadOnly,
+                    "planner tried to downgrade restart risk",
+                )
+                .expect("risk"),
             ],
             RollbackRequirement::new(
                 true,
@@ -120,13 +160,21 @@ mod adversarial {
             .expect("policy outcome");
 
         assert_eq!(outcome.kind, StepPolicyOutcomeKind::AwaitingApproval);
-        assert_eq!(outcome.diagnostic.authoritative_risk, RiskClass::ExecuteWithConfirmation);
-        assert_eq!(outcome.diagnostic.planner_risk_hints, vec![RiskClass::ReadOnly]);
+        assert_eq!(
+            outcome.diagnostic.authoritative_risk,
+            RiskClass::ExecuteWithConfirmation
+        );
+        assert_eq!(
+            outcome.diagnostic.planner_risk_hints,
+            vec![RiskClass::ReadOnly]
+        );
         assert!(outcome.lease.is_none());
-        assert!(journal
-            .event_lines()
-            .expect("audit")
-            .iter()
-            .all(|line| !line.contains("\"event_type\":\"EffectPrepared\"")));
+        assert!(
+            journal
+                .event_lines()
+                .expect("audit")
+                .iter()
+                .all(|line| !line.contains("\"event_type\":\"EffectPrepared\""))
+        );
     }
 }
