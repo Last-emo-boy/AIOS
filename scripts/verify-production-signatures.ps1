@@ -4,7 +4,12 @@ param(
     [string]$ToolManifestPath = "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
     [string]$KeyringPath = ".workflow/artifacts/production-signing/key-custody.json",
     [string]$OutputPath = ".workflow/artifacts/production-signature-verification/result.json",
+    [string]$ReproducibilityPath = ".workflow/artifacts/release-reproducibility-fast/result.json",
+    [string]$PromotionPath = ".workflow/artifacts/candidate-promotion/default-result.json",
+    [string]$ProductionRunbookPath = ".workflow/artifacts/production-runbook-smoke/result.json",
+    [string]$QemuDistroSmokePath = ".workflow/artifacts/signing-aware-replay/qemu-distro-smoke/result.json",
     [string]$ProductionKeyId = "agentos-production-root-v1",
+    [switch]$RequireDecisionEvidence,
     [switch]$FailOnBlocked
 )
 
@@ -233,6 +238,15 @@ function Test-ProductionSignature {
     Add-Check "signature.$Name.crypto_verified" $verified "Production signature must verify against canonical payload." "blocking" $productionSignature.signature.algorithm
 }
 
+function New-PathArtifact {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    $resolvedPath = Resolve-RepoPath $Path
+    return [ordered]@{
+        path = $Path
+        sha256 = Get-OptionalFileHash $resolvedPath
+    }
+}
+
 $script:repoRoot = (Resolve-Path -LiteralPath ".").Path
 $script:checks = @()
 $script:blockers = @()
@@ -272,6 +286,13 @@ $requiredArtifacts = [ordered]@{
     alpha_service_recovery_smoke = $provenance.artifacts.alpha_service_recovery_smoke
 }
 
+if ($RequireDecisionEvidence) {
+    $requiredArtifacts.release_reproducibility = New-PathArtifact $ReproducibilityPath
+    $requiredArtifacts.promotion_verifier = New-PathArtifact $PromotionPath
+    $requiredArtifacts.production_runbook_smoke = New-PathArtifact $ProductionRunbookPath
+    $requiredArtifacts.qemu_distro_smoke = New-PathArtifact $QemuDistroSmokePath
+}
+
 foreach ($name in $requiredArtifacts.Keys) {
     Test-ProductionSignature -Name $name -Artifact $requiredArtifacts[$name] -Keyring $keyring
 }
@@ -291,7 +312,12 @@ $result = [ordered]@{
         policy = $PolicyPath
         tool_manifest = $ToolManifestPath
         keyring = $KeyringPath
+        reproducibility = if ($RequireDecisionEvidence) { $ReproducibilityPath } else { $null }
+        promotion = if ($RequireDecisionEvidence) { $PromotionPath } else { $null }
+        production_runbook = if ($RequireDecisionEvidence) { $ProductionRunbookPath } else { $null }
+        qemu_distro_smoke = if ($RequireDecisionEvidence) { $QemuDistroSmokePath } else { $null }
     }
+    decision_evidence_required = [bool]$RequireDecisionEvidence
     required_artifacts = @($requiredArtifacts.Keys)
     checks = @($script:checks)
     blockers = @($script:blockers)
