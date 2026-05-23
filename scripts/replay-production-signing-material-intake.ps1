@@ -29,6 +29,14 @@ function Read-OptionalJson {
     return Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
 }
 
+function Resolve-RepoPath {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if ([IO.Path]::IsPathRooted($Path)) {
+        return [IO.Path]::GetFullPath($Path)
+    }
+    return [IO.Path]::GetFullPath((Join-Path $script:repoRoot $Path))
+}
+
 function Add-Step {
     param(
         [Parameter(Mandatory = $true)][string]$Id,
@@ -78,10 +86,68 @@ function Add-Step {
     }
 }
 
+function Remove-InstalledProductionSignatures {
+    param(
+        [Parameter(Mandatory = $true)][string]$InstallationPath,
+        [Parameter(Mandatory = $true)][string]$Reason
+    )
+
+    $installation = Read-OptionalJson $InstallationPath
+    $actions = @()
+    foreach ($entry in @($installation.installed_signatures)) {
+        $path = $entry.path
+        $action = [ordered]@{
+            artifact = $entry.artifact
+            path = $path
+            status = "skipped"
+            reason = $null
+        }
+
+        if ([string]::IsNullOrWhiteSpace($path)) {
+            $action.reason = "missing-path"
+            $actions += $action
+            continue
+        }
+        if ($AllowSignatureOverwrite) {
+            $action.reason = "allow-overwrite-enabled"
+            $actions += $action
+            continue
+        }
+
+        $resolved = Resolve-RepoPath $path
+        $repoPrefix = $script:repoRoot.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+        $insideRepo = $resolved.StartsWith($repoPrefix, [StringComparison]::OrdinalIgnoreCase)
+        $hasProductionSignatureSuffix = $resolved.EndsWith(".prod.sig.json", [StringComparison]::OrdinalIgnoreCase)
+        if (-not $insideRepo) {
+            $action.reason = "outside-repo"
+            $actions += $action
+            continue
+        }
+        if (-not $hasProductionSignatureSuffix) {
+            $action.reason = "not-production-signature-path"
+            $actions += $action
+            continue
+        }
+        if (-not (Test-Path -LiteralPath $resolved -PathType Leaf)) {
+            $action.reason = "already-absent"
+            $actions += $action
+            continue
+        }
+
+        Remove-Item -LiteralPath $resolved -Force
+        $action.status = "removed"
+        $action.reason = $Reason
+        $actions += $action
+    }
+    return @($actions)
+}
+
 New-Item -ItemType Directory -Force -Path $ArtifactDir | Out-Null
 
+$script:repoRoot = (Resolve-Path -LiteralPath ".").Path
 $script:steps = @()
 $script:blockers = @()
+$script:cleanupActions = @()
 
 $signingRequestPath = Join-Path $ArtifactDir "signing-request-decision-evidence.json"
 $keyringVerificationPath = Join-Path $ArtifactDir "keyring-verification.json"
@@ -160,6 +226,25 @@ Add-Step `
             -FailOnBlocked
     }
 
+$productionSignatureStep = @($script:steps | Where-Object { $_.id -eq "production_signature_verification" } | Select-Object -Last 1)
+if ($null -ne $productionSignatureStep -and $productionSignatureStep.status -ne "passed") {
+    $script:cleanupActions = Remove-InstalledProductionSignatures `
+        -InstallationPath $bundleInstallationPath `
+        -Reason "production-signature-verification-$($productionSignatureStep.status)"
+    $removedCount = @($script:cleanupActions | Where-Object { $_.status -eq "removed" }).Count
+    $script:steps += [ordered]@{
+        id = "signature_cleanup"
+        command = "remove signatures installed by this replay after failed production signature verification"
+        output = $bundleInstallationPath
+        status = "passed"
+        artifact_status = "cleanup-recorded"
+        blockers = 0
+        exit_code = 0
+        error = $null
+        removed_signatures = $removedCount
+    }
+}
+
 Add-Step `
     -Id "production_promotion_verification" `
     -Command ".\scripts\verify-candidate-promotion.ps1 -RequireProductionSignatures -OutputPath $promotionPath" `
@@ -204,6 +289,11 @@ $result = [ordered]@{
     production_ready_claim = $false
     artifact_dir = $ArtifactDir
     steps = @($script:steps)
+    cleanup = [ordered]@{
+        triggered = @($script:cleanupActions).Count -gt 0
+        removed_signatures = @($script:cleanupActions | Where-Object { $_.status -eq "removed" }).Count
+        actions = @($script:cleanupActions)
+    }
     blockers = @($script:blockers)
     summary = [ordered]@{
         steps = @($script:steps).Count
