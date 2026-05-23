@@ -86,6 +86,42 @@
       "risk": "read-only",
       "required_parameters": ["run_id"],
       "optional_parameters": []
+    },
+    {
+      "name": "pkg.fetch.metadata",
+      "risk": "read-only",
+      "required_parameters": ["package", "version", "source_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.isolate.install",
+      "risk": "execute-with-confirmation",
+      "required_parameters": ["package", "version", "source_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.isolate.smoke",
+      "risk": "read-only",
+      "required_parameters": ["package"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.host.checkpoint",
+      "risk": "write-with-diff",
+      "required_parameters": ["package"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.host.install",
+      "risk": "privileged-with-human-approval",
+      "required_parameters": ["package", "version", "source_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.host.verify",
+      "risk": "read-only",
+      "required_parameters": ["package"],
+      "optional_parameters": []
     }
   ]
 }

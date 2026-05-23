@@ -72,6 +72,24 @@ const CONTENT_SANITIZE_PARAMS: &[ParamSpec] = &[ParamSpec::required("content_id"
 const CONTENT_SUMMARIZE_PARAMS: &[ParamSpec] = &[ParamSpec::required("content_id")];
 const SOURCE_TO_SINK_CHECK_PARAMS: &[ParamSpec] = &[ParamSpec::required("content_id")];
 const AUDIT_PROJECT_PARAMS: &[ParamSpec] = &[ParamSpec::required("run_id")];
+const PKG_FETCH_METADATA_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("package"),
+    ParamSpec::required("version"),
+    ParamSpec::required("source_digest"),
+];
+const PKG_ISOLATE_INSTALL_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("package"),
+    ParamSpec::required("version"),
+    ParamSpec::required("source_digest"),
+];
+const PKG_ISOLATE_SMOKE_PARAMS: &[ParamSpec] = &[ParamSpec::required("package")];
+const PKG_HOST_CHECKPOINT_PARAMS: &[ParamSpec] = &[ParamSpec::required("package")];
+const PKG_HOST_INSTALL_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("package"),
+    ParamSpec::required("version"),
+    ParamSpec::required("source_digest"),
+];
+const PKG_HOST_VERIFY_PARAMS: &[ParamSpec] = &[ParamSpec::required("package")];
 
 pub const TOOL_SCHEMAS: &[ToolSchema] = &[
     ToolSchema {
@@ -157,6 +175,42 @@ pub const TOOL_SCHEMAS: &[ToolSchema] = &[
         version: "v1",
         risk: RiskClass::ReadOnly,
         params: AUDIT_PROJECT_PARAMS,
+    },
+    ToolSchema {
+        name: "pkg.fetch.metadata",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: PKG_FETCH_METADATA_PARAMS,
+    },
+    ToolSchema {
+        name: "pkg.isolate.install",
+        version: "v1",
+        risk: RiskClass::ExecuteWithConfirmation,
+        params: PKG_ISOLATE_INSTALL_PARAMS,
+    },
+    ToolSchema {
+        name: "pkg.isolate.smoke",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: PKG_ISOLATE_SMOKE_PARAMS,
+    },
+    ToolSchema {
+        name: "pkg.host.checkpoint",
+        version: "v1",
+        risk: RiskClass::WriteWithDiff,
+        params: PKG_HOST_CHECKPOINT_PARAMS,
+    },
+    ToolSchema {
+        name: "pkg.host.install",
+        version: "v1",
+        risk: RiskClass::PrivilegedWithHumanApproval,
+        params: PKG_HOST_INSTALL_PARAMS,
+    },
+    ToolSchema {
+        name: "pkg.host.verify",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: PKG_HOST_VERIFY_PARAMS,
     },
 ];
 
@@ -283,6 +337,12 @@ mod tests {
             "content.summarize",
             "policy.source_to_sink.check",
             "audit.project",
+            "pkg.fetch.metadata",
+            "pkg.isolate.install",
+            "pkg.isolate.smoke",
+            "pkg.host.checkpoint",
+            "pkg.host.install",
+            "pkg.host.verify",
         ] {
             assert!(names.contains(&expected), "missing {expected}");
         }
@@ -345,6 +405,71 @@ mod tests {
                 RiskClass::ReadOnly
             );
         }
+    }
+
+    #[test]
+    fn routes_package_manager_tool_chain_without_raw_apt_or_shell() {
+        let router = ToolRouter;
+        let fetch = router
+            .route(&SemanticToolCall::new(
+                "pkg.fetch.metadata",
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("source_digest", "sha256:abcdef"),
+                ],
+            ))
+            .expect("package metadata routes");
+        assert_eq!(fetch.risk, RiskClass::ReadOnly);
+
+        let isolate = router
+            .route(&SemanticToolCall::new(
+                "pkg.isolate.install",
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("source_digest", "sha256:abcdef"),
+                ],
+            ))
+            .expect("isolated package install routes");
+        assert_eq!(isolate.risk, RiskClass::ExecuteWithConfirmation);
+
+        let checkpoint = router
+            .route(&SemanticToolCall::new(
+                "pkg.host.checkpoint",
+                vec![("package", "nginx-agent-plugin")],
+            ))
+            .expect("host checkpoint routes");
+        assert_eq!(checkpoint.risk, RiskClass::WriteWithDiff);
+
+        let host_install = router
+            .route(&SemanticToolCall::new(
+                "pkg.host.install",
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("source_digest", "sha256:abcdef"),
+                ],
+            ))
+            .expect("host package install routes");
+        assert_eq!(host_install.risk, RiskClass::PrivilegedWithHumanApproval);
+        assert!(router
+            .route(&SemanticToolCall::new("apt.install", vec![("package", "nginx")]))
+            .is_err());
+        assert!(router
+            .route(&SemanticToolCall::new("dpkg.install", vec![("package", "nginx")]))
+            .is_err());
+        assert!(router
+            .route(&SemanticToolCall::new(
+                "pkg.host.install",
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("source_digest", "sha256:abcdef"),
+                    ("cmd", "apt install nginx"),
+                ],
+            ))
+            .is_err());
     }
 
     #[test]

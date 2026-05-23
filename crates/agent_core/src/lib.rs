@@ -9341,6 +9341,8 @@ pub mod package_install {
     const PACKAGE_ADAPTER_ID: &str = "package-manager";
     const PACKAGE_ADAPTER_VERSION: &str = "adapter-v1";
     const PACKAGE_VERIFICATION_RULE: &str = "package-isolated-validation";
+    const DEBIAN_ADAPTER_ID: &str = "debian-ubuntu-package-manager";
+    const DEBIAN_ADAPTER_VERSION: &str = "adapter-v1";
 
     #[derive(Debug, Clone, PartialEq, Eq)]
     pub struct PackageInstallRequest {
@@ -9590,6 +9592,185 @@ pub mod package_install {
                 ensure_no_secret("isolated.retained_artifact", artifact)?;
             }
             Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct DebianPackageMetadata {
+        pub package_name: String,
+        pub version: String,
+        pub source_uri: String,
+        pub source_digest: String,
+        pub architecture: String,
+        pub repository: String,
+    }
+
+    impl DebianPackageMetadata {
+        pub fn from_request(
+            request: &PackageInstallRequest,
+            architecture: impl Into<String>,
+            repository: impl Into<String>,
+        ) -> Result<Self, PackageInstallError> {
+            let metadata = Self {
+                package_name: request.package_name.clone(),
+                version: request.version.clone(),
+                source_uri: request.source_uri.clone(),
+                source_digest: request.source_digest.clone(),
+                architecture: architecture.into(),
+                repository: repository.into(),
+            };
+            metadata.validate()?;
+            Ok(metadata)
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"package_name\":\"{}\",\"version\":\"{}\",\"source_uri\":\"{}\",\"source_digest\":\"{}\",\"architecture\":\"{}\",\"repository\":\"{}\"}}",
+                escape_json(&self.package_name),
+                escape_json(&self.version),
+                escape_json(&self.source_uri),
+                escape_json(&self.source_digest),
+                escape_json(&self.architecture),
+                escape_json(&self.repository)
+            )
+        }
+
+        fn validate(&self) -> Result<(), PackageInstallError> {
+            ensure_no_secret("debian.package_name", &self.package_name)?;
+            ensure_no_secret("debian.version", &self.version)?;
+            ensure_no_secret("debian.source_uri", &self.source_uri)?;
+            ensure_no_secret("debian.source_digest", &self.source_digest)?;
+            ensure_no_secret("debian.architecture", &self.architecture)?;
+            ensure_no_secret("debian.repository", &self.repository)?;
+            if self.package_name.trim().is_empty()
+                || self.version.trim().is_empty()
+                || self.architecture.trim().is_empty()
+                || self.repository.trim().is_empty()
+            {
+                return Err(PackageInstallError::InvalidRequest {
+                    reason: "debian package metadata requires package, version, architecture, and repository".to_string(),
+                });
+            }
+            if !self.source_digest.starts_with("sha256:") {
+                return Err(PackageInstallError::InvalidRequest {
+                    reason: "debian package metadata source digest must be sha256".to_string(),
+                });
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct DebianPackageAdapterPlan {
+        pub adapter_id: String,
+        pub adapter_version: String,
+        pub metadata: DebianPackageMetadata,
+        pub dry_run_summary: String,
+        pub semantic_tools: Vec<String>,
+        pub host_promotion_hash: String,
+        pub raw_command_exposed: bool,
+    }
+
+    impl DebianPackageAdapterPlan {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"adapter_id\":\"{}\",\"adapter_version\":\"{}\",\"metadata\":{},\"dry_run_summary\":\"{}\",\"semantic_tools\":{},\"host_promotion_hash\":\"{}\",\"raw_command_exposed\":{}}}",
+                escape_json(&self.adapter_id),
+                escape_json(&self.adapter_version),
+                self.metadata.to_json(),
+                escape_json(&self.dry_run_summary),
+                string_array_json(&self.semantic_tools),
+                escape_json(&self.host_promotion_hash),
+                self.raw_command_exposed
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct DebianPackageAdapterEvidence {
+        pub plan: DebianPackageAdapterPlan,
+        pub isolated_result: IsolatedPackageInstallResult,
+        pub host_promotion: HostPromotionDecision,
+    }
+
+    impl DebianPackageAdapterEvidence {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"plan\":{},\"isolated_result\":{},\"host_promotion\":{}}}",
+                self.plan.to_json(),
+                self.isolated_result.to_json(),
+                self.host_promotion.to_json()
+            )
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct DebianPackageManagerAdapter;
+
+    impl DebianPackageManagerAdapter {
+        pub fn plan(
+            &self,
+            request: &PackageInstallRequest,
+            metadata: DebianPackageMetadata,
+        ) -> Result<DebianPackageAdapterPlan, PackageInstallError> {
+            request.validate()?;
+            metadata.validate()?;
+            if metadata.package_name != request.package_name
+                || metadata.version != request.version
+                || metadata.source_uri != request.source_uri
+                || metadata.source_digest != request.source_digest
+            {
+                return Err(PackageInstallError::InvalidRequest {
+                    reason: "debian package metadata must match requested package, version, source uri, and digest".to_string(),
+                });
+            }
+            let plan = PackageInstallWorkflow.plan(request)?;
+            let semantic_tools = plan
+                .steps()
+                .iter()
+                .map(|step| step.call().name.clone())
+                .collect::<Vec<_>>();
+            let raw_command_exposed = semantic_tools.iter().any(|tool| {
+                tool == "shell.exec" || tool.starts_with("apt.") || tool.starts_with("dpkg.")
+            });
+            if raw_command_exposed {
+                return Err(PackageInstallError::InvalidRequest {
+                    reason: "debian package adapter must not expose raw apt, dpkg, or shell tools"
+                        .to_string(),
+                });
+            }
+            Ok(DebianPackageAdapterPlan {
+                adapter_id: DEBIAN_ADAPTER_ID.to_string(),
+                adapter_version: DEBIAN_ADAPTER_VERSION.to_string(),
+                metadata,
+                dry_run_summary: format!(
+                    "resolved {} {} for isolated install on {} via semantic package workflow",
+                    request.package_name,
+                    request.version,
+                    plan.intent().working_scope()
+                ),
+                semantic_tools,
+                host_promotion_hash: request.host_promotion_parameter_hash(),
+                raw_command_exposed,
+            })
+        }
+
+        pub fn evaluate(
+            &self,
+            request: &PackageInstallRequest,
+            metadata: DebianPackageMetadata,
+            isolated: &IsolatedPackageInstallResult,
+            approval: Option<&ApprovalToken>,
+            now: u64,
+        ) -> Result<DebianPackageAdapterEvidence, PackageInstallError> {
+            let plan = self.plan(request, metadata)?;
+            let host_promotion =
+                PackageInstallWorkflow.evaluate_host_promotion(request, isolated, approval, now)?;
+            Ok(DebianPackageAdapterEvidence {
+                plan,
+                isolated_result: isolated.clone(),
+                host_promotion,
+            })
         }
     }
 
@@ -10047,6 +10228,85 @@ pub mod package_install {
             assert_eq!(allowed.kind, HostPromotionDecisionKind::Allowed);
             assert!(allowed.host_modified);
             assert!(allowed.rollback_ready);
+        }
+
+        #[test]
+        fn debian_adapter_plan_uses_only_semantic_package_tools() {
+            let request = request();
+            let metadata =
+                DebianPackageMetadata::from_request(&request, "x86_64", "agentos-stable")
+                    .expect("metadata");
+            let plan = DebianPackageManagerAdapter
+                .plan(&request, metadata)
+                .expect("adapter plan");
+
+            assert_eq!(plan.adapter_id, "debian-ubuntu-package-manager");
+            assert!(!plan.raw_command_exposed);
+            assert!(
+                plan.semantic_tools
+                    .contains(&"pkg.fetch.metadata".to_string())
+            );
+            assert!(
+                plan.semantic_tools
+                    .contains(&"pkg.isolate.install".to_string())
+            );
+            assert!(plan.semantic_tools.contains(&"pkg.host.install".to_string()));
+            assert!(plan
+                .semantic_tools
+                .iter()
+                .all(|tool| !tool.starts_with("apt.") && !tool.starts_with("dpkg.")));
+            assert!(!plan.to_json().contains("shell.exec"));
+            assert!(!plan.to_json().contains("apt install"));
+        }
+
+        #[test]
+        fn debian_adapter_evidence_binds_metadata_to_host_promotion() {
+            let request = request();
+            let metadata =
+                DebianPackageMetadata::from_request(&request, "x86_64", "agentos-stable")
+                    .expect("metadata");
+            let isolated = IsolatedPackageInstallResult::passed(&request).expect("isolated");
+            let evidence = DebianPackageManagerAdapter
+                .evaluate(
+                    &request,
+                    metadata,
+                    &isolated,
+                    Some(&request.exact_approval(0)),
+                    0,
+                )
+                .expect("evidence");
+
+            assert_eq!(
+                evidence.host_promotion.kind,
+                HostPromotionDecisionKind::Allowed
+            );
+            assert!(evidence.host_promotion.host_modified);
+            assert_eq!(
+                evidence.plan.host_promotion_hash,
+                request.host_promotion_parameter_hash()
+            );
+            assert_eq!(
+                evidence.host_promotion.evidence.source_digest,
+                request.source_digest
+            );
+            assert_eq!(
+                evidence.host_promotion.evidence.rollback_id,
+                request.rollback_id
+            );
+        }
+
+        #[test]
+        fn debian_adapter_rejects_metadata_mutation_before_promotion() {
+            let request = request();
+            let mut metadata =
+                DebianPackageMetadata::from_request(&request, "x86_64", "agentos-stable")
+                    .expect("metadata");
+            metadata.version = "1.2.4".to_string();
+
+            let error = DebianPackageManagerAdapter
+                .plan(&request, metadata)
+                .expect_err("metadata mutation denied");
+            assert!(error.reason().contains("metadata must match"));
         }
 
         #[test]
