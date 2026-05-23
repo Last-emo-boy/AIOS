@@ -201,8 +201,8 @@ Add-Check "source.commit.present" (Has-Value $script:sourceCommit) "Signing requ
 Add-Check "policy.version.present" (Has-Value $script:policyVersion) "Signing request must bind policy version." "blocking" $script:policyVersion
 Add-Check "tools.version.present" (Has-Value $script:toolManifestVersion) "Signing request must bind tool manifest version." "blocking" $script:toolManifestVersion
 Add-Check "key.id.present" (Has-Value $ProductionKeyId) "Signing request must bind production key id." "blocking" $ProductionKeyId
-Add-Check "key.public_fingerprint.provided" ($PublicFingerprint -notmatch '^<.*>$' -and (Has-Value $PublicFingerprint)) "Signing request should be generated with the release authority public fingerprint." "warning" $PublicFingerprint
-Add-Check "key.rotation_epoch.provided" ($RotationEpoch -notmatch '^<.*>$' -and (Has-Value $RotationEpoch)) "Signing request should be generated with the release authority rotation epoch." "warning" $RotationEpoch
+Add-Check "key.public_fingerprint.provided" ($PublicFingerprint -notmatch '^<.*>$' -and (Has-Value $PublicFingerprint)) "Signing request must be generated with the release authority public fingerprint." "blocking" $PublicFingerprint
+Add-Check "key.rotation_epoch.provided" ($RotationEpoch -notmatch '^<.*>$' -and (Has-Value $RotationEpoch)) "Signing request must be generated with the release authority rotation epoch." "blocking" $RotationEpoch
 
 $provenanceArtifact = [ordered]@{
     path = $ProvenancePath

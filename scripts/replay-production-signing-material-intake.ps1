@@ -158,15 +158,28 @@ $promotionPath = Join-Path $ArtifactDir "production-promotion-verification.json"
 $qemuSmokeDir = Join-Path $ArtifactDir "qemu-distro-smoke"
 $qemuSmokePath = Join-Path $qemuSmokeDir "result.json"
 $resultPath = Join-Path $ArtifactDir "result.json"
+$productionKeyId = "agentos-production-root-v1"
+$keyringPath = ".workflow/artifacts/production-signing/key-custody.json"
+$keyring = Read-OptionalJson $keyringPath
+$productionKey = if ($null -ne $keyring) {
+    @($keyring.keys | Where-Object { $_.key_id -eq $productionKeyId }) | Select-Object -First 1
+} else {
+    $null
+}
+$publicFingerprint = if ($null -ne $productionKey) { $productionKey.public_fingerprint } else { $null }
+$rotationEpoch = if ($null -ne $productionKey) { $productionKey.rotation_epoch } else { $null }
 
 Add-Step `
     -Id "signing_request" `
-    -Command ".\scripts\create-production-signing-request.ps1 -RequireDecisionEvidence -OutputPath $signingRequestPath" `
+    -Command ".\scripts\create-production-signing-request.ps1 -RequireDecisionEvidence -OutputPath $signingRequestPath -PublicFingerprint <from-keyring> -RotationEpoch <from-keyring>" `
     -OutputPath $signingRequestPath `
     -Blocking `
     -Action {
         & ".\scripts\create-production-signing-request.ps1" `
             -RequireDecisionEvidence `
+            -ProductionKeyId $productionKeyId `
+            -PublicFingerprint $publicFingerprint `
+            -RotationEpoch $rotationEpoch `
             -OutputPath $signingRequestPath `
             -FailOnBlocked
     }
