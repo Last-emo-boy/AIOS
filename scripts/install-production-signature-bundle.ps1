@@ -56,6 +56,18 @@ function Get-OptionalFileHash {
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
+function Test-InsideRepoPath {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    $resolved = Resolve-RepoPath $Path
+    $repoPrefix = $script:repoRoot.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+    return $resolved.StartsWith($repoPrefix, [StringComparison]::OrdinalIgnoreCase)
+}
+
+function Test-ProductionSignaturePath {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    return (Resolve-RepoPath $Path).EndsWith(".prod.sig.json", [StringComparison]::OrdinalIgnoreCase)
+}
+
 function Add-Check {
     param(
         [Parameter(Mandatory = $true)][string]$Id,
@@ -92,6 +104,7 @@ $script:repoRoot = (Resolve-Path -LiteralPath ".").Path
 $script:checks = @()
 $script:blockers = @()
 $installed = @()
+$installPlan = @()
 
 $signingRequest = Read-OptionalJson (Resolve-RepoPath $SigningRequestPath)
 $bundle = Read-OptionalJson (Resolve-RepoPath $SignatureBundlePath)
@@ -106,6 +119,10 @@ if ($null -ne $verification) {
     Add-Check "bundle_verification.schema" ($verification.schema -eq "agentos.production-signature-bundle-verification.v1") "Bundle verification schema must be exact." "blocking" $verification.schema
     Add-Check "bundle_verification.status" ($verification.status -eq "ready-for-cryptographic-verification") "Bundle verification must be ready for cryptographic verification before installation." "blocking" $verification.status
     Add-Check "bundle_verification.no_blockers" (@($verification.blockers).Count -eq 0) "Bundle verification must have zero blockers before installation." "blocking" @($verification.blockers).Count
+    Add-Check "bundle_verification.binds_signing_request" ($verification.inputs.signing_request -eq $SigningRequestPath) "Bundle verification must bind the signing request path being installed." "blocking" $verification.inputs.signing_request
+    Add-Check "bundle_verification.binds_signature_bundle" ($verification.inputs.signature_bundle -eq $SignatureBundlePath) "Bundle verification must bind the signature bundle path being installed." "blocking" $verification.inputs.signature_bundle
+    Add-Check "bundle_verification.request_count" ($verification.summary.requested_signatures -eq @($signingRequest.signing_requests).Count) "Bundle verification requested signature count must match signing request." "blocking" $verification.summary.requested_signatures
+    Add-Check "bundle_verification.match_count" ($verification.summary.matched_signatures -eq @($signingRequest.signing_requests).Count) "Bundle verification matched signature count must match signing request." "blocking" $verification.summary.matched_signatures
 }
 
 if ($script:blockers.Count -eq 0) {
@@ -122,20 +139,33 @@ if ($script:blockers.Count -eq 0) {
         if ([string]::IsNullOrWhiteSpace($targetPath)) {
             continue
         }
-
-        $targetExists = Test-Path -LiteralPath $targetPath -PathType Leaf
-        Add-Check "install.$name.no_overwrite" ((-not $targetExists) -or $AllowOverwrite) "Existing production signature files are not overwritten unless -AllowOverwrite is explicit." "blocking" $targetPath
-        if ($targetExists -and -not $AllowOverwrite) {
+        Add-Check "install.$name.target_inside_repo" (Test-InsideRepoPath $targetPath) "Production signature target path must stay inside the repository." "blocking" $targetPath
+        Add-Check "install.$name.target_suffix" (Test-ProductionSignaturePath $targetPath) "Production signature target path must end with .prod.sig.json." "blocking" $targetPath
+        if (-not (Test-InsideRepoPath $targetPath) -or -not (Test-ProductionSignaturePath $targetPath)) {
             continue
         }
 
-        Write-Json -Value $signature -Path $targetPath
-        $resolvedTargetPath = Resolve-RepoPath $targetPath
+        $targetExists = Test-Path -LiteralPath $targetPath -PathType Leaf
+        Add-Check "install.$name.no_overwrite" ((-not $targetExists) -or $AllowOverwrite) "Existing production signature files are not overwritten unless -AllowOverwrite is explicit." "blocking" $targetPath
+        if (-not ($targetExists -and -not $AllowOverwrite)) {
+            $installPlan += [ordered]@{
+                artifact = $name
+                target_path = $targetPath
+                signature = $signature
+            }
+        }
+    }
+}
+
+if ($script:blockers.Count -eq 0) {
+    foreach ($entry in @($installPlan)) {
+        Write-Json -Value $entry.signature -Path $entry.target_path
+        $resolvedTargetPath = Resolve-RepoPath $entry.target_path
         $installedHash = Get-OptionalFileHash $resolvedTargetPath
-        Add-Check "install.$name.installed_hash" (Has-Value $installedHash) "Installed production signature hash must be recorded for cleanup binding." "blocking" $installedHash
+        Add-Check "install.$($entry.artifact).installed_hash" (Has-Value $installedHash) "Installed production signature hash must be recorded for cleanup binding." "blocking" $installedHash
         $installed += [ordered]@{
-            artifact = $name
-            path = $targetPath
+            artifact = $entry.artifact
+            path = $entry.target_path
             sha256 = $installedHash
         }
     }
