@@ -14,6 +14,7 @@ pub const REQUIRED_SAFETY_SCENARIOS: &[&str] = &[
     "runtime-memory-poisoning-policy-override",
     "runtime-approval-parameter-mutation",
     "runtime-source-to-sink-abuse",
+    "runtime-package-install-host-promotion-bypass",
     "never-class-tool-abuse",
     "broad-approval-rejected",
     "secret-handle-only-redaction",
@@ -422,6 +423,11 @@ mod tests {
     use std::path::{Path, PathBuf};
 
     use super::*;
+    use crate::agent_core::model::TrustBoundary;
+    use crate::agent_core::package_install::{
+        HostPromotionDecisionKind, IsolatedPackageInstallResult, PackageInstallRequest,
+        PackageInstallWorkflow,
+    };
     use crate::audit::extract_json_string_for_tests;
     use crate::audit::{redact_summary, AuditEvent, AuditEventType, AuditJournal};
     use crate::api::RiskClass;
@@ -466,10 +472,64 @@ mod tests {
             "runtime-memory-poisoning-policy-override",
             "runtime-approval-parameter-mutation",
             "runtime-source-to-sink-abuse",
+            "runtime-package-install-host-promotion-bypass",
             "runtime-recovery-half-committed-effect",
         ] {
             assert!(gate.required_scenarios.contains(&runtime_expected));
         }
+    }
+
+    #[test]
+    fn package_install_host_promotion_requires_isolation_approval_and_rollback() {
+        let request = PackageInstallRequest::new(
+            "operator",
+            "nginx-agent-plugin",
+            "1.2.3",
+            "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+            "sha256:0123456789abcdef",
+        )
+        .expect("request");
+        let isolated = IsolatedPackageInstallResult::passed(&request).expect("isolated");
+
+        let awaiting = PackageInstallWorkflow
+            .evaluate_host_promotion(&request, &isolated, None, 0)
+            .expect("awaiting exact approval");
+        assert_eq!(awaiting.kind, HostPromotionDecisionKind::AwaitingApproval);
+        assert!(!awaiting.host_modified);
+        assert!(awaiting.exact_approval_required);
+        assert!(awaiting.rollback_ready);
+
+        let external = request
+            .clone()
+            .with_source_boundary(TrustBoundary::ExternalUntrusted);
+        let external_decision = PackageInstallWorkflow
+            .evaluate_host_promotion(&external, &isolated, Some(&external.exact_approval(0)), 0)
+            .expect("external source denied");
+        assert_eq!(external_decision.kind, HostPromotionDecisionKind::Denied);
+        assert!(!external_decision.host_modified);
+
+        let missing_rollback = request.clone().without_rollback();
+        let missing_rollback_decision = PackageInstallWorkflow
+            .evaluate_host_promotion(
+                &missing_rollback,
+                &isolated,
+                Some(&request.exact_approval(0)),
+                0,
+            )
+            .expect("missing rollback denied");
+        assert_eq!(
+            missing_rollback_decision.kind,
+            HostPromotionDecisionKind::Denied
+        );
+        assert!(!missing_rollback_decision.host_modified);
+        assert!(!missing_rollback_decision.rollback_ready);
+
+        let allowed = PackageInstallWorkflow
+            .evaluate_host_promotion(&request, &isolated, Some(&request.exact_approval(0)), 0)
+            .expect("allowed with exact approval");
+        assert_eq!(allowed.kind, HostPromotionDecisionKind::Allowed);
+        assert!(allowed.host_modified);
+        assert!(allowed.rollback_ready);
     }
 
     #[test]

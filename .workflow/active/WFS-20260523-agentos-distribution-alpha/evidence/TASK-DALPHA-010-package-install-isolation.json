@@ -1,0 +1,54 @@
+{
+  "task_id": "TASK-DALPHA-010",
+  "status": "completed",
+  "completed_at": "2026-05-23T10:05:00+08:00",
+  "title": "Add package install isolation workflow",
+  "implementation_files": [
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/safety.rs"
+  ],
+  "summary": {
+    "workflow_contract": "agent_core::package_install defines PackageInstallWorkflow with fetch metadata, isolated install, isolated smoke test, host checkpoint, host promotion, host verify, and rollback steps.",
+    "fail_closed_stub": "The workflow uses pkg.* semantic tool names as an Alpha contract/stub. It does not execute a real host package manager adapter and should not be validated through ToolRouter until those semantic tools are intentionally added.",
+    "isolation_before_host": "Host promotion is evaluated only after isolated install, smoke test, signature verification, matching package metadata, redacted retained artifacts, rollback metadata, and checkpoint readiness.",
+    "exact_approval": "PackageInstallRequest builds a PolicyRequest for pkg.host.install with RiskClass::PrivilegedWithHumanApproval and an exact approval token bound to actor, tool, package resource, source URI, source digest, and rollback id.",
+    "host_effect_boundary": "Denied or awaiting-approval decisions return host_modified=false. Allowed promotion is represented only after exact approval and rollback readiness.",
+    "source_boundary": "ExternalUntrusted and ModelOutput package sources are denied before policy approval can authorize host promotion."
+  },
+  "acceptance_evidence": {
+    "no_direct_host_install_without_policy": "host_promotion_requires_exact_approval_and_rollback asserts no approval and mutated approval both leave host_modified=false.",
+    "isolation_profile_or_blocking_risk_recorded": "PackageInstallWorkflow::plan records an isolate-package-install step before smoke test and host checkpoint; this is explicitly a contract/stub until pkg.* tools are backed by a semantic executor.",
+    "rollback_semantics": "The host checkpoint and host install PlanStep entries require rollback metadata; evaluate_host_promotion denies missing rollback or missing host checkpoint.",
+    "failure_artifacts": "failed_isolated_install_denies_host_promotion_and_retains_redacted_artifacts and raw_failure_artifacts_are_rejected_before_host_promotion require retained artifacts to be .json or .redacted and reject raw logs.",
+    "safety_gate": "REQUIRED_SAFETY_SCENARIOS now includes runtime-package-install-host-promotion-bypass and safety::tests::package_install_host_promotion_requires_isolation_approval_and_rollback covers the release scenario."
+  },
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::package_install",
+      "result": "passed",
+      "tests": "5 passed"
+    },
+    {
+      "command": "cargo test -p agentd agent_core::",
+      "result": "passed",
+      "tests": "73 passed"
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "result": "passed",
+      "tests": "17 passed"
+    }
+  ],
+  "non_goals": [
+    "No real package manager adapter was added.",
+    "No direct shell or host package install execution path was added.",
+    "No generated package install artifacts were committed."
+  ],
+  "non_committed_outputs": [
+    ".workflow/artifacts/"
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-011",
+    "blocked_until": []
+  }
+}

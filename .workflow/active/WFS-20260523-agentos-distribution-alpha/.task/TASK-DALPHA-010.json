@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-010",
   "title": "Add package install isolation workflow",
-  "status": "planned",
+  "status": "completed",
   "wave": 3,
   "priority": "P1",
   "type": "workflow",
@@ -66,5 +66,20 @@
       "Host promotion requires exact approval.",
       "Rollback semantics are defined."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T10:05:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json",
+    "implementation_files": [
+      "crates/agentd/src/agent_core.rs",
+      "crates/agentd/src/safety.rs"
+    ],
+    "verification": {
+      "package_install": "cargo test -p agentd agent_core::package_install passed, 5 tests",
+      "agent_core": "cargo test -p agentd agent_core:: passed, 73 tests",
+      "safety": "cargo test -p agentd safety:: passed, 17 tests"
+    },
+    "contract_status": "Alpha fail-closed workflow contract/stub; pkg.* semantic tools are not yet host package manager adapters.",
+    "next_task": "TASK-DALPHA-011"
   }
 }

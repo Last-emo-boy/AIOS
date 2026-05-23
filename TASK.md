@@ -35,6 +35,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-DALPHA-008` 已完成：`scripts/build-release.ps1` 已升级为 `agentos.distribution-alpha.provenance.v1` promotion gate，记录 source revision、toolchain、dependency inventory、runtime manifest hash、image inputs、artifact hashes、Alpha service recovery smoke、full QEMU runtime smoke 和 gate commands；本次 gate 结果为 `promotion.status=promotable`，blockers 为空。
 - 已按 Maestro 方式补充 Agent Core Runtime 和 AgentOS 安全执行底座的 Alpha 延续展开：`.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`。这份文档把 `TASK-ACR-001` 到 `TASK-ACR-010`、`TASK-SEF-001` 到 `TASK-SEF-010`、`TASK-DALPHA-009` 到 `TASK-DALPHA-012` 串成从底层 Agent runtime 到发行版安全执行面的执行链。
 - `TASK-DALPHA-009` 已完成：Firecracker executor profile 已放到 SecurityExecutionEngine 后面，缺 KVM、Firecracker binary、jailer、kernel image 或 rootfs image 会在 `EffectPrepared` 前 fail closed；planner hints 只记录为 ignored，profile selection 和 policy reason 进入 audit/explain，没有新增直接 Firecracker 执行 helper。
+- `TASK-DALPHA-010` 已完成：新增 `agent_core::package_install` Alpha workflow contract，第三方包安装必须先经过 metadata fetch、isolated install、isolated smoke test、host checkpoint，再凭绑定 package、version、source URI、source digest 和 rollback id 的 exact approval 才能 host promotion；external/model source、失败隔离验证、缺 rollback/checkpoint 或 raw artifacts 都会 fail closed 且 `host_modified=false`，`safety::` 已纳入 `runtime-package-install-host-promotion-bypass`。
 - Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
 - `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
@@ -136,7 +137,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 ### Distribution Alpha Wave 3：Alpha isolation workstreams
 
 - `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面（completed）
-- `TASK-DALPHA-010`：增加 package install isolation workflow（planned）
+- `TASK-DALPHA-010`：增加 package install isolation workflow（completed）
 - `TASK-DALPHA-011`：增加 untrusted content runtime workflow（planned）
 
 退出标准：
@@ -367,4 +368,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-执行 `TASK-DALPHA-010`：先读取 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md` 和 `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json`，在 Firecracker profile contract 之上定义 package install isolation workflow，确保第三方包安装先隔离验证，再通过 exact approval 和 rollback semantics 才能 host promotion。
+执行 `TASK-DALPHA-011`：先读取 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md` 和 `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-011.json`，在现有 source-to-sink policy 之上定义 untrusted content runtime workflow，确保外部内容默认 untrusted，只能经 sanitize/summary 参与 replanning，不能直接驱动 shell、secret、privileged、package install 或 exfiltration sink。

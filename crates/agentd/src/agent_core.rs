@@ -8440,6 +8440,553 @@ pub mod planner {
     }
 }
 
+pub mod package_install {
+    use std::fmt;
+
+    use crate::api::{escape_json, RiskClass, SemanticToolCall};
+    use crate::policy::{stable_parameter_hash, ApprovalToken, PolicyDecisionKind, PolicyEvaluator, PolicyRequest};
+
+    use super::model::{
+        contains_secret_value, ApprovalRequirement, IntentCtx, IntentSource, ModelEvidence,
+        ModelValidationError, PlanSpec, PlanStep, RiskHint, RollbackRequirement, TrustBoundary,
+        VerificationRule,
+    };
+
+    pub const STEP_FETCH_PACKAGE: &str = "fetch-package-metadata";
+    pub const STEP_ISOLATE_INSTALL: &str = "isolate-package-install";
+    pub const STEP_SMOKE_TEST: &str = "smoke-test-isolated-package";
+    pub const STEP_HOST_CHECKPOINT: &str = "prepare-host-package-checkpoint";
+    pub const STEP_HOST_INSTALL: &str = "promote-package-to-host";
+    pub const STEP_HOST_VERIFY: &str = "verify-host-package";
+    pub const STEP_HOST_ROLLBACK: &str = "rollback-host-package";
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct PackageInstallRequest {
+        pub actor: String,
+        pub package_name: String,
+        pub version: String,
+        pub source_uri: String,
+        pub source_digest: String,
+        pub source_boundary: TrustBoundary,
+        pub rollback_id: Option<String>,
+        pub host_checkpoint_ready: bool,
+    }
+
+    impl PackageInstallRequest {
+        pub fn new(
+            actor: impl Into<String>,
+            package_name: impl Into<String>,
+            version: impl Into<String>,
+            source_uri: impl Into<String>,
+            source_digest: impl Into<String>,
+        ) -> Result<Self, PackageInstallError> {
+            let package_name = package_name.into();
+            let version = version.into();
+            let request = Self {
+                actor: actor.into(),
+                rollback_id: Some(format!(
+                    "rollback-package-{}-{}",
+                    package_name.replace(['/', '\\', ' '], "-"),
+                    version.replace(['/', '\\', ' '], "-")
+                )),
+                package_name,
+                version,
+                source_uri: source_uri.into(),
+                source_digest: source_digest.into(),
+                source_boundary: TrustBoundary::Operator,
+                host_checkpoint_ready: true,
+            };
+            request.validate()?;
+            Ok(request)
+        }
+
+        pub fn with_source_boundary(mut self, boundary: TrustBoundary) -> Self {
+            self.source_boundary = boundary;
+            self
+        }
+
+        pub fn without_rollback(mut self) -> Self {
+            self.rollback_id = None;
+            self.host_checkpoint_ready = false;
+            self
+        }
+
+        pub fn host_resource(&self) -> String {
+            format!("{}@{}", self.package_name, self.version)
+        }
+
+        pub fn host_promotion_parameter_hash(&self) -> String {
+            stable_parameter_hash(&[
+                ("package".to_string(), self.package_name.clone()),
+                ("version".to_string(), self.version.clone()),
+                ("source_digest".to_string(), self.source_digest.clone()),
+                ("source_uri".to_string(), self.source_uri.clone()),
+                ("rollback_id".to_string(), self.rollback_id.clone().unwrap_or_else(|| "missing".to_string())),
+            ])
+        }
+
+        pub fn host_policy_request(&self, now: u64) -> PolicyRequest {
+            PolicyRequest {
+                actor: self.actor.clone(),
+                tool: "pkg.host.install".to_string(),
+                resource: self.host_resource(),
+                risk: RiskClass::PrivilegedWithHumanApproval,
+                parameter_hash: self.host_promotion_parameter_hash(),
+                policy_version: "policy-v1".to_string(),
+                now,
+            }
+        }
+
+        pub fn exact_approval(&self, now: u64) -> ApprovalToken {
+            let request = self.host_policy_request(now);
+            ApprovalToken {
+                actor: request.actor,
+                tool: request.tool,
+                resource: request.resource,
+                parameter_hash: request.parameter_hash,
+                expires_at: now + 60,
+                policy_version: request.policy_version,
+            }
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"actor\":\"{}\",\"package_name\":\"{}\",\"version\":\"{}\",\"source_uri\":\"{}\",\"source_digest\":\"{}\",\"source_boundary\":\"{}\",\"rollback_id\":{},\"host_checkpoint_ready\":{}}}",
+                escape_json(&self.actor),
+                escape_json(&self.package_name),
+                escape_json(&self.version),
+                escape_json(&self.source_uri),
+                escape_json(&self.source_digest),
+                self.source_boundary.as_str(),
+                optional_string_json(self.rollback_id.as_deref()),
+                self.host_checkpoint_ready
+            )
+        }
+
+        fn validate(&self) -> Result<(), PackageInstallError> {
+            ensure_no_secret("package.actor", &self.actor)?;
+            ensure_no_secret("package.name", &self.package_name)?;
+            ensure_no_secret("package.version", &self.version)?;
+            ensure_no_secret("package.source_uri", &self.source_uri)?;
+            ensure_no_secret("package.source_digest", &self.source_digest)?;
+            if self.package_name.trim().is_empty() || self.version.trim().is_empty() {
+                return Err(PackageInstallError::InvalidRequest { reason: "package name and version are required".to_string() });
+            }
+            if !self.source_digest.starts_with("sha256:") {
+                return Err(PackageInstallError::InvalidRequest { reason: "package source digest must be sha256".to_string() });
+            }
+            if let Some(rollback_id) = &self.rollback_id {
+                ensure_no_secret("package.rollback_id", rollback_id)?;
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct IsolatedPackageInstallResult {
+        pub package_name: String,
+        pub version: String,
+        pub source_digest: String,
+        pub installed_in_isolation: bool,
+        pub smoke_passed: bool,
+        pub signature_verified: bool,
+        pub dependency_summary: String,
+        pub retained_artifacts: Vec<String>,
+        pub raw_log_retained: bool,
+    }
+
+    impl IsolatedPackageInstallResult {
+        pub fn passed(request: &PackageInstallRequest) -> Result<Self, PackageInstallError> {
+            Self::new(
+                request,
+                true,
+                true,
+                true,
+                "dependencies resolved in isolated executor",
+                vec![
+                    ".workflow/artifacts/package-install/isolate-report.json",
+                    ".workflow/artifacts/package-install/smoke.log.redacted",
+                ],
+                false,
+            )
+        }
+
+        #[allow(clippy::too_many_arguments)]
+        pub fn new(
+            request: &PackageInstallRequest,
+            installed_in_isolation: bool,
+            smoke_passed: bool,
+            signature_verified: bool,
+            dependency_summary: impl Into<String>,
+            retained_artifacts: Vec<&str>,
+            raw_log_retained: bool,
+        ) -> Result<Self, PackageInstallError> {
+            let result = Self {
+                package_name: request.package_name.clone(),
+                version: request.version.clone(),
+                source_digest: request.source_digest.clone(),
+                installed_in_isolation,
+                smoke_passed,
+                signature_verified,
+                dependency_summary: dependency_summary.into(),
+                retained_artifacts: retained_artifacts.into_iter().map(str::to_string).collect(),
+                raw_log_retained,
+            };
+            result.validate()?;
+            Ok(result)
+        }
+
+        fn passed_all_gates(&self) -> bool {
+            self.installed_in_isolation && self.smoke_passed && self.signature_verified
+        }
+
+        fn artifacts_are_redacted(&self) -> bool {
+            !self.raw_log_retained
+                && self.retained_artifacts.iter().all(|path| path.ends_with(".redacted") || path.ends_with(".json"))
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"package_name\":\"{}\",\"version\":\"{}\",\"source_digest\":\"{}\",\"installed_in_isolation\":{},\"smoke_passed\":{},\"signature_verified\":{},\"dependency_summary\":\"{}\",\"retained_artifacts\":{},\"raw_log_retained\":{}}}",
+                escape_json(&self.package_name),
+                escape_json(&self.version),
+                escape_json(&self.source_digest),
+                self.installed_in_isolation,
+                self.smoke_passed,
+                self.signature_verified,
+                escape_json(&self.dependency_summary),
+                string_array_json(&self.retained_artifacts),
+                self.raw_log_retained
+            )
+        }
+
+        fn validate(&self) -> Result<(), PackageInstallError> {
+            ensure_no_secret("isolated.package_name", &self.package_name)?;
+            ensure_no_secret("isolated.version", &self.version)?;
+            ensure_no_secret("isolated.source_digest", &self.source_digest)?;
+            ensure_no_secret("isolated.dependency_summary", &self.dependency_summary)?;
+            for artifact in &self.retained_artifacts {
+                ensure_no_secret("isolated.retained_artifact", artifact)?;
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum HostPromotionDecisionKind {
+        Allowed,
+        AwaitingApproval,
+        Denied,
+    }
+
+    impl HostPromotionDecisionKind {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Allowed => "allowed",
+                Self::AwaitingApproval => "awaiting-approval",
+                Self::Denied => "denied",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct HostPromotionDecision {
+        pub kind: HostPromotionDecisionKind,
+        pub reason: String,
+        pub host_modified: bool,
+        pub exact_approval_required: bool,
+        pub rollback_ready: bool,
+        pub retained_artifacts: Vec<String>,
+    }
+
+    impl HostPromotionDecision {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"kind\":\"{}\",\"reason\":\"{}\",\"host_modified\":{},\"exact_approval_required\":{},\"rollback_ready\":{},\"retained_artifacts\":{}}}",
+                self.kind.as_str(),
+                escape_json(&self.reason),
+                self.host_modified,
+                self.exact_approval_required,
+                self.rollback_ready,
+                string_array_json(&self.retained_artifacts)
+            )
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct PackageInstallWorkflow;
+
+    impl PackageInstallWorkflow {
+        pub fn plan(&self, request: &PackageInstallRequest) -> Result<PlanSpec, PackageInstallError> {
+            request.validate()?;
+            let intent = IntentCtx::new(
+                &request.actor,
+                request.source_boundary,
+                IntentSource::Cli,
+                "vm:dev",
+                format!("install package {} {} from pinned digest {}", request.package_name, request.version, request.source_digest),
+            )?;
+            PlanSpec::new(
+                "plan-package-install-isolation",
+                "agent-core-package-install-v1",
+                intent,
+                vec![
+                    package_step(STEP_FETCH_PACKAGE, "pkg.fetch.metadata", vec![("package", &request.package_name), ("version", &request.version), ("source_digest", &request.source_digest)], Vec::new(), RiskClass::ReadOnly, false, false, None)?,
+                    package_step(STEP_ISOLATE_INSTALL, "pkg.isolate.install", vec![("package", &request.package_name), ("version", &request.version), ("source_digest", &request.source_digest)], vec![STEP_FETCH_PACKAGE], RiskClass::ExecuteWithConfirmation, false, false, None)?,
+                    package_step(STEP_SMOKE_TEST, "pkg.isolate.smoke", vec![("package", &request.package_name)], vec![STEP_ISOLATE_INSTALL], RiskClass::ReadOnly, false, false, None)?,
+                    package_step(STEP_HOST_CHECKPOINT, "pkg.host.checkpoint", vec![("package", &request.package_name)], vec![STEP_SMOKE_TEST], RiskClass::WriteWithDiff, false, true, request.rollback_id.as_deref())?,
+                    package_step(STEP_HOST_INSTALL, "pkg.host.install", vec![("package", &request.package_name), ("version", &request.version), ("source_digest", &request.source_digest)], vec![STEP_HOST_CHECKPOINT], RiskClass::PrivilegedWithHumanApproval, true, true, request.rollback_id.as_deref())?,
+                    package_step(STEP_HOST_VERIFY, "pkg.host.verify", vec![("package", &request.package_name)], vec![STEP_HOST_INSTALL], RiskClass::ReadOnly, false, false, None)?,
+                    package_step(STEP_HOST_ROLLBACK, "rollback.trigger", vec![("rollback_id", request.rollback_id.as_deref().unwrap_or("missing-rollback"))], vec![STEP_HOST_INSTALL], RiskClass::ExecuteWithConfirmation, true, false, None)?,
+                ],
+                vec![
+                    "package source digest and signature are verified".to_string(),
+                    "isolated install and smoke test pass before host promotion".to_string(),
+                    "host promotion has exact approval and rollback metadata".to_string(),
+                ],
+                ModelEvidence::stub(),
+            ).map_err(PackageInstallError::Model)
+        }
+
+        pub fn evaluate_host_promotion(
+            &self,
+            request: &PackageInstallRequest,
+            isolated: &IsolatedPackageInstallResult,
+            approval: Option<&ApprovalToken>,
+            now: u64,
+        ) -> Result<HostPromotionDecision, PackageInstallError> {
+            request.validate()?;
+            isolated.validate()?;
+            ensure_no_secret("package.request", &request.to_json())?;
+            ensure_no_secret("package.isolated_result", &isolated.to_json())?;
+            if matches!(request.source_boundary, TrustBoundary::ExternalUntrusted | TrustBoundary::ModelOutput) {
+                return Ok(decision(HostPromotionDecisionKind::Denied, "package host promotion requires operator-origin intent; external/model content cannot land on host", false, request, isolated));
+            }
+            if isolated.package_name != request.package_name || isolated.version != request.version || isolated.source_digest != request.source_digest {
+                return Ok(decision(HostPromotionDecisionKind::Denied, "isolated package result does not match requested package metadata", false, request, isolated));
+            }
+            if !isolated.passed_all_gates() {
+                return Ok(decision(HostPromotionDecisionKind::Denied, "isolated package install, smoke test, or signature verification failed", false, request, isolated));
+            }
+            if !isolated.artifacts_are_redacted() {
+                return Ok(decision(HostPromotionDecisionKind::Denied, "failure artifacts must be retained only as redacted logs or structured reports", false, request, isolated));
+            }
+            if request.rollback_id.is_none() || !request.host_checkpoint_ready {
+                return Ok(decision(HostPromotionDecisionKind::Denied, "host package promotion requires rollback metadata and a prepared checkpoint", false, request, isolated));
+            }
+            let policy_decision = PolicyEvaluator.evaluate(&request.host_policy_request(now), approval);
+            Ok(match policy_decision.kind {
+                PolicyDecisionKind::Allow => decision(HostPromotionDecisionKind::Allowed, "host promotion allowed after isolated validation, exact approval, and rollback checkpoint", true, request, isolated),
+                PolicyDecisionKind::PauseForApproval => decision(HostPromotionDecisionKind::AwaitingApproval, "host promotion awaits exact approval bound to package, digest, source, and rollback", false, request, isolated),
+                PolicyDecisionKind::Deny => decision(HostPromotionDecisionKind::Denied, "host package promotion denied by policy", false, request, isolated),
+            })
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum PackageInstallError {
+        InvalidRequest { reason: String },
+        SecretValue { field: String },
+        Model(ModelValidationError),
+    }
+
+    impl PackageInstallError {
+        pub fn reason(&self) -> String {
+            match self {
+                Self::InvalidRequest { reason } => reason.clone(),
+                Self::SecretValue { field } => format!("secret-like value is not allowed in {field}"),
+                Self::Model(error) => error.to_string(),
+            }
+        }
+    }
+
+    impl fmt::Display for PackageInstallError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl std::error::Error for PackageInstallError {}
+
+    impl From<ModelValidationError> for PackageInstallError {
+        fn from(error: ModelValidationError) -> Self {
+            Self::Model(error)
+        }
+    }
+
+    fn package_step(
+        step_id: &str,
+        tool: &str,
+        params: Vec<(&str, &str)>,
+        dependencies: Vec<&str>,
+        risk: RiskClass,
+        approval_required: bool,
+        rollback_required: bool,
+        rollback_id: Option<&str>,
+    ) -> Result<PlanStep, PackageInstallError> {
+        let approval = if approval_required {
+            ApprovalRequirement::operator_required(format!("{tool} requires exact operator approval"))?
+        } else {
+            ApprovalRequirement::not_required(format!("{tool} is gated by prior workflow state"))?
+        };
+        let rollback = if rollback_required {
+            RollbackRequirement::new(true, rollback_id.map(str::to_string), format!("{tool} requires rollback metadata before host promotion"))?
+        } else {
+            RollbackRequirement::not_required(format!("{tool} has no host mutation"))?
+        };
+        PlanStep::new(
+            step_id,
+            SemanticToolCall::new(tool, params),
+            dependencies.into_iter().map(str::to_string).collect(),
+            vec![format!("{tool} preconditions are satisfied")],
+            vec![format!("{tool} result is recorded")],
+            VerificationRule::new(format!("verify-{step_id}"), format!("verify {tool} result"), tool)?,
+            approval,
+            1,
+            vec![RiskHint::new(risk, format!("{tool} package workflow risk"))?],
+            rollback,
+        ).map_err(PackageInstallError::Model)
+    }
+
+    fn decision(
+        kind: HostPromotionDecisionKind,
+        reason: &str,
+        host_modified: bool,
+        request: &PackageInstallRequest,
+        isolated: &IsolatedPackageInstallResult,
+    ) -> HostPromotionDecision {
+        HostPromotionDecision {
+            kind,
+            reason: reason.to_string(),
+            host_modified,
+            exact_approval_required: true,
+            rollback_ready: request.rollback_id.is_some() && request.host_checkpoint_ready,
+            retained_artifacts: isolated.retained_artifacts.clone(),
+        }
+    }
+
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), PackageInstallError> {
+        if contains_secret_value(value) {
+            return Err(PackageInstallError::SecretValue { field: field.into() });
+        }
+        Ok(())
+    }
+
+    fn optional_string_json(value: Option<&str>) -> String {
+        value.map(|value| format!("\"{}\"", escape_json(value))).unwrap_or_else(|| "null".to_string())
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        format!("[{}]", values.iter().map(|value| format!("\"{}\"", escape_json(value))).collect::<Vec<_>>().join(","))
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        fn request() -> PackageInstallRequest {
+            PackageInstallRequest::new(
+                "operator",
+                "nginx-agent-plugin",
+                "1.2.3",
+                "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+                "sha256:0123456789abcdef",
+            ).expect("request")
+        }
+
+        #[test]
+        fn package_install_plan_encodes_isolation_before_host_promotion() {
+            let request = request();
+            let plan = PackageInstallWorkflow.plan(&request).expect("plan");
+            let ids = plan.steps().iter().map(|step| step.step_id()).collect::<Vec<_>>();
+            assert_eq!(ids, vec![STEP_FETCH_PACKAGE, STEP_ISOLATE_INSTALL, STEP_SMOKE_TEST, STEP_HOST_CHECKPOINT, STEP_HOST_INSTALL, STEP_HOST_VERIFY, STEP_HOST_ROLLBACK]);
+            let host_install = plan.steps().iter().find(|step| step.step_id() == STEP_HOST_INSTALL).expect("host step");
+            assert_eq!(host_install.call().name, "pkg.host.install");
+            assert_eq!(host_install.dependencies(), &[STEP_HOST_CHECKPOINT.to_string()]);
+            assert!(host_install.approval().required());
+            assert!(host_install.rollback().required());
+            assert_eq!(host_install.rollback().rollback_id(), request.rollback_id.as_deref());
+            assert!(host_install.risk_hints().iter().any(|hint| hint.risk() == RiskClass::PrivilegedWithHumanApproval));
+            assert!(!plan.to_json().contains("shell.exec"));
+        }
+
+        #[test]
+        fn failed_isolated_install_denies_host_promotion_and_retains_redacted_artifacts() {
+            let request = request();
+            let isolated = IsolatedPackageInstallResult::new(
+                &request,
+                false,
+                false,
+                true,
+                "dependency conflict retained as redacted report",
+                vec![".workflow/artifacts/package-install/failure-report.json", ".workflow/artifacts/package-install/install.log.redacted"],
+                false,
+            ).expect("isolated result");
+            let decision = PackageInstallWorkflow.evaluate_host_promotion(&request, &isolated, Some(&request.exact_approval(0)), 0).expect("decision");
+            assert_eq!(decision.kind, HostPromotionDecisionKind::Denied);
+            assert!(!decision.host_modified);
+            assert!(decision.reason.contains("isolated package install"));
+            assert!(decision.to_json().contains(".redacted"));
+        }
+
+        #[test]
+        fn host_promotion_requires_exact_approval_and_rollback() {
+            let request = request();
+            let isolated = IsolatedPackageInstallResult::passed(&request).expect("isolated");
+            let paused = PackageInstallWorkflow.evaluate_host_promotion(&request, &isolated, None, 0).expect("paused");
+            assert_eq!(paused.kind, HostPromotionDecisionKind::AwaitingApproval);
+            assert!(!paused.host_modified);
+
+            let mut mutated = request.clone();
+            mutated.version = "1.2.4".to_string();
+            let wrong_approval = mutated.exact_approval(0);
+            let still_paused = PackageInstallWorkflow.evaluate_host_promotion(&request, &isolated, Some(&wrong_approval), 0).expect("wrong approval");
+            assert_eq!(still_paused.kind, HostPromotionDecisionKind::AwaitingApproval);
+            assert!(!still_paused.host_modified);
+
+            let missing_rollback = request.clone().without_rollback();
+            let missing = PackageInstallWorkflow.evaluate_host_promotion(&missing_rollback, &isolated, Some(&request.exact_approval(0)), 0).expect("missing rollback");
+            assert_eq!(missing.kind, HostPromotionDecisionKind::Denied);
+            assert!(!missing.rollback_ready);
+
+            let allowed = PackageInstallWorkflow.evaluate_host_promotion(&request, &isolated, Some(&request.exact_approval(0)), 0).expect("allowed");
+            assert_eq!(allowed.kind, HostPromotionDecisionKind::Allowed);
+            assert!(allowed.host_modified);
+            assert!(allowed.rollback_ready);
+        }
+
+        #[test]
+        fn external_or_model_origin_package_cannot_land_on_host() {
+            for boundary in [TrustBoundary::ExternalUntrusted, TrustBoundary::ModelOutput] {
+                let request = request().with_source_boundary(boundary);
+                let isolated = IsolatedPackageInstallResult::passed(&request).expect("isolated");
+                let decision = PackageInstallWorkflow.evaluate_host_promotion(&request, &isolated, Some(&request.exact_approval(0)), 0).expect("decision");
+                assert_eq!(decision.kind, HostPromotionDecisionKind::Denied);
+                assert!(!decision.host_modified);
+                assert!(decision.reason.contains("external/model content"));
+            }
+        }
+
+        #[test]
+        fn raw_failure_artifacts_are_rejected_before_host_promotion() {
+            let request = request();
+            let isolated = IsolatedPackageInstallResult::new(
+                &request,
+                true,
+                true,
+                true,
+                "smoke pass but raw logs retained",
+                vec![".workflow/artifacts/package-install/raw-install.log"],
+                true,
+            ).expect("isolated result");
+            let decision = PackageInstallWorkflow.evaluate_host_promotion(&request, &isolated, Some(&request.exact_approval(0)), 0).expect("decision");
+            assert_eq!(decision.kind, HostPromotionDecisionKind::Denied);
+            assert!(decision.reason.contains("redacted logs"));
+            assert!(!decision.host_modified);
+        }
+    }
+}
+
 pub mod service_recovery {
     use std::path::{Path, PathBuf};
 

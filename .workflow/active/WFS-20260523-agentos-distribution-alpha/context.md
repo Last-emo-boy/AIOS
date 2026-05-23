@@ -45,15 +45,23 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
   image, or rootfs image fails closed before `EffectPrepared`, planner hints are
   recorded as ignored, and audit/explain output records profile selection plus
   policy reason without adding a direct Firecracker execution helper.
+- `TASK-DALPHA-010` is complete: `agent_core::package_install` now defines the
+  Alpha package install isolation workflow contract with package metadata fetch,
+  isolated install, isolated smoke, host checkpoint, exact host-promotion
+  approval, host verification, and rollback steps. Host promotion fails closed
+  unless isolated validation passes, retained artifacts are redacted, package
+  metadata matches, the source is operator-origin, and rollback/checkpoint
+  metadata is ready. The safety gate now includes
+  `runtime-package-install-host-promotion-bypass`.
 
 ## Next Task
 
-Execute `TASK-DALPHA-010`: define the package install isolation workflow on top
-of the Firecracker profile contract. It must validate third-party package
-install behavior in isolation before any host promotion and keep host promotion
-behind exact policy approval plus rollback semantics.
+Execute `TASK-DALPHA-011`: define the untrusted content runtime workflow on top
+of the existing source-to-sink policy. It must label external content as
+untrusted, sanitize/summarize it before replanning, deny direct high-risk sinks,
+and keep denied actions visible in audit projection.
 
 Read before execution:
 
 - `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`
-- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json`
+- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-011.json`
