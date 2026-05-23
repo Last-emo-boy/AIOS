@@ -1,4 +1,5 @@
 pub use runtime_contracts::{RiskClass, SemanticToolCall};
+pub use security_execution_crate::{CommitId, VerificationResult};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IntentCtx {
@@ -80,15 +81,6 @@ impl Effect {
         )
     }
 }
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct VerificationResult {
-    pub success: bool,
-    pub reason: String,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct CommitId(pub String);
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RollbackResult {
