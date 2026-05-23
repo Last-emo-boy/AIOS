@@ -3,6 +3,9 @@ param(
     [string]$DependencyInventoryPath = ".workflow/artifacts/release/dependency-inventory.json",
     [string]$ReproducibilityPath = ".workflow/artifacts/release-reproducibility-fast/result.json",
     [string]$OutputPath = ".workflow/artifacts/candidate-promotion/result.json",
+    [string]$ProductionSignatureVerifierPath = "scripts/verify-production-signatures.ps1",
+    [string]$ProductionSignatureVerificationPath = ".workflow/artifacts/candidate-promotion/production-signature-verification.json",
+    [switch]$RequireProductionSignatures,
     [switch]$FailOnBlocked
 )
 
@@ -45,6 +48,14 @@ function Get-StringSha256 {
     } finally {
         $sha.Dispose()
     }
+}
+
+function Resolve-RepoPath {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if ([IO.Path]::IsPathRooted($Path)) {
+        return [IO.Path]::GetFullPath($Path)
+    }
+    return [IO.Path]::GetFullPath((Join-Path $script:repoRoot $Path))
 }
 
 function Add-Check {
@@ -149,6 +160,49 @@ function Test-DetachedSignature {
     Add-Check "signature.$Name.key_provenance" (Has-Value $signature.key.provenance) "Detached signature key provenance must be recorded." "blocking" $signature.key.provenance
     Add-Check "signature.$Name.rotation_policy" (Has-Value $signature.key.rotation_policy) "Detached signature key rotation policy must be referenced." "blocking" $signature.key.rotation_policy
     Add-Check "signature.$Name.fail_closed" ($signature.policy.fail_closed -eq $true) "Detached signature policy must fail closed." "blocking" $signature.policy.fail_closed
+}
+
+function Test-ProductionSignatureGate {
+    param([Parameter(Mandatory = $true)]$Provenance)
+
+    $verifierPath = Resolve-RepoPath $ProductionSignatureVerifierPath
+    $verifierPresent = Test-Path -LiteralPath $verifierPath -PathType Leaf
+    Add-Check "production_signature_verifier.script_present" $verifierPresent "Production mode requires the production signature verifier script." "blocking" $ProductionSignatureVerifierPath
+    if (-not $verifierPresent) {
+        return
+    }
+
+    try {
+        & $verifierPath `
+            -ProvenancePath $ProvenancePath `
+            -OutputPath $ProductionSignatureVerificationPath
+        Add-Check "production_signature_verifier.invoked" $true "Production signature verifier must run in promotion production mode." "blocking" $ProductionSignatureVerificationPath
+    } catch {
+        Add-Check "production_signature_verifier.invoked" $false "Production signature verifier must run without execution errors." "blocking" $_.Exception.Message
+        return
+    }
+
+    $resultPath = Resolve-RepoPath $ProductionSignatureVerificationPath
+    $resultPresent = Test-Path -LiteralPath $resultPath -PathType Leaf
+    Add-Check "production_signature_verification.result_present" $resultPresent "Production signature verifier must emit a result artifact." "blocking" $ProductionSignatureVerificationPath
+    if (-not $resultPresent) {
+        return
+    }
+
+    try {
+        $productionSignatureVerification = Read-RequiredJson $resultPath
+    } catch {
+        Add-Check "production_signature_verification.parse" $false "Production signature verification result must be valid JSON." "blocking" $_.Exception.Message
+        return
+    }
+
+    $blockerCount = @($productionSignatureVerification.blockers).Count
+    Add-Check "production_signature_verification.schema" ($productionSignatureVerification.schema -eq "agentos.production-signature-verification.v1") "Production signature verification schema must be exact." "blocking" $productionSignatureVerification.schema
+    Add-Check "production_signature_verification.production_ready_false" ($productionSignatureVerification.production_ready_claim -eq $false) "Production signature verification must not claim Production ready." "blocking" $productionSignatureVerification.production_ready_claim
+    Add-Check "production_signature_verification.source_branch" ($productionSignatureVerification.source.git_branch -eq $Provenance.source.git_branch) "Production signature verification must bind the promoted source branch." "blocking" $productionSignatureVerification.source.git_branch
+    Add-Check "production_signature_verification.source_commit" ($productionSignatureVerification.source.git_commit -eq $Provenance.source.git_commit) "Production signature verification must bind the promoted source commit." "blocking" $productionSignatureVerification.source.git_commit
+    Add-Check "production_signature_verification.status" ($productionSignatureVerification.status -eq "passed") "Production promotion mode requires production signature verification to pass." "blocking" $productionSignatureVerification.status
+    Add-Check "production_signature_verification.no_blockers" ($blockerCount -eq 0) "Production promotion mode requires zero production signature blockers." "blocking" $blockerCount
 }
 
 $script:checks = @()
@@ -270,39 +324,51 @@ try {
         Add-Check "reproducibility.present" $false "Release reproducibility result is required before candidate go." "blocking" $ReproducibilityPath
     }
 
+    if ($RequireProductionSignatures) {
+        Test-ProductionSignatureGate -Provenance $provenance
+    }
+
     $status = if ($script:blockers.Count -eq 0) { "passed" } else { "blocked" }
+    $inputs = [ordered]@{
+        provenance = $ProvenancePath
+        dependency_inventory = $DependencyInventoryPath
+        reproducibility = $ReproducibilityPath
+    }
+    $requiredArtifactClasses = @(
+        "agentd_binary",
+        "initramfs",
+        "initramfs_manifest",
+        "alpha_rootfs_manifest",
+        "rootfs_runtime_manifest",
+        "qemu_runtime_smoke",
+        "alpha_service_recovery_smoke",
+        "dependency_inventory",
+        "dependency_inventory_signature",
+        "sbom",
+        "sbom_signature",
+        "update_metadata",
+        "update_metadata_signature",
+        "provenance_signature",
+        "release_reproducibility"
+    )
+    if ($RequireProductionSignatures) {
+        $inputs["production_signature_verifier"] = $ProductionSignatureVerifierPath
+        $inputs["production_signature_verification"] = $ProductionSignatureVerificationPath
+        $requiredArtifactClasses += "production_signature_verification"
+    }
     $manifest = [ordered]@{
         schema = "agentos.candidate-promotion-manifest.v1"
         checked_at = (Get-Date).ToString("o")
         status = $status
         production_ready_claim = $false
+        production_signature_required = [bool]$RequireProductionSignatures
         source = [ordered]@{
             git_commit = $provenance.source.git_commit
             git_branch = $provenance.source.git_branch
             git_status_porcelain = $provenance.source.git_status_porcelain
         }
-        inputs = [ordered]@{
-            provenance = $ProvenancePath
-            dependency_inventory = $DependencyInventoryPath
-            reproducibility = $ReproducibilityPath
-        }
-        required_artifact_classes = @(
-            "agentd_binary",
-            "initramfs",
-            "initramfs_manifest",
-            "alpha_rootfs_manifest",
-            "rootfs_runtime_manifest",
-            "qemu_runtime_smoke",
-            "alpha_service_recovery_smoke",
-            "dependency_inventory",
-            "dependency_inventory_signature",
-            "sbom",
-            "sbom_signature",
-            "update_metadata",
-            "update_metadata_signature",
-            "provenance_signature",
-            "release_reproducibility"
-        )
+        inputs = $inputs
+        required_artifact_classes = $requiredArtifactClasses
         checks = @($script:checks)
         blockers = @($script:blockers)
         summary = [ordered]@{
@@ -321,6 +387,7 @@ try {
         checked_at = (Get-Date).ToString("o")
         status = "blocked"
         production_ready_claim = $false
+        production_signature_required = [bool]$RequireProductionSignatures
         error = $_.Exception.Message
         checks = @($script:checks)
         blockers = @($script:blockers)
