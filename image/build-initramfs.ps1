@@ -202,9 +202,22 @@ function New-InitramfsArchive {
     }
 }
 
+function Get-ReproducibleTimestamp {
+    if ($env:SOURCE_DATE_EPOCH) {
+        try {
+            $epochSeconds = [Int64]::Parse($env:SOURCE_DATE_EPOCH, [Globalization.CultureInfo]::InvariantCulture)
+            return [DateTimeOffset]::FromUnixTimeSeconds($epochSeconds).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", [Globalization.CultureInfo]::InvariantCulture)
+        } catch {
+            throw "SOURCE_DATE_EPOCH must be a Unix timestamp in seconds: $env:SOURCE_DATE_EPOCH"
+        }
+    }
+    return "1970-01-01T00:00:00Z"
+}
+
 $repoRoot = (Resolve-Path -LiteralPath ".").Path
 $sourceRoot = Join-Path $repoRoot $SourceDir
 $outRoot = Join-Path $repoRoot $OutDir
+$buildTimestamp = Get-ReproducibleTimestamp
 
 if ($Clean -and (Test-Path -LiteralPath $outRoot)) {
     Remove-Item -LiteralPath $outRoot -Recurse -Force
@@ -299,7 +312,7 @@ $manifest = [ordered]@{
         "no native GUI required",
         "no arbitrary root shell in normal mode"
     )
-    built_at = (Get-Date).ToString("o")
+    built_at = $buildTimestamp
     builder = "image/build-initramfs.ps1"
 }
 

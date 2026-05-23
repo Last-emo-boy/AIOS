@@ -30,6 +30,18 @@ function Write-Json {
     $Value | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $Path -Encoding UTF8
 }
 
+function Get-ReproducibleTimestamp {
+    if ($env:SOURCE_DATE_EPOCH) {
+        try {
+            $epochSeconds = [Int64]::Parse($env:SOURCE_DATE_EPOCH, [Globalization.CultureInfo]::InvariantCulture)
+            return [DateTimeOffset]::FromUnixTimeSeconds($epochSeconds).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", [Globalization.CultureInfo]::InvariantCulture)
+        } catch {
+            throw "SOURCE_DATE_EPOCH must be a Unix timestamp in seconds: $env:SOURCE_DATE_EPOCH"
+        }
+    }
+    return "1970-01-01T00:00:00Z"
+}
+
 function Invoke-InitramfsBuild {
     & pwsh -NoProfile -ExecutionPolicy Bypass -File "image/build-initramfs.ps1" -Clean
     if ($LASTEXITCODE -ne 0) {
@@ -110,6 +122,7 @@ function Format-ProcessArgument {
 $repoRoot = (Resolve-Path -LiteralPath ".").Path
 $artifactRoot = Join-Path $repoRoot $ArtifactDir
 New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
+$checkedAt = Get-ReproducibleTimestamp
 
 $needsBuild = (-not (Test-Path -LiteralPath $InitramfsPath -PathType Leaf)) -or
     (-not (Test-Path -LiteralPath $InitramfsManifestPath -PathType Leaf))
@@ -187,7 +200,7 @@ $dependency = [ordered]@{
     allow_handoff_only = [bool]$AllowHandoffOnly
     dependency_check_only = [bool]$DependencyCheckOnly
     skip_kernel_download = [bool]$SkipKernelDownload
-    checked_at = (Get-Date).ToString("o")
+    checked_at = $checkedAt
     missing = @()
 }
 
@@ -284,7 +297,7 @@ $result = [ordered]@{
     boot_args = $bootArgs
     timeout_seconds = $TimeoutSeconds
     log_path = $bootLog
-    checked_at = (Get-Date).ToString("o")
+    checked_at = $checkedAt
 }
 Write-Json -Value $result -Path $resultPath
 

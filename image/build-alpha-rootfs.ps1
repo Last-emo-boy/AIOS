@@ -55,10 +55,23 @@ function Copy-DirectoryContents {
     }
 }
 
+function Get-ReproducibleTimestamp {
+    if ($env:SOURCE_DATE_EPOCH) {
+        try {
+            $epochSeconds = [Int64]::Parse($env:SOURCE_DATE_EPOCH, [Globalization.CultureInfo]::InvariantCulture)
+            return [DateTimeOffset]::FromUnixTimeSeconds($epochSeconds).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", [Globalization.CultureInfo]::InvariantCulture)
+        } catch {
+            throw "SOURCE_DATE_EPOCH must be a Unix timestamp in seconds: $env:SOURCE_DATE_EPOCH"
+        }
+    }
+    return "1970-01-01T00:00:00Z"
+}
+
 $repoRoot = (Resolve-Path -LiteralPath ".").Path
 $sourceRoot = (Resolve-Path -LiteralPath $SourceRootfs).Path
 $outRoot = Join-Path $repoRoot $OutDir
 $stagingRoot = Join-Path $outRoot $StagingName
+$buildTimestamp = Get-ReproducibleTimestamp
 
 New-Item -ItemType Directory -Force -Path $outRoot | Out-Null
 
@@ -104,7 +117,7 @@ foreach ($artifact in @($validation.artifacts)) {
 
 $rootfsRuntimeManifest = [ordered]@{
     schema = "agentos.rootfs-runtime-manifest.v1"
-    generated_at = (Get-Date).ToString("o")
+    generated_at = $buildTimestamp
     source_rootfs = [IO.Path]::GetRelativePath($repoRoot, $sourceRoot)
     staged_rootfs = [IO.Path]::GetRelativePath($repoRoot, $stagingRoot)
     validation = [ordered]@{
@@ -131,7 +144,7 @@ Write-Json -Value $rootfsRuntimeManifest -Path $rootfsRuntimeManifestPath
 
 $manifest = [ordered]@{
     schema = "agentos.alpha-rootfs-assembly.v1"
-    generated_at = (Get-Date).ToString("o")
+    generated_at = $buildTimestamp
     source_rootfs = [IO.Path]::GetRelativePath($repoRoot, $sourceRoot)
     staged_rootfs = [IO.Path]::GetRelativePath($repoRoot, $stagingRoot)
     validation_result = [IO.Path]::GetRelativePath($repoRoot, $validationPath)

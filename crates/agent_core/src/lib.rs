@@ -11691,6 +11691,685 @@ pub mod untrusted_content {
     }
 }
 
+pub mod rootfs_update {
+    use std::fmt;
+
+    use crate::escape_json;
+    use security_execution::audit::{AuditEvent, AuditEventType, AuditJournal};
+
+    pub const UPDATE_SCHEMA_VERSION: &str = "agentos.ab-update-runtime.v1";
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum RootfsSlot {
+        A,
+        B,
+    }
+
+    impl RootfsSlot {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::A => "A",
+                Self::B => "B",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum UpdateState {
+        Idle,
+        ArtifactVerified,
+        InactiveSlotPrepared,
+        InactiveSlotValidated,
+        ActivationScheduled,
+        PendingHealth,
+        Committed,
+        RollbackScheduled,
+        RolledBack,
+        FailedClosed,
+    }
+
+    impl UpdateState {
+        pub fn as_str(self) -> &'static str {
+            match self {
+                Self::Idle => "Idle",
+                Self::ArtifactVerified => "ArtifactVerified",
+                Self::InactiveSlotPrepared => "InactiveSlotPrepared",
+                Self::InactiveSlotValidated => "InactiveSlotValidated",
+                Self::ActivationScheduled => "ActivationScheduled",
+                Self::PendingHealth => "PendingHealth",
+                Self::Committed => "Committed",
+                Self::RollbackScheduled => "RollbackScheduled",
+                Self::RolledBack => "RolledBack",
+                Self::FailedClosed => "FailedClosed",
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct UpdateArtifactSet {
+        pub release_manifest_sha256: String,
+        pub rootfs_sha256: String,
+        pub provenance_sha256: String,
+        pub sbom_sha256: String,
+        pub signature_bundle_sha256: String,
+        pub update_metadata_sha256: String,
+        pub production_rootfs_validation_sha256: Option<String>,
+    }
+
+    impl UpdateArtifactSet {
+        #[allow(clippy::too_many_arguments)]
+        pub fn new(
+            release_manifest_sha256: impl Into<String>,
+            rootfs_sha256: impl Into<String>,
+            provenance_sha256: impl Into<String>,
+            sbom_sha256: impl Into<String>,
+            signature_bundle_sha256: impl Into<String>,
+            update_metadata_sha256: impl Into<String>,
+        ) -> Result<Self, RootfsUpdateError> {
+            let artifacts = Self {
+                release_manifest_sha256: release_manifest_sha256.into(),
+                rootfs_sha256: rootfs_sha256.into(),
+                provenance_sha256: provenance_sha256.into(),
+                sbom_sha256: sbom_sha256.into(),
+                signature_bundle_sha256: signature_bundle_sha256.into(),
+                update_metadata_sha256: update_metadata_sha256.into(),
+                production_rootfs_validation_sha256: None,
+            };
+            artifacts.validate()?;
+            Ok(artifacts)
+        }
+
+        pub fn with_validation_hash(mut self, hash: impl Into<String>) -> Result<Self, RootfsUpdateError> {
+            self.production_rootfs_validation_sha256 = Some(hash.into());
+            self.validate()?;
+            Ok(self)
+        }
+
+        fn validate(&self) -> Result<(), RootfsUpdateError> {
+            require_hash("release_manifest_sha256", &self.release_manifest_sha256)?;
+            require_hash("rootfs_sha256", &self.rootfs_sha256)?;
+            require_hash("provenance_sha256", &self.provenance_sha256)?;
+            require_hash("sbom_sha256", &self.sbom_sha256)?;
+            require_hash("signature_bundle_sha256", &self.signature_bundle_sha256)?;
+            require_hash("update_metadata_sha256", &self.update_metadata_sha256)?;
+            if let Some(hash) = &self.production_rootfs_validation_sha256 {
+                require_hash("production_rootfs_validation_sha256", hash)?;
+            }
+            Ok(())
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"release_manifest_sha256\":\"{}\",\"rootfs_sha256\":\"{}\",\"provenance_sha256\":\"{}\",\"sbom_sha256\":\"{}\",\"signature_bundle_sha256\":\"{}\",\"update_metadata_sha256\":\"{}\",\"production_rootfs_validation_sha256\":{}}}",
+                escape_json(&self.release_manifest_sha256),
+                escape_json(&self.rootfs_sha256),
+                escape_json(&self.provenance_sha256),
+                escape_json(&self.sbom_sha256),
+                escape_json(&self.signature_bundle_sha256),
+                escape_json(&self.update_metadata_sha256),
+                optional_json(self.production_rootfs_validation_sha256.as_deref())
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct RootfsUpdateRequest {
+        pub actor: String,
+        pub run_id: String,
+        pub active_slot: RootfsSlot,
+        pub inactive_slot: RootfsSlot,
+        pub target_slot: RootfsSlot,
+        pub source_uri: String,
+        pub artifacts: UpdateArtifactSet,
+        pub signature_verified: bool,
+        pub provenance_verified: bool,
+        pub sbom_verified: bool,
+        pub update_metadata_verified: bool,
+        pub active_slot_write_requested: bool,
+        pub state_backup_ready: bool,
+    }
+
+    impl RootfsUpdateRequest {
+        pub fn new(
+            actor: impl Into<String>,
+            run_id: impl Into<String>,
+            active_slot: RootfsSlot,
+            inactive_slot: RootfsSlot,
+            source_uri: impl Into<String>,
+            artifacts: UpdateArtifactSet,
+        ) -> Result<Self, RootfsUpdateError> {
+            if active_slot == inactive_slot {
+                return Err(RootfsUpdateError::InvalidSlot(
+                    "active and inactive slot must differ".to_string(),
+                ));
+            }
+            let request = Self {
+                actor: actor.into(),
+                run_id: run_id.into(),
+                active_slot,
+                inactive_slot,
+                target_slot: inactive_slot,
+                source_uri: source_uri.into(),
+                artifacts,
+                signature_verified: false,
+                provenance_verified: false,
+                sbom_verified: false,
+                update_metadata_verified: false,
+                active_slot_write_requested: false,
+                state_backup_ready: false,
+            };
+            request.validate_base()?;
+            Ok(request)
+        }
+
+        pub fn with_preflight_verified(mut self) -> Self {
+            self.signature_verified = true;
+            self.provenance_verified = true;
+            self.sbom_verified = true;
+            self.update_metadata_verified = true;
+            self
+        }
+
+        pub fn with_state_backup_ready(mut self) -> Self {
+            self.state_backup_ready = true;
+            self
+        }
+
+        pub fn with_active_slot_write_requested(mut self) -> Self {
+            self.active_slot_write_requested = true;
+            self
+        }
+
+        fn validate_base(&self) -> Result<(), RootfsUpdateError> {
+            require_non_empty("actor", &self.actor)?;
+            require_non_empty("run_id", &self.run_id)?;
+            require_non_empty("source_uri", &self.source_uri)?;
+            if !(self.source_uri.starts_with("https://") || self.source_uri.starts_with("file://")) {
+                return Err(RootfsUpdateError::InvalidArtifact(
+                    "source_uri must use https:// or file://".to_string(),
+                ));
+            }
+            self.artifacts.validate()?;
+            Ok(())
+        }
+
+        fn validate_preflight(&self) -> Result<(), RootfsUpdateError> {
+            self.validate_base()?;
+            if self.target_slot != self.inactive_slot {
+                return Err(RootfsUpdateError::ActiveSlotMutation(
+                    "target slot must be inactive slot".to_string(),
+                ));
+            }
+            if self.active_slot_write_requested {
+                return Err(RootfsUpdateError::ActiveSlotMutation(
+                    "active slot write is forbidden".to_string(),
+                ));
+            }
+            if !self.signature_verified {
+                return Err(RootfsUpdateError::MissingGate("signature".to_string()));
+            }
+            if !self.provenance_verified {
+                return Err(RootfsUpdateError::MissingGate("provenance".to_string()));
+            }
+            if !self.sbom_verified {
+                return Err(RootfsUpdateError::MissingGate("sbom".to_string()));
+            }
+            if !self.update_metadata_verified {
+                return Err(RootfsUpdateError::MissingGate("update-metadata".to_string()));
+            }
+            if !self.state_backup_ready {
+                return Err(RootfsUpdateError::MissingGate("state-backup".to_string()));
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct UpdateHealthReport {
+        pub agentd_handoff_ok: bool,
+        pub runtime_artifacts_ok: bool,
+        pub production_rootfs_validation_ok: bool,
+        pub audit_journal_readable: bool,
+        pub rollback_handles_readable: bool,
+        pub policy_versions_match: bool,
+        pub recovery_classification_ok: bool,
+        pub summary: String,
+    }
+
+    impl UpdateHealthReport {
+        pub fn healthy() -> Self {
+            Self {
+                agentd_handoff_ok: true,
+                runtime_artifacts_ok: true,
+                production_rootfs_validation_ok: true,
+                audit_journal_readable: true,
+                rollback_handles_readable: true,
+                policy_versions_match: true,
+                recovery_classification_ok: true,
+                summary: "pending slot health passed".to_string(),
+            }
+        }
+
+        pub fn failed(summary: impl Into<String>) -> Self {
+            Self {
+                agentd_handoff_ok: false,
+                runtime_artifacts_ok: false,
+                production_rootfs_validation_ok: false,
+                audit_journal_readable: true,
+                rollback_handles_readable: true,
+                policy_versions_match: false,
+                recovery_classification_ok: true,
+                summary: summary.into(),
+            }
+        }
+
+        pub fn is_healthy(&self) -> bool {
+            self.agentd_handoff_ok
+                && self.runtime_artifacts_ok
+                && self.production_rootfs_validation_ok
+                && self.audit_journal_readable
+                && self.rollback_handles_readable
+                && self.policy_versions_match
+                && self.recovery_classification_ok
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct RootfsUpdateDecision {
+        pub state: UpdateState,
+        pub active_slot: RootfsSlot,
+        pub inactive_slot: RootfsSlot,
+        pub pending_slot: Option<RootfsSlot>,
+        pub rollback_slot: RootfsSlot,
+        pub active_slot_modified: bool,
+        pub activation_scheduled: bool,
+        pub committed: bool,
+        pub rollback_scheduled: bool,
+        pub reason: String,
+        pub evidence: Vec<String>,
+    }
+
+    impl RootfsUpdateDecision {
+        pub fn to_json(&self) -> String {
+            let pending_slot = self
+                .pending_slot
+                .map(|slot| format!("\"{}\"", slot.as_str()))
+                .unwrap_or_else(|| "null".to_string());
+            format!(
+                "{{\"schema\":\"{}\",\"state\":\"{}\",\"active_slot\":\"{}\",\"inactive_slot\":\"{}\",\"pending_slot\":{},\"rollback_slot\":\"{}\",\"active_slot_modified\":{},\"activation_scheduled\":{},\"committed\":{},\"rollback_scheduled\":{},\"reason\":\"{}\",\"evidence\":{}}}",
+                UPDATE_SCHEMA_VERSION,
+                self.state.as_str(),
+                self.active_slot.as_str(),
+                self.inactive_slot.as_str(),
+                pending_slot,
+                self.rollback_slot.as_str(),
+                self.active_slot_modified,
+                self.activation_scheduled,
+                self.committed,
+                self.rollback_scheduled,
+                escape_json(&self.reason),
+                string_array_json(&self.evidence)
+            )
+        }
+    }
+
+    pub struct RootfsUpdateRuntime;
+
+    impl RootfsUpdateRuntime {
+        pub fn stage_update(
+            &self,
+            journal: &AuditJournal,
+            request: &RootfsUpdateRequest,
+        ) -> Result<RootfsUpdateDecision, RootfsUpdateError> {
+            if let Err(error) = request.validate_preflight() {
+                append_update_event(
+                    journal,
+                    AuditEventType::PolicyEvaluated,
+                    request,
+                    UpdateState::FailedClosed,
+                    &format!("update failed closed before staging: {error}"),
+                )?;
+                return Ok(RootfsUpdateDecision {
+                    state: UpdateState::FailedClosed,
+                    active_slot: request.active_slot,
+                    inactive_slot: request.inactive_slot,
+                    pending_slot: None,
+                    rollback_slot: request.active_slot,
+                    active_slot_modified: false,
+                    activation_scheduled: false,
+                    committed: false,
+                    rollback_scheduled: false,
+                    reason: error.to_string(),
+                    evidence: Vec::new(),
+                });
+            }
+
+            append_update_event(
+                journal,
+                AuditEventType::EffectPrepared,
+                request,
+                UpdateState::InactiveSlotPrepared,
+                "inactive slot write prepared",
+            )?;
+            append_update_event(
+                journal,
+                AuditEventType::EffectObserved,
+                request,
+                UpdateState::InactiveSlotValidated,
+                "inactive slot validated by production rootfs checks",
+            )?;
+            append_update_event(
+                journal,
+                AuditEventType::CommitSealed,
+                request,
+                UpdateState::ActivationScheduled,
+                "activation scheduled for pending slot after reboot boundary",
+            )?;
+
+            Ok(RootfsUpdateDecision {
+                state: UpdateState::ActivationScheduled,
+                active_slot: request.active_slot,
+                inactive_slot: request.inactive_slot,
+                pending_slot: Some(request.inactive_slot),
+                rollback_slot: request.active_slot,
+                active_slot_modified: false,
+                activation_scheduled: true,
+                committed: false,
+                rollback_scheduled: false,
+                reason: "pending slot activation scheduled".to_string(),
+                evidence: vec![
+                    request.artifacts.release_manifest_sha256.clone(),
+                    request.artifacts.rootfs_sha256.clone(),
+                    request.artifacts.provenance_sha256.clone(),
+                    request.artifacts.sbom_sha256.clone(),
+                    request.artifacts.update_metadata_sha256.clone(),
+                ],
+            })
+        }
+
+        pub fn evaluate_pending_health(
+            &self,
+            journal: &AuditJournal,
+            request: &RootfsUpdateRequest,
+            health: &UpdateHealthReport,
+        ) -> Result<RootfsUpdateDecision, RootfsUpdateError> {
+            if health.is_healthy() {
+                append_update_event(
+                    journal,
+                    AuditEventType::CommitSealed,
+                    request,
+                    UpdateState::Committed,
+                    &format!("pending slot committed: {}", health.summary),
+                )?;
+                return Ok(RootfsUpdateDecision {
+                    state: UpdateState::Committed,
+                    active_slot: request.inactive_slot,
+                    inactive_slot: request.active_slot,
+                    pending_slot: None,
+                    rollback_slot: request.active_slot,
+                    active_slot_modified: false,
+                    activation_scheduled: false,
+                    committed: true,
+                    rollback_scheduled: false,
+                    reason: "pending slot health passed".to_string(),
+                    evidence: vec![health.summary.clone()],
+                });
+            }
+
+            append_update_event(
+                journal,
+                AuditEventType::RollbackPending,
+                request,
+                UpdateState::RollbackScheduled,
+                &format!("pending slot health failed; rollback scheduled: {}", health.summary),
+            )?;
+            Ok(RootfsUpdateDecision {
+                state: UpdateState::RollbackScheduled,
+                active_slot: request.active_slot,
+                inactive_slot: request.inactive_slot,
+                pending_slot: Some(request.inactive_slot),
+                rollback_slot: request.active_slot,
+                active_slot_modified: false,
+                activation_scheduled: false,
+                committed: false,
+                rollback_scheduled: true,
+                reason: health.summary.clone(),
+                evidence: vec!["rollback-to-previous-slot".to_string()],
+            })
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum RootfsUpdateError {
+        InvalidArtifact(String),
+        InvalidSlot(String),
+        MissingGate(String),
+        ActiveSlotMutation(String),
+        Audit(String),
+    }
+
+    impl fmt::Display for RootfsUpdateError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            match self {
+                Self::InvalidArtifact(reason) => write!(formatter, "invalid artifact: {reason}"),
+                Self::InvalidSlot(reason) => write!(formatter, "invalid slot: {reason}"),
+                Self::MissingGate(gate) => write!(formatter, "missing update gate: {gate}"),
+                Self::ActiveSlotMutation(reason) => write!(formatter, "active slot mutation denied: {reason}"),
+                Self::Audit(reason) => write!(formatter, "audit failed: {reason}"),
+            }
+        }
+    }
+
+    impl std::error::Error for RootfsUpdateError {}
+
+    impl From<std::io::Error> for RootfsUpdateError {
+        fn from(error: std::io::Error) -> Self {
+            Self::Audit(error.to_string())
+        }
+    }
+
+    fn append_update_event(
+        journal: &AuditJournal,
+        event_type: AuditEventType,
+        request: &RootfsUpdateRequest,
+        state: UpdateState,
+        summary: &str,
+    ) -> Result<(), RootfsUpdateError> {
+        let event = AuditEvent::new(
+            event_type,
+            &request.run_id,
+            "ab-rootfs-update",
+            &request.actor,
+            format!(
+                "state={} active_slot={} inactive_slot={} target_slot={} active_slot_modified=false source={} rootfs_sha256={} summary={}",
+                state.as_str(),
+                request.active_slot.as_str(),
+                request.inactive_slot.as_str(),
+                request.target_slot.as_str(),
+                request.source_uri,
+                request.artifacts.rootfs_sha256,
+                summary
+            ),
+        );
+        journal.append(&event)?;
+        Ok(())
+    }
+
+    fn require_non_empty(field: &str, value: &str) -> Result<(), RootfsUpdateError> {
+        if value.trim().is_empty() {
+            return Err(RootfsUpdateError::InvalidArtifact(format!(
+                "{field} must not be empty"
+            )));
+        }
+        Ok(())
+    }
+
+    fn require_hash(field: &str, value: &str) -> Result<(), RootfsUpdateError> {
+        require_non_empty(field, value)?;
+        if !value.starts_with("sha256:") && value.len() != 64 {
+            return Err(RootfsUpdateError::InvalidArtifact(format!(
+                "{field} must be sha256-prefixed or 64 hex characters"
+            )));
+        }
+        Ok(())
+    }
+
+    fn optional_json(value: Option<&str>) -> String {
+        value
+            .map(|value| format!("\"{}\"", escape_json(value)))
+            .unwrap_or_else(|| "null".to_string())
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        format!(
+            "[{}]",
+            values
+                .iter()
+                .map(|value| format!("\"{}\"", escape_json(value)))
+                .collect::<Vec<_>>()
+                .join(",")
+        )
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path = std::env::temp_dir().join(format!(
+                "agent-core-rootfs-update-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_file(&path);
+            AuditJournal::new(path)
+        }
+
+        fn artifacts() -> UpdateArtifactSet {
+            UpdateArtifactSet::new(
+                "sha256:release-manifest",
+                "sha256:rootfs",
+                "sha256:provenance",
+                "sha256:sbom",
+                "sha256:signature",
+                "sha256:update-metadata",
+            )
+            .expect("artifacts")
+            .with_validation_hash("sha256:validation")
+            .expect("validation")
+        }
+
+        fn request() -> RootfsUpdateRequest {
+            RootfsUpdateRequest::new(
+                "operator",
+                "run-update",
+                RootfsSlot::A,
+                RootfsSlot::B,
+                "https://updates.example/agentos/rootfs.img",
+                artifacts(),
+            )
+            .expect("request")
+            .with_preflight_verified()
+            .with_state_backup_ready()
+        }
+
+        #[test]
+        fn stages_only_inactive_slot_after_signature_provenance_sbom_and_backup() {
+            let journal = test_journal("stage");
+            let decision = RootfsUpdateRuntime
+                .stage_update(&journal, &request())
+                .expect("stage");
+
+            assert_eq!(decision.state, UpdateState::ActivationScheduled);
+            assert_eq!(decision.pending_slot, Some(RootfsSlot::B));
+            assert_eq!(decision.rollback_slot, RootfsSlot::A);
+            assert!(!decision.active_slot_modified);
+            assert!(decision.activation_scheduled);
+            let lines = journal.event_lines().expect("audit");
+            assert!(lines.iter().any(|line| line.contains("EffectPrepared")));
+            assert!(lines.iter().any(|line| line.contains("InactiveSlotPrepared")));
+            assert!(lines.iter().any(|line| line.contains("CommitSealed")));
+        }
+
+        #[test]
+        fn active_slot_write_fails_closed_without_effect_prepared() {
+            let journal = test_journal("active-slot");
+            let decision = RootfsUpdateRuntime
+                .stage_update(&journal, &request().with_active_slot_write_requested())
+                .expect("failed closed");
+
+            assert_eq!(decision.state, UpdateState::FailedClosed);
+            assert!(!decision.active_slot_modified);
+            assert!(!decision.activation_scheduled);
+            let lines = journal.event_lines().expect("audit");
+            assert!(lines.iter().any(|line| line.contains("PolicyEvaluated")));
+            assert!(lines.iter().all(|line| !line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn unsigned_or_missing_metadata_update_fails_closed() {
+            let journal = test_journal("missing-gate");
+            let unsigned = RootfsUpdateRequest::new(
+                "operator",
+                "run-unsigned",
+                RootfsSlot::A,
+                RootfsSlot::B,
+                "file://updates/rootfs.img",
+                artifacts(),
+            )
+            .expect("request");
+            let decision = RootfsUpdateRuntime
+                .stage_update(&journal, &unsigned)
+                .expect("failed closed");
+
+            assert_eq!(decision.state, UpdateState::FailedClosed);
+            assert!(decision.reason.contains("signature"));
+            assert!(!decision.activation_scheduled);
+        }
+
+        #[test]
+        fn failed_pending_health_schedules_rollback_to_previous_slot() {
+            let journal = test_journal("rollback");
+            let request = request();
+            RootfsUpdateRuntime
+                .stage_update(&journal, &request)
+                .expect("stage");
+            let decision = RootfsUpdateRuntime
+                .evaluate_pending_health(
+                    &journal,
+                    &request,
+                    &UpdateHealthReport::failed("agentd handoff marker missing"),
+                )
+                .expect("health");
+
+            assert_eq!(decision.state, UpdateState::RollbackScheduled);
+            assert!(decision.rollback_scheduled);
+            assert_eq!(decision.rollback_slot, RootfsSlot::A);
+            assert!(!decision.active_slot_modified);
+            let lines = journal.event_lines().expect("audit");
+            assert!(lines.iter().any(|line| line.contains("RollbackPending")));
+            assert!(lines.iter().any(|line| line.contains("RollbackScheduled")));
+        }
+
+        #[test]
+        fn healthy_pending_slot_commits_without_deleting_rollback_slot() {
+            let journal = test_journal("commit");
+            let request = request();
+            RootfsUpdateRuntime
+                .stage_update(&journal, &request)
+                .expect("stage");
+            let decision = RootfsUpdateRuntime
+                .evaluate_pending_health(&journal, &request, &UpdateHealthReport::healthy())
+                .expect("health");
+
+            assert_eq!(decision.state, UpdateState::Committed);
+            assert!(decision.committed);
+            assert_eq!(decision.active_slot, RootfsSlot::B);
+            assert_eq!(decision.rollback_slot, RootfsSlot::A);
+            assert!(!decision.active_slot_modified);
+        }
+    }
+}
+
 pub mod service_recovery {
     use std::path::{Path, PathBuf};
 

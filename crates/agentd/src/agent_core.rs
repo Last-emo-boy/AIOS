@@ -104,6 +104,49 @@ mod compatibility {
             step.step_id == "promote-package-to-host" && step.effect_state == "rollback-pending"
         }));
     }
+
+    #[test]
+    fn facade_exports_rootfs_update_paths() {
+        let artifacts = super::rootfs_update::UpdateArtifactSet::new(
+            "sha256:release-manifest",
+            "sha256:rootfs",
+            "sha256:provenance",
+            "sha256:sbom",
+            "sha256:signature",
+            "sha256:update-metadata",
+        )
+        .expect("artifacts")
+        .with_validation_hash("sha256:validation")
+        .expect("validation");
+        let request = super::rootfs_update::RootfsUpdateRequest::new(
+            "operator",
+            "run-update-facade",
+            super::rootfs_update::RootfsSlot::A,
+            super::rootfs_update::RootfsSlot::B,
+            "file://updates/rootfs.img",
+            artifacts,
+        )
+        .expect("request")
+        .with_preflight_verified()
+        .with_state_backup_ready();
+        let path = std::env::temp_dir().join(format!(
+            "agentd-rootfs-update-facade-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        let journal = crate::security_execution::audit::AuditJournal::new(path);
+
+        let decision = super::rootfs_update::RootfsUpdateRuntime
+            .stage_update(&journal, &request)
+            .expect("stage");
+
+        assert_eq!(
+            decision.state,
+            super::rootfs_update::UpdateState::ActivationScheduled
+        );
+        assert!(!decision.active_slot_modified);
+        assert!(decision.to_json().contains("\"pending_slot\":\"B\""));
+    }
 }
 
 #[cfg(test)]

@@ -30,10 +30,8 @@ fn firecracker_facade_missing_dependencies_fail_before_effect_prepare() {
         }
     }
 
-    let root = std::env::temp_dir().join(format!(
-        "agentd-firecracker-facade-{}",
-        std::process::id()
-    ));
+    let root =
+        std::env::temp_dir().join(format!("agentd-firecracker-facade-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     std::fs::create_dir_all(&root).expect("temp dir");
     let journal = audit::AuditJournal::new(root.join("audit.jsonl"));
@@ -182,9 +180,51 @@ mod compatibility {
     #[test]
     fn facade_exports_tool_router_paths() {
         let routed = super::tools::ToolRouter
-            .route(&SemanticToolCall::new("svc.status", vec![("service", "agentd")]))
+            .route(&SemanticToolCall::new(
+                "svc.status",
+                vec![("service", "agentd")],
+            ))
             .expect("route");
 
         assert_eq!(routed.risk, RiskClass::ReadOnly);
+    }
+
+    #[test]
+    fn facade_exports_remote_audit_mirror_runtime_paths() {
+        let root =
+            std::env::temp_dir().join(format!("agentd-remote-audit-facade-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("temp dir");
+        let journal = super::audit::AuditJournal::new(root.join("local.jsonl"));
+        journal
+            .append(&super::audit::AuditEvent::new(
+                super::audit::AuditEventType::PolicyEvaluated,
+                "run-remote-audit",
+                "step-remote-audit",
+                "operator",
+                "decision=allow token=abc secret://prod/db",
+            ))
+            .expect("local audit");
+
+        let mirror = super::audit::FileRemoteAuditMirror::new(root.join("mirror.jsonl"));
+        let decision = mirror
+            .mirror_journal(
+                &journal,
+                &super::audit::RemoteAuditMirrorConfig::local_warn(),
+            )
+            .expect("mirror");
+
+        assert_eq!(
+            decision.status,
+            super::audit::RemoteAuditMirrorStatus::Mirrored
+        );
+        assert!(decision.local_audit_authoritative);
+        assert!(!decision.mirror_authoritative_for_recovery);
+        let mirrored = super::audit::AuditJournal::new(mirror.path().to_path_buf())
+            .event_lines()
+            .expect("mirror lines");
+        assert!(mirrored[0].contains("secret://prod/db"));
+        assert!(mirrored[0].contains("[REDACTED]"));
+        assert!(!mirrored[0].contains("token=abc"));
     }
 }

@@ -19,6 +19,18 @@ function Write-Json {
     $Value | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $Path -Encoding UTF8
 }
 
+function Get-ReproducibleTimestamp {
+    if ($env:SOURCE_DATE_EPOCH) {
+        try {
+            $epochSeconds = [Int64]::Parse($env:SOURCE_DATE_EPOCH, [Globalization.CultureInfo]::InvariantCulture)
+            return [DateTimeOffset]::FromUnixTimeSeconds($epochSeconds).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", [Globalization.CultureInfo]::InvariantCulture)
+        } catch {
+            throw "SOURCE_DATE_EPOCH must be a Unix timestamp in seconds: $env:SOURCE_DATE_EPOCH"
+        }
+    }
+    return "1970-01-01T00:00:00Z"
+}
+
 function Invoke-LoggedCommand {
     param(
         [Parameter(Mandatory = $true)][string]$Name,
@@ -148,6 +160,7 @@ function Test-ModelBrokerLocalOnly {
 
 $repoRoot = (Resolve-Path -LiteralPath ".").Path
 New-Item -ItemType Directory -Force -Path $ArtifactDir | Out-Null
+$checkedAt = Get-ReproducibleTimestamp
 
 $approvedJournal = Join-Path $ArtifactDir "approved.jsonl"
 $deniedJournal = Join-Path $ArtifactDir "denied.jsonl"
@@ -278,7 +291,7 @@ Test-SecretFreeFiles -Paths @(
 
 $result = [ordered]@{
     schema = "agentos.alpha-service-recovery-smoke.v1"
-    checked_at = (Get-Date).ToString("o")
+    checked_at = $checkedAt
     result = "passed"
     execution_surface = "host cargo binary against staged Alpha rootfs runtime contracts"
     staged_rootfs = $stagedRootfs

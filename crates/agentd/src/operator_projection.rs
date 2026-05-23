@@ -31,6 +31,7 @@ impl OperatorProjection {
         let health = agentd.health_report();
         let audit = OperatorAuditProjection::from_journal(audit_journal, run_id)?;
         let telemetry = OperatorTelemetryProjection::from_audit(&audit);
+        let update = OperatorUpdateProjection::from_journal(audit_journal)?;
         Ok(Self {
             schema_version: OPERATOR_PROJECTION_SCHEMA_VERSION,
             source: "agentd-read-only",
@@ -39,7 +40,7 @@ impl OperatorProjection {
             runtime: OperatorRuntimeProjection::from_health(&health),
             telemetry,
             audit,
-            update: OperatorUpdateProjection::contract_only(),
+            update,
             adapters: OperatorAdapterProjection::from_tool_manifest(),
             safety: OperatorSafetyProjection::from_gate(&SafetyGateConfig::default_gate()),
         })
@@ -189,6 +190,9 @@ pub struct OperatorAuditProjection {
     pub unresolved_effects: usize,
     pub warning_count: usize,
     pub warnings: Vec<String>,
+    pub remote_mirror_status: String,
+    pub remote_mirror_failure_policy: Option<String>,
+    pub remote_mirror_non_local_side_effects_allowed: bool,
 }
 
 impl OperatorAuditProjection {
@@ -206,22 +210,33 @@ impl OperatorAuditProjection {
             Some(run_id) => journal.project_runtime_run(run_id)?,
         };
         let unresolved_effects = journal.unresolved_effects()?.len();
+        let remote_mirror = RemoteMirrorProjection::from_lines(&journal.event_lines()?);
         let journal_path = Some(journal.path().display().to_string());
 
         let Some(projection) = projection else {
-            return Ok(Self {
+            let mut empty = Self {
                 journal_path,
                 requested_run_id,
                 ..Self::empty(None, None)
-            });
+            };
+            empty.remote_mirror_status = remote_mirror.status;
+            empty.remote_mirror_failure_policy = remote_mirror.failure_policy;
+            empty.remote_mirror_non_local_side_effects_allowed =
+                remote_mirror.non_local_side_effects_allowed;
+            return Ok(empty);
         };
 
-        Ok(Self::from_runtime_projection(
+        let mut audit = Self::from_runtime_projection(
             journal_path,
             requested_run_id,
             &projection,
             unresolved_effects,
-        ))
+        );
+        audit.remote_mirror_status = remote_mirror.status;
+        audit.remote_mirror_failure_policy = remote_mirror.failure_policy;
+        audit.remote_mirror_non_local_side_effects_allowed =
+            remote_mirror.non_local_side_effects_allowed;
+        Ok(audit)
     }
 
     fn empty(journal_path: Option<String>, run_id: Option<&str>) -> Self {
@@ -239,6 +254,9 @@ impl OperatorAuditProjection {
             unresolved_effects: 0,
             warning_count: 0,
             warnings: Vec::new(),
+            remote_mirror_status: "not-observed".to_string(),
+            remote_mirror_failure_policy: None,
+            remote_mirror_non_local_side_effects_allowed: true,
         }
     }
 
@@ -292,12 +310,15 @@ impl OperatorAuditProjection {
                 .iter()
                 .map(|warning| redact_summary(warning))
                 .collect(),
+            remote_mirror_status: "not-observed".to_string(),
+            remote_mirror_failure_policy: None,
+            remote_mirror_non_local_side_effects_allowed: true,
         }
     }
 
     fn to_json(&self) -> String {
         format!(
-            "{{\"journal_path\":{},\"requested_run_id\":{},\"latest_run_id\":{},\"latest_step_id\":{},\"latest_run_status\":\"{}\",\"audit_seal_status\":\"{}\",\"event_count\":{},\"effect_prepared_count\":{},\"commit_sealed_count\":{},\"rollback_pending_count\":{},\"unresolved_effects\":{},\"warning_count\":{},\"warnings\":{}}}",
+            "{{\"journal_path\":{},\"requested_run_id\":{},\"latest_run_id\":{},\"latest_step_id\":{},\"latest_run_status\":\"{}\",\"audit_seal_status\":\"{}\",\"event_count\":{},\"effect_prepared_count\":{},\"commit_sealed_count\":{},\"rollback_pending_count\":{},\"unresolved_effects\":{},\"warning_count\":{},\"warnings\":{},\"remote_mirror_status\":\"{}\",\"remote_mirror_failure_policy\":{},\"remote_mirror_non_local_side_effects_allowed\":{}}}",
             optional_json(self.journal_path.as_deref()),
             optional_json(self.requested_run_id.as_deref()),
             optional_json(self.latest_run_id.as_deref()),
@@ -310,13 +331,16 @@ impl OperatorAuditProjection {
             self.rollback_pending_count,
             self.unresolved_effects,
             self.warning_count,
-            string_array_json(&self.warnings)
+            string_array_json(&self.warnings),
+            escape_json(&self.remote_mirror_status),
+            optional_json(self.remote_mirror_failure_policy.as_deref()),
+            self.remote_mirror_non_local_side_effects_allowed
         )
     }
 
     fn to_cli_line(&self) -> String {
         format!(
-            "audit journal={} requested_run={} latest_run={} step={} status={} seal={} prepared={} sealed={} rollback_pending={} unresolved_effects={} warnings={}",
+            "audit journal={} requested_run={} latest_run={} step={} status={} seal={} prepared={} sealed={} rollback_pending={} unresolved_effects={} warnings={} remote_mirror={} remote_policy={} non_local_side_effects_allowed={}",
             self.journal_path.as_deref().unwrap_or("-"),
             self.requested_run_id.as_deref().unwrap_or("-"),
             self.latest_run_id.as_deref().unwrap_or("-"),
@@ -327,42 +351,87 @@ impl OperatorAuditProjection {
             self.commit_sealed_count,
             self.rollback_pending_count,
             self.unresolved_effects,
-            self.warning_count
+            self.warning_count,
+            self.remote_mirror_status,
+            self.remote_mirror_failure_policy.as_deref().unwrap_or("-"),
+            self.remote_mirror_non_local_side_effects_allowed
         )
     }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OperatorUpdateProjection {
-    pub slot_strategy: &'static str,
-    pub active_slot: &'static str,
-    pub inactive_slot: &'static str,
+    pub slot_strategy: String,
+    pub active_slot: String,
+    pub inactive_slot: String,
     pub pending_activation: bool,
     pub rollback_available: bool,
-    pub status: &'static str,
+    pub status: String,
 }
 
 impl OperatorUpdateProjection {
     fn contract_only() -> Self {
         Self {
-            slot_strategy: "ab-rootfs-contract",
-            active_slot: "unknown",
-            inactive_slot: "unknown",
+            slot_strategy: "ab-rootfs-contract".to_string(),
+            active_slot: "unknown".to_string(),
+            inactive_slot: "unknown".to_string(),
             pending_activation: false,
             rollback_available: false,
-            status: "not-configured",
+            status: "not-configured".to_string(),
         }
+    }
+
+    fn from_journal(audit_journal: Option<&AuditJournal>) -> io::Result<Self> {
+        let Some(journal) = audit_journal else {
+            return Ok(Self::contract_only());
+        };
+        let Some(summary) = journal.event_lines()?.iter().rev().find_map(|line| {
+            if json_string(line, "step_id").as_deref() == Some("ab-rootfs-update") {
+                json_string(line, "summary")
+            } else {
+                None
+            }
+        }) else {
+            return Ok(Self::contract_only());
+        };
+        let state = summary_value(&summary, "state").unwrap_or_else(|| "Unknown".to_string());
+        let active_slot = summary_value(&summary, "active_slot").unwrap_or_else(|| "unknown".to_string());
+        let inactive_slot =
+            summary_value(&summary, "inactive_slot").unwrap_or_else(|| "unknown".to_string());
+        Ok(Self {
+            slot_strategy: "ab-rootfs-runtime".to_string(),
+            active_slot,
+            inactive_slot,
+            pending_activation: matches!(
+                state.as_str(),
+                "InactiveSlotPrepared"
+                    | "InactiveSlotValidated"
+                    | "ActivationScheduled"
+                    | "PendingHealth"
+            ),
+            rollback_available: !matches!(state.as_str(), "FailedClosed" | "Unknown"),
+            status: update_status(&state).to_string(),
+        })
+    }
+
+    pub fn assert_ready_for_runbook(&self) -> bool {
+        self.slot_strategy == "ab-rootfs-runtime"
+            && self.active_slot != "unknown"
+            && self.inactive_slot != "unknown"
+            && self.rollback_available
+            && self.status != "failed-closed"
+            && self.status != "not-configured"
     }
 
     fn to_json(&self) -> String {
         format!(
             "{{\"slot_strategy\":\"{}\",\"active_slot\":\"{}\",\"inactive_slot\":\"{}\",\"pending_activation\":{},\"rollback_available\":{},\"status\":\"{}\"}}",
-            self.slot_strategy,
-            self.active_slot,
-            self.inactive_slot,
+            escape_json(&self.slot_strategy),
+            escape_json(&self.active_slot),
+            escape_json(&self.inactive_slot),
             self.pending_activation,
             self.rollback_available,
-            self.status
+            escape_json(&self.status)
         )
     }
 
@@ -376,6 +445,40 @@ impl OperatorUpdateProjection {
             self.rollback_available,
             self.status
         )
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct RemoteMirrorProjection {
+    status: String,
+    failure_policy: Option<String>,
+    non_local_side_effects_allowed: bool,
+}
+
+impl RemoteMirrorProjection {
+    fn from_lines(lines: &[String]) -> Self {
+        let Some(summary) = lines.iter().rev().find_map(|line| {
+            let summary = json_string(line, "summary")?;
+            if summary.contains("remote-audit-mirror failure") {
+                Some(redact_summary(&summary))
+            } else {
+                None
+            }
+        }) else {
+            return Self {
+                status: "not-observed".to_string(),
+                failure_policy: None,
+                non_local_side_effects_allowed: true,
+            };
+        };
+        let status = summary_value(&summary, "status").unwrap_or_else(|| "warning".to_string());
+        let failure_policy = summary_value(&summary, "policy");
+        let non_local_side_effects_allowed = !matches!(status.as_str(), "paused" | "failed-closed");
+        Self {
+            status,
+            failure_policy,
+            non_local_side_effects_allowed,
+        }
     }
 }
 
@@ -550,13 +653,58 @@ fn string_array_json(values: &[String]) -> String {
     format!("[{items}]")
 }
 
+fn json_string(line: &str, key: &str) -> Option<String> {
+    let needle = format!("\"{key}\":\"");
+    let start = line.find(&needle)? + needle.len();
+    let rest = &line[start..];
+    let end = rest.find('"')?;
+    Some(rest[..end].to_string())
+}
+
+fn summary_value(summary: &str, key: &str) -> Option<String> {
+    let prefix = format!("{key}=");
+    summary
+        .split_whitespace()
+        .find_map(|token| token.strip_prefix(&prefix))
+        .map(|value| {
+            value
+                .trim_matches(|ch: char| {
+                    !ch.is_ascii_alphanumeric() && !matches!(ch, ':' | '/' | '_' | '-' | '.')
+                })
+                .to_string()
+        })
+        .filter(|value| !value.is_empty())
+}
+
+fn update_status(state: &str) -> &'static str {
+    match state {
+        "Idle" => "idle",
+        "ArtifactVerified" => "artifact-verified",
+        "InactiveSlotPrepared" => "inactive-slot-prepared",
+        "InactiveSlotValidated" => "inactive-slot-validated",
+        "ActivationScheduled" => "activation-scheduled",
+        "PendingHealth" => "pending-health",
+        "Committed" => "committed",
+        "RollbackScheduled" => "rollback-scheduled",
+        "RolledBack" => "rolled-back",
+        "FailedClosed" => "failed-closed",
+        _ => "unknown",
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::OpenOptions;
     use std::io::Write;
 
     use super::*;
+    use crate::agent_core::rootfs_update::{
+        RootfsSlot, RootfsUpdateRequest, RootfsUpdateRuntime, UpdateArtifactSet,
+    };
     use crate::audit::{AuditEvent, AuditEventType};
+    use crate::security_execution::audit::{
+        FileRemoteAuditMirror, RemoteAuditFailurePolicy, RemoteAuditMirrorConfig,
+    };
     use crate::lifecycle::LifecycleConfig;
 
     fn test_journal(name: &str) -> AuditJournal {
@@ -706,5 +854,73 @@ mod tests {
 
         assert_eq!(projection.audit.warning_count, 1);
         assert!(!json.contains("hunter2"));
+    }
+
+    #[test]
+    fn projection_consumes_update_and_remote_audit_runtime_assertions() {
+        let mut agentd = Agentd::new(LifecycleConfig::default());
+        agentd.start();
+        let root = std::env::temp_dir().join(format!(
+            "agentd-operator-projection-runtime-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("temp dir");
+        let journal = AuditJournal::new(root.join("audit.jsonl"));
+        let artifacts = UpdateArtifactSet::new(
+            "sha256:release-manifest",
+            "sha256:rootfs",
+            "sha256:provenance",
+            "sha256:sbom",
+            "sha256:signature",
+            "sha256:update-metadata",
+        )
+        .expect("artifacts");
+        let request = RootfsUpdateRequest::new(
+            "operator",
+            "run-update",
+            RootfsSlot::A,
+            RootfsSlot::B,
+            "file://updates/rootfs.img",
+            artifacts,
+        )
+        .expect("request")
+        .with_preflight_verified()
+        .with_state_backup_ready();
+        RootfsUpdateRuntime
+            .stage_update(&journal, &request)
+            .expect("stage update");
+
+        let mirror_path = root.join("mirror.jsonl");
+        std::fs::write(&mirror_path, "not-json\n").expect("broken mirror");
+        FileRemoteAuditMirror::new(mirror_path)
+            .mirror_journal(
+                &journal,
+                &RemoteAuditMirrorConfig::new(RemoteAuditFailurePolicy::FailClosed, "regulated"),
+            )
+            .expect("mirror failure decision");
+
+        let before = journal.event_lines().expect("before projection");
+        let projection = OperatorProjection::collect(&agentd, Some(&journal), Some("run-update"))
+            .expect("projection");
+        let after = journal.event_lines().expect("after projection");
+
+        assert_eq!(before, after);
+        assert_eq!(projection.update.slot_strategy, "ab-rootfs-runtime");
+        assert_eq!(projection.update.active_slot, "A");
+        assert_eq!(projection.update.inactive_slot, "B");
+        assert_eq!(projection.update.status, "activation-scheduled");
+        assert!(projection.update.pending_activation);
+        assert!(projection.update.assert_ready_for_runbook());
+        assert_eq!(projection.audit.remote_mirror_status, "failed-closed");
+        assert_eq!(
+            projection.audit.remote_mirror_failure_policy.as_deref(),
+            Some("fail-closed")
+        );
+        assert!(!projection.audit.remote_mirror_non_local_side_effects_allowed);
+        let json = projection.to_json();
+        assert!(json.contains("\"remote_mirror_status\":\"failed-closed\""));
+        assert!(json.contains("\"slot_strategy\":\"ab-rootfs-runtime\""));
+        assert!(!json.contains("not-json"));
     }
 }
