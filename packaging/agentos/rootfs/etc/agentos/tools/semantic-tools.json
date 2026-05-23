@@ -90,7 +90,7 @@
     {
       "name": "pkg.fetch.metadata",
       "risk": "read-only",
-      "required_parameters": ["package", "version", "source_digest"],
+      "required_parameters": ["package", "version", "source_uri", "source_digest"],
       "optional_parameters": []
     },
     {
@@ -102,25 +102,25 @@
     {
       "name": "pkg.isolate.smoke",
       "risk": "read-only",
-      "required_parameters": ["package"],
+      "required_parameters": ["package", "version"],
       "optional_parameters": []
     },
     {
       "name": "pkg.host.checkpoint",
       "risk": "write-with-diff",
-      "required_parameters": ["package"],
+      "required_parameters": ["package", "version", "rollback_id"],
       "optional_parameters": []
     },
     {
       "name": "pkg.host.install",
       "risk": "privileged-with-human-approval",
-      "required_parameters": ["package", "version", "source_digest"],
+      "required_parameters": ["package", "version", "source_uri", "source_digest", "rollback_id"],
       "optional_parameters": []
     },
     {
       "name": "pkg.host.verify",
       "risk": "read-only",
-      "required_parameters": ["package"],
+      "required_parameters": ["package", "version"],
       "optional_parameters": []
     }
   ]

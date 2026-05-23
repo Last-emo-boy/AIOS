@@ -75,6 +75,7 @@ const AUDIT_PROJECT_PARAMS: &[ParamSpec] = &[ParamSpec::required("run_id")];
 const PKG_FETCH_METADATA_PARAMS: &[ParamSpec] = &[
     ParamSpec::required("package"),
     ParamSpec::required("version"),
+    ParamSpec::required("source_uri"),
     ParamSpec::required("source_digest"),
 ];
 const PKG_ISOLATE_INSTALL_PARAMS: &[ParamSpec] = &[
@@ -82,14 +83,22 @@ const PKG_ISOLATE_INSTALL_PARAMS: &[ParamSpec] = &[
     ParamSpec::required("version"),
     ParamSpec::required("source_digest"),
 ];
-const PKG_ISOLATE_SMOKE_PARAMS: &[ParamSpec] = &[ParamSpec::required("package")];
-const PKG_HOST_CHECKPOINT_PARAMS: &[ParamSpec] = &[ParamSpec::required("package")];
+const PKG_ISOLATE_SMOKE_PARAMS: &[ParamSpec] =
+    &[ParamSpec::required("package"), ParamSpec::required("version")];
+const PKG_HOST_CHECKPOINT_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("package"),
+    ParamSpec::required("version"),
+    ParamSpec::required("rollback_id"),
+];
 const PKG_HOST_INSTALL_PARAMS: &[ParamSpec] = &[
     ParamSpec::required("package"),
     ParamSpec::required("version"),
+    ParamSpec::required("source_uri"),
     ParamSpec::required("source_digest"),
+    ParamSpec::required("rollback_id"),
 ];
-const PKG_HOST_VERIFY_PARAMS: &[ParamSpec] = &[ParamSpec::required("package")];
+const PKG_HOST_VERIFY_PARAMS: &[ParamSpec] =
+    &[ParamSpec::required("package"), ParamSpec::required("version")];
 
 pub const TOOL_SCHEMAS: &[ToolSchema] = &[
     ToolSchema {
@@ -416,6 +425,7 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
                     ("source_digest", "sha256:abcdef"),
                 ],
             ))
@@ -437,7 +447,11 @@ mod tests {
         let checkpoint = router
             .route(&SemanticToolCall::new(
                 "pkg.host.checkpoint",
-                vec![("package", "nginx-agent-plugin")],
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
+                ],
             ))
             .expect("host checkpoint routes");
         assert_eq!(checkpoint.risk, RiskClass::WriteWithDiff);
@@ -448,7 +462,9 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
                     ("source_digest", "sha256:abcdef"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                 ],
             ))
             .expect("host package install routes");
@@ -465,7 +481,9 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
                     ("source_digest", "sha256:abcdef"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                     ("cmd", "apt install nginx"),
                 ],
             ))

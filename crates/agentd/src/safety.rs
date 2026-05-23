@@ -555,7 +555,9 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
                     ("source_digest", "sha256:0123456789abcdef"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                 ],
             ))
             .expect("semantic package host install routes");
@@ -567,7 +569,9 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
                     ("source_digest", "sha256:0123456789abcdef"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                     ("cmd", "apt install nginx"),
                 ],
             ))

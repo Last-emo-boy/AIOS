@@ -9804,6 +9804,7 @@ pub mod package_install {
                         vec![
                             ("package", &request.package_name),
                             ("version", &request.version),
+                            ("source_uri", &request.source_uri),
                             ("source_digest", &request.source_digest),
                         ],
                         Vec::new(),
@@ -9829,7 +9830,10 @@ pub mod package_install {
                     package_step(
                         STEP_SMOKE_TEST,
                         "pkg.isolate.smoke",
-                        vec![("package", &request.package_name)],
+                        vec![
+                            ("package", &request.package_name),
+                            ("version", &request.version),
+                        ],
                         vec![STEP_ISOLATE_INSTALL],
                         RiskClass::ReadOnly,
                         false,
@@ -9839,7 +9843,14 @@ pub mod package_install {
                     package_step(
                         STEP_HOST_CHECKPOINT,
                         "pkg.host.checkpoint",
-                        vec![("package", &request.package_name)],
+                        vec![
+                            ("package", &request.package_name),
+                            ("version", &request.version),
+                            (
+                                "rollback_id",
+                                request.rollback_id.as_deref().unwrap_or("missing-rollback"),
+                            ),
+                        ],
                         vec![STEP_SMOKE_TEST],
                         RiskClass::WriteWithDiff,
                         false,
@@ -9852,7 +9863,12 @@ pub mod package_install {
                         vec![
                             ("package", &request.package_name),
                             ("version", &request.version),
+                            ("source_uri", &request.source_uri),
                             ("source_digest", &request.source_digest),
+                            (
+                                "rollback_id",
+                                request.rollback_id.as_deref().unwrap_or("missing-rollback"),
+                            ),
                         ],
                         vec![STEP_HOST_CHECKPOINT],
                         RiskClass::PrivilegedWithHumanApproval,
@@ -9863,7 +9879,10 @@ pub mod package_install {
                     package_step(
                         STEP_HOST_VERIFY,
                         "pkg.host.verify",
-                        vec![("package", &request.package_name)],
+                        vec![
+                            ("package", &request.package_name),
+                            ("version", &request.version),
+                        ],
                         vec![STEP_HOST_INSTALL],
                         RiskClass::ReadOnly,
                         false,
