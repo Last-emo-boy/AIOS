@@ -33,6 +33,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-DALPHA-006` 已完成：新增 `scripts/alpha-service-recovery-smoke.ps1`，从 staged Alpha rootfs runtime contracts 运行 approved / denied generic AgentCore service recovery；approved restart-service 投影为 sealed 且 `CommitSealed=true`，denied restart-service 记录 `PolicyEvaluated` 且 `EffectPrepared=0`，ModelBroker 保持 stub/local-only，无需外部 LLM。
 - `TASK-DALPHA-007` 已完成：`image/build-initramfs.ps1` 会把 `AGENTOS_RUNTIME_ARTIFACTS_OK` 和 rootfs runtime manifest hash marker 嵌入 early `/sbin/agentd`，`scripts/boot-smoke-test.ps1` 已从 handoff-only gate 升级为 runtime-aware QEMU gate；完整 QEMU smoke 观察到 `AGENTD_HANDOFF_OK`、runtime marker 和 runtime manifest hash marker。
 - `TASK-DALPHA-008` 已完成：`scripts/build-release.ps1` 已升级为 `agentos.distribution-alpha.provenance.v1` promotion gate，记录 source revision、toolchain、dependency inventory、runtime manifest hash、image inputs、artifact hashes、Alpha service recovery smoke、full QEMU runtime smoke 和 gate commands；本次 gate 结果为 `promotion.status=promotable`，blockers 为空。
+- 已按 Maestro 方式补充 Agent Core Runtime 和 AgentOS 安全执行底座的 Alpha 延续展开：`.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`。这份文档把 `TASK-ACR-001` 到 `TASK-ACR-010`、`TASK-SEF-001` 到 `TASK-SEF-010`、`TASK-DALPHA-009` 到 `TASK-DALPHA-012` 串成从底层 Agent runtime 到发行版安全执行面的执行链。
 - 下一步正在执行 `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面，不能形成绕过 policy/capability/audit/rollback/recovery 的并行 side-effect path。
 - Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
@@ -94,6 +95,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - Firecracker 是 Alpha executor profile，必须位于 `SecurityExecutionEngine` 后面，不能成为并行 side-effect path。
 - 所有 promotion gate 必须继承 runtime、safety、AgentCore、adversarial、release 和 QEMU 验证。
 - 生成的 image、cache、release artifact 和 boot log 不能进入提交。
+- Alpha 视角的底层 Agent 与安全执行 TASK 展开见 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`。
 
 ### Distribution Alpha Wave 0：Alpha scope 与 packaging contract
 
@@ -174,6 +176,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 详细 TASK 展开：
 
 - Agent Core Runtime 和 Security Execution Foundation 的 worker-facing 实施蓝图已经写入 `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-implementation-tasks.md`，逐任务详细规格已经写入 `.workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md`。
+- Distribution Alpha 的延续执行视角已经写入 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`，把已完成的 ACR/SEF foundation 映射到 Firecracker profile、package install isolation、untrusted content workflow 和 final promotion audit。
 - Agent Core Runtime 的底层实现链路固定为 `IntentCtx -> ModelBroker -> Planner -> PlanSpec -> RunStore -> StepScheduler`，它只负责意图、计划、状态、调度、观察、memory 和 projection。
 - AgentOS 安全执行底座固定为 `SecurityExecutionEngine -> PolicyAdapter -> CapabilityLease -> SandboxProfile -> EffectEnvelope -> AuditJournal -> VerificationResult -> CommitSealed/RollbackPending/FailedClosed`，它是唯一 side-effect path。
 - `TASK-ACR-001` 到 `TASK-ACR-010`、`TASK-SEF-001` 到 `TASK-SEF-010` 均已补充 `read_first`、`implementation_steps`、`failure_modes`、`verification_matrix` 和 `handoff`，后续可直接按 Maestro 执行或审计。
@@ -364,4 +367,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-执行 `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面，确保 Firecracker 只是 executor profile，不绕过 semantic tools、policy、capability lease、EffectEnvelope、audit、rollback 或 recovery。
+执行 `TASK-DALPHA-009`：先读取 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md` 和 `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-009.json`，把 Firecracker executor profile 放到 SecurityExecutionEngine 后面，确保 Firecracker 只是 executor profile，不绕过 semantic tools、policy、capability lease、EffectEnvelope、audit、rollback 或 recovery。

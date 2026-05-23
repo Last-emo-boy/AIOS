@@ -17,6 +17,32 @@ The guiding rule is:
 Runtime Foundation proof -> rootfs runtime contract -> image assembly -> QEMU runtime proof -> promotion gate
 ```
 
+## Runtime and Security TASK Expansion
+
+The bottom Agent implementation and the AgentOS security execution substrate are
+expanded in:
+
+```text
+.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md
+```
+
+That document is the Alpha carry-forward view of the completed Runtime
+Foundation tasks:
+
+- `TASK-ACR-001` through `TASK-ACR-010`: runtime data model, RunStore,
+  ModelBroker, Planner, run loop, scheduler, observations, memory, service
+  recovery migration, and adversarial runtime tests.
+- `TASK-SEF-001` through `TASK-SEF-010`: EffectEnvelope, policy/capability
+  adapter, lease-derived sandbox profiles, source-to-sink policy, secret handle
+  leases, SecurityExecutionEngine, recovery, safety gates, audit projection, and
+  final SEF verification.
+- `TASK-DALPHA-009` through `TASK-DALPHA-012`: Firecracker executor profile,
+  package install isolation, untrusted content workflow, and Alpha promotion
+  audit.
+
+The key runtime rule is that AgentCore decides the next desired state, while
+SecurityExecutionEngine remains the only side-effect path.
+
 ## Scope
 
 Alpha must install and validate:

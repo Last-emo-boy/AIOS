@@ -20,6 +20,8 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
 - Stub/local-only ModelBroker mode remains mandatory for acceptance.
 - Firecracker is an Alpha executor profile behind SecurityExecutionEngine, not
   a replacement for semantic tools, policy, capability, audit, rollback, or recovery.
+- The worker-facing ACR/SEF task expansion for Alpha continuation is documented
+  in `docs/agent-core-runtime-security-execution-expanded-tasks.md`.
 
 ## Current Progress
 
@@ -43,3 +45,8 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
 Execute `TASK-DALPHA-009`: represent the Firecracker executor profile behind
 SecurityExecutionEngine. It must not introduce a parallel side-effect path or
 weaken policy, capability, EffectEnvelope, audit, rollback, or recovery.
+
+Read before execution:
+
+- `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`
+- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-009.json`
