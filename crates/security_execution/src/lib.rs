@@ -1626,6 +1626,7 @@ pub mod policy_adapter {
 
 pub mod sandbox_profile {
     use std::fmt;
+    use std::path::Path;
 
     use runtime_contracts::contains_secret_value;
     use crate::escape_json;
@@ -1726,6 +1727,22 @@ pub mod sandbox_profile {
                 jailer_binary_available: true,
                 kernel_image_available: true,
                 rootfs_image_available: true,
+            }
+        }
+
+        pub fn from_paths(
+            kvm_device: impl AsRef<Path>,
+            firecracker_binary: impl AsRef<Path>,
+            jailer_binary: impl AsRef<Path>,
+            kernel_image: impl AsRef<Path>,
+            rootfs_image: impl AsRef<Path>,
+        ) -> Self {
+            Self {
+                kvm_available: kvm_device.as_ref().exists(),
+                firecracker_binary_available: executable_or_file(firecracker_binary.as_ref()),
+                jailer_binary_available: executable_or_file(jailer_binary.as_ref()),
+                kernel_image_available: kernel_image.as_ref().is_file(),
+                rootfs_image_available: rootfs_image.as_ref().is_file(),
             }
         }
 
@@ -2160,6 +2177,10 @@ pub mod sandbox_profile {
         )
     }
 
+    fn executable_or_file(path: &Path) -> bool {
+        path.is_file()
+    }
+
     fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), SandboxProfileError> {
         if contains_secret_value(value) {
             return Err(SandboxProfileError::SecretValue {
@@ -2249,6 +2270,16 @@ pub mod sandbox_profile {
                 snapshot_policy: "same-host-only".to_string(),
                 dependency_probe: FirecrackerDependencyProbe::ready(),
             }
+        }
+
+        fn temp_probe_paths(name: &str) -> std::path::PathBuf {
+            let path = std::env::temp_dir().join(format!(
+                "agentd-firecracker-probe-{name}-{}",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_dir_all(&path);
+            std::fs::create_dir_all(&path).expect("temp firecracker probe dir");
+            path
         }
 
         #[test]
@@ -2465,6 +2496,44 @@ pub mod sandbox_profile {
                 .contains("host_trust=same-host-trusted"));
             assert!(binding.audit_summary.contains("ignored_planner_hints=4"));
             assert!(!binding.audit_summary.contains("host-profile"));
+        }
+
+        #[test]
+        fn firecracker_dependency_probe_reflects_host_paths() {
+            let root = temp_probe_paths("ready");
+            let kvm = root.join("kvm");
+            let firecracker = root.join("firecracker");
+            let jailer = root.join("jailer");
+            let kernel = root.join("vmlinux");
+            let rootfs = root.join("rootfs.ext4");
+            for path in [&kvm, &firecracker, &jailer, &kernel, &rootfs] {
+                std::fs::write(path, "fixture").expect("write dependency fixture");
+            }
+
+            let probe =
+                FirecrackerDependencyProbe::from_paths(&kvm, &firecracker, &jailer, &kernel, &rootfs);
+
+            assert!(probe.missing_dependencies().is_empty());
+            assert!(probe.to_json().contains("\"kvm_available\":true"));
+
+            let missing_root = temp_probe_paths("missing");
+            let missing = FirecrackerDependencyProbe::from_paths(
+                missing_root.join("kvm"),
+                missing_root.join("firecracker"),
+                missing_root.join("jailer"),
+                missing_root.join("vmlinux"),
+                missing_root.join("rootfs.ext4"),
+            );
+            assert_eq!(
+                missing.missing_dependencies(),
+                vec![
+                    "kvm".to_string(),
+                    "firecracker-binary".to_string(),
+                    "jailer-binary".to_string(),
+                    "kernel-image".to_string(),
+                    "rootfs-image".to_string()
+                ]
+            );
         }
 
         #[test]
