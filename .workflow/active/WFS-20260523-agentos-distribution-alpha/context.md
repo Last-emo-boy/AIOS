@@ -39,14 +39,21 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
   `agentos.distribution-alpha.provenance.v1`, records Alpha runtime/image
   inputs, service recovery smoke, full QEMU runtime smoke, dependency inventory,
   artifact hashes, and promotion status with blockers.
+- `TASK-DALPHA-009` is complete: `crates/agentd/src/security_execution.rs`
+  now represents Firecracker as a high-risk executor profile behind
+  `SecurityExecutionEngine`; missing KVM, Firecracker binary, jailer, kernel
+  image, or rootfs image fails closed before `EffectPrepared`, planner hints are
+  recorded as ignored, and audit/explain output records profile selection plus
+  policy reason without adding a direct Firecracker execution helper.
 
 ## Next Task
 
-Execute `TASK-DALPHA-009`: represent the Firecracker executor profile behind
-SecurityExecutionEngine. It must not introduce a parallel side-effect path or
-weaken policy, capability, EffectEnvelope, audit, rollback, or recovery.
+Execute `TASK-DALPHA-010`: define the package install isolation workflow on top
+of the Firecracker profile contract. It must validate third-party package
+install behavior in isolation before any host promotion and keep host promotion
+behind exact policy approval plus rollback semantics.
 
 Read before execution:
 
 - `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`
-- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-009.json`
+- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json`

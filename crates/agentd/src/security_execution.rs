@@ -90,6 +90,7 @@ pub mod effect_envelope {
         pub policy_decision: PolicyDecision,
         pub lease: Option<CapabilityLease>,
         pub sandbox_profile: Option<SandboxProfile>,
+        pub execution_profile_summary: Option<String>,
         pub prepared_event: Option<AuditEvent>,
         pub observed_event: Option<AuditEvent>,
         pub verification_result: Option<VerificationResult>,
@@ -114,6 +115,7 @@ pub mod effect_envelope {
                 policy_decision,
                 lease: None,
                 sandbox_profile: None,
+                execution_profile_summary: None,
                 prepared_event: None,
                 observed_event: None,
                 verification_result: None,
@@ -127,6 +129,17 @@ pub mod effect_envelope {
 
         pub fn parameter_hash(&self) -> String {
             stable_parameter_hash(&sort_params(self.normalized_params.clone()))
+        }
+
+        pub fn set_execution_profile_summary(
+            &mut self,
+            summary: impl Into<String>,
+        ) -> Result<(), EffectEnvelopeError> {
+            self.require_state(EffectEnvelopeState::Draft, "set_execution_profile_summary")?;
+            let summary = summary.into();
+            ensure_no_secret("execution_profile_summary", &summary)?;
+            self.execution_profile_summary = Some(summary);
+            Ok(())
         }
 
         pub fn prepare(
@@ -166,10 +179,12 @@ pub mod effect_envelope {
                 AuditEventType::EffectPrepared,
                 actor,
                 format!(
-                    "prepared tool={} risk={} parameter_hash={}",
+                    "prepared tool={} risk={} parameter_hash={} policy_reason={} execution_profile_summary={}",
                     self.tool,
                     self.risk().as_str(),
-                    self.parameter_hash()
+                    self.parameter_hash(),
+                    self.policy_decision.reason,
+                    self.execution_profile_summary.as_deref().unwrap_or("none")
                 ),
             )?;
             journal.append(&event)?;
@@ -344,6 +359,11 @@ pub mod effect_envelope {
                 .as_ref()
                 .map(SandboxProfile::to_json)
                 .unwrap_or_else(|| "null".to_string());
+            let execution_profile_summary = self
+                .execution_profile_summary
+                .as_ref()
+                .map(|summary| format!("\"{}\"", escape_json(summary)))
+                .unwrap_or_else(|| "null".to_string());
             let prepared_event = self
                 .prepared_event
                 .as_ref()
@@ -370,7 +390,7 @@ pub mod effect_envelope {
                 .map(|id| format!("\"{}\"", escape_json(&id.0)))
                 .unwrap_or_else(|| "null".to_string());
             Ok(format!(
-                "{{\"run_id\":\"{}\",\"step_id\":\"{}\",\"tool\":\"{}\",\"state\":\"{}\",\"normalized_params\":[{}],\"parameter_hash\":\"{}\",\"policy_decision\":{},\"lease\":{},\"sandbox_profile\":{},\"prepared_event\":{},\"observed_event\":{},\"verification_result\":{},\"rollback_handle\":{},\"commit_id\":{}}}",
+                "{{\"run_id\":\"{}\",\"step_id\":\"{}\",\"tool\":\"{}\",\"state\":\"{}\",\"normalized_params\":[{}],\"parameter_hash\":\"{}\",\"policy_decision\":{},\"lease\":{},\"sandbox_profile\":{},\"execution_profile_summary\":{},\"prepared_event\":{},\"observed_event\":{},\"verification_result\":{},\"rollback_handle\":{},\"commit_id\":{}}}",
                 escape_json(&self.run_id),
                 escape_json(&self.step_id),
                 escape_json(&self.tool),
@@ -380,6 +400,7 @@ pub mod effect_envelope {
                 self.policy_decision.to_json(),
                 lease,
                 sandbox_profile,
+                execution_profile_summary,
                 prepared_event,
                 observed_event,
                 verification_result,
@@ -437,17 +458,17 @@ pub mod effect_envelope {
             if self.state != expected {
                 return Err(self.invalid(
                     action,
-                    format!("expected {}, got {}", expected.as_str(), self.state.as_str()),
+                    format!(
+                        "expected {}, got {}",
+                        expected.as_str(),
+                        self.state.as_str()
+                    ),
                 ));
             }
             Ok(())
         }
 
-        fn invalid(
-            &self,
-            action: &'static str,
-            reason: impl Into<String>,
-        ) -> EffectEnvelopeError {
+        fn invalid(&self, action: &'static str, reason: impl Into<String>) -> EffectEnvelopeError {
             EffectEnvelopeError::InvalidTransition {
                 from: self.state,
                 action,
@@ -492,6 +513,9 @@ pub mod effect_envelope {
             }
             if let Some(profile) = &self.sandbox_profile {
                 ensure_no_secret("sandbox_profile", &profile.to_json())?;
+            }
+            if let Some(summary) = &self.execution_profile_summary {
+                ensure_no_secret("execution_profile_summary", summary)?;
             }
             if let Some(event) = &self.prepared_event {
                 ensure_no_secret("prepared_event", &event.to_json_line())?;
@@ -549,10 +573,7 @@ pub mod effect_envelope {
         ensure_no_secret(format!("normalized_params.{key}"), value)
     }
 
-    fn ensure_no_secret(
-        field: impl Into<String>,
-        value: &str,
-    ) -> Result<(), EffectEnvelopeError> {
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), EffectEnvelopeError> {
         if contains_secret_value(value) {
             return Err(EffectEnvelopeError::SecretValue {
                 field: field.into(),
@@ -800,7 +821,11 @@ pub mod effect_envelope {
                 .expect("observe");
 
             let error = envelope
-                .seal(&journal, "operator", CommitId("commit-without-verify".to_string()))
+                .seal(
+                    &journal,
+                    "operator",
+                    CommitId("commit-without-verify".to_string()),
+                )
                 .expect_err("seal needs verification");
             assert!(error.reason().contains("expected Verified"));
             assert!(!journal
@@ -947,8 +972,8 @@ pub mod policy_adapter {
     use crate::api::{escape_json, RiskClass};
     use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
     use crate::policy::{
-        stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyDecision,
-        PolicyDecisionKind, PolicyEvaluator, PolicyRequest,
+        stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyDecision, PolicyDecisionKind,
+        PolicyEvaluator, PolicyRequest,
     };
     use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
 
@@ -1194,7 +1219,10 @@ pub mod policy_adapter {
             let decision = PolicyDecision {
                 kind: PolicyDecisionKind::Deny,
                 risk: RiskClass::Never,
-                reason: format!("tool routing denied before policy lease: {}", rejection.reason),
+                reason: format!(
+                    "tool routing denied before policy lease: {}",
+                    rejection.reason
+                ),
             };
             let diagnostic = StepPolicyDiagnostic {
                 reason: decision.reason.clone(),
@@ -1253,10 +1281,7 @@ pub mod policy_adapter {
         stable_parameter_hash(&params)
     }
 
-    fn ensure_no_secret(
-        field: impl Into<String>,
-        value: &str,
-    ) -> Result<(), StepPolicyError> {
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), StepPolicyError> {
         if contains_secret_value(value) {
             return Err(StepPolicyError::SecretValue {
                 field: field.into(),
@@ -1316,12 +1341,8 @@ pub mod policy_adapter {
                 Vec::new(),
                 Vec::new(),
                 Vec::new(),
-                VerificationRule::new(
-                    format!("verify-{step_id}"),
-                    "verification rule",
-                    tool,
-                )
-                .expect("verification"),
+                VerificationRule::new(format!("verify-{step_id}"), "verification rule", tool)
+                    .expect("verification"),
                 approval,
                 1,
                 vec![RiskHint::new(hint, "planner risk hint").expect("risk hint")],
@@ -1502,13 +1523,7 @@ pub mod policy_adapter {
                 true,
             );
             let initial = adapter()
-                .evaluate_step(
-                    &initial_journal,
-                    "run-exact",
-                    "operator",
-                    &restart,
-                    None,
-                )
+                .evaluate_step(&initial_journal, "run-exact", "operator", &restart, None)
                 .expect("initial pause");
             let token = exact_approval_for(&initial);
 
@@ -1588,6 +1603,7 @@ pub mod sandbox_profile {
         WriteWithDiffPreparation,
         ExecuteWithConfirmation,
         PrivilegedHumanApproval,
+        FirecrackerExecutor,
         Never,
     }
 
@@ -1608,6 +1624,7 @@ pub mod sandbox_profile {
                 Self::WriteWithDiffPreparation => "write-with-diff-preparation",
                 Self::ExecuteWithConfirmation => "execute-with-confirmation",
                 Self::PrivilegedHumanApproval => "privileged-human-approval",
+                Self::FirecrackerExecutor => "firecracker-executor",
                 Self::Never => "never",
             }
         }
@@ -1657,6 +1674,158 @@ pub mod sandbox_profile {
     }
 
     #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct FirecrackerDependencyProbe {
+        pub kvm_available: bool,
+        pub firecracker_binary_available: bool,
+        pub jailer_binary_available: bool,
+        pub kernel_image_available: bool,
+        pub rootfs_image_available: bool,
+    }
+
+    impl FirecrackerDependencyProbe {
+        pub fn ready() -> Self {
+            Self {
+                kvm_available: true,
+                firecracker_binary_available: true,
+                jailer_binary_available: true,
+                kernel_image_available: true,
+                rootfs_image_available: true,
+            }
+        }
+
+        pub fn missing_dependencies(&self) -> Vec<String> {
+            let mut missing = Vec::new();
+            if !self.kvm_available {
+                missing.push("kvm".to_string());
+            }
+            if !self.firecracker_binary_available {
+                missing.push("firecracker-binary".to_string());
+            }
+            if !self.jailer_binary_available {
+                missing.push("jailer-binary".to_string());
+            }
+            if !self.kernel_image_available {
+                missing.push("kernel-image".to_string());
+            }
+            if !self.rootfs_image_available {
+                missing.push("rootfs-image".to_string());
+            }
+            missing
+        }
+
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"kvm_available\":{},\"firecracker_binary_available\":{},\"jailer_binary_available\":{},\"kernel_image_available\":{},\"rootfs_image_available\":{}}}",
+                self.kvm_available,
+                self.firecracker_binary_available,
+                self.jailer_binary_available,
+                self.kernel_image_available,
+                self.rootfs_image_available
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct FirecrackerProfileRequest {
+        pub firecracker_binary: String,
+        pub jailer_binary: String,
+        pub kernel_image: String,
+        pub rootfs_image: String,
+        pub network_mode: String,
+        pub block_devices: Vec<String>,
+        pub cpu_count: u8,
+        pub memory_mib: u32,
+        pub rate_limiter: String,
+        pub snapshot_policy: String,
+        pub dependency_probe: FirecrackerDependencyProbe,
+    }
+
+    impl FirecrackerProfileRequest {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"firecracker_binary\":\"{}\",\"jailer_binary\":\"{}\",\"kernel_image\":\"{}\",\"rootfs_image\":\"{}\",\"network_mode\":\"{}\",\"block_devices\":{},\"cpu_count\":{},\"memory_mib\":{},\"rate_limiter\":\"{}\",\"snapshot_policy\":\"{}\",\"dependency_probe\":{}}}",
+                escape_json(&self.firecracker_binary),
+                escape_json(&self.jailer_binary),
+                escape_json(&self.kernel_image),
+                escape_json(&self.rootfs_image),
+                escape_json(&self.network_mode),
+                string_array_json(&self.block_devices),
+                self.cpu_count,
+                self.memory_mib,
+                escape_json(&self.rate_limiter),
+                escape_json(&self.snapshot_policy),
+                self.dependency_probe.to_json()
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct FirecrackerExecutorProfile {
+        pub lease_id: String,
+        pub tool: String,
+        pub resource: String,
+        pub parameter_hash: String,
+        pub policy_version: String,
+        pub risk: RiskClass,
+        pub firecracker_binary: String,
+        pub jailer_binary: String,
+        pub kernel_image: String,
+        pub rootfs_image: String,
+        pub network_mode: String,
+        pub block_devices: Vec<String>,
+        pub cpu_count: u8,
+        pub memory_mib: u32,
+        pub rate_limiter: String,
+        pub snapshot_policy: String,
+        pub jailer_enabled: bool,
+    }
+
+    impl FirecrackerExecutorProfile {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"lease_id\":\"{}\",\"tool\":\"{}\",\"resource\":\"{}\",\"parameter_hash\":\"{}\",\"policy_version\":\"{}\",\"risk\":\"{}\",\"firecracker_binary\":\"{}\",\"jailer_binary\":\"{}\",\"kernel_image\":\"{}\",\"rootfs_image\":\"{}\",\"network_mode\":\"{}\",\"block_devices\":{},\"cpu_count\":{},\"memory_mib\":{},\"rate_limiter\":\"{}\",\"snapshot_policy\":\"{}\",\"jailer_enabled\":{}}}",
+                escape_json(&self.lease_id),
+                escape_json(&self.tool),
+                escape_json(&self.resource),
+                escape_json(&self.parameter_hash),
+                escape_json(&self.policy_version),
+                self.risk.as_str(),
+                escape_json(&self.firecracker_binary),
+                escape_json(&self.jailer_binary),
+                escape_json(&self.kernel_image),
+                escape_json(&self.rootfs_image),
+                escape_json(&self.network_mode),
+                string_array_json(&self.block_devices),
+                self.cpu_count,
+                self.memory_mib,
+                escape_json(&self.rate_limiter),
+                escape_json(&self.snapshot_policy),
+                self.jailer_enabled
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct FirecrackerProfileBinding {
+        pub class: SandboxProfileClass,
+        pub profile: FirecrackerExecutorProfile,
+        pub ignored_planner_hints: Vec<String>,
+        pub audit_summary: String,
+    }
+
+    impl FirecrackerProfileBinding {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"class\":\"{}\",\"profile\":{},\"ignored_planner_hints\":{},\"audit_summary\":\"{}\"}}",
+                self.class.as_str(),
+                self.profile.to_json(),
+                string_array_json(&self.ignored_planner_hints),
+                escape_json(&self.audit_summary)
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
     pub struct SandboxProfileBinding {
         pub class: SandboxProfileClass,
         pub profile: SandboxProfile,
@@ -1694,7 +1863,10 @@ pub mod sandbox_profile {
         pub fn reason(&self) -> String {
             match self {
                 SandboxProfileError::UnsupportedClass { class, reason } => {
-                    format!("sandbox profile class {} is unsupported: {reason}", class.as_str())
+                    format!(
+                        "sandbox profile class {} is unsupported: {reason}",
+                        class.as_str()
+                    )
                 }
                 SandboxProfileError::SecretValue { field } => {
                     format!("secret-like value is not allowed in {field}")
@@ -1779,6 +1951,75 @@ pub mod sandbox_profile {
             ensure_no_secret("sandbox_profile", &profile.to_json())?;
             Ok(())
         }
+
+        pub fn compile_firecracker(
+            &self,
+            lease: &CapabilityLease,
+            request: &FirecrackerProfileRequest,
+            planner_hints: Option<&PlannerSandboxHints>,
+        ) -> Result<FirecrackerProfileBinding, SandboxProfileError> {
+            ensure_no_secret("lease", &lease.to_json())?;
+            ensure_no_secret("firecracker_profile_request", &request.to_json())?;
+            if let Some(hints) = planner_hints {
+                ensure_no_secret("planner_sandbox_hints", &hints.to_json())?;
+            }
+
+            if !matches!(
+                lease.risk,
+                RiskClass::ExecuteWithConfirmation | RiskClass::PrivilegedWithHumanApproval
+            ) {
+                return Err(SandboxProfileError::UnsupportedClass {
+                    class: SandboxProfileClass::FirecrackerExecutor,
+                    reason: format!(
+                        "firecracker executor requires an approved high-risk lease, got {}",
+                        lease.risk.as_str()
+                    ),
+                });
+            }
+
+            let missing = request.dependency_probe.missing_dependencies();
+            if !missing.is_empty() {
+                return Err(SandboxProfileError::InvalidProfile {
+                    reason: format!(
+                        "firecracker dependencies missing: {}; no host fallback is allowed",
+                        missing.join("|")
+                    ),
+                });
+            }
+            validate_firecracker_request(request)?;
+
+            let ignored_planner_hints = planner_hints
+                .map(PlannerSandboxHints::ignored_reasons)
+                .unwrap_or_default();
+            let profile = FirecrackerExecutorProfile {
+                lease_id: lease.lease_id.clone(),
+                tool: lease.tool.clone(),
+                resource: lease.resource.clone(),
+                parameter_hash: lease.parameter_hash.clone(),
+                policy_version: lease.policy_version.clone(),
+                risk: lease.risk,
+                firecracker_binary: request.firecracker_binary.clone(),
+                jailer_binary: request.jailer_binary.clone(),
+                kernel_image: request.kernel_image.clone(),
+                rootfs_image: request.rootfs_image.clone(),
+                network_mode: request.network_mode.clone(),
+                block_devices: request.block_devices.clone(),
+                cpu_count: request.cpu_count,
+                memory_mib: request.memory_mib,
+                rate_limiter: request.rate_limiter.clone(),
+                snapshot_policy: request.snapshot_policy.clone(),
+                jailer_enabled: true,
+            };
+            ensure_no_secret("firecracker_profile", &profile.to_json())?;
+            let audit_summary = firecracker_profile_audit_summary(&profile, &ignored_planner_hints);
+            ensure_no_secret("firecracker_profile_audit_summary", &audit_summary)?;
+            Ok(FirecrackerProfileBinding {
+                class: SandboxProfileClass::FirecrackerExecutor,
+                profile,
+                ignored_planner_hints,
+                audit_summary,
+            })
+        }
     }
 
     fn profile_audit_summary(
@@ -1815,10 +2056,75 @@ pub mod sandbox_profile {
         )
     }
 
-    fn ensure_no_secret(
-        field: impl Into<String>,
-        value: &str,
+    fn validate_firecracker_request(
+        request: &FirecrackerProfileRequest,
     ) -> Result<(), SandboxProfileError> {
+        for (field, value) in [
+            ("firecracker_binary", request.firecracker_binary.as_str()),
+            ("jailer_binary", request.jailer_binary.as_str()),
+            ("kernel_image", request.kernel_image.as_str()),
+            ("rootfs_image", request.rootfs_image.as_str()),
+            ("network_mode", request.network_mode.as_str()),
+            ("rate_limiter", request.rate_limiter.as_str()),
+            ("snapshot_policy", request.snapshot_policy.as_str()),
+        ] {
+            if value.trim().is_empty() {
+                return Err(SandboxProfileError::InvalidProfile {
+                    reason: format!("firecracker profile requires {field}"),
+                });
+            }
+        }
+        if request.cpu_count == 0 {
+            return Err(SandboxProfileError::InvalidProfile {
+                reason: "firecracker profile requires at least one vCPU".to_string(),
+            });
+        }
+        if request.memory_mib < 128 {
+            return Err(SandboxProfileError::InvalidProfile {
+                reason: "firecracker profile requires at least 128 MiB memory".to_string(),
+            });
+        }
+        if !matches!(request.network_mode.as_str(), "none" | "tap" | "restricted") {
+            return Err(SandboxProfileError::InvalidProfile {
+                reason: "firecracker network mode must be none, tap, or restricted".to_string(),
+            });
+        }
+        if !matches!(
+            request.snapshot_policy.as_str(),
+            "disabled" | "same-host-only"
+        ) {
+            return Err(SandboxProfileError::InvalidProfile {
+                reason: "firecracker snapshot policy must be disabled or same-host-only"
+                    .to_string(),
+            });
+        }
+        Ok(())
+    }
+
+    fn firecracker_profile_audit_summary(
+        profile: &FirecrackerExecutorProfile,
+        ignored_planner_hints: &[String],
+    ) -> String {
+        format!(
+            "firecracker_profile class={} lease_id={} tool={} risk={} kernel_image={} rootfs_image={} network_mode={} block_devices={} cpu_count={} memory_mib={} rate_limiter={} snapshot_policy={} jailer_enabled={} host_trust=same-host-trusted snapshot_trust=not-portable ignored_planner_hints={}",
+            SandboxProfileClass::FirecrackerExecutor.as_str(),
+            profile.lease_id,
+            profile.tool,
+            profile.risk.as_str(),
+            profile.kernel_image,
+            profile.rootfs_image,
+            profile.network_mode,
+            profile.block_devices.join("|"),
+            profile.cpu_count,
+            profile.memory_mib,
+            profile.rate_limiter,
+            profile.snapshot_policy,
+            profile.jailer_enabled,
+            ignored_planner_hints.len()
+        )
+    }
+
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), SandboxProfileError> {
         if contains_secret_value(value) {
             return Err(SandboxProfileError::SecretValue {
                 field: field.into(),
@@ -1893,6 +2199,22 @@ pub mod sandbox_profile {
             }
         }
 
+        fn firecracker_request() -> FirecrackerProfileRequest {
+            FirecrackerProfileRequest {
+                firecracker_binary: "/usr/bin/firecracker".to_string(),
+                jailer_binary: "/usr/bin/jailer".to_string(),
+                kernel_image: "/var/lib/agentos/firecracker/vmlinux".to_string(),
+                rootfs_image: "/var/lib/agentos/firecracker/rootfs.ext4".to_string(),
+                network_mode: "restricted".to_string(),
+                block_devices: vec!["rootfs:ro".to_string()],
+                cpu_count: 2,
+                memory_mib: 512,
+                rate_limiter: "default-deny-egress".to_string(),
+                snapshot_policy: "same-host-only".to_string(),
+                dependency_probe: FirecrackerDependencyProbe::ready(),
+            }
+        }
+
         #[test]
         fn read_only_lease_compiles_without_persistent_write_access() {
             let lease = lease_for(
@@ -1922,7 +2244,9 @@ pub mod sandbox_profile {
             assert!(!binding.profile.network.allow_network);
             assert!(binding.profile.network.allowlist.is_empty());
             assert_eq!(binding.ignored_planner_hints.len(), 4);
-            assert!(binding.audit_summary.contains("persistent_write_allowed:false"));
+            assert!(binding
+                .audit_summary
+                .contains("persistent_write_allowed:false"));
         }
 
         #[test]
@@ -1970,7 +2294,9 @@ pub mod sandbox_profile {
                     .compile(&lease, None)
                     .expect_err("unsupported profile fails closed");
                 assert!(error.reason().contains("unsupported"));
-                assert!(error.reason().contains(SandboxProfileClass::for_risk(risk).as_str()));
+                assert!(error
+                    .reason()
+                    .contains(SandboxProfileClass::for_risk(risk).as_str()));
             }
         }
 
@@ -2055,6 +2381,77 @@ pub mod sandbox_profile {
             assert!(json.contains("no_new_privs=true"));
         }
 
+        #[test]
+        fn firecracker_profile_compiles_from_high_risk_lease() {
+            let lease = lease_for(
+                "svc.restart",
+                "nginx",
+                RiskClass::ExecuteWithConfirmation,
+                vec![("service", "nginx")],
+            );
+            let hints = PlannerSandboxHints {
+                requested_profile_name: Some("host-profile".to_string()),
+                requested_writable_host_paths: vec!["/".to_string()],
+                requested_network_allowlist: vec!["0.0.0.0/0".to_string()],
+                requested_persistent_write: true,
+            };
+
+            let binding = compiler()
+                .compile_firecracker(&lease, &firecracker_request(), Some(&hints))
+                .expect("firecracker profile");
+
+            assert_eq!(binding.class, SandboxProfileClass::FirecrackerExecutor);
+            assert_eq!(binding.profile.lease_id, lease.lease_id);
+            assert_eq!(binding.profile.tool, lease.tool);
+            assert_eq!(binding.profile.resource, lease.resource);
+            assert_eq!(binding.profile.parameter_hash, lease.parameter_hash);
+            assert_eq!(binding.profile.risk, RiskClass::ExecuteWithConfirmation);
+            assert_eq!(binding.profile.cpu_count, 2);
+            assert_eq!(binding.profile.memory_mib, 512);
+            assert_eq!(binding.profile.network_mode, "restricted");
+            assert_eq!(binding.profile.snapshot_policy, "same-host-only");
+            assert!(binding.profile.jailer_enabled);
+            assert_eq!(binding.ignored_planner_hints.len(), 4);
+            assert!(binding
+                .ignored_planner_hints
+                .iter()
+                .any(|reason| reason.contains("0.0.0.0/0")));
+            assert!(!binding
+                .profile
+                .block_devices
+                .iter()
+                .any(|device| device == "/"));
+            assert!(binding
+                .audit_summary
+                .contains("snapshot_trust=not-portable"));
+            assert!(binding
+                .audit_summary
+                .contains("host_trust=same-host-trusted"));
+            assert!(binding.audit_summary.contains("ignored_planner_hints=4"));
+            assert!(!binding.audit_summary.contains("host-profile"));
+        }
+
+        #[test]
+        fn firecracker_profile_missing_dependencies_fail_closed() {
+            let lease = lease_for(
+                "svc.restart",
+                "nginx",
+                RiskClass::ExecuteWithConfirmation,
+                vec![("service", "nginx")],
+            );
+            let mut request = firecracker_request();
+            request.dependency_probe.kvm_available = false;
+            request.dependency_probe.rootfs_image_available = false;
+
+            let error = compiler()
+                .compile_firecracker(&lease, &request, None)
+                .expect_err("missing dependencies fail closed");
+
+            assert!(error.reason().contains("firecracker dependencies missing"));
+            assert!(error.reason().contains("kvm"));
+            assert!(error.reason().contains("rootfs-image"));
+            assert!(error.reason().contains("no host fallback"));
+        }
     }
 }
 
@@ -2071,7 +2468,9 @@ pub mod engine {
         content_hash, PreparedWrite, RollbackReport, WriteDiffError, WriteDiffExecutor,
         WriteRequest,
     };
-    use crate::sandbox::{SandboxCompiler, SandboxDecision, SandboxExecutor, SandboxOperation, SandboxReport};
+    use crate::sandbox::{
+        SandboxCompiler, SandboxDecision, SandboxExecutor, SandboxOperation, SandboxReport,
+    };
     use crate::tools::ToolRouter;
 
     use super::effect_envelope::{EffectEnvelope, EffectEnvelopeError, EffectEnvelopeState};
@@ -2079,8 +2478,8 @@ pub mod engine {
         PlanStepPolicyAdapter, StepPolicyError, StepPolicyOutcome, StepPolicyOutcomeKind,
     };
     use super::sandbox_profile::{
-        LeaseSandboxProfileCompiler, PlannerSandboxHints, SandboxProfileBinding,
-        SandboxProfileError,
+        FirecrackerProfileBinding, FirecrackerProfileRequest, LeaseSandboxProfileCompiler,
+        PlannerSandboxHints, SandboxProfileBinding, SandboxProfileError,
     };
 
     pub trait SecurityExecutionEngine {
@@ -2118,7 +2517,10 @@ pub mod engine {
             prepared: &mut PreparedStepExecution,
             reason: &str,
         ) -> Result<RollbackReport, SecurityExecutionError>;
-        fn explain(&self, prepared: &PreparedStepExecution) -> Result<String, SecurityExecutionError>;
+        fn explain(
+            &self,
+            prepared: &PreparedStepExecution,
+        ) -> Result<String, SecurityExecutionError>;
     }
 
     #[derive(Debug, Clone)]
@@ -2158,7 +2560,10 @@ pub mod engine {
                 base_hash: base_hash.into(),
                 proposed_content: proposed_content.into(),
             };
-            ensure_no_secret("write_input.target_path", &input.target_path.display().to_string())?;
+            ensure_no_secret(
+                "write_input.target_path",
+                &input.target_path.display().to_string(),
+            )?;
             ensure_no_secret("write_input.base_hash", &input.base_hash)?;
             ensure_no_secret("write_input.proposed_content", &input.proposed_content)?;
             Ok(input)
@@ -2174,6 +2579,7 @@ pub mod engine {
         pub now: u64,
         pub write_input: Option<WriteDiffInput>,
         pub sandbox_hints: Option<PlannerSandboxHints>,
+        pub firecracker_profile: Option<FirecrackerProfileRequest>,
     }
 
     impl StepExecutionRequest {
@@ -2190,6 +2596,7 @@ pub mod engine {
                 now: 0,
                 write_input: None,
                 sandbox_hints: None,
+                firecracker_profile: None,
             };
             request.validate()?;
             Ok(request)
@@ -2215,6 +2622,11 @@ pub mod engine {
             self
         }
 
+        pub fn with_firecracker_profile(mut self, profile: FirecrackerProfileRequest) -> Self {
+            self.firecracker_profile = Some(profile);
+            self
+        }
+
         fn validate(&self) -> Result<(), SecurityExecutionError> {
             ensure_no_secret("execution_request.run_id", &self.run_id)?;
             ensure_no_secret("execution_request.actor", &self.actor)?;
@@ -2224,6 +2636,9 @@ pub mod engine {
                 ensure_no_secret("execution_request.approval_tool", &approval.tool)?;
                 ensure_no_secret("execution_request.approval_resource", &approval.resource)?;
                 ensure_no_secret("execution_request.approval_hash", &approval.parameter_hash)?;
+            }
+            if let Some(profile) = &self.firecracker_profile {
+                ensure_no_secret("execution_request.firecracker_profile", &profile.to_json())?;
             }
             Ok(())
         }
@@ -2255,6 +2670,7 @@ pub mod engine {
         pub outcome: StepPolicyOutcome,
         pub envelope: Option<EffectEnvelope>,
         pub sandbox_binding: Option<SandboxProfileBinding>,
+        pub firecracker_binding: Option<FirecrackerProfileBinding>,
         pub prepared_write: Option<PreparedWrite>,
         pub execution_report: Option<ExecutionReport>,
     }
@@ -2272,6 +2688,11 @@ pub mod engine {
                 .as_ref()
                 .map(SandboxProfileBinding::to_json)
                 .unwrap_or_else(|| "null".to_string());
+            let firecracker_binding = self
+                .firecracker_binding
+                .as_ref()
+                .map(FirecrackerProfileBinding::to_json)
+                .unwrap_or_else(|| "null".to_string());
             let rollback_handle = self
                 .prepared_write
                 .as_ref()
@@ -2283,7 +2704,7 @@ pub mod engine {
                 .map(ExecutionReport::to_json)
                 .unwrap_or_else(|| "null".to_string());
             Ok(format!(
-                "{{\"status\":\"{}\",\"run_id\":\"{}\",\"step_id\":\"{}\",\"actor\":\"{}\",\"outcome\":{},\"envelope\":{},\"sandbox_binding\":{},\"rollback_handle\":{},\"execution_report\":{}}}",
+                "{{\"status\":\"{}\",\"run_id\":\"{}\",\"step_id\":\"{}\",\"actor\":\"{}\",\"outcome\":{},\"envelope\":{},\"sandbox_binding\":{},\"firecracker_binding\":{},\"rollback_handle\":{},\"execution_report\":{}}}",
                 self.status.as_str(),
                 escape_json(&self.run_id),
                 escape_json(&self.step_id),
@@ -2291,6 +2712,7 @@ pub mod engine {
                 self.outcome.to_json(),
                 envelope,
                 sandbox_binding,
+                firecracker_binding,
                 rollback_handle,
                 execution_report
             ))
@@ -2368,9 +2790,16 @@ pub mod engine {
         Effect(EffectEnvelopeError),
         SandboxProfile(SandboxProfileError),
         WriteDiff(WriteDiffError),
-        SandboxDenied { report: SandboxReport },
-        InvalidState { action: &'static str, reason: String },
-        SecretValue { field: String },
+        SandboxDenied {
+            report: SandboxReport,
+        },
+        InvalidState {
+            action: &'static str,
+            reason: String,
+        },
+        SecretValue {
+            field: String,
+        },
         Io(String),
     }
 
@@ -2401,7 +2830,9 @@ pub mod engine {
                 Self::InvalidState { action, reason } => {
                     format!("invalid security execution state for {action}: {reason}")
                 }
-                Self::SecretValue { field } => format!("secret-like value is not allowed in {field}"),
+                Self::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
                 Self::Io(error) => error.clone(),
             }
         }
@@ -2479,14 +2910,15 @@ pub mod engine {
                 StepPolicyOutcomeKind::Allowed => {}
             }
 
-            let routed = outcome
-                .routed
-                .as_ref()
-                .ok_or_else(|| invalid("prepare", "allowed policy outcome is missing routed tool"))?;
-            let lease = outcome
-                .lease
-                .as_ref()
-                .ok_or_else(|| invalid("prepare", "allowed policy outcome is missing capability lease"))?;
+            let routed = outcome.routed.as_ref().ok_or_else(|| {
+                invalid("prepare", "allowed policy outcome is missing routed tool")
+            })?;
+            let lease = outcome.lease.as_ref().ok_or_else(|| {
+                invalid(
+                    "prepare",
+                    "allowed policy outcome is missing capability lease",
+                )
+            })?;
             let mut envelope = EffectEnvelope::draft(
                 &request.run_id,
                 request.step.step_id(),
@@ -2496,6 +2928,7 @@ pub mod engine {
             )?;
 
             let mut sandbox_binding = None;
+            let mut firecracker_binding = None;
             let mut prepared_write = None;
             let mut rollback_handle = None;
 
@@ -2531,11 +2964,23 @@ pub mod engine {
                 prepared_write = Some(write);
             }
 
+            if let Some(profile_request) = &request.firecracker_profile {
+                let binding = self.sandbox_compiler.compile_firecracker(
+                    lease,
+                    profile_request,
+                    request.sandbox_hints.as_ref(),
+                )?;
+                envelope.set_execution_profile_summary(binding.audit_summary.clone())?;
+                firecracker_binding = Some(binding);
+            }
+
             envelope.prepare(
                 journal,
                 &request.actor,
                 lease.clone(),
-                sandbox_binding.as_ref().map(|binding| binding.profile.clone()),
+                sandbox_binding
+                    .as_ref()
+                    .map(|binding| binding.profile.clone()),
                 rollback_handle,
             )?;
 
@@ -2547,6 +2992,7 @@ pub mod engine {
                 outcome,
                 envelope: Some(envelope),
                 sandbox_binding,
+                firecracker_binding,
                 prepared_write,
                 execution_report: None,
             })
@@ -2568,10 +3014,9 @@ pub mod engine {
                 .ok_or_else(|| invalid("execute", "prepared execution is missing lease"))?;
             let report = match lease.risk {
                 RiskClass::ReadOnly => {
-                    let binding = prepared
-                        .sandbox_binding
-                        .as_ref()
-                        .ok_or_else(|| invalid("execute", "read-only execution is missing sandbox binding"))?;
+                    let binding = prepared.sandbox_binding.as_ref().ok_or_else(|| {
+                        invalid("execute", "read-only execution is missing sandbox binding")
+                    })?;
                     let sandbox_report = self.sandbox_executor.evaluate(
                         &binding.profile,
                         sandbox_operation_for(&binding.profile.tool, &binding.profile.resource),
@@ -2597,10 +3042,12 @@ pub mod engine {
                     }
                 }
                 RiskClass::WriteWithDiff => {
-                    let write = prepared
-                        .prepared_write
-                        .as_ref()
-                        .ok_or_else(|| invalid("execute", "write-with-diff execution is missing prepared write"))?;
+                    let write = prepared.prepared_write.as_ref().ok_or_else(|| {
+                        invalid(
+                            "execute",
+                            "write-with-diff execution is missing prepared write",
+                        )
+                    })?;
                     let proposed = fs::read_to_string(&write.handle.proposed_content_path)?;
                     fs::write(&write.handle.target_path, proposed.as_bytes())?;
                     let final_content = fs::read_to_string(&write.handle.target_path)?;
@@ -2620,20 +3067,36 @@ pub mod engine {
                     }
                 }
                 RiskClass::ExecuteWithConfirmation | RiskClass::PrivilegedWithHumanApproval => {
+                    let summary = if let Some(binding) = &prepared.firecracker_binding {
+                        format!(
+                            "firecracker controlled effect profile selected class={} lease_id={} tool={} resource={} parameter_hash={} policy_reason={} snapshot_trust=not-portable no_host_fallback=true",
+                            binding.class.as_str(),
+                            binding.profile.lease_id,
+                            lease.tool,
+                            lease.resource,
+                            lease.parameter_hash,
+                            prepared.outcome.decision.reason
+                        )
+                    } else {
+                        format!(
+                            "controlled effect executed tool={} resource={} parameter_hash={}",
+                            lease.tool, lease.resource, lease.parameter_hash
+                        )
+                    };
                     ExecutionReport {
                         kind: ExecutionReportKind::ControlledEffect,
                         tool: lease.tool.clone(),
                         success: true,
-                        summary: format!(
-                            "controlled effect executed tool={} resource={} parameter_hash={}",
-                            lease.tool, lease.resource, lease.parameter_hash
-                        ),
+                        summary,
                         sandbox_report: None,
                         rollback_id: None,
                     }
                 }
                 RiskClass::Never => {
-                    return Err(invalid("execute", "never-risk execution cannot be prepared"));
+                    return Err(invalid(
+                        "execute",
+                        "never-risk execution cannot be prepared",
+                    ));
                 }
             };
             ensure_no_secret("execution_report", &report.to_json())?;
@@ -2718,7 +3181,10 @@ pub mod engine {
             Ok(report)
         }
 
-        fn explain(&self, prepared: &PreparedStepExecution) -> Result<String, SecurityExecutionError> {
+        fn explain(
+            &self,
+            prepared: &PreparedStepExecution,
+        ) -> Result<String, SecurityExecutionError> {
             let envelope_state = prepared
                 .envelope
                 .as_ref()
@@ -2731,7 +3197,7 @@ pub mod engine {
                 .map(|lease| lease.risk.as_str())
                 .unwrap_or("none");
             let explanation = format!(
-                "security-execution status={} run={} step={} policy={} risk={} envelope={} sandbox={} rollback_handle={}",
+                "security-execution status={} run={} step={} policy={} risk={} envelope={} sandbox={} firecracker={} rollback_handle={}",
                 prepared.status.as_str(),
                 prepared.run_id,
                 prepared.step_id,
@@ -2739,6 +3205,7 @@ pub mod engine {
                 lease_risk,
                 envelope_state,
                 prepared.sandbox_binding.is_some(),
+                prepared.firecracker_binding.is_some(),
                 prepared.prepared_write.is_some()
             );
             ensure_no_secret("execution_explanation", &explanation)?;
@@ -2759,6 +3226,7 @@ pub mod engine {
             outcome,
             envelope: None,
             sandbox_binding: None,
+            firecracker_binding: None,
             prepared_write: None,
             execution_report: None,
         }
@@ -2807,15 +3275,24 @@ pub mod engine {
             ));
         }
         if path != input.target_path.display().to_string() {
-            return Err(invalid("prepare", "write input target path must match step path"));
+            return Err(invalid(
+                "prepare",
+                "write input target path must match step path",
+            ));
         }
         if let Some(base_hash) = param_value(normalized_params, "base_hash") {
             if base_hash != input.base_hash {
-                return Err(invalid("prepare", "write input base hash must match step base_hash"));
+                return Err(invalid(
+                    "prepare",
+                    "write input base hash must match step base_hash",
+                ));
             }
         }
         if !step.rollback().required() {
-            return Err(invalid("prepare", "fs.write.diff step must require rollback"));
+            return Err(invalid(
+                "prepare",
+                "fs.write.diff step must require rollback",
+            ));
         }
         Ok(())
     }
@@ -2845,7 +3322,10 @@ pub mod engine {
         }
     }
 
-    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), SecurityExecutionError> {
+    fn ensure_no_secret(
+        field: impl Into<String>,
+        value: &str,
+    ) -> Result<(), SecurityExecutionError> {
         if contains_secret_value(value) {
             return Err(SecurityExecutionError::SecretValue {
                 field: field.into(),
@@ -2870,6 +3350,9 @@ pub mod engine {
         };
         use crate::api::SemanticToolCall;
         use crate::audit::extract_json_string_for_tests;
+        use crate::security_execution::sandbox_profile::{
+            FirecrackerDependencyProbe, FirecrackerProfileRequest,
+        };
 
         fn temp_dir(name: &str) -> PathBuf {
             let path = std::env::temp_dir().join(format!(
@@ -2941,6 +3424,22 @@ pub mod engine {
             }
         }
 
+        fn firecracker_request() -> FirecrackerProfileRequest {
+            FirecrackerProfileRequest {
+                firecracker_binary: "/usr/bin/firecracker".to_string(),
+                jailer_binary: "/usr/bin/jailer".to_string(),
+                kernel_image: "/var/lib/agentos/firecracker/vmlinux".to_string(),
+                rootfs_image: "/var/lib/agentos/firecracker/rootfs.ext4".to_string(),
+                network_mode: "restricted".to_string(),
+                block_devices: vec!["rootfs:ro".to_string()],
+                cpu_count: 2,
+                memory_mib: 512,
+                rate_limiter: "default-deny-egress".to_string(),
+                snapshot_policy: "same-host-only".to_string(),
+                dependency_probe: FirecrackerDependencyProbe::ready(),
+            }
+        }
+
         #[test]
         fn read_only_step_runs_under_sandbox_and_seals() {
             let root = temp_dir("read-only");
@@ -2999,10 +3498,18 @@ pub mod engine {
                 EffectEnvelopeState::Sealed
             );
             let lines = journal.event_lines().expect("journal");
-            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
-            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
-            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"EffectObserved\"")));
-            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"CommitSealed\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"EffectObserved\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"CommitSealed\"")));
         }
 
         #[test]
@@ -3120,7 +3627,144 @@ pub mod engine {
                     CommitId("commit-run-restart".to_string()),
                 )
                 .expect("seal");
-            assert!(engine(&root).explain(&prepared).expect("explain").contains("envelope=Sealed"));
+            assert!(engine(&root)
+                .explain(&prepared)
+                .expect("explain")
+                .contains("envelope=Sealed"));
+        }
+
+        #[test]
+        fn firecracker_profile_requires_policy_approval_before_prepare() {
+            let root = temp_dir("firecracker-approved");
+            let journal = test_journal(&root);
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+                false,
+            );
+            let initial = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-firecracker", "operator", restart.clone())
+                        .expect("request")
+                        .with_firecracker_profile(firecracker_request()),
+                )
+                .expect("initial pause");
+            assert_eq!(initial.status, PreparedExecutionStatus::AwaitingApproval);
+            assert!(initial.envelope.is_none());
+            assert!(initial.firecracker_binding.is_none());
+            let token = approval_for(&initial);
+
+            let mut prepared = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-firecracker", "operator", restart)
+                        .expect("request")
+                        .with_approval(token)
+                        .with_firecracker_profile(firecracker_request())
+                        .with_sandbox_hints(PlannerSandboxHints {
+                            requested_profile_name: Some("host-exec".to_string()),
+                            requested_writable_host_paths: vec!["/".to_string()],
+                            requested_network_allowlist: vec!["0.0.0.0/0".to_string()],
+                            requested_persistent_write: true,
+                        }),
+                )
+                .expect("approved prepare");
+
+            assert_eq!(prepared.status, PreparedExecutionStatus::Prepared);
+            assert!(prepared.envelope.is_some());
+            assert!(prepared.sandbox_binding.is_none());
+            let binding = prepared
+                .firecracker_binding
+                .as_ref()
+                .expect("firecracker binding");
+            assert_eq!(binding.class.as_str(), "firecracker-executor");
+            assert_eq!(binding.ignored_planner_hints.len(), 4);
+            assert!(binding
+                .audit_summary
+                .contains("snapshot_trust=not-portable"));
+            let json = prepared.to_json().expect("prepared json");
+            assert!(json.contains("\"firecracker_binding\""));
+            assert!(json.contains("firecracker-executor"));
+            assert!(engine(&root)
+                .explain(&prepared)
+                .expect("explain")
+                .contains("firecracker=true"));
+
+            let report = engine(&root)
+                .execute(&journal, &mut prepared)
+                .expect("execute controlled effect");
+            assert_eq!(report.kind, ExecutionReportKind::ControlledEffect);
+            assert!(report
+                .summary
+                .contains("firecracker controlled effect profile selected"));
+            assert!(report.summary.contains("no_host_fallback=true"));
+            assert!(!report.summary.contains("host-exec"));
+
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("firecracker_profile")));
+            assert!(lines.iter().any(|line| {
+                line.contains("policy_reason=matching approval token bound to exact parameters")
+            }));
+            assert!(!lines.iter().any(|line| line.contains("host-exec")));
+        }
+
+        #[test]
+        fn firecracker_missing_dependency_fails_before_effect_prepare() {
+            let root = temp_dir("firecracker-missing-deps");
+            let journal = test_journal(&root);
+            let restart = step(
+                "restart-nginx",
+                "svc.restart",
+                vec![("service", "nginx")],
+                RiskClass::ExecuteWithConfirmation,
+                true,
+                false,
+            );
+            let initial = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new(
+                        "run-firecracker-missing",
+                        "operator",
+                        restart.clone(),
+                    )
+                    .expect("request"),
+                )
+                .expect("initial pause");
+            let token = approval_for(&initial);
+            let mut profile = firecracker_request();
+            profile.dependency_probe.kvm_available = false;
+            profile.dependency_probe.rootfs_image_available = false;
+
+            let error = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-firecracker-missing", "operator", restart)
+                        .expect("request")
+                        .with_approval(token)
+                        .with_firecracker_profile(profile),
+                )
+                .expect_err("missing firecracker dependencies fail closed");
+
+            assert_eq!(error.failure_class(), ExecutionFailureClass::FailedClosed);
+            assert!(error.reason().contains("firecracker dependencies missing"));
+            assert!(error.reason().contains("no host fallback"));
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
+            assert!(!lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
         }
 
         #[test]
@@ -3174,7 +3818,10 @@ pub mod engine {
                 .expect("envelope")
                 .rollback_handle
                 .is_some());
-            assert_eq!(fs::read_to_string(&target).expect("read target"), "port=80\n");
+            assert_eq!(
+                fs::read_to_string(&target).expect("read target"),
+                "port=80\n"
+            );
 
             let report = engine(&root)
                 .execute(&journal, &mut prepared)
@@ -3203,14 +3850,21 @@ pub mod engine {
                 .rollback(&journal, &mut prepared, "verification failed")
                 .expect("rollback");
             assert!(rollback.restored);
-            assert_eq!(fs::read_to_string(&target).expect("read target"), "port=80\n");
+            assert_eq!(
+                fs::read_to_string(&target).expect("read target"),
+                "port=80\n"
+            );
             assert_eq!(
                 prepared.envelope.as_ref().expect("envelope").state,
                 EffectEnvelopeState::RolledBack
             );
             let lines = journal.event_lines().expect("journal");
-            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"RollbackPending\"")));
-            assert!(lines.iter().any(|line| line.contains("\"event_type\":\"RollbackObserved\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"RollbackPending\"")));
+            assert!(lines
+                .iter()
+                .any(|line| line.contains("\"event_type\":\"RollbackObserved\"")));
             assert!(!lines.iter().any(|line| {
                 extract_json_string_for_tests(line, "event_type").as_deref() == Some("CommitSealed")
             }));
@@ -3251,8 +3905,7 @@ pub mod engine {
                         .expect("request")
                         .with_approval(token)
                         .with_write_input(
-                            WriteDiffInput::new(&target, base_hash, "a=2\n")
-                                .expect("write input"),
+                            WriteDiffInput::new(&target, base_hash, "a=2\n").expect("write input"),
                         ),
                 )
                 .expect_err("hash mismatch rejected");
@@ -3311,7 +3964,9 @@ pub mod source_to_sink {
             )
         }
 
-        pub fn local_system_output(content_id: impl Into<String>) -> Result<Self, SourceToSinkError> {
+        pub fn local_system_output(
+            content_id: impl Into<String>,
+        ) -> Result<Self, SourceToSinkError> {
             Self::new(
                 SourceLabel::LocalSystemOutput,
                 TrustBoundary::LocalSystem,
@@ -3426,7 +4081,8 @@ pub mod source_to_sink {
             let tool = tool.into();
             let resource = resource.into();
             let mut normalized_params = normalized_params;
-            normalized_params.sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
+            normalized_params
+                .sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
             let class = classify_sink(&tool, risk, &resource, &normalized_params);
             let sink = Self {
                 tool,
@@ -3690,7 +4346,10 @@ pub mod source_to_sink {
 
     fn source_to_sink_hash(request: &SourceToSinkRequest) -> String {
         let mut params = vec![
-            ("source_label".to_string(), request.source.label.as_str().to_string()),
+            (
+                "source_label".to_string(),
+                request.source.label.as_str().to_string(),
+            ),
             (
                 "source_trust".to_string(),
                 request.source.trust_boundary.as_str().to_string(),
@@ -3700,7 +4359,10 @@ pub mod source_to_sink {
                 request.source.original_trust_boundary.as_str().to_string(),
             ),
             ("content_id".to_string(), request.source.content_id.clone()),
-            ("sink_class".to_string(), request.sink.class.as_str().to_string()),
+            (
+                "sink_class".to_string(),
+                request.sink.class.as_str().to_string(),
+            ),
             ("tool".to_string(), request.sink.tool.clone()),
             ("resource".to_string(), request.sink.resource.clone()),
         ];
@@ -3709,10 +4371,7 @@ pub mod source_to_sink {
         stable_parameter_hash(&params)
     }
 
-    fn ensure_no_secret(
-        field: impl Into<String>,
-        value: &str,
-    ) -> Result<(), SourceToSinkError> {
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), SourceToSinkError> {
         if contains_secret_value(value) {
             return Err(SourceToSinkError::SecretValue {
                 field: field.into(),
@@ -3762,10 +4421,7 @@ pub mod source_to_sink {
             .expect("sink")
         }
 
-        fn request(
-            source: ContentSource,
-            sink: SinkDescriptor,
-        ) -> SourceToSinkRequest {
+        fn request(source: ContentSource, sink: SinkDescriptor) -> SourceToSinkRequest {
             SourceToSinkRequest::new("run-source", "step-source", "operator", source, sink)
                 .expect("request")
         }
@@ -3818,7 +4474,10 @@ pub mod source_to_sink {
             let source = ContentSource::external_content("webpage-1").expect("source");
             assert_eq!(source.label, SourceLabel::ExternalUntrustedContent);
             assert_eq!(source.trust_boundary, TrustBoundary::ExternalUntrusted);
-            assert_eq!(source.original_trust_boundary, TrustBoundary::ExternalUntrusted);
+            assert_eq!(
+                source.original_trust_boundary,
+                TrustBoundary::ExternalUntrusted
+            );
             assert!(!source.sanitized);
             assert!(source.to_json().contains("external-untrusted"));
         }
@@ -3908,7 +4567,10 @@ pub mod source_to_sink {
                 ))
                 .expect("execute");
             assert_eq!(execute.kind, SourceToSinkDecisionKind::Denied);
-            assert_eq!(execute.original_trust_boundary, TrustBoundary::ExternalUntrusted);
+            assert_eq!(
+                execute.original_trust_boundary,
+                TrustBoundary::ExternalUntrusted
+            );
         }
 
         #[test]
@@ -4188,7 +4850,8 @@ pub mod secret_runtime {
             let key = key.into();
             let value = value.into();
             ensure_no_secret("memory.key", &key)?;
-            let boundary = SecretRuntimePolicy::inspect_boundary(SecretSurface::MemoryEntry, &value)?;
+            let boundary =
+                SecretRuntimePolicy::inspect_boundary(SecretSurface::MemoryEntry, &value)?;
             if boundary.disposition != BoundaryDisposition::Accepted {
                 return Err(SecretRuntimeError::ForbiddenRawSecret {
                     surface: SecretSurface::MemoryEntry,
@@ -4394,7 +5057,8 @@ pub mod secret_runtime {
             if trimmed.starts_with("secret://") {
                 if !is_secret_handle(trimmed) {
                     return Err(SecretRuntimeError::InvalidHandle {
-                        reason: "secret handles must be single-token secret:// references".to_string(),
+                        reason: "secret handles must be single-token secret:// references"
+                            .to_string(),
                     });
                 }
                 handles.push(trimmed.to_string());
@@ -4415,10 +5079,7 @@ pub mod secret_runtime {
             && !value.contains('`')
     }
 
-    fn ensure_no_secret(
-        field: impl Into<String>,
-        value: &str,
-    ) -> Result<(), SecretRuntimeError> {
+    fn ensure_no_secret(field: impl Into<String>, value: &str) -> Result<(), SecretRuntimeError> {
         if contains_secret_value(value) {
             return Err(SecretRuntimeError::SecretValue {
                 field: field.into(),
@@ -4489,11 +5150,9 @@ pub mod secret_runtime {
 
         #[test]
         fn raw_secret_values_are_rejected_or_redacted_before_boundaries() {
-            let model = SecretRuntimePolicy::inspect_boundary(
-                SecretSurface::ModelContext,
-                "token=abc123",
-            )
-            .expect_err("model raw secret rejected");
+            let model =
+                SecretRuntimePolicy::inspect_boundary(SecretSurface::ModelContext, "token=abc123")
+                    .expect_err("model raw secret rejected");
             assert!(model.reason().contains("model-context"));
 
             let memory = RuntimeMemoryEntry::new("session", "password=hunter2")
@@ -4519,12 +5178,9 @@ pub mod secret_runtime {
             assert!(missing.reason().contains("explicit capability lease"));
 
             let capability = capability_for(&handle, 60);
-            let mut lease = SecretRuntimePolicy::require_secret_use_lease(
-                Some(&capability),
-                &handle,
-                0,
-            )
-            .expect("secret use lease");
+            let mut lease =
+                SecretRuntimePolicy::require_secret_use_lease(Some(&capability), &handle, 0)
+                    .expect("secret use lease");
             assert!(lease.one_shot);
             assert!(!lease.consumed);
             lease.consume(1).expect("consume");
@@ -4559,12 +5215,8 @@ pub mod secret_runtime {
 
             let mut wildcard = capability_for(&handle, 60);
             wildcard.resource = "*".to_string();
-            let error = SecretRuntimePolicy::require_secret_use_lease(
-                Some(&wildcard),
-                &handle,
-                0,
-            )
-            .expect_err("wildcard rejected");
+            let error = SecretRuntimePolicy::require_secret_use_lease(Some(&wildcard), &handle, 0)
+                .expect_err("wildcard rejected");
             assert!(error.reason().contains("wildcard"));
         }
 
@@ -4572,12 +5224,9 @@ pub mod secret_runtime {
         fn secret_use_audit_is_handle_only() {
             let handle = handle();
             let capability = capability_for(&handle, 60);
-            let lease = SecretRuntimePolicy::require_secret_use_lease(
-                Some(&capability),
-                &handle,
-                0,
-            )
-            .expect("secret use lease");
+            let lease =
+                SecretRuntimePolicy::require_secret_use_lease(Some(&capability), &handle, 0)
+                    .expect("secret use lease");
             let journal = test_journal("audit");
             SecretRuntimePolicy::record_secret_use(
                 &journal,

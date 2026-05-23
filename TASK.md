@@ -34,7 +34,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 - `TASK-DALPHA-007` 已完成：`image/build-initramfs.ps1` 会把 `AGENTOS_RUNTIME_ARTIFACTS_OK` 和 rootfs runtime manifest hash marker 嵌入 early `/sbin/agentd`，`scripts/boot-smoke-test.ps1` 已从 handoff-only gate 升级为 runtime-aware QEMU gate；完整 QEMU smoke 观察到 `AGENTD_HANDOFF_OK`、runtime marker 和 runtime manifest hash marker。
 - `TASK-DALPHA-008` 已完成：`scripts/build-release.ps1` 已升级为 `agentos.distribution-alpha.provenance.v1` promotion gate，记录 source revision、toolchain、dependency inventory、runtime manifest hash、image inputs、artifact hashes、Alpha service recovery smoke、full QEMU runtime smoke 和 gate commands；本次 gate 结果为 `promotion.status=promotable`，blockers 为空。
 - 已按 Maestro 方式补充 Agent Core Runtime 和 AgentOS 安全执行底座的 Alpha 延续展开：`.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`。这份文档把 `TASK-ACR-001` 到 `TASK-ACR-010`、`TASK-SEF-001` 到 `TASK-SEF-010`、`TASK-DALPHA-009` 到 `TASK-DALPHA-012` 串成从底层 Agent runtime 到发行版安全执行面的执行链。
-- 下一步正在执行 `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面，不能形成绕过 policy/capability/audit/rollback/recovery 的并行 side-effect path。
+- `TASK-DALPHA-009` 已完成：Firecracker executor profile 已放到 SecurityExecutionEngine 后面，缺 KVM、Firecracker binary、jailer、kernel image 或 rootfs image 会在 `EffectPrepared` 前 fail closed；planner hints 只记录为 ignored，profile selection 和 policy reason 进入 audit/explain，没有新增直接 Firecracker 执行 helper。
 - Runtime Foundation 已完成执行与 final audit：6 个 wave，26 个 task，覆盖 Agent Core Runtime、Security Execution Foundation 和 Distribution Alpha 入口门槛。
 - `TASK-RTF-000` 已完成：Agent Core Runtime 和 Security Execution Foundation 边界已冻结为 accepted decision，AgentCore 初始实现选择 in-process inside `agentd`，Distribution Alpha 被阻塞到 generic AgentCore runtime 通过验收。
 - `TASK-RTF-001` 已完成：runtime states、state transitions、audit event mapping、RunStore/AuditJournal source of truth、idempotency 和 recovery policy 已冻结为 contract。
@@ -135,7 +135,7 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ### Distribution Alpha Wave 3：Alpha isolation workstreams
 
-- `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面（planned）
+- `TASK-DALPHA-009`：把 Firecracker executor profile 放到 SecurityExecutionEngine 后面（completed）
 - `TASK-DALPHA-010`：增加 package install isolation workflow（planned）
 - `TASK-DALPHA-011`：增加 untrusted content runtime workflow（planned）
 
@@ -367,4 +367,4 @@ Wave 1 入口约束：
 
 ## 下一步
 
-执行 `TASK-DALPHA-009`：先读取 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md` 和 `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-009.json`，把 Firecracker executor profile 放到 SecurityExecutionEngine 后面，确保 Firecracker 只是 executor profile，不绕过 semantic tools、policy、capability lease、EffectEnvelope、audit、rollback 或 recovery。
+执行 `TASK-DALPHA-010`：先读取 `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md` 和 `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json`，在 Firecracker profile contract 之上定义 package install isolation workflow，确保第三方包安装先隔离验证，再通过 exact approval 和 rollback semantics 才能 host promotion。

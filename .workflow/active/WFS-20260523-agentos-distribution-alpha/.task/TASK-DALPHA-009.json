@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-009",
   "title": "Add Firecracker executor profile behind SecurityExecutionEngine",
-  "status": "planned",
+  "status": "completed",
   "wave": 3,
   "priority": "P1",
   "type": "isolation",
@@ -66,5 +66,18 @@
       "Dependency failure is fail-closed.",
       "Audit records profile selection."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T09:50:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-009-firecracker-profile.json",
+    "implementation_files": [
+      "crates/agentd/src/security_execution.rs"
+    ],
+    "verification": {
+      "security_execution": "cargo test -p agentd security_execution:: passed, 37 tests",
+      "sandbox": "cargo test -p agentd sandbox:: passed, 5 tests"
+    },
+    "dependency_behavior": "Missing KVM, Firecracker binary, jailer, kernel image, or rootfs image fails closed before EffectPrepared; no host fallback is allowed.",
+    "next_task": "TASK-DALPHA-010"
   }
 }

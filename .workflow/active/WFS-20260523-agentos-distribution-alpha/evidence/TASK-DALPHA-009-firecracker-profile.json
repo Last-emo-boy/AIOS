@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-DALPHA-009",
+  "status": "completed",
+  "completed_at": "2026-05-23T09:50:00+08:00",
+  "title": "Add Firecracker executor profile behind SecurityExecutionEngine",
+  "implementation_files": [
+    "crates/agentd/src/security_execution.rs"
+  ],
+  "summary": {
+    "firecracker_boundary": "Firecracker is represented as a FirecrackerExecutor profile binding compiled by LeaseSandboxProfileCompiler and attached through DefaultSecurityExecutionEngine::prepare after policy allow and CapabilityLease acquisition.",
+    "no_direct_executor": "No Firecracker helper or direct command execution path was added; high-risk steps still use the SecurityExecutionEngine controlled-effect path.",
+    "authority": "Profile metadata is derived from CapabilityLease plus SEF-controlled FirecrackerProfileRequest. Planner sandbox hints are recorded as ignored reasons and cannot weaken profile constraints.",
+    "audit": "EffectPrepared includes the policy reason and execution profile summary. PreparedStepExecution JSON and explain output expose the selected Firecracker binding without secrets.",
+    "snapshot_and_host_trust": "Audit summary records host_trust=same-host-trusted and snapshot_trust=not-portable; Firecracker snapshots are not treated as portable cross-host rollback artifacts."
+  },
+  "dependency_check_behavior": {
+    "checked_dependencies": [
+      "kvm",
+      "firecracker-binary",
+      "jailer-binary",
+      "kernel-image",
+      "rootfs-image"
+    ],
+    "missing_dependency_result": "compile_firecracker returns InvalidProfile before EffectEnvelope::prepare, so no EffectPrepared audit event is emitted.",
+    "host_without_firecracker": "Hosts without KVM, Firecracker, jailer, kernel image, or rootfs image fail closed with a message containing 'firecracker dependencies missing' and 'no host fallback is allowed'.",
+    "external_binary_required_for_tests": false
+  },
+  "acceptance_evidence": {
+    "firecracker_cannot_execute_outside_security_execution_engine": "Only StepExecutionRequest::with_firecracker_profile reaches compile_firecracker inside DefaultSecurityExecutionEngine::prepare; no standalone Firecracker runner was added.",
+    "planner_output_cannot_weaken_profile_constraints": "PlannerSandboxHints are serialized, secret-checked, and converted to ignored_planner_hints; profile CPU, memory, network mode, block devices, image paths, and snapshot policy come from the SEF request and lease.",
+    "missing_dependencies_fail_closed": "firecracker_missing_dependency_fails_before_effect_prepare asserts PolicyEvaluated exists and EffectPrepared does not.",
+    "audit_records_profile_selection_and_policy_reason": "firecracker_profile_requires_policy_approval_before_prepare asserts EffectPrepared contains firecracker_profile and policy_reason."
+  },
+  "verification": [
+    {
+      "command": "cargo test -p agentd security_execution::",
+      "result": "passed",
+      "tests": "37 passed"
+    },
+    {
+      "command": "cargo test -p agentd sandbox::",
+      "result": "passed",
+      "tests": "5 passed"
+    }
+  ],
+  "non_committed_outputs": [
+    ".workflow/artifacts/"
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-010",
+    "blocked_until": []
+  }
+}
