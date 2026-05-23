@@ -2,6 +2,7 @@ pub mod model {
     use std::fmt;
 
     use crate::api::{escape_json, RiskClass, SemanticToolCall};
+    pub use crate::runtime_contracts::{contains_secret_value, TrustBoundary};
 
     pub const PLAN_SCHEMA_VERSION: &str = "agent-core-plan/v1";
     pub const RUN_SCHEMA_VERSION: &str = "agent-core-run/v1";
@@ -29,47 +30,6 @@ pub mod model {
     }
 
     impl std::error::Error for ModelValidationError {}
-
-    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-    pub enum TrustBoundary {
-        Operator,
-        OperatorApproved,
-        LocalSystem,
-        SandboxedTool,
-        ExternalUntrusted,
-        ModelOutput,
-        ModelSummary,
-        SanitizedSummary,
-    }
-
-    impl TrustBoundary {
-        pub fn as_str(self) -> &'static str {
-            match self {
-                Self::Operator => "operator",
-                Self::OperatorApproved => "operator-approved",
-                Self::LocalSystem => "local-system",
-                Self::SandboxedTool => "sandboxed-tool",
-                Self::ExternalUntrusted => "external-untrusted",
-                Self::ModelOutput => "model-output",
-                Self::ModelSummary => "model-summary",
-                Self::SanitizedSummary => "sanitized-summary",
-            }
-        }
-
-        pub fn from_str(value: &str) -> Option<Self> {
-            Some(match value {
-                "operator" => Self::Operator,
-                "operator-approved" => Self::OperatorApproved,
-                "local-system" => Self::LocalSystem,
-                "sandboxed-tool" => Self::SandboxedTool,
-                "external-untrusted" => Self::ExternalUntrusted,
-                "model-output" => Self::ModelOutput,
-                "model-summary" => Self::ModelSummary,
-                "sanitized-summary" => Self::SanitizedSummary,
-                _ => return None,
-            })
-        }
-    }
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum IntentSource {
@@ -709,6 +669,24 @@ pub mod model {
                 risk_hints,
                 self.rollback.to_json()
             )
+        }
+    }
+
+    impl crate::runtime_contracts::ExecutionStep for PlanStep {
+        fn step_id(&self) -> &str {
+            self.step_id()
+        }
+
+        fn call(&self) -> &SemanticToolCall {
+            self.call()
+        }
+
+        fn planner_risk_hints(&self) -> Vec<RiskClass> {
+            self.risk_hints().iter().map(RiskHint::risk).collect()
+        }
+
+        fn rollback_required(&self) -> bool {
+            self.rollback().required()
         }
     }
 
@@ -1456,40 +1434,6 @@ pub mod model {
             ));
         }
         Ok(())
-    }
-
-    pub fn contains_secret_value(value: &str) -> bool {
-        let lower = value.to_ascii_lowercase();
-        if lower.trim().starts_with("secret://") && !lower.trim().contains(char::is_whitespace) {
-            return false;
-        }
-        let compact = lower.replace(['"', '\'', '`'], "");
-        for key in ["password", "token", "apikey", "api_key", "secret"] {
-            for separator in ["=", ":"] {
-                let pattern = format!("{key}{separator}");
-                let mut search = compact.as_str();
-                while let Some(index) = search.find(&pattern) {
-                    let tail = &search[index..];
-                    if key == "secret" && tail.starts_with("secret://") {
-                        search = &tail["secret://".len()..];
-                        continue;
-                    }
-                    let after = tail[pattern.len()..].trim_start();
-                    if after.starts_with("secret://") {
-                        search = &after["secret://".len()..];
-                        continue;
-                    }
-                    if after.chars().next().is_some_and(|ch| {
-                        ch.is_ascii_alphanumeric()
-                            || matches!(ch, '_' | '-' | '.' | '/' | '\\' | '$' | '{' | '[')
-                    }) {
-                        return true;
-                    }
-                    search = &tail[pattern.len()..];
-                }
-            }
-        }
-        false
     }
 
     fn secret_key(key: &str) -> bool {

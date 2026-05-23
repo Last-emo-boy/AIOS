@@ -968,13 +968,14 @@ pub mod effect_envelope {
 pub mod policy_adapter {
     use std::fmt;
 
-    use crate::agent_core::model::{contains_secret_value, PlanStep};
+    use crate::agent_core::model::contains_secret_value;
     use crate::api::{escape_json, RiskClass};
     use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
     use crate::policy::{
         stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyDecision, PolicyDecisionKind,
         PolicyEvaluator, PolicyRequest,
     };
+    use crate::runtime_contracts::ExecutionStep;
     use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -1112,7 +1113,7 @@ pub mod policy_adapter {
             journal: &AuditJournal,
             run_id: &str,
             actor: &str,
-            step: &PlanStep,
+            step: &impl ExecutionStep,
             approval: Option<&ApprovalToken>,
         ) -> Result<StepPolicyOutcome, StepPolicyError> {
             self.evaluate_step_at(journal, run_id, actor, step, approval, 0)
@@ -1123,18 +1124,14 @@ pub mod policy_adapter {
             journal: &AuditJournal,
             run_id: &str,
             actor: &str,
-            step: &PlanStep,
+            step: &impl ExecutionStep,
             approval: Option<&ApprovalToken>,
             now: u64,
         ) -> Result<StepPolicyOutcome, StepPolicyError> {
             ensure_no_secret("run_id", run_id)?;
             ensure_no_secret("actor", actor)?;
             ensure_no_secret("step_id", step.step_id())?;
-            let planner_risk_hints = step
-                .risk_hints()
-                .iter()
-                .map(|hint| hint.risk())
-                .collect::<Vec<_>>();
+            let planner_risk_hints = step.planner_risk_hints();
 
             let routed = match self.router.route(step.call()) {
                 Ok(routed) => routed,
@@ -1210,7 +1207,7 @@ pub mod policy_adapter {
             journal: &AuditJournal,
             run_id: &str,
             actor: &str,
-            step: &PlanStep,
+            step: &impl ExecutionStep,
             rejection: ToolRejection,
             planner_risk_hints: Vec<RiskClass>,
         ) -> Result<StepPolicyOutcome, StepPolicyError> {
@@ -1275,7 +1272,7 @@ pub mod policy_adapter {
         )
     }
 
-    fn stable_call_hash(step: &PlanStep) -> String {
+    fn stable_call_hash(step: &impl ExecutionStep) -> String {
         let mut params = step.call().params.clone();
         params.sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
         stable_parameter_hash(&params)
@@ -1294,7 +1291,7 @@ pub mod policy_adapter {
     mod tests {
         use super::*;
         use crate::agent_core::model::{
-            ApprovalRequirement, RiskHint, RollbackRequirement, VerificationRule,
+            ApprovalRequirement, PlanStep, RiskHint, RollbackRequirement, VerificationRule,
         };
         use crate::api::SemanticToolCall;
         use crate::audit::extract_json_string_for_tests;

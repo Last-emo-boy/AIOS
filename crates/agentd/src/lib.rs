@@ -6,6 +6,7 @@ pub mod modules;
 pub mod policy;
 pub mod recovery;
 pub mod rollback;
+pub mod runtime_contracts;
 pub mod sandbox;
 pub mod safety;
 pub mod security_execution;
