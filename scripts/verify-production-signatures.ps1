@@ -4,6 +4,8 @@ param(
     [string]$ToolManifestPath = "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
     [string]$KeyringPath = ".workflow/artifacts/production-signing/key-custody.json",
     [string]$OutputPath = ".workflow/artifacts/production-signature-verification/result.json",
+    [string]$KeyringVerifierPath = "scripts/verify-production-keyring.ps1",
+    [string]$KeyringVerificationPath = ".workflow/artifacts/production-signing/keyring-verification.json",
     [string]$ReproducibilityPath = ".workflow/artifacts/release-reproducibility-fast/result.json",
     [string]$PromotionPath = ".workflow/artifacts/candidate-promotion/default-result.json",
     [string]$ProductionRunbookPath = ".workflow/artifacts/production-runbook-smoke/result.json",
@@ -238,6 +240,39 @@ function Test-ProductionSignature {
     Add-Check "signature.$Name.crypto_verified" $verified "Production signature must verify against canonical payload." "blocking" $productionSignature.signature.algorithm
 }
 
+function Test-KeyringVerification {
+    $verifierPath = Resolve-RepoPath $KeyringVerifierPath
+    $verifierPresent = Test-Path -LiteralPath $verifierPath -PathType Leaf
+    Add-Check "keyring_verifier.script_present" $verifierPresent "Production signature verification requires keyring verifier script." "blocking" $KeyringVerifierPath
+    if (-not $verifierPresent) {
+        return
+    }
+
+    try {
+        & $verifierPath `
+            -KeyringPath $KeyringPath `
+            -OutputPath $KeyringVerificationPath `
+            -ProductionKeyId $ProductionKeyId
+        Add-Check "keyring_verifier.invoked" $true "Production keyring verifier must run before signature verification." "blocking" $KeyringVerificationPath
+    } catch {
+        Add-Check "keyring_verifier.invoked" $false "Production keyring verifier must run without execution errors." "blocking" $_.Exception.Message
+        return
+    }
+
+    $resultPath = Resolve-RepoPath $KeyringVerificationPath
+    $resultPresent = Test-Path -LiteralPath $resultPath -PathType Leaf
+    Add-Check "keyring_verification.result_present" $resultPresent "Production keyring verifier must emit result artifact." "blocking" $KeyringVerificationPath
+    if (-not $resultPresent) {
+        return
+    }
+    $keyringVerification = Read-OptionalJson $resultPath
+    $blockerCount = @($keyringVerification.blockers).Count
+    Add-Check "keyring_verification.schema" ($keyringVerification.schema -eq "agentos.production-keyring-verification.v1") "Production keyring verification schema must be exact." "blocking" $keyringVerification.schema
+    Add-Check "keyring_verification.production_ready_false" ($keyringVerification.production_ready_claim -eq $false) "Production keyring verification must not claim Production ready." "blocking" $keyringVerification.production_ready_claim
+    Add-Check "keyring_verification.status" ($keyringVerification.status -eq "passed") "Production keyring verification must pass before signature verification can pass." "blocking" $keyringVerification.status
+    Add-Check "keyring_verification.no_blockers" ($blockerCount -eq 0) "Production keyring verification must have zero blockers." "blocking" $blockerCount
+}
+
 function New-PathArtifact {
     param([Parameter(Mandatory = $true)][string]$Path)
     $resolvedPath = Resolve-RepoPath $Path
@@ -269,6 +304,7 @@ Add-Check "source.commit.present" (Has-Value $script:sourceCommit) "Source commi
 Add-Check "policy.version.present" (Has-Value $script:policyVersion) "Policy version must be present." "blocking" $script:policyVersion
 Add-Check "tools.version.present" (Has-Value $script:toolManifestVersion) "Tool manifest version must be present." "blocking" $script:toolManifestVersion
 Add-Check "keyring.present" ($null -ne $keyring) "Public production keyring must be present." "blocking" $KeyringPath
+Test-KeyringVerification
 
 $provenanceArtifact = [ordered]@{
     path = $ProvenancePath
@@ -312,6 +348,7 @@ $result = [ordered]@{
         policy = $PolicyPath
         tool_manifest = $ToolManifestPath
         keyring = $KeyringPath
+        keyring_verification = $KeyringVerificationPath
         reproducibility = if ($RequireDecisionEvidence) { $ReproducibilityPath } else { $null }
         promotion = if ($RequireDecisionEvidence) { $PromotionPath } else { $null }
         production_runbook = if ($RequireDecisionEvidence) { $ProductionRunbookPath } else { $null }
