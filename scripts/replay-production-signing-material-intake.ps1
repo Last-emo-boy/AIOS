@@ -1,5 +1,9 @@
 param(
     [string]$ArtifactDir = ".workflow/artifacts/production-signing-material-intake",
+    [string]$SignatureBundlePath = ".workflow/artifacts/production-signing/signature-bundle.json",
+    [string]$CleanupOnlyInstallationPath = "",
+    [string]$CleanupOnlyOutputPath = "",
+    [string]$CleanupOnlyReason = "operator-requested-cleanup",
     [string]$QemuPath = "E:\qemu\qemu-system-x86_64.exe",
     [int]$QemuTimeoutSeconds = 45,
     [switch]$AllowSignatureOverwrite,
@@ -35,6 +39,14 @@ function Resolve-RepoPath {
         return [IO.Path]::GetFullPath($Path)
     }
     return [IO.Path]::GetFullPath((Join-Path $script:repoRoot $Path))
+}
+
+function Get-OptionalFileHash {
+    param([string]$Path)
+    if (-not $Path -or -not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        return $null
+    }
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
 function Add-Step {
@@ -99,6 +111,8 @@ function Remove-InstalledProductionSignatures {
         $action = [ordered]@{
             artifact = $entry.artifact
             path = $path
+            expected_sha256 = $entry.sha256
+            actual_sha256 = $null
             status = "skipped"
             reason = $null
         }
@@ -133,6 +147,19 @@ function Remove-InstalledProductionSignatures {
             $actions += $action
             continue
         }
+        if ([string]::IsNullOrWhiteSpace($entry.sha256)) {
+            $action.reason = "missing-installed-hash"
+            $actions += $action
+            continue
+        }
+
+        $actualHash = Get-OptionalFileHash $resolved
+        $action.actual_sha256 = $actualHash
+        if ($actualHash -ne $entry.sha256) {
+            $action.reason = "hash-mismatch"
+            $actions += $action
+            continue
+        }
 
         Remove-Item -LiteralPath $resolved -Force
         $action.status = "removed"
@@ -148,6 +175,40 @@ $script:repoRoot = (Resolve-Path -LiteralPath ".").Path
 $script:steps = @()
 $script:blockers = @()
 $script:cleanupActions = @()
+
+if (-not [string]::IsNullOrWhiteSpace($CleanupOnlyInstallationPath)) {
+    $cleanupOutputPath = if ([string]::IsNullOrWhiteSpace($CleanupOnlyOutputPath)) {
+        Join-Path $ArtifactDir "cleanup-only-result.json"
+    } else {
+        $CleanupOnlyOutputPath
+    }
+    $script:cleanupActions = Remove-InstalledProductionSignatures `
+        -InstallationPath $CleanupOnlyInstallationPath `
+        -Reason $CleanupOnlyReason
+    $result = [ordered]@{
+        schema = "agentos.production-signing-material-intake.cleanup-only.v1"
+        checked_at = (Get-Date).ToString("o")
+        status = "cleanup-completed"
+        production_ready_claim = $false
+        installation = $CleanupOnlyInstallationPath
+        cleanup = [ordered]@{
+            hash_bound = $true
+            removed_signatures = @($script:cleanupActions | Where-Object { $_.status -eq "removed" }).Count
+            hash_mismatches = @($script:cleanupActions | Where-Object { $_.reason -eq "hash-mismatch" }).Count
+            missing_installed_hashes = @($script:cleanupActions | Where-Object { $_.reason -eq "missing-installed-hash" }).Count
+            already_absent = @($script:cleanupActions | Where-Object { $_.reason -eq "already-absent" }).Count
+            actions = @($script:cleanupActions)
+        }
+        summary = [ordered]@{
+            actions = @($script:cleanupActions).Count
+            removed_signatures = @($script:cleanupActions | Where-Object { $_.status -eq "removed" }).Count
+            skipped_signatures = @($script:cleanupActions | Where-Object { $_.status -ne "removed" }).Count
+        }
+    }
+    Write-Json -Value $result -Path $cleanupOutputPath
+    Write-Host "Production signing material cleanup-only $($result.status): $cleanupOutputPath"
+    return
+}
 
 $signingRequestPath = Join-Path $ArtifactDir "signing-request-decision-evidence.json"
 $keyringVerificationPath = Join-Path $ArtifactDir "keyring-verification.json"
@@ -197,19 +258,20 @@ Add-Step `
 
 Add-Step `
     -Id "signature_bundle_verification" `
-    -Command ".\scripts\verify-production-signature-bundle.ps1 -SigningRequestPath $signingRequestPath -OutputPath $bundleVerificationPath" `
+    -Command ".\scripts\verify-production-signature-bundle.ps1 -SigningRequestPath $signingRequestPath -SignatureBundlePath $SignatureBundlePath -OutputPath $bundleVerificationPath" `
     -OutputPath $bundleVerificationPath `
     -Blocking `
     -Action {
         & ".\scripts\verify-production-signature-bundle.ps1" `
             -SigningRequestPath $signingRequestPath `
+            -SignatureBundlePath $SignatureBundlePath `
             -OutputPath $bundleVerificationPath `
             -FailOnBlocked
     }
 
 $installArgs = @{
     SigningRequestPath = $signingRequestPath
-    SignatureBundlePath = ".workflow/artifacts/production-signing/signature-bundle.json"
+    SignatureBundlePath = $SignatureBundlePath
     BundleVerificationPath = $bundleVerificationPath
     OutputPath = $bundleInstallationPath
     FailOnBlocked = $true
@@ -303,8 +365,11 @@ $result = [ordered]@{
     artifact_dir = $ArtifactDir
     steps = @($script:steps)
     cleanup = [ordered]@{
+        hash_bound = $true
         triggered = @($script:cleanupActions).Count -gt 0
         removed_signatures = @($script:cleanupActions | Where-Object { $_.status -eq "removed" }).Count
+        hash_mismatches = @($script:cleanupActions | Where-Object { $_.reason -eq "hash-mismatch" }).Count
+        missing_installed_hashes = @($script:cleanupActions | Where-Object { $_.reason -eq "missing-installed-hash" }).Count
         actions = @($script:cleanupActions)
     }
     blockers = @($script:blockers)

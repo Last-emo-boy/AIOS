@@ -29,12 +29,31 @@ function Read-OptionalJson {
     return Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
 }
 
+function Has-Value {
+    param($Value)
+    if ($null -eq $Value) {
+        return $false
+    }
+    if ($Value -is [string]) {
+        return -not [string]::IsNullOrWhiteSpace($Value)
+    }
+    return $true
+}
+
 function Resolve-RepoPath {
     param([Parameter(Mandatory = $true)][string]$Path)
     if ([IO.Path]::IsPathRooted($Path)) {
         return [IO.Path]::GetFullPath($Path)
     }
     return [IO.Path]::GetFullPath((Join-Path $script:repoRoot $Path))
+}
+
+function Get-OptionalFileHash {
+    param([string]$Path)
+    if (-not $Path -or -not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        return $null
+    }
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
 function Add-Check {
@@ -111,9 +130,13 @@ if ($script:blockers.Count -eq 0) {
         }
 
         Write-Json -Value $signature -Path $targetPath
+        $resolvedTargetPath = Resolve-RepoPath $targetPath
+        $installedHash = Get-OptionalFileHash $resolvedTargetPath
+        Add-Check "install.$name.installed_hash" (Has-Value $installedHash) "Installed production signature hash must be recorded for cleanup binding." "blocking" $installedHash
         $installed += [ordered]@{
             artifact = $name
             path = $targetPath
+            sha256 = $installedHash
         }
     }
 }
