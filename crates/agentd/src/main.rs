@@ -8,12 +8,13 @@ use agentd::{
     api::{RiskClass, SemanticToolCall},
     audit::{AuditEvent, AuditEventType, AuditJournal},
     lifecycle::{Agentd, LifecycleConfig},
-    policy::{ApprovalToken, PolicyEvaluator, PolicyRequest, stable_parameter_hash},
+    operator_projection::OperatorProjection,
+    policy::{stable_parameter_hash, ApprovalToken, PolicyEvaluator, PolicyRequest},
     recovery::RecoveryReconciler,
     rollback::{content_hash, WriteDiffExecutor, WriteRequest},
     sandbox::{SandboxCompiler, SandboxExecutor, SandboxOperation},
     service_recovery::{RestartApproval, ServiceFixture, ServiceRecoveryWorkflow},
-    tui::{ApprovalDecision, build_demo_session},
+    tui::{build_demo_session, render_operator_projection, ApprovalDecision},
 };
 
 fn main() {
@@ -128,6 +129,22 @@ fn main() {
                 .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
             let run_id = args.get(3).map(String::as_str);
             run_audit_project(path, run_id)
+        }
+        Some("--operator-project") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
+            let run_id = args.get(3).map(String::as_str);
+            run_operator_project(&agentd, path, run_id, false)
+        }
+        Some("--operator-project-tui") => {
+            let path = args
+                .get(2)
+                .map(String::as_str)
+                .unwrap_or(".workflow/artifacts/service-recovery/demo.jsonl");
+            let run_id = args.get(3).map(String::as_str);
+            run_operator_project(&agentd, path, run_id, true)
         }
         Some("--tui-demo") => {
             let intent = args
@@ -352,7 +369,10 @@ fn run_policy_demo(agentd: &Agentd, path: &str) -> Result<(), String> {
 
 fn run_sandbox_demo(agentd: &Agentd, path: &str) -> Result<(), String> {
     let routed = agentd
-        .route_tool(&SemanticToolCall::new("fs.read", vec![("path", "/var/log/agentd.log")]))
+        .route_tool(&SemanticToolCall::new(
+            "fs.read",
+            vec![("path", "/var/log/agentd.log")],
+        ))
         .map_err(|error| error.reason)?;
     let request = PolicyRequest::from_routed("operator", &routed);
     let evaluator = PolicyEvaluator;
@@ -483,7 +503,8 @@ fn run_write_diff_demo(agentd: &Agentd, root: PathBuf) -> Result<(), String> {
 
 fn run_service_recovery_demo(path: &str, approval: RestartApproval) -> Result<(), String> {
     let journal = AuditJournal::new(path);
-    let report = ServiceRecoveryWorkflow.run(&journal, ServiceFixture::degraded_nginx(), approval)?;
+    let report =
+        ServiceRecoveryWorkflow.run(&journal, ServiceFixture::degraded_nginx(), approval)?;
     println!("{}", report.to_json());
     Ok(())
 }
@@ -521,6 +542,23 @@ fn run_audit_project(path: &str, run_id: Option<&str>) -> Result<(), String> {
             .ok_or_else(|| format!("audit journal has no run: {run_id}"))?,
     };
     println!("{}", projection.to_json());
+    Ok(())
+}
+
+fn run_operator_project(
+    agentd: &Agentd,
+    path: &str,
+    run_id: Option<&str>,
+    tui_text: bool,
+) -> Result<(), String> {
+    let journal = AuditJournal::new(path);
+    let projection = OperatorProjection::collect(agentd, Some(&journal), run_id)
+        .map_err(|error| error.to_string())?;
+    if tui_text {
+        print!("{}", render_operator_projection(&projection));
+    } else {
+        println!("{}", projection.to_json());
+    }
     Ok(())
 }
 
