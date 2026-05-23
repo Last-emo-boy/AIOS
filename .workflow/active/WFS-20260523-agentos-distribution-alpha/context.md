@@ -53,15 +53,23 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
   metadata matches, the source is operator-origin, and rollback/checkpoint
   metadata is ready. The safety gate now includes
   `runtime-package-install-host-promotion-bypass`.
+- `TASK-DALPHA-011` is complete: `agent_core::untrusted_content` now defines
+  the Alpha untrusted content runtime workflow contract with fetch, sanitize,
+  summarize, source-to-sink policy check, and audit projection steps. External
+  content remains `external-untrusted`, sanitized summaries are replanning
+  context only, direct package/secret/privileged/exfiltration sinks are denied,
+  and runtime audit projection shows denied `PolicyEvaluated` steps without
+  `EffectPrepared`. The safety gate now includes
+  `runtime-untrusted-content-direct-sink-bypass`.
 
 ## Next Task
 
-Execute `TASK-DALPHA-011`: define the untrusted content runtime workflow on top
-of the existing source-to-sink policy. It must label external content as
-untrusted, sanitize/summarize it before replanning, deny direct high-risk sinks,
-and keep denied actions visible in audit projection.
+Execute `TASK-DALPHA-012`: complete the Distribution Alpha final audit and
+promotion decision. It must verify all Alpha evidence, run inherited runtime and
+release gates, inspect generated artifact hygiene, and record whether the Alpha
+image path is promotable or explicitly blocked.
 
 Read before execution:
 
 - `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`
-- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-011.json`
+- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-012.json`

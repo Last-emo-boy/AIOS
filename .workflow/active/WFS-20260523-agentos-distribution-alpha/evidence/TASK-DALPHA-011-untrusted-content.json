@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-DALPHA-011",
+  "status": "completed",
+  "completed_at": "2026-05-23T10:25:00+08:00",
+  "title": "Add untrusted content runtime workflow",
+  "implementation_files": [
+    "crates/agentd/src/agent_core.rs",
+    "crates/agentd/src/safety.rs"
+  ],
+  "summary": {
+    "workflow_contract": "agent_core::untrusted_content defines an Alpha workflow contract with fetch, sanitize, summarize, source-to-sink policy check, and runtime audit projection steps.",
+    "source_labeling": "UntrustedContentRequest always creates external ContentSource labels for fetched content and sanitized-summary ContentSource labels for replanning context.",
+    "sanitization": "ObservationProcessor::stub sanitizes external content, redacts secret-like material, records policy flags, and emits a replanning hint with direct_tool_call_allowed=false.",
+    "source_to_sink": "UntrustedContentWorkflow::process_fixture routes attempted sinks through SourceToSinkPolicy::evaluate_and_audit before any effect path.",
+    "audit_projection": "Denied source-to-sink attempts are recorded as PolicyEvaluated and projected through RuntimeAuditProjection with no EffectPrepared."
+  },
+  "acceptance_evidence": {
+    "external_content_untrusted_by_default": "untrusted_content_plan_encodes_fetch_sanitize_summary_policy_and_audit asserts the plan intent trust boundary is ExternalUntrusted.",
+    "dangerous_sinks_denied": "untrusted_content_cannot_drive_package_secret_privileged_or_exfiltration_sinks covers pkg.host.install, secret.read, net.exfiltrate, and kernel.module.load from external content.",
+    "summary_context_only": "external_content_fixture_is_sanitized_and_replanning_only asserts sanitized summary is produced and direct_tool_call_allowed=false.",
+    "audit_projection_visible": "denied_untrusted_content_action_is_visible_in_runtime_audit_projection asserts the denied policy step appears in RuntimeAuditProjection and no step prepared an effect.",
+    "safety_gate": "REQUIRED_SAFETY_SCENARIOS now includes runtime-untrusted-content-direct-sink-bypass and safety::tests::untrusted_content_workflow_denies_direct_high_risk_sink_without_effect_prepare covers the release scenario."
+  },
+  "verification": [
+    {
+      "command": "cargo test -p agentd agent_core::untrusted_content",
+      "result": "passed",
+      "tests": "4 passed"
+    },
+    {
+      "command": "cargo test -p agentd security_execution::source_to_sink",
+      "result": "passed",
+      "tests": "5 passed"
+    },
+    {
+      "command": "cargo test -p agentd safety::prompt_injection",
+      "result": "passed",
+      "tests": "3 passed"
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "result": "passed",
+      "tests": "18 passed"
+    }
+  ],
+  "non_goals": [
+    "No external network fetch adapter was added.",
+    "No direct package, shell, secret, privileged, or exfiltration execution path was added.",
+    "No generated malicious-content artifacts were committed."
+  ],
+  "non_committed_outputs": [
+    ".workflow/artifacts/"
+  ],
+  "handoff": {
+    "next_task": "TASK-DALPHA-012",
+    "blocked_until": []
+  }
+}

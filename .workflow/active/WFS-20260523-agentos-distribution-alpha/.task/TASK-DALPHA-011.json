@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-011",
   "title": "Add untrusted content runtime workflow",
-  "status": "planned",
+  "status": "completed",
   "wave": 3,
   "priority": "P1",
   "type": "workflow",
@@ -66,5 +66,21 @@
       "Source-to-sink denial evidence exists.",
       "Audit projection shows denied action context."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T10:25:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json",
+    "implementation_files": [
+      "crates/agentd/src/agent_core.rs",
+      "crates/agentd/src/safety.rs"
+    ],
+    "verification": {
+      "untrusted_content": "cargo test -p agentd agent_core::untrusted_content passed, 4 tests",
+      "source_to_sink": "cargo test -p agentd security_execution::source_to_sink passed, 5 tests",
+      "prompt_injection": "cargo test -p agentd safety::prompt_injection passed, 3 tests",
+      "safety": "cargo test -p agentd safety:: passed, 18 tests"
+    },
+    "contract_status": "Alpha workflow contract/stub; content.* semantic steps are not yet network fetch adapters.",
+    "next_task": "TASK-DALPHA-012"
   }
 }
