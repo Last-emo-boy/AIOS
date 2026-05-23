@@ -103,6 +103,7 @@ $resolvedRevocationLogPath = Resolve-RepoPath $RevocationLogPath
 $keyring = Read-OptionalJson $resolvedKeyringPath
 $rotationLog = Read-OptionalJson $resolvedRotationLogPath
 $revocationLog = Read-OptionalJson $resolvedRevocationLogPath
+$productionKeyEntry = $null
 
 Add-Check "production_ready_claim.false" $true "Production keyring verifier does not claim Production ready." "info" $false
 Add-Check "keyring.present" ($null -ne $keyring) "Public production key custody metadata must exist." "blocking" $KeyringPath
@@ -117,6 +118,7 @@ if ($null -ne $keyring) {
 
     if ($entries.Count -eq 1) {
         $entry = $entries[0]
+        $productionKeyEntry = $entry
         Add-Check "keyring.production_key.status" ($entry.status -eq "active") "Production key must be active for new release decisions." "blocking" $entry.status
         Add-Check "keyring.production_key.revocation_status" ($entry.revocation_status -eq "not-revoked") "Production key must not be revoked." "blocking" $entry.revocation_status
         Add-Check "keyring.production_key.public_fingerprint" (Has-Value $entry.public_fingerprint) "Production key must include public fingerprint." "blocking" $entry.public_fingerprint
@@ -136,12 +138,36 @@ if ($null -ne $rotationLog) {
     Test-NoPrivateMaterial "rotation_log" $rotationLog
     Add-Check "rotation_log.schema" ($rotationLog.schema -eq "agentos.production-key-rotation-log.v1") "Rotation log schema must be exact." "blocking" $rotationLog.schema
     Add-Check "rotation_log.events.present" (@($rotationLog.events).Count -gt 0) "Rotation log must contain at least one event." "blocking" @($rotationLog.events).Count
+    if ($null -ne $productionKeyEntry) {
+        $matchingRotationEvents = @($rotationLog.events | Where-Object {
+            $_.key_id -eq $ProductionKeyId -and $_.rotation_epoch -eq $productionKeyEntry.rotation_epoch
+        })
+        Add-Check "rotation_log.production_key.event_present" ($matchingRotationEvents.Count -gt 0) "Rotation log must bind the production key id to the active rotation epoch." "blocking" -Evidence ([ordered]@{
+            key_id = $ProductionKeyId
+            rotation_epoch = $productionKeyEntry.rotation_epoch
+            matching_events = $matchingRotationEvents.Count
+        })
+        $invalidRotationEvents = @($rotationLog.events | Where-Object {
+            $_.key_id -eq $ProductionKeyId -and $_.rotation_epoch -ne $productionKeyEntry.rotation_epoch
+        })
+        Add-Check "rotation_log.production_key.no_conflicting_epoch" ($invalidRotationEvents.Count -eq 0) "Rotation log must not contain conflicting epochs for the production key used by this release decision." "blocking" @($invalidRotationEvents | ForEach-Object { $_.rotation_epoch })
+    }
 }
 
 Add-Check "revocation_log.present" ($null -ne $revocationLog) "Production key revocation log must exist." "blocking" $RevocationLogPath
 if ($null -ne $revocationLog) {
     Test-NoPrivateMaterial "revocation_log" $revocationLog
     Add-Check "revocation_log.schema" ($revocationLog.schema -eq "agentos.production-key-revocation-log.v1") "Revocation log schema must be exact." "blocking" $revocationLog.schema
+    if ($null -ne $productionKeyEntry) {
+        $revokedEvents = @($revocationLog.events | Where-Object {
+            $_.key_id -eq $ProductionKeyId -and (
+                $_.revocation_status -eq "revoked" -or
+                $_.status -eq "revoked" -or
+                $_.event -match "(?i)revok"
+            )
+        })
+        Add-Check "revocation_log.production_key.not_revoked" ($revokedEvents.Count -eq 0) "Revocation log must not revoke the production key used by this release decision." "blocking" @($revokedEvents | ForEach-Object { $_.event })
+    }
 }
 
 $result = [ordered]@{
