@@ -1,0 +1,114 @@
+{
+  "task": "TASK-DALPHA-008",
+  "status": "completed",
+  "completed_at": "2026-05-23T09:35:00+08:00",
+  "summary": "Upgraded the release pipeline into a Distribution Alpha promotion gate. The generated provenance now uses agentos.distribution-alpha.provenance.v1, records runtime manifest hashes, Alpha rootfs and initramfs image inputs, dependency inventory, artifact hashes, Alpha service recovery smoke, full QEMU runtime smoke, gate commands, and promotion blockers.",
+  "deliverables": {
+    "release_gate": "scripts/build-release.ps1",
+    "qemu_smoke_fix": "scripts/boot-smoke-test.ps1",
+    "documentation": "docs/release-artifacts.md",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json"
+  },
+  "source_inputs": [
+    "docs/release-artifacts.md",
+    "scripts/build-release.ps1",
+    "scripts/boot-smoke-test.ps1",
+    "scripts/alpha-service-recovery-smoke.ps1",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
+  ],
+  "generated_outputs": {
+    "ignored_outputs": [
+      ".workflow/artifacts/release/provenance.json",
+      ".workflow/artifacts/release/dependency-inventory.json",
+      ".workflow/artifacts/boot/boot-smoke-result.json",
+      ".workflow/artifacts/boot/boot-smoke.log",
+      ".workflow/artifacts/alpha-service-recovery/result.json",
+      "image/out/agentos-initramfs.cpio.gz",
+      "image/out/agentos-initramfs.manifest.json",
+      "image/out/agentos-alpha-rootfs/",
+      "image/out/agentos-alpha-rootfs.manifest.json",
+      "target/release/agentd.exe"
+    ],
+    "tracked_outputs": [
+      "scripts/build-release.ps1",
+      "scripts/boot-smoke-test.ps1",
+      "docs/release-artifacts.md",
+      ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json"
+    ]
+  },
+  "provenance": {
+    "schema": "agentos.distribution-alpha.provenance.v1",
+    "path": ".workflow/artifacts/release/provenance.json",
+    "source_commit": "e62582430e9e8fb7141ab7f0502453deda82eba8",
+    "promotion_status": "promotable",
+    "promotion_blockers": [],
+    "gate_count": 8,
+    "rootfs_runtime_manifest_sha256": "4f16fd0d240b79a2a7f14bb55245aacfba1707f51256e472f3bdc2d13c0a8c1b",
+    "initramfs_sha256": "c61d52ae284a728b20c730894d0ca1d43313559886de5ab4acc49dd9e428deb6",
+    "qemu_runtime_smoke_sha256": "82c5d3165d321e4ce20f4563a8ebb735713f38e835490ac38e90dc17db01cc9a",
+    "alpha_service_recovery_smoke_sha256": "3acc53d3cd4d89c13e7b11db706a76e86ba27f42a4c1042dd99ed02e420b2235",
+    "dependency_inventory_sha256": "7fa8192a0cd3e9817523b8cef4d5937f04919bf9a8d9ba79dba56d05cc5a6ebf"
+  },
+  "verification": {
+    "alpha_release_gate": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -QemuTimeoutSeconds 30",
+      "status": "passed",
+      "result": ".workflow/artifacts/release/provenance.json"
+    },
+    "gates": [
+      {
+        "command": "cargo test -p agentd",
+        "status": "passed",
+        "result": "163 passed; 0 failed"
+      },
+      {
+        "command": "cargo test -p agentd safety::",
+        "status": "passed",
+        "result": "16 passed; 0 failed"
+      },
+      {
+        "command": "cargo test -p agentd agent_core::",
+        "status": "passed",
+        "result": "68 passed; 0 failed"
+      },
+      {
+        "command": "cargo test -p agentd agent_core::adversarial",
+        "status": "passed",
+        "result": "5 passed; 0 failed"
+      },
+      {
+        "command": "cargo build -p agentd --release",
+        "status": "passed"
+      },
+      {
+        "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1",
+        "status": "passed"
+      },
+      {
+        "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests",
+        "status": "passed",
+        "result": "approved CommitSealed=true; denied EffectPrepared events=0; no external LLM required"
+      },
+      {
+        "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+        "status": "passed",
+        "result": "observed handoff marker, runtime marker, and rootfs runtime manifest hash marker"
+      }
+    ]
+  },
+  "acceptance_evidence": {
+    "source_revision_toolchain_dependencies": "Generated provenance records git commit, branch, working tree status, cargo/rustc/PowerShell versions, dependency inventory path, and dependency inventory hash.",
+    "runtime_manifest_and_image_inputs": "Generated provenance records Alpha rootfs manifest, rootfs runtime manifest hash, initramfs manifest, image inputs, and runtime artifact IDs.",
+    "promotion_gate_coverage": "Generated provenance records cargo, safety, AgentCore, adversarial, release build, initramfs, Alpha service recovery smoke, and full QEMU runtime smoke gates.",
+    "qemu_runtime_smoke_required": "scripts/build-release.ps1 now runs full scripts/boot-smoke-test.ps1 unless -SkipBootSmoke is explicitly set, and records qemu-runtime-smoke-skipped as a blocker when skipped.",
+    "secret_hygiene": "build-release.ps1 scans generated dependency inventory and provenance for raw secret-like patterns and passed.",
+    "generated_artifact_hygiene": "Release metadata, boot logs, cache, target build output, initramfs, and staged rootfs outputs remain under ignored paths and were not staged."
+  },
+  "blocking_alpha_risks_remaining": [
+    "FullRootfs validation still requires installed agentd.boot, agentd.runtime, release.provenance, and release.rootfs_manifest.",
+    "Firecracker executor profile remains planned behind SecurityExecutionEngine.",
+    "Package install isolation and untrusted content runtime workstreams remain planned."
+  ],
+  "next_task": "TASK-DALPHA-009"
+}

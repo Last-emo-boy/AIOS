@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-008",
   "title": "Add Distribution Alpha release and provenance promotion gate",
-  "status": "planned",
+  "status": "completed",
   "wave": 2,
   "priority": "P0",
   "type": "release",
@@ -17,7 +17,9 @@
     "Reject promotion if runtime manifest, safety gates, or QEMU runtime smoke are missing."
   ],
   "deliverables": [
-    "Release/provenance gate update",
+    "scripts/build-release.ps1",
+    "scripts/boot-smoke-test.ps1",
+    "docs/release-artifacts.md",
     ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json"
   ],
   "acceptance_criteria": [
@@ -66,5 +68,29 @@
       "Runtime manifest and QEMU smoke are promotion inputs.",
       "Generated artifacts remain ignored."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T09:35:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json",
+    "release_gate": "scripts/build-release.ps1",
+    "qemu_smoke_gate": "scripts/boot-smoke-test.ps1",
+    "documentation": "docs/release-artifacts.md",
+    "generated_provenance": ".workflow/artifacts/release/provenance.json",
+    "generated_dependency_inventory": ".workflow/artifacts/release/dependency-inventory.json",
+    "verification": {
+      "alpha_release_gate": "passed",
+      "cargo_test_agentd": "passed",
+      "safety_gate": "passed",
+      "agent_core_gate": "passed",
+      "adversarial_gate": "passed",
+      "release_build": "passed",
+      "alpha_service_recovery_smoke": "passed",
+      "qemu_runtime_smoke": "passed"
+    },
+    "promotion": {
+      "status": "promotable",
+      "blockers": []
+    },
+    "next_task": "TASK-DALPHA-009"
   }
 }

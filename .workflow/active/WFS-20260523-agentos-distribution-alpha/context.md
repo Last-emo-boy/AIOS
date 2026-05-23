@@ -33,9 +33,13 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
   runtime markers into early `/sbin/agentd`, and `scripts/boot-smoke-test.ps1`
   requires QEMU serial output to include both `AGENTD_HANDOFF_OK` and
   `AGENTOS_RUNTIME_ARTIFACTS_OK` plus the rootfs runtime manifest hash marker.
+- `TASK-DALPHA-008` is complete: `scripts/build-release.ps1` now emits
+  `agentos.distribution-alpha.provenance.v1`, records Alpha runtime/image
+  inputs, service recovery smoke, full QEMU runtime smoke, dependency inventory,
+  artifact hashes, and promotion status with blockers.
 
 ## Next Task
 
-Execute `TASK-DALPHA-008`: add the Distribution Alpha release/provenance
-promotion gate. It must record runtime manifest hashes, image inputs, gate
-commands, generated artifact hashes, and remaining Alpha blockers.
+Execute `TASK-DALPHA-009`: represent the Firecracker executor profile behind
+SecurityExecutionEngine. It must not introduce a parallel side-effect path or
+weaken policy, capability, EffectEnvelope, audit, rollback, or recovery.

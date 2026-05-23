@@ -69,6 +69,44 @@ function Test-AllMarkersObserved {
     return $true
 }
 
+function Read-SharedText {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        return ""
+    }
+    $stream = [IO.File]::Open($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+    try {
+        $reader = [IO.StreamReader]::new($stream)
+        try {
+            return $reader.ReadToEnd()
+        } finally {
+            $reader.Dispose()
+        }
+    } finally {
+        $stream.Dispose()
+    }
+}
+
+function Update-ObservedMarkers {
+    param(
+        [Parameter(Mandatory = $true)][string]$Content,
+        [Parameter(Mandatory = $true)]$ObservedMarkers
+    )
+    foreach ($marker in @($ObservedMarkers.Keys)) {
+        if ($Content -match [regex]::Escape($marker)) {
+            $ObservedMarkers[$marker] = $true
+        }
+    }
+}
+
+function Format-ProcessArgument {
+    param([Parameter(Mandatory = $true)][string]$Value)
+    if ($Value -notmatch '[\s"]') {
+        return $Value
+    }
+    return '"' + ($Value -replace '"', '\"') + '"'
+}
+
 $repoRoot = (Resolve-Path -LiteralPath ".").Path
 $artifactRoot = Join-Path $repoRoot $ArtifactDir
 New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
@@ -178,7 +216,10 @@ if ($DependencyCheckOnly) {
 }
 
 $bootLog = Join-Path $artifactRoot "boot-smoke.log"
+$bootStdoutLog = Join-Path $artifactRoot "boot-smoke.stdout.log"
+$bootStderrLog = Join-Path $artifactRoot "boot-smoke.stderr.log"
 $resultPath = Join-Path $artifactRoot "boot-smoke-result.json"
+Remove-Item -LiteralPath $bootLog, $bootStdoutLog, $bootStderrLog -ErrorAction SilentlyContinue
 $bootArgs = "console=ttyS0 rdinit=/sbin/agentd panic=-1"
 $qemuArgs = @(
     "-M", "microvm",
@@ -191,18 +232,14 @@ $qemuArgs = @(
     "-append", $bootArgs
 )
 
-$outputBuilder = New-Object System.Text.StringBuilder
-$process = New-Object System.Diagnostics.Process
-$process.StartInfo.FileName = $resolvedQemu
-foreach ($arg in $qemuArgs) {
-    $process.StartInfo.ArgumentList.Add($arg)
-}
-$process.StartInfo.RedirectStandardOutput = $true
-$process.StartInfo.RedirectStandardError = $true
-$process.StartInfo.UseShellExecute = $false
-$process.StartInfo.CreateNoWindow = $true
-
-$null = $process.Start()
+$formattedQemuArgs = @($qemuArgs | ForEach-Object { Format-ProcessArgument $_ })
+$process = Start-Process `
+    -FilePath $resolvedQemu `
+    -ArgumentList $formattedQemuArgs `
+    -RedirectStandardOutput $bootStdoutLog `
+    -RedirectStandardError $bootStderrLog `
+    -WindowStyle Hidden `
+    -PassThru
 $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
 $observedMarkers = [ordered]@{}
 foreach ($marker in $requiredMarkers) {
@@ -210,14 +247,8 @@ foreach ($marker in $requiredMarkers) {
 }
 
 while (-not $process.HasExited -and [DateTime]::UtcNow -lt $deadline) {
-    while ($process.StandardOutput.Peek() -ge 0) {
-        $line = $process.StandardOutput.ReadLine()
-        Add-BootLine -OutputBuilder $outputBuilder -Line $line -ObservedMarkers $observedMarkers
-    }
-    while ($process.StandardError.Peek() -ge 0) {
-        $line = $process.StandardError.ReadLine()
-        Add-BootLine -OutputBuilder $outputBuilder -Line $line -ObservedMarkers $observedMarkers
-    }
+    $currentOutput = (Read-SharedText $bootStdoutLog) + "`n" + (Read-SharedText $bootStderrLog)
+    Update-ObservedMarkers -Content $currentOutput -ObservedMarkers $observedMarkers
     if (Test-AllMarkersObserved -ObservedMarkers $observedMarkers) { break }
     Start-Sleep -Milliseconds 100
 }
@@ -228,20 +259,11 @@ if (-not $process.HasExited) {
 } else {
     $process.WaitForExit()
 }
-
-foreach ($line in ($process.StandardOutput.ReadToEnd() -split "\r?\n")) {
-    if (-not [string]::IsNullOrWhiteSpace($line)) {
-        Add-BootLine -OutputBuilder $outputBuilder -Line $line -ObservedMarkers $observedMarkers
-    }
-}
-foreach ($line in ($process.StandardError.ReadToEnd() -split "\r?\n")) {
-    if (-not [string]::IsNullOrWhiteSpace($line)) {
-        Add-BootLine -OutputBuilder $outputBuilder -Line $line -ObservedMarkers $observedMarkers
-    }
-}
+$finalOutput = (Read-SharedText $bootStdoutLog) + "`n" + (Read-SharedText $bootStderrLog)
+Update-ObservedMarkers -Content $finalOutput -ObservedMarkers $observedMarkers
 
 $observed = Test-AllMarkersObserved -ObservedMarkers $observedMarkers
-$outputBuilder.ToString() | Set-Content -LiteralPath $bootLog -Encoding UTF8
+$finalOutput | Set-Content -LiteralPath $bootLog -Encoding UTF8
 $result = [ordered]@{
     status = if ($observed) { "completed" } else { "failed" }
     observed_all_markers = $observed
