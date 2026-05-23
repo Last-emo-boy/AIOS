@@ -1,7 +1,7 @@
 {
   "id": "TASK-DALPHA-012",
   "title": "Complete Distribution Alpha final audit and promotion decision",
-  "status": "planned",
+  "status": "completed",
   "wave": 4,
   "priority": "P0",
   "type": "audit",
@@ -81,5 +81,24 @@
       "All gates pass or blocking risks are explicit.",
       "Promotion decision is recorded."
     ]
+  },
+  "completed_evidence": {
+    "completed_at": "2026-05-23T10:35:00+08:00",
+    "evidence_file": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json",
+    "audited_commit": "56278f05d4ca078efe18a3be7aa42d8789a5490f",
+    "clean_audit_worktree": "E:\\Playground\\AIOS-clean-audit-dalpha012",
+    "verification": {
+      "cargo_test_agentd": "cargo test -p agentd passed, 178 tests",
+      "safety": "cargo test -p agentd safety:: passed, 18 tests",
+      "agent_core": "cargo test -p agentd agent_core:: passed, 77 tests",
+      "adversarial": "cargo test -p agentd agent_core::adversarial passed, 5 tests",
+      "release": "scripts/build-release.ps1 passed in clean worktree",
+      "qemu": "scripts/boot-smoke-test.ps1 passed with E:\\qemu\\qemu-system-x86_64.exe"
+    },
+    "promotion": {
+      "status": "promotable",
+      "blockers": []
+    },
+    "next_task": "post-alpha planning"
   }
 }

@@ -61,15 +61,24 @@ Foundation into a bootable VM image path. A minimal initramfs that only prints
   and runtime audit projection shows denied `PolicyEvaluated` steps without
   `EffectPrepared`. The safety gate now includes
   `runtime-untrusted-content-direct-sink-bypass`.
+- `TASK-DALPHA-012` is complete: the final audit re-ran runtime, safety,
+  AgentCore, adversarial, release, and QEMU gates from a clean detached
+  worktree at commit `56278f05d4ca078efe18a3be7aa42d8789a5490f`. All gates
+  passed, QEMU observed `AGENTD_HANDOFF_OK`, `AGENTOS_RUNTIME_ARTIFACTS_OK`,
+  and the rootfs runtime manifest hash marker, and Alpha promotion is recorded
+  as `promotable` with no blockers.
 
-## Next Task
+## Workflow Result
 
-Execute `TASK-DALPHA-012`: complete the Distribution Alpha final audit and
-promotion decision. It must verify all Alpha evidence, run inherited runtime and
-release gates, inspect generated artifact hygiene, and record whether the Alpha
-image path is promotable or explicitly blocked.
+Distribution Alpha is complete and promotable as an Alpha image path. The main
+worktree still has unrelated WIP in several Rust files; those changes were not
+included in the final audit commit and should be resolved before any release tag
+or public artifact handoff.
 
-Read before execution:
+Recommended post-Alpha planning focus:
 
-- `.workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md`
-- `.workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-012.json`
+- Real package manager adapter behind the package install workflow contract.
+- Real untrusted content fetch adapter behind the untrusted content workflow
+  contract.
+- Firecracker execution integration beyond the current profile/fail-closed
+  contract.

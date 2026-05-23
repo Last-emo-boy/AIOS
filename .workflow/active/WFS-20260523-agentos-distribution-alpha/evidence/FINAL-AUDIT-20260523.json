@@ -1,0 +1,145 @@
+{
+  "audit_id": "FINAL-AUDIT-20260523",
+  "workflow_id": "WFS-20260523-agentos-distribution-alpha",
+  "status": "completed",
+  "completed_at": "2026-05-23T10:35:00+08:00",
+  "audited_commit": "56278f05d4ca078efe18a3be7aa42d8789a5490f",
+  "clean_audit_worktree": {
+    "path": "E:\\Playground\\AIOS-clean-audit-dalpha012",
+    "created_from": "56278f05d4ca078efe18a3be7aa42d8789a5490f",
+    "removed_after_audit": true,
+    "git_status_after_gates": "clean"
+  },
+  "task_status": {
+    "completed": [
+      "TASK-DALPHA-000",
+      "TASK-DALPHA-001",
+      "TASK-DALPHA-002",
+      "TASK-DALPHA-003",
+      "TASK-DALPHA-004",
+      "TASK-DALPHA-005",
+      "TASK-DALPHA-006",
+      "TASK-DALPHA-007",
+      "TASK-DALPHA-008",
+      "TASK-DALPHA-009",
+      "TASK-DALPHA-010",
+      "TASK-DALPHA-011",
+      "TASK-DALPHA-012"
+    ],
+    "deferred": [],
+    "missing_evidence": []
+  },
+  "evidence_files": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-001-rootfs-manifest.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-002-state-permissions.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-009-firecracker-profile.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json",
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json"
+  ],
+  "gate_results": [
+    {
+      "command": "cargo test -p agentd",
+      "environment": "clean worktree",
+      "result": "passed",
+      "tests": "178 passed"
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "environment": "clean worktree via release gate and main worktree direct run",
+      "result": "passed",
+      "tests": "18 passed"
+    },
+    {
+      "command": "cargo test -p agentd agent_core::",
+      "environment": "clean worktree via release gate and main worktree direct run",
+      "result": "passed",
+      "tests": "77 passed"
+    },
+    {
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "environment": "clean worktree via release gate and main worktree direct run",
+      "result": "passed",
+      "tests": "5 passed"
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "environment": "clean worktree",
+      "result": "passed",
+      "provenance": ".workflow/artifacts/release/provenance.json"
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "environment": "clean worktree",
+      "result": "passed",
+      "observed_markers": [
+        "AGENTD_HANDOFF_OK",
+        "AGENTOS_RUNTIME_ARTIFACTS_OK",
+        "AGENTOS_RUNTIME_MANIFEST_SHA256=d42555b78d28f3da5ca90ed153b461fc57c0543393681cde5bfd113240a32778"
+      ]
+    }
+  ],
+  "release_provenance": {
+    "schema": "agentos.distribution-alpha.provenance.v1",
+    "generated_at": "2026-05-23T10:07:54.5201589+08:00",
+    "git_commit": "56278f05d4ca078efe18a3be7aa42d8789a5490f",
+    "promotion_status": "promotable",
+    "blockers": [],
+    "runtime_marker": "AGENTOS_RUNTIME_ARTIFACTS_OK",
+    "runtime_manifest_marker": "AGENTOS_RUNTIME_MANIFEST_SHA256=d42555b78d28f3da5ca90ed153b461fc57c0543393681cde5bfd113240a32778",
+    "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe"
+  },
+  "runtime_artifacts": {
+    "required_ids": [
+      "policy.pack",
+      "tools.semantic",
+      "model_broker.config",
+      "state.runs",
+      "state.audit",
+      "state.rollback",
+      "state.memory"
+    ],
+    "missing_ids": [],
+    "failed_ids": [],
+    "rootfs_runtime_manifest_sha256": "d42555b78d28f3da5ca90ed153b461fc57c0543393681cde5bfd113240a32778"
+  },
+  "security_and_isolation_coverage": {
+    "firecracker_profile": "TASK-DALPHA-009 proves Firecracker profile is behind SecurityExecutionEngine and missing dependencies fail closed before EffectPrepared.",
+    "package_install": "TASK-DALPHA-010 proves package host promotion requires isolated validation, exact approval, rollback/checkpoint readiness, and redacted artifacts.",
+    "untrusted_content": "TASK-DALPHA-011 proves external content remains untrusted, sanitized summaries are context-only, direct high-risk sinks are denied, and audit projection shows denial without EffectPrepared."
+  },
+  "generated_artifact_hygiene": {
+    "main_worktree_generated_artifacts": ".workflow/artifacts/ is ignored by .gitignore and was not staged.",
+    "main_worktree_unrelated_wip": [
+      "crates/agentd/src/audit.rs",
+      "crates/agentd/src/lib.rs",
+      "crates/agentd/src/lifecycle.rs",
+      "crates/agentd/src/main.rs",
+      "crates/agentd/src/recovery.rs",
+      "crates/agentd/src/rollback.rs",
+      "crates/agentd/src/sandbox.rs",
+      "crates/agentd/src/tools.rs",
+      "crates/agentd/src/tui.rs"
+    ],
+    "wip_handling": "Unrelated WIP was not staged for this audit. Final gates were repeated in a clean detached worktree at the audited commit."
+  },
+  "promotion_decision": {
+    "status": "promotable",
+    "blockers": [],
+    "rationale": "All Distribution Alpha task evidence exists, runtime and safety gates pass in a clean worktree, release provenance is Alpha-aware, QEMU observes boot and runtime markers, and generated artifacts are ignored rather than committed."
+  },
+  "handoff": {
+    "next_task": "post-alpha planning",
+    "recommended_focus": [
+      "Decide Beta scope: real package manager adapter, real content fetch adapter, and Firecracker execution integration.",
+      "Resolve or commit unrelated main-worktree WIP before starting a release tag or public artifact handoff."
+    ]
+  }
+}
