@@ -9318,7 +9318,13 @@ pub mod package_install {
 
     use crate::escape_json;
     use runtime_contracts::{RiskClass, SemanticToolCall};
+    use security_execution::audit::AuditJournal;
     use security_execution::policy::{ApprovalToken, PolicyRequest};
+    use security_execution::policy_adapter::{
+        PlanStepPolicyAdapter, StepPolicyOutcomeKind,
+    };
+    use security_execution::tools::ToolRouter;
+    use security_execution::policy::PolicyEvaluator;
 
     pub use super::host_promotion::{HostPromotionDecision, HostPromotionDecisionKind};
     use super::host_promotion::{
@@ -9485,6 +9491,9 @@ pub mod package_install {
             ensure_no_secret("package.version", &self.version)?;
             ensure_no_secret("package.source_uri", &self.source_uri)?;
             ensure_no_secret("package.source_digest", &self.source_digest)?;
+            ensure_safe_debian_identifier("package.name", &self.package_name)?;
+            ensure_safe_debian_identifier("package.version", &self.version)?;
+            ensure_safe_source_uri(&self.source_uri)?;
             if self.package_name.trim().is_empty() || self.version.trim().is_empty() {
                 return Err(PackageInstallError::InvalidRequest {
                     reason: "package name and version are required".to_string(),
@@ -9690,15 +9699,17 @@ pub mod package_install {
     pub struct DebianPackageAdapterEvidence {
         pub plan: DebianPackageAdapterPlan,
         pub isolated_result: IsolatedPackageInstallResult,
+        pub policy_checked_phases: Vec<String>,
         pub host_promotion: HostPromotionDecision,
     }
 
     impl DebianPackageAdapterEvidence {
         pub fn to_json(&self) -> String {
             format!(
-                "{{\"plan\":{},\"isolated_result\":{},\"host_promotion\":{}}}",
+                "{{\"plan\":{},\"isolated_result\":{},\"policy_checked_phases\":{},\"host_promotion\":{}}}",
                 self.plan.to_json(),
                 self.isolated_result.to_json(),
+                string_array_json(&self.policy_checked_phases),
                 self.host_promotion.to_json()
             )
         }
@@ -9706,6 +9717,8 @@ pub mod package_install {
 
     #[derive(Debug, Default, Clone, Copy)]
     pub struct DebianPackageManagerAdapter;
+
+    pub type PackageManagerAdapter = DebianPackageManagerAdapter;
 
     impl DebianPackageManagerAdapter {
         pub fn plan(
@@ -9757,6 +9770,7 @@ pub mod package_install {
 
         pub fn evaluate(
             &self,
+            journal: &AuditJournal,
             request: &PackageInstallRequest,
             metadata: DebianPackageMetadata,
             isolated: &IsolatedPackageInstallResult,
@@ -9764,14 +9778,70 @@ pub mod package_install {
             now: u64,
         ) -> Result<DebianPackageAdapterEvidence, PackageInstallError> {
             let plan = self.plan(request, metadata)?;
+            let policy_checked_phases = evaluate_package_plan_policy(
+                journal,
+                request,
+                &PackageInstallWorkflow.plan(request)?,
+                approval,
+                now,
+            )?;
             let host_promotion =
                 PackageInstallWorkflow.evaluate_host_promotion(request, isolated, approval, now)?;
             Ok(DebianPackageAdapterEvidence {
                 plan,
                 isolated_result: isolated.clone(),
+                policy_checked_phases,
                 host_promotion,
             })
         }
+    }
+
+    fn evaluate_package_plan_policy(
+        journal: &AuditJournal,
+        request: &PackageInstallRequest,
+        plan: &PlanSpec,
+        approval: Option<&ApprovalToken>,
+        now: u64,
+    ) -> Result<Vec<String>, PackageInstallError> {
+        let adapter = PlanStepPolicyAdapter::new(ToolRouter, PolicyEvaluator);
+        let mut checked = Vec::new();
+        for step in plan.steps().iter().filter(|step| {
+            step.call().name.starts_with("pkg.") && step.step_id() != STEP_HOST_ROLLBACK
+        }) {
+            let outcome = adapter
+                .evaluate_step_at(
+                    journal,
+                    &format!(
+                        "run-package-adapter-{}-{}",
+                        request.package_name, request.version
+                    ),
+                    &request.actor,
+                    step,
+                    approval,
+                    now,
+                )
+                .map_err(|error| PackageInstallError::InvalidRequest {
+                    reason: format!("package adapter policy evaluation failed: {error}"),
+                })?;
+            match outcome.kind {
+                StepPolicyOutcomeKind::Denied => {
+                    return Err(PackageInstallError::InvalidRequest {
+                        reason: format!(
+                            "package adapter phase {} denied by policy",
+                            step.call().name
+                        ),
+                    });
+                }
+                StepPolicyOutcomeKind::Allowed | StepPolicyOutcomeKind::AwaitingApproval => {
+                    checked.push(format!(
+                        "{}:{}",
+                        step.call().name,
+                        outcome.kind.as_str()
+                    ));
+                }
+            }
+        }
+        Ok(checked)
     }
 
     #[derive(Debug, Default, Clone, Copy)]
@@ -10104,6 +10174,47 @@ pub mod package_install {
         Ok(())
     }
 
+    fn ensure_safe_debian_identifier(field: &str, value: &str) -> Result<(), PackageInstallError> {
+        let lower = value.to_ascii_lowercase();
+        if lower.contains("apt")
+            || lower.contains("dpkg")
+            || lower.contains("shell")
+            || value.chars().any(|ch| {
+                matches!(
+                    ch,
+                    ';' | '&' | '|' | '`' | '$' | '<' | '>' | '\n' | '\r' | '"' | '\''
+                )
+            })
+        {
+            return Err(PackageInstallError::InvalidRequest {
+                reason: format!("{field} must be a typed package value, not a raw apt/dpkg/shell command"),
+            });
+        }
+        Ok(())
+    }
+
+    fn ensure_safe_source_uri(source_uri: &str) -> Result<(), PackageInstallError> {
+        let lower = source_uri.to_ascii_lowercase();
+        if !(lower.starts_with("https://") || lower.starts_with("file://")) {
+            return Err(PackageInstallError::InvalidRequest {
+                reason: "package source uri must be https:// or file://".to_string(),
+            });
+        }
+        if lower.contains(" apt ")
+            || lower.contains("apt-get")
+            || lower.contains("dpkg")
+            || lower.contains("shell")
+            || source_uri
+                .chars()
+                .any(|ch| matches!(ch, ';' | '|' | '`' | '$' | '\n' | '\r'))
+        {
+            return Err(PackageInstallError::InvalidRequest {
+                reason: "package source uri must not contain raw apt/dpkg/shell fragments".to_string(),
+            });
+        }
+        Ok(())
+    }
+
     fn optional_string_json(value: Option<&str>) -> String {
         value
             .map(|value| format!("\"{}\"", escape_json(value)))
@@ -10124,6 +10235,7 @@ pub mod package_install {
     #[cfg(test)]
     mod tests {
         use super::*;
+        use std::path::PathBuf;
 
         fn request() -> PackageInstallRequest {
             PackageInstallRequest::new(
@@ -10134,6 +10246,15 @@ pub mod package_install {
                 "sha256:0123456789abcdef",
             )
             .expect("request")
+        }
+
+        fn test_journal(name: &str) -> AuditJournal {
+            let path: PathBuf = std::env::temp_dir().join(format!(
+                "agent-core-package-install-{name}-{}.jsonl",
+                std::process::id()
+            ));
+            let _ = std::fs::remove_file(&path);
+            AuditJournal::new(path)
         }
 
         #[test]
@@ -10285,8 +10406,10 @@ pub mod package_install {
                 DebianPackageMetadata::from_request(&request, "x86_64", "agentos-stable")
                     .expect("metadata");
             let isolated = IsolatedPackageInstallResult::passed(&request).expect("isolated");
+            let journal = test_journal("debian-evidence");
             let evidence = DebianPackageManagerAdapter
                 .evaluate(
+                    &journal,
                     &request,
                     metadata,
                     &isolated,
@@ -10312,6 +10435,15 @@ pub mod package_install {
                 evidence.host_promotion.evidence.rollback_id,
                 request.rollback_id
             );
+            assert!(evidence
+                .policy_checked_phases
+                .iter()
+                .any(|phase| phase == "pkg.host.install:awaiting-approval"));
+            assert!(journal
+                .event_lines()
+                .expect("journal")
+                .iter()
+                .any(|line| line.contains("pkg.host.install")));
         }
 
         #[test]
@@ -10326,6 +10458,64 @@ pub mod package_install {
                 .plan(&request, metadata)
                 .expect_err("metadata mutation denied");
             assert!(error.reason().contains("metadata must match"));
+        }
+
+        #[test]
+        fn debian_adapter_pauses_without_exact_approval_before_host_promotion() {
+            let request = request();
+            let metadata =
+                DebianPackageMetadata::from_request(&request, "x86_64", "agentos-stable")
+                    .expect("metadata");
+            let isolated = IsolatedPackageInstallResult::passed(&request).expect("isolated");
+            let journal = test_journal("debian-pause");
+            let evidence = DebianPackageManagerAdapter
+                .evaluate(&journal, &request, metadata, &isolated, None, 0)
+                .expect("evidence");
+
+            assert_eq!(
+                evidence.host_promotion.kind,
+                HostPromotionDecisionKind::AwaitingApproval
+            );
+            assert!(!evidence.host_promotion.host_modified);
+            assert!(evidence
+                .policy_checked_phases
+                .iter()
+                .any(|phase| phase == "pkg.isolate.install:awaiting-approval"));
+            assert!(evidence
+                .policy_checked_phases
+                .iter()
+                .any(|phase| phase == "pkg.host.install:awaiting-approval"));
+        }
+
+        #[test]
+        fn package_request_rejects_raw_apt_or_shell_fragments() {
+            for (package, version, source_uri) in [
+                (
+                    "nginx; apt install curl",
+                    "1.2.3",
+                    "https://packages.example/nginx.deb",
+                ),
+                (
+                    "nginx-agent-plugin",
+                    "1.2.3 && dpkg -i bad.deb",
+                    "https://packages.example/nginx.deb",
+                ),
+                (
+                    "nginx-agent-plugin",
+                    "1.2.3",
+                    "https://packages.example/nginx.deb;apt install curl",
+                ),
+            ] {
+                let error = PackageInstallRequest::new(
+                    "operator",
+                    package,
+                    version,
+                    source_uri,
+                    "sha256:0123456789abcdef",
+                )
+                .expect_err("raw command fragment rejected");
+                assert!(error.reason().contains("raw apt"));
+            }
         }
 
         #[test]
