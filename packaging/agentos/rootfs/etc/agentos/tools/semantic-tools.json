@@ -56,6 +56,36 @@
       "risk": "execute-with-confirmation",
       "required_parameters": ["rollback_id"],
       "optional_parameters": []
+    },
+    {
+      "name": "content.fetch",
+      "risk": "read-only",
+      "required_parameters": ["source_uri", "content_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "content.sanitize",
+      "risk": "read-only",
+      "required_parameters": ["content_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "content.summarize",
+      "risk": "read-only",
+      "required_parameters": ["content_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "policy.source_to_sink.check",
+      "risk": "read-only",
+      "required_parameters": ["content_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "audit.project",
+      "risk": "read-only",
+      "required_parameters": ["run_id"],
+      "optional_parameters": []
     }
   ]
 }

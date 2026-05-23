@@ -50,10 +50,8 @@ impl ToolSchema {
     }
 }
 
-const SVC_LOGS_PARAMS: &[ParamSpec] = &[
-    ParamSpec::required("service"),
-    ParamSpec::optional("last"),
-];
+const SVC_LOGS_PARAMS: &[ParamSpec] =
+    &[ParamSpec::required("service"), ParamSpec::optional("last")];
 const SVC_STATUS_PARAMS: &[ParamSpec] = &[ParamSpec::required("service")];
 const HTTP_CHECK_PARAMS: &[ParamSpec] = &[ParamSpec::required("url")];
 const CONFIG_TEST_PARAMS: &[ParamSpec] = &[ParamSpec::required("service")];
@@ -66,6 +64,14 @@ const FS_WRITE_DIFF_PARAMS: &[ParamSpec] = &[
 const SVC_RESTART_PARAMS: &[ParamSpec] = &[ParamSpec::required("service")];
 const AUDIT_SHOW_PARAMS: &[ParamSpec] = &[ParamSpec::required("run")];
 const ROLLBACK_TRIGGER_PARAMS: &[ParamSpec] = &[ParamSpec::required("rollback_id")];
+const CONTENT_FETCH_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("source_uri"),
+    ParamSpec::required("content_digest"),
+];
+const CONTENT_SANITIZE_PARAMS: &[ParamSpec] = &[ParamSpec::required("content_id")];
+const CONTENT_SUMMARIZE_PARAMS: &[ParamSpec] = &[ParamSpec::required("content_id")];
+const SOURCE_TO_SINK_CHECK_PARAMS: &[ParamSpec] = &[ParamSpec::required("content_id")];
+const AUDIT_PROJECT_PARAMS: &[ParamSpec] = &[ParamSpec::required("run_id")];
 
 pub const TOOL_SCHEMAS: &[ToolSchema] = &[
     ToolSchema {
@@ -121,6 +127,36 @@ pub const TOOL_SCHEMAS: &[ToolSchema] = &[
         version: "v1",
         risk: RiskClass::ExecuteWithConfirmation,
         params: ROLLBACK_TRIGGER_PARAMS,
+    },
+    ToolSchema {
+        name: "content.fetch",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: CONTENT_FETCH_PARAMS,
+    },
+    ToolSchema {
+        name: "content.sanitize",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: CONTENT_SANITIZE_PARAMS,
+    },
+    ToolSchema {
+        name: "content.summarize",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: CONTENT_SUMMARIZE_PARAMS,
+    },
+    ToolSchema {
+        name: "policy.source_to_sink.check",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: SOURCE_TO_SINK_CHECK_PARAMS,
+    },
+    ToolSchema {
+        name: "audit.project",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: AUDIT_PROJECT_PARAMS,
     },
 ];
 
@@ -192,7 +228,10 @@ impl ToolRouter {
         params.sort_by(|left, right| left.0.cmp(&right.0));
 
         for required in schema.required_params() {
-            if !params.iter().any(|(name, value)| name == required && !value.is_empty()) {
+            if !params
+                .iter()
+                .any(|(name, value)| name == required && !value.is_empty())
+            {
                 return Err(ToolRejection {
                     tool: call.name.clone(),
                     reason: format!("missing required parameter: {required}"),
@@ -239,6 +278,11 @@ mod tests {
             "svc.restart",
             "audit.show",
             "rollback.trigger",
+            "content.fetch",
+            "content.sanitize",
+            "content.summarize",
+            "policy.source_to_sink.check",
+            "audit.project",
         ] {
             assert!(names.contains(&expected), "missing {expected}");
         }
@@ -273,6 +317,34 @@ mod tests {
             ))
             .expect("fs.write.diff routes");
         assert_eq!(routed.risk, RiskClass::WriteWithDiff);
+    }
+
+    #[test]
+    fn routes_untrusted_content_tool_chain() {
+        let router = ToolRouter;
+        let fetched = router
+            .route(&SemanticToolCall::new(
+                "content.fetch",
+                vec![
+                    ("source_uri", "https://docs.example/setup"),
+                    ("content_digest", "sha256:abcdef"),
+                ],
+            ))
+            .expect("content.fetch routes");
+        assert_eq!(fetched.risk, RiskClass::ReadOnly);
+        assert_eq!(fetched.version, "v1");
+
+        for call in [
+            SemanticToolCall::new("content.sanitize", vec![("content_id", "doc-1")]),
+            SemanticToolCall::new("content.summarize", vec![("content_id", "doc-1")]),
+            SemanticToolCall::new("policy.source_to_sink.check", vec![("content_id", "doc-1")]),
+            SemanticToolCall::new("audit.project", vec![("run_id", "run-doc-1")]),
+        ] {
+            assert_eq!(
+                router.route(&call).expect("content chain route").risk,
+                RiskClass::ReadOnly
+            );
+        }
     }
 
     #[test]
