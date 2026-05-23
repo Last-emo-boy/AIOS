@@ -175,7 +175,8 @@ function Test-ProductionSignatureGate {
     try {
         & $verifierPath `
             -ProvenancePath $ProvenancePath `
-            -OutputPath $ProductionSignatureVerificationPath
+            -OutputPath $ProductionSignatureVerificationPath `
+            -RequireDecisionEvidence
         Add-Check "production_signature_verifier.invoked" $true "Production signature verifier must run in promotion production mode." "blocking" $ProductionSignatureVerificationPath
     } catch {
         Add-Check "production_signature_verifier.invoked" $false "Production signature verifier must run without execution errors." "blocking" $_.Exception.Message
@@ -199,6 +200,7 @@ function Test-ProductionSignatureGate {
     $blockerCount = @($productionSignatureVerification.blockers).Count
     Add-Check "production_signature_verification.schema" ($productionSignatureVerification.schema -eq "agentos.production-signature-verification.v1") "Production signature verification schema must be exact." "blocking" $productionSignatureVerification.schema
     Add-Check "production_signature_verification.production_ready_false" ($productionSignatureVerification.production_ready_claim -eq $false) "Production signature verification must not claim Production ready." "blocking" $productionSignatureVerification.production_ready_claim
+    Add-Check "production_signature_verification.decision_evidence_required" ($productionSignatureVerification.decision_evidence_required -eq $true) "Production promotion mode requires production signatures over release artifacts and final decision evidence." "blocking" $productionSignatureVerification.decision_evidence_required
     Add-Check "production_signature_verification.source_branch" ($productionSignatureVerification.source.git_branch -eq $Provenance.source.git_branch) "Production signature verification must bind the promoted source branch." "blocking" $productionSignatureVerification.source.git_branch
     Add-Check "production_signature_verification.source_commit" ($productionSignatureVerification.source.git_commit -eq $Provenance.source.git_commit) "Production signature verification must bind the promoted source commit." "blocking" $productionSignatureVerification.source.git_commit
     Add-Check "production_signature_verification.status" ($productionSignatureVerification.status -eq "passed") "Production promotion mode requires production signature verification to pass." "blocking" $productionSignatureVerification.status
