@@ -537,10 +537,11 @@ foreach ($path in @($sbomPath, $updateMetadataPath, "$inventoryPath.sig.json", "
 }
 
 if ($RequireProductionSignatures) {
-    Invoke-Checked "production signature verification" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1 -ProvenancePath $provenancePath -FailOnBlocked" {
+    Invoke-Checked "production signature verification" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1 -ProvenancePath $provenancePath -RequireDecisionEvidence -FailOnBlocked" {
         pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/verify-production-signatures.ps1" `
             -ProvenancePath $provenancePath `
             -OutputPath ".workflow/artifacts/production-signature-verification/result.json" `
+            -RequireDecisionEvidence `
             -FailOnBlocked
     }
 }
