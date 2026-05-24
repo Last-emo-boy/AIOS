@@ -1,0 +1,62 @@
+{
+  "id": "TASK-FUNC-002",
+  "title": "Define functional release gate and fixture strategy",
+  "status": "planned",
+  "wave": 0,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "scripts/build-release.ps1; scripts/alpha-service-recovery-smoke.ps1",
+  "depends_on": [
+    "TASK-FUNC-000"
+  ],
+  "purpose": "Define the fixture-backed replay strategy that will prove functional capabilities without external dependencies.",
+  "scope": [
+    "Design a functional replay suite that covers package, content, Firecracker fail-closed, diagnostics, support bundle, rollback, and audit export.",
+    "Define fixture directories and result JSON shape.",
+    "Define which checks are local-only baseline and which checks are optional QEMU/host integration.",
+    "Define how build-release provenance records capability matrix and replay hashes."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-release-gate.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-002-release-gate-strategy.json"
+  ],
+  "read_first": [
+    "scripts/build-release.ps1",
+    "scripts/alpha-service-recovery-smoke.ps1",
+    "scripts/boot-smoke-test.ps1",
+    "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-task-plan.md"
+  ],
+  "implementation_steps": [
+    "Define replay fixture taxonomy and result schema.",
+    "Specify commands for local-only replay and optional QEMU replay.",
+    "Specify release provenance additions: matrix hash, replay hash, fixture inventory, gate versions.",
+    "Record evidence with all planned commands and blocker handling."
+  ],
+  "acceptance_criteria": [
+    "The gate strategy can run without external LLM, network, Firecracker, or package manager.",
+    "QEMU path is parameterized and defaults to E:\\qemu\\qemu-system-x86_64.exe when used.",
+    "Release provenance records enough hashes for replay traceability.",
+    "Failures are categorized as remediation-required or rollout-blocked."
+  ],
+  "verification": [
+    "Validate evidence JSON parses.",
+    "Confirm planned commands include `cargo test --workspace` and a functional replay script placeholder."
+  ],
+  "failure_modes": [
+    "Replay depends on live network by default.",
+    "Gate only tests happy paths.",
+    "Provenance omits capability matrix hash.",
+    "QEMU path is hard-coded in a way that cannot be overridden."
+  ],
+  "handoff": {
+    "next_tasks": [
+      "TASK-FUNC-050",
+      "TASK-FUNC-051"
+    ],
+    "blocked_until": [
+      "Replay fixture strategy exists."
+    ]
+  }
+}

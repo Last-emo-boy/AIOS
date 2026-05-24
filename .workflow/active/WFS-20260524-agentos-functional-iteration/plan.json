@@ -1,0 +1,219 @@
+{
+  "plan_id": "PLAN-AIOS-FUNCTIONAL-ITERATION-20260524",
+  "workflow_id": "WFS-20260524-agentos-functional-iteration",
+  "title": "AgentOS Functional Iteration Task Plan",
+  "status": "planned",
+  "source": "research.md",
+  "created_at": "2026-05-24T21:23:07+08:00",
+  "updated_at": "2026-05-24T21:23:07+08:00",
+  "objective": "Expand AgentOS post-Alpha functionality through typed capability contracts, real adapters, operator workflows, long-running control-plane gates, and functional promotion evidence while preserving crate boundaries.",
+  "entry_criteria": [
+    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json",
+    "cargo test --workspace passes on main",
+    "SecurityExecutionEngine remains the only side-effect path"
+  ],
+  "assumptions": [
+    "Baseline acceptance must run in local-only/stub mode.",
+    "QEMU is available at E:\\qemu\\qemu-system-x86_64.exe for promotion smoke.",
+    "Firecracker and host package manager availability are optional integration capabilities, not required for the first replay gate.",
+    "Agentd should stay thin: CLI/TUI/API projection and lifecycle only."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "Scope And Capability Matrix",
+      "purpose": "Freeze functional scope, capability ownership, and replay strategy.",
+      "tasks": [
+        "TASK-FUNC-000",
+        "TASK-FUNC-001",
+        "TASK-FUNC-002"
+      ],
+      "exit_criteria": [
+        "User-visible capabilities map to owner modules and runtime contracts.",
+        "Adapter logic cannot land directly in agentd.",
+        "Functional replay has fixture-backed local-only coverage."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Real Adapter Contracts",
+      "purpose": "Design typed adapter contracts and local fixtures before implementation.",
+      "tasks": [
+        "TASK-FUNC-010",
+        "TASK-FUNC-011",
+        "TASK-FUNC-012",
+        "TASK-FUNC-013"
+      ],
+      "exit_criteria": [
+        "Package, content, Firecracker, diagnostics, and support contracts exist.",
+        "Optional dependencies fail closed before EffectPrepared.",
+        "Fixture schemas are versioned and reusable in release replay."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Workflow Integration",
+      "purpose": "Wire adapter contracts into AgentCore and SecurityExecution without bypasses.",
+      "tasks": [
+        "TASK-FUNC-020",
+        "TASK-FUNC-021",
+        "TASK-FUNC-022",
+        "TASK-FUNC-023"
+      ],
+      "exit_criteria": [
+        "AgentCore owns workflow DAGs and state transitions.",
+        "SecurityExecution owns all effect preparation and sealing.",
+        "Audit projection explains allowed, denied, paused, rollback, and failed-closed paths."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Operator UX",
+      "purpose": "Expose capabilities through terminal-first operator commands and TUI projection.",
+      "tasks": [
+        "TASK-FUNC-030",
+        "TASK-FUNC-031",
+        "TASK-FUNC-032"
+      ],
+      "exit_criteria": [
+        "Operators can discover capabilities and blocked prerequisites.",
+        "Approval, denial, rollback, and audit projection flows are ergonomic and exact-token safe.",
+        "TUI remains a projection over runtime state."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Long-Running Control Plane",
+      "purpose": "Prepare AgentOS for stateful operation over upgrades, recovery, diagnostics, and audits.",
+      "tasks": [
+        "TASK-FUNC-040",
+        "TASK-FUNC-041",
+        "TASK-FUNC-042",
+        "TASK-FUNC-043"
+      ],
+      "exit_criteria": [
+        "Persistent state has compatibility and migration gates.",
+        "Diagnostics and support bundles are redacted and reproducible.",
+        "Update and rollback hooks feed production distro gates."
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Functional Promotion",
+      "purpose": "Replay functional capabilities and decide readiness for the next production-distro stage.",
+      "tasks": [
+        "TASK-FUNC-050",
+        "TASK-FUNC-051",
+        "TASK-FUNC-052"
+      ],
+      "exit_criteria": [
+        "Functional replay suite passes in local-only mode.",
+        "Release provenance records capability matrix and replay evidence hashes.",
+        "Final audit decides functional-ready, functional-remediation-required, or rollout-blocked."
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-FUNC-000",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-000.json"
+    },
+    {
+      "id": "TASK-FUNC-001",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-001.json"
+    },
+    {
+      "id": "TASK-FUNC-002",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-002.json"
+    },
+    {
+      "id": "TASK-FUNC-010",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-010.json"
+    },
+    {
+      "id": "TASK-FUNC-011",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-011.json"
+    },
+    {
+      "id": "TASK-FUNC-012",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-012.json"
+    },
+    {
+      "id": "TASK-FUNC-013",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-013.json"
+    },
+    {
+      "id": "TASK-FUNC-020",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-020.json"
+    },
+    {
+      "id": "TASK-FUNC-021",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-021.json"
+    },
+    {
+      "id": "TASK-FUNC-022",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-022.json"
+    },
+    {
+      "id": "TASK-FUNC-023",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-023.json"
+    },
+    {
+      "id": "TASK-FUNC-030",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-030.json"
+    },
+    {
+      "id": "TASK-FUNC-031",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-031.json"
+    },
+    {
+      "id": "TASK-FUNC-032",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-032.json"
+    },
+    {
+      "id": "TASK-FUNC-040",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-040.json"
+    },
+    {
+      "id": "TASK-FUNC-041",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-041.json"
+    },
+    {
+      "id": "TASK-FUNC-042",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-042.json"
+    },
+    {
+      "id": "TASK-FUNC-043",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-043.json"
+    },
+    {
+      "id": "TASK-FUNC-050",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-050.json"
+    },
+    {
+      "id": "TASK-FUNC-051",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-051.json"
+    },
+    {
+      "id": "TASK-FUNC-052",
+      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-052.json"
+    }
+  ],
+  "risk_policy": {
+    "normal_shell": "deny",
+    "model_output_direct_execution": "forbidden",
+    "external_content_trust": "untrusted",
+    "secret_policy": "handle-only",
+    "new_capability_landing_zone": "runtime_contracts + agent_core + security_execution, not agentd-only",
+    "optional_dependency_behavior": "fail-closed-before-effect-prepared"
+  },
+  "confidence": {
+    "overall": 0.84,
+    "requirements_coverage": 0.9,
+    "task_quality": 0.84,
+    "dependency_correctness": 0.86,
+    "collision_safety": 0.82,
+    "weakest_dimension": "estimation_accuracy",
+    "notes": "The plan is grounded in completed Alpha contracts. Exact file counts may change during adapter implementation, especially package manager and Firecracker integration."
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": "TASK-FUNC-052",
+  "title": "Run final functional audit and decide next production-distro gate",
+  "status": "planned",
+  "wave": 5,
+  "priority": "P0",
+  "type": "final-audit",
+  "owner": "workflow",
+  "source": "TASK-FUNC-051",
+  "depends_on": [
+    "TASK-FUNC-051",
+    "TASK-FUNC-043"
+  ],
+  "purpose": "Close the functional iteration with a clean audit and decide whether AgentOS is ready for the next production-distro implementation gate.",
+  "scope": [
+    "Run workspace tests, safety tests, functional replay, release gate, and optional QEMU runtime smoke.",
+    "Verify all TASK-FUNC evidence files exist and parse.",
+    "Verify capability matrix, contract ownership, release replay, and update readiness are aligned.",
+    "Record final decision: functional-ready, functional-remediation-required, or rollout-blocked."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/FINAL-AUDIT-20260524-functional-iteration.json",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/final-functional-audit-summary.md",
+    "TASK.md update with completed functional iteration status"
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/plan.json",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-task-plan.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-050.json",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-051.json",
+    "TASK.md"
+  ],
+  "implementation_steps": [
+    "Run required test and replay commands from a clean worktree or clean main.",
+    "Validate every task evidence JSON.",
+    "Scan for private key paths and PEM private key blocks.",
+    "Write final audit decision and next production-distro blockers."
+  ],
+  "acceptance_criteria": [
+    "All required gates pass or blockers are explicit.",
+    "No concrete private key paths or PEM private key blocks are committed.",
+    "Final audit includes command outputs, hashes, and decision.",
+    "Next production-distro gate has clear entry criteria."
+  ],
+  "verification": [
+    "cargo test --workspace",
+    "powershell -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Final audit runs from dirty worktree without recording it.",
+    "Evidence files are missing or malformed.",
+    "Functional replay is skipped but decision says ready.",
+    "Private signing material path leaks into evidence."
+  ],
+  "handoff": {
+    "next_workflow": "production-distro-functional-hardening",
+    "blocked_until": [
+      "Final audit produces functional-ready or explicit remediation plan."
+    ]
+  }
+}

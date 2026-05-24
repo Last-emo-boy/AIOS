@@ -1,0 +1,44 @@
+{
+  "workflow_id": "WFS-20260524-agentos-functional-iteration",
+  "name": "AgentOS Functional Iteration",
+  "status": "planned",
+  "created_at": "2026-05-24T21:23:07+08:00",
+  "updated_at": "2026-05-24T21:23:07+08:00",
+  "source": "research.md",
+  "previous_workflow": ".workflow/active/WFS-20260523-agentos-distribution-alpha",
+  "goal": "Turn the completed Distribution Alpha from a promotable runtime image path into a more useful AgentOS by adding real functional adapters, operator-facing workflows, long-running control-plane surfaces, and production-distro capability gates without weakening AgentCore or SecurityExecution boundaries.",
+  "core_thesis": "AgentOS functionality must grow through contracts and adapters, not through a larger agentd binary: runtime_contracts defines typed surfaces, agent_core owns workflow orchestration, security_execution owns side effects, and agentd owns projection and process integration.",
+  "entry_contract": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json",
+  "non_goals": [
+    "Do not add normal-mode arbitrary shell execution.",
+    "Do not let new adapters bypass SecurityExecutionEngine, PolicyAdapter, CapabilityLease, EffectEnvelope, AuditJournal, rollback, or recovery.",
+    "Do not make external LLM, network access, Firecracker, or a host package manager mandatory for baseline acceptance.",
+    "Do not collapse runtime_contracts, agent_core, security_execution, and agentd back into a single ownership boundary.",
+    "Do not promote a new functional capability without CLI/TUI/operator projection, audit evidence, and a release gate.",
+    "Do not treat this workflow as a replacement for production distro hardening; it feeds the production distro path."
+  ],
+  "primary_acceptance": [
+    "A functional capability matrix defines user-visible workflows and their required contracts.",
+    "Package management, untrusted content, Firecracker execution, update/rollback, and diagnostics/support capabilities are planned as adapter families behind existing runtime boundaries.",
+    "Agentd remains a thin composition and projection layer; new capability logic is owned by agent_core, security_execution, runtime_contracts, scripts, or packaging.",
+    "Operator-facing commands expose plan preview, approval, denial, audit projection, rollback, and support bundle flows.",
+    "Long-running AgentOS control-plane state has health, recovery, migration, and audit retention tasks.",
+    "A functional release gate can replay capability workflows in local-only mode and optionally use QEMU at E:\\qemu\\qemu-system-x86_64.exe."
+  ],
+  "completed_tasks": [],
+  "plan": ".workflow/active/WFS-20260524-agentos-functional-iteration/plan.json",
+  "task_dir": ".workflow/active/WFS-20260524-agentos-functional-iteration/.task",
+  "docs": [
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-scope.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-task-plan.md"
+  ],
+  "inherited_gates": {
+    "workspace_tests": "cargo test --workspace",
+    "safety_substrate": "cargo test -p agentd safety::",
+    "agent_core_suite": "cargo test -p agentd agent_core::",
+    "security_execution_suite": "cargo test -p security_execution",
+    "release_gate": "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "qemu_runtime_smoke": "powershell -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  }
+}

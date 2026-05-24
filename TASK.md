@@ -368,6 +368,97 @@ Wave 1 入口约束：
 - 审批 token 必须绑定 actor、tool、resource、parameter hash、expiry、policy version。
 - 没有 audit 和 rollback 语义的自动写入功能不能上线。
 
+## AgentOS Functional Iteration 任务计划
+
+Source: `research.md`  
+Workflow: `.workflow/active/WFS-20260524-agentos-functional-iteration`  
+Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
+
+目标：把 Distribution Alpha 从“可启动、可审计、可 promotion 的 runtime image path”，推进到“对操作员真正有用的 AgentOS 功能层”。这轮不追求更多自治，而是补齐真实 adapter、operator workflow、长期运行控制面和 functional release gate。
+
+核心边界：
+
+- `runtime_contracts` 定义稳定 request / response / report 类型。
+- `agent_core` 负责编排 workflow、PlanRun、scheduler、observation、memory 和 projection 输入。
+- `security_execution` 负责唯一 side-effect authority：policy、lease、sandbox、effect envelope、audit、rollback、source-to-sink。
+- `agentd` 只负责 PID 1 lifecycle、CLI/TUI/API、operator projection 和 process integration。
+- packaging / scripts 负责 rootfs artifact、fixture、smoke、release/provenance gate。
+
+### Functional Iteration Wave 0：scope 与 capability matrix
+
+- `TASK-FUNC-000`：冻结 functional iteration scope and capability matrix（planned）
+- `TASK-FUNC-001`：定义 cross-crate capability contract ownership（planned）
+- `TASK-FUNC-002`：定义 functional release gate and fixture strategy（planned）
+
+退出标准：
+
+- 用户可见能力映射到 owner module、runtime contract、semantic tool、policy、audit、rollback/fail-closed 和 release gate。
+- 新功能不能只落在 `agentd` 里。
+- baseline replay 不依赖 external LLM、network、Firecracker 或 host package manager。
+
+### Functional Iteration Wave 1：真实 adapter contracts
+
+- `TASK-FUNC-010`：扩展 package manager adapter contract and Debian fixture（planned）
+- `TASK-FUNC-011`：扩展 untrusted content adapter contract and fetch fixture（planned）
+- `TASK-FUNC-012`：扩展 Firecracker execution adapter contract and fail-closed fixture（planned）
+- `TASK-FUNC-013`：增加 diagnostics and support bundle contract（planned）
+
+退出标准：
+
+- package、content、Firecracker、diagnostics/support bundle 都有 typed contract 和 fixture strategy。
+- 可选宿主依赖缺失必须在 `EffectPrepared` 前 fail closed。
+- fixture schema 可被最终 functional replay 复用。
+
+### Functional Iteration Wave 2：workflow integration
+
+- `TASK-FUNC-020`：把 package manager adapter 接入 AgentCore workflow（planned）
+- `TASK-FUNC-021`：把 untrusted content adapter 接入 AgentCore workflow（planned）
+- `TASK-FUNC-022`：把 Firecracker execution profile 接入 SecurityExecutionEngine（planned）
+- `TASK-FUNC-023`：把 diagnostics/support bundle 接入 audit projection（planned）
+
+退出标准：
+
+- AgentCore 只负责编排，不直接执行 host mutation。
+- SecurityExecution 仍是唯一 side-effect path。
+- audit/operator projection 能解释 allowed、denied、paused、rollback 和 failed-closed 结果。
+
+### Functional Iteration Wave 3：operator UX
+
+- `TASK-FUNC-030`：增加 operator command registry and capability matrix projection（planned）
+- `TASK-FUNC-031`：增加 approval、denial、rollback 和 audit command flows（planned）
+- `TASK-FUNC-032`：增加 TUI capability workflow 和 support bundle export views（planned）
+
+退出标准：
+
+- 操作员能看到 AgentOS 当前能做什么、缺什么依赖、为什么被阻止。
+- approval token 继续绑定 actor、tool、resource、parameter hash、expiry、policy version。
+- TUI 是 runtime state projection，不是第二套 runtime。
+
+### Functional Iteration Wave 4：long-running control plane
+
+- `TASK-FUNC-040`：定义 persistent state migration and compatibility checks（planned）
+- `TASK-FUNC-041`：增加 health、diagnostics 和 recovery drills（planned）
+- `TASK-FUNC-042`：增加 audit retention、export 和 redaction gates（planned）
+- `TASK-FUNC-043`：增加 update/rollback readiness hooks for production distro（planned）
+
+退出标准：
+
+- runtime state 有 versioned migration 和 compatibility gate。
+- diagnostics/support bundle 不泄漏 secrets。
+- update/rollback readiness 能作为 Production Distro 的入口条件。
+
+### Functional Iteration Wave 5：functional promotion
+
+- `TASK-FUNC-050`：构建 functional capability replay suite（planned）
+- `TASK-FUNC-051`：把 functional replay 接入 release/provenance gate（planned）
+- `TASK-FUNC-052`：运行 final functional audit 并决定下一步 production-distro gate（planned）
+
+退出标准：
+
+- `cargo test --workspace`、functional replay、release gate 通过或 blocker 明确。
+- provenance 记录 capability matrix hash、fixture inventory hash 和 replay evidence hash。
+- final audit 输出 `functional-ready`、`functional-remediation-required` 或 `rollout-blocked`。
+
 ## 下一步
 
-Distribution Alpha 已完成并通过 final audit。下一步进入 post-Alpha planning：优先决定 Beta 范围，包括真实 package manager adapter、真实 untrusted content fetch adapter、Firecracker execution integration，以及在 release tag 或公开 artifact handoff 前处理当前主工作区 unrelated WIP。
+当前应从 `TASK-FUNC-000` 开始执行，先冻结功能矩阵和跨 crate ownership。后续所有功能实现都必须沿着 `runtime_contracts -> agent_core -> security_execution -> agentd projection -> release gate` 链路推进。

@@ -1,0 +1,66 @@
+{
+  "id": "TASK-FUNC-001",
+  "title": "Define cross-crate capability contract ownership",
+  "status": "planned",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "owner": "runtime_contracts",
+  "source": "research.md; docs/decisions/003-agent-core-runtime-boundary.md",
+  "depends_on": [
+    "TASK-FUNC-000"
+  ],
+  "purpose": "Turn the functional matrix into an ownership contract that prevents future features from re-coupling agentd and runtime logic.",
+  "scope": [
+    "Define which data types belong in runtime_contracts.",
+    "Define which workflow state belongs in agent_core.",
+    "Define which execution authority belongs in security_execution.",
+    "Define which CLI/TUI/API surfaces belong in agentd.",
+    "Add a reviewer checklist for future capability PRs."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/cross-crate-capability-contract.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-001-contract-ownership.json"
+  ],
+  "read_first": [
+    "docs/decisions/003-agent-core-runtime-boundary.md",
+    "crates/runtime_contracts/src/lib.rs",
+    "crates/agent_core/src/lib.rs",
+    "crates/security_execution/src/lib.rs",
+    "crates/agentd/src/main.rs",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
+  ],
+  "implementation_steps": [
+    "Write a cross-crate ownership table with allowed and forbidden responsibilities.",
+    "Add examples for package, content, Firecracker, diagnostics, and operator workflows.",
+    "Add a PR checklist requiring typed contract, policy mapping, audit projection, and gate evidence.",
+    "Record evidence with the contract hash and open questions."
+  ],
+  "acceptance_criteria": [
+    "The contract explains why agentd must not own adapter business logic.",
+    "The contract identifies the first files likely to change per capability family.",
+    "The PR checklist is concrete enough to block bypass paths.",
+    "The evidence lists any intentional exceptions."
+  ],
+  "verification": [
+    "Run `cargo test --workspace` after future code work touches these boundaries.",
+    "Check the document references all four crates."
+  ],
+  "failure_modes": [
+    "Contract repeats architecture slogans without file-level ownership.",
+    "Agentd is allowed to mutate host state directly.",
+    "runtime_contracts starts depending on execution crates.",
+    "SecurityExecution starts owning product workflow branching."
+  ],
+  "handoff": {
+    "next_tasks": [
+      "TASK-FUNC-010",
+      "TASK-FUNC-011",
+      "TASK-FUNC-012",
+      "TASK-FUNC-013"
+    ],
+    "blocked_until": [
+      "Ownership contract is written."
+    ]
+  }
+}

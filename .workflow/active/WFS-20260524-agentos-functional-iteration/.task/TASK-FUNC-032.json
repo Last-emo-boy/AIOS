@@ -1,0 +1,60 @@
+{
+  "id": "TASK-FUNC-032",
+  "title": "Add TUI views for capability workflows and support bundle export",
+  "status": "planned",
+  "wave": 3,
+  "priority": "P2",
+  "type": "operator-ux",
+  "owner": "agentd",
+  "source": "docs/tui-operator-flow.md",
+  "depends_on": [
+    "TASK-FUNC-030",
+    "TASK-FUNC-023"
+  ],
+  "purpose": "Extend the terminal-first TUI to show functional workflows, blockers, approvals, audit projections, and support bundle export status.",
+  "scope": [
+    "Render capability matrix and workflow status.",
+    "Render blocked prerequisites for package/content/Firecracker/support workflows.",
+    "Render approval prompts with exact parameter hashes.",
+    "Render support bundle manifest and redaction status."
+  ],
+  "deliverables": [
+    "TUI capability workflow views or design snapshot",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-032-tui-capability-views.json"
+  ],
+  "read_first": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/operator_projection.rs",
+    "docs/tui-operator-flow.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-023.json"
+  ],
+  "implementation_steps": [
+    "Add or design TUI rendering for capability matrix and workflow status.",
+    "Render exact approval parameter hash and policy version.",
+    "Render support bundle manifest hash and redaction report.",
+    "Add snapshot-style tests or text fixtures."
+  ],
+  "acceptance_criteria": [
+    "TUI does not introduce a second source of runtime truth.",
+    "Blocked capabilities explain missing prerequisites.",
+    "Approval display includes parameter hash and policy version.",
+    "Support bundle redaction status is visible."
+  ],
+  "verification": [
+    "cargo test -p agentd tui::",
+    "cargo test -p agentd operator_projection::",
+    "cargo test --workspace"
+  ],
+  "failure_modes": [
+    "TUI hides important risk or blocker state.",
+    "TUI duplicates runtime decisions outside AgentCore/SecurityExecution.",
+    "Approval prompt omits parameter hash.",
+    "Support bundle status hides redaction failures."
+  ],
+  "handoff": {
+    "next_task": "TASK-FUNC-050",
+    "blocked_until": [
+      "TUI capability projection evidence exists."
+    ]
+  }
+}

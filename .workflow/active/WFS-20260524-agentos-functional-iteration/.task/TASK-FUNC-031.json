@@ -1,0 +1,60 @@
+{
+  "id": "TASK-FUNC-031",
+  "title": "Add approval, denial, rollback, and audit command flows",
+  "status": "planned",
+  "wave": 3,
+  "priority": "P1",
+  "type": "operator-ux",
+  "owner": "agentd",
+  "source": "research.md",
+  "depends_on": [
+    "TASK-FUNC-030"
+  ],
+  "purpose": "Make high-risk workflow control usable from terminal commands while preserving exact approval token semantics.",
+  "scope": [
+    "Define CLI flows for approve, deny, timeout/suspend, rollback trigger, audit project, and explain.",
+    "Bind approval command input to actor, tool, resource, parameter hash, expiry, and policy version.",
+    "Ensure rollback and audit commands use existing runtime state and AuditJournal.",
+    "Add negative fixtures for broad approval and parameter mutation."
+  ],
+  "deliverables": [
+    "operator approval/denial/rollback/audit command implementation or design",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-031-operator-control-flows.json"
+  ],
+  "read_first": [
+    "crates/agentd/src/main.rs",
+    "crates/security_execution/src/policy.rs",
+    "crates/security_execution/src/rollback.rs",
+    "crates/security_execution/src/audit.rs",
+    "docs/tui-operator-flow.md"
+  ],
+  "implementation_steps": [
+    "Add or specify CLI arguments for approval, denial, rollback, audit projection, and explain flows.",
+    "Route approval through existing exact token validation.",
+    "Add tests or smoke fixtures for denied and mutated approvals.",
+    "Record evidence with sample command outputs."
+  ],
+  "acceptance_criteria": [
+    "Broad approval is rejected.",
+    "Approval parameter mutation is denied or paused.",
+    "Rollback command requires an existing rollback handle.",
+    "Audit projection command redacts secret-like summaries."
+  ],
+  "verification": [
+    "cargo test -p security_execution policy",
+    "cargo test -p agentd tui::",
+    "cargo test --workspace"
+  ],
+  "failure_modes": [
+    "CLI creates broad session approvals.",
+    "Rollback can be triggered without a known handle.",
+    "Audit output leaks secret-like data.",
+    "Denial path prepares an effect."
+  ],
+  "handoff": {
+    "next_task": "TASK-FUNC-050",
+    "blocked_until": [
+      "Operator control flow evidence exists."
+    ]
+  }
+}

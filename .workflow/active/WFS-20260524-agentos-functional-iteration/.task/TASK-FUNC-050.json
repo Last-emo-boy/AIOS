@@ -1,0 +1,68 @@
+{
+  "id": "TASK-FUNC-050",
+  "title": "Build functional capability replay suite",
+  "status": "planned",
+  "wave": 5,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "TASK-FUNC-002",
+  "depends_on": [
+    "TASK-FUNC-020",
+    "TASK-FUNC-021",
+    "TASK-FUNC-022",
+    "TASK-FUNC-023",
+    "TASK-FUNC-031",
+    "TASK-FUNC-032",
+    "TASK-FUNC-041",
+    "TASK-FUNC-042"
+  ],
+  "purpose": "Create a replay suite that proves functional capabilities under local-only fixtures before promotion.",
+  "scope": [
+    "Replay service recovery approved and denied.",
+    "Replay package install metadata mismatch, isolated failure, denied host promotion, and approved promotion fixture.",
+    "Replay untrusted content injection denial.",
+    "Replay Firecracker missing dependency fail-closed.",
+    "Replay diagnostics/support bundle and audit export redaction.",
+    "Emit stable result JSON and evidence hashes."
+  ],
+  "deliverables": [
+    "scripts/functional-capability-replay.ps1",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-050-functional-replay.json"
+  ],
+  "read_first": [
+    "scripts/alpha-service-recovery-smoke.ps1",
+    "scripts/build-release.ps1",
+    "scripts/boot-smoke-test.ps1",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-release-gate.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
+  ],
+  "implementation_steps": [
+    "Create or specify a PowerShell replay script with deterministic fixture inputs.",
+    "Write result JSON with per-capability status, blockers, and artifact hashes.",
+    "Ensure generated artifacts stay under ignored .workflow/artifacts.",
+    "Record evidence and failed-case expectations."
+  ],
+  "acceptance_criteria": [
+    "Replay can run without network, external LLM, Firecracker, or host package manager.",
+    "All negative fixtures fail closed before unsafe side effects.",
+    "Result JSON is stable and parseable.",
+    "Replay records capability matrix hash."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+    "cargo test --workspace"
+  ],
+  "failure_modes": [
+    "Replay requires live external dependencies.",
+    "Negative fixture prepares unsafe effect.",
+    "Result JSON is non-deterministic.",
+    "Generated artifacts are accidentally tracked."
+  ],
+  "handoff": {
+    "next_task": "TASK-FUNC-051",
+    "blocked_until": [
+      "Functional replay suite passes."
+    ]
+  }
+}

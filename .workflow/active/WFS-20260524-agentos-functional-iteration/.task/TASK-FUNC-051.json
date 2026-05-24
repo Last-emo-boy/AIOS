@@ -1,0 +1,58 @@
+{
+  "id": "TASK-FUNC-051",
+  "title": "Wire functional replay into release and provenance gate",
+  "status": "planned",
+  "wave": 5,
+  "priority": "P0",
+  "type": "release",
+  "owner": "scripts",
+  "source": "scripts/build-release.ps1",
+  "depends_on": [
+    "TASK-FUNC-050"
+  ],
+  "purpose": "Make functional capability replay part of release/provenance promotion so new functionality cannot bypass distro gates.",
+  "scope": [
+    "Update build-release or successor gate to run functional replay.",
+    "Record capability matrix hash, replay result hash, fixture inventory hash, and command versions.",
+    "Classify replay blockers into remediation-required or rollout-blocked.",
+    "Keep generated release artifacts ignored unless intentionally published."
+  ],
+  "deliverables": [
+    "release/provenance gate update",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-051-release-gate-integration.json"
+  ],
+  "read_first": [
+    "scripts/build-release.ps1",
+    "docs/release-artifacts.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-050.json"
+  ],
+  "implementation_steps": [
+    "Add functional replay command invocation to release gate or document a successor gate.",
+    "Add provenance fields for capability matrix and replay evidence hashes.",
+    "Add blocker classification for functional failures.",
+    "Record evidence from a dry run."
+  ],
+  "acceptance_criteria": [
+    "Release gate fails or blocks promotion when functional replay fails.",
+    "Provenance includes matrix and replay hashes.",
+    "Generated private or local material remains ignored.",
+    "QEMU smoke remains separately visible when promotion requires it."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+    "cargo test --workspace"
+  ],
+  "failure_modes": [
+    "Release gate ignores functional replay failures.",
+    "Provenance omits replay evidence.",
+    "Gate depends on private signing material for local functional validation.",
+    "Generated artifacts become tracked."
+  ],
+  "handoff": {
+    "next_task": "TASK-FUNC-052",
+    "blocked_until": [
+      "Release gate records functional replay evidence."
+    ]
+  }
+}

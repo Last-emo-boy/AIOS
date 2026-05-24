@@ -1,0 +1,61 @@
+{
+  "id": "TASK-FUNC-020",
+  "title": "Integrate package manager adapter into AgentCore workflow",
+  "status": "planned",
+  "wave": 2,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agent_core",
+  "source": "TASK-FUNC-010",
+  "depends_on": [
+    "TASK-FUNC-010"
+  ],
+  "purpose": "Wire the package adapter contract into AgentCore so package install workflows can run through generic PlanRun state without host mutation bypasses.",
+  "scope": [
+    "Extend package install workflow to consume typed adapter reports.",
+    "Preserve isolated validation before host promotion.",
+    "Bind host promotion approval to package identity, source digest, and rollback id.",
+    "Project success, denial, and failure artifacts through runtime audit."
+  ],
+  "deliverables": [
+    "agent_core package workflow integration",
+    "package manager fixture tests",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-020-package-workflow.json"
+  ],
+  "read_first": [
+    "crates/agent_core/src/lib.rs",
+    "crates/runtime_contracts/src/model.rs",
+    "crates/security_execution/src/lib.rs",
+    "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-010.json"
+  ],
+  "implementation_steps": [
+    "Add or extend package workflow types in AgentCore using runtime_contracts types.",
+    "Add fixture-backed tests for metadata mismatch, isolated failure, denied host promotion, approved promotion, and rollback missing.",
+    "Ensure all host promotion paths require exact approval and SecurityExecution handoff.",
+    "Record evidence with test commands and audit projection examples."
+  ],
+  "acceptance_criteria": [
+    "Package workflow cannot host-promote without isolated validation.",
+    "Approval mutation remains denied or paused.",
+    "Host promotion includes rollback metadata.",
+    "Failed artifacts are redacted before projection."
+  ],
+  "verification": [
+    "cargo test -p agent_core package_install",
+    "cargo test -p agentd safety::",
+    "cargo test --workspace"
+  ],
+  "failure_modes": [
+    "Workflow executes host package manager directly.",
+    "AgentCore encodes raw shell commands.",
+    "Approval token is not parameter-bound.",
+    "Rollback metadata is optional."
+  ],
+  "handoff": {
+    "next_task": "TASK-FUNC-050",
+    "blocked_until": [
+      "Package workflow tests and evidence pass."
+    ]
+  }
+}
