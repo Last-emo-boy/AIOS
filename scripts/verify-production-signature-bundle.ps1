@@ -46,6 +46,14 @@ function Resolve-RepoPath {
     return [IO.Path]::GetFullPath((Join-Path $script:repoRoot $Path))
 }
 
+function Get-OptionalFileHash {
+    param([string]$Path)
+    if (-not $Path -or -not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        return $null
+    }
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+
 function Add-Check {
     param(
         [Parameter(Mandatory = $true)][string]$Id,
@@ -135,12 +143,19 @@ $script:checks = @()
 $script:blockers = @()
 $matchedSignatures = @()
 
-$signingRequest = Read-OptionalJson (Resolve-RepoPath $SigningRequestPath)
-$bundle = Read-OptionalJson (Resolve-RepoPath $SignatureBundlePath)
+$resolvedSigningRequestPath = Resolve-RepoPath $SigningRequestPath
+$resolvedSignatureBundlePath = Resolve-RepoPath $SignatureBundlePath
+$signingRequestSha256 = Get-OptionalFileHash $resolvedSigningRequestPath
+$signatureBundleSha256 = Get-OptionalFileHash $resolvedSignatureBundlePath
+
+$signingRequest = Read-OptionalJson $resolvedSigningRequestPath
+$bundle = Read-OptionalJson $resolvedSignatureBundlePath
 
 Add-Check "production_ready_claim.false" $true "Signature bundle verifier does not claim Production ready." "info" $false
 Add-Check "signing_request.present" ($null -ne $signingRequest) "Signing request manifest must exist." "blocking" $SigningRequestPath
 Add-Check "signature_bundle.present" ($null -ne $bundle) "External production signature bundle must exist." "blocking" $SignatureBundlePath
+Add-Check "signing_request.sha256_recorded" (Has-Value $signingRequestSha256) "Signing request input hash must be recorded for stale verification protection." "blocking" $signingRequestSha256
+Add-Check "signature_bundle.sha256_recorded" (Has-Value $signatureBundleSha256) "Signature bundle input hash must be recorded for stale verification protection." "blocking" $signatureBundleSha256
 
 if ($null -ne $signingRequest) {
     Test-NoPrivateMaterial "signing_request" $signingRequest
@@ -212,7 +227,9 @@ $result = [ordered]@{
     production_ready_claim = $false
     inputs = [ordered]@{
         signing_request = $SigningRequestPath
+        signing_request_sha256 = $signingRequestSha256
         signature_bundle = $SignatureBundlePath
+        signature_bundle_sha256 = $signatureBundleSha256
     }
     matched_signatures = @($matchedSignatures)
     checks = @($script:checks)

@@ -126,11 +126,15 @@ $installPlan = @()
 $signingRequest = Read-OptionalJson (Resolve-RepoPath $SigningRequestPath)
 $bundle = Read-OptionalJson (Resolve-RepoPath $SignatureBundlePath)
 $verification = Read-OptionalJson (Resolve-RepoPath $BundleVerificationPath)
+$signingRequestSha256 = Get-OptionalFileHash (Resolve-RepoPath $SigningRequestPath)
+$signatureBundleSha256 = Get-OptionalFileHash (Resolve-RepoPath $SignatureBundlePath)
 
 Add-Check "production_ready_claim.false" $true "Signature bundle installer does not claim Production ready." "info" $false
 Add-Check "signing_request.present" ($null -ne $signingRequest) "Signing request must exist before installing signatures." "blocking" $SigningRequestPath
 Add-Check "signature_bundle.present" ($null -ne $bundle) "Signature bundle must exist before installing signatures." "blocking" $SignatureBundlePath
 Add-Check "bundle_verification.present" ($null -ne $verification) "Signature bundle verification result must exist before installation." "blocking" $BundleVerificationPath
+Add-Check "signing_request.sha256_current" (Has-Value $signingRequestSha256) "Current signing request hash must be available before installation." "blocking" $signingRequestSha256
+Add-Check "signature_bundle.sha256_current" (Has-Value $signatureBundleSha256) "Current signature bundle hash must be available before installation." "blocking" $signatureBundleSha256
 
 if ($null -ne $signingRequest) {
     $requestNames = @($signingRequest.signing_requests | ForEach-Object { $_.artifact.name })
@@ -144,6 +148,8 @@ if ($null -ne $verification) {
     Add-Check "bundle_verification.no_blockers" (@($verification.blockers).Count -eq 0) "Bundle verification must have zero blockers before installation." "blocking" @($verification.blockers).Count
     Add-Check "bundle_verification.binds_signing_request" ($verification.inputs.signing_request -eq $SigningRequestPath) "Bundle verification must bind the signing request path being installed." "blocking" $verification.inputs.signing_request
     Add-Check "bundle_verification.binds_signature_bundle" ($verification.inputs.signature_bundle -eq $SignatureBundlePath) "Bundle verification must bind the signature bundle path being installed." "blocking" $verification.inputs.signature_bundle
+    Add-Check "bundle_verification.binds_signing_request_sha256" ((Has-Value $verification.inputs.signing_request_sha256) -and $verification.inputs.signing_request_sha256 -eq $signingRequestSha256) "Bundle verification must bind the current signing request hash." "blocking" $verification.inputs.signing_request_sha256
+    Add-Check "bundle_verification.binds_signature_bundle_sha256" ((Has-Value $verification.inputs.signature_bundle_sha256) -and $verification.inputs.signature_bundle_sha256 -eq $signatureBundleSha256) "Bundle verification must bind the current signature bundle hash." "blocking" $verification.inputs.signature_bundle_sha256
     Add-Check "bundle_verification.request_count" ($verification.summary.requested_signatures -eq @($signingRequest.signing_requests).Count) "Bundle verification requested signature count must match signing request." "blocking" $verification.summary.requested_signatures
     Add-Check "bundle_verification.match_count" ($verification.summary.matched_signatures -eq @($signingRequest.signing_requests).Count) "Bundle verification matched signature count must match signing request." "blocking" $verification.summary.matched_signatures
     $requestNames = @($signingRequest.signing_requests | ForEach-Object { $_.artifact.name })
