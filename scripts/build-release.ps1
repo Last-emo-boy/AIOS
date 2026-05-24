@@ -1,9 +1,10 @@
 param(
     [string]$ArtifactDir = ".workflow/artifacts/release",
     [string]$QemuPath = "E:\qemu\qemu-system-x86_64.exe",
-    [int]$QemuTimeoutSeconds = 30,
+    [int]$QemuTimeoutSeconds = 60,
     [switch]$SkipBootSmoke,
     [switch]$SkipTests,
+    [switch]$SkipFunctionalReplay,
     [switch]$RequireProductionSignatures
 )
 
@@ -89,7 +90,12 @@ function Get-RelativeOrNull {
     if (-not (Test-Path -LiteralPath $Path)) {
         return $null
     }
-    return [IO.Path]::GetRelativePath($repoRoot, (Resolve-Path -LiteralPath $Path).Path)
+    $resolvedPath = (Resolve-Path -LiteralPath $Path).Path
+    $rootWithSeparator = $repoRoot.TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
+    if ($resolvedPath.StartsWith($rootWithSeparator, [StringComparison]::OrdinalIgnoreCase)) {
+        return $resolvedPath.Substring($rootWithSeparator.Length)
+    }
+    return $resolvedPath
 }
 
 function Test-SecretFreeContent {
@@ -286,6 +292,12 @@ if (-not $SkipTests) {
     Invoke-Checked "cargo test -p agentd agent_core::adversarial" "cargo test -p agentd agent_core::adversarial" { cargo test -p agentd agent_core::adversarial }
 }
 
+if (-not $SkipFunctionalReplay) {
+    Invoke-Checked "functional capability replay" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1" {
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/functional-capability-replay.ps1"
+    }
+}
+
 Invoke-Checked "cargo build -p agentd --release" "cargo build -p agentd --release" { cargo build -p agentd --release }
 Invoke-Checked "image/build-initramfs.ps1" "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1" {
     pwsh -NoProfile -ExecutionPolicy Bypass -File "image/build-initramfs.ps1"
@@ -325,6 +337,9 @@ $bootSmokeResultPath = Join-Path $repoRoot ".workflow/artifacts/boot/boot-smoke-
 $bootSmokeResult = Read-OptionalJson $bootSmokeResultPath
 $serviceRecoveryResultPath = Join-Path $repoRoot ".workflow/artifacts/alpha-service-recovery/result.json"
 $serviceRecoveryResult = Read-OptionalJson $serviceRecoveryResultPath
+$functionalReplayResultPath = Join-Path $repoRoot ".workflow/artifacts/functional-replay/result.json"
+$functionalReplayResult = Read-OptionalJson $functionalReplayResultPath
+$capabilityMatrixPath = Join-Path $repoRoot ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md"
 
 $inventory = New-DependencyInventory -GeneratedAt $candidateGeneratedAt
 $inventoryPath = Join-Path $artifactRoot "dependency-inventory.json"
@@ -359,6 +374,14 @@ $releaseArtifacts = [ordered]@{
     alpha_service_recovery_smoke = [ordered]@{
         path = Get-RelativeOrNull $serviceRecoveryResultPath
         sha256 = Get-OptionalFileHash $serviceRecoveryResultPath
+    }
+    functional_capability_replay = [ordered]@{
+        path = Get-RelativeOrNull $functionalReplayResultPath
+        sha256 = Get-OptionalFileHash $functionalReplayResultPath
+    }
+    functional_capability_matrix = [ordered]@{
+        path = Get-RelativeOrNull $capabilityMatrixPath
+        sha256 = Get-OptionalFileHash $capabilityMatrixPath
     }
     dependency_inventory = [ordered]@{
         path = "dependency-inventory.json"
@@ -409,6 +432,7 @@ $releaseArtifacts.update_metadata_signature = Write-CandidateDetachedSignature `
 $requiredRuntimeArtifactIds = @(
     "policy.pack",
     "tools.semantic",
+    "operator.commands",
     "model_broker.config",
     "state.runs",
     "state.audit",
@@ -423,12 +447,14 @@ $failedRuntimeArtifactIds = @($runtimeArtifacts | Where-Object { $_.status -ne "
 $promotionBlockers = @()
 if ($SkipTests) { $promotionBlockers += "tests-skipped" }
 if ($SkipBootSmoke) { $promotionBlockers += "qemu-runtime-smoke-skipped" }
+if ($SkipFunctionalReplay) { $promotionBlockers += "functional-replay-skipped" }
 if (-not $initramfsManifest) { $promotionBlockers += "initramfs-manifest-missing" }
 if (-not $alphaRootfsManifest) { $promotionBlockers += "alpha-rootfs-manifest-missing" }
 if (-not $rootfsRuntimeManifest) { $promotionBlockers += "rootfs-runtime-manifest-missing" }
 if ($missingRuntimeArtifactIds.Count -gt 0) { $promotionBlockers += @($missingRuntimeArtifactIds | ForEach-Object { "runtime-artifact-missing:$_" }) }
 if ($failedRuntimeArtifactIds.Count -gt 0) { $promotionBlockers += @($failedRuntimeArtifactIds | ForEach-Object { "runtime-artifact-failed:$_" }) }
 if (-not $serviceRecoveryResult -or $serviceRecoveryResult.result -ne "passed") { $promotionBlockers += "alpha-service-recovery-smoke-missing-or-failed" }
+if (-not $functionalReplayResult -or $functionalReplayResult.status -ne "passed") { $promotionBlockers += "functional-capability-replay-missing-or-failed" }
 if (-not $SkipBootSmoke) {
     if (-not $bootSmokeResult -or $bootSmokeResult.status -ne "completed" -or $bootSmokeResult.observed_all_markers -ne $true) {
         $promotionBlockers += "qemu-runtime-smoke-missing-or-failed"
@@ -458,6 +484,7 @@ $provenance = [ordered]@{
         "cargo test -p agentd safety::",
         "cargo test -p agentd agent_core::",
         "cargo test -p agentd agent_core::adversarial",
+        "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
         "cargo build -p agentd --release",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests -SkipRootfsAssembly",
@@ -470,6 +497,15 @@ $provenance = [ordered]@{
         rootfs_runtime_manifest_schema = if ($rootfsRuntimeManifest) { $rootfsRuntimeManifest.schema } else { $null }
         qemu_runtime_smoke = $bootSmokeResult
         service_recovery_smoke = $serviceRecoveryResult
+        functional_capability_replay = $functionalReplayResult
+    }
+    functional_iteration = [ordered]@{
+        capability_matrix_sha256 = $releaseArtifacts.functional_capability_matrix.sha256
+        replay_result_sha256 = $releaseArtifacts.functional_capability_replay.sha256
+        local_only_replay = $true
+        external_llm_required = $false
+        host_package_manager_required = $false
+        firecracker_required = $false
     }
     alpha_runtime = [ordered]@{
         runtime_artifact_ids = @($runtimeArtifactIds)

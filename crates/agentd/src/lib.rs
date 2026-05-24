@@ -12,5 +12,6 @@ pub mod safety;
 pub mod sandbox;
 pub mod security_execution;
 pub mod service_recovery;
+pub mod support_bundle;
 pub mod tools;
 pub mod tui;

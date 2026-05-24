@@ -1,64 +1,66 @@
-{
-  "id": "TASK-FUNC-030",
-  "title": "Add operator command registry and capability matrix projection",
-  "status": "planned",
-  "wave": 3,
-  "priority": "P1",
-  "type": "operator-ux",
-  "owner": "agentd",
-  "source": "TASK-FUNC-000",
-  "depends_on": [
-    "TASK-FUNC-000",
-    "TASK-FUNC-001"
-  ],
-  "purpose": "Give operators a discoverable terminal-first capability surface without adding runtime authority to agentd.",
-  "scope": [
-    "Define operator command registry entries for capability matrix, plan preview, audit projection, rollback, diagnostics, and support bundle.",
-    "Expose blocked prerequisites and optional dependency status.",
-    "Keep registry as projection over contracts and config.",
-    "Package operator command defaults in rootfs config."
-  ],
-  "deliverables": [
-    "operator command registry design or implementation",
-    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-030-operator-command-registry.json"
-  ],
-  "read_first": [
-    "crates/agentd/src/main.rs",
-    "crates/agentd/src/operator_projection.rs",
-    "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
-  ],
-  "implementation_steps": [
-    "Create registry schema and default command entries.",
-    "Add command projection for capability availability and blockers.",
-    "Ensure registry commands map to semantic entry points or projections.",
-    "Record evidence with sample JSON output."
-  ],
-  "acceptance_criteria": [
-    "Registry does not expose shell.exec.",
-    "Each command has risk, owner, semantic mapping, and blocked prerequisites.",
-    "Operator can see local-only versus optional integration status.",
-    "Rootfs packaging includes the registry."
-  ],
-  "verification": [
-    "cargo test -p agentd operator_projection",
-    "powershell -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1 if packaging changes",
-    "cargo test --workspace"
-  ],
-  "failure_modes": [
-    "Command registry grants authority instead of projecting status.",
-    "Commands bypass semantic tool manifest.",
-    "Blocked dependency status is hidden.",
-    "Rootfs package omits registry."
-  ],
-  "handoff": {
-    "next_tasks": [
-      "TASK-FUNC-031",
-      "TASK-FUNC-032"
-    ],
-    "blocked_until": [
-      "Operator registry exists or is fully specified."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-030",
+    "title":  "Add operator command registry and capability matrix projection",
+    "status":  "completed",
+    "wave":  3,
+    "priority":  "P1",
+    "type":  "operator-ux",
+    "owner":  "agentd",
+    "source":  "TASK-FUNC-000",
+    "depends_on":  [
+                       "TASK-FUNC-000",
+                       "TASK-FUNC-001"
+                   ],
+    "purpose":  "Give operators a discoverable terminal-first capability surface without adding runtime authority to agentd.",
+    "scope":  [
+                  "Define operator command registry entries for capability matrix, plan preview, audit projection, rollback, diagnostics, and support bundle.",
+                  "Expose blocked prerequisites and optional dependency status.",
+                  "Keep registry as projection over contracts and config.",
+                  "Package operator command defaults in rootfs config."
+              ],
+    "deliverables":  [
+                         "operator command registry design or implementation",
+                         "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-030-operator-command-registry.json"
+                     ],
+    "read_first":  [
+                       "crates/agentd/src/main.rs",
+                       "crates/agentd/src/operator_projection.rs",
+                       "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+                       ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
+                   ],
+    "implementation_steps":  [
+                                 "Create registry schema and default command entries.",
+                                 "Add command projection for capability availability and blockers.",
+                                 "Ensure registry commands map to semantic entry points or projections.",
+                                 "Record evidence with sample JSON output."
+                             ],
+    "acceptance_criteria":  [
+                                "Registry does not expose shell.exec.",
+                                "Each command has risk, owner, semantic mapping, and blocked prerequisites.",
+                                "Operator can see local-only versus optional integration status.",
+                                "Rootfs packaging includes the registry."
+                            ],
+    "verification":  [
+                         "cargo test -p agentd operator_projection",
+                         "powershell -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1 if packaging changes",
+                         "cargo test --workspace"
+                     ],
+    "failure_modes":  [
+                          "Command registry grants authority instead of projecting status.",
+                          "Commands bypass semantic tool manifest.",
+                          "Blocked dependency status is hidden.",
+                          "Rootfs package omits registry."
+                      ],
+    "handoff":  {
+                    "next_tasks":  [
+                                       "TASK-FUNC-031",
+                                       "TASK-FUNC-032"
+                                   ],
+                    "blocked_until":  [
+                                          "Operator registry exists or is fully specified."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.7379051+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-030-operator-command-registry.json"
 }

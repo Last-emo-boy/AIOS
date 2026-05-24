@@ -4,6 +4,7 @@ use crate::api::{escape_json, RiskClass};
 use crate::audit::{redact_summary, AuditJournal, RuntimeAuditProjection};
 use crate::lifecycle::{Agentd, HealthReport, LifecycleState};
 use crate::safety::SafetyGateConfig;
+use crate::support_bundle::SupportBundleProjection;
 use crate::tools::TOOL_SCHEMAS;
 
 pub const OPERATOR_PROJECTION_SCHEMA_VERSION: &str = "agentd-operator-projection/v1";
@@ -19,6 +20,7 @@ pub struct OperatorProjection {
     pub audit: OperatorAuditProjection,
     pub update: OperatorUpdateProjection,
     pub adapters: OperatorAdapterProjection,
+    pub support_bundle: OperatorSupportBundleProjection,
     pub safety: OperatorSafetyProjection,
 }
 
@@ -42,13 +44,14 @@ impl OperatorProjection {
             audit,
             update,
             adapters: OperatorAdapterProjection::from_tool_manifest(),
+            support_bundle: OperatorSupportBundleProjection::from_journal(audit_journal)?,
             safety: OperatorSafetyProjection::from_gate(&SafetyGateConfig::default_gate()),
         })
     }
 
     pub fn to_json(&self) -> String {
         format!(
-            "{{\"schema_version\":\"{}\",\"source\":\"{}\",\"read_only\":{},\"redaction\":\"{}\",\"runtime\":{},\"telemetry\":{},\"audit\":{},\"update\":{},\"adapters\":{},\"safety\":{}}}",
+            "{{\"schema_version\":\"{}\",\"source\":\"{}\",\"read_only\":{},\"redaction\":\"{}\",\"runtime\":{},\"telemetry\":{},\"audit\":{},\"update\":{},\"adapters\":{},\"support_bundle\":{},\"safety\":{}}}",
             self.schema_version,
             self.source,
             self.read_only,
@@ -58,6 +61,7 @@ impl OperatorProjection {
             self.audit.to_json(),
             self.update.to_json(),
             self.adapters.to_json(),
+            self.support_bundle.to_json(),
             self.safety.to_json()
         )
     }
@@ -73,12 +77,80 @@ impl OperatorProjection {
             self.audit.to_cli_line(),
             self.update.to_cli_line(),
             self.adapters.to_cli_line(),
+            self.support_bundle.to_cli_line(),
             self.safety.to_cli_line(),
         ]
     }
 
     pub fn to_cli_text(&self) -> String {
         self.to_cli_lines().join("\n")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OperatorSupportBundleProjection {
+    pub status: String,
+    pub bundle_id: Option<String>,
+    pub redaction_status: String,
+    pub audit_excerpt_count: usize,
+    pub deterministic: bool,
+}
+
+impl OperatorSupportBundleProjection {
+    fn from_journal(audit_journal: Option<&AuditJournal>) -> io::Result<Self> {
+        let Some(journal) = audit_journal else {
+            return Ok(Self {
+                status: "not-configured".to_string(),
+                bundle_id: None,
+                redaction_status: "secret-values-redacted".to_string(),
+                audit_excerpt_count: 0,
+                deterministic: true,
+            });
+        };
+        let latest_run = journal.latest_run()?;
+        let Some(run_id) = latest_run else {
+            return Ok(Self {
+                status: "no-run".to_string(),
+                bundle_id: None,
+                redaction_status: "secret-values-redacted".to_string(),
+                audit_excerpt_count: 0,
+                deterministic: true,
+            });
+        };
+        let projection = SupportBundleProjection::from_journal(
+            journal,
+            format!("support-{run_id}"),
+            vec![run_id.clone()],
+        )?;
+        Ok(Self {
+            status: "ready".to_string(),
+            bundle_id: Some(projection.manifest.bundle_id.clone()),
+            redaction_status: projection.manifest.redaction_status.clone(),
+            audit_excerpt_count: projection.audit_excerpt_count,
+            deterministic: projection.deterministic,
+        })
+    }
+
+    fn to_json(&self) -> String {
+        format!(
+            "{{\"status\":\"{}\",\"bundle_id\":{},\"redaction_status\":\"{}\",\"audit_excerpt_count\":{},\"deterministic\":{}}}",
+            escape_json(&self.status),
+            optional_json(self.bundle_id.as_deref()),
+            escape_json(&self.redaction_status),
+            self.audit_excerpt_count,
+            self.deterministic
+        )
+    }
+
+    fn to_cli_line(&self) -> String {
+        format!(
+            "support_bundle status={} bundle={} redaction={} audit_excerpt_count={} deterministic={}",
+            self.status,
+            self.bundle_id.as_deref().unwrap_or("-"),
+            self.redaction_status,
+            self.audit_excerpt_count,
+            self.deterministic
+        )
     }
 }
 
@@ -771,6 +843,11 @@ mod tests {
         assert_eq!(projection.update.status, "not-configured");
         assert_eq!(projection.adapters.untrusted_content_status, "available");
         assert_eq!(projection.adapters.audit_projection_status, "available");
+        assert_eq!(projection.support_bundle.status, "ready");
+        assert_eq!(
+            projection.support_bundle.redaction_status,
+            "secret-values-redacted"
+        );
         assert!(projection.safety.fail_closed);
 
         let json = projection.to_json();
@@ -778,6 +855,8 @@ mod tests {
         assert!(json.contains("\"read_only\":true"));
         assert!(json.contains("\"audit_seal_status\":\"sealed\""));
         assert!(json.contains("\"package_manager_status\":\"available\""));
+        assert!(json.contains("\"support_bundle\":{"));
+        assert!(json.contains("\"bundle_id\":\"support-run-operator\""));
         assert!(json.contains("secret://prod/db"));
         assert!(json.contains("[REDACTED]"));
         assert!(!json.contains("hunter2"));

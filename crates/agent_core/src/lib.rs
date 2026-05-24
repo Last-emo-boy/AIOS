@@ -9317,7 +9317,9 @@ pub mod package_install {
     use std::fmt;
 
     use crate::escape_json;
-    use runtime_contracts::{RiskClass, SemanticToolCall};
+    use runtime_contracts::{
+        PackageAdapterPhase, PackageAdapterReport, PackageIdentity, RiskClass, SemanticToolCall,
+    };
     use security_execution::audit::AuditJournal;
     use security_execution::policy::{ApprovalToken, PolicyRequest};
     use security_execution::policy_adapter::{
@@ -9483,6 +9485,22 @@ pub mod package_install {
                 optional_string_json(self.rollback_id.as_deref()),
                 self.host_checkpoint_ready
             )
+        }
+
+        pub fn package_identity(
+            &self,
+            repository_identity: impl Into<String>,
+        ) -> Result<PackageIdentity, PackageInstallError> {
+            PackageIdentity::new(
+                &self.package_name,
+                &self.version,
+                &self.source_uri,
+                &self.source_digest,
+                repository_identity,
+            )
+            .map_err(|error| PackageInstallError::InvalidRequest {
+                reason: error.reason(),
+            })
         }
 
         fn validate(&self) -> Result<(), PackageInstallError> {
@@ -9712,6 +9730,46 @@ pub mod package_install {
                 string_array_json(&self.policy_checked_phases),
                 self.host_promotion.to_json()
             )
+        }
+
+        pub fn contract_report(&self) -> Result<PackageAdapterReport, PackageInstallError> {
+            let phase = match self.host_promotion.kind {
+                HostPromotionDecisionKind::Allowed => PackageAdapterPhase::HostPromotion,
+                HostPromotionDecisionKind::AwaitingApproval => PackageAdapterPhase::HostCheckpoint,
+                HostPromotionDecisionKind::Denied => PackageAdapterPhase::Denied,
+                HostPromotionDecisionKind::RollbackPending => {
+                    PackageAdapterPhase::RollbackPrepared
+                }
+                HostPromotionDecisionKind::FailedClosed => PackageAdapterPhase::FailedClosed,
+            };
+            PackageAdapterReport::new(
+                PackageIdentity::new(
+                    &self.plan.metadata.package_name,
+                    &self.plan.metadata.version,
+                    &self.plan.metadata.source_uri,
+                    &self.plan.metadata.source_digest,
+                    &self.plan.metadata.repository,
+                )
+                .map_err(|error| PackageInstallError::InvalidRequest {
+                    reason: error.reason(),
+                })?,
+                phase,
+                self.isolated_result.installed_in_isolation
+                    && self.isolated_result.smoke_passed
+                    && self.isolated_result.signature_verified,
+                self.host_promotion.kind == HostPromotionDecisionKind::Allowed,
+                self.host_promotion.host_modified,
+                self.host_promotion.evidence.rollback_id.clone(),
+                self.isolated_result.retained_artifacts.clone(),
+                if self.host_promotion.kind == HostPromotionDecisionKind::Denied {
+                    Some(self.host_promotion.reason.clone())
+                } else {
+                    None
+                },
+            )
+            .map_err(|error| PackageInstallError::InvalidRequest {
+                reason: error.reason(),
+            })
         }
     }
 
@@ -10439,6 +10497,12 @@ pub mod package_install {
                 .policy_checked_phases
                 .iter()
                 .any(|phase| phase == "pkg.host.install:awaiting-approval"));
+            let contract = evidence.contract_report().expect("contract report");
+            assert!(contract
+                .to_json()
+                .contains("agentos.package-adapter-report.v1"));
+            assert_eq!(contract.identity.repository_identity, "agentos-stable");
+            assert!(contract.host_promotion_approved);
             assert!(journal
                 .event_lines()
                 .expect("journal")
@@ -10566,7 +10630,9 @@ pub mod untrusted_content {
     use std::path::PathBuf;
 
     use crate::escape_json;
-    use runtime_contracts::{RiskClass, SemanticToolCall};
+    use runtime_contracts::{
+        ContentAdapterReport, ContentFetchContract, RiskClass, SemanticToolCall,
+    };
     use security_execution::audit::{AuditJournal, RuntimeAuditProjection};
     use security_execution::source_to_sink::{
         ContentSource, SinkDescriptor, SourceToSinkDecision, SourceToSinkError, SourceToSinkPolicy,
@@ -10781,6 +10847,32 @@ pub mod untrusted_content {
                 self.sanitized.to_json()
             )
         }
+
+        pub fn contract_report(
+            &self,
+            denied_sink_visible: bool,
+            effect_prepared: bool,
+        ) -> Result<ContentAdapterReport, UntrustedContentError> {
+            ContentAdapterReport::new(
+                ContentFetchContract::new(
+                    &self.fetched.content_id,
+                    &self.fetched.source_uri,
+                    &self.fetched.content_digest,
+                    self.fetched.bytes_read.max(1),
+                )
+                .map_err(|error| UntrustedContentError::InvalidRequest {
+                    reason: error.reason(),
+                })?,
+                self.fetched.bytes_read,
+                &self.sanitized.sanitized_summary,
+                self.sanitized.direct_tool_call_allowed,
+                denied_sink_visible,
+                effect_prepared,
+            )
+            .map_err(|error| UntrustedContentError::InvalidRequest {
+                reason: error.reason(),
+            })
+        }
     }
 
     pub trait UntrustedContentFetcher {
@@ -10950,6 +11042,34 @@ pub mod untrusted_content {
                 self.effect_prepared,
                 self.replanning_hint.to_json()
             )
+        }
+
+        pub fn contract_report(
+            &self,
+            request: &UntrustedContentRequest,
+            bytes_read: usize,
+            max_bytes: usize,
+        ) -> Result<ContentAdapterReport, UntrustedContentError> {
+            ContentAdapterReport::new(
+                ContentFetchContract::new(
+                    &request.content_id,
+                    &request.source_uri,
+                    &request.content_digest,
+                    max_bytes,
+                )
+                .map_err(|error| UntrustedContentError::InvalidRequest {
+                    reason: error.reason(),
+                })?,
+                bytes_read,
+                &self.replanning_hint.sanitized_summary,
+                self.replanning_hint.direct_tool_call_allowed,
+                self.source_to_sink.kind
+                    == security_execution::source_to_sink::SourceToSinkDecisionKind::Denied,
+                self.effect_prepared,
+            )
+            .map_err(|error| UntrustedContentError::InvalidRequest {
+                reason: error.reason(),
+            })
         }
     }
 
@@ -11486,6 +11606,13 @@ pub mod untrusted_content {
                     .contains(&"suggested-command".to_string())
             );
             assert!(!output.to_json().contains("EffectPrepared"));
+            let contract = output
+                .contract_report(false, false)
+                .expect("contract report");
+            assert!(contract
+                .to_json()
+                .contains("agentos.content-adapter-report.v1"));
+            assert!(!contract.direct_tool_call_allowed);
         }
 
         #[test]
@@ -11531,6 +11658,11 @@ pub mod untrusted_content {
                     .contains("sanitized: untrusted instructions removed")
             );
             assert!(!report.effect_prepared);
+            let contract = report
+                .contract_report(&request, raw.len(), DEFAULT_FETCH_MAX_BYTES)
+                .expect("contract report");
+            assert!(contract.denied_sink_visible);
+            assert!(!contract.effect_prepared);
             let projection = report.audit_projection.expect("projection");
             assert!(projection.steps.iter().any(|step| {
                 step.step_id == STEP_POLICY_CHECK

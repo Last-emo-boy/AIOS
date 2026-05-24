@@ -1,60 +1,64 @@
-{
-  "id": "TASK-FUNC-000",
-  "title": "Freeze functional iteration scope and capability matrix",
-  "status": "planned",
-  "wave": 0,
-  "priority": "P0",
-  "type": "scope",
-  "owner": "workflow",
-  "source": "research.md; TASK.md",
-  "depends_on": [],
-  "purpose": "Freeze the post-Alpha functional capability matrix so later work grows through contracts, AgentCore workflows, SecurityExecution authority, and operator projections.",
-  "scope": [
-    "List user-visible AgentOS capability families after Distribution Alpha.",
-    "Map each family to owner crate/module, semantic tools, policy risk, audit projection, rollback/fail-closed behavior, and release gate.",
-    "Declare non-goals and blocked shortcuts, especially direct agentd-only implementation and normal-mode shell execution.",
-    "Create a capability matrix document that subsequent tasks must update."
-  ],
-  "deliverables": [
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-000-capability-matrix.json"
-  ],
-  "read_first": [
-    "research.md",
-    "TASK.md",
-    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-scope.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
-  ],
-  "implementation_steps": [
-    "Create a matrix row for package manager, untrusted content, Firecracker execution, operator UX, diagnostics/support bundle, update/rollback, and audit export.",
-    "For each row, assign a primary owner and an integration path.",
-    "Define baseline local-only acceptance and optional dependency behavior.",
-    "Record risks and explicit non-goals in evidence JSON."
-  ],
-  "acceptance_criteria": [
-    "Every capability has exactly one primary owner and clear integration layers.",
-    "No capability is allowed to bypass SecurityExecutionEngine for side effects.",
-    "The matrix states the local-only replay path and optional dependency behavior.",
-    "The matrix links to follow-up TASK-FUNC tasks."
-  ],
-  "verification": [
-    "Validate JSON evidence parses.",
-    "Grep the matrix for owner entries for runtime_contracts, agent_core, security_execution, agentd, scripts, and packaging."
-  ],
-  "failure_modes": [
-    "Capability ownership is ambiguous.",
-    "Agentd becomes the owner of adapter business logic.",
-    "A capability requires external LLM, network, Firecracker, or host package manager for baseline acceptance.",
-    "Rollback or fail-closed behavior is omitted."
-  ],
-  "handoff": {
-    "next_tasks": [
-      "TASK-FUNC-001",
-      "TASK-FUNC-002"
-    ],
-    "blocked_until": [
-      "Capability matrix is written and evidence is parseable."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-000",
+    "title":  "Freeze functional iteration scope and capability matrix",
+    "status":  "completed",
+    "wave":  0,
+    "priority":  "P0",
+    "type":  "scope",
+    "owner":  "workflow",
+    "source":  "research.md; TASK.md",
+    "depends_on":  [
+
+                   ],
+    "purpose":  "Freeze the post-Alpha functional capability matrix so later work grows through contracts, AgentCore workflows, SecurityExecution authority, and operator projections.",
+    "scope":  [
+                  "List user-visible AgentOS capability families after Distribution Alpha.",
+                  "Map each family to owner crate/module, semantic tools, policy risk, audit projection, rollback/fail-closed behavior, and release gate.",
+                  "Declare non-goals and blocked shortcuts, especially direct agentd-only implementation and normal-mode shell execution.",
+                  "Create a capability matrix document that subsequent tasks must update."
+              ],
+    "deliverables":  [
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-000-capability-matrix.json"
+                     ],
+    "read_first":  [
+                       "research.md",
+                       "TASK.md",
+                       ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json",
+                       ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-scope.md",
+                       ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
+                   ],
+    "implementation_steps":  [
+                                 "Create a matrix row for package manager, untrusted content, Firecracker execution, operator UX, diagnostics/support bundle, update/rollback, and audit export.",
+                                 "For each row, assign a primary owner and an integration path.",
+                                 "Define baseline local-only acceptance and optional dependency behavior.",
+                                 "Record risks and explicit non-goals in evidence JSON."
+                             ],
+    "acceptance_criteria":  [
+                                "Every capability has exactly one primary owner and clear integration layers.",
+                                "No capability is allowed to bypass SecurityExecutionEngine for side effects.",
+                                "The matrix states the local-only replay path and optional dependency behavior.",
+                                "The matrix links to follow-up TASK-FUNC tasks."
+                            ],
+    "verification":  [
+                         "Validate JSON evidence parses.",
+                         "Grep the matrix for owner entries for runtime_contracts, agent_core, security_execution, agentd, scripts, and packaging."
+                     ],
+    "failure_modes":  [
+                          "Capability ownership is ambiguous.",
+                          "Agentd becomes the owner of adapter business logic.",
+                          "A capability requires external LLM, network, Firecracker, or host package manager for baseline acceptance.",
+                          "Rollback or fail-closed behavior is omitted."
+                      ],
+    "handoff":  {
+                    "next_tasks":  [
+                                       "TASK-FUNC-001",
+                                       "TASK-FUNC-002"
+                                   ],
+                    "blocked_until":  [
+                                          "Capability matrix is written and evidence is parseable."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.5505394+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-000-capability-matrix.json"
 }

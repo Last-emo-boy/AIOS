@@ -1,62 +1,64 @@
-{
-  "id": "TASK-FUNC-021",
-  "title": "Integrate untrusted content adapter into AgentCore workflow",
-  "status": "planned",
-  "wave": 2,
-  "priority": "P1",
-  "type": "implementation",
-  "owner": "agent_core",
-  "source": "TASK-FUNC-011",
-  "depends_on": [
-    "TASK-FUNC-011"
-  ],
-  "purpose": "Wire the content adapter contract into AgentCore so fetch, sanitize, summarize, and source-to-sink checks are repeatable runtime workflows.",
-  "scope": [
-    "Consume typed content fetch and sanitization reports.",
-    "Keep sanitized summary as replanning-only context.",
-    "Use source-to-sink policy before any high-risk sink.",
-    "Project denied injection attempts into audit and operator views."
-  ],
-  "deliverables": [
-    "agent_core untrusted content workflow integration",
-    "content fixture tests",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-021-content-workflow.json"
-  ],
-  "read_first": [
-    "crates/agent_core/src/lib.rs",
-    "crates/security_execution/src/lib.rs",
-    "crates/security_execution/src/policy.rs",
-    "crates/runtime_contracts/src/model.rs",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-011.json"
-  ],
-  "implementation_steps": [
-    "Add content workflow execution over typed fetch/sanitize/summary reports.",
-    "Add fixtures for valid local content, digest mismatch, over-size content, and shell-injection text.",
-    "Assert direct shell/secret/privileged/exfiltration sinks do not prepare effects.",
-    "Record evidence with audit projection examples."
-  ],
-  "acceptance_criteria": [
-    "External content remains untrusted unless explicitly operator-origin.",
-    "Digest mismatch and size limit fail closed.",
-    "Sanitized summaries cannot create tool calls.",
-    "Denied high-risk sink is visible and effect-free."
-  ],
-  "verification": [
-    "cargo test -p agent_core untrusted_content",
-    "cargo test -p security_execution source_to_sink",
-    "cargo test -p agentd safety::prompt_injection",
-    "cargo test --workspace"
-  ],
-  "failure_modes": [
-    "Raw external content is fed to planner as authority.",
-    "Sanitized summary becomes a direct tool call.",
-    "Denied sink still prepares an effect.",
-    "Audit projection hides source label."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-050",
-    "blocked_until": [
-      "Content workflow tests and evidence pass."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-021",
+    "title":  "Integrate untrusted content adapter into AgentCore workflow",
+    "status":  "completed",
+    "wave":  2,
+    "priority":  "P1",
+    "type":  "implementation",
+    "owner":  "agent_core",
+    "source":  "TASK-FUNC-011",
+    "depends_on":  [
+                       "TASK-FUNC-011"
+                   ],
+    "purpose":  "Wire the content adapter contract into AgentCore so fetch, sanitize, summarize, and source-to-sink checks are repeatable runtime workflows.",
+    "scope":  [
+                  "Consume typed content fetch and sanitization reports.",
+                  "Keep sanitized summary as replanning-only context.",
+                  "Use source-to-sink policy before any high-risk sink.",
+                  "Project denied injection attempts into audit and operator views."
+              ],
+    "deliverables":  [
+                         "agent_core untrusted content workflow integration",
+                         "content fixture tests",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-021-content-workflow.json"
+                     ],
+    "read_first":  [
+                       "crates/agent_core/src/lib.rs",
+                       "crates/security_execution/src/lib.rs",
+                       "crates/security_execution/src/policy.rs",
+                       "crates/runtime_contracts/src/model.rs",
+                       ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-011.json"
+                   ],
+    "implementation_steps":  [
+                                 "Add content workflow execution over typed fetch/sanitize/summary reports.",
+                                 "Add fixtures for valid local content, digest mismatch, over-size content, and shell-injection text.",
+                                 "Assert direct shell/secret/privileged/exfiltration sinks do not prepare effects.",
+                                 "Record evidence with audit projection examples."
+                             ],
+    "acceptance_criteria":  [
+                                "External content remains untrusted unless explicitly operator-origin.",
+                                "Digest mismatch and size limit fail closed.",
+                                "Sanitized summaries cannot create tool calls.",
+                                "Denied high-risk sink is visible and effect-free."
+                            ],
+    "verification":  [
+                         "cargo test -p agent_core untrusted_content",
+                         "cargo test -p security_execution source_to_sink",
+                         "cargo test -p agentd safety::prompt_injection",
+                         "cargo test --workspace"
+                     ],
+    "failure_modes":  [
+                          "Raw external content is fed to planner as authority.",
+                          "Sanitized summary becomes a direct tool call.",
+                          "Denied sink still prepares an effect.",
+                          "Audit projection hides source label."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-050",
+                    "blocked_until":  [
+                                          "Content workflow tests and evidence pass."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.6949033+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-021-content-workflow.json"
 }

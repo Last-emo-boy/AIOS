@@ -138,6 +138,34 @@ function Test-SemanticTools {
     return $checks
 }
 
+function Test-OperatorCommands {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    $checks = [System.Collections.ArrayList]::new()
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        Add-Check $checks "json-parse" $false "operator command registry missing"
+        return $checks
+    }
+
+    try {
+        $registry = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+        Add-Check $checks "json-parse" $true
+    } catch {
+        Add-Check $checks "json-parse" $false $_.Exception.Message
+        return $checks
+    }
+
+    Add-Check $checks "schema" ($registry.schema -eq "agentos.operator-commands.v1") "operator command schema must be stable"
+    Add-Check $checks "shell-absent" (-not (@($registry.commands | ForEach-Object { $_.name }) -contains "shell.exec")) "operator registry must not expose shell.exec"
+    foreach ($field in @("name", "owner", "risk", "semantic_mapping", "blocked_prerequisites")) {
+        $missing = @($registry.commands | Where-Object { -not $_.PSObject.Properties[$field] })
+        Add-Check $checks "command-field-$field" ($missing.Count -eq 0) "each operator command must declare $field"
+    }
+    foreach ($command in @("capability.list", "service.recover", "package.install.fixture", "content.inspect", "audit.export", "support.bundle.export", "rollback.trigger")) {
+        Add-Check $checks "command-$command" (@($registry.commands | Where-Object { $_.name -eq $command }).Count -eq 1) "required operator command missing"
+    }
+    return $checks
+}
+
 function Test-ModelBrokerConfig {
     param([Parameter(Mandatory = $true)][string]$Path)
     $checks = [System.Collections.ArrayList]::new()
@@ -183,6 +211,8 @@ function New-ArtifactResult {
         foreach ($check in (Test-PolicyPack $path)) { [void]$checks.Add($check) }
     } elseif ($Artifact.id -eq "tools.semantic") {
         foreach ($check in (Test-SemanticTools $path)) { [void]$checks.Add($check) }
+    } elseif ($Artifact.id -eq "operator.commands") {
+        foreach ($check in (Test-OperatorCommands $path)) { [void]$checks.Add($check) }
     } elseif ($Artifact.id -eq "model_broker.config") {
         foreach ($check in (Test-ModelBrokerConfig $path)) { [void]$checks.Add($check) }
     }
@@ -207,6 +237,7 @@ $resolvedRootfs = (Resolve-Path -LiteralPath $RootfsPath -ErrorAction Stop).Path
 $required = @(
     @{ id = "policy.pack"; kind = "file"; path = "/etc/agentos/policy/policy-pack.json"; owner = "root:root"; mode = "0644" },
     @{ id = "tools.semantic"; kind = "file"; path = "/etc/agentos/tools/semantic-tools.json"; owner = "root:root"; mode = "0644" },
+    @{ id = "operator.commands"; kind = "file"; path = "/etc/agentos/operator-commands.json"; owner = "root:root"; mode = "0644" },
     @{ id = "model_broker.config"; kind = "file"; path = "/etc/agentos/model-broker.toml"; owner = "root:root"; mode = "0644" },
     @{ id = "state.runs"; kind = "directory"; path = "/var/lib/agentos/runs/"; owner = "root:root"; mode = "0700" },
     @{ id = "state.audit"; kind = "directory"; path = "/var/log/agentos/audit/"; owner = "root:root"; mode = "0700" },

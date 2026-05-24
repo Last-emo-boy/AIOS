@@ -143,6 +143,7 @@ if (-not $AllowHandoffOnly -and [string]::IsNullOrWhiteSpace($initramfsManifest.
 $requiredRuntimeArtifactIds = @(
     "policy.pack",
     "tools.semantic",
+    "operator.commands",
     "model_broker.config",
     "state.runs",
     "state.audit",

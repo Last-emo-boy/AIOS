@@ -1,0 +1,71 @@
+{
+  "schema": "agentos.operator-commands.v1",
+  "manifest_version": "functional-iteration-1",
+  "normal_mode_shell_exec": "absent-and-denied",
+  "commands": [
+    {
+      "name": "capability.list",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "operator.project",
+      "local_only": true,
+      "blocked_prerequisites": []
+    },
+    {
+      "name": "service.recover",
+      "owner": "agent_core",
+      "risk": "execute-with-confirmation",
+      "semantic_mapping": "svc.logs -> svc.status -> http.check -> config.test -> svc.restart",
+      "local_only": true,
+      "blocked_prerequisites": ["exact approval token for svc.restart"]
+    },
+    {
+      "name": "package.install.fixture",
+      "owner": "agent_core",
+      "risk": "privileged-with-human-approval",
+      "semantic_mapping": "pkg.fetch.metadata -> pkg.isolate.install -> pkg.isolate.smoke -> pkg.host.checkpoint -> pkg.host.install -> pkg.host.verify",
+      "local_only": true,
+      "blocked_prerequisites": ["isolated validation", "rollback_id", "exact approval token"]
+    },
+    {
+      "name": "content.inspect",
+      "owner": "agent_core",
+      "risk": "read-only",
+      "semantic_mapping": "content.fetch -> content.sanitize -> content.summarize -> policy.source_to_sink.check -> audit.project",
+      "local_only": true,
+      "blocked_prerequisites": ["source digest", "max byte limit"]
+    },
+    {
+      "name": "firecracker.run.fixture",
+      "owner": "security_execution",
+      "risk": "execute-with-confirmation",
+      "semantic_mapping": "SecurityExecutionEngine firecracker profile",
+      "local_only": false,
+      "blocked_prerequisites": ["firecracker binary", "jailer binary", "kernel image", "rootfs image", "KVM"]
+    },
+    {
+      "name": "audit.export",
+      "owner": "security_execution",
+      "risk": "read-only",
+      "semantic_mapping": "audit.project",
+      "local_only": true,
+      "blocked_prerequisites": ["redaction manifest", "audit hash chain"]
+    },
+    {
+      "name": "support.bundle.export",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "operator.project + audit.project",
+      "local_only": true,
+      "blocked_prerequisites": ["redacted audit projection", "support bundle manifest"]
+    },
+    {
+      "name": "rollback.trigger",
+      "owner": "security_execution",
+      "risk": "execute-with-confirmation",
+      "semantic_mapping": "rollback.trigger",
+      "local_only": true,
+      "blocked_prerequisites": ["existing rollback_id", "exact approval token"]
+    }
+  ]
+}

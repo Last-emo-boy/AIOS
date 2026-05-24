@@ -1,61 +1,63 @@
-{
-  "id": "TASK-FUNC-041",
-  "title": "Add health, diagnostics, and recovery drills",
-  "status": "planned",
-  "wave": 4,
-  "priority": "P1",
-  "type": "operations",
-  "owner": "agentd",
-  "source": "docs/agentd-lifecycle.md",
-  "depends_on": [
-    "TASK-FUNC-013",
-    "TASK-FUNC-023"
-  ],
-  "purpose": "Turn health and diagnostics into repeatable recovery drills for long-running AgentOS operation.",
-  "scope": [
-    "Define health report levels for runtime, policy, state, audit, rollback, ModelBroker, packaging, and optional dependencies.",
-    "Define recovery drills for interrupted run, rollback pending, audit mirror failure, and denied high-risk action.",
-    "Define diagnostics output redaction and operator projection.",
-    "Add fixture-backed smoke strategy."
-  ],
-  "deliverables": [
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/health-diagnostics-recovery-drills.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-041-health-recovery-drills.json"
-  ],
-  "read_first": [
-    "crates/agentd/src/lifecycle.rs",
-    "crates/agentd/src/recovery.rs",
-    "crates/agentd/src/operator_projection.rs",
-    "crates/agent_core/src/lib.rs",
-    "docs/agentd-lifecycle.md"
-  ],
-  "implementation_steps": [
-    "Define health dimensions and severity model.",
-    "Define recovery drill fixtures and expected operator projection.",
-    "Add or plan smoke scripts for recovery drills.",
-    "Record evidence with drill matrix."
-  ],
-  "acceptance_criteria": [
-    "Health report distinguishes degraded optional dependency from blocked runtime authority.",
-    "Recovery drills never replay model output as authority.",
-    "Diagnostics are redacted.",
-    "Operator projection explains recovery source."
-  ],
-  "verification": [
-    "cargo test -p agentd recovery",
-    "cargo test -p agent_core recovery",
-    "cargo test --workspace"
-  ],
-  "failure_modes": [
-    "Health treats optional dependency missing as global failure.",
-    "Recovery drill reruns model planning for unresolved effects.",
-    "Diagnostics leak secret-like data.",
-    "Operator projection hides recovery source."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-050",
-    "blocked_until": [
-      "Health/recovery drill matrix exists."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-041",
+    "title":  "Add health, diagnostics, and recovery drills",
+    "status":  "completed",
+    "wave":  4,
+    "priority":  "P1",
+    "type":  "operations",
+    "owner":  "agentd",
+    "source":  "docs/agentd-lifecycle.md",
+    "depends_on":  [
+                       "TASK-FUNC-013",
+                       "TASK-FUNC-023"
+                   ],
+    "purpose":  "Turn health and diagnostics into repeatable recovery drills for long-running AgentOS operation.",
+    "scope":  [
+                  "Define health report levels for runtime, policy, state, audit, rollback, ModelBroker, packaging, and optional dependencies.",
+                  "Define recovery drills for interrupted run, rollback pending, audit mirror failure, and denied high-risk action.",
+                  "Define diagnostics output redaction and operator projection.",
+                  "Add fixture-backed smoke strategy."
+              ],
+    "deliverables":  [
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/health-diagnostics-recovery-drills.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-041-health-recovery-drills.json"
+                     ],
+    "read_first":  [
+                       "crates/agentd/src/lifecycle.rs",
+                       "crates/agentd/src/recovery.rs",
+                       "crates/agentd/src/operator_projection.rs",
+                       "crates/agent_core/src/lib.rs",
+                       "docs/agentd-lifecycle.md"
+                   ],
+    "implementation_steps":  [
+                                 "Define health dimensions and severity model.",
+                                 "Define recovery drill fixtures and expected operator projection.",
+                                 "Add or plan smoke scripts for recovery drills.",
+                                 "Record evidence with drill matrix."
+                             ],
+    "acceptance_criteria":  [
+                                "Health report distinguishes degraded optional dependency from blocked runtime authority.",
+                                "Recovery drills never replay model output as authority.",
+                                "Diagnostics are redacted.",
+                                "Operator projection explains recovery source."
+                            ],
+    "verification":  [
+                         "cargo test -p agentd recovery",
+                         "cargo test -p agent_core recovery",
+                         "cargo test --workspace"
+                     ],
+    "failure_modes":  [
+                          "Health treats optional dependency missing as global failure.",
+                          "Recovery drill reruns model planning for unresolved effects.",
+                          "Diagnostics leak secret-like data.",
+                          "Operator projection hides recovery source."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-050",
+                    "blocked_until":  [
+                                          "Health/recovery drill matrix exists."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.7941388+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-041-health-recovery-drills.json"
 }

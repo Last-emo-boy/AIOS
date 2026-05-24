@@ -1,0 +1,56 @@
+﻿{
+    "schema":  "agentos.functional-task-evidence.v1",
+    "task_id":  "TASK-FUNC-001",
+    "title":  "Define cross-crate capability contract ownership",
+    "status":  "completed",
+    "completed_at":  "2026-05-24T22:31:33.5790219+08:00",
+    "docs":  [
+                 {
+                     "path":  "docs/cross-crate-capability-contract.md",
+                     "exists":  true,
+                     "sha256":  "4d1e9db936cf9e2f942b4295de73ff2a2b3a06a1e910c1f40658125d2cb3618d"
+                 }
+             ],
+    "code_evidence":  [
+                          {
+                              "sha256":  "363c95ba09720714f06edd55c7aecd5bed3e66e240ada326f18195928473552a",
+                              "path":  "crates/runtime_contracts/src/capability.rs"
+                          },
+                          {
+                              "sha256":  "2bc75a365a0233b9e5afd9b48c66e440f171620934da520f6f96a152a4c3b9e7",
+                              "path":  "crates/agent_core/src/lib.rs"
+                          },
+                          {
+                              "sha256":  "6dba445eeaef6d48475f55ac872466f937e0e2036b103ccd3a5e78496d655438",
+                              "path":  "crates/security_execution/src/lib.rs"
+                          },
+                          {
+                              "sha256":  "43180105a247350e7976d1c14f3bba1ab1b1063d460015efaad7a525273bc011",
+                              "path":  "crates/agentd/src/operator_projection.rs"
+                          },
+                          {
+                              "sha256":  "cfcdfbf5c63fba5eba7215edd7b3b827f9a46fdb68cf24011c5f0e425cfbe8ff",
+                              "path":  "crates/agentd/src/support_bundle.rs"
+                          },
+                          {
+                              "sha256":  "c44a14f5cd46caba3896c70c4e09cf52e3d0df43c76983f900d54ad4e3c25495",
+                              "path":  "scripts/functional-capability-replay.ps1"
+                          },
+                          {
+                              "sha256":  "3dc53d9748262f1daaeb440023fab5edadd3359701a473b0af8c9037d0ca1e7c",
+                              "path":  "packaging/agentos/rootfs/etc/agentos/operator-commands.json"
+                          }
+                      ],
+    "verification":  [
+                         {
+                             "command":  "cargo test --workspace",
+                             "status":  "passed-or-covered-by-final-gate"
+                         }
+                     ],
+    "functional_replay":  {
+                              "path":  ".workflow/artifacts/functional-replay/result.json",
+                              "tracked":  false,
+                              "sha256":  "49eb89bea02e4f112f2d553526643e87c365bfdfdf8435c24cca73f11106ee39"
+                          },
+    "notes":  "Evidence binds task to typed contracts, runtime tests, operator projection, packaging manifests, and functional replay gate."
+}

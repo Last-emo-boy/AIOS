@@ -1,61 +1,63 @@
-{
-  "id": "TASK-FUNC-011",
-  "title": "Expand untrusted content adapter contract and fetch fixture",
-  "status": "planned",
-  "wave": 1,
-  "priority": "P1",
-  "type": "contract",
-  "owner": "runtime_contracts",
-  "source": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-011.json",
-  "depends_on": [
-    "TASK-FUNC-001",
-    "TASK-FUNC-002"
-  ],
-  "purpose": "Turn the Alpha untrusted-content workflow into a typed content adapter contract with pinned local fixtures and future network fetch support.",
-  "scope": [
-    "Define content fetch, content artifact, sanitizer, summary, and source-to-sink decision contracts.",
-    "Define pinned digest, maximum bytes, content type, origin label, and sanitization policy fields.",
-    "Define local fixture fetch as baseline and network fetch as optional integration.",
-    "Define denied action projection for injection attempts."
-  ],
-  "deliverables": [
-    "runtime_contracts content adapter model additions or design doc",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/untrusted-content-adapter-contract.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-011-content-contract.json"
-  ],
-  "read_first": [
-    "crates/runtime_contracts/src/model.rs",
-    "crates/security_execution/src/lib.rs",
-    "crates/security_execution/src/policy.rs",
-    "crates/agent_core/src/lib.rs",
-    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json"
-  ],
-  "implementation_steps": [
-    "Define content adapter contract fields and fixture shapes.",
-    "Specify local fixture fetch, digest mismatch, over-size, unsupported type, and injection cases.",
-    "Map summary outputs to replanning-only context.",
-    "Record source-to-sink audit projection expectations."
-  ],
-  "acceptance_criteria": [
-    "External content defaults to untrusted.",
-    "Digest and size limits are mandatory for fetch adapters.",
-    "Sanitized summaries cannot directly create tool calls.",
-    "Denied sink attempts are visible in audit projection without EffectPrepared."
-  ],
-  "verification": [
-    "Run `cargo test -p security_execution source_to_sink` if policy code changes.",
-    "Run `cargo test -p agent_core untrusted_content` after workflow integration."
-  ],
-  "failure_modes": [
-    "Network fetch becomes baseline acceptance dependency.",
-    "External content is treated as operator-trusted.",
-    "Summary text can drive privileged or exfiltration sinks.",
-    "Digest mismatch is warning-only instead of fail-closed."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-021",
-    "blocked_until": [
-      "Content adapter contract and fixtures are defined."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-011",
+    "title":  "Expand untrusted content adapter contract and fetch fixture",
+    "status":  "completed",
+    "wave":  1,
+    "priority":  "P1",
+    "type":  "contract",
+    "owner":  "runtime_contracts",
+    "source":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-011.json",
+    "depends_on":  [
+                       "TASK-FUNC-001",
+                       "TASK-FUNC-002"
+                   ],
+    "purpose":  "Turn the Alpha untrusted-content workflow into a typed content adapter contract with pinned local fixtures and future network fetch support.",
+    "scope":  [
+                  "Define content fetch, content artifact, sanitizer, summary, and source-to-sink decision contracts.",
+                  "Define pinned digest, maximum bytes, content type, origin label, and sanitization policy fields.",
+                  "Define local fixture fetch as baseline and network fetch as optional integration.",
+                  "Define denied action projection for injection attempts."
+              ],
+    "deliverables":  [
+                         "runtime_contracts content adapter model additions or design doc",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/untrusted-content-adapter-contract.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-011-content-contract.json"
+                     ],
+    "read_first":  [
+                       "crates/runtime_contracts/src/model.rs",
+                       "crates/security_execution/src/lib.rs",
+                       "crates/security_execution/src/policy.rs",
+                       "crates/agent_core/src/lib.rs",
+                       ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json"
+                   ],
+    "implementation_steps":  [
+                                 "Define content adapter contract fields and fixture shapes.",
+                                 "Specify local fixture fetch, digest mismatch, over-size, unsupported type, and injection cases.",
+                                 "Map summary outputs to replanning-only context.",
+                                 "Record source-to-sink audit projection expectations."
+                             ],
+    "acceptance_criteria":  [
+                                "External content defaults to untrusted.",
+                                "Digest and size limits are mandatory for fetch adapters.",
+                                "Sanitized summaries cannot directly create tool calls.",
+                                "Denied sink attempts are visible in audit projection without EffectPrepared."
+                            ],
+    "verification":  [
+                         "Run `cargo test -p security_execution source_to_sink` if policy code changes.",
+                         "Run `cargo test -p agent_core untrusted_content` after workflow integration."
+                     ],
+    "failure_modes":  [
+                          "Network fetch becomes baseline acceptance dependency.",
+                          "External content is treated as operator-trusted.",
+                          "Summary text can drive privileged or exfiltration sinks.",
+                          "Digest mismatch is warning-only instead of fail-closed."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-021",
+                    "blocked_until":  [
+                                          "Content adapter contract and fixtures are defined."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.6328705+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-011-content-contract.json"
 }

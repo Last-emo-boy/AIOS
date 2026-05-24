@@ -1,60 +1,62 @@
-{
-  "id": "TASK-FUNC-013",
-  "title": "Add diagnostics and support bundle contract",
-  "status": "planned",
-  "wave": 1,
-  "priority": "P1",
-  "type": "contract",
-  "owner": "runtime_contracts",
-  "source": "research.md",
-  "depends_on": [
-    "TASK-FUNC-001",
-    "TASK-FUNC-002"
-  ],
-  "purpose": "Define diagnostics and support bundle contracts so operators can export useful evidence without leaking secrets.",
-  "scope": [
-    "Define health snapshot, runtime diagnostics, support bundle manifest, audit excerpt, and redaction report shapes.",
-    "Define what can be included by default and what requires explicit approval.",
-    "Define deterministic bundle hashing and reproducibility expectations.",
-    "Define denial behavior for secret-like or untrusted fields."
-  ],
-  "deliverables": [
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/diagnostics-support-bundle-contract.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-013-diagnostics-support-contract.json"
-  ],
-  "read_first": [
-    "crates/agentd/src/lifecycle.rs",
-    "crates/agentd/src/operator_projection.rs",
-    "crates/security_execution/src/audit.rs",
-    "docs/audit-journal.md",
-    "docs/recovery-semantics.md"
-  ],
-  "implementation_steps": [
-    "Define diagnostics and support bundle schema.",
-    "Classify fields into always-allowed, redacted, approval-required, and forbidden.",
-    "Define stable bundle manifest hashing.",
-    "Record evidence with fixture cases for valid and secret-like diagnostics."
-  ],
-  "acceptance_criteria": [
-    "Support bundles contain metadata and redacted audit excerpts, not raw secrets.",
-    "Bundle manifest is deterministic.",
-    "Operators can trace bundle contents to audit/run IDs.",
-    "Secret-like fixtures are rejected or redacted before export."
-  ],
-  "verification": [
-    "Run future support bundle smoke script once implemented.",
-    "Run `cargo test --workspace` after contract code changes."
-  ],
-  "failure_modes": [
-    "Support bundle includes raw secret-like values.",
-    "Bundle output is non-deterministic.",
-    "Bundle omits run/audit traceability.",
-    "Diagnostics mutate runtime state."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-023",
-    "blocked_until": [
-      "Diagnostics/support bundle contract is defined."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-013",
+    "title":  "Add diagnostics and support bundle contract",
+    "status":  "completed",
+    "wave":  1,
+    "priority":  "P1",
+    "type":  "contract",
+    "owner":  "runtime_contracts",
+    "source":  "research.md",
+    "depends_on":  [
+                       "TASK-FUNC-001",
+                       "TASK-FUNC-002"
+                   ],
+    "purpose":  "Define diagnostics and support bundle contracts so operators can export useful evidence without leaking secrets.",
+    "scope":  [
+                  "Define health snapshot, runtime diagnostics, support bundle manifest, audit excerpt, and redaction report shapes.",
+                  "Define what can be included by default and what requires explicit approval.",
+                  "Define deterministic bundle hashing and reproducibility expectations.",
+                  "Define denial behavior for secret-like or untrusted fields."
+              ],
+    "deliverables":  [
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/diagnostics-support-bundle-contract.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-013-diagnostics-support-contract.json"
+                     ],
+    "read_first":  [
+                       "crates/agentd/src/lifecycle.rs",
+                       "crates/agentd/src/operator_projection.rs",
+                       "crates/security_execution/src/audit.rs",
+                       "docs/audit-journal.md",
+                       "docs/recovery-semantics.md"
+                   ],
+    "implementation_steps":  [
+                                 "Define diagnostics and support bundle schema.",
+                                 "Classify fields into always-allowed, redacted, approval-required, and forbidden.",
+                                 "Define stable bundle manifest hashing.",
+                                 "Record evidence with fixture cases for valid and secret-like diagnostics."
+                             ],
+    "acceptance_criteria":  [
+                                "Support bundles contain metadata and redacted audit excerpts, not raw secrets.",
+                                "Bundle manifest is deterministic.",
+                                "Operators can trace bundle contents to audit/run IDs.",
+                                "Secret-like fixtures are rejected or redacted before export."
+                            ],
+    "verification":  [
+                         "Run future support bundle smoke script once implemented.",
+                         "Run `cargo test --workspace` after contract code changes."
+                     ],
+    "failure_modes":  [
+                          "Support bundle includes raw secret-like values.",
+                          "Bundle output is non-deterministic.",
+                          "Bundle omits run/audit traceability.",
+                          "Diagnostics mutate runtime state."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-023",
+                    "blocked_until":  [
+                                          "Diagnostics/support bundle contract is defined."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.6649095+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-013-diagnostics-support-contract.json"
 }

@@ -1,59 +1,61 @@
-{
-  "id": "TASK-FUNC-043",
-  "title": "Add update and rollback readiness hooks for production distro",
-  "status": "planned",
-  "wave": 4,
-  "priority": "P1",
-  "type": "operations",
-  "owner": "packaging",
-  "source": "research.md",
-  "depends_on": [
-    "TASK-FUNC-040"
-  ],
-  "purpose": "Bridge functional iteration results into the production distro update and rollback path.",
-  "scope": [
-    "Define update readiness checks for runtime contracts, policy pack, tool manifest, operator commands, state migrations, and rollback handles.",
-    "Define inactive-slot staging and activation health expectations.",
-    "Define failed activation rollback evidence.",
-    "Define production-distro handoff criteria."
-  ],
-  "deliverables": [
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/update-rollback-readiness-hooks.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-043-update-rollback-readiness.json"
-  ],
-  "read_first": [
-    "scripts/build-release.ps1",
-    "image/build-alpha-rootfs.ps1",
-    "docs/release-artifacts.md",
-    ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
-  ],
-  "implementation_steps": [
-    "Define update readiness checklist and fixture statuses.",
-    "Map functional capability matrix to rootfs/update artifacts.",
-    "Define activation health and rollback evidence shape.",
-    "Record production-distro handoff blockers."
-  ],
-  "acceptance_criteria": [
-    "Update readiness checks include contracts, policy, tools, operator commands, and state migrations.",
-    "Failed activation has a rollback evidence path.",
-    "Functional gates are prerequisites for production distro promotion.",
-    "Handoff blockers are explicit."
-  ],
-  "verification": [
-    "future: powershell -ExecutionPolicy Bypass -File scripts/verify-update-channel.ps1",
-    "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1 after integration",
-    "cargo test --workspace"
-  ],
-  "failure_modes": [
-    "Update promotion ignores functional capability matrix.",
-    "State migration readiness is not checked.",
-    "Failed activation has no rollback evidence.",
-    "Operator command registry is omitted from rootfs validation."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-052",
-    "blocked_until": [
-      "Update/rollback readiness hook contract exists."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-043",
+    "title":  "Add update and rollback readiness hooks for production distro",
+    "status":  "completed",
+    "wave":  4,
+    "priority":  "P1",
+    "type":  "operations",
+    "owner":  "packaging",
+    "source":  "research.md",
+    "depends_on":  [
+                       "TASK-FUNC-040"
+                   ],
+    "purpose":  "Bridge functional iteration results into the production distro update and rollback path.",
+    "scope":  [
+                  "Define update readiness checks for runtime contracts, policy pack, tool manifest, operator commands, state migrations, and rollback handles.",
+                  "Define inactive-slot staging and activation health expectations.",
+                  "Define failed activation rollback evidence.",
+                  "Define production-distro handoff criteria."
+              ],
+    "deliverables":  [
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/update-rollback-readiness-hooks.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-043-update-rollback-readiness.json"
+                     ],
+    "read_first":  [
+                       "scripts/build-release.ps1",
+                       "image/build-alpha-rootfs.ps1",
+                       "docs/release-artifacts.md",
+                       ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
+                   ],
+    "implementation_steps":  [
+                                 "Define update readiness checklist and fixture statuses.",
+                                 "Map functional capability matrix to rootfs/update artifacts.",
+                                 "Define activation health and rollback evidence shape.",
+                                 "Record production-distro handoff blockers."
+                             ],
+    "acceptance_criteria":  [
+                                "Update readiness checks include contracts, policy, tools, operator commands, and state migrations.",
+                                "Failed activation has a rollback evidence path.",
+                                "Functional gates are prerequisites for production distro promotion.",
+                                "Handoff blockers are explicit."
+                            ],
+    "verification":  [
+                         "future: powershell -ExecutionPolicy Bypass -File scripts/verify-update-channel.ps1",
+                         "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1 after integration",
+                         "cargo test --workspace"
+                     ],
+    "failure_modes":  [
+                          "Update promotion ignores functional capability matrix.",
+                          "State migration readiness is not checked.",
+                          "Failed activation has no rollback evidence.",
+                          "Operator command registry is omitted from rootfs validation."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-052",
+                    "blocked_until":  [
+                                          "Update/rollback readiness hook contract exists."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.8521371+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-043-update-rollback-readiness.json"
 }

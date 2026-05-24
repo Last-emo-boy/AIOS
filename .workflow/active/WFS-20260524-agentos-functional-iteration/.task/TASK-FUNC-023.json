@@ -1,63 +1,65 @@
-{
-  "id": "TASK-FUNC-023",
-  "title": "Integrate diagnostics and support bundle into audit projection",
-  "status": "planned",
-  "wave": 2,
-  "priority": "P1",
-  "type": "implementation",
-  "owner": "agentd",
-  "source": "TASK-FUNC-013",
-  "depends_on": [
-    "TASK-FUNC-013"
-  ],
-  "purpose": "Expose diagnostics and support bundle generation as read-only/operator projection flows with redacted audit evidence.",
-  "scope": [
-    "Add support bundle projection over health, runtime config summary, audit excerpts, and run metadata.",
-    "Ensure bundle generation is read-only and deterministic.",
-    "Reject or redact secret-like diagnostics.",
-    "Expose bundle manifest and hash for release replay."
-  ],
-  "deliverables": [
-    "diagnostics/support bundle projection implementation or smoke design",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-023-diagnostics-support-integration.json"
-  ],
-  "read_first": [
-    "crates/agentd/src/operator_projection.rs",
-    "crates/agentd/src/lifecycle.rs",
-    "crates/security_execution/src/audit.rs",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-013.json"
-  ],
-  "implementation_steps": [
-    "Add or design support bundle manifest projection.",
-    "Add fixtures for valid and secret-like diagnostics.",
-    "Ensure support bundle generation writes only to artifact output path and not runtime state.",
-    "Record evidence with bundle manifest hash and redaction report."
-  ],
-  "acceptance_criteria": [
-    "Bundle generation is read-only with respect to runtime authority.",
-    "Secret-like fields are redacted or rejected.",
-    "Bundle manifest is deterministic.",
-    "Bundle links to run IDs and audit event ranges."
-  ],
-  "verification": [
-    "cargo test -p agentd operator_projection",
-    "cargo test --workspace",
-    "future: powershell -ExecutionPolicy Bypass -File scripts/verify-support-bundle.ps1"
-  ],
-  "failure_modes": [
-    "Bundle includes raw secret values.",
-    "Bundle output is non-deterministic.",
-    "Bundle generation mutates runtime state.",
-    "Audit excerpts lose traceability."
-  ],
-  "handoff": {
-    "next_tasks": [
-      "TASK-FUNC-032",
-      "TASK-FUNC-042",
-      "TASK-FUNC-050"
-    ],
-    "blocked_until": [
-      "Diagnostics/support projection evidence exists."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-023",
+    "title":  "Integrate diagnostics and support bundle into audit projection",
+    "status":  "completed",
+    "wave":  2,
+    "priority":  "P1",
+    "type":  "implementation",
+    "owner":  "agentd",
+    "source":  "TASK-FUNC-013",
+    "depends_on":  [
+                       "TASK-FUNC-013"
+                   ],
+    "purpose":  "Expose diagnostics and support bundle generation as read-only/operator projection flows with redacted audit evidence.",
+    "scope":  [
+                  "Add support bundle projection over health, runtime config summary, audit excerpts, and run metadata.",
+                  "Ensure bundle generation is read-only and deterministic.",
+                  "Reject or redact secret-like diagnostics.",
+                  "Expose bundle manifest and hash for release replay."
+              ],
+    "deliverables":  [
+                         "diagnostics/support bundle projection implementation or smoke design",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-023-diagnostics-support-integration.json"
+                     ],
+    "read_first":  [
+                       "crates/agentd/src/operator_projection.rs",
+                       "crates/agentd/src/lifecycle.rs",
+                       "crates/security_execution/src/audit.rs",
+                       ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-013.json"
+                   ],
+    "implementation_steps":  [
+                                 "Add or design support bundle manifest projection.",
+                                 "Add fixtures for valid and secret-like diagnostics.",
+                                 "Ensure support bundle generation writes only to artifact output path and not runtime state.",
+                                 "Record evidence with bundle manifest hash and redaction report."
+                             ],
+    "acceptance_criteria":  [
+                                "Bundle generation is read-only with respect to runtime authority.",
+                                "Secret-like fields are redacted or rejected.",
+                                "Bundle manifest is deterministic.",
+                                "Bundle links to run IDs and audit event ranges."
+                            ],
+    "verification":  [
+                         "cargo test -p agentd operator_projection",
+                         "cargo test --workspace",
+                         "future: powershell -ExecutionPolicy Bypass -File scripts/verify-support-bundle.ps1"
+                     ],
+    "failure_modes":  [
+                          "Bundle includes raw secret values.",
+                          "Bundle output is non-deterministic.",
+                          "Bundle generation mutates runtime state.",
+                          "Audit excerpts lose traceability."
+                      ],
+    "handoff":  {
+                    "next_tasks":  [
+                                       "TASK-FUNC-032",
+                                       "TASK-FUNC-042",
+                                       "TASK-FUNC-050"
+                                   ],
+                    "blocked_until":  [
+                                          "Diagnostics/support projection evidence exists."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.7229084+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-023-diagnostics-support-integration.json"
 }

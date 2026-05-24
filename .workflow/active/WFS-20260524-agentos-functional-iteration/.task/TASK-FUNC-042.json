@@ -1,60 +1,62 @@
-{
-  "id": "TASK-FUNC-042",
-  "title": "Add audit retention, export, and redaction gates",
-  "status": "planned",
-  "wave": 4,
-  "priority": "P1",
-  "type": "operations",
-  "owner": "security_execution",
-  "source": "docs/audit-journal.md",
-  "depends_on": [
-    "TASK-FUNC-013",
-    "TASK-FUNC-023"
-  ],
-  "purpose": "Define audit export and retention behavior for support bundles and production-distro operations.",
-  "scope": [
-    "Define audit retention policy, export manifest, hash chain validation, and redaction report.",
-    "Define local audit export smoke and secret-like rejection fixture.",
-    "Define how remote audit mirror status appears in operator projection.",
-    "Define release evidence for audit export gates."
-  ],
-  "deliverables": [
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/audit-retention-export-gates.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-042-audit-export-redaction.json"
-  ],
-  "read_first": [
-    "crates/security_execution/src/audit.rs",
-    "crates/agentd/src/operator_projection.rs",
-    "docs/audit-journal.md",
-    "scripts/remote-audit-mirror-smoke.ps1"
-  ],
-  "implementation_steps": [
-    "Define export manifest schema and retention rules.",
-    "Define redaction gate for secret-like summaries.",
-    "Define hash chain verification expectations.",
-    "Record evidence with valid and secret-like export fixtures."
-  ],
-  "acceptance_criteria": [
-    "Export manifest binds audit event range and hash chain.",
-    "Secret-like audit data is redacted or export-blocked.",
-    "Remote mirror failure mode is visible and policy-aware.",
-    "Retention policy is explicit and testable."
-  ],
-  "verification": [
-    "cargo test -p security_execution audit",
-    "future: powershell -ExecutionPolicy Bypass -File scripts/export-audit-bundle.ps1",
-    "cargo test --workspace"
-  ],
-  "failure_modes": [
-    "Audit export breaks hash chain.",
-    "Secret-like content appears in export.",
-    "Retention policy deletes unresolved effect evidence.",
-    "Remote mirror failure silently allows non-local side effects when policy forbids it."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-050",
-    "blocked_until": [
-      "Audit export and redaction gate contract exists."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-042",
+    "title":  "Add audit retention, export, and redaction gates",
+    "status":  "completed",
+    "wave":  4,
+    "priority":  "P1",
+    "type":  "operations",
+    "owner":  "security_execution",
+    "source":  "docs/audit-journal.md",
+    "depends_on":  [
+                       "TASK-FUNC-013",
+                       "TASK-FUNC-023"
+                   ],
+    "purpose":  "Define audit export and retention behavior for support bundles and production-distro operations.",
+    "scope":  [
+                  "Define audit retention policy, export manifest, hash chain validation, and redaction report.",
+                  "Define local audit export smoke and secret-like rejection fixture.",
+                  "Define how remote audit mirror status appears in operator projection.",
+                  "Define release evidence for audit export gates."
+              ],
+    "deliverables":  [
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/audit-retention-export-gates.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-042-audit-export-redaction.json"
+                     ],
+    "read_first":  [
+                       "crates/security_execution/src/audit.rs",
+                       "crates/agentd/src/operator_projection.rs",
+                       "docs/audit-journal.md",
+                       "scripts/remote-audit-mirror-smoke.ps1"
+                   ],
+    "implementation_steps":  [
+                                 "Define export manifest schema and retention rules.",
+                                 "Define redaction gate for secret-like summaries.",
+                                 "Define hash chain verification expectations.",
+                                 "Record evidence with valid and secret-like export fixtures."
+                             ],
+    "acceptance_criteria":  [
+                                "Export manifest binds audit event range and hash chain.",
+                                "Secret-like audit data is redacted or export-blocked.",
+                                "Remote mirror failure mode is visible and policy-aware.",
+                                "Retention policy is explicit and testable."
+                            ],
+    "verification":  [
+                         "cargo test -p security_execution audit",
+                         "future: powershell -ExecutionPolicy Bypass -File scripts/export-audit-bundle.ps1",
+                         "cargo test --workspace"
+                     ],
+    "failure_modes":  [
+                          "Audit export breaks hash chain.",
+                          "Secret-like content appears in export.",
+                          "Retention policy deletes unresolved effect evidence.",
+                          "Remote mirror failure silently allows non-local side effects when policy forbids it."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-050",
+                    "blocked_until":  [
+                                          "Audit export and redaction gate contract exists."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.8101432+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-042-audit-export-redaction.json"
 }

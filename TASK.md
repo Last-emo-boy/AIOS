@@ -386,9 +386,9 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ### Functional Iteration Wave 0：scope 与 capability matrix
 
-- `TASK-FUNC-000`：冻结 functional iteration scope and capability matrix（planned）
-- `TASK-FUNC-001`：定义 cross-crate capability contract ownership（planned）
-- `TASK-FUNC-002`：定义 functional release gate and fixture strategy（planned）
+- `TASK-FUNC-000`：冻结 functional iteration scope and capability matrix（completed）
+- `TASK-FUNC-001`：定义 cross-crate capability contract ownership（completed）
+- `TASK-FUNC-002`：定义 functional release gate and fixture strategy（completed）
 
 退出标准：
 
@@ -398,10 +398,10 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ### Functional Iteration Wave 1：真实 adapter contracts
 
-- `TASK-FUNC-010`：扩展 package manager adapter contract and Debian fixture（planned）
-- `TASK-FUNC-011`：扩展 untrusted content adapter contract and fetch fixture（planned）
-- `TASK-FUNC-012`：扩展 Firecracker execution adapter contract and fail-closed fixture（planned）
-- `TASK-FUNC-013`：增加 diagnostics and support bundle contract（planned）
+- `TASK-FUNC-010`：扩展 package manager adapter contract and Debian fixture（completed）
+- `TASK-FUNC-011`：扩展 untrusted content adapter contract and fetch fixture（completed）
+- `TASK-FUNC-012`：扩展 Firecracker execution adapter contract and fail-closed fixture（completed）
+- `TASK-FUNC-013`：增加 diagnostics and support bundle contract（completed）
 
 退出标准：
 
@@ -411,10 +411,10 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ### Functional Iteration Wave 2：workflow integration
 
-- `TASK-FUNC-020`：把 package manager adapter 接入 AgentCore workflow（planned）
-- `TASK-FUNC-021`：把 untrusted content adapter 接入 AgentCore workflow（planned）
-- `TASK-FUNC-022`：把 Firecracker execution profile 接入 SecurityExecutionEngine（planned）
-- `TASK-FUNC-023`：把 diagnostics/support bundle 接入 audit projection（planned）
+- `TASK-FUNC-020`：把 package manager adapter 接入 AgentCore workflow（completed）
+- `TASK-FUNC-021`：把 untrusted content adapter 接入 AgentCore workflow（completed）
+- `TASK-FUNC-022`：把 Firecracker execution profile 接入 SecurityExecutionEngine（completed）
+- `TASK-FUNC-023`：把 diagnostics/support bundle 接入 audit projection（completed）
 
 退出标准：
 
@@ -424,9 +424,9 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ### Functional Iteration Wave 3：operator UX
 
-- `TASK-FUNC-030`：增加 operator command registry and capability matrix projection（planned）
-- `TASK-FUNC-031`：增加 approval、denial、rollback 和 audit command flows（planned）
-- `TASK-FUNC-032`：增加 TUI capability workflow 和 support bundle export views（planned）
+- `TASK-FUNC-030`：增加 operator command registry and capability matrix projection（completed）
+- `TASK-FUNC-031`：增加 approval、denial、rollback 和 audit command flows（completed）
+- `TASK-FUNC-032`：增加 TUI capability workflow 和 support bundle export views（completed）
 
 退出标准：
 
@@ -436,10 +436,10 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ### Functional Iteration Wave 4：long-running control plane
 
-- `TASK-FUNC-040`：定义 persistent state migration and compatibility checks（planned）
-- `TASK-FUNC-041`：增加 health、diagnostics 和 recovery drills（planned）
-- `TASK-FUNC-042`：增加 audit retention、export 和 redaction gates（planned）
-- `TASK-FUNC-043`：增加 update/rollback readiness hooks for production distro（planned）
+- `TASK-FUNC-040`：定义 persistent state migration and compatibility checks（completed）
+- `TASK-FUNC-041`：增加 health、diagnostics 和 recovery drills（completed）
+- `TASK-FUNC-042`：增加 audit retention、export 和 redaction gates（completed）
+- `TASK-FUNC-043`：增加 update/rollback readiness hooks for production distro（completed）
 
 退出标准：
 
@@ -449,9 +449,9 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ### Functional Iteration Wave 5：functional promotion
 
-- `TASK-FUNC-050`：构建 functional capability replay suite（planned）
-- `TASK-FUNC-051`：把 functional replay 接入 release/provenance gate（planned）
-- `TASK-FUNC-052`：运行 final functional audit 并决定下一步 production-distro gate（planned）
+- `TASK-FUNC-050`：构建 functional capability replay suite（completed）
+- `TASK-FUNC-051`：把 functional replay 接入 release/provenance gate（completed）
+- `TASK-FUNC-052`：运行 final functional audit 并决定下一步 production-distro gate（completed）
 
 退出标准：
 
@@ -461,4 +461,4 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 
 ## 下一步
 
-当前应从 `TASK-FUNC-000` 开始执行，先冻结功能矩阵和跨 crate ownership。后续所有功能实现都必须沿着 `runtime_contracts -> agent_core -> security_execution -> agentd projection -> release gate` 链路推进。
+Functional Iteration 已完成：typed contracts、AgentCore workflow bridge、SecurityExecution Firecracker fail-closed gate、operator command registry、support bundle projection、functional replay 和 release provenance gate 已落地。下一步进入 Production Distro 加固入口：以 functional replay、release gate、QEMU smoke、production signing verification 作为进入条件。

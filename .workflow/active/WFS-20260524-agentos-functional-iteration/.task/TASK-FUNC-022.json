@@ -1,61 +1,63 @@
-{
-  "id": "TASK-FUNC-022",
-  "title": "Integrate Firecracker execution profile into SecurityExecutionEngine",
-  "status": "planned",
-  "wave": 2,
-  "priority": "P1",
-  "type": "implementation",
-  "owner": "security_execution",
-  "source": "TASK-FUNC-012",
-  "depends_on": [
-    "TASK-FUNC-012"
-  ],
-  "purpose": "Implement the Firecracker adapter profile as an optional high-risk SecurityExecution path with dependency probing and fail-closed reports.",
-  "scope": [
-    "Add typed dependency probe and microVM execution report handling.",
-    "Bind Firecracker profile to CapabilityLease and SandboxProfile metadata.",
-    "Fail closed before EffectPrepared when dependencies are missing.",
-    "Keep optional integration smoke separate from baseline local-only tests."
-  ],
-  "deliverables": [
-    "security_execution Firecracker profile integration",
-    "fail-closed dependency fixture tests",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-022-firecracker-integration.json"
-  ],
-  "read_first": [
-    "crates/security_execution/src/lib.rs",
-    "crates/security_execution/src/sandbox.rs",
-    "crates/security_execution/src/policy.rs",
-    "crates/agentd/src/security_execution.rs",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-012.json"
-  ],
-  "implementation_steps": [
-    "Add Firecracker dependency probe model and fixture tests.",
-    "Integrate probe result into SecurityExecution prepare path.",
-    "Add fail-closed explanation and audit metadata for missing dependencies.",
-    "Add optional smoke command documentation for environments with Firecracker."
-  ],
-  "acceptance_criteria": [
-    "Missing Firecracker dependencies produce FailedClosed before EffectPrepared.",
-    "CapabilityLease is the only profile authority.",
-    "Planner hints cannot widen network or filesystem access.",
-    "Audit projection explains profile selection and failure reason."
-  ],
-  "verification": [
-    "cargo test -p security_execution",
-    "cargo test -p agentd security_execution::",
-    "cargo test --workspace"
-  ],
-  "failure_modes": [
-    "Dependency probing happens after preparing an effect.",
-    "Firecracker path bypasses PolicyAdapter.",
-    "VM network allowlist is inferred from planner text.",
-    "Artifact retention stores raw secrets."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-050",
-    "blocked_until": [
-      "Firecracker fail-closed tests and evidence pass."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-022",
+    "title":  "Integrate Firecracker execution profile into SecurityExecutionEngine",
+    "status":  "completed",
+    "wave":  2,
+    "priority":  "P1",
+    "type":  "implementation",
+    "owner":  "security_execution",
+    "source":  "TASK-FUNC-012",
+    "depends_on":  [
+                       "TASK-FUNC-012"
+                   ],
+    "purpose":  "Implement the Firecracker adapter profile as an optional high-risk SecurityExecution path with dependency probing and fail-closed reports.",
+    "scope":  [
+                  "Add typed dependency probe and microVM execution report handling.",
+                  "Bind Firecracker profile to CapabilityLease and SandboxProfile metadata.",
+                  "Fail closed before EffectPrepared when dependencies are missing.",
+                  "Keep optional integration smoke separate from baseline local-only tests."
+              ],
+    "deliverables":  [
+                         "security_execution Firecracker profile integration",
+                         "fail-closed dependency fixture tests",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-022-firecracker-integration.json"
+                     ],
+    "read_first":  [
+                       "crates/security_execution/src/lib.rs",
+                       "crates/security_execution/src/sandbox.rs",
+                       "crates/security_execution/src/policy.rs",
+                       "crates/agentd/src/security_execution.rs",
+                       ".workflow/active/WFS-20260524-agentos-functional-iteration/.task/TASK-FUNC-012.json"
+                   ],
+    "implementation_steps":  [
+                                 "Add Firecracker dependency probe model and fixture tests.",
+                                 "Integrate probe result into SecurityExecution prepare path.",
+                                 "Add fail-closed explanation and audit metadata for missing dependencies.",
+                                 "Add optional smoke command documentation for environments with Firecracker."
+                             ],
+    "acceptance_criteria":  [
+                                "Missing Firecracker dependencies produce FailedClosed before EffectPrepared.",
+                                "CapabilityLease is the only profile authority.",
+                                "Planner hints cannot widen network or filesystem access.",
+                                "Audit projection explains profile selection and failure reason."
+                            ],
+    "verification":  [
+                         "cargo test -p security_execution",
+                         "cargo test -p agentd security_execution::",
+                         "cargo test --workspace"
+                     ],
+    "failure_modes":  [
+                          "Dependency probing happens after preparing an effect.",
+                          "Firecracker path bypasses PolicyAdapter.",
+                          "VM network allowlist is inferred from planner text.",
+                          "Artifact retention stores raw secrets."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-050",
+                    "blocked_until":  [
+                                          "Firecracker fail-closed tests and evidence pass."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.7099038+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-022-firecracker-integration.json"
 }

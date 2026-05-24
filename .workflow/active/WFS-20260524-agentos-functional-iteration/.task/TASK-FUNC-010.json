@@ -1,61 +1,63 @@
-{
-  "id": "TASK-FUNC-010",
-  "title": "Expand package manager adapter contract and Debian fixture",
-  "status": "planned",
-  "wave": 1,
-  "priority": "P1",
-  "type": "contract",
-  "owner": "runtime_contracts",
-  "source": ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json",
-  "depends_on": [
-    "TASK-FUNC-001",
-    "TASK-FUNC-002"
-  ],
-  "purpose": "Promote the Alpha package-install workflow from contract/stub into a typed adapter contract with Debian/Ubuntu fixture semantics.",
-  "scope": [
-    "Define package metadata, isolated install, smoke, checkpoint, host promotion, host verification, and rollback report types.",
-    "Define Debian/Ubuntu fixture schema without hard-coding apt into AgentCore.",
-    "Define source digest, repository identity, package version, and rollback binding rules.",
-    "Define fail-closed behavior when host package manager is unavailable."
-  ],
-  "deliverables": [
-    "runtime_contracts package adapter model additions or design doc",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/package-manager-adapter-contract.md",
-    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-010-package-contract.json"
-  ],
-  "read_first": [
-    "crates/runtime_contracts/src/model.rs",
-    "crates/runtime_contracts/src/plan.rs",
-    "crates/agent_core/src/lib.rs",
-    "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
-    ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json"
-  ],
-  "implementation_steps": [
-    "Define versioned contract types or a doc-equivalent schema for package adapter reports.",
-    "Add fixture examples for valid, metadata mismatch, untrusted source, isolated smoke failure, and host promotion denied.",
-    "Map each report to required audit events and policy decisions.",
-    "Record evidence with contract status and future implementation files."
-  ],
-  "acceptance_criteria": [
-    "Host promotion remains privileged-with-human-approval.",
-    "Package identity includes name, version, source URI, source digest, and repository identity.",
-    "The contract can represent failed isolated install without host mutation.",
-    "Rollback binding is mandatory for host promotion."
-  ],
-  "verification": [
-    "Run `cargo test -p runtime_contracts` if code changes are made.",
-    "Run `cargo test -p agent_core package_install` after workflow integration."
-  ],
-  "failure_modes": [
-    "AgentCore depends directly on apt command strings.",
-    "Host install can happen before isolated validation.",
-    "Source digest or rollback id is optional for host promotion.",
-    "Failed isolated artifacts leak secrets."
-  ],
-  "handoff": {
-    "next_task": "TASK-FUNC-020",
-    "blocked_until": [
-      "Package adapter contract and fixtures are defined."
-    ]
-  }
+﻿{
+    "id":  "TASK-FUNC-010",
+    "title":  "Expand package manager adapter contract and Debian fixture",
+    "status":  "completed",
+    "wave":  1,
+    "priority":  "P1",
+    "type":  "contract",
+    "owner":  "runtime_contracts",
+    "source":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/.task/TASK-DALPHA-010.json",
+    "depends_on":  [
+                       "TASK-FUNC-001",
+                       "TASK-FUNC-002"
+                   ],
+    "purpose":  "Promote the Alpha package-install workflow from contract/stub into a typed adapter contract with Debian/Ubuntu fixture semantics.",
+    "scope":  [
+                  "Define package metadata, isolated install, smoke, checkpoint, host promotion, host verification, and rollback report types.",
+                  "Define Debian/Ubuntu fixture schema without hard-coding apt into AgentCore.",
+                  "Define source digest, repository identity, package version, and rollback binding rules.",
+                  "Define fail-closed behavior when host package manager is unavailable."
+              ],
+    "deliverables":  [
+                         "runtime_contracts package adapter model additions or design doc",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/package-manager-adapter-contract.md",
+                         ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-010-package-contract.json"
+                     ],
+    "read_first":  [
+                       "crates/runtime_contracts/src/model.rs",
+                       "crates/runtime_contracts/src/plan.rs",
+                       "crates/agent_core/src/lib.rs",
+                       "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json",
+                       ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json"
+                   ],
+    "implementation_steps":  [
+                                 "Define versioned contract types or a doc-equivalent schema for package adapter reports.",
+                                 "Add fixture examples for valid, metadata mismatch, untrusted source, isolated smoke failure, and host promotion denied.",
+                                 "Map each report to required audit events and policy decisions.",
+                                 "Record evidence with contract status and future implementation files."
+                             ],
+    "acceptance_criteria":  [
+                                "Host promotion remains privileged-with-human-approval.",
+                                "Package identity includes name, version, source URI, source digest, and repository identity.",
+                                "The contract can represent failed isolated install without host mutation.",
+                                "Rollback binding is mandatory for host promotion."
+                            ],
+    "verification":  [
+                         "Run `cargo test -p runtime_contracts` if code changes are made.",
+                         "Run `cargo test -p agent_core package_install` after workflow integration."
+                     ],
+    "failure_modes":  [
+                          "AgentCore depends directly on apt command strings.",
+                          "Host install can happen before isolated validation.",
+                          "Source digest or rollback id is optional for host promotion.",
+                          "Failed isolated artifacts leak secrets."
+                      ],
+    "handoff":  {
+                    "next_task":  "TASK-FUNC-020",
+                    "blocked_until":  [
+                                          "Package adapter contract and fixtures are defined."
+                                      ]
+                },
+    "completed_at":  "2026-05-24T22:31:33.6140232+08:00",
+    "evidence":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/TASK-FUNC-010-package-contract.json"
 }

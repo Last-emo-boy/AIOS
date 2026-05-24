@@ -1,479 +1,507 @@
-{
-  "project": "AIOS",
-  "workflow_name": "agentos-functional-iteration",
-  "current_workflow": ".workflow/active/WFS-20260524-agentos-functional-iteration",
-  "current_phase": "functional-iteration",
-  "status": "planned",
-  "created_at": "2026-05-22T21:31:25+08:00",
-  "updated_at": "2026-05-24T21:23:07+08:00",
-  "source": "research.md",
-  "summary": "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy; current phase plans post-Alpha functional capability iteration with typed adapters, operator workflows, long-running control-plane gates, and functional release replay.",
-  "active_decisions": [
-    {
-      "id": "DEC-001",
-      "status": "accepted",
-      "title": "MVP shape is Developer VM first, Cloud VM compatible",
-      "source": "docs/decisions/000-mvp-shape.md"
-    },
-    {
-      "id": "DEC-002",
-      "status": "accepted",
-      "title": "MVP operating assumptions frozen for Developer VM first path",
-      "source": "docs/decisions/001-mvp-operating-assumptions.md"
-    },
-    {
-      "id": "DEC-003",
-      "status": "accepted",
-      "title": "MVP scope control locks deferred product lines and forbids arbitrary root shell in normal mode",
-      "source": "docs/decisions/002-mvp-scope-control.md"
-    },
-    {
-      "id": "DEC-004",
-      "status": "accepted",
-      "title": "Agent Core Runtime is deterministic orchestration and Security Execution Foundation is the only side-effect path",
-      "source": "docs/decisions/003-agent-core-runtime-boundary.md"
-    }
-  ],
-  "artifacts": [
-    {
-      "type": "research",
-      "path": "research.md"
-    },
-    {
-      "type": "workflow",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json"
-    },
-    {
-      "type": "plan",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/plan.json"
-    },
-    {
-      "type": "task_index",
-      "path": "TASK.md"
-    },
-    {
-      "type": "decision",
-      "path": "docs/decisions/000-mvp-shape.md"
-    },
-    {
-      "type": "decision",
-      "path": "docs/decisions/001-mvp-operating-assumptions.md"
-    },
-    {
-      "type": "decision",
-      "path": "docs/decisions/002-mvp-scope-control.md"
-    },
-    {
-      "type": "completed_wave",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-0"
-    },
-    {
-      "type": "completed_wave",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-1"
-    },
-    {
-      "type": "completed_wave",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-2"
-    },
-    {
-      "type": "completed_wave",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-3"
-    },
-    {
-      "type": "completed_wave",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-4"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-001-boot-smoke.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-002-agentd-lifecycle.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-003-tui-surface.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-004-semantic-tools.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-005-audit-journal.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-006-recovery-reconciler.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-007-capability-policy.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-008-linux-sandbox.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-009-write-diff-rollback.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-010-service-recovery.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-011-safety-regression.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-012-release-artifacts.json"
-    },
-    {
-      "type": "final_audit",
-      "path": ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/FINAL-AUDIT-20260522.json"
-    },
-    {
-      "type": "workflow",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/workflow-session.json"
-    },
-    {
-      "type": "plan",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/plan.json"
-    },
-    {
-      "type": "runtime_doc",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md"
-    },
-    {
-      "type": "runtime_doc",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md"
-    },
-    {
-      "type": "task_breakdown",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/task-breakdown.md"
-    },
-    {
-      "type": "runtime_implementation_blueprint",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-implementation-tasks.md"
-    },
-    {
-      "type": "runtime_task_spec",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md"
-    },
-    {
-      "type": "decision",
-      "path": "docs/decisions/003-agent-core-runtime-boundary.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-000-boundary.json"
-    },
-    {
-      "type": "runtime_doc",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-001-state-contract.json"
-    },
-    {
-      "type": "runtime_doc",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-module-ownership.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-002-module-map.json"
-    },
-    {
-      "type": "runtime_doc",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-003-runtime-gates.json"
-    },
-    {
-      "type": "runtime_code",
-      "path": "crates/agentd/src/agent_core.rs"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-001-data-model.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-002-run-store.json"
-    },
-    {
-      "type": "runtime_doc",
-      "path": "docs/model-broker.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-003-model-broker.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-004-planner.json"
-    },
-    {
-      "type": "runtime_code",
-      "path": "crates/agentd/src/security_execution.rs"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-001-effect-envelope.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-002-policy-adapter.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-003-sandbox-profiles.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-004-untrusted-content.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-005-secret-handles.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-005-run-loop.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-006-scheduler.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-007-observations.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-006-execution-engine.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-007-run-recovery.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-010-adversarial.json"
-    },
-    {
-      "type": "ci_gate",
-      "path": ".github/workflows/safety.yml"
-    },
-    {
-      "type": "ci_gate",
-      "path": ".github/workflows/release.yml"
-    },
-    {
-      "type": "release_gate",
-      "path": "scripts/build-release.ps1"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-008-runtime-safety-gate.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-009-audit-projection.json"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json"
-    },
-    {
-      "type": "safety_gate_manifest",
-      "path": "crates/agentd/src/safety.rs"
-    },
-    {
-      "type": "distribution_entry_criteria",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json"
-    },
-    {
-      "type": "final_audit",
-      "path": ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json"
-    },
-    {
-      "type": "workflow",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/workflow-session.json"
-    },
-    {
-      "type": "plan",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json"
-    },
-    {
-      "type": "distribution_alpha_doc",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/distribution-alpha-task-plan.md"
-    },
-    {
-      "type": "distribution_alpha_runtime_task_spec",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json"
-    },
-    {
-      "type": "distribution_alpha_doc",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-001-rootfs-manifest.json"
-    },
-    {
-      "type": "distribution_alpha_doc",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-002-state-permissions.json"
-    },
-    {
-      "type": "distribution_alpha_config",
-      "path": "packaging/agentos/rootfs/etc/agentos/policy/policy-pack.json"
-    },
-    {
-      "type": "distribution_alpha_config",
-      "path": "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json"
-    },
-    {
-      "type": "distribution_alpha_config",
-      "path": "packaging/agentos/rootfs/etc/agentos/model-broker.toml"
-    },
-    {
-      "type": "distribution_alpha_doc",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json"
-    },
-    {
-      "type": "distribution_alpha_validator",
-      "path": "scripts/validate-alpha-rootfs.ps1"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json"
-    },
-    {
-      "type": "distribution_alpha_builder",
-      "path": "image/build-alpha-rootfs.ps1"
-    },
-    {
-      "type": "distribution_alpha_doc",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-aware-image-assembly.md"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json"
-    },
-    {
-      "type": "distribution_alpha_smoke",
-      "path": "scripts/alpha-service-recovery-smoke.ps1"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
-    },
-    {
-      "type": "distribution_alpha_qemu_smoke",
-      "path": "scripts/boot-smoke-test.ps1"
-    },
-    {
-      "type": "distribution_alpha_builder",
-      "path": "image/build-initramfs.ps1"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
-    },
-    {
-      "type": "distribution_alpha_release_gate",
-      "path": "scripts/build-release.ps1"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json"
-    },
-    {
-      "type": "runtime_code",
-      "path": "crates/agentd/src/security_execution.rs"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-009-firecracker-profile.json"
-    },
-    {
-      "type": "runtime_code",
-      "path": "crates/agentd/src/agent_core.rs"
-    },
-    {
-      "type": "safety_gate_manifest",
-      "path": "crates/agentd/src/safety.rs"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json"
-    },
-    {
-      "type": "runtime_code",
-      "path": "crates/agentd/src/agent_core.rs"
-    },
-    {
-      "type": "safety_gate_manifest",
-      "path": "crates/agentd/src/safety.rs"
-    },
-    {
-      "type": "task_evidence",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json"
-    },
-    {
-      "type": "final_audit",
-      "path": ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json"
-    },
-    {
-      "type": "workflow",
-      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/workflow-session.json"
-    },
-    {
-      "type": "plan",
-      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/plan.json"
-    },
-    {
-      "type": "functional_iteration_doc",
-      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-scope.md"
-    },
-    {
-      "type": "functional_iteration_doc",
-      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
-    },
-    {
-      "type": "functional_iteration_doc",
-      "path": ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-task-plan.md"
-    }
-  ]
+﻿{
+    "project":  "AIOS",
+    "workflow_name":  "agentos-functional-iteration",
+    "current_workflow":  ".workflow/active/WFS-20260524-agentos-functional-iteration",
+    "current_phase":  "functional-iteration",
+    "status":  "completed",
+    "created_at":  "2026-05-22T21:31:25+08:00",
+    "updated_at":  "2026-05-24T22:33:38.3604427+08:00",
+    "source":  "research.md",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy; functional iteration completed with typed adapter contracts, operator command registry, support bundle projection, local-only replay, and release provenance gate.",
+    "active_decisions":  [
+                             {
+                                 "id":  "DEC-001",
+                                 "status":  "accepted",
+                                 "title":  "MVP shape is Developer VM first, Cloud VM compatible",
+                                 "source":  "docs/decisions/000-mvp-shape.md"
+                             },
+                             {
+                                 "id":  "DEC-002",
+                                 "status":  "accepted",
+                                 "title":  "MVP operating assumptions frozen for Developer VM first path",
+                                 "source":  "docs/decisions/001-mvp-operating-assumptions.md"
+                             },
+                             {
+                                 "id":  "DEC-003",
+                                 "status":  "accepted",
+                                 "title":  "MVP scope control locks deferred product lines and forbids arbitrary root shell in normal mode",
+                                 "source":  "docs/decisions/002-mvp-scope-control.md"
+                             },
+                             {
+                                 "id":  "DEC-004",
+                                 "status":  "accepted",
+                                 "title":  "Agent Core Runtime is deterministic orchestration and Security Execution Foundation is the only side-effect path",
+                                 "source":  "docs/decisions/003-agent-core-runtime-boundary.md"
+                             }
+                         ],
+    "artifacts":  [
+                      {
+                          "type":  "research",
+                          "path":  "research.md"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/plan.json"
+                      },
+                      {
+                          "type":  "task_index",
+                          "path":  "TASK.md"
+                      },
+                      {
+                          "type":  "decision",
+                          "path":  "docs/decisions/000-mvp-shape.md"
+                      },
+                      {
+                          "type":  "decision",
+                          "path":  "docs/decisions/001-mvp-operating-assumptions.md"
+                      },
+                      {
+                          "type":  "decision",
+                          "path":  "docs/decisions/002-mvp-scope-control.md"
+                      },
+                      {
+                          "type":  "completed_wave",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-0"
+                      },
+                      {
+                          "type":  "completed_wave",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-1"
+                      },
+                      {
+                          "type":  "completed_wave",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-2"
+                      },
+                      {
+                          "type":  "completed_wave",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-3"
+                      },
+                      {
+                          "type":  "completed_wave",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/workflow-session.json#wave-4"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-001-boot-smoke.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-002-agentd-lifecycle.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-003-tui-surface.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-004-semantic-tools.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-005-audit-journal.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-006-recovery-reconciler.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-007-capability-policy.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-008-linux-sandbox.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-009-write-diff-rollback.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-010-service-recovery.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-011-safety-regression.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/TASK-AIOS-012-release-artifacts.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260522-agentos-linux-mvp/evidence/FINAL-AUDIT-20260522.json"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/plan.json"
+                      },
+                      {
+                          "type":  "runtime_doc",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-runtime.md"
+                      },
+                      {
+                          "type":  "runtime_doc",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/security-execution-foundation.md"
+                      },
+                      {
+                          "type":  "task_breakdown",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/task-breakdown.md"
+                      },
+                      {
+                          "type":  "runtime_implementation_blueprint",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-implementation-tasks.md"
+                      },
+                      {
+                          "type":  "runtime_task_spec",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/agent-core-sef-detailed-tasks.md"
+                      },
+                      {
+                          "type":  "decision",
+                          "path":  "docs/decisions/003-agent-core-runtime-boundary.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-000-boundary.json"
+                      },
+                      {
+                          "type":  "runtime_doc",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-state-contract.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-001-state-contract.json"
+                      },
+                      {
+                          "type":  "runtime_doc",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-module-ownership.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-002-module-map.json"
+                      },
+                      {
+                          "type":  "runtime_doc",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/runtime-safety-gates.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-003-runtime-gates.json"
+                      },
+                      {
+                          "type":  "runtime_code",
+                          "path":  "crates/agentd/src/agent_core.rs"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-001-data-model.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-002-run-store.json"
+                      },
+                      {
+                          "type":  "runtime_doc",
+                          "path":  "docs/model-broker.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-003-model-broker.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-004-planner.json"
+                      },
+                      {
+                          "type":  "runtime_code",
+                          "path":  "crates/agentd/src/security_execution.rs"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-001-effect-envelope.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-002-policy-adapter.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-003-sandbox-profiles.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-004-untrusted-content.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-005-secret-handles.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-005-run-loop.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-006-scheduler.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-007-observations.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-006-execution-engine.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-007-run-recovery.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-009-service-migration.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-010-adversarial.json"
+                      },
+                      {
+                          "type":  "ci_gate",
+                          "path":  ".github/workflows/safety.yml"
+                      },
+                      {
+                          "type":  "ci_gate",
+                          "path":  ".github/workflows/release.yml"
+                      },
+                      {
+                          "type":  "release_gate",
+                          "path":  "scripts/build-release.ps1"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-008-runtime-safety-gate.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-009-audit-projection.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-010-final-verification.json"
+                      },
+                      {
+                          "type":  "safety_gate_manifest",
+                          "path":  "crates/agentd/src/safety.rs"
+                      },
+                      {
+                          "type":  "distribution_entry_criteria",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/docs/distribution-alpha-entry-criteria.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-RTF-004-distro-entry.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/FINAL-AUDIT-20260522.json"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/plan.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_doc",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/distribution-alpha-task-plan.md"
+                      },
+                      {
+                          "type":  "distribution_alpha_runtime_task_spec",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/agent-core-runtime-security-execution-expanded-tasks.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-000-plan-freeze.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_doc",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/rootfs-runtime-install-manifest.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-001-rootfs-manifest.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_doc",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-state-permissions.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-002-state-permissions.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_config",
+                          "path":  "packaging/agentos/rootfs/etc/agentos/policy/policy-pack.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_config",
+                          "path":  "packaging/agentos/rootfs/etc/agentos/tools/semantic-tools.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_config",
+                          "path":  "packaging/agentos/rootfs/etc/agentos/model-broker.toml"
+                      },
+                      {
+                          "type":  "distribution_alpha_doc",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/alpha-runtime-config-defaults.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-004-config-packaging.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_validator",
+                          "path":  "scripts/validate-alpha-rootfs.ps1"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-003-rootfs-validation.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_builder",
+                          "path":  "image/build-alpha-rootfs.ps1"
+                      },
+                      {
+                          "type":  "distribution_alpha_doc",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/docs/runtime-aware-image-assembly.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-005-image-assembly.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_smoke",
+                          "path":  "scripts/alpha-service-recovery-smoke.ps1"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-006-packaged-service-recovery.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_qemu_smoke",
+                          "path":  "scripts/boot-smoke-test.ps1"
+                      },
+                      {
+                          "type":  "distribution_alpha_builder",
+                          "path":  "image/build-initramfs.ps1"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-007-qemu-runtime-smoke.json"
+                      },
+                      {
+                          "type":  "distribution_alpha_release_gate",
+                          "path":  "scripts/build-release.ps1"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-008-alpha-provenance.json"
+                      },
+                      {
+                          "type":  "runtime_code",
+                          "path":  "crates/agentd/src/security_execution.rs"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-009-firecracker-profile.json"
+                      },
+                      {
+                          "type":  "runtime_code",
+                          "path":  "crates/agentd/src/agent_core.rs"
+                      },
+                      {
+                          "type":  "safety_gate_manifest",
+                          "path":  "crates/agentd/src/safety.rs"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-010-package-install-isolation.json"
+                      },
+                      {
+                          "type":  "runtime_code",
+                          "path":  "crates/agentd/src/agent_core.rs"
+                      },
+                      {
+                          "type":  "safety_gate_manifest",
+                          "path":  "crates/agentd/src/safety.rs"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/TASK-DALPHA-011-untrusted-content.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260523-agentos-distribution-alpha/evidence/FINAL-AUDIT-20260523.json"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/plan.json"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-scope.md"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-architecture.md"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-iteration-task-plan.md"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/cross-crate-capability-contract.md"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-release-gate.md"
+                      },
+                      {
+                          "type":  "functional_iteration_doc",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/final-functional-audit-summary.md"
+                      },
+                      {
+                          "type":  "functional_replay",
+                          "path":  "scripts/functional-capability-replay.ps1"
+                      },
+                      {
+                          "type":  "operator_registry",
+                          "path":  "packaging/agentos/rootfs/etc/agentos/operator-commands.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/FINAL-AUDIT-20260524-functional-iteration.json"
+                      }
+                  ]
 }
