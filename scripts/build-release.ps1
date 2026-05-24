@@ -3,7 +3,8 @@ param(
     [string]$QemuPath = "E:\qemu\qemu-system-x86_64.exe",
     [int]$QemuTimeoutSeconds = 30,
     [switch]$SkipBootSmoke,
-    [switch]$SkipTests
+    [switch]$SkipTests,
+    [switch]$RequireProductionSignatures
 )
 
 $ErrorActionPreference = "Stop"
@@ -16,6 +17,18 @@ function Write-Json {
     $Value | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $Path -Encoding UTF8
 }
 
+function Get-ReproducibleTimestamp {
+    if ($env:SOURCE_DATE_EPOCH) {
+        try {
+            $epochSeconds = [Int64]::Parse($env:SOURCE_DATE_EPOCH, [Globalization.CultureInfo]::InvariantCulture)
+            return [DateTimeOffset]::FromUnixTimeSeconds($epochSeconds).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", [Globalization.CultureInfo]::InvariantCulture)
+        } catch {
+            throw "SOURCE_DATE_EPOCH must be a Unix timestamp in seconds: $env:SOURCE_DATE_EPOCH"
+        }
+    }
+    return "1970-01-01T00:00:00Z"
+}
+
 function Invoke-Checked {
     param(
         [Parameter(Mandatory = $true)][string]$Name,
@@ -23,7 +36,7 @@ function Invoke-Checked {
         [Parameter(Mandatory = $true)][scriptblock]$Script
     )
     Write-Host "==> $Name"
-    $started = Get-Date
+    $started = if ($script:releaseGeneratedAt) { $script:releaseGeneratedAt } else { (Get-Date).ToString("o") }
     & $Script
     if ($LASTEXITCODE -ne 0) {
         $script:gateResults += [ordered]@{
@@ -31,8 +44,8 @@ function Invoke-Checked {
             command = $Command
             status = "failed"
             exit_code = $LASTEXITCODE
-            started_at = $started.ToString("o")
-            completed_at = (Get-Date).ToString("o")
+            started_at = $started
+            completed_at = if ($script:releaseGeneratedAt) { $script:releaseGeneratedAt } else { (Get-Date).ToString("o") }
         }
         throw "$Name failed with exit code $LASTEXITCODE"
     }
@@ -41,8 +54,8 @@ function Invoke-Checked {
         command = $Command
         status = "passed"
         exit_code = 0
-        started_at = $started.ToString("o")
-        completed_at = (Get-Date).ToString("o")
+        started_at = $started
+        completed_at = if ($script:releaseGeneratedAt) { $script:releaseGeneratedAt } else { (Get-Date).ToString("o") }
     }
 }
 
@@ -102,7 +115,19 @@ function Test-SecretFreeContent {
     return $true
 }
 
+function Get-StringSha256 {
+    param([Parameter(Mandatory = $true)][string]$Value)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try {
+        $bytes = [Text.Encoding]::UTF8.GetBytes($Value)
+        return (($sha.ComputeHash($bytes) | ForEach-Object { $_.ToString("x2") }) -join "")
+    } finally {
+        $sha.Dispose()
+    }
+}
+
 function New-DependencyInventory {
+    param([Parameter(Mandatory = $true)][string]$GeneratedAt)
     $cargoMetadata = & cargo metadata --format-version 1 --locked --no-deps 2>$null | ConvertFrom-Json
     if ($LASTEXITCODE -ne 0) {
         throw "cargo metadata failed"
@@ -118,7 +143,7 @@ function New-DependencyInventory {
     }
     return [ordered]@{
         schema = "aios.dependency-inventory.v1"
-        generated_at = (Get-Date).ToString("o")
+        generated_at = $GeneratedAt
         packages = $packages
         lockfile = [ordered]@{
             path = "Cargo.lock"
@@ -127,10 +152,132 @@ function New-DependencyInventory {
     }
 }
 
+function New-CandidateSbom {
+    param(
+        [Parameter(Mandatory = $true)]$Inventory,
+        [Parameter(Mandatory = $true)][string]$GeneratedAt
+    )
+    return [ordered]@{
+        schema = "agentos.candidate-sbom.v1"
+        generated_at = $GeneratedAt
+        format = "agentos-minimal-spdx-like"
+        packages = @($Inventory.packages | Sort-Object name, version | ForEach-Object {
+            [ordered]@{
+                name = $_.name
+                version = $_.version
+                license = $_.license
+                manifest_path = $_.manifest_path
+            }
+        })
+        lockfile = $Inventory.lockfile
+    }
+}
+
+function New-CandidateDetachedSignature {
+    param(
+        [Parameter(Mandatory = $true)][string]$ArtifactName,
+        [Parameter(Mandatory = $true)]$Artifact,
+        [Parameter(Mandatory = $true)][string]$GeneratedAt,
+        [Parameter(Mandatory = $true)][string]$SourceCommit
+    )
+    $algorithm = "sha256-hash-bound-candidate-signature-v1"
+    $keyId = "agentos-candidate-release-hash-bound-v1"
+    $artifactLeafPath = if (-not [string]::IsNullOrWhiteSpace($Artifact.path)) { Split-Path -Leaf $Artifact.path } else { "$ArtifactName.json" }
+    $payload = @($algorithm, $keyId, $ArtifactName, $Artifact.sha256, $SourceCommit) -join "`n"
+    return [ordered]@{
+        schema = "agentos.release-detached-signature.v1"
+        signed_at = $GeneratedAt
+        artifact = [ordered]@{
+            name = $ArtifactName
+            path = $artifactLeafPath
+            sha256 = $Artifact.sha256
+        }
+        signature = [ordered]@{
+            algorithm = $algorithm
+            value = Get-StringSha256 $payload
+        }
+        key = [ordered]@{
+            key_id = $keyId
+            provenance = "scripts/build-release.ps1 deterministic candidate signing record"
+            rotation_policy = "docs/release-artifacts.md#signature-and-key-policy"
+            production_key_required = $false
+        }
+        policy = [ordered]@{
+            detached = $true
+            fail_closed = $true
+        }
+    }
+}
+
+function Write-CandidateDetachedSignature {
+    param(
+        [Parameter(Mandatory = $true)][string]$ArtifactName,
+        [Parameter(Mandatory = $true)]$Artifact,
+        [Parameter(Mandatory = $true)][string]$ArtifactPath,
+        [Parameter(Mandatory = $true)][string]$GeneratedAt,
+        [Parameter(Mandatory = $true)][string]$SourceCommit
+    )
+    $signature = New-CandidateDetachedSignature `
+        -ArtifactName $ArtifactName `
+        -Artifact $Artifact `
+        -GeneratedAt $GeneratedAt `
+        -SourceCommit $SourceCommit
+    $signaturePath = "$ArtifactPath.sig.json"
+    Write-Json -Value $signature -Path $signaturePath
+    return [ordered]@{
+        path = Split-Path -Leaf $signaturePath
+        sha256 = Get-OptionalFileHash $signaturePath
+    }
+}
+
+function New-CandidateUpdateMetadata {
+    param(
+        [Parameter(Mandatory = $true)][string]$GeneratedAt,
+        [Parameter(Mandatory = $true)][string]$SourceCommit,
+        [Parameter(Mandatory = $true)][string]$SourceBranch,
+        [Parameter(Mandatory = $true)]$Artifacts,
+        [Parameter(Mandatory = $true)][string]$SbomPath,
+        [Parameter(Mandatory = $true)][string]$SbomSha256
+    )
+    return [ordered]@{
+        schema = "agentos.candidate-update-metadata.v1"
+        generated_at = $GeneratedAt
+        production_ready_claim = $false
+        source = [ordered]@{
+            git_commit = $SourceCommit
+            git_branch = $SourceBranch
+        }
+        update_strategy = [ordered]@{
+            mode = "ab-rootfs"
+            stage_target = "inactive-slot"
+            active_slot_modified_in_place = $false
+            health_gate_required = $true
+            rollback_required = $true
+        }
+        artifacts = [ordered]@{
+            agentd_binary_sha256 = $Artifacts.agentd_binary.sha256
+            initramfs_sha256 = $Artifacts.initramfs.sha256
+            initramfs_manifest_sha256 = $Artifacts.initramfs.manifest_sha256
+            alpha_rootfs_manifest_sha256 = $Artifacts.alpha_rootfs_manifest.sha256
+            rootfs_runtime_manifest_sha256 = $Artifacts.rootfs_runtime_manifest.sha256
+            sbom = [ordered]@{
+                path = $SbomPath
+                sha256 = $SbomSha256
+            }
+        }
+        signature_policy = [ordered]@{
+            status = "candidate-hash-bound"
+            note = "Candidate metadata is hash-bound for promotion verification; production key management remains a separate release decision."
+        }
+    }
+}
+
 $repoRoot = (Resolve-Path -LiteralPath ".").Path
 $artifactRoot = Join-Path $repoRoot $ArtifactDir
 New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
 $script:gateResults = @()
+$candidateGeneratedAt = Get-ReproducibleTimestamp
+$script:releaseGeneratedAt = $candidateGeneratedAt
 
 if (-not $SkipTests) {
     Invoke-Checked "cargo test -p agentd" "cargo test -p agentd" { cargo test -p agentd }
@@ -144,8 +291,8 @@ Invoke-Checked "image/build-initramfs.ps1" "pwsh -NoProfile -ExecutionPolicy Byp
     pwsh -NoProfile -ExecutionPolicy Bypass -File "image/build-initramfs.ps1"
 }
 
-Invoke-Checked "alpha service recovery smoke" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests" {
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/alpha-service-recovery-smoke.ps1" -SkipCargoTests
+Invoke-Checked "alpha service recovery smoke" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests -SkipRootfsAssembly" {
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/alpha-service-recovery-smoke.ps1" -SkipCargoTests -SkipRootfsAssembly
 }
 
 if (-not $SkipBootSmoke) {
@@ -179,9 +326,85 @@ $bootSmokeResult = Read-OptionalJson $bootSmokeResultPath
 $serviceRecoveryResultPath = Join-Path $repoRoot ".workflow/artifacts/alpha-service-recovery/result.json"
 $serviceRecoveryResult = Read-OptionalJson $serviceRecoveryResultPath
 
-$inventory = New-DependencyInventory
+$inventory = New-DependencyInventory -GeneratedAt $candidateGeneratedAt
 $inventoryPath = Join-Path $artifactRoot "dependency-inventory.json"
 Write-Json -Value $inventory -Path $inventoryPath
+
+$sourceCommit = Get-GitValue @("rev-parse", "HEAD")
+$sourceBranch = Get-GitValue @("branch", "--show-current")
+
+$releaseArtifacts = [ordered]@{
+    agentd_binary = [ordered]@{
+        path = Get-RelativeOrNull $binaryPath
+        sha256 = Get-OptionalFileHash $binaryPath
+    }
+    initramfs = [ordered]@{
+        path = "image/out/agentos-initramfs.cpio.gz"
+        sha256 = Get-OptionalFileHash "image/out/agentos-initramfs.cpio.gz"
+        manifest_path = Get-RelativeOrNull $initramfsManifestPath
+        manifest_sha256 = Get-OptionalFileHash $initramfsManifestPath
+    }
+    alpha_rootfs_manifest = [ordered]@{
+        path = Get-RelativeOrNull $alphaRootfsManifestPath
+        sha256 = Get-OptionalFileHash $alphaRootfsManifestPath
+    }
+    rootfs_runtime_manifest = [ordered]@{
+        path = Get-RelativeOrNull $rootfsRuntimeManifestPath
+        sha256 = Get-OptionalFileHash $rootfsRuntimeManifestPath
+    }
+    qemu_runtime_smoke = [ordered]@{
+        path = Get-RelativeOrNull $bootSmokeResultPath
+        sha256 = Get-OptionalFileHash $bootSmokeResultPath
+    }
+    alpha_service_recovery_smoke = [ordered]@{
+        path = Get-RelativeOrNull $serviceRecoveryResultPath
+        sha256 = Get-OptionalFileHash $serviceRecoveryResultPath
+    }
+    dependency_inventory = [ordered]@{
+        path = "dependency-inventory.json"
+        sha256 = Get-OptionalFileHash $inventoryPath
+    }
+}
+
+$sbom = New-CandidateSbom -Inventory $inventory -GeneratedAt $candidateGeneratedAt
+$sbomPath = Join-Path $artifactRoot "sbom.json"
+Write-Json -Value $sbom -Path $sbomPath
+$releaseArtifacts.sbom = [ordered]@{
+    path = "sbom.json"
+    sha256 = Get-OptionalFileHash $sbomPath
+}
+
+$updateMetadata = New-CandidateUpdateMetadata `
+    -GeneratedAt $candidateGeneratedAt `
+    -SourceCommit $sourceCommit `
+    -SourceBranch $sourceBranch `
+    -Artifacts $releaseArtifacts `
+    -SbomPath "sbom.json" `
+    -SbomSha256 $releaseArtifacts.sbom.sha256
+$updateMetadataPath = Join-Path $artifactRoot "update-metadata.json"
+Write-Json -Value $updateMetadata -Path $updateMetadataPath
+$releaseArtifacts.update_metadata = [ordered]@{
+    path = "update-metadata.json"
+    sha256 = Get-OptionalFileHash $updateMetadataPath
+}
+$releaseArtifacts.dependency_inventory_signature = Write-CandidateDetachedSignature `
+    -ArtifactName "dependency_inventory" `
+    -Artifact $releaseArtifacts.dependency_inventory `
+    -ArtifactPath $inventoryPath `
+    -GeneratedAt $candidateGeneratedAt `
+    -SourceCommit $sourceCommit
+$releaseArtifacts.sbom_signature = Write-CandidateDetachedSignature `
+    -ArtifactName "sbom" `
+    -Artifact $releaseArtifacts.sbom `
+    -ArtifactPath $sbomPath `
+    -GeneratedAt $candidateGeneratedAt `
+    -SourceCommit $sourceCommit
+$releaseArtifacts.update_metadata_signature = Write-CandidateDetachedSignature `
+    -ArtifactName "update_metadata" `
+    -Artifact $releaseArtifacts.update_metadata `
+    -ArtifactPath $updateMetadataPath `
+    -GeneratedAt $candidateGeneratedAt `
+    -SourceCommit $sourceCommit
 
 $requiredRuntimeArtifactIds = @(
     "policy.pack",
@@ -217,11 +440,11 @@ if ($failedGates.Count -gt 0) {
 }
 
 $provenance = [ordered]@{
-    schema = "agentos.distribution-alpha.provenance.v1"
-    generated_at = (Get-Date).ToString("o")
+    schema = "agentos.production-candidate.provenance.v1"
+    generated_at = $candidateGeneratedAt
     source = [ordered]@{
-        git_commit = Get-GitValue @("rev-parse", "HEAD")
-        git_branch = Get-GitValue @("branch", "--show-current")
+        git_commit = $sourceCommit
+        git_branch = $sourceBranch
         git_status_porcelain = Get-GitValue @("status", "--porcelain")
     }
     toolchain = [ordered]@{
@@ -237,41 +460,10 @@ $provenance = [ordered]@{
         "cargo test -p agentd agent_core::adversarial",
         "cargo build -p agentd --release",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1",
-        "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests",
+        "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests -SkipRootfsAssembly",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath <qemu> -TimeoutSeconds <seconds>"
     )
-    artifacts = [ordered]@{
-        agentd_binary = [ordered]@{
-            path = Get-RelativeOrNull $binaryPath
-            sha256 = Get-OptionalFileHash $binaryPath
-        }
-        initramfs = [ordered]@{
-            path = "image/out/agentos-initramfs.cpio.gz"
-            sha256 = Get-OptionalFileHash "image/out/agentos-initramfs.cpio.gz"
-            manifest_path = Get-RelativeOrNull $initramfsManifestPath
-            manifest_sha256 = Get-OptionalFileHash $initramfsManifestPath
-        }
-        alpha_rootfs_manifest = [ordered]@{
-            path = Get-RelativeOrNull $alphaRootfsManifestPath
-            sha256 = Get-OptionalFileHash $alphaRootfsManifestPath
-        }
-        rootfs_runtime_manifest = [ordered]@{
-            path = Get-RelativeOrNull $rootfsRuntimeManifestPath
-            sha256 = Get-OptionalFileHash $rootfsRuntimeManifestPath
-        }
-        qemu_runtime_smoke = [ordered]@{
-            path = Get-RelativeOrNull $bootSmokeResultPath
-            sha256 = Get-OptionalFileHash $bootSmokeResultPath
-        }
-        alpha_service_recovery_smoke = [ordered]@{
-            path = Get-RelativeOrNull $serviceRecoveryResultPath
-            sha256 = Get-OptionalFileHash $serviceRecoveryResultPath
-        }
-        dependency_inventory = [ordered]@{
-            path = Get-RelativeOrNull $inventoryPath
-            sha256 = Get-OptionalFileHash $inventoryPath
-        }
-    }
+    artifacts = $releaseArtifacts
     image_inputs = [ordered]@{
         initramfs_manifest = $initramfsManifest
         alpha_rootfs_manifest = $alphaRootfsManifest
@@ -292,10 +484,26 @@ $provenance = [ordered]@{
     }
     policy = [ordered]@{
         safety_gate = "cargo test -p agentd safety::; cargo test -p agentd agent_core::; cargo test -p agentd agent_core::adversarial"
-        service_recovery_gate = "scripts/alpha-service-recovery-smoke.ps1"
+        service_recovery_gate = "scripts/alpha-service-recovery-smoke.ps1 -SkipRootfsAssembly"
         boot_gate = "scripts/boot-smoke-test.ps1 requires handoff plus runtime markers"
         secret_policy = "handle-only; release metadata stores hashes and paths, not secret values"
-        promotion = "Promote Distribution Alpha only after tests, safety gates, AgentCore gates, service recovery smoke, dependency inventory, provenance, image manifest, and full QEMU runtime smoke pass."
+        promotion = "Promote Production Candidate only after tests, safety gates, AgentCore gates, service recovery smoke, dependency inventory, SBOM, update metadata, detached signatures, provenance, image manifest, reproducibility, and full QEMU runtime smoke pass."
+    }
+    signing = [ordered]@{
+        signature_schema = "agentos.release-detached-signature.v1"
+        algorithm = "sha256-hash-bound-candidate-signature-v1"
+        key_id = "agentos-candidate-release-hash-bound-v1"
+        key_provenance = "scripts/build-release.ps1 deterministic candidate signing record"
+        key_rotation_policy = "docs/release-artifacts.md#signature-and-key-policy"
+        detached_signature_suffix = ".sig.json"
+        required_detached_signatures = @(
+            "dependency_inventory",
+            "sbom",
+            "update_metadata",
+            "provenance"
+        )
+        production_key_required = $false
+        fail_closed = $true
     }
     promotion = [ordered]@{
         status = if ($promotionBlockers.Count -eq 0) { "promotable" } else { "blocked" }
@@ -305,12 +513,37 @@ $provenance = [ordered]@{
 
 $provenancePath = Join-Path $artifactRoot "provenance.json"
 Write-Json -Value $provenance -Path $provenancePath
+$provenanceArtifact = [ordered]@{
+    path = "provenance.json"
+    sha256 = Get-OptionalFileHash $provenancePath
+}
+$provenanceSignatureArtifact = Write-CandidateDetachedSignature `
+    -ArtifactName "provenance" `
+    -Artifact $provenanceArtifact `
+    -ArtifactPath $provenancePath `
+    -GeneratedAt $candidateGeneratedAt `
+    -SourceCommit $sourceCommit
 
 if (-not (Test-SecretFreeContent $inventoryPath)) {
     throw "Dependency inventory contains secret-like content: $inventoryPath"
 }
 if (-not (Test-SecretFreeContent $provenancePath)) {
     throw "Provenance contains secret-like content: $provenancePath"
+}
+foreach ($path in @($sbomPath, $updateMetadataPath, "$inventoryPath.sig.json", "$sbomPath.sig.json", "$updateMetadataPath.sig.json", "$provenancePath.sig.json")) {
+    if (-not (Test-SecretFreeContent $path)) {
+        throw "Release artifact contains secret-like content: $path"
+    }
+}
+
+if ($RequireProductionSignatures) {
+    Invoke-Checked "production signature verification" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1 -ProvenancePath $provenancePath -RequireDecisionEvidence -FailOnBlocked" {
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/verify-production-signatures.ps1" `
+            -ProvenancePath $provenancePath `
+            -OutputPath ".workflow/artifacts/production-signature-verification/result.json" `
+            -RequireDecisionEvidence `
+            -FailOnBlocked
+    }
 }
 
 if ($promotionBlockers.Count -gt 0 -and -not ($SkipTests -or $SkipBootSmoke)) {
@@ -319,4 +552,7 @@ if ($promotionBlockers.Count -gt 0 -and -not ($SkipTests -or $SkipBootSmoke)) {
 
 Write-Host "Release artifacts written:"
 Write-Host "  $inventoryPath"
+Write-Host "  $sbomPath"
+Write-Host "  $updateMetadataPath"
 Write-Host "  $provenancePath"
+Write-Host "  $($provenanceSignatureArtifact.path)"

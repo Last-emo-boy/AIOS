@@ -1,6 +1,7 @@
 use crate::api::{escape_json, PlanSpec};
 use crate::audit::RuntimeAuditProjection;
 use crate::lifecycle::Agentd;
+use crate::operator_projection::OperatorProjection;
 use crate::rollback::DiffPreview;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -82,10 +83,17 @@ impl TuiSession {
     }
 }
 
-pub fn build_demo_session(agentd: &Agentd, intent: impl Into<String>, approval: ApprovalDecision) -> TuiSession {
+pub fn build_demo_session(
+    agentd: &Agentd,
+    intent: impl Into<String>,
+    approval: ApprovalDecision,
+) -> TuiSession {
     let intent = intent.into();
     let plan = agentd.plan(&intent);
-    let first_step = plan.steps.first().expect("stub planner always emits a step");
+    let first_step = plan
+        .steps
+        .first()
+        .expect("stub planner always emits a step");
     let policy = agentd.evaluate(first_step);
     let mut audit = vec![
         AuditEvent {
@@ -142,6 +150,10 @@ pub fn render_runtime_audit_projection(projection: &RuntimeAuditProjection) -> S
     )
 }
 
+pub fn render_operator_projection(projection: &OperatorProjection) -> String {
+    format!("Operator Projection\n{}\n", projection.to_cli_text())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -151,7 +163,8 @@ mod tests {
     fn renders_plan_preview_and_audit() {
         let mut agentd = Agentd::new(LifecycleConfig::default());
         agentd.start();
-        let session = build_demo_session(&agentd, "recover local service", ApprovalDecision::Approved);
+        let session =
+            build_demo_session(&agentd, "recover local service", ApprovalDecision::Approved);
         let rendered = session.render();
         assert!(rendered.contains("AIOS agentd TUI"));
         assert!(rendered.contains("Intent: recover local service"));
@@ -180,7 +193,8 @@ mod tests {
     fn audit_json_records_policy_and_approval_projection() {
         let mut agentd = Agentd::new(LifecycleConfig::default());
         agentd.start();
-        let session = build_demo_session(&agentd, "recover local service", ApprovalDecision::Denied);
+        let session =
+            build_demo_session(&agentd, "recover local service", ApprovalDecision::Denied);
         let audit = session.audit_json();
         assert!(audit.contains("IntentReceived"));
         assert!(audit.contains("PlanFrozen"));
@@ -208,9 +222,10 @@ mod tests {
 
     #[test]
     fn renders_runtime_audit_projection() {
-        let journal = crate::audit::AuditJournal::new(
-            std::env::temp_dir().join(format!("agentd-tui-projection-{}.jsonl", std::process::id())),
-        );
+        let journal = crate::audit::AuditJournal::new(std::env::temp_dir().join(format!(
+            "agentd-tui-projection-{}.jsonl",
+            std::process::id()
+        )));
         let _ = std::fs::remove_file(journal.path());
         journal
             .append(&crate::audit::AuditEvent::new(
@@ -239,5 +254,18 @@ mod tests {
         assert!(rendered.contains("run=run-tui"));
         assert!(rendered.contains("step=step-read"));
         assert!(rendered.contains("trust=sandboxed-tool"));
+    }
+
+    #[test]
+    fn renders_operator_projection_without_runtime_logic() {
+        let mut agentd = Agentd::new(LifecycleConfig::default());
+        agentd.start();
+        let projection = OperatorProjection::collect(&agentd, None, None).expect("projection");
+        let rendered = render_operator_projection(&projection);
+
+        assert!(rendered.contains("Operator Projection"));
+        assert!(rendered.contains("runtime state=running"));
+        assert!(rendered.contains("audit journal=-"));
+        assert!(rendered.contains("safety gate=agentd-safety-regression-v1"));
     }
 }

@@ -56,6 +56,72 @@
       "risk": "execute-with-confirmation",
       "required_parameters": ["rollback_id"],
       "optional_parameters": []
+    },
+    {
+      "name": "content.fetch",
+      "risk": "read-only",
+      "required_parameters": ["source_uri", "content_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "content.sanitize",
+      "risk": "read-only",
+      "required_parameters": ["content_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "content.summarize",
+      "risk": "read-only",
+      "required_parameters": ["content_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "policy.source_to_sink.check",
+      "risk": "read-only",
+      "required_parameters": ["content_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "audit.project",
+      "risk": "read-only",
+      "required_parameters": ["run_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.fetch.metadata",
+      "risk": "read-only",
+      "required_parameters": ["package", "version", "source_uri", "source_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.isolate.install",
+      "risk": "execute-with-confirmation",
+      "required_parameters": ["package", "version", "source_digest"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.isolate.smoke",
+      "risk": "read-only",
+      "required_parameters": ["package", "version"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.host.checkpoint",
+      "risk": "write-with-diff",
+      "required_parameters": ["package", "version", "rollback_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.host.install",
+      "risk": "privileged-with-human-approval",
+      "required_parameters": ["package", "version", "source_uri", "source_digest", "rollback_id"],
+      "optional_parameters": []
+    },
+    {
+      "name": "pkg.host.verify",
+      "risk": "read-only",
+      "required_parameters": ["package", "version"],
+      "optional_parameters": []
     }
   ]
 }

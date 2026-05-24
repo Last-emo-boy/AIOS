@@ -538,6 +538,48 @@ mod tests {
     }
 
     #[test]
+    fn package_manager_adapter_rejects_raw_apt_dpkg_and_shell_bypass() {
+        for tool in ["apt.install", "dpkg.install", "shell.exec"] {
+            let rejection = ToolRouter
+                .route(&SemanticToolCall::new(tool, vec![("cmd", "apt install nginx")]))
+                .expect_err("raw package manager or shell tool denied");
+            assert!(
+                rejection.reason.contains("unknown semantic tool")
+                    || rejection.reason.contains("denies arbitrary shell")
+            );
+        }
+
+        let routed = ToolRouter
+            .route(&SemanticToolCall::new(
+                "pkg.host.install",
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
+                    ("source_digest", "sha256:0123456789abcdef"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
+                ],
+            ))
+            .expect("semantic package host install routes");
+        assert_eq!(routed.risk, RiskClass::PrivilegedWithHumanApproval);
+
+        let injected = ToolRouter
+            .route(&SemanticToolCall::new(
+                "pkg.host.install",
+                vec![
+                    ("package", "nginx-agent-plugin"),
+                    ("version", "1.2.3"),
+                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
+                    ("source_digest", "sha256:0123456789abcdef"),
+                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
+                    ("cmd", "apt install nginx"),
+                ],
+            ))
+            .expect_err("command smuggling denied");
+        assert!(injected.reason.contains("unexpected parameter"));
+    }
+
+    #[test]
     fn untrusted_content_workflow_denies_direct_high_risk_sink_without_effect_prepare() {
         let root = temp_dir("untrusted-content");
         let journal = journal_at(&root);

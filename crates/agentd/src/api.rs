@@ -1,3 +1,6 @@
+pub use runtime_contracts::{RiskClass, SemanticToolCall};
+pub use security_execution_crate::{CommitId, VerificationResult};
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IntentCtx {
     pub intent: String,
@@ -45,27 +48,6 @@ impl PlanStep {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum RiskClass {
-    ReadOnly,
-    WriteWithDiff,
-    ExecuteWithConfirmation,
-    PrivilegedWithHumanApproval,
-    Never,
-}
-
-impl RiskClass {
-    pub fn as_str(self) -> &'static str {
-        match self {
-            RiskClass::ReadOnly => "read-only",
-            RiskClass::WriteWithDiff => "write-with-diff",
-            RiskClass::ExecuteWithConfirmation => "execute-with-confirmation",
-            RiskClass::PrivilegedWithHumanApproval => "privileged-with-human-approval",
-            RiskClass::Never => "never",
-        }
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PolicyDecision {
     pub allowed: bool,
@@ -78,24 +60,6 @@ pub struct CapabilityLease {
     pub lease_id: String,
     pub risk: RiskClass,
     pub expires_in_seconds: u64,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SemanticToolCall {
-    pub name: String,
-    pub params: Vec<(String, String)>,
-}
-
-impl SemanticToolCall {
-    pub fn new(name: impl Into<String>, params: Vec<(&str, &str)>) -> Self {
-        Self {
-            name: name.into(),
-            params: params
-                .into_iter()
-                .map(|(k, v)| (k.to_string(), v.to_string()))
-                .collect(),
-        }
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -117,15 +81,6 @@ impl Effect {
         )
     }
 }
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct VerificationResult {
-    pub success: bool,
-    pub reason: String,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct CommitId(pub String);
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RollbackResult {
