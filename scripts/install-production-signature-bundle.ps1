@@ -68,6 +68,23 @@ function Test-ProductionSignaturePath {
     return (Resolve-RepoPath $Path).EndsWith(".prod.sig.json", [StringComparison]::OrdinalIgnoreCase)
 }
 
+function Get-DuplicateValues {
+    param([object[]]$Values)
+    $normalized = @($Values | Where-Object { Has-Value $_ } | ForEach-Object { [string]$_ })
+    return @($normalized | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+}
+
+function Get-MissingValues {
+    param(
+        [object[]]$Expected,
+        [object[]]$Actual
+    )
+    $actualSet = @($Actual | Where-Object { Has-Value $_ } | ForEach-Object { [string]$_ })
+    return @($Expected | Where-Object {
+        (Has-Value $_) -and ([string]$_ -notin $actualSet)
+    } | ForEach-Object { [string]$_ })
+}
+
 function Add-Check {
     param(
         [Parameter(Mandatory = $true)][string]$Id,
@@ -115,6 +132,12 @@ Add-Check "signing_request.present" ($null -ne $signingRequest) "Signing request
 Add-Check "signature_bundle.present" ($null -ne $bundle) "Signature bundle must exist before installing signatures." "blocking" $SignatureBundlePath
 Add-Check "bundle_verification.present" ($null -ne $verification) "Signature bundle verification result must exist before installation." "blocking" $BundleVerificationPath
 
+if ($null -ne $signingRequest) {
+    $requestNames = @($signingRequest.signing_requests | ForEach-Object { $_.artifact.name })
+    $duplicateRequestNames = Get-DuplicateValues $requestNames
+    Add-Check "signing_request.artifact_names_unique" ($duplicateRequestNames.Count -eq 0) "Signing request artifact names must be unique before installation." "blocking" $duplicateRequestNames
+}
+
 if ($null -ne $verification) {
     Add-Check "bundle_verification.schema" ($verification.schema -eq "agentos.production-signature-bundle-verification.v1") "Bundle verification schema must be exact." "blocking" $verification.schema
     Add-Check "bundle_verification.status" ($verification.status -eq "ready-for-cryptographic-verification") "Bundle verification must be ready for cryptographic verification before installation." "blocking" $verification.status
@@ -123,6 +146,14 @@ if ($null -ne $verification) {
     Add-Check "bundle_verification.binds_signature_bundle" ($verification.inputs.signature_bundle -eq $SignatureBundlePath) "Bundle verification must bind the signature bundle path being installed." "blocking" $verification.inputs.signature_bundle
     Add-Check "bundle_verification.request_count" ($verification.summary.requested_signatures -eq @($signingRequest.signing_requests).Count) "Bundle verification requested signature count must match signing request." "blocking" $verification.summary.requested_signatures
     Add-Check "bundle_verification.match_count" ($verification.summary.matched_signatures -eq @($signingRequest.signing_requests).Count) "Bundle verification matched signature count must match signing request." "blocking" $verification.summary.matched_signatures
+    $requestNames = @($signingRequest.signing_requests | ForEach-Object { $_.artifact.name })
+    $matchedNames = @($verification.matched_signatures)
+    $duplicateMatchedNames = Get-DuplicateValues $matchedNames
+    $missingMatchedNames = Get-MissingValues -Expected $requestNames -Actual $matchedNames
+    $unexpectedMatchedNames = Get-MissingValues -Expected $matchedNames -Actual $requestNames
+    Add-Check "bundle_verification.matched_names_unique" ($duplicateMatchedNames.Count -eq 0) "Bundle verification matched signatures must be unique." "blocking" $duplicateMatchedNames
+    Add-Check "bundle_verification.matched_names_complete" ($missingMatchedNames.Count -eq 0) "Bundle verification matched signatures must include every requested artifact." "blocking" $missingMatchedNames
+    Add-Check "bundle_verification.matched_names_no_unexpected" ($unexpectedMatchedNames.Count -eq 0) "Bundle verification matched signatures must not include unrequested artifacts." "blocking" $unexpectedMatchedNames
 }
 
 if ($script:blockers.Count -eq 0) {

@@ -103,6 +103,33 @@ function Test-Base64Value {
     }
 }
 
+function Get-DuplicateValues {
+    param([object[]]$Values)
+    $normalized = @($Values | Where-Object { Has-Value $_ } | ForEach-Object { [string]$_ })
+    return @($normalized | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+}
+
+function Get-MissingValues {
+    param(
+        [object[]]$Expected,
+        [object[]]$Actual
+    )
+    $actualSet = @($Actual | Where-Object { Has-Value $_ } | ForEach-Object { [string]$_ })
+    return @($Expected | Where-Object {
+        (Has-Value $_) -and ([string]$_ -notin $actualSet)
+    } | ForEach-Object { [string]$_ })
+}
+
+function Get-ResolvedTargetPaths {
+    param([object[]]$Requests)
+    return @($Requests | ForEach-Object {
+        $path = $_.artifact.production_signature_path
+        if (Has-Value $path) {
+            Resolve-RepoPath ([string]$path)
+        }
+    })
+}
+
 $script:repoRoot = (Resolve-Path -LiteralPath ".").Path
 $script:checks = @()
 $script:blockers = @()
@@ -119,6 +146,14 @@ if ($null -ne $signingRequest) {
     Test-NoPrivateMaterial "signing_request" $signingRequest
     Add-Check "signing_request.schema" ($signingRequest.schema -eq "agentos.production-signing-request.v1") "Signing request schema must be exact." "blocking" $signingRequest.schema
     Add-Check "signing_request.status" ($signingRequest.status -eq "ready-for-external-signer") "Signing request must be ready for external signer." "blocking" $signingRequest.status
+    $requestNames = @($signingRequest.signing_requests | ForEach-Object { $_.artifact.name })
+    $requestTargets = Get-ResolvedTargetPaths @($signingRequest.signing_requests)
+    $duplicateRequestNames = Get-DuplicateValues $requestNames
+    $duplicateRequestTargets = Get-DuplicateValues $requestTargets
+    Add-Check "signing_request.signatures.present" (@($signingRequest.signing_requests).Count -gt 0) "Signing request must include requested signatures." "blocking" @($signingRequest.signing_requests).Count
+    Add-Check "signing_request.artifact_names.present" (@($requestNames | Where-Object { -not (Has-Value $_) }).Count -eq 0) "Every signing request entry must include an artifact name." "blocking" $requestNames
+    Add-Check "signing_request.artifact_names_unique" ($duplicateRequestNames.Count -eq 0) "Signing request artifact names must be unique." "blocking" $duplicateRequestNames
+    Add-Check "signing_request.target_paths_unique" ($duplicateRequestTargets.Count -eq 0) "Signing request production signature target paths must be unique." "blocking" $duplicateRequestTargets
 }
 
 if ($null -ne $bundle) {
@@ -126,11 +161,21 @@ if ($null -ne $bundle) {
     Add-Check "signature_bundle.schema" ($bundle.schema -eq "agentos.production-signature-bundle.v1") "Signature bundle schema must be exact." "blocking" $bundle.schema
     Add-Check "signature_bundle.production_ready_false" ($bundle.production_ready_claim -eq $false) "Signature bundle must not claim Production ready." "blocking" $bundle.production_ready_claim
     Add-Check "signature_bundle.signatures.present" (@($bundle.signatures).Count -gt 0) "Signature bundle must contain signatures." "blocking" @($bundle.signatures).Count
+    $bundleNames = @($bundle.signatures | ForEach-Object { $_.artifact.name })
+    $duplicateBundleNames = Get-DuplicateValues $bundleNames
+    Add-Check "signature_bundle.artifact_names.present" (@($bundleNames | Where-Object { -not (Has-Value $_) }).Count -eq 0) "Every signature bundle entry must include an artifact name." "blocking" $bundleNames
+    Add-Check "signature_bundle.artifact_names_unique" ($duplicateBundleNames.Count -eq 0) "Signature bundle artifact names must be unique." "blocking" $duplicateBundleNames
 }
 
 if ($null -ne $signingRequest -and $null -ne $bundle) {
     Add-Check "bundle.binds.source_branch" ($bundle.source.git_branch -eq $signingRequest.source.git_branch) "Signature bundle must bind signing request source branch." "blocking" $bundle.source.git_branch
     Add-Check "bundle.binds.source_commit" ($bundle.source.git_commit -eq $signingRequest.source.git_commit) "Signature bundle must bind signing request source commit." "blocking" $bundle.source.git_commit
+    $requestNames = @($signingRequest.signing_requests | ForEach-Object { $_.artifact.name })
+    $bundleNames = @($bundle.signatures | ForEach-Object { $_.artifact.name })
+    $missingBundleNames = Get-MissingValues -Expected $requestNames -Actual $bundleNames
+    $unrequestedBundleNames = Get-MissingValues -Expected $bundleNames -Actual $requestNames
+    Add-Check "bundle.no_missing_signatures" ($missingBundleNames.Count -eq 0) "Signature bundle must include every requested artifact exactly once." "blocking" $missingBundleNames
+    Add-Check "bundle.no_unrequested_signatures" ($unrequestedBundleNames.Count -eq 0) "Signature bundle must not include unrequested artifacts." "blocking" $unrequestedBundleNames
 
     foreach ($request in @($signingRequest.signing_requests)) {
         $name = $request.artifact.name
