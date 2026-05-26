@@ -1,0 +1,60 @@
+{
+  "task_id": "TASK-TUI2-024",
+  "title": "Add catalog replay gate",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:59:07+08:00",
+  "artifacts": [
+    "scripts/catalog-replay.ps1",
+    "scripts/tui-replay.ps1",
+    ".workflow/artifacts/catalog-replay/result.json"
+  ],
+  "verified": [
+    "Catalog replay renders capability index, workflow catalog, launch preview and AOM artifact trust panel.",
+    "Launch preview stays preview-only and does not create PlanRun snapshots.",
+    "AOM artifact activation remains gated and requires runtime-mediated activation.",
+    "Unsafe catalog input fails closed.",
+    "Replay is local-only and deterministic."
+  ],
+  "commands": [
+    "cargo fmt --check",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/catalog-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "test_result": {
+    "catalog_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/catalog-replay.ps1",
+      "result": "passed",
+      "passed": 14,
+      "failed": 0,
+      "artifact": ".workflow/artifacts/catalog-replay/result.json",
+      "run_store_snapshot_count": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    },
+    "ecosystem_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/ecosystem-replay/result.json"
+    },
+    "tui_tests": {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "passed": 66,
+      "failed": 0
+    }
+  },
+  "risk_notes": [
+    "Catalog replay proves no run snapshots were created.",
+    "AOM activation remains gated and cannot be triggered by catalog views.",
+    "Unsafe catalog input fails closed.",
+    "Replay does not require network, external LLM, Firecracker or host package manager."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-030",
+    "TASK-TUI2-050"
+  ]
+}

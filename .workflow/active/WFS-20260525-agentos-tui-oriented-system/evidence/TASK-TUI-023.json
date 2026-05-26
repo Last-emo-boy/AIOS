@@ -1,0 +1,25 @@
+{
+  "task_id": "TASK-TUI-023",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:47:41+08:00",
+  "evidence_type": "recovery-view",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/artifacts/tui-replay/output.txt",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json"
+  ],
+  "verified": [
+    "recovery.show latest renders recovery state from run-store+audit-journal source",
+    "recovery view states no-model-replay=true",
+    "rollback and human-review states are projected without mutating durable run state",
+    "production runbook smoke asserts recovery_source=run-store+audit-journal"
+  ],
+  "commands": [
+    "cargo test -p agentd tui_ --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "blockers": []
+}

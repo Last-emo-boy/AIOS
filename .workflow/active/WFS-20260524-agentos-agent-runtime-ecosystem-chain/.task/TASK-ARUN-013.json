@@ -1,0 +1,54 @@
+{
+  "id": "TASK-ARUN-013",
+  "title": "Define degraded mode and local/stub fallback behavior",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "owner": "agent_core",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-CHAIN-001"],
+  "purpose": "Define how AgentOS keeps operating when optional model, network, Firecracker, package manager or adapter dependencies are unavailable.",
+  "scope": [
+    "Define degraded-mode classes and operator-facing explanations.",
+    "Define local/stub ModelBroker fallback.",
+    "Define which capabilities remain read-only.",
+    "Define fail-closed behavior before EffectPrepared."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-degraded-mode.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-013.json"
+  ],
+  "read_first": [
+    "docs/model-broker.md",
+    "packaging/agentos/rootfs/etc/agentos/model-broker.toml",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md"
+  ],
+  "implementation_steps": [
+    "List optional dependency classes.",
+    "Define degraded capability matrix.",
+    "Define projection fields for dependency status.",
+    "Record evidence with fail-closed examples."
+  ],
+  "acceptance_criteria": [
+    "Baseline boot and functional replay remain local-only.",
+    "Missing optional dependencies never trigger host mutation.",
+    "Operator can see why a capability is degraded.",
+    "Degraded mode does not broaden authority."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+    "cargo test -p agent_core model_broker"
+  ],
+  "failure_modes": [
+    "Missing optional dependency falls back to unsafe host path.",
+    "Degraded mode hides blockers.",
+    "Remote model becomes required."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-003", "TASK-VERIFY-041"],
+    "blocked_until": ["TASK-CHAIN-001"]
+  },
+  "completed_at": "2026-05-25T00:30:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-013.json"
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "image-host-fallback",
+  "artifact_kind": "execution-image-pack",
+  "coordinate": "agentos:execution-image-pack/adversarial/host-fallback@1.0.0",
+  "attempt": "image pack attempts to run workload on the host after virtualization is missing",
+  "forbidden_surface": "host execution fallback",
+  "expected_outcome": "denied",
+  "denial_reason": "execution image packs cannot fall back to host execution",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

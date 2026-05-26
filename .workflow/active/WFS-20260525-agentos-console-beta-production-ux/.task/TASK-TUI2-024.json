@@ -1,0 +1,45 @@
+{
+  "id": "TASK-TUI2-024",
+  "title": "Add catalog replay gate",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:59:07+08:00",
+  "wave": 3,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-020", "TASK-TUI2-021", "TASK-TUI2-022", "TASK-TUI2-023"],
+  "purpose": "Make capability catalog and AOM artifact UX part of local release evidence.",
+  "scope": [
+    "Extend TUI replay or add catalog replay script.",
+    "Assert capability index, workflow detail, launch preview and artifact trust panel render.",
+    "Assert catalog does not execute or activate directly.",
+    "Assert unsafe catalog input fails closed.",
+    "Persist replay result under .workflow/artifacts."
+  ],
+  "deliverables": [
+    "scripts/tui-replay.ps1 or scripts/catalog-replay.ps1",
+    ".workflow/artifacts/catalog-replay/result.json",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-024.json"
+  ],
+  "acceptance_criteria": [
+    "Catalog replay fails if capability catalog is missing.",
+    "Replay proves launch preview does not execute.",
+    "Replay proves AOM artifact activation remains gated.",
+    "Replay is local-only and deterministic."
+  ],
+  "verification": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "failure_modes": [
+    "Replay only checks old dashboard path.",
+    "Catalog launch prepares an effect.",
+    "Replay depends on network registry."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-030", "TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-020", "TASK-TUI2-021", "TASK-TUI2-022", "TASK-TUI2-023"]
+  }
+}

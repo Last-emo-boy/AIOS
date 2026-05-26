@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-010",
+  "title": "Add TuiRuntimeController over real AgentCore APIs",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-000", "TASK-TUI-001", "TASK-TUI-002"],
+  "purpose": "Replace demo-only TUI session control with a thin controller that calls durable AgentCore run APIs.",
+  "scope": [
+    "Introduce a TuiRuntimeController boundary in agentd.",
+    "Map TUI submit intent to AgentCore accept_intent and plan_run.",
+    "Map TUI advance to AgentCore advance_run.",
+    "Return RunProjection and audit-derived view data instead of synthetic demo data.",
+    "Keep planner, policy and side-effect ownership outside the TUI controller."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/main.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-010.json"
+  ],
+  "acceptance_criteria": [
+    "TUI runtime controller does not create PlanSpec manually except through AgentCore APIs.",
+    "Run ids returned by TUI correspond to durable RunStore entries.",
+    "TUI submit and advance flows survive process restart when FileRunStore is configured.",
+    "Demo rendering remains available only behind explicit demo flags."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_runtime_controller",
+    "cargo test -p agentd agent_core::run_loop",
+    "cargo test -p agentd tui"
+  ],
+  "failure_modes": [
+    "TUI keeps using build_demo_session for interactive runtime flows.",
+    "TUI controller duplicates planning or scheduler logic.",
+    "TUI controller prepares side effects directly instead of using AgentCore and SecurityExecutionEngine."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-011", "TASK-TUI-012", "TASK-TUI-013"],
+    "blocked_until": ["TASK-TUI-001", "TASK-TUI-002"]
+  }
+}

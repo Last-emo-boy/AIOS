@@ -1,0 +1,43 @@
+{
+  "id": "TASK-ECO-052",
+  "title": "Add model and knowledge adversarial replay fixtures",
+  "status": "completed",
+  "wave": 8,
+  "priority": "P1",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-ECO-050", "TASK-ECO-051", "TASK-VERIFY-042"],
+  "purpose": "Prove model profile and knowledge packs cannot leak secrets, bypass ModelBroker or poison memory.",
+  "scope": [
+    "Fixture where model profile embeds secret-like values.",
+    "Fixture where model profile attempts direct provider execution.",
+    "Fixture where knowledge pack attempts policy override.",
+    "Fixture where knowledge pack attempts approval claim injection."
+  ],
+  "deliverables": [
+    "packaging/agentos/fixtures/ecosystem/adversarial/model-knowledge/",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-052.json"
+  ],
+  "acceptance_criteria": [
+    "Secret-like model profile content is rejected.",
+    "Direct provider bypass is denied.",
+    "Knowledge policy override is quarantined.",
+    "Replay records denied reasons and hashes."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "cargo test -p agentd agent_core::adversarial"
+  ],
+  "failure_modes": [
+    "Replay skips model/knowledge fixtures.",
+    "Rejected fixture lacks audit evidence.",
+    "Knowledge poisoning enters trusted planner context."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-PROD-053"],
+    "blocked_until": ["TASK-ECO-050", "TASK-ECO-051"]
+  },
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-052.json"
+}

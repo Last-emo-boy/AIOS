@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI2-043",
+  "title": "Add remote registry mirror UX design",
+  "status": "completed",
+  "completed_at": "2026-05-26T07:57:20+08:00",
+  "wave": 5,
+  "priority": "P1",
+  "type": "design",
+  "owner": "workflow",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-023", "TASK-TUI2-040"],
+  "purpose": "Design remote registry mirror UX while keeping pinned local snapshots authoritative for baseline.",
+  "scope": [
+    "Define mirror status states: not-configured, available, stale, failed, untrusted and disabled.",
+    "Define how pinned local snapshot remains baseline source.",
+    "Define operator UX for snapshot expiry and mirror failure.",
+    "Define trust and signature display requirements.",
+    "Document fail-closed behavior for mirror inconsistencies."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/remote-registry-mirror-ux.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-043.json"
+  ],
+  "acceptance_criteria": [
+    "Remote mirror is optional and not baseline authority.",
+    "Expired local snapshot remains fail-closed unless policy explicitly allows refresh.",
+    "Mirror trust and signature status are visible.",
+    "Network failure does not break local baseline."
+  ],
+  "verification": [
+    "manual review of remote-registry-mirror-ux.md",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "failure_modes": [
+    "Remote mirror silently overrides pinned snapshot.",
+    "Network availability becomes baseline requirement.",
+    "Mirror trust failure is hidden."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-044", "TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-023", "TASK-TUI2-040"]
+  }
+}

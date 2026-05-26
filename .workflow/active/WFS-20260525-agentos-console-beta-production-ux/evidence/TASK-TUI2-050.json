@@ -1,0 +1,80 @@
+{
+  "task_id": "TASK-TUI2-050",
+  "title": "Run final Console Beta and Production UX audit",
+  "status": "completed",
+  "completed_at": "2026-05-26T08:20:11+08:00",
+  "decision": "console-beta",
+  "production_ready_claim": false,
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/final-console-beta-audit-summary.md",
+    ".workflow/artifacts/release/provenance.json",
+    ".workflow/artifacts/boot/boot-smoke-result.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json",
+    ".workflow/artifacts/ecosystem-replay/result.json"
+  ],
+  "verified": [
+    "All 29 TASK-TUI2 tasks are completed and have evidence.",
+    "All final audit gates passed.",
+    "Console Beta decision is accepted.",
+    "TUI remains projection-controller only.",
+    "AgentCore remains PlanRun lifecycle authority.",
+    "SecurityExecutionEngine remains the only side-effect authority.",
+    "Release, signing, gate status and rollout panels are read-only projections.",
+    "Fleet and governance features remain preview-only and non-GA.",
+    "Production Distro RC0 blockers and next tasks are listed."
+  ],
+  "commands": [
+    "cargo fmt --check",
+    "cargo test --workspace",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -QemuTimeoutSeconds 120",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120"
+  ],
+  "test_result": {
+    "cargo_fmt": "passed",
+    "workspace_tests": "passed",
+    "agentd_tui_tests": {
+      "passed": 84,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "projection_controller_only": true
+    },
+    "production_runbook_smoke": {
+      "status": "passed",
+      "cases": 12
+    },
+    "ecosystem_replay": {
+      "status": "passed",
+      "local_only": true
+    },
+    "release_gate": {
+      "status": "passed",
+      "promotion_status_in_candidate_provenance": "promotable",
+      "production_ready_claim": false
+    },
+    "qemu_runtime_smoke": {
+      "status": "completed",
+      "selected_machine": "microvm",
+      "machine_candidates": ["microvm", "pc"],
+      "observed_all_markers": true
+    }
+  },
+  "risk_notes": [
+    "Console Beta is not GA and not Production Distro RC0.",
+    "Production signing still needs a real ceremony, keyring, rotation policy and operator process.",
+    "Fleet rollout, remote registry mirror refresh, support upload and organization policy overlays are still preview/design surfaces.",
+    "TUI must remain read-only/projection-only for release promotion, signing, validation, blocker clearing and remote rollout."
+  ],
+  "next_tasks": [
+    "production-distro-rc0-wave"
+  ]
+}

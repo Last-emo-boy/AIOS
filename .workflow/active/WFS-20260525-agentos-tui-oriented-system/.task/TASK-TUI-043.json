@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI-043",
+  "title": "Integrate TUI projection into production runbook smoke",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-040", "TASK-TUI-041", "TASK-TUI-042"],
+  "purpose": "Upgrade production runbook smoke so it proves TUI operator projections for runtime, ecosystem and support workflows.",
+  "scope": [
+    "Extend production-runbook-smoke.ps1 with TUI scripted or projection checks.",
+    "Assert dashboard, ecosystem, activation preview and support bundle sections.",
+    "Assert install/stage is inert and activation remains gated.",
+    "Persist smoke evidence under workflow artifacts.",
+    "Keep smoke local-only and deterministic."
+  ],
+  "deliverables": [
+    "scripts/production-runbook-smoke.ps1",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-043.json"
+  ],
+  "acceptance_criteria": [
+    "Runbook smoke fails if TUI projection is missing required sections.",
+    "Runbook smoke fails if activation appears ungated.",
+    "Runbook smoke evidence records command outputs and hashes.",
+    "Existing functional and ecosystem replay remain compatible."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "cargo test -p agentd tui_ecosystem"
+  ],
+  "failure_modes": [
+    "Runbook smoke only checks legacy projection output.",
+    "Runbook smoke does not detect missing support bundle section.",
+    "Runbook smoke depends on network or external services."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-050", "TASK-TUI-060", "TASK-TUI-062"],
+    "blocked_until": ["TASK-TUI-040", "TASK-TUI-041", "TASK-TUI-042"]
+  }
+}

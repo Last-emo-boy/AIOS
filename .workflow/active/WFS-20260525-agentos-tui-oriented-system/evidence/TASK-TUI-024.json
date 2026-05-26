@@ -1,0 +1,23 @@
+{
+  "task_id": "TASK-TUI-024",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:47:41+08:00",
+  "evidence_type": "snapshot-redaction-tests",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/artifacts/tui-replay/output.txt",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "tui_snapshot_redacts_secret_and_preserves_deterministic_views covers dashboard, approvals and recovery output",
+    "secret-like payloads are redacted while safe handles and hashes remain explainable",
+    "repeated view renders remain deterministic across local test runs",
+    "approval and recovery states are visible in line-oriented snapshots without terminal rendering dependencies"
+  ],
+  "commands": [
+    "cargo test -p agentd tui_ --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

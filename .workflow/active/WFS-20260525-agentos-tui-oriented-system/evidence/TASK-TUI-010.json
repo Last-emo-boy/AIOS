@@ -1,0 +1,22 @@
+{
+  "task_id": "TASK-TUI-010",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "runtime-controller",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/main.rs",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "TuiRuntimeController constructs AgentCore<FileRunStore, DeterministicPlanner<StubModelProvider>> with AuditJournal",
+    "intent.submit routes to AgentCore accept_intent and plan_run",
+    "run.advance routes to AgentCore advance_run",
+    "scripted replay persisted 28 RunStore snapshots"
+  ],
+  "commands": [
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

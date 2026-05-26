@@ -1,0 +1,56 @@
+{
+  "task_id": "TASK-TUI2-014",
+  "title": "Build Support Console panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:19:52+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/support_console.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "support.bundle status now renders TUI Support Console without exporting a bundle.",
+    "support.bundle export writes the redacted bundle through typed command dispatch.",
+    "Support Console renders runtime health, audit status, ecosystem state and release evidence summary.",
+    "Support Console identifies degraded runtime/support/ecosystem state.",
+    "Remote audit mirror state is visible while local audit remains authoritative.",
+    "Support bundle manifest stays deterministic and redacted.",
+    "Support Console preserves existing TUI Support Bundle marker for runbook compatibility."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_support_console --no-fail-fast",
+    "cargo test -p agentd support_bundle --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "test_result": {
+    "targeted": {
+      "command": "cargo test -p agentd tui_support_console --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "support_bundle": {
+      "command": "cargo test -p agentd support_bundle --no-fail-fast",
+      "passed": 2,
+      "failed": 0
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "status": "passed",
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json"
+    }
+  },
+  "risk_notes": [
+    "Support Console is a projection panel and does not own runtime, audit, resolver or side-effect authority.",
+    "Support export remains bound to typed support.bundle export dispatch.",
+    "Remote mirror is displayed as diagnostics only and is not recovery authority."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-015",
+    "TASK-TUI2-020"
+  ]
+}

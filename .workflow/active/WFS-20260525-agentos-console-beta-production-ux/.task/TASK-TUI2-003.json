@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-003",
+  "title": "Add full-screen pane layout model and narrow terminal fallback",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-001", "TASK-TUI2-002"],
+  "purpose": "Introduce a stable full-screen TUI layout that can run as the main operator shell.",
+  "scope": [
+    "Define pane layout model for status bar, navigation rail, run workspace, event feed and command palette area.",
+    "Define narrow terminal fallback with a single focused panel and tab strip.",
+    "Keep dimensions stable to prevent layout jumps.",
+    "Reuse existing line renderers as initial panel content.",
+    "Avoid terminal-specific state as authority."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui shell/layout code",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-003.json"
+  ],
+  "acceptance_criteria": [
+    "Wide and narrow layouts render deterministically.",
+    "All text fits within panel boundaries.",
+    "Existing scripted output remains available for automation.",
+    "Layout does not require GUI or web UI."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_layout",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "failure_modes": [
+    "Full-screen layout breaks scripted replay.",
+    "Narrow terminal output overlaps or truncates unsafe context.",
+    "Layout code duplicates runtime projection logic."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-004", "TASK-TUI2-005"],
+    "blocked_until": ["TASK-TUI2-001", "TASK-TUI2-002"]
+  },
+  "completed_at": "2026-05-26T00:13:11+08:00",
+  "evidence": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-003.json"
+}

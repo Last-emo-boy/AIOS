@@ -1,0 +1,45 @@
+{
+  "id": "TASK-TUI2-005",
+  "title": "Add full-screen layout snapshots and scripted parity gate",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "test",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-003", "TASK-TUI2-004"],
+  "purpose": "Ensure full-screen UI work remains deterministic and does not regress existing scripted automation.",
+  "scope": [
+    "Add golden snapshots for wide layout, narrow fallback, command palette, approval panel and recovery panel.",
+    "Add tests that compare full-screen source projections with scripted output expectations.",
+    "Add redaction fixtures for command history and preview text.",
+    "Add layout tests for long labels and terminal width boundaries.",
+    "Record snapshot hashes in evidence."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui tests",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-005.json"
+  ],
+  "acceptance_criteria": [
+    "Snapshot output is deterministic across repeated local runs.",
+    "Full-screen mode and scripted mode share projection sources.",
+    "Secret-like content is redacted from layout, history and previews.",
+    "Release replay remains stable."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_layout_snapshot",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Full-screen UI cannot be tested without a live terminal.",
+    "Snapshots include raw secret-like values.",
+    "Layout snapshots are nondeterministic due to timestamps or cursor state."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-006", "TASK-TUI2-010"],
+    "blocked_until": ["TASK-TUI2-003", "TASK-TUI2-004"]
+  },
+  "completed_at": "2026-05-26T00:48:49+08:00",
+  "evidence": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-005.json"
+}

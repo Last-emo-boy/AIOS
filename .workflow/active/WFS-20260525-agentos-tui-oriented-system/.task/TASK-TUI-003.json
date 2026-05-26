@@ -1,0 +1,42 @@
+{
+  "id": "TASK-TUI-003",
+  "title": "Define TUI replay and release gate strategy",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-000", "TASK-TUI-001", "TASK-TUI-002"],
+  "purpose": "Define replay, adversarial fixtures and release evidence required before claiming TUI-oriented AgentOS status.",
+  "scope": [
+    "Define local TUI replay script inputs and outputs.",
+    "Define golden output inventory.",
+    "Define adversarial command fixtures.",
+    "Define release provenance fields for TUI readiness.",
+    "Define QEMU console proof expectations."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-release-gate.md",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-003.json"
+  ],
+  "acceptance_criteria": [
+    "TUI replay is local-only.",
+    "Replay covers submit, plan, advance, approve, deny, recover, audit, support and aom projection flows.",
+    "Adversarial command fixtures fail closed before EffectPrepared.",
+    "Release gate cannot mark TUI-oriented promotion if replay is missing or failed."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\tui-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1"
+  ],
+  "failure_modes": [
+    "TUI readiness is claimed without replay.",
+    "Adversarial command injection is not represented.",
+    "QEMU console proof remains handoff-only."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-060", "TASK-TUI-061", "TASK-TUI-062", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-001", "TASK-TUI-002"]
+  }
+}

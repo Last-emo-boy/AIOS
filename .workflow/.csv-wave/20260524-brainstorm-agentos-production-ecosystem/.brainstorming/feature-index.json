@@ -1,0 +1,88 @@
+{
+  "session": "20260524-brainstorm-agentos-production-ecosystem",
+  "topic": "AgentOS Production Distro complete ecosystem and APT-like manager",
+  "decision": "ecosystem-brainstorm-ready",
+  "features": [
+    {
+      "id": "F-001",
+      "slug": "artifact-manifest-registry-object-model",
+      "priority": "P0",
+      "summary": "Define AgentOS-native artifact manifest, coordinates, registry snapshot, lockfile, activation report and compatibility schema.",
+      "primary_owners": ["runtime_contracts"],
+      "supporting_owners": ["agent_core", "security_execution", "scripts", "packaging"],
+      "task_ids": ["TASK-ECO-001", "TASK-ECO-020", "TASK-ECO-021", "TASK-ECO-022", "TASK-ECO-023"]
+    },
+    {
+      "id": "F-002",
+      "slug": "local-first-ecosystem-manager",
+      "priority": "P0",
+      "summary": "Implement offline-capable aom lifecycle: search, show, verify, stage, diff, activate, deactivate, rollback, doctor and explain.",
+      "primary_owners": ["agent_core", "agentd"],
+      "supporting_owners": ["security_execution", "scripts", "packaging"],
+      "task_ids": ["TASK-ECO-002", "TASK-ECO-003", "TASK-ECO-004", "TASK-ECO-005", "TASK-ECO-006", "TASK-ECO-011"]
+    },
+    {
+      "id": "F-003",
+      "slug": "capability-tool-policy-pack-system",
+      "priority": "P0",
+      "summary": "Package capability semantics, semantic tools and policies with safety-invariant-preserving activation.",
+      "primary_owners": ["runtime_contracts", "security_execution"],
+      "supporting_owners": ["agent_core", "packaging", "scripts"],
+      "task_ids": ["TASK-ECO-012", "TASK-ECO-030", "TASK-ECO-031", "TASK-ECO-032", "TASK-ECO-035"]
+    },
+    {
+      "id": "F-004",
+      "slug": "workflow-runbook-pack-system",
+      "priority": "P1",
+      "summary": "Install reusable workflows that compile into AgentCore PlanSpec and local replay fixtures.",
+      "primary_owners": ["agent_core"],
+      "supporting_owners": ["runtime_contracts", "agentd", "scripts"],
+      "task_ids": ["TASK-ECO-013", "TASK-ECO-014", "TASK-ECO-041", "TASK-ECO-046"]
+    },
+    {
+      "id": "F-005",
+      "slug": "model-profile-knowledge-pack-governance",
+      "priority": "P1",
+      "summary": "Manage model routing profiles and knowledge packs with secret-handle-only, trust labels and memory quarantine rules.",
+      "primary_owners": ["agent_core"],
+      "supporting_owners": ["runtime_contracts", "security_execution"],
+      "task_ids": ["TASK-ECO-050", "TASK-ECO-051", "TASK-ECO-052"]
+    },
+    {
+      "id": "F-006",
+      "slug": "runtime-adapter-execution-image-packs",
+      "priority": "P1",
+      "summary": "Package host adapters, Firecracker profiles, sandbox rootfs, guest images and update image bundles as typed artifacts.",
+      "primary_owners": ["security_execution", "packaging"],
+      "supporting_owners": ["runtime_contracts", "agent_core", "scripts"],
+      "task_ids": ["TASK-ECO-060", "TASK-ECO-061", "TASK-ECO-062"]
+    },
+    {
+      "id": "F-007",
+      "slug": "trust-channel-supply-chain-control-plane",
+      "priority": "P0",
+      "summary": "Define trust tiers, channels, signatures, provenance, SBOM, revocation and advisory flow for Production Distro.",
+      "primary_owners": ["packaging", "scripts"],
+      "supporting_owners": ["runtime_contracts", "agentd"],
+      "task_ids": ["TASK-ECO-015", "TASK-ECO-024", "TASK-ECO-025", "TASK-ECO-030", "TASK-ECO-031", "TASK-ECO-033", "TASK-ECO-034", "TASK-ECO-035"]
+    },
+    {
+      "id": "F-008",
+      "slug": "ecosystem-replay-compatibility-production-promotion",
+      "priority": "P0",
+      "summary": "Extend functional replay with ecosystem activation, policy merge, rollback, revocation, adversarial fixtures and provenance hashes.",
+      "primary_owners": ["scripts"],
+      "supporting_owners": ["runtime_contracts", "agent_core", "security_execution", "agentd"],
+      "task_ids": ["TASK-ECO-040", "TASK-ECO-041", "TASK-ECO-042", "TASK-ECO-043", "TASK-ECO-044", "TASK-ECO-045", "TASK-ECO-046"]
+    }
+  ],
+  "global_constraints": [
+    "agentd remains thin and projection-oriented",
+    "install is not activation",
+    "all activation side effects go through SecurityExecutionEngine",
+    "baseline replay is local-only",
+    "normal-mode arbitrary shell remains forbidden",
+    "policy packs cannot weaken core safety invariants",
+    "release provenance records registry snapshot, lockfile and replay hashes"
+  ]
+}

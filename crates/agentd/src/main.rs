@@ -1,20 +1,24 @@
 use std::env;
 use std::fs;
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
 use std::path::PathBuf;
 use std::process;
 
 use agentd::{
+    aom::run_aom,
     api::{RiskClass, SemanticToolCall},
     audit::{AuditEvent, AuditEventType, AuditJournal},
     lifecycle::{Agentd, LifecycleConfig},
     operator_projection::OperatorProjection,
-    policy::{stable_parameter_hash, ApprovalToken, PolicyEvaluator, PolicyRequest},
+    policy::{ApprovalToken, PolicyEvaluator, PolicyRequest, stable_parameter_hash},
     recovery::RecoveryReconciler,
-    rollback::{content_hash, WriteDiffExecutor, WriteRequest},
+    rollback::{WriteDiffExecutor, WriteRequest, content_hash},
     sandbox::{SandboxCompiler, SandboxExecutor, SandboxOperation},
     service_recovery::{RestartApproval, ServiceFixture, ServiceRecoveryWorkflow},
-    tui::{build_demo_session, render_operator_projection, ApprovalDecision},
+    tui::{
+        ApprovalDecision, TuiRuntimeController, TuiRuntimePaths, build_demo_session,
+        render_operator_projection, run_scripted_lines,
+    },
 };
 
 fn main() {
@@ -146,6 +150,13 @@ fn main() {
             let run_id = args.get(3).map(String::as_str);
             run_operator_project(&agentd, path, run_id, true)
         }
+        Some("--aom") => match run_aom(&args[2..]) {
+            Ok(output) => {
+                println!("{output}");
+                Ok(())
+            }
+            Err(error) => Err(error),
+        },
         Some("--tui-demo") => {
             let intent = args
                 .get(2)
@@ -171,7 +182,8 @@ fn main() {
             println!("{}", session.audit_json());
             Ok(())
         }
-        Some("--tui-interactive") => run_interactive(&agentd),
+        Some("--tui-interactive") => run_interactive(&agentd, &args[2..]),
+        Some("--tui-scripted") => run_tui_scripted(&agentd, &args[2..]),
         Some("--reap-once") => {
             let reaped = agentd.reap_children_once();
             println!("{{\"reaped_children\":{reaped}}}");
@@ -204,26 +216,127 @@ fn parse_approval(value: &str) -> Result<ApprovalDecision, String> {
     }
 }
 
-fn run_interactive(agentd: &Agentd) -> Result<(), String> {
+fn run_interactive(agentd: &Agentd, args: &[String]) -> Result<(), String> {
+    let controller = TuiRuntimeController::new(parse_tui_paths(args)?)?;
     println!("AIOS agentd TUI");
-    println!("Enter intent, or empty line to exit.");
+    println!("Mode: durable");
+    println!("Enter a TUI command, help, or exit.");
     loop {
         print!("aios> ");
         io::stdout()
             .flush()
             .map_err(|error| format!("flush failed: {error}"))?;
-        let mut intent = String::new();
+        let mut line = String::new();
         io::stdin()
-            .read_line(&mut intent)
+            .read_line(&mut line)
             .map_err(|error| format!("read failed: {error}"))?;
-        let intent = intent.trim();
-        if intent.is_empty() {
-            break;
+        let line = line.trim();
+        if line.is_empty() {
+            continue;
         }
-        let session = build_demo_session(agentd, intent, ApprovalDecision::Suspended);
-        print!("{}", session.render());
+        let dispatch = controller.dispatch_line(agentd, line);
+        print!("{}", dispatch.text);
+        if dispatch.should_exit {
+            return Ok(());
+        }
     }
+}
+
+fn run_tui_scripted(agentd: &Agentd, args: &[String]) -> Result<(), String> {
+    let (paths, script_path) = parse_tui_script_args(args)?;
+    let controller = TuiRuntimeController::new(paths)?;
+    let content = match script_path {
+        Some("-") | None => {
+            let mut input = String::new();
+            io::stdin()
+                .read_to_string(&mut input)
+                .map_err(|error| format!("read scripted stdin failed: {error}"))?;
+            input
+        }
+        Some(path) => fs::read_to_string(path)
+            .map_err(|error| format!("read TUI script failed: {path}: {error}"))?,
+    };
+    let lines = content.lines().map(ToString::to_string).collect::<Vec<_>>();
+    print!("{}", run_scripted_lines(agentd, &controller, &lines));
     Ok(())
+}
+
+fn parse_tui_script_args(args: &[String]) -> Result<(TuiRuntimePaths, Option<&str>), String> {
+    let mut paths = TuiRuntimePaths::default();
+    let mut script_path = None;
+    let mut index = 0;
+    while index < args.len() {
+        match args[index].as_str() {
+            "--run-store" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "--run-store requires a path".to_string())?;
+                paths.run_store_root = PathBuf::from(value);
+            }
+            "--audit-journal" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "--audit-journal requires a path".to_string())?;
+                paths.audit_journal_path = PathBuf::from(value);
+            }
+            "--support-bundle" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "--support-bundle requires a path".to_string())?;
+                paths.support_bundle_path = PathBuf::from(value);
+            }
+            value if value.starts_with("--") => {
+                return Err(format!("unknown TUI option: {value}"));
+            }
+            value => {
+                if script_path.is_some() {
+                    return Err(format!("multiple TUI script paths supplied: {value}"));
+                }
+                script_path = Some(value);
+            }
+        }
+        index += 1;
+    }
+    Ok((paths, script_path))
+}
+
+fn parse_tui_paths(args: &[String]) -> Result<TuiRuntimePaths, String> {
+    let mut paths = TuiRuntimePaths::default();
+    let mut index = 0;
+    while index < args.len() {
+        match args[index].as_str() {
+            "--run-store" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "--run-store requires a path".to_string())?;
+                paths.run_store_root = PathBuf::from(value);
+            }
+            "--audit-journal" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "--audit-journal requires a path".to_string())?;
+                paths.audit_journal_path = PathBuf::from(value);
+            }
+            "--support-bundle" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "--support-bundle requires a path".to_string())?;
+                paths.support_bundle_path = PathBuf::from(value);
+            }
+            value if value.starts_with("--") => {
+                return Err(format!("unknown TUI option: {value}"));
+            }
+            _ => {}
+        }
+        index += 1;
+    }
+    Ok(paths)
 }
 
 fn run_audit_demo(path: &str) -> Result<(), String> {

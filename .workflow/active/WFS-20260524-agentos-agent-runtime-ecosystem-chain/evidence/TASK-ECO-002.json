@@ -1,0 +1,57 @@
+{
+  "task_id": "TASK-ECO-002",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:23:14+08:00",
+  "summary": "Added a local-first AgentOS artifact registry fixture and deterministic agent_core ecosystem resolver.",
+  "artifacts": [
+    {
+      "path": "crates/agent_core/src/lib.rs",
+      "status": "updated",
+      "sha256": "260163B5D68B12E79EF9730F7C952D859B4691AC9010A31291856D3092C137AE"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json",
+      "status": "created",
+      "sha256": "70B9E22C7A3D4A6EF094BFE5F617F2CCF281B6CA92D0B7ADE10A027A9C108B0B"
+    }
+  ],
+  "acceptance_evidence": [
+    "agent_core::ecosystem::LocalRegistrySnapshot loads a pinned local snapshot from file or JSON.",
+    "agent_core::ecosystem::EcosystemResolver resolves requested artifacts and dependencies into a deterministic EcosystemLockV1.",
+    "Resolver returns network_required=false and refuses network source URIs in local-only mode.",
+    "Resolver fails closed for revoked artifacts, missing dependencies, digest mismatch and incompatible runtime versions.",
+    "Rootfs fixture includes policy-pack, workflow-pack and test-replay-pack entries with file:// sources."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core ecosystem::resolver",
+      "result": "passed",
+      "summary": "5 resolver tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 99, agentd 56, runtime_contracts 20 and security_execution 75 tests passed."
+    },
+    {
+      "command": "Get-Content -Raw packaging\\agentos\\rootfs\\etc\\agentos\\ecosystem\\registry-snapshot.json | ConvertFrom-Json",
+      "result": "passed",
+      "summary": "Local registry fixture JSON parses."
+    },
+    {
+      "command": "Select-String -Path packaging\\agentos\\rootfs\\etc\\agentos\\ecosystem\\registry-snapshot.json -Pattern 'https://|http://'",
+      "result": "passed",
+      "summary": "No live network registry URI is present in the fixture."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Resolver does not fetch live network data.",
+    "Resolver does not stage or activate artifacts.",
+    "Revoked, missing, incompatible or digest-mismatched artifacts cannot resolve as valid.",
+    "Dependency order is deterministic."
+  ],
+  "optional_dependencies": [
+    "Missing optional host features are reported as degraded optional features and do not authorize host mutation."
+  ],
+  "promotion_impact": "Enables aom local search/show/verify/stage work to build on deterministic local artifact resolution without adding network or activation authority."
+}

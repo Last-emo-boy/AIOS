@@ -83,8 +83,10 @@ const PKG_ISOLATE_INSTALL_PARAMS: &[ParamSpec] = &[
     ParamSpec::required("version"),
     ParamSpec::required("source_digest"),
 ];
-const PKG_ISOLATE_SMOKE_PARAMS: &[ParamSpec] =
-    &[ParamSpec::required("package"), ParamSpec::required("version")];
+const PKG_ISOLATE_SMOKE_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("package"),
+    ParamSpec::required("version"),
+];
 const PKG_HOST_CHECKPOINT_PARAMS: &[ParamSpec] = &[
     ParamSpec::required("package"),
     ParamSpec::required("version"),
@@ -97,8 +99,30 @@ const PKG_HOST_INSTALL_PARAMS: &[ParamSpec] = &[
     ParamSpec::required("source_digest"),
     ParamSpec::required("rollback_id"),
 ];
-const PKG_HOST_VERIFY_PARAMS: &[ParamSpec] =
-    &[ParamSpec::required("package"), ParamSpec::required("version")];
+const PKG_HOST_VERIFY_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("package"),
+    ParamSpec::required("version"),
+];
+const ECOSYSTEM_REPLAY_VERIFY_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("replay_hash"),
+    ParamSpec::required("lock_hash"),
+    ParamSpec::required("registry_snapshot_digest"),
+];
+const ECOSYSTEM_COMPATIBILITY_CHECK_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("compatibility_hash"),
+    ParamSpec::required("lock_hash"),
+    ParamSpec::required("artifact_count"),
+];
+const ECOSYSTEM_ACTIVATE_PARAMS: &[ParamSpec] = &[
+    ParamSpec::required("lock_hash"),
+    ParamSpec::required("registry_snapshot_digest"),
+    ParamSpec::required("activation_diff_hash"),
+    ParamSpec::required("previous_active_set_hash"),
+    ParamSpec::required("rollback_id"),
+    ParamSpec::required("policy_version"),
+    ParamSpec::required("artifacts"),
+    ParamSpec::required("preserved_invariants"),
+];
 
 pub const TOOL_SCHEMAS: &[ToolSchema] = &[
     ToolSchema {
@@ -220,6 +244,24 @@ pub const TOOL_SCHEMAS: &[ToolSchema] = &[
         version: "v1",
         risk: RiskClass::ReadOnly,
         params: PKG_HOST_VERIFY_PARAMS,
+    },
+    ToolSchema {
+        name: "ecosystem.replay.verify",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: ECOSYSTEM_REPLAY_VERIFY_PARAMS,
+    },
+    ToolSchema {
+        name: "ecosystem.compatibility.check",
+        version: "v1",
+        risk: RiskClass::ReadOnly,
+        params: ECOSYSTEM_COMPATIBILITY_CHECK_PARAMS,
+    },
+    ToolSchema {
+        name: "ecosystem.activate",
+        version: "v1",
+        risk: RiskClass::PrivilegedWithHumanApproval,
+        params: ECOSYSTEM_ACTIVATE_PARAMS,
     },
 ];
 
@@ -352,6 +394,9 @@ mod tests {
             "pkg.host.checkpoint",
             "pkg.host.install",
             "pkg.host.verify",
+            "ecosystem.replay.verify",
+            "ecosystem.compatibility.check",
+            "ecosystem.activate",
         ] {
             assert!(names.contains(&expected), "missing {expected}");
         }
@@ -425,7 +470,10 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
-                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
+                    (
+                        "source_uri",
+                        "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+                    ),
                     ("source_digest", "sha256:abcdef"),
                 ],
             ))
@@ -462,32 +510,109 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
-                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
+                    (
+                        "source_uri",
+                        "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+                    ),
                     ("source_digest", "sha256:abcdef"),
                     ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                 ],
             ))
             .expect("host package install routes");
         assert_eq!(host_install.risk, RiskClass::PrivilegedWithHumanApproval);
-        assert!(router
-            .route(&SemanticToolCall::new("apt.install", vec![("package", "nginx")]))
-            .is_err());
-        assert!(router
-            .route(&SemanticToolCall::new("dpkg.install", vec![("package", "nginx")]))
-            .is_err());
-        assert!(router
+        assert!(
+            router
+                .route(&SemanticToolCall::new(
+                    "apt.install",
+                    vec![("package", "nginx")]
+                ))
+                .is_err()
+        );
+        assert!(
+            router
+                .route(&SemanticToolCall::new(
+                    "dpkg.install",
+                    vec![("package", "nginx")]
+                ))
+                .is_err()
+        );
+        assert!(
+            router
+                .route(&SemanticToolCall::new(
+                    "pkg.host.install",
+                    vec![
+                        ("package", "nginx-agent-plugin"),
+                        ("version", "1.2.3"),
+                        (
+                            "source_uri",
+                            "https://packages.example/nginx-agent-plugin_1.2.3.deb"
+                        ),
+                        ("source_digest", "sha256:abcdef"),
+                        ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
+                        ("cmd", "apt install nginx"),
+                    ],
+                ))
+                .is_err()
+        );
+    }
+
+    #[test]
+    fn routes_ecosystem_activation_tool_chain() {
+        let router = ToolRouter;
+        let replay = router
             .route(&SemanticToolCall::new(
-                "pkg.host.install",
+                "ecosystem.replay.verify",
                 vec![
-                    ("package", "nginx-agent-plugin"),
-                    ("version", "1.2.3"),
-                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
-                    ("source_digest", "sha256:abcdef"),
-                    ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
-                    ("cmd", "apt install nginx"),
+                    ("replay_hash", "sha256:replay"),
+                    ("lock_hash", "sha256:lock"),
+                    ("registry_snapshot_digest", "sha256:snapshot"),
                 ],
             ))
-            .is_err());
+            .expect("replay routes");
+        assert_eq!(replay.risk, RiskClass::ReadOnly);
+
+        let compatibility = router
+            .route(&SemanticToolCall::new(
+                "ecosystem.compatibility.check",
+                vec![
+                    ("compatibility_hash", "sha256:compat"),
+                    ("lock_hash", "sha256:lock"),
+                    ("artifact_count", "2"),
+                ],
+            ))
+            .expect("compatibility routes");
+        assert_eq!(compatibility.risk, RiskClass::ReadOnly);
+
+        let activation = router
+            .route(&SemanticToolCall::new(
+                "ecosystem.activate",
+                vec![
+                    ("lock_hash", "sha256:lock"),
+                    ("registry_snapshot_digest", "sha256:snapshot"),
+                    ("activation_diff_hash", "sha256:diff"),
+                    ("previous_active_set_hash", "sha256:previous"),
+                    ("rollback_id", "rollback-ecosystem-activation"),
+                    ("policy_version", "policy-v1"),
+                    ("artifacts", "agentos:policy-pack/agentos/core-policy@1.0.0"),
+                    (
+                        "preserved_invariants",
+                        "no-shell|exact-approval|secret-handle|source-to-sink|audit|rollback",
+                    ),
+                ],
+            ))
+            .expect("activation routes");
+        assert_eq!(activation.risk, RiskClass::PrivilegedWithHumanApproval);
+        assert!(
+            router
+                .route(&SemanticToolCall::new(
+                    "ecosystem.activate",
+                    vec![
+                        ("lock_hash", "sha256:lock"),
+                        ("registry_snapshot_digest", "sha256:snapshot"),
+                    ],
+                ))
+                .is_err()
+        );
     }
 
     #[test]

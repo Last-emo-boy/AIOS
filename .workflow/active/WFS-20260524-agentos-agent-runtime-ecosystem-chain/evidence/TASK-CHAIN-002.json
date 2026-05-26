@@ -1,0 +1,33 @@
+{
+  "task_id": "TASK-CHAIN-002",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "summary": "Frozen the aom ecosystem invariant: install/stage is inert; activate is a runtime-mediated side effect through AgentCore PlanSpec and SecurityExecutionEngine.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md",
+      "sha256": "9235be069b02b4cc1a765b6a2b87f8f1608e7075da409e7b9f60f81467c77966"
+    },
+    {
+      "path": ".workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/guidance-specification.md"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-ecosystem-architecture.md defines the aom command flow from resolver and staging store into activation planner, AgentCore PlanSpec and SecurityExecutionEngine.",
+    "runtime-ecosystem-architecture.md states staged artifacts must be inert.",
+    "runtime-ecosystem-architecture.md defines activation steps, including verification, activation diff, AgentCore PlanSpec, SecurityExecutionEngine, exact approval and rollback handles.",
+    "TASK.md records install/stage != activate as a core boundary."
+  ],
+  "blocked_shortcuts": [
+    "No direct host package mutation as aom baseline.",
+    "No activation without AgentCore PlanSpec.",
+    "No activation without SecurityExecutionEngine policy/effect/audit/rollback."
+  ],
+  "verification": [
+    {
+      "command": "Select-String runtime-ecosystem-architecture.md for AgentCore PlanSpec and SecurityExecutionEngine activation",
+      "result": "passed"
+    }
+  ],
+  "promotion_impact": "Blocks unsafe package-manager-like activation semantics before ecosystem implementation begins."
+}

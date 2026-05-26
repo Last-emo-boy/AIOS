@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-015",
+  "title": "Define verified community and local-dev channel policy",
+  "status": "completed",
+  "wave": 7,
+  "priority": "P1",
+  "type": "security",
+  "owner": "packaging",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-030"],
+  "purpose": "Define how AgentOS separates core, verified, organization, community and local-dev channels.",
+  "scope": ["Define channel metadata.", "Define default enablement.", "Define production promotion rules.", "Define offline/pinned snapshot behavior."],
+  "deliverables": [".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/ecosystem-channel-policy.md", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-015.json"],
+  "acceptance_criteria": ["Core channel is enabled by default.", "Verified requires signatures and replay.", "Community is sandbox-only by default.", "Local-dev is not production-promotable by default."],
+  "verification": ["Validate evidence JSON parses.", "Check channel policy names all trust tiers."],
+  "failure_modes": ["Community channel is trusted by default.", "Local-dev bypasses release gate.", "Offline behavior is undefined."],
+  "handoff": {"next_tasks": ["TASK-ECO-031", "TASK-ECO-033", "TASK-ECO-035"], "blocked_until": ["TASK-ECO-030"]},
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-015.json"
+}

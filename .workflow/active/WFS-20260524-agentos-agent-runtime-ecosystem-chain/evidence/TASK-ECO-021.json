@@ -1,0 +1,41 @@
+{
+  "task_id": "TASK-ECO-021",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "summary": "Defined local-pinned registry snapshot, revocation advisory, resolved artifact and deterministic ecosystem lockfile schemas.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7DFF92B146194EF0EA423AB1579FAFDDBB2E6220286103858E3FBA421D3F31A4"
+    }
+  ],
+  "acceptance_evidence": [
+    "RegistrySnapshotV1 supports pinned local snapshots without requiring a live registry URI.",
+    "Snapshot validation rejects expired snapshots through validate_at.",
+    "RegistryArtifactEntry binds coordinate, manifest digest, artifact digest, trust, channel and advisory references.",
+    "EcosystemLockV1 stable_hash is deterministic and includes publisher identity, manifest digest and artifact digest through resolved artifacts.",
+    "RevocationAdvisoryV1 represents advisory id, affected coordinate, reason, publication time and optional replacement coordinate."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem::registry",
+      "result": "passed",
+      "summary": "2 registry tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace test suite passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Lockfile cannot omit artifact digest or publisher-bound coordinate.",
+    "Pinned local snapshots do not require live network access.",
+    "Expired snapshots are not silently accepted."
+  ],
+  "optional_dependencies": [
+    "Live registry access remains optional for baseline and release gates."
+  ],
+  "promotion_impact": "Enables reproducible local artifact sets and future release provenance to pin snapshot and lockfile hashes."
+}

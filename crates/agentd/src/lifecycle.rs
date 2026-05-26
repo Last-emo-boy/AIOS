@@ -1,6 +1,6 @@
 use crate::api::{
-    escape_json, CapabilityLease, CommitId, Effect, IntentCtx, PlanSpec, PlanStep, PolicyDecision,
-    ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult,
+    CapabilityLease, CommitId, Effect, IntentCtx, PlanSpec, PlanStep, PolicyDecision,
+    ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult, escape_json,
 };
 use crate::modules::{ModuleKind, ModuleStatus};
 use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
@@ -277,9 +277,14 @@ mod tests {
         let decision = agentd.evaluate(step);
         let lease = agentd.acquire(&decision).expect("lease is issued");
         assert_eq!(lease.risk, RiskClass::ReadOnly);
-        let effect = agentd.invoke(SemanticToolCall::new("svc.status", vec![("service", "agentd")]));
+        let effect = agentd.invoke(SemanticToolCall::new(
+            "svc.status",
+            vec![("service", "agentd")],
+        ));
         assert!(agentd.verify(&effect).success);
-        let commit = agentd.commit(&effect).expect("commit seals verified effect");
+        let commit = agentd
+            .commit(&effect)
+            .expect("commit seals verified effect");
         assert!(!agentd.rollback(&commit).triggered);
         assert_eq!(agentd.recover().unresolved_effects, 0);
     }

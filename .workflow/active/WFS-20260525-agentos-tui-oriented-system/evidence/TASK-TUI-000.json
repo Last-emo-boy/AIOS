@@ -1,0 +1,23 @@
+{
+  "task_id": "TASK-TUI-000",
+  "status": "completed",
+  "completed_at": "2026-05-25T08:05:13+08:00",
+  "evidence_type": "contract-freeze",
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-oriented-architecture.md"
+  ],
+  "accepted_boundaries": [
+    "TUI is projection-controller only",
+    "AgentCore owns PlanRun lifecycle",
+    "SecurityExecutionEngine owns side effects",
+    "agent_core::ecosystem owns resolver and activation planning",
+    "RunStore and AuditJournal remain durable truth",
+    "baseline TUI is local-only"
+  ],
+  "verification": [
+    "architecture document states AgentOS should become TUI-oriented, not TUI-owned",
+    "architecture document lists RunStore, AuditJournal, active artifact set and release provenance as state authorities",
+    "architecture document requires no external LLM, network, Firecracker, host package manager or public registry for baseline"
+  ],
+  "blockers": []
+}

@@ -1,0 +1,25 @@
+{
+  "task_id": "TASK-TUI-022",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:47:41+08:00",
+  "evidence_type": "approval-queue-view",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/artifacts/tui-replay/output.txt",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json"
+  ],
+  "verified": [
+    "approvals.show latest renders pending approval queue from durable RunStore and AuditJournal projections",
+    "approval rows include exact binding context: actor, tool, resource, parameter hash, policy version and expiry",
+    "deny command hints are first-class alongside approve paths",
+    "blocked approval output is redacted and does not expose raw secret-like input"
+  ],
+  "commands": [
+    "cargo test -p agentd tui_ --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "blockers": []
+}

@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI2-040",
+  "title": "Draft local-first fleet operations model",
+  "status": "completed",
+  "completed_at": "2026-05-26T06:48:16+08:00",
+  "wave": 5,
+  "priority": "P1",
+  "type": "architecture",
+  "owner": "workflow",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-032", "TASK-TUI2-034"],
+  "purpose": "Prepare fleet operations concepts without turning Console Beta into a GA fleet manager.",
+  "scope": [
+    "Define local-first node identity, node state and rollout target concepts.",
+    "Define what remains single-node in Console Beta.",
+    "Define future fleet authority boundaries and non-goals.",
+    "Define local proof requirements before remote fleet work.",
+    "Document failure and rollback expectations."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/local-first-fleet-operations.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-040.json"
+  ],
+  "acceptance_criteria": [
+    "Fleet model is explicitly preview-only.",
+    "Single-node local proof remains complete without remote services.",
+    "Remote commands cannot bypass local AgentCore and SecurityExecutionEngine.",
+    "Rollout and rollback authorities are documented."
+  ],
+  "verification": [
+    "manual review of local-first-fleet-operations.md",
+    "cargo test --workspace"
+  ],
+  "failure_modes": [
+    "Fleet preview implies remote production readiness.",
+    "Remote operator authority bypasses local policy.",
+    "Rollout rollback ownership is undefined."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-041", "TASK-TUI2-042"],
+    "blocked_until": ["TASK-TUI2-032", "TASK-TUI2-034"]
+  }
+}

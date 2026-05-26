@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "adapter-direct-host-mutation-v2",
+  "artifact_kind": "runtime-adapter-pack",
+  "coordinate": "agentos:runtime-adapter-pack/adversarial/direct-host-mutation-v2@1.0.0",
+  "attempt": "adapter pack attempts a host write without SecurityExecutionEngine authority",
+  "forbidden_surface": "host mutation",
+  "expected_outcome": "denied",
+  "denial_reason": "adapter packs cannot mutate host state directly",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

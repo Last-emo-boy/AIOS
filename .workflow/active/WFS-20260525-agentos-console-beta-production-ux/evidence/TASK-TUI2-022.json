@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-TUI2-022",
+  "title": "Add launch-intent preview for operational capabilities",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:28:05+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/launch_preview.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "launch.preview and capability.launch.preview generate typed intent.submit previews without creating PlanRun snapshots.",
+    "High-risk workflows render AgentCore planner, SecurityExecutionEngine, approval and rollback authority path.",
+    "Unsafe launch inputs fail closed before intent submission and do not create audit/run state.",
+    "Secret-like and secret:// launch inputs are redacted in deterministic preview output.",
+    "Command palette preview for launch.preview remains preview-before-dispatch."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_launch_preview --no-fail-fast",
+    "cargo test -p agentd tui_adversarial --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "launch_preview": {
+      "command": "cargo test -p agentd tui_launch_preview --no-fail-fast",
+      "passed": 4,
+      "failed": 0
+    },
+    "adversarial": {
+      "command": "cargo test -p agentd tui_adversarial --no-fail-fast",
+      "passed": 1,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "risk_notes": [
+    "Launch preview is a TUI projection path and does not call AgentCore accept_intent or plan_run.",
+    "TUI still does not own planner, resolver, policy or side-effect authority.",
+    "Parser-level and runtime-level validation reject shell-like launch input.",
+    "Explicit dispatch remains required after preview."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-023",
+    "TASK-TUI2-024"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "task_id": "TASK-ARUN-020",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:34:19+08:00",
+  "summary": "Defined durable OS run state reconciliation for AgentOS boot recovery, including truth precedence across RunStore, AuditJournal, rollback state and future active ecosystem artifact state.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-state-reconciliation.md",
+      "sha256": "c22d06bd6236a54557d138f278ec1789b101c476b4a98296ca473602684a3aa7"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-state-reconciliation.md defines boot-time reconciliation ordering from packaged runtime validation through RunStore, AuditJournal, rollback store, active artifact state and operator projection.",
+    "Truth precedence makes AuditJournal authoritative for effect truth and prevents RunStore, model output or active artifact state from overriding sealed audit evidence.",
+    "Half-committed EffectPrepared records without CommitSealed or RollbackObserved are unresolved and map to Recovering, RollbackPending, Suspended or FailedClosed depending on effect class.",
+    "The contract reserves active artifact state reconciliation for later ecosystem activation tasks while keeping staged artifacts inert.",
+    "The no-model-replay rule forbids model output from reconstructing recovery truth."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core recovery",
+      "result": "passed",
+      "summary": "13 passed; recovery joins RunStore and AuditJournal, preserves RollbackPending, fails closed mid-effect without audit truth and verifies no-model-replay recovery."
+    },
+    {
+      "command": "cargo test -p agentd support_bundle",
+      "result": "passed",
+      "summary": "1 passed; support bundle manifest links run ids and audit ranges while redacting secret values."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No model replay as recovery authority.",
+    "No half-committed effect can be silently completed.",
+    "No restart may auto-grant pending approval.",
+    "No staged ecosystem artifact is treated as active.",
+    "No active artifact state may override audit truth."
+  ],
+  "promotion_impact": "Starts Wave 2 durable runtime state by defining boot recovery truth and support evidence needed for PID 1 operation and later ecosystem activation."
+}

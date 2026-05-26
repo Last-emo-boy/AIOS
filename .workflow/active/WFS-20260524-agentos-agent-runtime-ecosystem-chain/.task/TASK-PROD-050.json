@@ -1,0 +1,44 @@
+{
+  "id": "TASK-PROD-050",
+  "title": "Add runtime and ecosystem support bundle sections",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-PROD-050.json",
+  "wave": 9,
+  "priority": "P0",
+  "type": "operations",
+  "owner": "agentd",
+  "source": "production distro task chain",
+  "depends_on": ["TASK-ARUN-020", "TASK-ECO-006", "TASK-ECO-034"],
+  "purpose": "Make Production Distro support evidence include Agent Runtime health and ecosystem artifact state without leaking secrets.",
+  "scope": [
+    "Add runtime loop health summary.",
+    "Add recovery state summary.",
+    "Add staged/active artifact hashes.",
+    "Add registry snapshot, lockfile, trust tier and revocation state.",
+    "Redact secret-like fields."
+  ],
+  "deliverables": [
+    "crates/agentd/src/support_bundle.rs",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-PROD-050.json"
+  ],
+  "acceptance_criteria": [
+    "Support bundle includes runtime and ecosystem state.",
+    "Support bundle is deterministic.",
+    "Raw secrets are excluded.",
+    "Revoked/degraded artifacts are visible."
+  ],
+  "verification": [
+    "cargo test -p agentd support_bundle",
+    "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1"
+  ],
+  "failure_modes": [
+    "Bundle leaks secret-like content.",
+    "Bundle omits active artifact hash.",
+    "Runtime recovery state is not represented."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-PROD-053"],
+    "blocked_until": ["TASK-ARUN-020", "TASK-ECO-006", "TASK-ECO-034"]
+  }
+}

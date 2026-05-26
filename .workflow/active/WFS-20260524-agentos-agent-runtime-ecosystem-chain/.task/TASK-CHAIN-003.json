@@ -1,0 +1,55 @@
+{
+  "id": "TASK-CHAIN-003",
+  "title": "Define chain acceptance gates and evidence model",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-CHAIN-000"],
+  "purpose": "Define the gates that prove Agent Runtime and ecosystem work can safely enter Production Distro.",
+  "scope": [
+    "Define baseline commands for workspace, functional replay, release and QEMU promotion.",
+    "Define runtime gates.",
+    "Define ecosystem gates.",
+    "Define evidence JSON shape and blocking conditions."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/acceptance-gates.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-003.json"
+  ],
+  "read_first": [
+    "scripts/build-release.ps1",
+    "scripts/functional-capability-replay.ps1",
+    "scripts/boot-smoke-test.ps1",
+    ".workflow/artifacts/release/provenance.json"
+  ],
+  "implementation_steps": [
+    "List commands and expected evidence paths.",
+    "Add runtime and ecosystem gate categories.",
+    "Document adversarial fixtures and promotion blockers.",
+    "Create evidence with gate matrix."
+  ],
+  "acceptance_criteria": [
+    "Release gate must include functional replay.",
+    "Ecosystem replay is defined before ecosystem activation is promotable.",
+    "QEMU path uses E:\\qemu\\qemu-system-x86_64.exe where required.",
+    "Blocking conditions include shell exposure and activation bypass."
+  ],
+  "verification": [
+    "Evidence JSON parses.",
+    "Gate doc includes workspace, functional, release and QEMU commands."
+  ],
+  "failure_modes": [
+    "Gates rely on external network by default.",
+    "QEMU path is omitted for boot proof.",
+    "Release provenance omits replay hashes."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-VERIFY-040", "TASK-VERIFY-041", "TASK-VERIFY-044"],
+    "blocked_until": ["TASK-CHAIN-000"]
+  },
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-003.json"
+}

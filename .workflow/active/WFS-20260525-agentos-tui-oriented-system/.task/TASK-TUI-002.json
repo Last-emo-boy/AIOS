@@ -1,0 +1,42 @@
+{
+  "id": "TASK-TUI-002",
+  "title": "Define TUI state and render model",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-000"],
+  "purpose": "Define deterministic TUI state snapshots and render boundaries so the console can be tested without owning durable runtime state.",
+  "scope": [
+    "Define TuiSnapshotV1 for dashboard, run detail, approvals, audit, recovery, ecosystem and support views.",
+    "Define render snapshot redaction rules.",
+    "Define cache invalidation and refresh semantics.",
+    "Define line-oriented deterministic renderer before richer terminal UI libraries.",
+    "Define golden snapshot testing strategy."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-state-render-model.md",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-002.json"
+  ],
+  "acceptance_criteria": [
+    "TUI snapshots are deterministic and serializable.",
+    "Raw secrets are redacted while secret handles remain explainable.",
+    "Render cache is never authoritative over RunStore or AuditJournal.",
+    "Golden text snapshots can validate key views."
+  ],
+  "verification": [
+    "cargo test -p agentd tui",
+    "cargo test -p agentd support_bundle"
+  ],
+  "failure_modes": [
+    "TUI render output leaks raw secrets.",
+    "Render cache hides rollback-pending or degraded state.",
+    "Dynamic formatting makes replay nondeterministic."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-020", "TASK-TUI-021", "TASK-TUI-022", "TASK-TUI-023", "TASK-TUI-024"],
+    "blocked_until": ["TASK-TUI-000"]
+  }
+}

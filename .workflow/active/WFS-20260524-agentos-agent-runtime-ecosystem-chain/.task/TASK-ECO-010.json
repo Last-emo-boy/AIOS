@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-010",
+  "title": "Define operator-facing artifact explanation format",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "operator-ux",
+  "owner": "agentd",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-003"],
+  "purpose": "Give operators a clear explanation of what an artifact is, what it changes, what it requires and why it may be blocked.",
+  "scope": ["Define artifact show/explain projection.", "Include trust tier, channel, dependencies, risk, activation requirements and replay status.", "Exclude raw secrets and untrusted instructions."],
+  "deliverables": [".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/aom-operator-explain.md", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-010.json"],
+  "acceptance_criteria": ["Operator can see added capabilities and policies.", "Blocked prerequisites are explicit.", "Projection does not reveal raw secrets.", "Projection distinguishes staged from active."],
+  "verification": ["cargo test -p agentd operator_projection", "cargo test -p agentd support_bundle"],
+  "failure_modes": ["Explanation implies staged artifact is active.", "Risk or trust tier is omitted.", "Raw secret-like content appears in projection."],
+  "handoff": {"next_tasks": ["TASK-ECO-011", "TASK-ECO-006"], "blocked_until": ["TASK-ECO-003"]},
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-010.json"
+}

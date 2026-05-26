@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-022",
+  "title": "Define activation report and installed/active state schema",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "runtime_contracts",
+  "source": "runtime-ecosystem-architecture.md",
+  "depends_on": ["TASK-ECO-020"],
+  "purpose": "Define the reports and state files that distinguish staged artifacts from active runtime behavior.",
+  "scope": ["Define staging, activation, deactivation and rollback reports.", "Define ActiveArtifactSetV1.", "Bind active artifacts to audit range, approval and rollback handles."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-022.json"],
+  "acceptance_criteria": ["Active state can be reconstructed after restart.", "Activation report includes audit range and rollback handle.", "Staged state is explicitly inert."],
+  "verification": ["cargo test -p runtime_contracts ecosystem::activation", "cargo test --workspace"],
+  "failure_modes": ["Active and staged state are conflated.", "Rollback handle omitted.", "Activation report omits policy version."],
+  "handoff": {"next_tasks": ["TASK-ECO-003", "TASK-ECO-004", "TASK-ARUN-020"], "blocked_until": ["TASK-ECO-020"]},
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-022.json"
+}

@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-020",
+  "title": "Build TUI dashboard from operator projection",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-002", "TASK-TUI-011"],
+  "purpose": "Create the primary AgentOS dashboard view from existing OperatorProjection and support bundle state.",
+  "scope": [
+    "Render runtime health, degraded mode and local-only baseline state.",
+    "Render recent runs and pending approval counts.",
+    "Render audit, update, adapter, ecosystem and safety summaries.",
+    "Render support bundle readiness and last export state.",
+    "Keep rendering deterministic and snapshot-testable."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/operator_projection.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-020.json"
+  ],
+  "acceptance_criteria": [
+    "Dashboard view is derived from projection data, not duplicated runtime queries.",
+    "Dashboard explains missing optional dependencies without blocking baseline TUI.",
+    "Dashboard shows whether TUI is durable, demo or headless projection mode.",
+    "Raw secrets are not present in rendered output."
+  ],
+  "verification": [
+    "cargo test -p agentd operator_projection",
+    "cargo test -p agentd tui_dashboard",
+    "cargo test -p agentd support_bundle"
+  ],
+  "failure_modes": [
+    "Dashboard hides degraded or rollback-pending state.",
+    "Dashboard introduces a second source of runtime truth.",
+    "Dashboard leaks sensitive config values."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-024", "TASK-TUI-030", "TASK-TUI-043"],
+    "blocked_until": ["TASK-TUI-002", "TASK-TUI-011"]
+  }
+}

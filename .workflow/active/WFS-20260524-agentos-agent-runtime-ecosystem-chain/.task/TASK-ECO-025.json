@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-025",
+  "title": "Add deterministic ecosystem hash projection for provenance",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "release",
+  "owner": "scripts",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-021", "TASK-ECO-022"],
+  "purpose": "Make registry snapshot, lockfile, staged set and active set hashes available to release provenance.",
+  "scope": ["Define hash projection fields.", "Record snapshot and lockfile hashes.", "Prepare build-release integration."],
+  "deliverables": ["scripts/build-release.ps1", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-025.json"],
+  "acceptance_criteria": ["Hashes are deterministic.", "Missing ecosystem replay becomes a future blocker after TASK-VERIFY-041.", "Provenance can distinguish staged and active artifacts."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1", "Get-Content .workflow\\artifacts\\release\\provenance.json"],
+  "failure_modes": ["Hash depends on file ordering.", "Provenance omits lockfile.", "Staged and active hashes are conflated."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-044"], "blocked_until": ["TASK-ECO-021", "TASK-ECO-022"]},
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-025.json"
+}

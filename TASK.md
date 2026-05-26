@@ -1,8 +1,8 @@
 # AIOS TASK
 
 Source: `research.md`  
-Workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
-Previous workflow: `.workflow/active/WFS-20260522-agentos-runtime-foundation`
+Workflow: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain`
+Previous workflow: `.workflow/active/WFS-20260524-agentos-functional-iteration`
 Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 目标
@@ -23,7 +23,15 @@ Maestro session: `.workflow/.maestro/maestro-20260522-213125`
 
 ## 当前进度
 
-- 当前 Maestro 计划已切到 Distribution Alpha：`.workflow/active/WFS-20260523-agentos-distribution-alpha`。
+- 当前 Maestro 计划已完成 Agent Runtime + Ecosystem Chain：`.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain`。
+- 本轮 final audit 已完成：`.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/FINAL-AUDIT-20260524-agent-runtime-ecosystem-chain.json`。
+- 当前 promotion decision：`promote-to-next-production-distro-stage`；这不是 GA production-ready claim，production signing、fleet rollout、public ecosystem governance 仍是后续 wave。
+- 本轮验证通过：`cargo test --workspace`、`scripts/functional-capability-replay.ps1`、`scripts/ecosystem-replay.ps1`、`scripts/build-release.ps1`、`scripts/boot-smoke-test.ps1 -QemuPath E:\qemu\qemu-system-x86_64.exe -TimeoutSeconds 30`。
+- `TASK-PROD-050` 已完成：support bundle 现在包含 Agent Runtime loop、recovery、ecosystem registry/lockfile/active set、replay、revocation 和 offline baseline 状态，且不泄漏 raw secrets；`agentd` 仍是只读 projection，不拥有 resolver logic。
+- `TASK-PROD-051` 已完成：release update metadata / provenance 已加入 active artifact set hash、runtime contract compatibility、rollback previous active set evidence 和 promotion blockers；当前 `promotion.status=promotable` 且 blockers 为空。
+- `TASK-PROD-052` 已完成：ecosystem replay 增加 offline pinned snapshot drill；expired local registry snapshot 会 fail closed，并投影为 `degraded-expired-snapshot`。
+- `TASK-PROD-053` 已完成：final Production Distro chain audit 和 summary 已写入 `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/final-chain-audit-summary.md`。
+- Distribution Alpha 已在前序 workflow 完成：`.workflow/active/WFS-20260523-agentos-distribution-alpha`。
 - `TASK-DALPHA-000` 已完成：Distribution Alpha scope 和任务图已冻结，新的 workflow、plan、context、task plan、`TASK-DALPHA-001` 到 `TASK-DALPHA-012` 均已写入 `.workflow/active/WFS-20260523-agentos-distribution-alpha`。
 - `TASK-DALPHA-001` 已完成：rootfs runtime artifact install manifest 已定义，覆盖 boot/runtime `agentd`、policy pack、semantic tool manifest、ModelBroker config、run/audit/rollback/memory persistent directories、release provenance 和 rootfs manifest metadata，并提供后续 validator 可消费的 artifact ID 与 validation labels。
 - `TASK-DALPHA-002` 已完成：runtime state directory and permission validation 已定义，覆盖 `/var/lib/agentos/runs/`、`/var/log/agentos/audit/`、`/var/lib/agentos/rollback/` 和 `/var/lib/agentos/memory/` 的 `root:root` / `0700` 初始权限、runtime authority、secret-safety、restart-survival、audit projection、recovery truth 和 evidence schema。
@@ -462,3 +470,452 @@ Previous workflow: `.workflow/active/WFS-20260523-agentos-distribution-alpha`
 ## 下一步
 
 Functional Iteration 已完成：typed contracts、AgentCore workflow bridge、SecurityExecution Firecracker fail-closed gate、operator command registry、support bundle projection、functional replay 和 release provenance gate 已落地。下一步进入 Production Distro 加固入口：以 functional replay、release gate、QEMU smoke、production signing verification 作为进入条件。
+
+## Production Ecosystem Brainstorm
+
+Source: 用户提出 AgentOS 未来可能需要类似 APT 的生态管理器，但它管理的对象不只是传统 package。  
+Maestro brainstorm session: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem`
+
+结论：AgentOS 需要 APT-like 的体验，但不能复制 APT-like 的信任模型。建议工作名为 `aom`，即 AgentOS Ecosystem Manager。它管理 AgentOS-native artifacts：capability pack、semantic tool pack、policy pack、workflow/runbook pack、model profile pack、knowledge pack、runtime adapter pack、execution image pack、test/replay pack 和 trust metadata。
+
+核心不变量：
+
+```text
+install/stage != activate
+```
+
+`install/stage` 只代表 artifact 已经本地可用；`activate` 才会改变 runtime 行为。所有 activation 必须继续经过 Agent Core Runtime、SecurityExecutionEngine、audit、rollback 和 release/replay gate。底层 Debian/Ubuntu package manager 仍作为可选 adapter，不成为 `aom` 的第一目标。
+
+关键产物：
+
+- Guidance spec: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/guidance-specification.md`
+- Feature index: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/feature-index.json`
+- Synthesis: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/synthesis-specification.md`
+- Roadmap: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/production-ecosystem-task-roadmap.md`
+- Context report: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/context.md`
+
+### Production Ecosystem Wave ECO-0：决策与对象模型
+
+- `TASK-ECO-000`：冻结 ecosystem scope 和 `install is not activation` invariant（completed）
+- `TASK-ECO-001`：定义 `runtime_contracts::ecosystem` module boundary（completed）
+- `TASK-ECO-020`：定义 artifact coordinate 和 manifest schema（completed）
+- `TASK-ECO-021`：定义 registry snapshot 和 lockfile schema（completed）
+- `TASK-ECO-022`：定义 activation report 和 installed/active state schema（completed）
+- `TASK-ECO-023`：定义 compatibility and migration validation（completed）
+- `TASK-ECO-030`：定义 trust tier and channel policy（completed）
+
+退出标准：
+
+- Manifest、registry snapshot、lockfile 和 activation report 足够稳定，可被 fixture 和 replay 使用。
+- 首批 artifact kinds 冻结为 `policy-pack`、`workflow-pack`、`test-replay-pack`。
+- Policy invariant 明确：policy pack 不能削弱 core safety rules。
+
+### Production Ecosystem Wave ECO-1：local registry 与 staging
+
+- `TASK-ECO-002`：增加 local registry fixture 和 artifact resolver（completed）
+- `TASK-ECO-003`：实现 staging store with digest/signature verification report（completed）
+- `TASK-ECO-010`：定义 operator-facing artifact explanation format（completed）
+- `TASK-ECO-011`：增加 `aom` CLI surface for local lifecycle（completed）
+- `TASK-ECO-024`：增加 revocation/advisory metadata model（completed）
+- `TASK-ECO-025`：增加 deterministic ecosystem hash projection for provenance（completed）
+
+退出标准：
+
+- `aom search/show/verify/stage/explain` 可以在 local fixture registry 上工作。
+- Staged artifacts 是 inert state，不改变 runtime 行为。
+- Digest mismatch、revoked artifact 和 incompatible schema fail closed。
+
+当前完成度：
+
+- `agentd --aom search/show/verify/stage/explain` 已可基于 rootfs local registry fixture 工作，`stage` 只写 inert staged artifact evidence，`activate` 仍明确 blocked 到 `TASK-ECO-004` / `TASK-ECO-005`。
+- Operator projection 已增加只读 ecosystem 区块，显示 local registry、`aom.*` commands、activation gated、staged != active、无 shell、resolver owner 为 `agent_core::ecosystem`。
+- Rootfs validator 已把 `aom.*` command registry 和 `ecosystem.registry_snapshot` 纳入 Alpha package defaults。
+- Release provenance 已增加 deterministic ecosystem hash projection，记录 registry snapshot、lockfile、staged set、active set、replay，并声明 ecosystem replay gate 在 `TASK-VERIFY-041` 后成为硬门。
+
+### Production Ecosystem Wave ECO-2：activation through runtime
+
+- `TASK-ECO-004`：通过 AgentCore PlanSpec 实现 activation planning（planned）
+- `TASK-ECO-005`：把 activation side effects 接入 SecurityExecutionEngine（planned）
+- `TASK-ECO-006`：在 `agentd` 增加 read-only ecosystem projection（planned）
+- `TASK-ECO-012`：打包 built-in production-safe policy pack（planned）
+- `TASK-ECO-013`：打包 built-in service recovery workflow pack（planned）
+- `TASK-ECO-014`：把 ecosystem status 加到 TUI/operator projection（planned）
+
+退出标准：
+
+- `aom activate` 生成 PlanSpec，并使用既有 approval / policy / effect / audit flow。
+- Activation report 包含 audit range 和 rollback handle。
+- `agentd` 只展示 active/staged/blocked artifacts，不拥有 resolver 逻辑。
+
+### Production Ecosystem Wave ECO-3：safety、replay 与 release gate
+
+- `TASK-ECO-040`：增加 ecosystem schema unit tests（planned）
+- `TASK-ECO-041`：增加 local registry replay script（planned）
+- `TASK-ECO-042`：增加 adversarial artifact pack fixtures（planned）
+- `TASK-ECO-043`：增加 activation rollback drill（planned）
+- `TASK-ECO-044`：增加 revocation and advisory replay（planned）
+- `TASK-ECO-045`：把 ecosystem hashes 加入 release provenance（planned）
+- `TASK-ECO-046`：增加 long-running active artifact recovery smoke（planned）
+
+退出标准：
+
+- Release gate 在 ecosystem replay skipped/failed 时阻塞。
+- Provenance 记录 registry snapshot hash、lockfile hash 和 replay evidence hash。
+- Adversarial fixtures 覆盖 shell bypass、policy weakening、memory poisoning、secret embedding 和 adapter bypass。
+
+### Production Ecosystem Wave ECO-4：trust 与组织控制
+
+- `TASK-ECO-015`：定义 verified/community/local-dev channel policy（planned）
+- `TASK-ECO-031`：定义 signing and revocation requirements（planned）
+- `TASK-ECO-032`：定义 no-maintainer-script activation rule（planned）
+- `TASK-ECO-033`：定义 community artifact sandbox-only policy（planned）
+- `TASK-ECO-034`：把 ecosystem state 加到 support bundle manifest（planned）
+- `TASK-ECO-035`：定义 organization allowlist and denylist overlay（planned）
+
+退出标准：
+
+- Production Distro 可以 pin allowed channels 并拒绝 unsigned artifacts。
+- Support bundle 能解释 active artifact set、trust tier、channel 和 hashes，且不包含 raw secrets。
+- Community/local-dev artifacts 默认不能 production-promote。
+
+### Production Ecosystem Wave ECO-5：model、knowledge、adapter 与 image packs
+
+- `TASK-ECO-050`：定义 model profile pack schema and local/stub/remote optionality（planned）
+- `TASK-ECO-051`：定义 knowledge pack schema with trust labels and memory quarantine（planned）
+- `TASK-ECO-052`：增加 model/knowledge adversarial replay fixtures（planned）
+- `TASK-ECO-060`：定义 runtime adapter pack schema（planned）
+- `TASK-ECO-061`：定义 execution image pack schema for Firecracker/sandbox/update bundles（planned）
+- `TASK-ECO-062`：增加 adapter/image optional dependency fail-closed replay（planned）
+
+退出标准：
+
+- Model 和 knowledge packs 不能泄漏 secrets 或污染 privileged memory。
+- Adapter packs 不能绕过 SecurityExecutionEngine。
+- Image packs 在 activation 前证明 provenance、compatibility 和 rollback rules。
+
+## Agent Runtime + Ecosystem Chain
+
+Source: 用户明确提出需要一条完整链路：扩充 AgentOS 生态，同时强化目前的 Agent Runtime，因为 AgentOS 是完全依靠 Agent 来运作的。  
+Workflow: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain`  
+Brainstorm seed: `.workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem`
+
+目标：把 `functional-ready` 的 AgentOS 推进为 Production Distro 的完整运行链路。这个链路把两件事绑定在一起：
+
+- Agent Runtime 是 OS control plane，负责 boot、steady-state、degraded、recovery、update 和 operator projection。
+- `aom` 是 AgentOS-native ecosystem manager，负责管理 capability / tool / policy / workflow / model / knowledge / adapter / image / replay / trust metadata artifacts。
+
+核心边界：
+
+```text
+Linux handles deterministic reality.
+Agent Runtime handles intention and operation.
+aom install/stage is inert.
+aom activate is AgentCore PlanSpec + SecurityExecutionEngine side effect.
+```
+
+关键产物：
+
+- Workflow session: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/workflow-session.json`
+- Plan: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/plan.json`
+- Task dir: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/.task`
+- Agent-operated OS chain: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/agent-operated-os-chain.md`
+- Runtime ecosystem architecture: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md`
+- Production distro task chain: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/production-distro-task-chain.md`
+- Acceptance gates: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/acceptance-gates.md`
+
+### Chain Wave 0：冻结完整链路与不变量
+
+- `TASK-CHAIN-000`：冻结 Agent-operated OS and ecosystem chain（completed）
+- `TASK-CHAIN-001`：定义 AgentOS lifecycle control map（completed）
+- `TASK-CHAIN-002`：定义 `aom` install/stage/activate invariant（completed）
+- `TASK-CHAIN-003`：定义 chain acceptance gates and evidence model（completed）
+
+退出标准：
+
+- AgentOS lifecycle 明确覆盖 boot、steady-state、degraded、recovery、update。
+- `install/stage != activate` 成为生态不变量。
+- Production Distro gate 同时覆盖 runtime 和 ecosystem。
+
+### Chain Wave 1：Agent Runtime OS control loops
+
+- `TASK-ARUN-010`：定义 boot and steady-state Agent Runtime control loops（completed）
+- `TASK-ARUN-011`：定义 observation fabric and operator event intake（completed）
+- `TASK-ARUN-012`：定义 scheduler、quotas、backpressure and autonomous action budget（completed）
+- `TASK-ARUN-013`：定义 degraded mode and local/stub fallback behavior（completed）
+
+退出标准：
+
+- AgentOS 不靠旁路脚本维持主运行链路。
+- Observation 不能直接触发高风险 action。
+- Scheduler 能限制 retry、并发、预算和 backpressure。
+- 缺 external LLM / network / Firecracker / host package manager 时可解释降级。
+
+### Chain Wave 2：durable Agent Runtime state
+
+- `TASK-ARUN-020`：定义 durable OS run state reconciliation（completed）
+- `TASK-ARUN-021`：定义 approval、escalation and interrupt survival（completed）
+- `TASK-ARUN-022`：定义 OS memory governance and knowledge quarantine（completed）
+- `TASK-ARUN-023`：定义 runtime recovery drills for PID 1 operation（completed）
+
+退出标准：
+
+- Recovery 权威来自 RunStore + AuditJournal + active artifact state，不来自 model replay。
+- Approval token 重启后仍绑定 actor、tool、resource、parameter hash、expiry、policy version。
+- Memory / knowledge 不可污染 privileged action。
+- PID 1 恢复 drill 可生成支持证据。
+
+### Chain Wave 3-5：aom ecosystem spine and activation
+
+- Wave 3：`TASK-ECO-000`、`TASK-ECO-001`、`TASK-ECO-020`、`TASK-ECO-021`、`TASK-ECO-022`、`TASK-ECO-023`、`TASK-ECO-030`
+- Wave 4：`TASK-ECO-002`、`TASK-ECO-003`、`TASK-ECO-010`、`TASK-ECO-011`、`TASK-ECO-024`、`TASK-ECO-025`
+- Wave 5：`TASK-ECO-004`、`TASK-ECO-005`、`TASK-ECO-006`、`TASK-ECO-012`、`TASK-ECO-013`、`TASK-ECO-014`
+
+退出标准：
+
+- `runtime_contracts::ecosystem` 定义 artifact、registry、lockfile、activation report。
+- `aom search/show/verify/stage/explain` 可在 local fixture registry 工作。
+- `aom activate` 生成 AgentCore PlanSpec，并由 SecurityExecutionEngine 执行。
+
+### Chain Wave 6-9：verification、trust、full ecosystem、Production Distro operations
+
+- Wave 6：`TASK-VERIFY-040` 到 `TASK-VERIFY-044`
+- Wave 7：`TASK-ECO-015`、`TASK-ECO-031`、`TASK-ECO-032`、`TASK-ECO-033`、`TASK-ECO-034`、`TASK-ECO-035`
+- Wave 8：`TASK-ECO-050`、`TASK-ECO-051`、`TASK-ECO-052`、`TASK-ECO-060`、`TASK-ECO-061`、`TASK-ECO-062`
+- Wave 9：`TASK-PROD-050`、`TASK-PROD-051`、`TASK-PROD-052`、`TASK-PROD-053`
+
+退出标准：
+
+- Ecosystem replay 和 adversarial fixtures 进入 release gate。
+- Trust tiers、signing、revocation、organization overlay 可解释、可审计。
+- Model/knowledge/adapter/image packs 不能泄漏 secrets、污染 memory 或绕过 SecurityExecutionEngine。
+- Support bundle、A/B update readiness、offline snapshot drill 和 final chain audit 完成。
+
+## AgentOS TUI Oriented System
+
+Source: 用户要求继续迭代 TASK，让 AgentOS 变成 TUI-oriented system。  
+Workflow: `.workflow/active/WFS-20260525-agentos-tui-oriented-system`  
+Previous workflow: `.workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain`
+
+状态：completed。Final audit decision：`tui-oriented-alpha`。这不是 GA production-ready claim；production signatures、fleet rollout、remote registry governance 和长期运营运维仍是后续 Production Distro wave。
+
+目标已完成：TUI 从 demo/projection surface 推进为 AgentOS 的主要 durable operator console。TUI 现在能驱动真实 AgentCore run、approval、denial、recovery、audit、support bundle 和 ecosystem activation preview，同时保持架构边界：TUI 是 projection-controller，不是第二套 runtime。
+
+核心边界：
+
+```text
+TUI is the OS operator surface.
+AgentCore owns PlanRun lifecycle.
+SecurityExecutionEngine owns all side effects.
+RunStore + AuditJournal + active artifact state are truth.
+aom install/stage remains inert.
+activation remains AgentCore PlanSpec + SecurityExecutionEngine.
+```
+
+关键产物：
+
+- Workflow session: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/workflow-session.json`
+- Plan: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/plan.json`
+- Task dir: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/.task`
+- TUI architecture: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-oriented-architecture.md`
+- TUI task chain: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-oriented-task-chain.md`
+- Final audit: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/FINAL-AUDIT-20260525-tui-oriented-agentos.json`
+- Final summary: `.workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/final-tui-oriented-audit-summary.md`
+
+已通过验证：
+
+- `cargo fmt --check`
+- `cargo test --workspace`
+- `cargo test -p agentd tui_ --no-fail-fast`
+- `cargo test -p agentd tui --no-fail-fast`
+- `scripts/functional-capability-replay.ps1`
+- `scripts/ecosystem-replay.ps1`
+- `scripts/production-runbook-smoke.ps1`
+- `scripts/tui-replay.ps1`
+- `scripts/validate-alpha-rootfs.ps1`
+- `scripts/build-release.ps1 -QemuPath E:\qemu\qemu-system-x86_64.exe -QemuTimeoutSeconds 120`
+- `scripts/boot-smoke-test.ps1 -SkipKernelDownload -KernelPath image\cache\vmlinuz-virt -QemuPath E:\qemu\qemu-system-x86_64.exe -TimeoutSeconds 120`
+
+当前 TUI 能力：
+
+- `--tui-interactive` 和 `--tui-scripted` 走 durable `TuiRuntimeController`。
+- TUI controller 使用真实 `AgentCore<FileRunStore, DeterministicPlanner<StubModelProvider>>`。
+- Typed command 支持 `dashboard.show`、`intent.submit`、`run.advance`、`run.approve`、`run.deny`、`run.suspend`、`run.recover`、`audit.show`、`support.bundle` 和 `aom.*`。
+- `approvals.show latest` 渲染 exact approval binding：actor、tool、resource、parameter hash、policy version、expiry 和 deny hint。
+- `recovery.show latest` 渲染 `source=run-store+audit-journal`、`no-model-replay=true`。
+- `aom.activate.preview` 只做 activation preview，不因 install/stage 激活。
+- Shell-like input、`shell.exec`、stage+activate chaining 和 secret-like input 均 fail closed / redacted。
+- QEMU boot smoke 观察到 `AGENTOS_TUI_CONSOLE_READY`。
+
+### TUI Wave 0：TUI OS Contract Freeze
+
+- `TASK-TUI-000`：Freeze TUI-oriented AgentOS contract（completed）
+- `TASK-TUI-001`：Define safe TUI command grammar（completed）
+- `TASK-TUI-002`：Define TUI state and render model（completed）
+- `TASK-TUI-003`：Define TUI replay and release gate strategy（completed）
+
+### TUI Wave 1：Durable AgentCore TUI Bridge
+
+- `TASK-TUI-010`：Add TuiRuntimeController over real AgentCore APIs（completed）
+- `TASK-TUI-011`：Add durable TUI runtime path configuration（completed）
+- `TASK-TUI-012`：Add approval、denial、suspend and recover handlers（completed）
+- `TASK-TUI-013`：Add TUI controller lifecycle tests（completed）
+
+### TUI Wave 2：Operator Console Views
+
+- `TASK-TUI-020`：Build TUI dashboard from operator projection（completed）
+- `TASK-TUI-021`：Build run detail and audit timeline view（completed）
+- `TASK-TUI-022`：Build approval queue and blocked action view（completed）
+- `TASK-TUI-023`：Build recovery、rollback and degraded state view（completed）
+- `TASK-TUI-024`：Add TUI golden snapshot and redaction tests（completed）
+
+### TUI Wave 3：Interactive Command Loop
+
+- `TASK-TUI-030`：Replace demo interactive loop with safe typed command loop（completed）
+- `TASK-TUI-031`：Add TUI command parser、help and explain errors（completed）
+- `TASK-TUI-032`：Add deterministic TUI refresh and event model（completed）
+- `TASK-TUI-033`：Add noninteractive scripted TUI mode for replay（completed）
+
+### TUI Wave 4：Ecosystem And Production Operations In TUI
+
+- `TASK-TUI-040`：Expose aom lifecycle projections in TUI（completed）
+- `TASK-TUI-041`：Add activation preview view without stage activation（completed）
+- `TASK-TUI-042`：Add support bundle export command and view（completed）
+- `TASK-TUI-043`：Integrate TUI projection into production runbook smoke（completed）
+
+### TUI Wave 5：Boot And Distro Packaging
+
+- `TASK-TUI-050`：Add rootfs TUI console defaults（completed）
+- `TASK-TUI-051`：Add TUI-ready boot marker and initramfs manifest fields（completed）
+- `TASK-TUI-052`：Add QEMU TUI console smoke（completed）
+- `TASK-TUI-053`：Preserve headless and automation compatibility（completed）
+
+### TUI Wave 6：TUI Safety Replay And Final Audit
+
+- `TASK-TUI-060`：Add local TUI replay script（completed）
+- `TASK-TUI-061`：Add adversarial TUI command fixtures（completed）
+- `TASK-TUI-062`：Gate release provenance on TUI replay（completed）
+- `TASK-TUI-063`：Run final TUI-oriented AgentOS audit（completed）
+
+后续 Production Distro 方向：
+
+- Full-screen TUI shell：panes、navigation、command palette、live event stream。
+- Operator session model：role-aware command scopes、sealed local profile state。
+- Fleet/update operations：rollout rings、rollback drills、support bundle upload policy。
+- Production signing：key ceremony、rotation、release decision evidence。
+- Remote registry / marketplace governance：mirror、artifact review、organization policy overlays。
+
+## AgentOS Console Beta And Production UX
+
+Source: TUI-oriented Alpha final audit and post-Alpha Maestro brainstorm.  
+Workflow: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux`  
+Previous workflow: `.workflow/active/WFS-20260525-agentos-tui-oriented-system`
+
+状态：completed。结论是 `console-beta`，不是 GA / Production Distro RC0。目标已经从 line-oriented typed TUI 推进到 full-screen-oriented Console Beta，并完成 Production Distro UX 铺设：Operations Workbench、Capability Catalog、Production Evidence Center、Fleet and Governance Preview。
+
+核心判断：不要先疯狂加更多 runtime 功能。当前 AgentOS 底层能力已经足够多，下一轮要先让 operator shell 长期可用、可观察、可验证。
+
+关键产物：
+
+- Workflow session: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/workflow-session.json`
+- Plan: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/plan.json`
+- Task dir: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/.task`
+- Final audit: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json`
+- Final summary: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/final-console-beta-audit-summary.md`
+- Console architecture: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/console-beta-architecture.md`
+- Task chain: `.workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/console-beta-task-chain.md`
+- Brainstorm: `.workflow/.csv-wave/20260525-brainstorm-agentos-tui-prod-next/context.md`
+
+边界：
+
+```text
+TUI remains projection-controller only.
+AgentCore owns PlanRun lifecycle.
+SecurityExecutionEngine owns all side effects.
+agent_core::ecosystem owns resolver and activation planning.
+OperatorSession is UI state only, not permission authority.
+ProjectionSnapshot is immutable render input, not source of truth.
+```
+
+### Console Beta Wave 0：Contract And Refactor Spine
+
+- `TASK-TUI2-000`：Freeze Console Beta boundary and module ownership（completed）
+- `TASK-TUI2-001`：Split TUI runtime into shell, parser, view model and dispatch modules（completed）
+- `TASK-TUI2-002`：Add `ProjectionSnapshot` contract with source hashes（completed）
+
+退出标准：
+
+- TUI module ownership and shell boundaries are documented。
+- Existing scripted and interactive commands still work。
+- `ProjectionSnapshot` is defined as render input, not authority。
+
+### Console Beta Wave 1：Full-Screen Operator Shell
+
+- `TASK-TUI2-003`：Add full-screen pane layout model and narrow terminal fallback（completed）
+- `TASK-TUI2-004`：Add command palette with contextual preview（completed）
+- `TASK-TUI2-005`：Add full-screen layout snapshots and scripted parity gate（completed）
+- `TASK-TUI2-006`：Add live event feed from durable audit/runtime projections（completed）
+
+退出标准：
+
+- Wide and narrow terminal layouts are stable。
+- Command palette previews actions before dispatch。
+- Event feed derives from durable projections。
+- Scripted parity gate still passes。
+
+### Console Beta Wave 2：Operations Workbench
+
+- `TASK-TUI2-010`：Build Approval Center panel（completed）
+- `TASK-TUI2-011`：Add approval binding diff and stale/expired token UX（completed）
+- `TASK-TUI2-012`：Build Recovery Workbench panel（completed）
+- `TASK-TUI2-013`：Add rollback consequence preview（completed）
+- `TASK-TUI2-014`：Build Support Console panel（completed）
+- `TASK-TUI2-015`：Add degraded-state explainer and evidence path actions（completed）
+
+退出标准：
+
+- Approval Center shows exact binding diff、expiry and denial path。
+- Recovery Workbench shows recovery source、rollback needs and safe next action。
+- Support Console exports redacted evidence and explains degraded state。
+
+### Console Beta Wave 3：Capability Catalog
+
+- `TASK-TUI2-020`：Add capability index projection（completed）
+- `TASK-TUI2-021`：Add workflow catalog view（completed）
+- `TASK-TUI2-022`：Add launch-intent preview for operational capabilities（completed）
+- `TASK-TUI2-023`：Add AOM artifact detail and trust status panel（completed）
+- `TASK-TUI2-024`：Add catalog replay gate（completed）
+
+退出标准：
+
+- Operational workflows are discoverable。
+- Launching a capability creates an intent or preview only。
+- Catalog and AOM views cannot directly execute or activate。
+
+### Console Beta Wave 4：Production Evidence Center
+
+- `TASK-TUI2-030`：Add release provenance panel（completed）
+- `TASK-TUI2-031`：Add promotion blocker panel（completed）
+- `TASK-TUI2-032`：Add local update and rollback drill view（completed）
+- `TASK-TUI2-033`：Add QEMU/rootfs/replay gate status panel（completed）
+- `TASK-TUI2-034`：Add candidate signing status view（completed）
+
+退出标准：
+
+- Release provenance、blockers and signing status are visible。
+- QEMU/rootfs/replay gate status is projectable。
+- Local update and rollback drill evidence is explainable。
+
+### Console Beta Wave 5：Fleet And Governance Preview
+
+- `TASK-TUI2-040`：Draft local-first fleet operations model（completed）
+- `TASK-TUI2-041`：Add rollout ring projection prototype（completed）
+- `TASK-TUI2-042`：Add support bundle upload policy design（completed）
+- `TASK-TUI2-043`：Add remote registry mirror UX design（completed）
+- `TASK-TUI2-044`：Add organization policy overlay preview（completed）
+- `TASK-TUI2-050`：Run final Console Beta and Production UX audit（completed）
+
+退出标准：
+
+- Fleet and governance previews are explicit non-GA previews。
+- Remote features are optional and fail closed。
+- Final audit decided `console-beta` promotion；`production_ready_claim=false` remains intentional。

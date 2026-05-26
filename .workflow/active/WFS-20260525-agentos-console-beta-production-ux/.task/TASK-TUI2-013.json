@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-013",
+  "title": "Add rollback consequence preview",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:03:15+08:00",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-012"],
+  "purpose": "Make rollback handles, affected resources and operator consequences visible before recovery action.",
+  "scope": [
+    "Render rollback handle, target resource and base hash where available.",
+    "Render affected files, services or artifacts as redacted summaries.",
+    "Show whether rollback is automatic, requires approval or requires human review.",
+    "Add preview for failed verification and half-committed effects.",
+    "Link rollback preview to audit evidence."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui rollback preview",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-013.json"
+  ],
+  "acceptance_criteria": [
+    "Rollback consequence preview is visible for rollback-pending state.",
+    "Preview never executes rollback by rendering.",
+    "Audit evidence remains source of rollback truth.",
+    "Secret-like rollback details are redacted."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_rollback_preview",
+    "cargo test -p security_execution rollback",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "failure_modes": [
+    "Rollback preview implies rollback already occurred.",
+    "Preview omits affected resource or audit reference.",
+    "Rendering rollback preview mutates rollback state."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-014", "TASK-TUI2-015"],
+    "blocked_until": ["TASK-TUI2-012"]
+  }
+}

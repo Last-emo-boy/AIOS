@@ -1354,11 +1354,12 @@ mod tests {
         assert_eq!(step.status, "denied");
         assert!(!step.effect_prepared);
         assert_eq!(step.effect_state, "none");
-        assert!(step
-            .policy_summary
-            .as_deref()
-            .unwrap()
-            .contains("decision=deny"));
+        assert!(
+            step.policy_summary
+                .as_deref()
+                .unwrap()
+                .contains("decision=deny")
+        );
         assert!(step.to_cli_line().contains("approval denied"));
     }
 
@@ -1421,11 +1422,13 @@ mod tests {
             .expect("projection")
             .expect("run projection");
         assert_eq!(projection.steps[0].status, "recovered");
-        assert!(projection.steps[0]
-            .recovery_summary
-            .as_deref()
-            .unwrap()
-            .contains("source=run-store+audit"));
+        assert!(
+            projection.steps[0]
+                .recovery_summary
+                .as_deref()
+                .unwrap()
+                .contains("source=run-store+audit")
+        );
         assert_eq!(projection.warnings.len(), 1);
         assert!(projection.warnings[0].contains("missing event_type"));
     }
@@ -1547,9 +1550,11 @@ mod tests {
         assert!(decision.local_diagnostics_allowed);
         assert!(decision.non_local_side_effects_allowed);
         let local_lines = journal.event_lines().expect("local lines");
-        assert!(local_lines
-            .iter()
-            .any(|line| line.contains("remote-audit-mirror failure")));
+        assert!(
+            local_lines
+                .iter()
+                .any(|line| line.contains("remote-audit-mirror failure"))
+        );
     }
 
     #[test]
@@ -1588,9 +1593,11 @@ mod tests {
         assert!(!decision.mirror_authoritative_for_recovery);
         assert!(decision.local_diagnostics_allowed);
         assert!(!decision.non_local_side_effects_allowed);
-        assert!(decision
-            .to_json()
-            .contains("\"failure_policy\":\"fail-closed\""));
+        assert!(
+            decision
+                .to_json()
+                .contains("\"failure_policy\":\"fail-closed\"")
+        );
     }
 
     #[test]

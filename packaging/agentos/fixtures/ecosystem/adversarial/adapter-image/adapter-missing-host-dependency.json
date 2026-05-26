@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "adapter-missing-host-dependency",
+  "artifact_kind": "runtime-adapter-pack",
+  "coordinate": "agentos:runtime-adapter-pack/adversarial/missing-host-dependency@1.0.0",
+  "attempt": "adapter pack tries to proceed after a required host dependency is missing",
+  "forbidden_surface": "adapter dependency fallback",
+  "expected_outcome": "denied",
+  "denial_reason": "missing dependencies must fail before EffectPrepared and cannot fall back to host mutation",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

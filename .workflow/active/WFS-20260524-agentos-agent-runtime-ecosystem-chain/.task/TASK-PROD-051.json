@@ -1,0 +1,43 @@
+{
+  "id": "TASK-PROD-051",
+  "title": "Add A/B update readiness with active artifact awareness",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-PROD-051.json",
+  "wave": 9,
+  "priority": "P0",
+  "type": "release",
+  "owner": "packaging",
+  "source": "production distro task chain",
+  "depends_on": ["TASK-CHAIN-001", "TASK-ECO-061", "TASK-VERIFY-044"],
+  "purpose": "Ensure AgentOS updates account for active ecosystem artifacts and can roll back safely.",
+  "scope": [
+    "Record active artifact set hash in update readiness.",
+    "Check runtime contract compatibility before slot promotion.",
+    "Block update when active artifacts are incompatible.",
+    "Retain rollback evidence."
+  ],
+  "deliverables": [
+    "scripts/build-release.ps1",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-PROD-051.json"
+  ],
+  "acceptance_criteria": [
+    "Update metadata includes active artifact set hash.",
+    "Incompatible artifact set blocks promotion.",
+    "Rollback path preserves previous active set.",
+    "QEMU smoke can verify boot when required."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Update ignores active artifacts.",
+    "Incompatible artifact survives promotion.",
+    "Rollback loses previous active set."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-PROD-053"],
+    "blocked_until": ["TASK-ECO-061", "TASK-VERIFY-044"]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-021",
+  "title": "Add workflow catalog view",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:08:11+08:00",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-020"],
+  "purpose": "Make operational workflows discoverable with clear inputs, risk class and expected evidence.",
+  "scope": [
+    "Render workflow list grouped by service, package, content, update, support and ecosystem categories.",
+    "Render detail view with input schema, approval requirements, rollback expectations and evidence outputs.",
+    "Show local-only/external dependency status.",
+    "Link workflow detail to launch-intent preview.",
+    "Keep workflow catalog projection-only."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui workflow catalog",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-021.json"
+  ],
+  "acceptance_criteria": [
+    "Workflow detail shows risk and approval requirements.",
+    "Workflow catalog does not create PlanSpec directly except through typed intent preview.",
+    "External dependency status is visible and baseline remains local-only.",
+    "Workflow outputs identify audit/support evidence paths."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_workflow_catalog",
+    "cargo test -p agent_core package_install",
+    "cargo test -p agent_core untrusted_content"
+  ],
+  "failure_modes": [
+    "Workflow detail suggests unsafe direct execution.",
+    "Catalog omits rollback requirement for host-changing workflows.",
+    "External dependency appears mandatory for baseline."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-022", "TASK-TUI2-023"],
+    "blocked_until": ["TASK-TUI2-020"]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "task_id": "TASK-TUI-043",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:47:41+08:00",
+  "evidence_type": "production-runbook-tui-integration",
+  "artifacts": [
+    "scripts/production-runbook-smoke.ps1",
+    ".workflow/artifacts/production-runbook-smoke/result.json",
+    ".workflow/artifacts/production-runbook-smoke/tui-scripted-output.txt",
+    ".workflow/artifacts/production-runbook-smoke/tui-support-bundle.json"
+  ],
+  "verified": [
+    "production runbook smoke includes tui-scripted-operator-runbook case",
+    "runbook asserts durable projection controller, approval exact binding, recovery source and support bundle export",
+    "activation preview remains gated with security_execution_required=true and activation_prepared=false",
+    "unsafe command parsing fails closed during runbook smoke"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "blockers": []
+}

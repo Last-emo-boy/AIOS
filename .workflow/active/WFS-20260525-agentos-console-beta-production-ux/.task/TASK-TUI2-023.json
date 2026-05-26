@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-023",
+  "title": "Add AOM artifact detail and trust status panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:50:12+08:00",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-020"],
+  "purpose": "Make artifact trust, compatibility, revocation and activation preview status legible in the TUI.",
+  "scope": [
+    "Render artifact coordinate, kind, publisher, digest and trust tier.",
+    "Render staged, active, blocked, revoked, incompatible and degraded states.",
+    "Render activation preview status without activating.",
+    "Show why install/stage is inert and activation needs runtime mediation.",
+    "Keep resolver ownership in agent_core::ecosystem."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui AOM artifact detail panel",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-023.json"
+  ],
+  "acceptance_criteria": [
+    "Artifact detail explains trust and compatibility state.",
+    "Revoked or incompatible artifacts are visibly blocked.",
+    "Activation preview shows SecurityExecutionEngine requirement and activation_prepared=false.",
+    "No AOM resolver logic is implemented in TUI."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_aom_artifact",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Artifact panel implies staged artifact is active.",
+    "Revoked artifact appears launchable.",
+    "Trust UI is treated as policy authority."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-024", "TASK-TUI2-030"],
+    "blocked_until": ["TASK-TUI2-020"]
+  }
+}

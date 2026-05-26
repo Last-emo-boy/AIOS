@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI-031",
+  "title": "Add TUI command parser, help and explain errors",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-001", "TASK-TUI-030"],
+  "purpose": "Implement a typed parser and operator help model that makes safe actions discoverable without shell escape.",
+  "scope": [
+    "Implement parser output enum for TUI commands.",
+    "Implement help output grouped by dashboard, run, approval, recovery, audit, support and aom.",
+    "Implement explainable parse errors with fail-closed behavior.",
+    "Reject pipes, redirection, command substitution and shell metacharacter execution patterns.",
+    "Add parser fixtures for valid and invalid commands."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-031.json"
+  ],
+  "acceptance_criteria": [
+    "Parser output is typed and cannot be passed directly to a shell.",
+    "Help text lists only supported AgentOS operations.",
+    "Errors explain the rejected grammar rule without echoing sensitive payloads.",
+    "Approval commands require exact fields."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_command_parser",
+    "cargo test -p agentd tui_command_errors",
+    "cargo test -p agentd safety::tool_abuse"
+  ],
+  "failure_modes": [
+    "Parser stores raw untrusted command text as executable action.",
+    "Help suggests shell workarounds.",
+    "Parse errors leak secrets from command input."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-032", "TASK-TUI-033", "TASK-TUI-061"],
+    "blocked_until": ["TASK-TUI-030"]
+  }
+}

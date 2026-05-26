@@ -1,0 +1,64 @@
+{
+  "task_id": "TASK-ECO-011",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "summary": "Exposed local-first aom lifecycle commands through agentd and rootfs operator command registry without adding activation authority.",
+  "artifacts": [
+    {
+      "path": "crates/agentd/src/aom.rs",
+      "status": "created",
+      "sha256": "3625C9341D60477C95C0A6F79F8AF83D8EEEE025601257B04985B8DD65D4E276"
+    },
+    {
+      "path": "crates/agentd/src/lib.rs",
+      "status": "updated",
+      "sha256": "F901CE4B9832A63BEDA176E3F320C6CCD7AC004FE236EF66F6EF386DB7AFDB41"
+    },
+    {
+      "path": "crates/agentd/src/main.rs",
+      "status": "updated",
+      "sha256": "F8116512340CD35FD5AF268497E5DD3EB6269990A84E8FB5549BCF9252328AFA"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+      "status": "updated",
+      "sha256": "30F76526941C8A69B631362C5E8E1E6D4835E26819D2FC9C4E786661A674A2A6"
+    },
+    {
+      "path": "scripts/validate-alpha-rootfs.ps1",
+      "status": "updated",
+      "sha256": "51909EFB90325529AA7F13839E7478DF726870C3B2108B86A9988ACD08E28E64"
+    }
+  ],
+  "acceptance_evidence": [
+    "agentd exposes --aom search/show/verify/stage/explain/activate.",
+    "aom search/show/verify/stage/explain operate against the pinned local registry snapshot.",
+    "aom stage reports staged_only=true, active=false and activation_prepared=false.",
+    "aom activate returns status=blocked until TASK-ECO-004 and TASK-ECO-005.",
+    "Rootfs operator command registry lists aom.* commands and does not expose shell.exec."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd aom",
+      "result": "passed",
+      "summary": "2 aom lifecycle tests passed."
+    },
+    {
+      "command": "cargo test -p agentd operator_projection",
+      "result": "passed",
+      "summary": "6 operator projection tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1",
+      "result": "passed",
+      "summary": "Alpha rootfs validation passed and verified aom.* command registry entries plus ecosystem registry snapshot."
+    }
+  ],
+  "blocked_shortcuts": [
+    "aom activate does not activate artifacts in Wave 4.",
+    "aom stage does not create or mutate active artifact state.",
+    "agentd delegates resolver and staging behavior to agent_core::ecosystem.",
+    "No normal-mode shell command surface was added."
+  ],
+  "promotion_impact": "Establishes a local-first aom operator surface while preserving install/stage != activate."
+}

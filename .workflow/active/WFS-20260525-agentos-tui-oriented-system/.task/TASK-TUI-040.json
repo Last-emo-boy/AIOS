@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-040",
+  "title": "Expose aom lifecycle projections in TUI",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-020", "TASK-TUI-033"],
+  "purpose": "Make the AgentOS ecosystem visible through TUI without moving resolver or activation ownership into agentd.",
+  "scope": [
+    "Render aom search/show/verify/stage/explain results in TUI views.",
+    "Use existing agent_core::ecosystem and operator projection data.",
+    "Show staged, active, blocked, revoked and incompatible artifact states.",
+    "Explain install/stage is inert and not activation.",
+    "Reject unsupported ecosystem commands with typed errors."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/operator_projection.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-040.json"
+  ],
+  "acceptance_criteria": [
+    "TUI ecosystem view does not implement its own resolver.",
+    "Stage status is clearly displayed as inert.",
+    "Revoked or incompatible artifacts are fail-closed and visible.",
+    "TUI can explain local-only registry baseline."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_ecosystem",
+    "cargo test -p agentd ecosystem",
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1"
+  ],
+  "failure_modes": [
+    "TUI resolver diverges from agent_core::ecosystem.",
+    "Stage is presented as runtime activation.",
+    "Revocation or advisory state is omitted."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-041", "TASK-TUI-043", "TASK-TUI-060"],
+    "blocked_until": ["TASK-TUI-020", "TASK-TUI-033"]
+  }
+}

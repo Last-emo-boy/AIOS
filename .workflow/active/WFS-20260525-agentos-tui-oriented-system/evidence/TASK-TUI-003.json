@@ -1,0 +1,26 @@
+{
+  "task_id": "TASK-TUI-003",
+  "status": "completed",
+  "completed_at": "2026-05-25T08:05:13+08:00",
+  "evidence_type": "release-gate-contract",
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-release-gate.md"
+  ],
+  "required_future_gate": "scripts/tui-replay.ps1",
+  "required_gate_inputs": [
+    "cargo test --workspace",
+    "cargo test -p agentd tui",
+    "functional replay",
+    "ecosystem replay",
+    "production runbook smoke",
+    "TUI replay",
+    "release provenance",
+    "QEMU TUI-ready marker"
+  ],
+  "verification": [
+    "release gate contract blocks TUI-oriented promotion when replay is missing, stale or failed",
+    "release gate contract requires adversarial command coverage",
+    "release gate contract records TUI evidence hashes in provenance"
+  ],
+  "blockers": []
+}

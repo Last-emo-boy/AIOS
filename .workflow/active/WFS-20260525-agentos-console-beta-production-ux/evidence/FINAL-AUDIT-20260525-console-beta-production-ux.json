@@ -1,0 +1,266 @@
+{
+  "audit_id": "FINAL-AUDIT-20260525-console-beta-production-ux",
+  "workflow_id": "WFS-20260525-agentos-console-beta-production-ux",
+  "status": "completed",
+  "completed_at": "2026-05-26T08:20:11+08:00",
+  "decision": "console-beta",
+  "production_ready_claim": false,
+  "summary": "AgentOS passed the Console Beta and Production UX audit. The system now has a full-screen-oriented TUI shell model, command palette previews, deterministic projection snapshots, operations workbenches, capability catalog, production evidence center, local-first rollout ring preview and governance policy previews while preserving AgentCore and SecurityExecutionEngine authority boundaries.",
+  "scope": {
+    "waves_audited": [0, 1, 2, 3, 4, 5],
+    "task_total": 29,
+    "task_status": {
+      "completed": 29,
+      "planned": 0,
+      "in_progress": 0,
+      "blocked": 0
+    },
+    "baseline_constraints": [
+      "TUI is projection-controller only",
+      "AgentCore owns PlanRun lifecycle",
+      "SecurityExecutionEngine remains the only side-effect authority",
+      "normal-mode arbitrary shell is denied",
+      "AOM catalog and artifact views are read-only or preview-only",
+      "release, gate, signing and rollout panels are read-only projections",
+      "baseline does not require network, external LLM, Firecracker or host package manager",
+      "fleet and governance features are preview-only and do not imply GA production readiness"
+    ]
+  },
+  "wave_evidence": [
+    {
+      "wave": 0,
+      "name": "Console Beta Contract And Refactor Spine",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-000.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-001.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-002.json"
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Full-Screen Operator Shell",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-003.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-004.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-005.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-006.json"
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Operations Workbench",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-010.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-011.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-012.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-013.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-014.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-015.json"
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Capability Catalog",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-020.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-021.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-022.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-023.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-024.json"
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Production Evidence Center",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-030.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-031.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-032.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-033.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-034.json",
+        ".workflow/artifacts/release/provenance.json",
+        ".workflow/artifacts/boot/boot-smoke-result.json"
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Fleet And Governance Preview",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-040.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-041.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-042.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-043.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-044.json",
+        ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-050.json"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "command": "cargo fmt --check",
+      "result": "passed",
+      "summary": "Rust formatting gate passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core, agentd, runtime_contracts and security_execution tests passed; doctests passed."
+    },
+    {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "result": "passed",
+      "summary": "84 TUI tests passed, covering parser rejection, layouts, command palette preview, workbenches, catalog, release panels, signing status, rollout rings, deterministic refresh and projection boundaries."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "summary": "TUI replay passed 28/28 checks with projection_controller_only=true and local_only=true."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "result": "passed",
+      "summary": "Production runbook smoke passed 12/12 cases, including scripted TUI runbook, remote audit fail-closed policy, service recovery, rollback, crash recovery and sandbox baseline."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed locally with no network, external LLM, Firecracker or host package manager dependency."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -QemuTimeoutSeconds 120",
+      "result": "passed",
+      "summary": "Release gate passed and generated dependency inventory, SBOM, update metadata, provenance and detached candidate signatures."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120",
+      "result": "passed",
+      "summary": "QEMU boot smoke observed handoff, runtime artifacts, TUI console and runtime manifest markers. The script now records machine candidates and selected machine."
+    }
+  ],
+  "artifact_hashes": {
+    "release_provenance": "f3b7a4a921e9185736d87337ad1f90f087e028327101278b5ca1f695dce4b5ed",
+    "boot_smoke_result": "f58ee54c4042367fa9265f9090be5c980c44df707aa0ba9fd5fda7255c008c1e",
+    "tui_replay_result": "228335c3383602fa697c03438aecee7320e311bab09eafa69509f603c58789f2",
+    "production_runbook_smoke_result": "0e9a1e847dee43bec9380f2844bc7ee661a579dad3dda8ee127a1938ae769065",
+    "ecosystem_replay_result": "7b3a8b312fb1df1314a89cc568f4dd8c082ea79c25543f71917cd1e496df5720",
+    "update_metadata": "9918f7e37f4365acfaba646d452c5f21fbde691182e5ffc5523f29212b0a4c44"
+  },
+  "tui_replay": {
+    "status": "passed",
+    "total_checks": 28,
+    "passed_checks": 28,
+    "failed_checks": 0,
+    "projection_controller_only": true,
+    "local_only": true,
+    "run_store_snapshot_count": 28,
+    "rollout_rings_rendered": true,
+    "release_provenance_rendered": true,
+    "promotion_blockers_rendered": true,
+    "gate_status_rendered": true,
+    "signing_status_rendered": true,
+    "unsafe_command_rejected": true,
+    "direct_shell_rejected": true,
+    "secret_like_command_redacted": true,
+    "denied_restart_no_effect_prepared": true
+  },
+  "runbook": {
+    "status": "passed",
+    "total_cases": 12,
+    "passed_cases": 12,
+    "projection_authority_assertions": {
+      "durable_projection_controller": true,
+      "security_execution_required": true,
+      "tui_signing_authority": false,
+      "tui_promotion_authority": false,
+      "tui_gate_execution_authority": false,
+      "tui_remote_rollout_authority": false,
+      "tui_blocker_clear_authority": false,
+      "activation_prepared": false
+    }
+  },
+  "release_readiness": {
+    "release_gate_status": "passed",
+    "promotion_status_in_candidate_provenance": "promotable",
+    "promotion_blockers_in_candidate_provenance": [],
+    "production_ready_claim": false,
+    "production_key_required": false,
+    "signature_policy": "candidate-hash-bound",
+    "qemu_runtime_smoke_status": "completed",
+    "qemu_selected_machine": "microvm",
+    "qemu_machine_candidates": ["microvm", "pc"],
+    "qemu_required_markers_observed": [
+      "AGENTD_HANDOFF_OK",
+      "AGENTOS_RUNTIME_ARTIFACTS_OK",
+      "AGENTOS_TUI_CONSOLE_READY",
+      "AGENTOS_RUNTIME_MANIFEST_SHA256=d4a3190845505b44065fe730d837335ebf338b30c3e5e8b918d58531d2a28fae"
+    ],
+    "initramfs_sha256": "9627623c3e2a4b800459ab16890c4d007b9508b5af40f3a03281143c5dcd884d",
+    "rootfs_runtime_manifest_sha256": "d4a3190845505b44065fe730d837335ebf338b30c3e5e8b918d58531d2a28fae"
+  },
+  "boundary_audit": {
+    "tui_runtime_authority": "projection-controller only",
+    "tui_owns_planner": false,
+    "tui_owns_resolver": false,
+    "tui_owns_policy": false,
+    "tui_owns_side_effects": false,
+    "tui_signs_release": false,
+    "tui_promotes_release": false,
+    "tui_runs_qemu_validation": false,
+    "tui_executes_rootfs_validation": false,
+    "tui_clears_blockers": false,
+    "tui_executes_remote_rollout": false,
+    "agent_core_authority": "PlanRun lifecycle",
+    "side_effect_authority": "SecurityExecutionEngine only",
+    "ecosystem_activation_authority": "AgentCore PlanSpec + SecurityExecutionEngine",
+    "release_evidence_authority": "release scripts and immutable artifacts",
+    "baseline_external_dependency_required": false
+  },
+  "console_beta_capabilities": [
+    "full-screen pane layout model with wide and narrow deterministic snapshots",
+    "typed command palette with contextual preview and high-risk action explanation",
+    "durable event feed from runtime and audit projections",
+    "Approval Center with exact binding, expiry, stale token and denial handling",
+    "Recovery Workbench with rollback consequence preview and no model replay",
+    "Support Console with redacted bundle export and degraded-state explainer",
+    "Capability Catalog and workflow catalog with intent/preview-only launch paths",
+    "AOM artifact detail panel with trust, compatibility and activation gate status",
+    "Production Evidence Center for release provenance, blockers, update rollback, QEMU/rootfs/replay gates and candidate signing",
+    "local-first rollout ring preview",
+    "support bundle upload policy design",
+    "remote registry mirror UX design",
+    "organization policy overlay preview"
+  ],
+  "rc0_blockers": [
+    "Production signing ceremony, real keyring policy and key rotation are not implemented.",
+    "Fleet rollout execution authority and rollback drills are preview-only.",
+    "Support bundle upload implementation and destination trust verification are not implemented.",
+    "Remote registry mirror refresh, trust distribution and quarantine implementation are not implemented.",
+    "Organization policy overlay activation and conflict resolution are not implemented.",
+    "Node-level rollout audit evidence and incident response drills are not yet proven across a real fleet.",
+    "Public ecosystem governance, marketplace review and revocation operations require hardening."
+  ],
+  "next_production_distro_rc0_tasks": [
+    "RC0-001 production release signing ceremony and keyring trust store",
+    "RC0-002 immutable release channel metadata and rollback drill gate",
+    "RC0-003 fleet rollout authority split from TUI projection panels",
+    "RC0-004 support bundle upload implementation with destination trust and operator consent",
+    "RC0-005 remote registry mirror refresh implementation with quarantine and replay evidence",
+    "RC0-006 organization policy overlay activation through AgentCore and SecurityExecutionEngine",
+    "RC0-007 node enrollment, local identity and fleet audit evidence model",
+    "RC0-008 long-running TUI session hardening, profile persistence and degraded offline UX",
+    "RC0-009 marketplace governance and artifact review workflow",
+    "RC0-010 production incident runbooks with recovery and rollback drills"
+  ],
+  "decision_notes": [
+    "Console Beta is accepted because all workflow tasks and executable gates passed.",
+    "The release provenance candidate status can be promotable while the product-level production_ready_claim remains false.",
+    "The current claim is Console Beta, not GA and not Production Distro RC0.",
+    "The next milestone should move from preview-only fleet/governance surfaces to mediated implementations with real authority boundaries."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "TASK-VERIFY-041",
+  "title": "Add ecosystem local replay script",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-VERIFY-040", "TASK-ECO-003", "TASK-ECO-012", "TASK-ECO-013"],
+  "purpose": "Create local-only ecosystem replay that verifies registry, staging, policy pack and workflow pack behavior.",
+  "scope": ["Replay local registry resolution.", "Replay staging and verification.", "Replay built-in policy and workflow pack activation simulation.", "Emit deterministic JSON evidence."],
+  "deliverables": ["scripts/ecosystem-replay.ps1", ".workflow/artifacts/ecosystem-replay/result.json", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-041.json"],
+  "acceptance_criteria": ["Replay runs without network, external LLM, Firecracker or host package manager.", "Replay result records registry and lockfile hashes.", "Replay fails when unsafe fixture is enabled.", "Release gate can consume replay result."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1", "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1"],
+  "failure_modes": ["Replay depends on live services.", "Replay only tests happy path.", "Replay output omits hashes."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-042", "TASK-VERIFY-044"], "blocked_until": ["TASK-VERIFY-040"]},
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-041.json"
+}

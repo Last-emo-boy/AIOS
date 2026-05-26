@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-020",
+  "title": "Add capability index projection",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:59:59+08:00",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-014"],
+  "purpose": "Expose AgentOS operational capabilities as a read-only catalog projection.",
+  "scope": [
+    "Define capability index over built-in workflows and installed AOM artifacts.",
+    "Include service recovery, package install, untrusted content, rootfs update, support bundle and AOM activation preview capabilities.",
+    "Show capability authority path and required approvals.",
+    "Mark unavailable or degraded capabilities explicitly.",
+    "Ensure catalog cannot execute directly."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui capability index projection",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-020.json"
+  ],
+  "acceptance_criteria": [
+    "Capability catalog is read-only projection.",
+    "Every capability shows launch path as intent or preview.",
+    "Unavailable capabilities show reason and source.",
+    "Catalog does not duplicate planner or resolver logic."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_capability_index",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Catalog directly executes workflow.",
+    "Catalog hides required approval or rollback.",
+    "Catalog encodes AOM resolver logic in TUI."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-021", "TASK-TUI2-022"],
+    "blocked_until": ["TASK-TUI2-014"]
+  }
+}

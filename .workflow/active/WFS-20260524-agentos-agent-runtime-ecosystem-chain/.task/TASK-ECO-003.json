@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-003",
+  "title": "Implement staging store with digest and signature verification report",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agent_core",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-002", "TASK-ECO-022", "TASK-ECO-023"],
+  "purpose": "Stage verified artifacts inertly before any runtime activation can occur.",
+  "scope": ["Create staging report contract usage.", "Bind staged files to digest and registry snapshot hash.", "Ensure staged artifacts cannot alter active runtime state."],
+  "deliverables": ["/var/lib/agentos/ecosystem/staged/ contract", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-003.json"],
+  "acceptance_criteria": ["Staged artifacts are inert.", "Verification report includes digest, publisher, snapshot and compatibility.", "Missing optional dependencies are reported but do not trigger host mutation."],
+  "verification": ["cargo test -p agent_core ecosystem::staging", "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1"],
+  "failure_modes": ["Stage changes active policy.", "Digest mismatch is only warned.", "Optional dependency fallback mutates host."],
+  "handoff": {"next_tasks": ["TASK-ECO-004", "TASK-ECO-010", "TASK-VERIFY-041"], "blocked_until": ["TASK-ECO-002"]},
+  "completed_at": "2026-05-25T01:32:20+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-003.json"
+}

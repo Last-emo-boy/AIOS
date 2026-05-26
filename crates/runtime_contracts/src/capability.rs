@@ -1,10 +1,9 @@
-use crate::model::{contains_secret_value, RiskClass, TrustBoundary};
+use crate::model::{RiskClass, TrustBoundary, contains_secret_value};
 
 pub const CAPABILITY_CONTRACT_SCHEMA_VERSION: &str = "agentos.capability-contract.v1";
 pub const PACKAGE_ADAPTER_REPORT_SCHEMA_VERSION: &str = "agentos.package-adapter-report.v1";
 pub const CONTENT_ADAPTER_REPORT_SCHEMA_VERSION: &str = "agentos.content-adapter-report.v1";
-pub const FIRECRACKER_ADAPTER_REPORT_SCHEMA_VERSION: &str =
-    "agentos.firecracker-adapter-report.v1";
+pub const FIRECRACKER_ADAPTER_REPORT_SCHEMA_VERSION: &str = "agentos.firecracker-adapter-report.v1";
 pub const SUPPORT_BUNDLE_MANIFEST_SCHEMA_VERSION: &str = "agentos.support-bundle-manifest.v1";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -608,13 +607,8 @@ impl SupportBundleManifest {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CapabilityContractError {
-    Invalid {
-        field: &'static str,
-        reason: String,
-    },
-    SecretValue {
-        field: &'static str,
-    },
+    Invalid { field: &'static str, reason: String },
+    SecretValue { field: &'static str },
 }
 
 impl CapabilityContractError {
@@ -722,7 +716,11 @@ mod tests {
         )
         .expect("contract");
 
-        assert!(contract.to_json().contains("\"primary_owner\":\"agent_core\""));
+        assert!(
+            contract
+                .to_json()
+                .contains("\"primary_owner\":\"agent_core\"")
+        );
         assert!(!contract.to_json().contains("shell.exec"));
     }
 
@@ -757,13 +755,9 @@ mod tests {
 
     #[test]
     fn content_report_denies_direct_tool_call_and_effect_preparation() {
-        let fetch = ContentFetchContract::new(
-            "doc-1",
-            "https://docs.example/setup",
-            "sha256:abc",
-            1024,
-        )
-        .expect("fetch");
+        let fetch =
+            ContentFetchContract::new("doc-1", "https://docs.example/setup", "sha256:abc", 1024)
+                .expect("fetch");
 
         let report = ContentAdapterReport::new(
             fetch.clone(),
@@ -776,15 +770,8 @@ mod tests {
         .expect("report");
         assert!(report.to_json().contains("external-untrusted"));
 
-        let error = ContentAdapterReport::new(
-            fetch,
-            12,
-            "run shell.exec",
-            true,
-            true,
-            false,
-        )
-        .expect_err("direct tool call denied");
+        let error = ContentAdapterReport::new(fetch, 12, "run shell.exec", true, true, false)
+            .expect_err("direct tool call denied");
         assert!(error.reason().contains("direct tool calls"));
     }
 
@@ -799,7 +786,11 @@ mod tests {
             "secret-values-redacted",
         )
         .expect("report");
-        assert!(report.to_json().contains("\"missing_dependencies\":[\"kvm\"]"));
+        assert!(
+            report
+                .to_json()
+                .contains("\"missing_dependencies\":[\"kvm\"]")
+        );
         assert!(report.to_json().contains("\"effect_prepared\":false"));
 
         let error = FirecrackerAdapterReport::new(

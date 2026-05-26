@@ -1,0 +1,57 @@
+{
+  "task_id": "TASK-TUI2-012",
+  "title": "Build Recovery Workbench panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:51:22+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/recovery_workbench.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/runtime.rs"
+  ],
+  "verified": [
+    "Recovery Workbench renders panel=recovery-workbench.",
+    "Recovery source is run-store+audit-journal.",
+    "Recovery rendering is no-model-replay and uses scan-only recovery projection.",
+    "Runs are grouped as safe-to-verify, needs-rollback, needs-human-review and failed-closed.",
+    "recovery.show reads RunStore and AuditJournal projections without mutating recovery state.",
+    "Rollback-pending audit truth remains visible even when the dashboard summary is healthy.",
+    "No-run state is explicit.",
+    "Secret-like audit and recovery text is redacted at render level."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_recovery_workbench --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "test_result": {
+    "targeted": {
+      "command": "cargo test -p agentd tui_recovery_workbench --no-fail-fast",
+      "passed": 4,
+      "failed": 0
+    },
+    "agentd_tui": {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "passed": 43,
+      "failed": 0
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "status": "passed",
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json"
+    }
+  },
+  "risk_notes": [
+    "Recovery Workbench stays projection-controller only.",
+    "TUI recovery rendering does not call recover_run or any model replay path.",
+    "Rollback action preview is intentionally deferred to TASK-TUI2-013."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-013",
+    "TASK-TUI2-014"
+  ]
+}

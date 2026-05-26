@@ -1,0 +1,55 @@
+{
+  "id": "TASK-CHAIN-001",
+  "title": "Define AgentOS lifecycle control map",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "owner": "agent_core",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-CHAIN-000"],
+  "purpose": "Map boot, steady-state, degraded, recovery and update modes to Agent Runtime responsibilities.",
+  "scope": [
+    "Define lifecycle modes for AgentOS operation.",
+    "Assign each mode to Agent Runtime, SecurityExecution, agentd, packaging or scripts.",
+    "Identify required durable state and operator projection per mode.",
+    "Define degraded-mode behavior without external dependencies."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/agent-operated-os-chain.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-001.json"
+  ],
+  "read_first": [
+    "crates/agent_core/src/lib.rs",
+    "crates/agentd/src/operator_projection.rs",
+    "crates/agentd/src/support_bundle.rs",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md"
+  ],
+  "implementation_steps": [
+    "Create a lifecycle map table.",
+    "List runtime events that start or stop each loop.",
+    "Document degraded-mode behavior.",
+    "Record evidence for ownership and expected gates."
+  ],
+  "acceptance_criteria": [
+    "Boot mode does not require network or remote model.",
+    "Recovery uses durable runtime state.",
+    "Update mode accounts for active ecosystem artifacts.",
+    "Operator projection can explain every mode."
+  ],
+  "verification": [
+    "Evidence JSON parses.",
+    "Lifecycle map references boot, steady-state, degraded, recovery and update."
+  ],
+  "failure_modes": [
+    "Lifecycle depends on model replay as authority.",
+    "Degraded mode silently enables side effects.",
+    "Update mode ignores active artifact set."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ARUN-010", "TASK-ARUN-013", "TASK-PROD-051"],
+    "blocked_until": ["TASK-CHAIN-000"]
+  },
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-001.json"
+}

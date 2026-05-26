@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-013",
+  "title": "Package built-in service recovery workflow pack",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "packaging",
+  "owner": "agent_core",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-004", "TASK-ECO-005"],
+  "purpose": "Package the existing service recovery workflow as a core workflow-pack artifact.",
+  "scope": ["Create workflow pack manifest.", "Map workflow pack to existing AgentCore service recovery plan.", "Include local-only replay fixture.", "Ensure no workflow shell snippets are execution authority."],
+  "deliverables": ["packaging/agentos/rootfs/etc/agentos/ecosystem/core/workflow-service-recovery.json", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-013.json"],
+  "acceptance_criteria": ["Workflow pack compiles into PlanSpec.", "Restart action still requires exact approval.", "Denied path has no EffectPrepared.", "Replay fixture is local-only."],
+  "verification": ["cargo test -p agent_core service_recovery", "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1"],
+  "failure_modes": ["Workflow pack executes shell directly.", "Existing service recovery bypasses pack activation.", "Approval semantics change."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-041", "TASK-ECO-014"], "blocked_until": ["TASK-ECO-004", "TASK-ECO-005"]},
+  "completed_at": "2026-05-25T03:19:32+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-013.json"
+}

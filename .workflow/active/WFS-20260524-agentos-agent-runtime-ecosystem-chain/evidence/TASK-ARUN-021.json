@@ -1,0 +1,39 @@
+{
+  "task_id": "TASK-ARUN-021",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:37:02+08:00",
+  "summary": "Defined approval, escalation and interrupt survival for AgentOS so protected actions survive restart as exact, bounded approval states without auto-approval or widened authority.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-approval-survival.md",
+      "sha256": "f85a99695acc67613c149025e1c4a5b228fa19e7dcd18837a931e1c3af028681"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-approval-survival.md defines durable approval state including run_id, step_id, actor, tool, resource, parameter_hash, risk, policy_version, approval_id, status, reason, timestamps and audit linkage.",
+    "Approval tokens are defined as exact bindings over actor, tool, resource, parameter_hash, expires_at and policy_version.",
+    "Restart behavior preserves AwaitingApproval as pending or expired and never auto-grants a protected action.",
+    "Interrupt, timeout, denial and escalation transitions all persist state before affecting scheduling.",
+    "Protected resumption after restart must recompute routed policy request, parameter hash and policy decision before SecurityExecution prepares any effect."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "result": "passed",
+      "summary": "1 passed; planner risk downgrade still pauses before protected effects."
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "result": "passed",
+      "summary": "19 passed; broad approvals, parameter mutation, prompt injection, secret use, package host promotion and denied action paths remain fail-closed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No restart auto-approves a pending action.",
+    "No broad approval token can authorize changed parameters.",
+    "No expired or stale approval resumes execution.",
+    "No model output or projection text can claim approval authority.",
+    "No denied, paused, timed-out or expired approval path may emit EffectPrepared."
+  ],
+  "promotion_impact": "Completes durable approval survival rules needed before ecosystem activation can safely use AgentCore PlanSpec and SecurityExecution approval paths."
+}

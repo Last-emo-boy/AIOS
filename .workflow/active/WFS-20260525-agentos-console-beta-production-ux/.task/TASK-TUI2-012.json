@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-012",
+  "title": "Build Recovery Workbench panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:51:22+08:00",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-006", "TASK-TUI2-010"],
+  "purpose": "Turn recovery from a report into a focused workflow for interrupted, degraded or rollback-pending runs.",
+  "scope": [
+    "Render recoverable runs grouped by safe-to-verify, needs-rollback, needs-human-review and failed-closed.",
+    "Show recovery source as run-store plus audit-journal.",
+    "Show no-model-replay guarantee.",
+    "Render safe next commands through typed grammar.",
+    "Keep recovery state derived from RunStore and AuditJournal."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui recovery workbench",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-012.json"
+  ],
+  "acceptance_criteria": [
+    "Recovery Workbench states source=run-store+audit-journal.",
+    "Recovery actions never trigger model replay.",
+    "Rollback-pending state cannot be hidden by healthy dashboard summary.",
+    "Human review state includes clear next action and audit reference."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_recovery_workbench",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "Recovery panel uses synthetic render cache as truth.",
+    "Recovery command triggers replanning or model replay.",
+    "Rollback-pending effect is rendered as completed."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-013", "TASK-TUI2-014"],
+    "blocked_until": ["TASK-TUI2-006", "TASK-TUI2-010"]
+  }
+}

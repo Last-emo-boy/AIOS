@@ -1,0 +1,45 @@
+{
+  "task_id": "TASK-ECO-003",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:32:20+08:00",
+  "summary": "Implemented an inert ecosystem artifact staging store with digest-bound verification and staging reports.",
+  "artifacts": [
+    {
+      "path": "crates/agent_core/src/lib.rs",
+      "status": "updated",
+      "sha256": "CF5F28A4943FE7C3DA9B3B40FEE9E44C2B287D77326945866EC0A1F9139553DC"
+    }
+  ],
+  "acceptance_evidence": [
+    "agent_core::ecosystem::ArtifactStagingStore stages resolved artifacts under a staging root and writes payload, verification report and staging report files.",
+    "Staging reports are explicitly inert and activation_prepared=false.",
+    "Staging refuses active-state target paths before writing artifacts.",
+    "Digest mismatches fail closed before staging output is written.",
+    "Missing optional features are recorded as degraded optional features without host mutation."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core ecosystem::staging",
+      "result": "passed",
+      "summary": "4 staging tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed and wrote .workflow/artifacts/functional-replay/result.json."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 103, agentd 56, runtime_contracts 20 and security_execution 75 tests passed, plus doc tests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Staging does not activate artifacts.",
+    "Staging does not mutate active artifact state.",
+    "Staging does not bypass AgentCore PlanSpec or SecurityExecutionEngine.",
+    "Digest mismatches are errors, not warnings.",
+    "Optional dependency degradation does not authorize host mutation."
+  ],
+  "promotion_impact": "Enables local aom verify/stage/explain flows to operate on inert staged artifacts before runtime-mediated activation is implemented."
+}

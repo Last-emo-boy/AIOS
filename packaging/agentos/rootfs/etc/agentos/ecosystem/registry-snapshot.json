@@ -1,0 +1,58 @@
+{
+  "schema": "agentos.local-registry-snapshot.v1",
+  "snapshot_id": "agentos-local-alpha-20260525",
+  "generated_at": "2026-05-25T01:00:00Z",
+  "expires_at": "2026-06-01T00:00:00Z",
+  "local_pinned": true,
+  "snapshot_digest": "sha256:agentos-local-alpha-snapshot",
+  "artifacts": [
+    {
+      "coordinate": "agentos:policy-pack/agentos/core-policy@1.0.0",
+      "manifest_digest": "sha256:agentos-core-policy-manifest",
+      "artifact_digest": "sha256:agentos-core-policy-artifact",
+      "declared_artifact_digest": "sha256:agentos-core-policy-artifact",
+      "trust_tier": "core",
+      "source_uri": "file:///etc/agentos/ecosystem/core/policy-production-safe.json",
+      "revoked": false,
+      "min_runtime_contract_version": "0.1.0",
+      "max_runtime_contract_version": "0.9.0",
+      "architectures": ["x86_64"],
+      "required_host_features": ["audit-journal", "rollback-store"],
+      "optional_host_features": [],
+      "dependencies": [],
+      "advisory_refs": []
+    },
+    {
+      "coordinate": "agentos:workflow-pack/agentos/service-recovery@1.0.0",
+      "manifest_digest": "sha256:agentos-service-recovery-manifest",
+      "artifact_digest": "sha256:agentos-service-recovery-artifact",
+      "declared_artifact_digest": "sha256:agentos-service-recovery-artifact",
+      "trust_tier": "core",
+      "source_uri": "file:///etc/agentos/ecosystem/core/workflow-service-recovery.json",
+      "revoked": false,
+      "min_runtime_contract_version": "0.1.0",
+      "max_runtime_contract_version": "0.9.0",
+      "architectures": ["x86_64"],
+      "required_host_features": ["audit-journal", "rollback-store"],
+      "optional_host_features": ["kvm"],
+      "dependencies": ["agentos:policy-pack/agentos/core-policy@1.0.0"],
+      "advisory_refs": []
+    },
+    {
+      "coordinate": "agentos:test-replay-pack/agentos/functional-replay@1.0.0",
+      "manifest_digest": "sha256:agentos-functional-replay-manifest",
+      "artifact_digest": "sha256:agentos-functional-replay-artifact",
+      "declared_artifact_digest": "sha256:agentos-functional-replay-artifact",
+      "trust_tier": "core",
+      "source_uri": "file:///etc/agentos/ecosystem/artifacts/functional-replay.json",
+      "revoked": false,
+      "min_runtime_contract_version": "0.1.0",
+      "max_runtime_contract_version": "0.9.0",
+      "architectures": ["x86_64"],
+      "required_host_features": ["audit-journal"],
+      "optional_host_features": [],
+      "dependencies": ["agentos:policy-pack/agentos/core-policy@1.0.0"],
+      "advisory_refs": []
+    }
+  ]
+}

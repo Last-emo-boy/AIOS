@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-000",
+  "title": "Freeze ecosystem scope and install is not activation invariant",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "ecosystem",
+  "owner": "workflow",
+  "source": "production ecosystem brainstorm",
+  "depends_on": ["TASK-CHAIN-002"],
+  "purpose": "Freeze the aom ecosystem scope and make install/stage inert while activation is runtime-mediated.",
+  "scope": ["Freeze first artifact kinds as policy-pack, workflow-pack and test-replay-pack.", "Declare deferred artifact kinds and activation requirements.", "Document blocked shortcuts for direct host mutation and policy weakening."],
+  "deliverables": [".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-000.json"],
+  "acceptance_criteria": ["install/stage != activate is explicit.", "First artifact kinds are frozen.", "Deferred ecosystem kinds are listed.", "No public marketplace dependency is introduced."],
+  "verification": ["Validate evidence JSON parses.", "Check docs include policy-pack, workflow-pack and test-replay-pack."],
+  "failure_modes": ["Install triggers activation.", "Traditional package mutation becomes baseline.", "Community artifacts become production-promotable by default."],
+  "handoff": {"next_tasks": ["TASK-ECO-001", "TASK-ECO-020"], "blocked_until": ["TASK-CHAIN-002"]},
+  "completed_at": "2026-05-25T00:49:08+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-000.json"
+}

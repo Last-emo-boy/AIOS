@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-030",
+  "title": "Add release provenance panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T04:25:37+08:00",
+  "wave": 4,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-015", "TASK-TUI2-024"],
+  "purpose": "Expose release provenance and artifact hashes in the operator console without making TUI a release authority.",
+  "scope": [
+    "Render release provenance schema, source commit, branch, toolchain and generated artifact paths.",
+    "Render dependency inventory, SBOM, update metadata and provenance signature hashes.",
+    "Render TUI replay, ecosystem replay, functional replay and QEMU smoke artifact hashes.",
+    "Show dirty worktree or missing provenance as a promotion warning.",
+    "Keep release artifact generation in scripts/build-release.ps1."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui release provenance panel",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-030.json"
+  ],
+  "acceptance_criteria": [
+    "Release provenance panel projects existing release artifacts only.",
+    "Missing or failed provenance is shown as a blocker.",
+    "Hashes and paths are deterministic and redacted.",
+    "TUI cannot mark a release as signed or promoted by itself."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_release_provenance",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "TUI generates or mutates release provenance.",
+    "Unsigned candidate is displayed as production signed.",
+    "Missing provenance still appears promotable."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-031", "TASK-TUI2-033"],
+    "blocked_until": ["TASK-TUI2-015", "TASK-TUI2-024"]
+  }
+}

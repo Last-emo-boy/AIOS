@@ -1,5 +1,5 @@
-use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
 use crate::api::escape_json;
+use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RecoveryClassification {
@@ -89,7 +89,11 @@ impl RecoveryReport {
 pub struct RecoveryReconciler;
 
 impl RecoveryReconciler {
-    pub fn reconcile(&self, journal: &AuditJournal, run_id: &str) -> std::io::Result<RecoveryReport> {
+    pub fn reconcile(
+        &self,
+        journal: &AuditJournal,
+        run_id: &str,
+    ) -> std::io::Result<RecoveryReport> {
         journal.append(&AuditEvent::new(
             AuditEventType::RecoveryStarted,
             run_id,
@@ -103,7 +107,8 @@ impl RecoveryReconciler {
             .iter()
             .filter(|line| line.contains(&format!("\"run_id\":\"{run_id}\"")))
             .map(|line| {
-                let step_id = extract_field(line, "step_id").unwrap_or_else(|| "unknown".to_string());
+                let step_id =
+                    extract_field(line, "step_id").unwrap_or_else(|| "unknown".to_string());
                 let summary = extract_field(line, "summary").unwrap_or_default();
                 RecoveryItem {
                     step_id,
@@ -140,7 +145,10 @@ pub fn classify_summary(summary: &str) -> RecoveryClassification {
     let lower = summary.to_ascii_lowercase();
     if lower.contains("read-only") || lower.contains("svc.status") || lower.contains("http.check") {
         RecoveryClassification::SafeToVerify
-    } else if lower.contains("fs.write.diff") || lower.contains("write") || lower.contains("rollback") {
+    } else if lower.contains("fs.write.diff")
+        || lower.contains("write")
+        || lower.contains("rollback")
+    {
         RecoveryClassification::NeedsRollback
     } else if lower.contains("abandoned") {
         RecoveryClassification::Abandoned

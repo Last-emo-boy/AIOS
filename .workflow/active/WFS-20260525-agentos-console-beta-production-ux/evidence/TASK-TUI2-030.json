@@ -1,0 +1,72 @@
+{
+  "task_id": "TASK-TUI2-030",
+  "title": "Add release provenance panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T04:25:37+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/release_provenance_panel.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "scripts/tui-replay.ps1",
+    "scripts/production-runbook-smoke.ps1",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/artifacts/release/provenance.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json"
+  ],
+  "verified": [
+    "release.provenance.show renders existing release provenance, source, toolchain, artifact, gate and detached signature evidence.",
+    "Missing provenance is rendered as blocked and dirty worktree is rendered as warning.",
+    "TUI projection exposes direct_sign=false, direct_promote=false and does not mutate release artifacts.",
+    "TUI replay and production runbook smoke now include release provenance panel checks.",
+    "build-release regenerated release artifacts and included TUI replay in the release gate."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_release_provenance --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
+  ],
+  "test_result": {
+    "focused_tests": {
+      "command": "cargo test -p agentd tui_release_provenance --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "passed": 23,
+      "failed": 0,
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "result": "passed",
+      "passed": 12,
+      "failed": 0,
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json"
+    },
+    "release_gate": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "result": "passed",
+      "provenance": ".workflow/artifacts/release/provenance.json",
+      "promotion_status": "promotable"
+    }
+  },
+  "risk_notes": [
+    "Release provenance panel reads local release artifacts only.",
+    "TUI cannot generate provenance, mark a candidate as signed or clear promotion blockers.",
+    "Detached signatures are shown as candidate hash-bound signatures, not production signatures.",
+    "Dirty worktree and missing evidence remain visible as warning or blocker states."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-031",
+    "TASK-TUI2-033"
+  ]
+}

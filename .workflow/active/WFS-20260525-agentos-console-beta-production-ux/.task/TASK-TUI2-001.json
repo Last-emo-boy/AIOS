@@ -1,0 +1,46 @@
+{
+  "id": "TASK-TUI2-001",
+  "title": "Split TUI runtime into shell, parser, view model and dispatch modules",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "refactor",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-000"],
+  "purpose": "Reduce tui.rs size and prepare for full-screen shell work without changing current behavior.",
+  "scope": [
+    "Extract typed command parser into a dedicated module.",
+    "Extract durable runtime controller and dispatch adapter boundaries.",
+    "Extract view model and render helpers into focused modules.",
+    "Keep existing public command behavior stable.",
+    "Preserve --tui-interactive and --tui-scripted paths."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui/",
+    "crates/agentd/src/tui.rs or module shim",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-001.json"
+  ],
+  "acceptance_criteria": [
+    "No runtime behavior changes are introduced by the split.",
+    "Parser, shell, view model and dispatch responsibilities are separately testable.",
+    "agentd still does not own planner, resolver, policy or side-effect execution.",
+    "Existing TUI tests and replay still pass."
+  ],
+  "verification": [
+    "cargo fmt --check",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Refactor changes command output unexpectedly.",
+    "Scripted mode drifts from interactive mode.",
+    "Dispatch layer starts encoding runtime policy."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-002", "TASK-TUI2-003"],
+    "blocked_until": ["TASK-TUI2-000"]
+  },
+  "completed_at": "2026-05-25T23:49:01+08:00",
+  "evidence": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-001.json"
+}

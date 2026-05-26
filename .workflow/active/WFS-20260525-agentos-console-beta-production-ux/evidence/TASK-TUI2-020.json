@@ -1,0 +1,56 @@
+{
+  "task_id": "TASK-TUI2-020",
+  "title": "Add capability index projection",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:59:59+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/capability_index.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "Capability catalog renders as a read-only TUI projection.",
+    "Catalog includes service recovery, package install, untrusted content, rootfs update, support bundle, AOM activation preview and local AOM artifacts.",
+    "Every capability has an authority path, required approvals and a launch path constrained to intent or preview.",
+    "Unavailable or degraded capabilities include reason and source.",
+    "Catalog declares planner_logic=false and resolver_logic=false; resolver ownership remains agent_core::ecosystem.",
+    "capabilities.show and capability.list are typed TUI commands and do not export support bundles or activate AOM artifacts."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_capability_index --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "targeted": {
+      "command": "cargo test -p agentd tui_capability_index --no-fail-fast",
+      "passed": 4,
+      "failed": 0
+    },
+    "agentd_tui": {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "passed": 55,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "risk_notes": [
+    "Capability Index is projection-only and does not own runtime, planner, resolver or side-effect authority.",
+    "AOM activation remains preview-only in the catalog and active set mutation remains outside TUI.",
+    "Support bundle capability exposes palette preview rather than direct export.",
+    "Normal shell remains denied and no host shell/file manager launch path was added."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-021",
+    "TASK-TUI2-022"
+  ]
+}

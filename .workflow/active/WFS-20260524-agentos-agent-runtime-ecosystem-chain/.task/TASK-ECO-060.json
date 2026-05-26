@@ -1,0 +1,44 @@
+{
+  "id": "TASK-ECO-060",
+  "title": "Define runtime adapter pack schema",
+  "status": "completed",
+  "wave": 8,
+  "priority": "P1",
+  "type": "ecosystem",
+  "owner": "runtime_contracts",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-020", "TASK-ECO-032"],
+  "purpose": "Define how host and external runtime adapters are packaged without becoming direct side-effect paths.",
+  "scope": [
+    "Define runtime-adapter-pack manifest fields.",
+    "Bind adapter to semantic tool schema and risk class.",
+    "Declare optional dependency behavior.",
+    "Require SecurityExecutionEngine authority for side effects."
+  ],
+  "deliverables": [
+    "crates/runtime_contracts/src/ecosystem.rs",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-adapter-pack.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-060.json"
+  ],
+  "acceptance_criteria": [
+    "Adapter pack cannot expose arbitrary shell.",
+    "Adapter pack declares semantic tools and policy mapping.",
+    "Missing optional dependency fails before EffectPrepared.",
+    "Adapter activation requires replay evidence."
+  ],
+  "verification": [
+    "cargo test -p runtime_contracts ecosystem",
+    "cargo test -p security_execution"
+  ],
+  "failure_modes": [
+    "Adapter pack executes host mutation directly.",
+    "Adapter fallback bypasses SecurityExecutionEngine.",
+    "Adapter manifest lacks risk class."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-062"],
+    "blocked_until": ["TASK-ECO-020", "TASK-ECO-032"]
+  },
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-060.json"
+}

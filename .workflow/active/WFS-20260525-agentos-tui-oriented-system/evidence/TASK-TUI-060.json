@@ -1,0 +1,20 @@
+{
+  "task_id": "TASK-TUI-060",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "tui-replay",
+  "artifacts": [
+    "scripts/tui-replay.ps1",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "TUI replay status passed",
+    "15 checks passed",
+    "commands cover dashboard, intent submit, run advance, denial, audit, support bundle, aom and unsafe command rejection",
+    "replay is local-only and projection-controller-only"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

@@ -5,6 +5,8 @@ param(
     [switch]$SkipBootSmoke,
     [switch]$SkipTests,
     [switch]$SkipFunctionalReplay,
+    [switch]$SkipEcosystemReplay,
+    [switch]$SkipTuiReplay,
     [switch]$RequireProductionSignatures
 )
 
@@ -71,7 +73,7 @@ function Get-GitValue {
 
 function Get-OptionalFileHash {
     param([Parameter(Mandatory = $true)][string]$Path)
-    if (-not (Test-Path -LiteralPath $Path)) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
         return $null
     }
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -242,6 +244,7 @@ function New-CandidateUpdateMetadata {
         [Parameter(Mandatory = $true)][string]$SourceCommit,
         [Parameter(Mandatory = $true)][string]$SourceBranch,
         [Parameter(Mandatory = $true)]$Artifacts,
+        [Parameter(Mandatory = $true)]$ActiveArtifactReadiness,
         [Parameter(Mandatory = $true)][string]$SbomPath,
         [Parameter(Mandatory = $true)][string]$SbomSha256
     )
@@ -266,15 +269,76 @@ function New-CandidateUpdateMetadata {
             initramfs_manifest_sha256 = $Artifacts.initramfs.manifest_sha256
             alpha_rootfs_manifest_sha256 = $Artifacts.alpha_rootfs_manifest.sha256
             rootfs_runtime_manifest_sha256 = $Artifacts.rootfs_runtime_manifest.sha256
+            active_artifact_set = [ordered]@{
+                path = $Artifacts.ecosystem_active_set.path
+                sha256 = $Artifacts.ecosystem_active_set.sha256
+                required = $true
+            }
+            ecosystem_replay = [ordered]@{
+                path = $Artifacts.ecosystem_replay.path
+                sha256 = $Artifacts.ecosystem_replay.sha256
+                required = $Artifacts.ecosystem_replay.required
+            }
             sbom = [ordered]@{
                 path = $SbomPath
                 sha256 = $SbomSha256
             }
         }
+        update_readiness = [ordered]@{
+            active_artifact_set_hash = $ActiveArtifactReadiness.active_artifact_set_hash
+            active_artifact_set_path = $ActiveArtifactReadiness.active_artifact_set_path
+            active_artifact_set_present = $ActiveArtifactReadiness.active_artifact_set_present
+            runtime_contract_compatibility_checked = $ActiveArtifactReadiness.runtime_contract_compatibility_checked
+            incompatible_active_artifacts = @($ActiveArtifactReadiness.incompatible_active_artifacts)
+            rollback_preserves_previous_active_set = $ActiveArtifactReadiness.rollback_preserves_previous_active_set
+            previous_active_set_hash = $ActiveArtifactReadiness.previous_active_set_hash
+            restored_active_set_hash = $ActiveArtifactReadiness.restored_active_set_hash
+            ecosystem_replay_status = $ActiveArtifactReadiness.ecosystem_replay_status
+            promotion_allowed = $ActiveArtifactReadiness.promotion_allowed
+        }
         signature_policy = [ordered]@{
             status = "candidate-hash-bound"
             note = "Candidate metadata is hash-bound for promotion verification; production key management remains a separate release decision."
         }
+    }
+}
+
+function New-ActiveArtifactUpdateReadiness {
+    param(
+        [Parameter(Mandatory = $true)]$Artifacts,
+        $EcosystemReplayResult
+    )
+    $incompatible = @()
+    $activeSetPresent = [bool]$Artifacts.ecosystem_active_set.present
+    $activeSetHash = $Artifacts.ecosystem_active_set.sha256
+    if (-not $activeSetPresent) {
+        $incompatible += "active-artifact-set-missing"
+    }
+    if ([string]::IsNullOrWhiteSpace($activeSetHash)) {
+        $incompatible += "active-artifact-set-hash-missing"
+    }
+    $replayStatus = if ($EcosystemReplayResult) { $EcosystemReplayResult.status } else { "missing" }
+    $compatibilityChecked = ($replayStatus -eq "passed")
+    if (-not $compatibilityChecked) {
+        $incompatible += "ecosystem-replay-compatibility-missing"
+    }
+    $rollback = if ($EcosystemReplayResult) { $EcosystemReplayResult.rollback_revocation } else { $null }
+    $rollbackPreserves = ($rollback -and $rollback.rollback_restored_previous -eq $true)
+    if (-not $rollbackPreserves) {
+        $incompatible += "active-artifact-rollback-evidence-missing"
+    }
+    return [ordered]@{
+        schema = "agentos.active-artifact-update-readiness.v1"
+        active_artifact_set_path = $Artifacts.ecosystem_active_set.path
+        active_artifact_set_hash = $activeSetHash
+        active_artifact_set_present = $activeSetPresent
+        runtime_contract_compatibility_checked = $compatibilityChecked
+        incompatible_active_artifacts = @($incompatible)
+        rollback_preserves_previous_active_set = $rollbackPreserves
+        previous_active_set_hash = if ($rollback) { $rollback.previous_active_set_hash } else { $null }
+        restored_active_set_hash = if ($rollback) { $rollback.restored_active_set_hash } else { $null }
+        ecosystem_replay_status = $replayStatus
+        promotion_allowed = ($incompatible.Count -eq 0)
     }
 }
 
@@ -295,6 +359,63 @@ if (-not $SkipTests) {
 if (-not $SkipFunctionalReplay) {
     Invoke-Checked "functional capability replay" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1" {
         pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/functional-capability-replay.ps1"
+    }
+}
+
+if (-not $SkipEcosystemReplay) {
+    Invoke-Checked "ecosystem replay" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1" {
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/ecosystem-replay.ps1"
+    }
+}
+
+if (-not $SkipTuiReplay) {
+    Invoke-Checked "TUI replay" "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1" {
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/tui-replay.ps1"
+    }
+}
+
+function Get-RelativePathForHash {
+    param(
+        [Parameter(Mandatory = $true)][string]$Root,
+        [Parameter(Mandatory = $true)][string]$Path
+    )
+    $rootPath = (Resolve-Path -LiteralPath $Root).Path.TrimEnd('\', '/')
+    $entryPath = (Resolve-Path -LiteralPath $Path).Path
+    $rootPrefix = $rootPath + [IO.Path]::DirectorySeparatorChar
+    if ($entryPath.StartsWith($rootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        return $entryPath.Substring($rootPrefix.Length).Replace('\', '/')
+    }
+    return (Split-Path -Leaf $entryPath)
+}
+
+function Get-OptionalPathHash {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return $null
+    }
+    if (Test-Path -LiteralPath $Path -PathType Leaf) {
+        return Get-OptionalFileHash $Path
+    }
+    $resolved = (Resolve-Path -LiteralPath $Path).Path
+    $entries = @()
+    foreach ($entry in Get-ChildItem -LiteralPath $resolved -Recurse -File | Sort-Object FullName) {
+        $relative = Get-RelativePathForHash -Root $resolved -Path $entry.FullName
+        $hash = (Get-FileHash -LiteralPath $entry.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+        $entries += "$relative`t$hash"
+    }
+    return Get-StringSha256 ($entries -join "`n")
+}
+
+function New-EcosystemPathProjection {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [bool]$Required = $false
+    )
+    return [ordered]@{
+        path = Get-RelativeOrNull $Path
+        sha256 = Get-OptionalPathHash $Path
+        present = Test-Path -LiteralPath $Path
+        required = $Required
     }
 }
 
@@ -340,6 +461,16 @@ $serviceRecoveryResult = Read-OptionalJson $serviceRecoveryResultPath
 $functionalReplayResultPath = Join-Path $repoRoot ".workflow/artifacts/functional-replay/result.json"
 $functionalReplayResult = Read-OptionalJson $functionalReplayResultPath
 $capabilityMatrixPath = Join-Path $repoRoot ".workflow/active/WFS-20260524-agentos-functional-iteration/docs/functional-capability-matrix.md"
+$ecosystemRegistrySnapshotPath = Join-Path $repoRoot "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json"
+$ecosystemLockfilePath = Join-Path $repoRoot ".workflow/artifacts/aom/ecosystem-lock.json"
+$ecosystemStagedRootPath = Join-Path $repoRoot ".workflow/artifacts/aom/staged"
+$ecosystemActiveSetPath = Join-Path $repoRoot ".workflow/artifacts/aom/active-set.json"
+$ecosystemReplayResultPath = Join-Path $repoRoot ".workflow/artifacts/ecosystem-replay/result.json"
+$ecosystemReplayResult = Read-OptionalJson $ecosystemReplayResultPath
+$tuiReplayResultPath = Join-Path $repoRoot ".workflow/artifacts/tui-replay/result.json"
+$tuiReplayResult = Read-OptionalJson $tuiReplayResultPath
+$tuiConfigPath = Join-Path $repoRoot "packaging/agentos/rootfs/etc/agentos/tui.toml"
+$operatorCommandsPath = Join-Path $repoRoot "packaging/agentos/rootfs/etc/agentos/operator-commands.json"
 
 $inventory = New-DependencyInventory -GeneratedAt $candidateGeneratedAt
 $inventoryPath = Join-Path $artifactRoot "dependency-inventory.json"
@@ -383,6 +514,20 @@ $releaseArtifacts = [ordered]@{
         path = Get-RelativeOrNull $capabilityMatrixPath
         sha256 = Get-OptionalFileHash $capabilityMatrixPath
     }
+    ecosystem_registry_snapshot = New-EcosystemPathProjection -Path $ecosystemRegistrySnapshotPath -Required $true
+    ecosystem_lockfile = New-EcosystemPathProjection -Path $ecosystemLockfilePath -Required $false
+    ecosystem_staged_set = New-EcosystemPathProjection -Path $ecosystemStagedRootPath -Required $false
+    ecosystem_active_set = New-EcosystemPathProjection -Path $ecosystemActiveSetPath -Required $false
+    ecosystem_replay = New-EcosystemPathProjection -Path $ecosystemReplayResultPath -Required (-not $SkipEcosystemReplay)
+    tui_config = [ordered]@{
+        path = Get-RelativeOrNull $tuiConfigPath
+        sha256 = Get-OptionalFileHash $tuiConfigPath
+    }
+    operator_commands = [ordered]@{
+        path = Get-RelativeOrNull $operatorCommandsPath
+        sha256 = Get-OptionalFileHash $operatorCommandsPath
+    }
+    tui_replay = New-EcosystemPathProjection -Path $tuiReplayResultPath -Required (-not $SkipTuiReplay)
     dependency_inventory = [ordered]@{
         path = "dependency-inventory.json"
         sha256 = Get-OptionalFileHash $inventoryPath
@@ -397,11 +542,16 @@ $releaseArtifacts.sbom = [ordered]@{
     sha256 = Get-OptionalFileHash $sbomPath
 }
 
+$activeArtifactUpdateReadiness = New-ActiveArtifactUpdateReadiness `
+    -Artifacts $releaseArtifacts `
+    -EcosystemReplayResult $ecosystemReplayResult
+
 $updateMetadata = New-CandidateUpdateMetadata `
     -GeneratedAt $candidateGeneratedAt `
     -SourceCommit $sourceCommit `
     -SourceBranch $sourceBranch `
     -Artifacts $releaseArtifacts `
+    -ActiveArtifactReadiness $activeArtifactUpdateReadiness `
     -SbomPath "sbom.json" `
     -SbomSha256 $releaseArtifacts.sbom.sha256
 $updateMetadataPath = Join-Path $artifactRoot "update-metadata.json"
@@ -433,7 +583,9 @@ $requiredRuntimeArtifactIds = @(
     "policy.pack",
     "tools.semantic",
     "operator.commands",
+    "ecosystem.registry_snapshot",
     "model_broker.config",
+    "tui.config",
     "state.runs",
     "state.audit",
     "state.rollback",
@@ -443,11 +595,27 @@ $runtimeArtifacts = if ($initramfsManifest) { @($initramfsManifest.alpha_rootfs.
 $runtimeArtifactIds = @($runtimeArtifacts | ForEach-Object { $_.id })
 $missingRuntimeArtifactIds = @($requiredRuntimeArtifactIds | Where-Object { $runtimeArtifactIds -notcontains $_ })
 $failedRuntimeArtifactIds = @($runtimeArtifacts | Where-Object { $_.status -ne "passed" } | ForEach-Object { $_.id })
+$ecosystemReplayGateStatus = if ($SkipEcosystemReplay) {
+    "skipped"
+} elseif ($ecosystemReplayResult -and $ecosystemReplayResult.status -eq "passed") {
+    "passed"
+} else {
+    "missing-or-failed"
+}
+$tuiReplayGateStatus = if ($SkipTuiReplay) {
+    "skipped"
+} elseif ($tuiReplayResult -and $tuiReplayResult.status -eq "passed") {
+    "passed"
+} else {
+    "missing-or-failed"
+}
 
 $promotionBlockers = @()
 if ($SkipTests) { $promotionBlockers += "tests-skipped" }
 if ($SkipBootSmoke) { $promotionBlockers += "qemu-runtime-smoke-skipped" }
 if ($SkipFunctionalReplay) { $promotionBlockers += "functional-replay-skipped" }
+if ($SkipEcosystemReplay) { $promotionBlockers += "ecosystem-replay-skipped" }
+if ($SkipTuiReplay) { $promotionBlockers += "tui-replay-skipped" }
 if (-not $initramfsManifest) { $promotionBlockers += "initramfs-manifest-missing" }
 if (-not $alphaRootfsManifest) { $promotionBlockers += "alpha-rootfs-manifest-missing" }
 if (-not $rootfsRuntimeManifest) { $promotionBlockers += "rootfs-runtime-manifest-missing" }
@@ -455,6 +623,13 @@ if ($missingRuntimeArtifactIds.Count -gt 0) { $promotionBlockers += @($missingRu
 if ($failedRuntimeArtifactIds.Count -gt 0) { $promotionBlockers += @($failedRuntimeArtifactIds | ForEach-Object { "runtime-artifact-failed:$_" }) }
 if (-not $serviceRecoveryResult -or $serviceRecoveryResult.result -ne "passed") { $promotionBlockers += "alpha-service-recovery-smoke-missing-or-failed" }
 if (-not $functionalReplayResult -or $functionalReplayResult.status -ne "passed") { $promotionBlockers += "functional-capability-replay-missing-or-failed" }
+if (-not $releaseArtifacts.ecosystem_registry_snapshot.present) { $promotionBlockers += "ecosystem-registry-snapshot-missing" }
+if ($ecosystemReplayGateStatus -eq "missing-or-failed") { $promotionBlockers += "ecosystem-replay-missing-or-failed" }
+if ($tuiReplayGateStatus -eq "missing-or-failed") { $promotionBlockers += "tui-replay-missing-or-failed" }
+if (-not $activeArtifactUpdateReadiness.promotion_allowed) {
+    $promotionBlockers += "active-artifact-update-readiness-failed"
+    $promotionBlockers += @($activeArtifactUpdateReadiness.incompatible_active_artifacts | ForEach-Object { "active-artifact-incompatible:$_" })
+}
 if (-not $SkipBootSmoke) {
     if (-not $bootSmokeResult -or $bootSmokeResult.status -ne "completed" -or $bootSmokeResult.observed_all_markers -ne $true) {
         $promotionBlockers += "qemu-runtime-smoke-missing-or-failed"
@@ -485,6 +660,8 @@ $provenance = [ordered]@{
         "cargo test -p agentd agent_core::",
         "cargo test -p agentd agent_core::adversarial",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+        "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+        "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
         "cargo build -p agentd --release",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File image/build-initramfs.ps1",
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/alpha-service-recovery-smoke.ps1 -SkipCargoTests -SkipRootfsAssembly",
@@ -498,6 +675,8 @@ $provenance = [ordered]@{
         qemu_runtime_smoke = $bootSmokeResult
         service_recovery_smoke = $serviceRecoveryResult
         functional_capability_replay = $functionalReplayResult
+        ecosystem_replay = $ecosystemReplayResult
+        tui_replay = $tuiReplayResult
     }
     functional_iteration = [ordered]@{
         capability_matrix_sha256 = $releaseArtifacts.functional_capability_matrix.sha256
@@ -507,11 +686,44 @@ $provenance = [ordered]@{
         host_package_manager_required = $false
         firecracker_required = $false
     }
+    ecosystem = [ordered]@{
+        registry_snapshot = $releaseArtifacts.ecosystem_registry_snapshot
+        lockfile = $releaseArtifacts.ecosystem_lockfile
+        staged_set = $releaseArtifacts.ecosystem_staged_set
+        active_set = $releaseArtifacts.ecosystem_active_set
+        replay = $releaseArtifacts.ecosystem_replay
+        staged_and_active_separated = $true
+        install_stage_is_activation = $false
+        activation_authority = "AgentCore PlanSpec + SecurityExecutionEngine"
+        agentd_resolver_logic = $false
+        resolver_owner = "agent_core::ecosystem"
+        local_only_baseline = $true
+        network_required = $false
+        replay_gate_required_after = "TASK-VERIFY-041"
+        replay_gate_current_status = $ecosystemReplayGateStatus
+        update_readiness = $activeArtifactUpdateReadiness
+    }
+    tui = [ordered]@{
+        config = $releaseArtifacts.tui_config
+        replay = $releaseArtifacts.tui_replay
+        replay_status = $tuiReplayGateStatus
+        command_registry = $releaseArtifacts.operator_commands
+        default_mode = "durable"
+        projection_controller_only = $true
+        runtime_authority = "AgentCore PlanSpec + SecurityExecutionEngine"
+        normal_shell_available = $false
+        local_only_baseline = $true
+        external_llm_required = $false
+        network_required = $false
+        firecracker_required = $false
+        host_package_manager_required = $false
+    }
     alpha_runtime = [ordered]@{
         runtime_artifact_ids = @($runtimeArtifactIds)
         missing_runtime_artifact_ids = @($missingRuntimeArtifactIds)
         failed_runtime_artifact_ids = @($failedRuntimeArtifactIds)
         runtime_marker = if ($initramfsManifest) { $initramfsManifest.runtime_marker } else { $null }
+        tui_marker = if ($initramfsManifest) { $initramfsManifest.tui_marker } else { $null }
         runtime_manifest_marker = if ($initramfsManifest) { $initramfsManifest.runtime_manifest_marker } else { $null }
         rootfs_runtime_manifest_sha256 = if ($initramfsManifest) { $initramfsManifest.alpha_rootfs.rootfs_runtime_manifest_sha256 } else { $null }
         qemu_path = $QemuPath
@@ -521,7 +733,7 @@ $provenance = [ordered]@{
     policy = [ordered]@{
         safety_gate = "cargo test -p agentd safety::; cargo test -p agentd agent_core::; cargo test -p agentd agent_core::adversarial"
         service_recovery_gate = "scripts/alpha-service-recovery-smoke.ps1 -SkipRootfsAssembly"
-        boot_gate = "scripts/boot-smoke-test.ps1 requires handoff plus runtime markers"
+        boot_gate = "scripts/boot-smoke-test.ps1 requires handoff, runtime, TUI console, and runtime manifest markers"
         secret_policy = "handle-only; release metadata stores hashes and paths, not secret values"
         promotion = "Promote Production Candidate only after tests, safety gates, AgentCore gates, service recovery smoke, dependency inventory, SBOM, update metadata, detached signatures, provenance, image manifest, reproducibility, and full QEMU runtime smoke pass."
     }

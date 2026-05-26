@@ -96,11 +96,13 @@ fn firecracker_facade_missing_dependencies_fail_before_effect_prepare() {
         engine::ExecutionFailureClass::FailedClosed
     );
     assert!(error.reason().contains("firecracker dependencies missing"));
-    assert!(!journal
-        .event_lines()
-        .expect("journal")
-        .iter()
-        .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
+    assert!(
+        !journal
+            .event_lines()
+            .expect("journal")
+            .iter()
+            .any(|line| line.contains("\"event_type\":\"EffectPrepared\""))
+    );
 }
 
 #[cfg(test)]

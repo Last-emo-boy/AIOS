@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-023",
+  "title": "Build recovery, rollback and degraded state view",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-012"],
+  "purpose": "Expose recovery and rollback truth in the TUI so operators can understand interrupted or degraded AgentOS state.",
+  "scope": [
+    "Render recoverable runs from RunStore and AuditJournal classification.",
+    "Render rollback-pending effects and required operator actions.",
+    "Render degraded mode causes and fallback behavior.",
+    "Render recovery command hints using typed grammar.",
+    "Separate automatic verification, rollback required and human review states."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/operator_projection.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-023.json"
+  ],
+  "acceptance_criteria": [
+    "Recovery view states its source as run-store plus audit truth.",
+    "Rollback-pending state cannot be hidden by successful dashboard health.",
+    "Recovery commands never trigger model replay.",
+    "Degraded optional dependency state is visible but baseline operation remains possible."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_recovery",
+    "cargo test -p agentd agent_core::recovery",
+    "cargo test -p agentd operator_projection"
+  ],
+  "failure_modes": [
+    "Recovery view uses synthetic or model-derived state.",
+    "Rollback-pending effects are treated as completed.",
+    "Degraded causes are omitted from operator output."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-024", "TASK-TUI-032", "TASK-TUI-060"],
+    "blocked_until": ["TASK-TUI-012"]
+  }
+}

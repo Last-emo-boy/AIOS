@@ -1,7 +1,7 @@
-use crate::escape_json;
-use runtime_contracts::RiskClass;
 use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+use crate::escape_json;
 use crate::tools::RoutedToolCall;
+use runtime_contracts::RiskClass;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PolicyDecisionKind {
@@ -221,8 +221,8 @@ pub fn stable_parameter_hash(params: &[(String, String)]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use runtime_contracts::SemanticToolCall;
     use crate::tools::ToolRouter;
+    use runtime_contracts::SemanticToolCall;
 
     fn test_journal(name: &str) -> AuditJournal {
         let path =

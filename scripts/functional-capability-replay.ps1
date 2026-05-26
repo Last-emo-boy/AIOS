@@ -56,6 +56,76 @@ function Add-Result {
     })
 }
 
+function Assert-Condition {
+    param(
+        [Parameter(Mandatory = $true)][bool]$Condition,
+        [Parameter(Mandatory = $true)][string]$Message
+    )
+    if (-not $Condition) {
+        throw $Message
+    }
+}
+
+function Read-RequiredJson {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    Assert-Condition (Test-Path -LiteralPath $Path -PathType Leaf) "missing JSON fixture: $Path"
+    return Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+}
+
+function Assert-CoreActivationManifest {
+    param(
+        [Parameter(Mandatory = $true)]$Manifest,
+        [Parameter(Mandatory = $true)][string]$Coordinate
+    )
+    $invariants = @($Manifest.activation.preserved_core_invariants)
+    $capabilities = @($Manifest.activation.required_runtime_capabilities)
+    Assert-Condition ($Manifest.schema -eq "agentos.artifact-manifest.v1") "unexpected manifest schema"
+    Assert-Condition ($Manifest.coordinate -eq $Coordinate) "unexpected manifest coordinate"
+    Assert-Condition ($Manifest.trust.tier -eq "core") "manifest must use core trust tier"
+    Assert-Condition ($Manifest.activation.requires_agent_core_plan_spec -eq $true) "activation must require AgentCore PlanSpec"
+    Assert-Condition ($Manifest.activation.requires_security_execution_engine -eq $true) "activation must require SecurityExecutionEngine"
+    Assert-Condition ($Manifest.activation.requires_exact_approval -eq $true) "activation must require exact approval"
+    foreach ($invariant in @("no-shell", "exact-approval", "secret-handle", "source-to-sink", "audit", "rollback")) {
+        Assert-Condition ($invariants -contains $invariant) "missing core invariant: $invariant"
+    }
+    Assert-Condition ($capabilities -contains "audit-journal") "activation must require audit-journal"
+    Assert-Condition ($capabilities -contains "rollback-store") "activation must require rollback-store"
+    Assert-Condition ($Manifest.activation_gates.requires_replay_evidence -eq $true) "activation must require replay evidence"
+    Assert-Condition ($Manifest.activation_gates.requires_compatibility_evidence -eq $true) "activation must require compatibility evidence"
+    Assert-Condition ($Manifest.activation_gates.staged_artifact_is_inert -eq $true) "staged artifacts must remain inert"
+    Assert-Condition (-not [string]::IsNullOrWhiteSpace($Manifest.local_replay)) "manifest must include local replay fixture"
+}
+
+function Test-BuiltInEcosystemPacks {
+    $policyPath = "packaging/agentos/rootfs/etc/agentos/ecosystem/core/policy-production-safe.json"
+    $workflowPath = "packaging/agentos/rootfs/etc/agentos/ecosystem/core/workflow-service-recovery.json"
+    $registryPath = "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json"
+    $policy = Read-RequiredJson $policyPath
+    $workflow = Read-RequiredJson $workflowPath
+    $registry = Read-RequiredJson $registryPath
+
+    Assert-CoreActivationManifest $policy "agentos:policy-pack/agentos/core-policy@1.0.0"
+    Assert-Condition ($policy.pack_behavior.narrows_only -eq $true) "policy pack must only narrow policy"
+    Assert-Condition ($policy.pack_behavior.normal_shell -eq "deny") "policy pack must keep no-shell policy"
+    Assert-Condition ($policy.pack_behavior.broad_approval -eq "deny") "policy pack must deny broad approval"
+    Assert-Condition ($policy.pack_behavior.denied_decisions_prepare_effect -eq $false) "denied decisions must not prepare effects"
+    Assert-Condition ($policy.pack_behavior.can_deactivate -eq $true) "policy pack must support deactivation"
+    Assert-Condition ($policy.pack_behavior.can_rollback -eq $true) "policy pack must support rollback"
+
+    Assert-CoreActivationManifest $workflow "agentos:workflow-pack/agentos/service-recovery@1.0.0"
+    Assert-Condition ($workflow.workflow.compile_target -eq "agent_core::service_recovery::AgentCoreServiceRecovery") "workflow must compile through AgentCore service recovery"
+    Assert-Condition ($workflow.workflow.restart_action_tool -eq "svc.restart") "workflow restart must use semantic svc.restart"
+    Assert-Condition ($workflow.workflow.restart_requires_exact_approval -eq $true) "restart must require exact approval"
+    Assert-Condition ($workflow.workflow.denied_path_effect_prepared -eq $false) "denied restart must not prepare EffectPrepared"
+    Assert-Condition ($workflow.workflow.direct_shell_authority -eq $false) "workflow must not provide shell authority"
+    Assert-Condition ($workflow.workflow.local_replay_fixture -eq $true) "workflow replay fixture must be local-only"
+
+    $policyRegistry = @($registry.artifacts | Where-Object { $_.coordinate -eq $policy.coordinate -and $_.source_uri -eq "file:///etc/agentos/ecosystem/core/policy-production-safe.json" })
+    $workflowRegistry = @($registry.artifacts | Where-Object { $_.coordinate -eq $workflow.coordinate -and $_.source_uri -eq "file:///etc/agentos/ecosystem/core/workflow-service-recovery.json" })
+    Assert-Condition ($policyRegistry.Count -eq 1) "registry must reference built-in policy manifest"
+    Assert-Condition ($workflowRegistry.Count -eq 1) "registry must reference built-in service recovery manifest"
+}
+
 $results = [System.Collections.ArrayList]::new()
 
 if (-not $SkipCargoTests) {
@@ -90,6 +160,10 @@ Add-Result $results "operator projection" "cargo test -p agentd operator_project
 
 Add-Result $results "safety regression fixtures" "cargo test -p agentd safety::" {
     cargo test -p agentd safety::
+}
+
+Add-Result $results "built-in ecosystem packs" "local JSON replay gate for core policy and service recovery packs" {
+    Test-BuiltInEcosystemPacks
 }
 
 $failed = @($results | Where-Object { $_.status -ne "passed" })

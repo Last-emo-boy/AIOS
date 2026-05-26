@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-042",
+  "title": "Add support bundle export command and view",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-020", "TASK-TUI-033"],
+  "purpose": "Allow operators to inspect and export support bundle evidence from the TUI without leaking raw secrets.",
+  "scope": [
+    "Add typed TUI command for support bundle status and export.",
+    "Render bundle inventory, included evidence hashes and redaction status.",
+    "Use existing support bundle generation logic.",
+    "Write export result into TUI evidence output.",
+    "Display failures for missing paths or redaction violations."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/support_bundle.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-042.json"
+  ],
+  "acceptance_criteria": [
+    "TUI support export delegates to existing support bundle code.",
+    "Bundle view includes runtime, audit, ecosystem, update and safety sections.",
+    "Raw secrets are rejected or redacted before export.",
+    "Export command is available in scripted replay."
+  ],
+  "verification": [
+    "cargo test -p agentd support_bundle",
+    "cargo test -p agentd tui_support_bundle",
+    "powershell -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "TUI implements a separate bundle format.",
+    "Support view omits ecosystem or active artifact state.",
+    "Export includes raw secret material."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-043", "TASK-TUI-060", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-020", "TASK-TUI-033"]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-032",
+  "title": "Add local update and rollback drill view",
+  "status": "completed",
+  "completed_at": "2026-05-26T05:20:24+08:00",
+  "wave": 4,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-013", "TASK-TUI2-031"],
+  "purpose": "Expose A/B rootfs update and rollback evidence as an operator-facing production readiness view.",
+  "scope": [
+    "Render active slot, pending slot and rollback slot evidence when available.",
+    "Render update metadata signature and health-check state from release artifacts.",
+    "Render rollback drill status and previous active set preservation.",
+    "Show update operations as evidence and preview, not direct host mutation.",
+    "Link failures to promotion blocker panel."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui update rollback panel",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-032.json"
+  ],
+  "acceptance_criteria": [
+    "Update view shows active/pending/rollback evidence when present.",
+    "Failed health or rollback drill is visible as blocker.",
+    "TUI does not perform update or rollback side effects directly.",
+    "Rollback evidence remains tied to audit/release artifacts."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_update_rollback",
+    "cargo test -p agent_core rootfs_update",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
+  ],
+  "failure_modes": [
+    "Update view mutates slots directly.",
+    "Failed rollback drill is hidden behind promotable status.",
+    "Unsigned metadata is rendered as acceptable."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-033", "TASK-TUI2-040"],
+    "blocked_until": ["TASK-TUI2-013", "TASK-TUI2-031"]
+  }
+}

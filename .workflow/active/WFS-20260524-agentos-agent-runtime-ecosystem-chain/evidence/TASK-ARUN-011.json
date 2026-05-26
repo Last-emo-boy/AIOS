@@ -1,0 +1,37 @@
+{
+  "task_id": "TASK-ARUN-011",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:23:04+08:00",
+  "summary": "Defined the Agent Runtime observation fabric and operator event intake boundary so kernel, runtime, service, audit, operator, ecosystem, external and model-origin signals can inform replanning without becoming direct action authority.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-observation-fabric.md",
+      "sha256": "e3b5b109bcf9be7ee35c91e42d3ad615878f2c6997c5332633cbaa7655fc4811"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-observation-fabric.md defines source classes for kernel, runtime, service, audit, operator, ecosystem, external, model and sanitized-summary observations.",
+    "External observations are defined as external-untrusted and can only become sanitized replanning hints with direct_tool_call_allowed=false.",
+    "Operator events enter through explicit CLI/TUI/API surfaces and preserve actor, surface, requested outcome, working scope, trust boundary and sequence reference.",
+    "Source-to-sink checks are required before observation-derived text can influence write, execute, privileged, secret or exfiltration sinks.",
+    "Observation references include observation_id, step_id, trust_label and observation_hash so durable state and projections can link observations without treating raw text as authority."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core observation",
+      "result": "passed",
+      "summary": "7 passed; external content is untrusted, observation text cannot create direct tool calls, secret-like tool output is redacted and observation refs persist with hashes."
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "result": "passed",
+      "summary": "19 passed; prompt injection, resource abuse, secret handling, package install isolation and denied side-effect paths remain covered."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No external observation is treated as operator intent.",
+    "No model or observation text can directly create tool calls, approvals, capability leases or policy overrides.",
+    "No denied observation-derived action may emit EffectPrepared."
+  ],
+  "promotion_impact": "Completes the observation intake contract needed before scheduler budgets, durable runtime state and ecosystem activation can safely consume runtime signals."
+}

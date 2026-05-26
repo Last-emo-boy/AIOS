@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-033",
+  "title": "Define community artifact sandbox-only policy",
+  "status": "completed",
+  "wave": 7,
+  "priority": "P1",
+  "type": "security",
+  "owner": "security_execution",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-015"],
+  "purpose": "Ensure community artifacts are discoverable without becoming trusted Production Distro behavior by default.",
+  "scope": ["Define community trust restrictions.", "Define sandbox-only activation or disabled activation.", "Define promotion requirements into verified or organization tier."],
+  "deliverables": [".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/community-artifact-policy.md", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-033.json"],
+  "acceptance_criteria": ["Community artifacts cannot broaden host authority by default.", "Promotion requires signatures, replay and organization allowlist.", "Operator projection shows community risk."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1", "cargo test -p agentd operator_projection"],
+  "failure_modes": ["Community artifact activates as trusted.", "Promotion path lacks replay.", "Risk tier hidden in projection."],
+  "handoff": {"next_tasks": ["TASK-ECO-035", "TASK-VERIFY-042"], "blocked_until": ["TASK-ECO-015"]},
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-033.json"
+}

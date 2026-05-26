@@ -1,0 +1,21 @@
+{
+  "task_id": "TASK-TUI-040",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "ecosystem-projection",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/aom.rs",
+    ".workflow/artifacts/ecosystem-replay/result.json"
+  ],
+  "verified": [
+    "TUI exposes aom.search/show/verify/stage/explain/activate.preview through typed commands",
+    "aom logic remains in agentd aom facade over agent_core ecosystem contracts",
+    "ecosystem replay passed with local-only registry and inert staging"
+  ],
+  "commands": [
+    "cargo test -p agentd aom --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "blockers": []
+}

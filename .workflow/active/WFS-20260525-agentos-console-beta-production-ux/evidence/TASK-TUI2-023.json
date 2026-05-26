@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-TUI2-023",
+  "title": "Add AOM artifact detail and trust status panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:50:12+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/aom_artifact_panel.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "AOM artifact detail renders coordinate, kind, publisher, version, digests, trust tier and source evidence.",
+    "Artifact state explains registry-only, staged-inert, active, blocked-revoked and blocked-incompatible states.",
+    "Activation preview remains gated with activation_prepared=false, direct_activate=false and SecurityExecutionEngine required.",
+    "TUI does not own AOM resolver logic and renders resolver_owner=agent_core::ecosystem.",
+    "Command palette preview for aom.artifact.show is read-only and does not create run snapshots."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_aom_artifact --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "aom_artifact": {
+      "command": "cargo test -p agentd tui_aom_artifact --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "ecosystem_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/ecosystem-replay/result.json"
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "risk_notes": [
+    "AOM artifact panel consumes local registry, staging and active-set evidence only.",
+    "No resolver, activation planner, policy or side-effect authority was added to TUI.",
+    "Revoked and incompatible artifacts are visibly blocked and cannot appear directly launchable.",
+    "Stage/install remains inert; activation requires AgentCore PlanSpec, SecurityExecutionEngine, approval and rollback."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-024",
+    "TASK-TUI2-030"
+  ]
+}

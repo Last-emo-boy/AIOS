@@ -1,0 +1,20 @@
+{
+  "id": "TASK-VERIFY-043",
+  "title": "Add activation rollback and revocation replay",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-ECO-005", "TASK-ECO-024", "TASK-VERIFY-041"],
+  "purpose": "Prove ecosystem activation can be rolled back and revoked artifacts are blocked or degraded.",
+  "scope": ["Replay activation rollback.", "Replay revoked staged artifact.", "Replay revoked active artifact degraded projection.", "Replay advisory metadata projection."],
+  "deliverables": ["scripts/ecosystem-replay.ps1", ".workflow/artifacts/ecosystem-replay/result.json", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-043.json"],
+  "acceptance_criteria": ["Rollback restores previous active set.", "Revoked staged artifact cannot activate.", "Revoked active artifact is visible as degraded.", "Replay result includes revocation evidence hash."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1", "cargo test -p agent_core ecosystem"],
+  "failure_modes": ["Rollback only updates projection, not state.", "Revocation is ignored for cached artifacts.", "Advisory metadata is not bound to digest."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-044", "TASK-PROD-050"], "blocked_until": ["TASK-ECO-005", "TASK-ECO-024"]},
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-043.json"
+}

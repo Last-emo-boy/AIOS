@@ -1,0 +1,55 @@
+{
+  "id": "TASK-ARUN-010",
+  "title": "Define boot and steady-state Agent Runtime control loops",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "owner": "agent_core",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-CHAIN-001"],
+  "purpose": "Define how AgentOS boots into Agent Runtime control and keeps steady-state operation under bounded loops.",
+  "scope": [
+    "Map boot handoff, runtime validation, policy/tool/model config load and recovery scan.",
+    "Define steady-state observation, planning, scheduling, execution and projection loops.",
+    "Define loop inputs, outputs, persistence and backpressure.",
+    "Document which loops run in local-only mode."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-control-loops.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-010.json"
+  ],
+  "read_first": [
+    "crates/agent_core/src/lib.rs",
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/operator_projection.rs",
+    "scripts/boot-smoke-test.ps1"
+  ],
+  "implementation_steps": [
+    "Describe boot loop and steady-state loop state machines.",
+    "Identify durable state needed before each side effect.",
+    "List metrics and operator projection fields.",
+    "Record evidence with loop ownership and gate commands."
+  ],
+  "acceptance_criteria": [
+    "Boot loop does not require external dependencies.",
+    "Steady-state loop cannot execute outside SecurityExecutionEngine.",
+    "Projection can show loop health and degraded state.",
+    "QEMU smoke remains compatible."
+  ],
+  "verification": [
+    "cargo test --workspace",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Runtime loop depends on remote model.",
+    "Side effects occur before durable state.",
+    "agentd owns loop policy decisions."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ARUN-011", "TASK-ARUN-012"],
+    "blocked_until": ["TASK-CHAIN-001"]
+  },
+  "completed_at": "2026-05-25T00:26:00+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-010.json"
+}

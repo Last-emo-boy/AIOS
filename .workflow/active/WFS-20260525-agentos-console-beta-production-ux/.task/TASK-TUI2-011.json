@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-011",
+  "title": "Add approval binding diff and stale expired token UX",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:39:02+08:00",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-010"],
+  "purpose": "Make approval mutation, expiry and stale token risk explicit in the operator experience.",
+  "scope": [
+    "Render parameter hash and human-readable parameter summary side by side.",
+    "Render changed parameter or token mismatch as denied preview state.",
+    "Show expiry countdown or expired timestamp in deterministic form.",
+    "Add stale-token fixtures for focused approval actions.",
+    "Prevent keyboard shortcuts from bypassing stale or expired checks."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui approval binding diff",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-011.json"
+  ],
+  "acceptance_criteria": [
+    "Approval mutation is rejected before EffectPrepared.",
+    "Expired approvals cannot be submitted from panel or palette.",
+    "Binding diff does not leak raw secrets.",
+    "Tests cover focused-panel stale token reuse."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_approval_binding",
+    "cargo test -p agentd tui_adversarial",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "Only run id is checked and parameter mutation slips through.",
+    "Shortcut path bypasses command preview.",
+    "Diff renderer exposes raw secret-like input."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-012", "TASK-TUI2-013"],
+    "blocked_until": ["TASK-TUI2-010"]
+  }
+}

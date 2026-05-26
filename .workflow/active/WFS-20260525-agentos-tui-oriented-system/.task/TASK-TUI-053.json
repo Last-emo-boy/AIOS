@@ -1,0 +1,46 @@
+{
+  "id": "TASK-TUI-053",
+  "title": "Preserve headless and automation compatibility",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-050", "TASK-TUI-052"],
+  "purpose": "Ensure making AgentOS TUI-oriented does not break noninteractive release gates, support workflows or automation.",
+  "scope": [
+    "Verify --operator-project-tui remains noninteractive.",
+    "Verify scripted TUI replay works without terminal control sequences.",
+    "Verify release, functional replay and ecosystem replay remain headless.",
+    "Document mode selection between default TUI console and automation.",
+    "Add tests for no-tty or CI environments."
+  ],
+  "deliverables": [
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs",
+    "scripts/production-runbook-smoke.ps1",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-053.json"
+  ],
+  "acceptance_criteria": [
+    "Headless commands do not try to open an interactive TUI.",
+    "Automation mode produces deterministic output and exit codes.",
+    "Release gate can run on CI without a TTY.",
+    "TUI-oriented default is packaged but overridable."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_headless",
+    "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "Release scripts hang waiting for interactive input.",
+    "TUI default disables operator projection automation.",
+    "Scripted mode emits nondeterministic terminal control output."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-060", "TASK-TUI-062", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-050", "TASK-TUI-052"]
+  }
+}

@@ -1,13 +1,19 @@
-use std::io;
+use std::path::{Path, PathBuf};
+use std::{fs, io};
 
-use crate::api::{escape_json, RiskClass};
-use crate::audit::{redact_summary, AuditJournal, RuntimeAuditProjection};
+use crate::agent_core::ecosystem::LocalRegistrySnapshot;
+use crate::aom::{DEFAULT_LOCAL_REGISTRY_PATH, DEFAULT_STAGING_ROOT};
+use crate::api::{RiskClass, escape_json};
+use crate::audit::{AuditJournal, RuntimeAuditProjection, redact_summary};
 use crate::lifecycle::{Agentd, HealthReport, LifecycleState};
+use crate::runtime_contracts::stable_contract_hash;
 use crate::safety::SafetyGateConfig;
-use crate::support_bundle::SupportBundleProjection;
+use crate::support_bundle::{EcosystemSupportBundleProjection, SupportBundleProjection};
 use crate::tools::TOOL_SCHEMAS;
 
 pub const OPERATOR_PROJECTION_SCHEMA_VERSION: &str = "agentd-operator-projection/v1";
+pub const DEFAULT_ECOSYSTEM_LOCKFILE_PATH: &str = ".workflow/artifacts/aom/ecosystem-lock.json";
+pub const DEFAULT_ACTIVE_ARTIFACT_SET_PATH: &str = ".workflow/artifacts/aom/active-set.json";
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OperatorProjection {
@@ -20,6 +26,7 @@ pub struct OperatorProjection {
     pub audit: OperatorAuditProjection,
     pub update: OperatorUpdateProjection,
     pub adapters: OperatorAdapterProjection,
+    pub ecosystem: OperatorEcosystemProjection,
     pub support_bundle: OperatorSupportBundleProjection,
     pub safety: OperatorSafetyProjection,
 }
@@ -44,6 +51,7 @@ impl OperatorProjection {
             audit,
             update,
             adapters: OperatorAdapterProjection::from_tool_manifest(),
+            ecosystem: OperatorEcosystemProjection::from_defaults(),
             support_bundle: OperatorSupportBundleProjection::from_journal(audit_journal)?,
             safety: OperatorSafetyProjection::from_gate(&SafetyGateConfig::default_gate()),
         })
@@ -51,7 +59,7 @@ impl OperatorProjection {
 
     pub fn to_json(&self) -> String {
         format!(
-            "{{\"schema_version\":\"{}\",\"source\":\"{}\",\"read_only\":{},\"redaction\":\"{}\",\"runtime\":{},\"telemetry\":{},\"audit\":{},\"update\":{},\"adapters\":{},\"support_bundle\":{},\"safety\":{}}}",
+            "{{\"schema_version\":\"{}\",\"source\":\"{}\",\"read_only\":{},\"redaction\":\"{}\",\"runtime\":{},\"telemetry\":{},\"audit\":{},\"update\":{},\"adapters\":{},\"ecosystem\":{},\"support_bundle\":{},\"safety\":{}}}",
             self.schema_version,
             self.source,
             self.read_only,
@@ -61,6 +69,7 @@ impl OperatorProjection {
             self.audit.to_json(),
             self.update.to_json(),
             self.adapters.to_json(),
+            self.ecosystem.to_json(),
             self.support_bundle.to_json(),
             self.safety.to_json()
         )
@@ -77,6 +86,7 @@ impl OperatorProjection {
             self.audit.to_cli_line(),
             self.update.to_cli_line(),
             self.adapters.to_cli_line(),
+            self.ecosystem.to_cli_line(),
             self.support_bundle.to_cli_line(),
             self.safety.to_cli_line(),
         ]
@@ -88,68 +98,371 @@ impl OperatorProjection {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OperatorEcosystemProjection {
+    pub schema_version: &'static str,
+    pub local_registry_path: String,
+    pub local_registry_status: &'static str,
+    pub registry_snapshot_digest: Option<String>,
+    pub registry_artifact_count: usize,
+    pub core_artifact_count: usize,
+    pub core_artifacts: Vec<String>,
+    pub staging_root: String,
+    pub staged_artifact_count: usize,
+    pub active_set_path: String,
+    pub active_set_status: &'static str,
+    pub active_artifact_count: usize,
+    pub pending_activation_count: usize,
+    pub lockfile_path: String,
+    pub lockfile_hash: Option<String>,
+    pub durable_state_paths: Vec<String>,
+    pub lifecycle_commands: Vec<String>,
+    pub activation_status: &'static str,
+    pub activation_authority: &'static str,
+    pub blocked_until: Vec<String>,
+    pub required_approvals: Vec<String>,
+    pub blocked_reasons: Vec<String>,
+    pub staged_artifacts_active: bool,
+    pub staged_and_active_separated: bool,
+    pub normal_shell_available: bool,
+    pub agentd_resolver_logic: bool,
+    pub resolver_owner: &'static str,
+    pub network_required: bool,
+}
+
+impl OperatorEcosystemProjection {
+    fn from_defaults() -> Self {
+        let registry_path = resolve_projection_path(DEFAULT_LOCAL_REGISTRY_PATH);
+        let staging_root = resolve_projection_path(DEFAULT_STAGING_ROOT);
+        let active_set_path = resolve_projection_path(DEFAULT_ACTIVE_ARTIFACT_SET_PATH);
+        let lockfile_path = resolve_projection_path(DEFAULT_ECOSYSTEM_LOCKFILE_PATH);
+        let registry = RegistryProjection::from_file(&registry_path);
+        let staged_artifact_count = count_named_files(&staging_root, "staging-report.json");
+        let active_set = ActiveSetProjection::from_file(&active_set_path);
+        let lockfile_hash = file_stable_hash(&lockfile_path);
+        Self {
+            schema_version: "agentos.operator-ecosystem-projection.v1",
+            local_registry_path: DEFAULT_LOCAL_REGISTRY_PATH.to_string(),
+            local_registry_status: registry.status,
+            registry_snapshot_digest: registry.snapshot_digest,
+            registry_artifact_count: registry.artifact_count,
+            core_artifact_count: registry.core_artifacts.len(),
+            core_artifacts: registry.core_artifacts,
+            staging_root: DEFAULT_STAGING_ROOT.to_string(),
+            staged_artifact_count,
+            active_set_path: DEFAULT_ACTIVE_ARTIFACT_SET_PATH.to_string(),
+            active_set_status: active_set.status,
+            active_artifact_count: active_set.artifact_count,
+            pending_activation_count: staged_artifact_count,
+            lockfile_path: DEFAULT_ECOSYSTEM_LOCKFILE_PATH.to_string(),
+            lockfile_hash,
+            durable_state_paths: [
+                DEFAULT_LOCAL_REGISTRY_PATH,
+                DEFAULT_STAGING_ROOT,
+                DEFAULT_ECOSYSTEM_LOCKFILE_PATH,
+                DEFAULT_ACTIVE_ARTIFACT_SET_PATH,
+            ]
+            .into_iter()
+            .map(ToString::to_string)
+            .collect(),
+            lifecycle_commands: [
+                "aom.search",
+                "aom.show",
+                "aom.verify",
+                "aom.stage",
+                "aom.explain",
+                "aom.activate",
+            ]
+            .into_iter()
+            .map(ToString::to_string)
+            .collect(),
+            activation_status: "gated",
+            activation_authority: "AgentCore PlanSpec + SecurityExecutionEngine",
+            blocked_until: [
+                "local replay evidence",
+                "compatibility evidence",
+                "exact approval token",
+                "rollback handle",
+                "audit journal seal",
+            ]
+            .into_iter()
+            .map(ToString::to_string)
+            .collect(),
+            required_approvals: [
+                "exact approval token for ecosystem.activate",
+                "policy broadening approval when activation broadens policy",
+            ]
+            .into_iter()
+            .map(ToString::to_string)
+            .collect(),
+            blocked_reasons: [
+                "install and stage are inert until activation PlanSpec is approved",
+                "activation must provide replay and compatibility evidence",
+                "active artifact set mutation requires rollback metadata",
+            ]
+            .into_iter()
+            .map(ToString::to_string)
+            .collect(),
+            staged_artifacts_active: false,
+            staged_and_active_separated: true,
+            normal_shell_available: false,
+            agentd_resolver_logic: false,
+            resolver_owner: "agent_core::ecosystem",
+            network_required: registry.network_required,
+        }
+    }
+
+    fn to_json(&self) -> String {
+        format!(
+            "{{\"schema_version\":\"{}\",\"local_registry_path\":\"{}\",\"local_registry_status\":\"{}\",\"registry_snapshot_digest\":{},\"registry_artifact_count\":{},\"core_artifact_count\":{},\"core_artifacts\":{},\"staging_root\":\"{}\",\"staged_artifact_count\":{},\"active_set_path\":\"{}\",\"active_set_status\":\"{}\",\"active_artifact_count\":{},\"pending_activation_count\":{},\"lockfile_path\":\"{}\",\"lockfile_hash\":{},\"durable_state_paths\":{},\"lifecycle_commands\":{},\"activation_status\":\"{}\",\"activation_authority\":\"{}\",\"blocked_until\":{},\"required_approvals\":{},\"blocked_reasons\":{},\"staged_artifacts_active\":{},\"staged_and_active_separated\":{},\"normal_shell_available\":{},\"agentd_resolver_logic\":{},\"resolver_owner\":\"{}\",\"network_required\":{}}}",
+            self.schema_version,
+            escape_json(&self.local_registry_path),
+            self.local_registry_status,
+            optional_json(self.registry_snapshot_digest.as_deref()),
+            self.registry_artifact_count,
+            self.core_artifact_count,
+            string_array_json(&self.core_artifacts),
+            escape_json(&self.staging_root),
+            self.staged_artifact_count,
+            escape_json(&self.active_set_path),
+            self.active_set_status,
+            self.active_artifact_count,
+            self.pending_activation_count,
+            escape_json(&self.lockfile_path),
+            optional_json(self.lockfile_hash.as_deref()),
+            string_array_json(&self.durable_state_paths),
+            string_array_json(&self.lifecycle_commands),
+            self.activation_status,
+            escape_json(self.activation_authority),
+            string_array_json(&self.blocked_until),
+            string_array_json(&self.required_approvals),
+            string_array_json(&self.blocked_reasons),
+            self.staged_artifacts_active,
+            self.staged_and_active_separated,
+            self.normal_shell_available,
+            self.agentd_resolver_logic,
+            self.resolver_owner,
+            self.network_required
+        )
+    }
+
+    fn to_cli_line(&self) -> String {
+        format!(
+            "ecosystem registry={} registry_status={} snapshot_digest={} artifacts={} core_artifacts={} staging_root={} staged_artifacts={} active_set={} active_set_status={} active_artifacts={} pending_activation={} lockfile={} lockfile_hash={} commands={} activation_status={} activation_authority=\"{}\" staged_artifacts_active={} staged_active_separated={} normal_shell_available={} agentd_resolver_logic={} resolver_owner={} network_required={} required_approvals={} blocked_until={} blocked_reasons={}",
+            self.local_registry_path,
+            self.local_registry_status,
+            self.registry_snapshot_digest.as_deref().unwrap_or("-"),
+            self.registry_artifact_count,
+            self.core_artifacts.join("|"),
+            self.staging_root,
+            self.staged_artifact_count,
+            self.active_set_path,
+            self.active_set_status,
+            self.active_artifact_count,
+            self.pending_activation_count,
+            self.lockfile_path,
+            self.lockfile_hash.as_deref().unwrap_or("-"),
+            self.lifecycle_commands.join("|"),
+            self.activation_status,
+            self.activation_authority,
+            self.staged_artifacts_active,
+            self.staged_and_active_separated,
+            self.normal_shell_available,
+            self.agentd_resolver_logic,
+            self.resolver_owner,
+            self.network_required,
+            self.required_approvals.join("|"),
+            self.blocked_until.join("|"),
+            self.blocked_reasons.join("|")
+        )
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct RegistryProjection {
+    status: &'static str,
+    snapshot_digest: Option<String>,
+    artifact_count: usize,
+    core_artifacts: Vec<String>,
+    network_required: bool,
+}
+
+impl RegistryProjection {
+    fn from_file(path: &Path) -> Self {
+        if !path.is_file() {
+            return Self {
+                status: "missing",
+                snapshot_digest: None,
+                artifact_count: 0,
+                core_artifacts: Vec::new(),
+                network_required: false,
+            };
+        }
+
+        let Ok(snapshot) = LocalRegistrySnapshot::from_file(path) else {
+            return Self {
+                status: "invalid",
+                snapshot_digest: None,
+                artifact_count: 0,
+                core_artifacts: Vec::new(),
+                network_required: false,
+            };
+        };
+
+        let mut core_artifacts = snapshot
+            .artifacts
+            .iter()
+            .filter(|artifact| artifact.trust_tier.as_str() == "core")
+            .map(|artifact| artifact.coordinate.as_string())
+            .collect::<Vec<_>>();
+        core_artifacts.sort();
+        let network_required = snapshot
+            .artifacts
+            .iter()
+            .any(|artifact| is_network_uri(&artifact.source_uri));
+
+        Self {
+            status: "configured",
+            snapshot_digest: Some(snapshot.snapshot_digest),
+            artifact_count: snapshot.artifacts.len(),
+            core_artifacts,
+            network_required,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct ActiveSetProjection {
+    status: &'static str,
+    artifact_count: usize,
+}
+
+impl ActiveSetProjection {
+    fn from_file(path: &Path) -> Self {
+        if !path.is_file() {
+            return Self {
+                status: "missing",
+                artifact_count: 0,
+            };
+        }
+        let Ok(content) = fs::read_to_string(path) else {
+            return Self {
+                status: "invalid",
+                artifact_count: 0,
+            };
+        };
+        Self {
+            status: "present",
+            artifact_count: json_key_count(&content, "coordinate"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OperatorSupportBundleProjection {
     pub status: String,
     pub bundle_id: Option<String>,
     pub redaction_status: String,
     pub audit_excerpt_count: usize,
     pub deterministic: bool,
+    pub ecosystem_registry_snapshot_hash: Option<String>,
+    pub ecosystem_active_set_hash: Option<String>,
+    pub ecosystem_trust_tiers: Vec<String>,
+    pub ecosystem_revocation_status: String,
+    pub ecosystem_private_key_paths_included: bool,
 }
 
 impl OperatorSupportBundleProjection {
     fn from_journal(audit_journal: Option<&AuditJournal>) -> io::Result<Self> {
+        let ecosystem = EcosystemSupportBundleProjection::from_defaults();
         let Some(journal) = audit_journal else {
-            return Ok(Self {
-                status: "not-configured".to_string(),
-                bundle_id: None,
-                redaction_status: "secret-values-redacted".to_string(),
-                audit_excerpt_count: 0,
-                deterministic: true,
-            });
+            return Ok(Self::from_ecosystem(
+                "not-configured",
+                None,
+                "secret-values-redacted",
+                0,
+                true,
+                ecosystem,
+            ));
         };
         let latest_run = journal.latest_run()?;
         let Some(run_id) = latest_run else {
-            return Ok(Self {
-                status: "no-run".to_string(),
-                bundle_id: None,
-                redaction_status: "secret-values-redacted".to_string(),
-                audit_excerpt_count: 0,
-                deterministic: true,
-            });
+            return Ok(Self::from_ecosystem(
+                "no-run",
+                None,
+                "secret-values-redacted",
+                0,
+                true,
+                ecosystem,
+            ));
         };
         let projection = SupportBundleProjection::from_journal(
             journal,
             format!("support-{run_id}"),
             vec![run_id.clone()],
         )?;
-        Ok(Self {
-            status: "ready".to_string(),
-            bundle_id: Some(projection.manifest.bundle_id.clone()),
-            redaction_status: projection.manifest.redaction_status.clone(),
-            audit_excerpt_count: projection.audit_excerpt_count,
-            deterministic: projection.deterministic,
-        })
+        Ok(Self::from_ecosystem(
+            "ready",
+            Some(projection.manifest.bundle_id.clone()),
+            &projection.manifest.redaction_status,
+            projection.audit_excerpt_count,
+            projection.deterministic,
+            projection.ecosystem,
+        ))
+    }
+
+    fn from_ecosystem(
+        status: &str,
+        bundle_id: Option<String>,
+        redaction_status: &str,
+        audit_excerpt_count: usize,
+        deterministic: bool,
+        ecosystem: EcosystemSupportBundleProjection,
+    ) -> Self {
+        Self {
+            status: status.to_string(),
+            bundle_id,
+            redaction_status: redaction_status.to_string(),
+            audit_excerpt_count,
+            deterministic,
+            ecosystem_registry_snapshot_hash: ecosystem.registry_snapshot_hash,
+            ecosystem_active_set_hash: ecosystem.active_set_hash,
+            ecosystem_trust_tiers: ecosystem.trust_tiers,
+            ecosystem_revocation_status: ecosystem.revocation_status.to_string(),
+            ecosystem_private_key_paths_included: ecosystem.private_key_paths_included,
+        }
     }
 
     fn to_json(&self) -> String {
         format!(
-            "{{\"status\":\"{}\",\"bundle_id\":{},\"redaction_status\":\"{}\",\"audit_excerpt_count\":{},\"deterministic\":{}}}",
+            "{{\"status\":\"{}\",\"bundle_id\":{},\"redaction_status\":\"{}\",\"audit_excerpt_count\":{},\"deterministic\":{},\"ecosystem_registry_snapshot_hash\":{},\"ecosystem_active_set_hash\":{},\"ecosystem_trust_tiers\":{},\"ecosystem_revocation_status\":\"{}\",\"ecosystem_private_key_paths_included\":{}}}",
             escape_json(&self.status),
             optional_json(self.bundle_id.as_deref()),
             escape_json(&self.redaction_status),
             self.audit_excerpt_count,
-            self.deterministic
+            self.deterministic,
+            optional_json(self.ecosystem_registry_snapshot_hash.as_deref()),
+            optional_json(self.ecosystem_active_set_hash.as_deref()),
+            string_array_json(&self.ecosystem_trust_tiers),
+            escape_json(&self.ecosystem_revocation_status),
+            self.ecosystem_private_key_paths_included
         )
     }
 
     fn to_cli_line(&self) -> String {
         format!(
-            "support_bundle status={} bundle={} redaction={} audit_excerpt_count={} deterministic={}",
+            "support_bundle status={} bundle={} redaction={} audit_excerpt_count={} deterministic={} ecosystem_registry_hash={} ecosystem_active_hash={} ecosystem_trust_tiers={} ecosystem_revocation={} private_key_paths_included={}",
             self.status,
             self.bundle_id.as_deref().unwrap_or("-"),
             self.redaction_status,
             self.audit_excerpt_count,
-            self.deterministic
+            self.deterministic,
+            self.ecosystem_registry_snapshot_hash
+                .as_deref()
+                .unwrap_or("-"),
+            self.ecosystem_active_set_hash.as_deref().unwrap_or("-"),
+            self.ecosystem_trust_tiers.join("|"),
+            self.ecosystem_revocation_status,
+            self.ecosystem_private_key_paths_included
         )
     }
 }
@@ -467,7 +780,8 @@ impl OperatorUpdateProjection {
             return Ok(Self::contract_only());
         };
         let state = summary_value(&summary, "state").unwrap_or_else(|| "Unknown".to_string());
-        let active_slot = summary_value(&summary, "active_slot").unwrap_or_else(|| "unknown".to_string());
+        let active_slot =
+            summary_value(&summary, "active_slot").unwrap_or_else(|| "unknown".to_string());
         let inactive_slot =
             summary_value(&summary, "inactive_slot").unwrap_or_else(|| "unknown".to_string());
         Ok(Self {
@@ -710,6 +1024,55 @@ fn availability(required_tools: &[&str]) -> &'static str {
     }
 }
 
+fn resolve_projection_path(path: &str) -> PathBuf {
+    let candidate = PathBuf::from(path);
+    if candidate.exists() {
+        return candidate;
+    }
+    let mut current = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+    loop {
+        let joined = current.join(path);
+        if joined.exists() {
+            return joined;
+        }
+        if !current.pop() {
+            return candidate;
+        }
+    }
+}
+
+fn count_named_files(root: &Path, filename: &str) -> usize {
+    let Ok(entries) = fs::read_dir(root) else {
+        return 0;
+    };
+    let mut count = 0;
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            count += count_named_files(&path, filename);
+        } else if path.file_name().and_then(|value| value.to_str()) == Some(filename) {
+            count += 1;
+        }
+    }
+    count
+}
+
+fn file_stable_hash(path: &Path) -> Option<String> {
+    fs::read_to_string(path)
+        .ok()
+        .map(|content| stable_contract_hash(&content))
+}
+
+fn is_network_uri(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    lower.starts_with("http://") || lower.starts_with("https://")
+}
+
+fn json_key_count(content: &str, key: &str) -> usize {
+    let needle = format!("\"{key}\"");
+    content.match_indices(&needle).count()
+}
+
 fn optional_json(value: Option<&str>) -> String {
     value
         .map(|value| format!("\"{}\"", escape_json(value)))
@@ -774,10 +1137,10 @@ mod tests {
         RootfsSlot, RootfsUpdateRequest, RootfsUpdateRuntime, UpdateArtifactSet,
     };
     use crate::audit::{AuditEvent, AuditEventType};
+    use crate::lifecycle::LifecycleConfig;
     use crate::security_execution::audit::{
         FileRemoteAuditMirror, RemoteAuditFailurePolicy, RemoteAuditMirrorConfig,
     };
-    use crate::lifecycle::LifecycleConfig;
 
     fn test_journal(name: &str) -> AuditJournal {
         let path = std::env::temp_dir().join(format!(
@@ -843,10 +1206,70 @@ mod tests {
         assert_eq!(projection.update.status, "not-configured");
         assert_eq!(projection.adapters.untrusted_content_status, "available");
         assert_eq!(projection.adapters.audit_projection_status, "available");
+        assert_eq!(projection.ecosystem.activation_status, "gated");
+        assert_eq!(
+            projection.ecosystem.activation_authority,
+            "AgentCore PlanSpec + SecurityExecutionEngine"
+        );
+        assert_eq!(projection.ecosystem.local_registry_status, "configured");
+        assert_eq!(
+            projection.ecosystem.registry_snapshot_digest.as_deref(),
+            Some("sha256:agentos-local-alpha-snapshot")
+        );
+        assert_eq!(projection.ecosystem.registry_artifact_count, 3);
+        assert_eq!(projection.ecosystem.core_artifact_count, 3);
+        assert!(
+            projection
+                .ecosystem
+                .core_artifacts
+                .contains(&"agentos:policy-pack/agentos/core-policy@1.0.0".to_string())
+        );
+        assert!(
+            projection
+                .ecosystem
+                .blocked_until
+                .contains(&"local replay evidence".to_string())
+        );
+        assert!(
+            projection
+                .ecosystem
+                .required_approvals
+                .contains(&"exact approval token for ecosystem.activate".to_string())
+        );
+        assert!(
+            projection
+                .ecosystem
+                .blocked_reasons
+                .contains(&"activation must provide replay and compatibility evidence".to_string())
+        );
+        assert!(!projection.ecosystem.staged_artifacts_active);
+        assert!(projection.ecosystem.staged_and_active_separated);
+        assert!(!projection.ecosystem.normal_shell_available);
+        assert!(!projection.ecosystem.agentd_resolver_logic);
+        assert_eq!(projection.ecosystem.resolver_owner, "agent_core::ecosystem");
         assert_eq!(projection.support_bundle.status, "ready");
         assert_eq!(
             projection.support_bundle.redaction_status,
             "secret-values-redacted"
+        );
+        assert!(
+            projection
+                .support_bundle
+                .ecosystem_registry_snapshot_hash
+                .as_deref()
+                .unwrap_or("")
+                .starts_with("sha256:agentos-stable-v1-")
+        );
+        assert!(
+            projection
+                .support_bundle
+                .ecosystem_trust_tiers
+                .contains(&"core".to_string())
+        );
+        assert!(
+            !projection
+                .support_bundle
+                .ecosystem_private_key_paths_included
         );
         assert!(projection.safety.fail_closed);
 
@@ -855,12 +1278,25 @@ mod tests {
         assert!(json.contains("\"read_only\":true"));
         assert!(json.contains("\"audit_seal_status\":\"sealed\""));
         assert!(json.contains("\"package_manager_status\":\"available\""));
+        assert!(json.contains("\"ecosystem\":{"));
+        assert!(json.contains("\"activation_status\":\"gated\""));
+        assert!(json.contains("\"registry_artifact_count\":3"));
+        assert!(json.contains("\"core_artifact_count\":3"));
+        assert!(json.contains("\"required_approvals\":["));
+        assert!(json.contains("local replay evidence"));
+        assert!(json.contains("\"staged_artifacts_active\":false"));
+        assert!(json.contains("\"agentd_resolver_logic\":false"));
+        assert!(!json.contains("TASK-ECO-004"));
+        assert!(!json.contains("TASK-ECO-005"));
         assert!(json.contains("\"support_bundle\":{"));
         assert!(json.contains("\"bundle_id\":\"support-run-operator\""));
+        assert!(json.contains("\"ecosystem_registry_snapshot_hash\":\"sha256:agentos-stable-v1-"));
+        assert!(json.contains("\"ecosystem_private_key_paths_included\":false"));
         assert!(json.contains("secret://prod/db"));
         assert!(json.contains("[REDACTED]"));
         assert!(!json.contains("hunter2"));
         assert!(!json.contains("password=hunter2"));
+        assert!(!json.contains("/.ssh/"));
     }
 
     #[test]
@@ -900,7 +1336,14 @@ mod tests {
         assert!(json.contains("\"latest_run_status\":\"no-run\""));
         assert!(json.contains("\"audit_seal_status\":\"unknown\""));
         assert!(json.contains("\"slot_strategy\":\"ab-rootfs-contract\""));
-        assert!(projection.to_cli_text().contains("runtime state=running"));
+        let cli = projection.to_cli_text();
+        assert!(cli.contains("runtime state=running"));
+        assert!(cli.contains("ecosystem registry="));
+        assert!(cli.contains("activation_status=gated"));
+        assert!(cli.contains("core_artifacts=agentos:policy-pack/agentos/core-policy@1.0.0"));
+        assert!(cli.contains("required_approvals=exact approval token for ecosystem.activate"));
+        assert!(cli.contains("blocked_until=local replay evidence"));
+        assert!(cli.contains("staged_artifacts_active=false"));
     }
 
     #[test]
@@ -996,7 +1439,11 @@ mod tests {
             projection.audit.remote_mirror_failure_policy.as_deref(),
             Some("fail-closed")
         );
-        assert!(!projection.audit.remote_mirror_non_local_side_effects_allowed);
+        assert!(
+            !projection
+                .audit
+                .remote_mirror_non_local_side_effects_allowed
+        );
         let json = projection.to_json();
         assert!(json.contains("\"remote_mirror_status\":\"failed-closed\""));
         assert!(json.contains("\"slot_strategy\":\"ab-rootfs-runtime\""));

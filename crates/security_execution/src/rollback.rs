@@ -2,9 +2,9 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-use crate::escape_json;
 use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
-use crate::policy::{stable_parameter_hash, CapabilityLease};
+use crate::escape_json;
+use crate::policy::{CapabilityLease, stable_parameter_hash};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum WriteDiffError {
@@ -426,10 +426,8 @@ mod tests {
     use runtime_contracts::RiskClass;
 
     fn temp_dir(name: &str) -> PathBuf {
-        let path = std::env::temp_dir().join(format!(
-            "agentd-rollback-{name}-{}",
-            std::process::id()
-        ));
+        let path =
+            std::env::temp_dir().join(format!("agentd-rollback-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&path);
         fs::create_dir_all(&path).expect("temp dir");
         path
@@ -471,9 +469,15 @@ mod tests {
         let base_hash = content_hash("port=80\n");
         let executor = WriteDiffExecutor::new(root.join("shadow"));
         let prepared = executor
-            .prepare(&lease(), request(target.clone(), base_hash.clone(), "port=8080\n"))
+            .prepare(
+                &lease(),
+                request(target.clone(), base_hash.clone(), "port=8080\n"),
+            )
             .expect("prepare");
-        assert_eq!(fs::read_to_string(&target).expect("read target"), "port=80\n");
+        assert_eq!(
+            fs::read_to_string(&target).expect("read target"),
+            "port=80\n"
+        );
         assert_eq!(prepared.handle.base_hash, base_hash);
         assert_eq!(prepared.handle.proposed_hash, content_hash("port=8080\n"));
         assert!(prepared.preview.unified_diff.contains("-port=80"));
@@ -489,7 +493,10 @@ mod tests {
         fs::write(&target, "port=80\n").expect("write target");
         let executor = WriteDiffExecutor::new(root.join("shadow"));
         let error = executor
-            .prepare(&lease(), request(target, "stale".to_string(), "port=8080\n"))
+            .prepare(
+                &lease(),
+                request(target, "stale".to_string(), "port=8080\n"),
+            )
             .expect_err("stale base rejected");
         assert!(error.reason().contains("base hash mismatch"));
     }
@@ -533,13 +540,24 @@ mod tests {
             .expect("prepare");
         let report = executor.commit(&journal, &mut prepared).expect("commit");
         assert!(report.committed);
-        assert_eq!(fs::read_to_string(&target).expect("read target"), "port=8080\n");
+        assert_eq!(
+            fs::read_to_string(&target).expect("read target"),
+            "port=8080\n"
+        );
         let lines = journal.event_lines().expect("read journal");
         assert!(lines.iter().any(|line| line.contains("EffectPrepared")));
         assert!(lines.iter().any(|line| line.contains("EffectObserved")));
         assert!(lines.iter().any(|line| line.contains("CommitSealed")));
-        assert!(lines.iter().any(|line| line.contains(&prepared.handle.rollback_id)));
-        assert!(lines.iter().all(|line| line.contains("\"parameter_hash\":\"param-hash\"")));
+        assert!(
+            lines
+                .iter()
+                .any(|line| line.contains(&prepared.handle.rollback_id))
+        );
+        assert!(
+            lines
+                .iter()
+                .all(|line| line.contains("\"parameter_hash\":\"param-hash\""))
+        );
         assert_eq!(prepared.handle.committed, true);
     }
 
@@ -568,10 +586,17 @@ mod tests {
             )
             .expect("rollback");
         assert!(rollback.restored);
-        assert_eq!(fs::read_to_string(&target).expect("read target"), "port=80\n");
+        assert_eq!(
+            fs::read_to_string(&target).expect("read target"),
+            "port=80\n"
+        );
         let lines = journal.event_lines().expect("read journal");
         assert!(lines.iter().any(|line| line.contains("RollbackPending")));
         assert!(lines.iter().any(|line| line.contains("RollbackObserved")));
-        assert!(lines.iter().all(|line| line.contains("\"parameter_hash\":\"param-hash\"")));
+        assert!(
+            lines
+                .iter()
+                .all(|line| line.contains("\"parameter_hash\":\"param-hash\""))
+        );
     }
 }

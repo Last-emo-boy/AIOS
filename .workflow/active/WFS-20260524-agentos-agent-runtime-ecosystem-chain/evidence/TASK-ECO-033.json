@@ -1,0 +1,37 @@
+{
+  "task_id": "TASK-ECO-033",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "summary": "Defined community artifact sandbox-only policy and promotion requirements.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/community-artifact-policy.md",
+      "status": "created",
+      "sha256": "8d931a1e25ac9dd78787e452d31e93651e7e511c9668f0a1983f6360592e2195"
+    }
+  ],
+  "acceptance_evidence": [
+    "Community artifacts are sandbox-only and non-promotable by default.",
+    "Community artifacts cannot broaden host authority by default.",
+    "Promotion requires signatures, replay, revocation metadata and organization allowlist or verified publisher status.",
+    "Operator projection and support bundles must surface community risk."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Adversarial community-like fixture behavior remains denied before EffectPrepared."
+    },
+    {
+      "command": "cargo test -p agentd operator_projection",
+      "result": "passed",
+      "summary": "6 operator projection tests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Community artifacts cannot skip directly to core.",
+    "Discovery and staging do not imply activation.",
+    "Community artifacts cannot self-grant policy authority."
+  ],
+  "promotion_impact": "Community ecosystem discovery can grow without weakening Production Distro defaults."
+}

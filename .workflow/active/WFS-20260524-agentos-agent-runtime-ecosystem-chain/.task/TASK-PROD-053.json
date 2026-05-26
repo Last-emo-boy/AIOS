@@ -1,0 +1,49 @@
+{
+  "id": "TASK-PROD-053",
+  "title": "Run final Production Distro chain audit",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/FINAL-AUDIT-20260524-agent-runtime-ecosystem-chain.json",
+  "wave": 9,
+  "priority": "P0",
+  "type": "audit",
+  "owner": "workflow",
+  "source": "production distro task chain",
+  "depends_on": ["TASK-PROD-050", "TASK-PROD-051", "TASK-PROD-052", "TASK-VERIFY-044", "TASK-ECO-052", "TASK-ECO-062"],
+  "purpose": "Audit the full Agent Runtime and ecosystem chain and decide whether the next Production Distro stage can begin.",
+  "scope": [
+    "Check all task evidence.",
+    "Run workspace, functional replay, ecosystem replay, release gate and QEMU smoke where required.",
+    "Audit no-shell, no activation bypass, no secret leak and no external dependency baseline.",
+    "Issue promotion decision."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/FINAL-AUDIT-20260524-agent-runtime-ecosystem-chain.json",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/final-chain-audit-summary.md"
+  ],
+  "acceptance_criteria": [
+    "All required task evidence exists and parses.",
+    "cargo test --workspace passes.",
+    "functional replay and ecosystem replay pass.",
+    "release provenance records required hashes.",
+    "QEMU runtime smoke passes when required."
+  ],
+  "verification": [
+    "cargo test --workspace",
+    "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Missing evidence.",
+    "Ecosystem replay skipped.",
+    "Release provenance omits ecosystem hashes.",
+    "QEMU smoke fails when required.",
+    "Any activation bypass or shell exposure is found."
+  ],
+  "handoff": {
+    "next_tasks": [],
+    "blocked_until": ["TASK-PROD-050", "TASK-PROD-051", "TASK-PROD-052"]
+  }
+}

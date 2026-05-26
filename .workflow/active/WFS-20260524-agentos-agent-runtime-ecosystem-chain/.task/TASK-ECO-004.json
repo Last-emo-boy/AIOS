@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-004",
+  "title": "Implement activation planning through AgentCore PlanSpec",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agent_core",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-003", "TASK-ARUN-021"],
+  "purpose": "Turn aom activation into a frozen AgentCore PlanSpec instead of direct install behavior.",
+  "scope": ["Create activation planning workflow.", "Build activation diff from staged artifacts.", "Pause when activation broadens authority.", "Reject activation when replay or compatibility is missing."],
+  "deliverables": ["crates/agent_core/src/lib.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-004.json"],
+  "acceptance_criteria": ["aom activate yields PlanSpec.", "Planner cannot execute activation directly.", "Activation plan includes approval and rollback requirements.", "Policy-broadening activation pauses."],
+  "verification": ["cargo test -p agent_core ecosystem::activation", "cargo test --workspace"],
+  "failure_modes": ["Activation mutates active set during planning.", "Approval requirements are omitted.", "Replay failure is ignored."],
+  "handoff": {"next_tasks": ["TASK-ECO-005", "TASK-ECO-006"], "blocked_until": ["TASK-ECO-003", "TASK-ARUN-021"]},
+  "completed_at": "2026-05-25T02:54:06+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-004.json"
+}

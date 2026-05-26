@@ -1,0 +1,38 @@
+{
+  "task_id": "TASK-ECO-032",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "summary": "Defined the no-maintainer-script activation rule for AgentOS ecosystem artifacts.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/no-maintainer-script-rule.md",
+      "status": "created",
+      "sha256": "7d2155d944b3f686273a87ac2d561300027b26e15a9c1aacab028a6d6559b4f6"
+    }
+  ],
+  "acceptance_evidence": [
+    "Artifact manifests cannot define arbitrary shell hooks or traditional pre/post install scripts.",
+    "Activation operations are typed semantic operations and policy evaluated.",
+    "aom activate remains a previewable AgentCore PlanSpec path.",
+    "SecurityExecutionEngine owns exact approval, sandbox policy, EffectPrepared and CommitSealed.",
+    "Package manager adapters remain isolated workflows, not trusted maintainer scripts."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p security_execution ecosystem",
+      "result": "passed",
+      "summary": "4 ecosystem SecurityExecution tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Replay passed and kept activation prepared=false before approved SecurityExecution."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No arbitrary shell activation hooks.",
+    "No maintainer-script authority copied from OS package managers.",
+    "No stage-time host mutation."
+  ],
+  "promotion_impact": "Artifact activation stays typed, replayable and mediated by AgentCore plus SecurityExecution."
+}

@@ -1,0 +1,50 @@
+{
+  "workflow_id": "WFS-20260524-agentos-agent-runtime-ecosystem-chain",
+  "name": "AgentOS Agent Runtime And Ecosystem Chain",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:32:00+08:00",
+  "created_at": "2026-05-24T23:40:00+08:00",
+  "updated_at": "2026-05-25T04:32:00+08:00",
+  "source": "research.md; TASK.md; .workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/context.md",
+  "previous_workflow": ".workflow/active/WFS-20260524-agentos-functional-iteration",
+  "brainstorm_session": ".workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem",
+  "goal": "Create a complete Maestro-managed iteration chain that makes AgentOS a production distro operated through Agent Runtime control loops while expanding the ecosystem through an APT-like AgentOS-native manager.",
+  "core_thesis": "AgentOS is not a conventional Linux distribution with an agent bolted on. Linux remains the deterministic substrate, while Agent Runtime is the OS control plane. Ecosystem artifacts extend what the OS can do, but activation is mediated by AgentCore, SecurityExecutionEngine, audit, rollback, replay and release provenance.",
+  "operating_model": {
+    "kernel_role": "Linux handles deterministic resources: process, memory, devices, namespaces, cgroups, seccomp, filesystems and KVM.",
+    "agent_runtime_role": "Agent Runtime handles intention, observation, planning, scheduling, policy-aware action, recovery, operator projection and ecosystem activation.",
+    "agentd_role": "agentd remains PID 1 and a thin lifecycle/projection/process integration layer; it must not become the owner of adapter business logic.",
+    "ecosystem_role": "aom manages AgentOS-native artifacts: capability packs, semantic tool packs, policy packs, workflow packs, model profile packs, knowledge packs, runtime adapter packs, execution image packs, replay packs and trust metadata."
+  },
+  "entry_contract": ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/FINAL-AUDIT-20260524-functional-iteration.json",
+  "non_goals": [
+    "Do not replace the Linux kernel or move model reasoning into kernel space.",
+    "Do not expose normal-mode arbitrary shell execution.",
+    "Do not let ecosystem install imply runtime activation.",
+    "Do not make external LLM, network, Firecracker or host package manager mandatory for baseline acceptance.",
+    "Do not put ecosystem resolver, policy merge, adapter business logic or workflow compilation directly into agentd.",
+    "Do not allow community/local-dev artifacts to become production-promotable without trust and replay gates."
+  ],
+  "primary_acceptance": [
+    "A documented OS control chain shows how Agent Runtime operates boot, steady state, degraded mode, recovery, update and rollback.",
+    "Agent Runtime has tasks for observation fabric, control loops, scheduling/backpressure, operator event intake, memory governance and recovery reconciliation.",
+    "aom ecosystem work is tied to runtime activation, not a separate package manager path.",
+    "Activation of AgentOS artifacts flows through AgentCore PlanSpec and SecurityExecutionEngine.",
+    "Release provenance includes functional replay plus ecosystem registry snapshot, lockfile and replay hashes.",
+    "Production Distro gates remain local-only capable and can use QEMU at E:\\qemu\\qemu-system-x86_64.exe when promotion requires boot proof."
+  ],
+  "plan": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/plan.json",
+  "task_dir": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/.task",
+  "docs": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/agent-operated-os-chain.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/production-distro-task-chain.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/acceptance-gates.md"
+  ],
+  "inherited_gates": {
+    "workspace_tests": "cargo test --workspace",
+    "functional_replay": "powershell -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+    "release_gate": "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "qemu_runtime_smoke": "powershell -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  }
+}

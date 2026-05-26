@@ -1,0 +1,44 @@
+{
+  "id": "TASK-ECO-061",
+  "title": "Define execution image pack schema for Firecracker sandbox and update bundles",
+  "status": "completed",
+  "wave": 8,
+  "priority": "P1",
+  "type": "ecosystem",
+  "owner": "packaging",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-020", "TASK-ECO-023"],
+  "purpose": "Define image-pack artifacts for sandbox rootfs, Firecracker guests and update bundles with provenance and rollback constraints.",
+  "scope": [
+    "Define execution-image-pack manifest fields.",
+    "Represent kernel/rootfs/image digest and compatibility.",
+    "Represent Firecracker/KVM optional dependency behavior.",
+    "Represent A/B update bundle compatibility with active artifacts."
+  ],
+  "deliverables": [
+    "crates/runtime_contracts/src/ecosystem.rs",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/execution-image-pack.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-061.json"
+  ],
+  "acceptance_criteria": [
+    "Image pack activation requires provenance and compatibility.",
+    "Missing Firecracker/KVM fails closed before EffectPrepared.",
+    "Update bundle accounts for active artifact set.",
+    "Rollback rule is explicit."
+  ],
+  "verification": [
+    "cargo test -p runtime_contracts ecosystem",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Image digest is not pinned.",
+    "Missing virtualization falls back to host execution.",
+    "Update image ignores active artifacts."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-062", "TASK-PROD-051"],
+    "blocked_until": ["TASK-ECO-020", "TASK-ECO-023"]
+  },
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-061.json"
+}

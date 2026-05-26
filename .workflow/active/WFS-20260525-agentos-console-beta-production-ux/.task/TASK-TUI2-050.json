@@ -1,0 +1,56 @@
+{
+  "id": "TASK-TUI2-050",
+  "title": "Run final Console Beta and Production UX audit",
+  "status": "completed",
+  "completed_at": "2026-05-26T08:20:11+08:00",
+  "wave": 5,
+  "priority": "P0",
+  "type": "audit",
+  "owner": "workflow",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-005", "TASK-TUI2-024", "TASK-TUI2-034", "TASK-TUI2-041", "TASK-TUI2-042", "TASK-TUI2-043", "TASK-TUI2-044"],
+  "purpose": "Decide whether AgentOS can claim Console Beta and identify blockers for Production Distro RC0.",
+  "scope": [
+    "Parse all TASK-TUI2 JSON and evidence files.",
+    "Run workspace, TUI, replay, runbook, release and QEMU gates.",
+    "Audit full-screen shell, command palette, workbenches, catalog and evidence center boundaries.",
+    "Verify TUI remains projection-controller only.",
+    "Write final decision and next Production Distro RC0 recommendations."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/final-console-beta-audit-summary.md"
+  ],
+  "acceptance_criteria": [
+    "Final audit includes pass/fail evidence for every wave.",
+    "Decision is one of console-beta, remediation-required or rollout-blocked.",
+    "Boundary audit confirms TUI still does not own planner, resolver, policy or side effects.",
+    "Next Production Distro RC0 tasks are listed with blockers."
+  ],
+  "verification": [
+    "cargo fmt --check",
+    "cargo test --workspace",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120"
+  ],
+  "failure_modes": [
+    "Audit accepts a UI-only demo without executable gates.",
+    "Audit ignores scripted parity or QEMU evidence.",
+    "Console Beta claim hides production signing or fleet blockers."
+  ],
+  "handoff": {
+    "next_tasks": ["production-distro-rc0-wave"],
+    "blocked_until": ["TASK-TUI2-005", "TASK-TUI2-024", "TASK-TUI2-034", "TASK-TUI2-041", "TASK-TUI2-042", "TASK-TUI2-043", "TASK-TUI2-044"]
+  },
+  "completion": {
+    "decision": "console-beta",
+    "production_ready_claim": false,
+    "evidence": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-050.json",
+    "final_audit": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json",
+    "summary": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/final-console-beta-audit-summary.md"
+  }
+}

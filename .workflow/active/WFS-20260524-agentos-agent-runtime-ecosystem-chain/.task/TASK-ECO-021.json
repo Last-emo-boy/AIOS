@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-021",
+  "title": "Define registry snapshot and lockfile schema",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "runtime_contracts",
+  "source": "runtime-ecosystem-architecture.md",
+  "depends_on": ["TASK-ECO-020"],
+  "purpose": "Define signed registry snapshots and deterministic lockfiles for reproducible AgentOS artifact sets.",
+  "scope": ["Define RegistrySnapshotV1 fields.", "Define EcosystemLockV1 with resolved artifacts and hashes.", "Define snapshot expiry, channel and revocation references."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-021.json"],
+  "acceptance_criteria": ["Lockfile hash is deterministic.", "Snapshot can run from local pinned file.", "Revocation/advisory references are represented."],
+  "verification": ["cargo test -p runtime_contracts ecosystem::registry", "cargo test --workspace"],
+  "failure_modes": ["Lockfile omits digest or publisher identity.", "Snapshot requires live network.", "Expired snapshot is silently accepted."],
+  "handoff": {"next_tasks": ["TASK-ECO-002", "TASK-ECO-025"], "blocked_until": ["TASK-ECO-020"]},
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-021.json"
+}

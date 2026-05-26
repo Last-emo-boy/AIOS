@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-ECO-061",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "summary": "Defined execution-image-pack contract for Firecracker/sandbox/update images with pinned digests, provenance, compatibility, active artifact set awareness and rollback rule.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7243c66e3350e40c87022c831135482e7c3984463ab3edbacb5f2b499db10e25"
+    },
+    {
+      "path": "crates/runtime_contracts/src/lib.rs",
+      "status": "updated",
+      "sha256": "7dd7fca8a11fdf5c0ab5c5190bdcda5302c4d50236aef331b95f8831affd024e"
+    },
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/execution-image-pack.md",
+      "status": "added",
+      "sha256": "2ea6c6fd3e8cb147d8cbd3cd8861aca50613be217f248ad11b80ffb582e5a5ad"
+    }
+  ],
+  "acceptance_evidence": [
+    "ExecutionImagePackV1 requires sha256-bound kernel, rootfs, image and provenance digests.",
+    "CompatibilityRequirement and Firecracker dependency contract are required.",
+    "Firecracker dependency must be optional_read_only, preserving local replay without unsafe host fallback.",
+    "kvm_required=true and host_fallback_allowed=false are enforced.",
+    "active_artifact_set_hash_required=true and explicit rollback_rule are enforced."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem",
+      "result": "passed",
+      "summary": "18 ecosystem-filtered runtime contract tests passed, including image pack fail-closed coverage."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "result": "passed",
+      "summary": "Observed AGENTD_HANDOFF_OK, AGENTOS_RUNTIME_ARTIFACTS_OK and runtime manifest sha256 marker."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gate passed with QEMU runtime smoke and provenance generation."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Execution image cannot omit pinned digests or provenance.",
+    "Missing Firecracker/KVM cannot fall back to host execution.",
+    "Update image cannot ignore active artifact set compatibility."
+  ],
+  "promotion_impact": "Execution images now have a contract suitable for future Firecracker sandbox and A/B update bundle promotion."
+}

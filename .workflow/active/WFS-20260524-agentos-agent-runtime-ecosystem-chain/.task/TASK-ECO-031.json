@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-031",
+  "title": "Define signing and revocation requirements",
+  "status": "completed",
+  "wave": 7,
+  "priority": "P1",
+  "type": "security",
+  "owner": "packaging",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-015", "TASK-ECO-024"],
+  "purpose": "Define what must be signed, how revocation is represented and how Production Distro reacts.",
+  "scope": ["Require signed manifests, snapshots, archives, policy packs, adapter packs, image packs and revocation metadata.", "Define local-dev exception.", "Define key rotation and revoked publisher behavior."],
+  "deliverables": [".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/ecosystem-signing-revocation.md", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-031.json"],
+  "acceptance_criteria": ["Unsigned production activation is blocked.", "Revocation can block staged artifacts.", "Active revoked artifacts show degraded state.", "Local-dev exception is explicit and non-promotable."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1", "Validate evidence JSON parses."],
+  "failure_modes": ["Unsigned artifacts activate in production.", "Revocation metadata is optional for verified channel.", "Key rotation cannot be audited."],
+  "handoff": {"next_tasks": ["TASK-ECO-034", "TASK-VERIFY-043"], "blocked_until": ["TASK-ECO-015", "TASK-ECO-024"]},
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-031.json"
+}

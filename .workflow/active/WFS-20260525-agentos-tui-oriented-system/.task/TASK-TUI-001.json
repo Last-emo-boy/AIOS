@@ -1,0 +1,42 @@
+{
+  "id": "TASK-TUI-001",
+  "title": "Define safe TUI command grammar",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-000"],
+  "purpose": "Define a typed TUI command grammar that routes operator intent to existing runtime APIs and rejects shell-like execution.",
+  "scope": [
+    "Define semantic command ids for intent, run, audit, support and aom operations.",
+    "Define parser output type and error model.",
+    "Reject shell fragments, pipes, redirection and unknown commands.",
+    "Map each accepted command to its owning subsystem.",
+    "Document that command parsing does not execute side effects."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-command-grammar.md",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-001.json"
+  ],
+  "acceptance_criteria": [
+    "Every TUI command has a typed owner and no raw shell execution path.",
+    "Approval commands require run id, step id and actor context.",
+    "aom commands are lifecycle projections or activation previews only.",
+    "Parser failure is explainable and fail-closed."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_command",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "Command grammar accepts shell-like syntax as executable input.",
+    "Approval mutation is possible through partial command parameters.",
+    "Unknown commands silently fall back to host shell."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-010", "TASK-TUI-030", "TASK-TUI-060"],
+    "blocked_until": ["TASK-TUI-000"]
+  }
+}

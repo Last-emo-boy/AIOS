@@ -1,0 +1,57 @@
+{
+  "task_id": "TASK-ECO-005",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:54:06+08:00",
+  "summary": "Routed ecosystem activation through SecurityExecutionEngine with semantic tool schemas, exact approval gating, EffectEnvelope preparation and rollback handle binding.",
+  "artifacts": [
+    {
+      "path": "crates/security_execution/src/lib.rs",
+      "status": "updated",
+      "sha256": "E516F4681D6BB12FE8F6DBC9F272175B71C73FD15EEE932EA9B3670DF31F147E"
+    },
+    {
+      "path": "crates/security_execution/src/tools.rs",
+      "status": "updated",
+      "sha256": "9612D359134220B1E5970991087BCB2A6D63342EDBE112AE189E1393320B9B30"
+    }
+  ],
+  "acceptance_evidence": [
+    "ToolRouter exposes ecosystem.replay.verify, ecosystem.compatibility.check and ecosystem.activate semantic tool schemas.",
+    "ecosystem.activate is classified as privileged-with-human-approval and cannot prepare without an exact approval token.",
+    "Awaiting approval activation returns no EffectEnvelope and no EffectPrepared audit event.",
+    "Approved activation binds a RollbackHandle for /var/lib/agentos/ecosystem/active-set.json before controlled effect execution.",
+    "Controlled effect execution projects the activation rollback_id from the envelope.",
+    "Activation fails closed when preserved_invariants omits no-shell, exact-approval, secret-handle, source-to-sink, audit or rollback.",
+    "Policy version in activation parameters must match the approved capability lease."
+  ],
+  "commands": [
+    {
+      "command": "cargo check -p security_execution",
+      "result": "passed",
+      "summary": "security_execution compiled after activation rollback helper was added."
+    },
+    {
+      "command": "cargo test -p security_execution ecosystem -- --nocapture",
+      "result": "passed",
+      "summary": "4 ecosystem security execution tests passed."
+    },
+    {
+      "command": "cargo test -p agentd safety:: -- --nocapture",
+      "result": "passed",
+      "summary": "19 safety tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed with 79 security_execution tests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Activation cannot bypass EffectEnvelope preparation.",
+    "Denied or awaiting-approval activation has no effect envelope.",
+    "Policy packs cannot remove core safety invariants.",
+    "Rollback metadata is required before any active artifact mutation can be represented.",
+    "Raw shell, apt or host package mutation remains outside the activation path."
+  ],
+  "promotion_impact": "Completes the security execution foundation needed for runtime-mediated artifact activation without giving aom or agentd direct mutation authority."
+}

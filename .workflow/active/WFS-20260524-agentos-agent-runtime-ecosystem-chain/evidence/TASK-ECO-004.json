@@ -1,0 +1,52 @@
+{
+  "task_id": "TASK-ECO-004",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:54:06+08:00",
+  "summary": "Implemented AgentCore ecosystem activation planning as a frozen PlanSpec and wired aom activate to return a read-only activation plan preview instead of direct activation.",
+  "artifacts": [
+    {
+      "path": "crates/agent_core/src/lib.rs",
+      "status": "updated",
+      "sha256": "12EBA0E129C4E3220019CBCE5BE7BD34E10C84D2B142B095171A156C8B2C4E0B"
+    },
+    {
+      "path": "crates/agentd/src/aom.rs",
+      "status": "updated",
+      "sha256": "54EAC61971335973129438729C4D20B5A282BFCEE10613306379B41CE6CA9A5D"
+    }
+  ],
+  "acceptance_evidence": [
+    "ActivationPlanningRequest validates staged artifact evidence, replay evidence, compatibility evidence, lock hash, registry snapshot digest, previous active set hash, policy version and rollback handle.",
+    "EcosystemActivationPlanner emits a 3-step PlanSpec: ecosystem.replay.verify, ecosystem.compatibility.check and ecosystem.activate.",
+    "ActivationPlanPreview reports approval_required=true, rollback_required=true, security_execution_required=true, planner_can_execute_directly=false and active_mutated=false.",
+    "Missing replay or compatibility evidence is rejected before PlanSpec output.",
+    "Planning does not create active artifact state.",
+    "Policy-pack activation is inferred as policy_broadening and pauses with awaiting-policy-broadening-approval.",
+    "aom activate now stages local artifacts inertly and returns plan_spec plus activation_plan_preview with active=false and activation_prepared=false."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core ecosystem::activation -- --nocapture",
+      "result": "passed",
+      "summary": "4 activation planner tests passed."
+    },
+    {
+      "command": "cargo test -p agentd aom -- --nocapture",
+      "result": "passed",
+      "summary": "2 aom tests passed, including activate PlanSpec preview output."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 58, runtime_contracts 23 and security_execution 79 tests passed, plus doc tests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "AgentCore planner cannot directly activate artifacts.",
+    "install/stage remains separate from activate.",
+    "Missing replay or compatibility evidence is a hard error.",
+    "Activation planning does not mutate active state.",
+    "Policy-broadening activation cannot bypass explicit approval."
+  ],
+  "promotion_impact": "Completes the AgentCore side of runtime-mediated ecosystem activation and gives operators a reviewable activation PlanSpec before any side effect can be prepared."
+}

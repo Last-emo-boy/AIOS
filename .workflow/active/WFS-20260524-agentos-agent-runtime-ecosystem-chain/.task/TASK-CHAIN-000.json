@@ -1,0 +1,55 @@
+{
+  "id": "TASK-CHAIN-000",
+  "title": "Freeze Agent-operated OS and ecosystem chain",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "owner": "workflow",
+  "source": "research.md; TASK.md; production ecosystem brainstorm",
+  "depends_on": [],
+  "purpose": "Freeze the unified chain that makes Agent Runtime the OS control plane and aom the safe ecosystem extension manager.",
+  "scope": [
+    "Declare that Linux is the deterministic substrate while Agent Runtime is the AgentOS control plane.",
+    "Bind ecosystem activation to AgentCore and SecurityExecutionEngine.",
+    "Prevent aom from becoming a second privileged runtime.",
+    "Record non-goals and inherited safety invariants."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/agent-operated-os-chain.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-000.json"
+  ],
+  "read_first": [
+    "research.md",
+    "TASK.md",
+    ".workflow/active/WFS-20260524-agentos-functional-iteration/evidence/FINAL-AUDIT-20260524-functional-iteration.json",
+    ".workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/context.md"
+  ],
+  "implementation_steps": [
+    "Review existing AgentCore, SecurityExecution and functional-ready constraints.",
+    "Write a chain invariant summary.",
+    "Record which runtime layer owns each responsibility.",
+    "Create evidence with accepted and rejected shortcuts."
+  ],
+  "acceptance_criteria": [
+    "The chain says Agent Runtime operates OS control loops.",
+    "agentd remains thin.",
+    "aom install/stage is separate from activation.",
+    "Normal-mode arbitrary shell remains denied."
+  ],
+  "verification": [
+    "Validate evidence JSON parses.",
+    "Confirm docs mention AgentCore, SecurityExecutionEngine, aom and install/stage != activate."
+  ],
+  "failure_modes": [
+    "The chain treats aom as traditional package manager only.",
+    "The chain permits ecosystem activation outside SecurityExecutionEngine.",
+    "The chain increases agentd ownership."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-CHAIN-001", "TASK-CHAIN-002", "TASK-CHAIN-003"],
+    "blocked_until": []
+  },
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-000.json"
+}

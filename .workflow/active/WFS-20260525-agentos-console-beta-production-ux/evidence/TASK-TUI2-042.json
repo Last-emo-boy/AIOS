@@ -1,0 +1,42 @@
+{
+  "task_id": "TASK-TUI2-042",
+  "title": "Add support bundle upload policy design",
+  "status": "completed",
+  "completed_at": "2026-05-26T07:52:10+08:00",
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/support-bundle-upload-policy.md"
+  ],
+  "verified": [
+    "Support bundle upload is explicitly marked future work and not enabled by the baseline.",
+    "Baseline support bundle behavior remains local export only with upload_enabled=false, automatic_upload=false and remote_support_authority=false.",
+    "Raw prompts, raw observations, raw secrets, private key material, tokens, passwords and unredacted audit journals remain forbidden upload surfaces.",
+    "Future upload requires destination trust, exact operator approval, redaction checks and SecurityExecutionEngine-mediated PlanRun execution.",
+    "Untrusted, stale, missing or revoked destinations fail closed and do not mutate local runtime state.",
+    "TUI remains a projection surface for upload readiness and may not upload directly or bypass redaction, approval or local audit authority."
+  ],
+  "commands": [
+    "rg -n \"future work|upload_enabled=false|Raw|Operator|trusted|fail-closed|SecurityExecutionEngine|No automatic upload|redaction=secret-values-redacted|remote_support_authority=false\" .workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/support-bundle-upload-policy.md",
+    "cargo test -p agentd support_bundle"
+  ],
+  "test_result": {
+    "manual_review": {
+      "result": "passed",
+      "document": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/support-bundle-upload-policy.md"
+    },
+    "support_bundle_tests": {
+      "command": "cargo test -p agentd support_bundle",
+      "passed": 2,
+      "failed": 0
+    }
+  },
+  "risk_notes": [
+    "Upload execution remains unimplemented and intentionally unavailable in Console Beta.",
+    "Future upload must be mediated by AgentCore and SecurityExecutionEngine, not by TUI direct network code.",
+    "Local-only support bundle export remains the production baseline until RC0 supplies destination trust and upload failure evidence."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-043",
+    "TASK-TUI2-044",
+    "TASK-TUI2-050"
+  ]
+}

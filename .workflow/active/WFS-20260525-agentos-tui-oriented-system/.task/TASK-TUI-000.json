@@ -1,0 +1,42 @@
+{
+  "id": "TASK-TUI-000",
+  "title": "Freeze TUI-oriented AgentOS contract",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "owner": "workflow",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": [],
+  "purpose": "Freeze the role of TUI as the primary AgentOS operator surface without making it a second runtime or side-effect authority.",
+  "scope": [
+    "Define TUI ownership and non-ownership.",
+    "Define required operator workflows.",
+    "Define source-of-truth rules for RunStore, AuditJournal and active artifact state.",
+    "Define local-only baseline expectations.",
+    "Define forbidden shortcuts."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-oriented-architecture.md",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-000.json"
+  ],
+  "acceptance_criteria": [
+    "TUI is documented as projection/controller only.",
+    "AgentCore remains owner of PlanRun lifecycle.",
+    "SecurityExecutionEngine remains owner of side effects.",
+    "aom resolver and activation planning remain outside TUI.",
+    "Baseline TUI requires no network, external LLM, Firecracker or host package manager."
+  ],
+  "verification": [
+    "Select-String -Path .workflow\\active\\WFS-20260525-agentos-tui-oriented-system\\docs\\tui-oriented-architecture.md -Pattern 'not TUI-owned|RunStore|AuditJournal|SecurityExecution|no external LLM|required'"
+  ],
+  "failure_modes": [
+    "TUI becomes source of truth for run state.",
+    "TUI owns planner, resolver, policy or execution logic.",
+    "TUI baseline requires external dependencies."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-001", "TASK-TUI-002", "TASK-TUI-003"],
+    "blocked_until": []
+  }
+}

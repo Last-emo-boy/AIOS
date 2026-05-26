@@ -1,0 +1,77 @@
+{
+  "task_id": "TASK-ECO-062",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "summary": "Added adapter and image adversarial fixtures proving missing dependencies and host fallback attempts fail closed before EffectPrepared.",
+  "artifacts": [
+    {
+      "path": "scripts/ecosystem-replay.ps1",
+      "status": "updated",
+      "sha256": "2bef365c48f731244fb2e3c39e1f2ae9d53a1232f8d1df6fbaf58af0e67d538f"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/adapter-image/adapter-missing-host-dependency.json",
+      "status": "added",
+      "sha256": "44e82e9acd0a83e3beddd51467b8ed182189047e35e29db809b17c0a6d4817e4"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/adapter-image/image-missing-firecracker.json",
+      "status": "added",
+      "sha256": "8ad6d5efea1ebb81b146473f907ab048e77b02ceb4b78dbf6f28a00689f1f91f"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/adapter-image/adapter-direct-host-mutation-v2.json",
+      "status": "added",
+      "sha256": "371a339c83b5a2a9ebdd5ed8c0667c29d0f092fff4daf7f8c15480798f75cc28"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/adapter-image/image-host-fallback.json",
+      "status": "added",
+      "sha256": "ddab2d728424b44be52b08928be0d3263e3036ff48c4c5c924fe69f63986b83b"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "d67268a02530fe4af175262640e9465bf38329d87158421e5d83e52e56205d80"
+    }
+  ],
+  "acceptance_evidence": [
+    "Replay recursively scans adapter-image fixtures.",
+    "Replay requires at least four adapter-image fixtures.",
+    "Replay result records adapter_image_fixture_count=4 and denied_count=14.",
+    "Missing host dependency and direct host mutation adapter fixtures are denied before EffectPrepared.",
+    "Missing Firecracker and image host fallback fixtures are denied before EffectPrepared."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed with fixture_count=14, adapter_image_fixture_count=4, denied_count=14."
+    },
+    {
+      "command": "cargo test -p security_execution firecracker",
+      "result": "passed",
+      "summary": "5 Firecracker fail-closed tests passed."
+    },
+    {
+      "command": "cargo test -p security_execution",
+      "result": "passed",
+      "summary": "79 SecurityExecution tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gate consumed ecosystem replay and QEMU runtime smoke."
+    }
+  ],
+  "hashes": {
+    "ecosystem_replay_result": "d67268a02530fe4af175262640e9465bf38329d87158421e5d83e52e56205d80",
+    "adversarial_evidence_hash": "061275fe3673bc04e0bbb9d075fa2ea09ae4def7d530b86d002a0b90779ea54f"
+  },
+  "blocked_shortcuts": [
+    "Adapter missing dependency cannot execute host fallback.",
+    "Image missing Firecracker/KVM cannot reach EffectPrepared.",
+    "Replay remains local-only and does not require real Firecracker."
+  ],
+  "promotion_impact": "Adapter and image ecosystem expansion now has fail-closed replay evidence for production promotion."
+}

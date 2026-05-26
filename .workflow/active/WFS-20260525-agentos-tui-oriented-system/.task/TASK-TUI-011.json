@@ -1,0 +1,45 @@
+{
+  "id": "TASK-TUI-011",
+  "title": "Add durable TUI runtime path configuration",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-010"],
+  "purpose": "Ensure TUI operations use explicit durable RunStore, AuditJournal and runtime state paths instead of transient demo state.",
+  "scope": [
+    "Define CLI/config inputs for TUI run store and audit journal paths.",
+    "Default packaged paths to AgentOS runtime directories.",
+    "Reject unsafe or missing runtime paths with clear errors.",
+    "Project degraded path state in the TUI dashboard.",
+    "Preserve noninteractive and CI-friendly defaults."
+  ],
+  "deliverables": [
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-011.json"
+  ],
+  "acceptance_criteria": [
+    "TUI durable mode uses FileRunStore and AuditJournal paths from config or safe defaults.",
+    "Missing or unwritable runtime directories fail closed before any action is accepted.",
+    "Path configuration is visible in operator projection without exposing secrets.",
+    "Headless existing commands continue to work."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_runtime_paths",
+    "cargo test -p agentd operator_projection",
+    "powershell -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "TUI silently falls back to in-memory state.",
+    "TUI writes durable state outside AgentOS runtime directories without explanation.",
+    "Path errors are hidden from operator projection."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-020", "TASK-TUI-030", "TASK-TUI-050"],
+    "blocked_until": ["TASK-TUI-010"]
+  }
+}

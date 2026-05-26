@@ -1,0 +1,31 @@
+{
+  "task_id": "TASK-CHAIN-001",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "summary": "Defined the AgentOS lifecycle control map across boot, steady-state, degraded, recovery and update modes.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/agent-operated-os-chain.md",
+      "sha256": "108a7ce07c456f089c933f866341c9505c4b3e57b46be533e1d62ba9fdaf5780"
+    }
+  ],
+  "acceptance_evidence": [
+    "Boot Mode section defines kernel handoff through agentd lifecycle, runtime artifact validation, config load, recovery scan and operator projection.",
+    "Steady-State Mode section defines observation, planning, scheduling, execution and projection loops.",
+    "Degraded Mode section defines local/stub ModelBroker, read-only diagnostics, paused/denied high-risk effects and explainable projection.",
+    "Recovery Mode section defines RunStore, AuditJournal, rollback store and ecosystem active/staged state as recovery truth.",
+    "Update Mode section includes inactive slot staging, runtime compatibility and active artifact compatibility checks."
+  ],
+  "blocked_shortcuts": [
+    "No lifecycle mode relies on model replay as recovery authority.",
+    "No degraded mode broadens side-effect authority.",
+    "No update mode may ignore active artifact compatibility."
+  ],
+  "verification": [
+    {
+      "command": "Read agent-operated-os-chain.md lifecycle sections",
+      "result": "passed"
+    }
+  ],
+  "promotion_impact": "Creates the ordered lifecycle map for subsequent Agent Runtime control-loop tasks."
+}

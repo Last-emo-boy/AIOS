@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-ECO-050",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "summary": "Defined model-profile-pack contract with stub/local baseline, remote-optional policy gating, secret-handle-only credentials and mandatory ModelBroker routing.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7243c66e3350e40c87022c831135482e7c3984463ab3edbacb5f2b499db10e25"
+    },
+    {
+      "path": "crates/runtime_contracts/src/lib.rs",
+      "status": "updated",
+      "sha256": "7dd7fca8a11fdf5c0ab5c5190bdcda5302c4d50236aef331b95f8831affd024e"
+    },
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/model-profile-pack.md",
+      "status": "added",
+      "sha256": "8bcd3fe54f871fd862e3fe9ec8ea41f6139e239ab2e67c352bad133ab96fb071"
+    }
+  ],
+  "acceptance_evidence": [
+    "ModelProfilePackV1 requires model-profile-pack coordinates and at least one profile.",
+    "Baseline provider modes must include stub or local; remote providers are optional only.",
+    "RemoteOptional profiles require a policy gate.",
+    "Credential references must be single-token secret:// handles; raw token/password-like values are rejected.",
+    "direct_provider_execution_allowed=false and broker_required=true preserve ModelBroker authority."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem",
+      "result": "passed",
+      "summary": "18 ecosystem-filtered runtime contract tests passed, including model profile pack fail-closed coverage."
+    },
+    {
+      "command": "cargo test -p agent_core model_broker",
+      "result": "passed",
+      "summary": "8 ModelBroker tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gate passed with ecosystem replay and QEMU runtime smoke included."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Remote model is not required for boot, replay or release gates.",
+    "Model profile pack cannot embed raw credentials.",
+    "Model profile pack cannot route workflow execution around ModelBroker."
+  ],
+  "promotion_impact": "AgentOS can now manage model routing as ecosystem metadata while preserving local-first baseline runtime behavior."
+}

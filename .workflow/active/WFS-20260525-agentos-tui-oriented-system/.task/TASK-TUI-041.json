@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-041",
+  "title": "Add activation preview view without stage activation",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-012", "TASK-TUI-040"],
+  "purpose": "Expose ecosystem activation planning through TUI as a previewable AgentCore PlanSpec flow, never as direct install or stage activation.",
+  "scope": [
+    "Render activation preview produced by runtime ecosystem planning.",
+    "Show affected artifacts, compatibility, policy, rollback and audit expectations.",
+    "Require explicit AgentCore run and exact approval for activation side effects.",
+    "Show activation blockers from trust, revocation, compatibility or policy.",
+    "Prevent stage/install commands from mutating active artifact state."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/operator_projection.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-041.json"
+  ],
+  "acceptance_criteria": [
+    "Activation preview is backed by AgentCore PlanSpec, not TUI-authored side effects.",
+    "Stage/install cannot change active artifact set.",
+    "Activation blockers are visible before approval.",
+    "Rollback handle and audit range expectations are displayed when available."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_activation_preview",
+    "cargo test -p agentd ecosystem_activation",
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1"
+  ],
+  "failure_modes": [
+    "TUI activates artifacts by stage or install.",
+    "Activation preview omits rollback or audit requirements.",
+    "TUI constructs activation effects directly."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-043", "TASK-TUI-061", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-040", "TASK-TUI-012"]
+  }
+}

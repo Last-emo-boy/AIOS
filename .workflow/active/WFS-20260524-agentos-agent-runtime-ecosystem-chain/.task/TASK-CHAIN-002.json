@@ -1,0 +1,54 @@
+{
+  "id": "TASK-CHAIN-002",
+  "title": "Define aom install/stage/activate invariant",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "owner": "runtime_contracts",
+  "source": "production ecosystem brainstorm",
+  "depends_on": ["TASK-CHAIN-000"],
+  "purpose": "Freeze the ecosystem invariant that install and stage are inert, while activation is a controlled runtime side effect.",
+  "scope": [
+    "Define search, fetch, verify, stage, diff, activate, deactivate and rollback lifecycle.",
+    "State that staged artifacts cannot change runtime behavior.",
+    "Require activation to produce AgentCore PlanSpec.",
+    "Require activation side effects to go through SecurityExecutionEngine."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-002.json"
+  ],
+  "read_first": [
+    ".workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/guidance-specification.md",
+    ".workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/production-ecosystem-task-roadmap.md",
+    "crates/runtime_contracts/src/capability.rs"
+  ],
+  "implementation_steps": [
+    "Document artifact lifecycle states.",
+    "Document activation authority path.",
+    "Document blocked shortcuts.",
+    "Create evidence with invariant hash."
+  ],
+  "acceptance_criteria": [
+    "`install/stage != activate` is explicit.",
+    "Activation path includes AgentCore and SecurityExecutionEngine.",
+    "Traditional package manager mutation is treated as an adapter workflow, not aom baseline.",
+    "Community/local-dev artifacts are not production-promotable by default."
+  ],
+  "verification": [
+    "Evidence JSON parses.",
+    "Docs mention install/stage != activate and AgentCore PlanSpec."
+  ],
+  "failure_modes": [
+    "Install triggers runtime behavior.",
+    "Activation bypasses approval or audit.",
+    "aom owns host package mutation directly."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-000", "TASK-ECO-020", "TASK-ECO-004"],
+    "blocked_until": ["TASK-CHAIN-000"]
+  },
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-CHAIN-002.json"
+}

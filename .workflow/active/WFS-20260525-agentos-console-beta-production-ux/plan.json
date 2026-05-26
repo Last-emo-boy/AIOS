@@ -1,0 +1,113 @@
+{
+  "plan_id": "PLAN-AIOS-CONSOLE-BETA-PRODUCTION-UX-20260525",
+  "workflow_id": "WFS-20260525-agentos-console-beta-production-ux",
+  "title": "AgentOS Console Beta And Production UX",
+  "status": "completed",
+  "source": "post TUI-oriented Alpha brainstorm",
+  "created_at": "2026-05-25T21:15:00+08:00",
+  "updated_at": "2026-05-26T08:20:11+08:00",
+  "objective": "Build the next AgentOS UX and operations layer: full-screen TUI shell, deterministic projections, operator workbenches, capability catalog, production evidence center, and local-first fleet/governance previews.",
+  "entry_criteria": [
+    "TUI-oriented Alpha final audit is completed.",
+    "TUI remains projection-controller only.",
+    "AgentCore remains the PlanRun lifecycle authority.",
+    "SecurityExecutionEngine remains the only side-effect authority.",
+    "AOM install/stage remains inert and activation remains runtime-mediated.",
+    "Baseline remains local-only and deterministic."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "Console Beta Contract And Refactor Spine",
+      "purpose": "Freeze Console Beta ownership and split TUI internals without behavior changes.",
+      "tasks": ["TASK-TUI2-000", "TASK-TUI2-001", "TASK-TUI2-002"],
+      "exit_criteria": [
+        "TUI module ownership and shell boundaries are documented.",
+        "Existing scripted and interactive commands still work.",
+        "ProjectionSnapshot is defined as render input, not authority."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Full-Screen Operator Shell",
+      "purpose": "Add full-screen pane layout, command palette and deterministic layout tests.",
+      "tasks": ["TASK-TUI2-003", "TASK-TUI2-004", "TASK-TUI2-005", "TASK-TUI2-006"],
+      "exit_criteria": [
+        "Wide and narrow terminal layouts are stable.",
+        "Command palette previews actions before dispatch.",
+        "Event feed derives from durable projections.",
+        "Scripted parity gate still passes."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Operations Workbench",
+      "purpose": "Make approval, recovery and support workflows first-class.",
+      "tasks": ["TASK-TUI2-010", "TASK-TUI2-011", "TASK-TUI2-012", "TASK-TUI2-013", "TASK-TUI2-014", "TASK-TUI2-015"],
+      "exit_criteria": [
+        "Approval Center shows exact binding diff, expiry and denial path.",
+        "Recovery Workbench shows recovery source, rollback needs and safe next action.",
+        "Support Console exports redacted evidence and explains degraded state."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Capability Catalog",
+      "purpose": "Expose AgentOS operational capabilities and AOM artifacts safely.",
+      "tasks": ["TASK-TUI2-020", "TASK-TUI2-021", "TASK-TUI2-022", "TASK-TUI2-023", "TASK-TUI2-024"],
+      "exit_criteria": [
+        "Operational workflows are discoverable.",
+        "Launching a capability creates an intent or preview only.",
+        "Catalog and AOM views cannot directly execute or activate."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Production Evidence Center",
+      "purpose": "Make release, update, rollback and promotion evidence operator-facing.",
+      "tasks": ["TASK-TUI2-030", "TASK-TUI2-031", "TASK-TUI2-032", "TASK-TUI2-033", "TASK-TUI2-034"],
+      "exit_criteria": [
+        "Release provenance, blockers and signing status are visible.",
+        "QEMU/rootfs/replay gate status is projectable.",
+        "Local update and rollback drill evidence is explainable."
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Fleet And Governance Preview",
+      "purpose": "Prepare local-first fleet, registry and governance UX without GA claims.",
+      "tasks": ["TASK-TUI2-040", "TASK-TUI2-041", "TASK-TUI2-042", "TASK-TUI2-043", "TASK-TUI2-044", "TASK-TUI2-050"],
+      "exit_criteria": [
+        "Fleet and governance previews are explicit non-GA previews.",
+        "Remote features are optional and fail closed.",
+        "Final audit decides Console Beta promotion."
+      ]
+    }
+  ],
+  "risk_policy": {
+    "tui_runtime_authority": "projection-controller only",
+    "operator_session_authority": "ui-state-only",
+    "render_cache_authority": "none",
+    "command_palette_high_risk_actions": "preview-before-dispatch",
+    "normal_shell": "deny",
+    "side_effect_authority": "SecurityExecutionEngine only",
+    "ecosystem_activation_authority": "AgentCore PlanSpec + SecurityExecutionEngine only",
+    "baseline_external_dependency": "forbidden"
+  },
+  "final_decision": {
+    "status": "completed",
+    "decision": "console-beta",
+    "production_ready_claim": false,
+    "completed_at": "2026-05-26T08:20:11+08:00",
+    "final_audit": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json",
+    "summary": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/final-console-beta-audit-summary.md"
+  },
+  "recommended_first_execution_slice": [
+    "TASK-TUI2-000",
+    "TASK-TUI2-001",
+    "TASK-TUI2-002",
+    "TASK-TUI2-003",
+    "TASK-TUI2-004",
+    "TASK-TUI2-005"
+  ]
+}

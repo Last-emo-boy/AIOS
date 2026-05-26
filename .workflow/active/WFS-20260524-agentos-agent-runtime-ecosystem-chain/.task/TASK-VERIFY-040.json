@@ -1,0 +1,20 @@
+{
+  "id": "TASK-VERIFY-040",
+  "title": "Add ecosystem schema and resolver tests",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "runtime_contracts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-ECO-020", "TASK-ECO-021", "TASK-ECO-022", "TASK-ECO-002"],
+  "purpose": "Prove ecosystem schemas and resolver behavior before activation work can be promoted.",
+  "scope": ["Test coordinate parsing.", "Test manifest validation.", "Test registry snapshot and lockfile hashes.", "Test resolver failure cases."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", "crates/agent_core/src/lib.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-040.json"],
+  "acceptance_criteria": ["Invalid manifest fails closed.", "Lockfile hash is stable.", "Resolver rejects revoked and digest-mismatched artifacts.", "Tests do not require network."],
+  "verification": ["cargo test -p runtime_contracts ecosystem", "cargo test -p agent_core ecosystem::resolver", "cargo test --workspace"],
+  "failure_modes": ["Schema accepts unknown required fields.", "Resolver ordering is nondeterministic.", "Tests rely on live registry."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-041"], "blocked_until": ["TASK-ECO-002"]},
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-040.json"
+}

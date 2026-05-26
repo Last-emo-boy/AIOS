@@ -1,0 +1,45 @@
+{
+  "id": "TASK-TUI2-002",
+  "title": "Add ProjectionSnapshot contract with source hashes",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-000"],
+  "purpose": "Create a deterministic render input for the full-screen console while preventing render cache from becoming authority.",
+  "scope": [
+    "Define ProjectionSnapshot fields for runs, audit, approvals, recovery, support, ecosystem and release evidence.",
+    "Attach source hashes or freshness markers for each projection source.",
+    "Represent degraded, missing or stale sources explicitly.",
+    "Ensure ProjectionSnapshot is immutable render input.",
+    "Add tests proving refresh rebuilds from durable sources."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui projection snapshot module",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-002.json"
+  ],
+  "acceptance_criteria": [
+    "ProjectionSnapshot is not used as durable source of truth.",
+    "Source hashes are deterministic for unchanged inputs.",
+    "Missing or degraded sources are visible to the operator.",
+    "Refresh cannot mask approval, recovery or rollback state."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_projection",
+    "cargo test -p agentd tui_refresh",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Render cache becomes authoritative state.",
+    "Source hash changes nondeterministically.",
+    "Degraded source is hidden by dashboard health."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-003", "TASK-TUI2-006"],
+    "blocked_until": ["TASK-TUI2-000"]
+  },
+  "completed_at": "2026-05-26T00:04:58+08:00",
+  "evidence": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-002.json"
+}

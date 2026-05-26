@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-022",
+  "title": "Build approval queue and blocked action view",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-012"],
+  "purpose": "Make pending human decisions visible and exact enough for safe operator approval or denial.",
+  "scope": [
+    "Render pending approval queue from durable run and audit state.",
+    "Show actor, tool, resource, parameter hash, policy version and expiry.",
+    "Show why each action is blocked, paused or denied.",
+    "Render safe approve and deny command hints using typed grammar.",
+    "Mark expired or stale approvals as not actionable."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/operator_projection.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-022.json"
+  ],
+  "acceptance_criteria": [
+    "Approval queue cannot be rendered without exact token binding context.",
+    "Expired approvals are rejected and displayed as expired.",
+    "Deny path is as visible and easy as approve path.",
+    "Blocked action explanations do not include raw secrets."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_approval_queue",
+    "cargo test -p agentd tui_approval",
+    "cargo test -p agentd safety::approval"
+  ],
+  "failure_modes": [
+    "Approval queue encourages broad approval.",
+    "Expired approval remains actionable.",
+    "Blocked action view hides policy reason."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-024", "TASK-TUI-031", "TASK-TUI-061"],
+    "blocked_until": ["TASK-TUI-012"]
+  }
+}

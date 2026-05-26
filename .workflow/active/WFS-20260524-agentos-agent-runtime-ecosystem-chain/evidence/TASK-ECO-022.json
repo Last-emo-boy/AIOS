@@ -1,0 +1,40 @@
+{
+  "task_id": "TASK-ECO-022",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "summary": "Defined staging, activation, active artifact set, deactivation and rollback report contracts that separate inert staging from active runtime behavior.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7DFF92B146194EF0EA423AB1579FAFDDBB2E6220286103858E3FBA421D3F31A4"
+    }
+  ],
+  "acceptance_evidence": [
+    "ArtifactStagingReportV1 requires inert=true and activation_prepared=false.",
+    "ActivationReportV1 binds activated artifacts to AgentCore plan id, SecurityExecution run id, audit range, approval id, approval token hash, policy version, rollback handle and active set hashes.",
+    "ActiveArtifactSetV1 can reconstruct active artifact state with coordinate, manifest digest, activation report id, rollback handle and policy version.",
+    "Unsupported artifact kinds cannot activate in the alpha activation contract."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem::activation",
+      "result": "passed",
+      "summary": "3 activation tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace test suite passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Staged state cannot prepare activation side effects.",
+    "Activation reports cannot omit audit range, policy version or rollback handle.",
+    "Active and staged state are represented by separate contracts."
+  ],
+  "optional_dependencies": [
+    "No external service is required to reconstruct active artifact state."
+  ],
+  "promotion_impact": "Provides the durable active-state contract needed before aom activation can be mediated by Agent Runtime."
+}

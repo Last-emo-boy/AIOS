@@ -1,0 +1,83 @@
+{
+  "task_id": "TASK-TUI2-033",
+  "title": "Add QEMU rootfs replay gate status panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T06:05:13+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/gate_status_panel.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "scripts/tui-replay.ps1",
+    "scripts/production-runbook-smoke.ps1",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json",
+    ".workflow/artifacts/alpha-rootfs-validation/result.json",
+    ".workflow/artifacts/boot/boot-smoke-result.json"
+  ],
+  "verified": [
+    "gate.status.show renders TUI Gate Status as a read-only projection over QEMU, rootfs and replay gate artifacts.",
+    "The panel projects AGENTOS_TUI_CONSOLE_READY, observed runtime markers, QEMU path, log path and runtime manifest marker from boot smoke evidence.",
+    "Rootfs runtime manifest status shows recorded sha256, runtime manifest sha256, runtime artifact counts and hash_tied_to_release_provenance=true when release provenance binds the hash.",
+    "Missing gate artifacts render status=missing, missing_gate_artifact=true and gate_blocker entries; missing evidence cannot be treated as pass.",
+    "TUI exposes qemu_execution_in_tui=false, rootfs_validation_in_tui=false, replay_execution_in_tui=false and artifact_generation_in_tui=false.",
+    "tui-replay and production-runbook-smoke include gate.status.show and assert the gate status panel remains read-only.",
+    "QEMU boot smoke observed AGENTOS_TUI_CONSOLE_READY with E:\\qemu\\qemu-system-x86_64.exe."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_gate_status --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120"
+  ],
+  "test_result": {
+    "focused_tests": {
+      "command": "cargo test -p agentd tui_gate_status --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json",
+      "check": "gate-status-rendered"
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json",
+      "assertion": "gate_status_projected"
+    },
+    "rootfs_validation": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/alpha-rootfs-validation/result.json"
+    },
+    "qemu_boot_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/boot/boot-smoke-result.json",
+      "observed_markers": [
+        "AGENTD_HANDOFF_OK",
+        "AGENTOS_RUNTIME_ARTIFACTS_OK",
+        "AGENTOS_TUI_CONSOLE_READY",
+        "AGENTOS_RUNTIME_MANIFEST_SHA256=d4db864636a8d415f876e3750502d40aef1bf7ef06d478b9f42c995d3b7287f9"
+      ]
+    }
+  },
+  "risk_notes": [
+    "Gate status panel reads local artifacts only and never executes QEMU, rootfs validation or replay scripts.",
+    "Gate execution remains in scripts and CI paths.",
+    "TUI remains projection-controller only; AgentCore and SecurityExecutionEngine authority boundaries are unchanged."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-034",
+    "TASK-TUI2-050"
+  ]
+}

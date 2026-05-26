@@ -1,0 +1,54 @@
+{
+  "id": "TASK-ARUN-023",
+  "title": "Define runtime recovery drills for PID 1 operation",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "agentd",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-ARUN-020", "TASK-ARUN-021"],
+  "purpose": "Define recovery drills that prove AgentOS can continue operating when PID 1 runtime components restart or recover unfinished work.",
+  "scope": [
+    "Define simulated crash/restart scenarios.",
+    "Define recovery expectations for read-only, write-with-diff, approval-pending and activation-pending runs.",
+    "Define support bundle evidence.",
+    "Define QEMU and local-only variants."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-recovery-drills.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-023.json"
+  ],
+  "read_first": [
+    "scripts/boot-smoke-test.ps1",
+    "crates/agentd/src/support_bundle.rs",
+    "crates/agentd/src/operator_projection.rs"
+  ],
+  "implementation_steps": [
+    "List drill scenarios and expected projections.",
+    "Define local-only fixture evidence.",
+    "Define QEMU smoke extension points.",
+    "Record evidence with recovery status taxonomy."
+  ],
+  "acceptance_criteria": [
+    "Recovery drills cover pending approval and rollback states.",
+    "Support bundle can show recovery state without secrets.",
+    "QEMU smoke path is documented.",
+    "No drill depends on external LLM."
+  ],
+  "verification": [
+    "cargo test --workspace",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "PID 1 restart loses run state.",
+    "Support bundle omits recovery classification.",
+    "Drill requires network or remote model."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-PROD-050", "TASK-PROD-053"],
+    "blocked_until": ["TASK-ARUN-020", "TASK-ARUN-021"]
+  },
+  "completed_at": "2026-05-25T00:43:34+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-023.json"
+}

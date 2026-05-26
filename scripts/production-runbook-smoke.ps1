@@ -163,6 +163,126 @@ $cases += New-Case `
         operator_projection_tui = $operatorProjectionTuiPath
     }
 
+$tuiScriptPath = Join-Path $ArtifactDir "tui-scripted-runbook.tui"
+$tuiRunStore = Join-Path $ArtifactDir "tui-runs"
+$tuiAuditJournal = Join-Path $ArtifactDir "tui-audit.jsonl"
+$tuiSupportBundle = Join-Path $ArtifactDir "tui-support-bundle.json"
+$tuiOutputPath = Join-Path $ArtifactDir "tui-scripted-output.txt"
+$tuiCommands = @(
+    "dashboard.show",
+    "intent.submit recover nginx service",
+    "run.advance latest",
+    "run.advance latest",
+    "run.advance latest",
+    "run.advance latest",
+    "run.advance latest",
+    "approvals.show latest",
+    "recovery.show latest",
+    "support.bundle export",
+    "aom.search",
+    "aom.activate.preview agentos:workflow-pack/agentos/service-recovery@1.0.0",
+    "release.provenance.show",
+    "promotion.blockers.show",
+    "update.rollback.show",
+    "gate.status.show",
+    "signing.status.show",
+    "rollout.rings.show",
+    "dashboard.show | sh"
+)
+Remove-Item -LiteralPath $tuiRunStore -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -LiteralPath $tuiAuditJournal, $tuiSupportBundle, $tuiOutputPath, $tuiScriptPath -Force -ErrorAction SilentlyContinue
+$tuiCommands -join "`n" | Set-Content -LiteralPath $tuiScriptPath -Encoding UTF8
+$tuiScriptedCommand = Invoke-LoggedCommand `
+    -Name "tui-scripted-runbook" `
+    -Command @("cargo", "run", "-q", "-p", "agentd", "--", "--tui-scripted", $tuiScriptPath, "--run-store", $tuiRunStore, "--audit-journal", $tuiAuditJournal, "--support-bundle", $tuiSupportBundle) `
+    -StdoutPath $tuiOutputPath `
+    -StderrPath (Join-Path $ArtifactDir "tui-scripted.stderr.txt")
+$commands += $tuiScriptedCommand
+$tuiText = Get-Content -LiteralPath $tuiOutputPath -Raw
+Assert-True ($tuiText -match "TUI Dashboard") "Scripted TUI runbook must render dashboard."
+Assert-True ($tuiText -match "mode=durable projection_controller=true") "Scripted TUI must run durable projection-controller mode."
+Assert-True ($tuiText -match "TUI Approvals") "Scripted TUI runbook must render approval queue."
+Assert-True ($tuiText -match "exact_binding_required=true") "TUI approval queue must require exact binding."
+Assert-True ($tuiText -match "policy_version=policy-v1") "TUI approval queue must show policy version."
+Assert-True ($tuiText -match "TUI Recovery") "Scripted TUI runbook must render recovery view."
+Assert-True ($tuiText -match "source=run-store\+audit-journal") "TUI recovery view must state durable source-of-truth."
+Assert-True ($tuiText -match "no-model-replay=true") "TUI recovery view must deny model replay authority."
+Assert-True ($tuiText -match "TUI Support Bundle") "Scripted TUI runbook must render support bundle."
+Assert-True ((Test-Path -LiteralPath $tuiSupportBundle -PathType Leaf)) "Scripted TUI runbook must export support bundle."
+Assert-True ($tuiText -match "TUI Ecosystem") "Scripted TUI runbook must render ecosystem projection."
+Assert-True ($tuiText -match "activation_plan_preview") "Scripted TUI runbook must render activation preview."
+Assert-True ($tuiText -match '"activation_prepared":false') "Activation preview must not prepare activation."
+Assert-True ($tuiText -match '"security_execution_required":true') "Activation preview must require SecurityExecutionEngine."
+Assert-True ($tuiText -match "TUI Release Provenance") "Scripted TUI runbook must render release provenance panel."
+Assert-True ($tuiText -match "release_provenance_panel") "Release provenance panel schema line must be visible."
+Assert-True ($tuiText -match "direct_sign=false") "TUI must not claim signing authority."
+Assert-True ($tuiText -match "direct_promote=false") "TUI must not claim promotion authority."
+Assert-True ($tuiText -match "TUI Promotion Blockers") "Scripted TUI runbook must render promotion blocker panel."
+Assert-True ($tuiText -match "promotion_blocker_panel") "Promotion blocker panel schema line must be visible."
+Assert-True ($tuiText -match "clear_blocker_allowed=false") "TUI must not claim blocker clearing authority."
+Assert-True ($tuiText -match "blocker_override_allowed=false") "TUI must not claim blocker override authority."
+Assert-True ($tuiText -match "TUI Update Rollback") "Scripted TUI runbook must render update rollback panel."
+Assert-True ($tuiText -match "update_rollback_panel") "Update rollback panel schema line must be visible."
+Assert-True ($tuiText -match "direct_update=false") "TUI must not claim update authority."
+Assert-True ($tuiText -match "direct_rollback=false") "TUI must not claim rollback authority."
+Assert-True ($tuiText -match "host_mutation_in_tui=false") "TUI update rollback panel must not mutate host state."
+Assert-True ($tuiText -match "TUI Gate Status") "Scripted TUI runbook must render gate status panel."
+Assert-True ($tuiText -match "gate_status_panel") "Gate status panel schema line must be visible."
+Assert-True ($tuiText -match "AGENTOS_TUI_CONSOLE_READY") "Gate status panel must project the TUI console boot marker."
+Assert-True ($tuiText -match "qemu_execution_in_tui=false") "TUI gate status panel must not execute QEMU."
+Assert-True ($tuiText -match "rootfs_validation_in_tui=false") "TUI gate status panel must not execute rootfs validation."
+Assert-True ($tuiText -match "replay_execution_in_tui=false") "TUI gate status panel must not execute replay scripts."
+Assert-True ($tuiText -match "TUI Signing Status") "Scripted TUI runbook must render signing status panel."
+Assert-True ($tuiText -match "signing_status_panel") "Signing status panel schema line must be visible."
+Assert-True ($tuiText -match "scope=candidate-only") "Signing status panel must label detached signatures as candidate-only."
+Assert-True ($tuiText -match "candidate_is_production_signature=false") "Candidate signatures must not be accepted as production signatures."
+Assert-True ($tuiText -match "production_ready_claim=false") "TUI signing status must not claim Production ready."
+Assert-True ($tuiText -match "production_signing_authority=false") "TUI signing status panel must not claim production signing authority."
+Assert-True ($tuiText -match "TUI Rollout Rings") "Scripted TUI runbook must render rollout rings panel."
+Assert-True ($tuiText -match "rollout_ring_panel") "Rollout rings panel schema line must be visible."
+Assert-True ($tuiText -match "preview_only=true") "Rollout rings panel must remain preview-only."
+Assert-True ($tuiText -match "remote_rollout_authority=false") "TUI rollout rings panel must not claim remote rollout authority."
+Assert-True ($tuiText -match "direct_rollout=false") "TUI rollout rings panel must not expose direct rollout execution."
+Assert-True ($tuiText -match "remote_command_dispatch=false") "TUI rollout rings panel must not dispatch remote commands."
+Assert-True ($tuiText -match "TUI Error`nkind=parse") "Scripted TUI runbook must show unsafe command parse error."
+Assert-True (-not ($tuiText -match "password=")) "Scripted TUI output must not leak password-like values."
+
+$cases += New-Case `
+    -Name "tui-scripted-operator-runbook" `
+    -Status "passed" `
+    -Summary "runbook proves durable TUI dashboard, approvals, recovery, support, ecosystem preview and fail-closed parser" `
+    -Commands @($tuiScriptedCommand) `
+    -Assertions @{
+        durable_projection_controller = $true
+        approvals_exact_binding = $true
+        recovery_source = "run-store+audit-journal"
+        activation_prepared = $false
+        security_execution_required = $true
+        release_provenance_projected = $true
+        promotion_blockers_projected = $true
+        update_rollback_projected = $true
+        gate_status_projected = $true
+        signing_status_projected = $true
+        rollout_rings_projected = $true
+        tui_signing_authority = $false
+        tui_production_signing_authority = $false
+        tui_promotion_authority = $false
+        tui_update_authority = $false
+        tui_rollback_authority = $false
+        tui_remote_rollout_authority = $false
+        tui_gate_execution_authority = $false
+        tui_blocker_clear_authority = $false
+        unsafe_command_rejected = $true
+        support_bundle_exported = $true
+    } `
+    -Artifacts @{
+        script = $tuiScriptPath
+        output = $tuiOutputPath
+        run_store = $tuiRunStore
+        audit_journal = $tuiAuditJournal
+        support_bundle = $tuiSupportBundle
+    }
+
 $remoteAuditDir = Join-Path $ArtifactDir "remote-audit-fail-closed"
 Remove-Item -LiteralPath $remoteAuditDir -Recurse -Force -ErrorAction SilentlyContinue
 $remoteAuditCommand = Invoke-LoggedCommand `

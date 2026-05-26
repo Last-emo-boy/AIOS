@@ -1,0 +1,51 @@
+{
+  "task_id": "TASK-TUI2-002",
+  "status": "completed",
+  "completed_at": "2026-05-26T00:04:58+08:00",
+  "evidence_type": "tui-projection-snapshot-contract",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/snapshot.rs"
+  ],
+  "verified": [
+    "ProjectionSnapshot is immutable render input and explicitly marks source_of_truth=false.",
+    "Snapshot sources cover runs, audit, approvals, recovery, support, ecosystem and release evidence.",
+    "Each source has deterministic source_hash plus status, freshness, authority and degraded markers.",
+    "dashboard.show and refresh rebuild ProjectionSnapshot from durable sources instead of reusing render cache.",
+    "Pending approvals retain exact binding visibility after refresh.",
+    "Recovery states requiring operator attention stay visible after refresh.",
+    "Missing or partial release evidence is surfaced as degraded snapshot source instead of hidden by dashboard health."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_projection --no-fail-fast",
+    "cargo test -p agentd tui_refresh --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "cargo_fmt_check": "passed",
+    "tui_projection_tests": {
+      "status": "passed",
+      "passed": 1,
+      "failed": 0
+    },
+    "tui_refresh_tests": {
+      "status": "passed",
+      "passed": 2,
+      "failed": 0
+    },
+    "agentd_tui_tests": {
+      "status": "passed",
+      "passed": 16,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "blockers": []
+}

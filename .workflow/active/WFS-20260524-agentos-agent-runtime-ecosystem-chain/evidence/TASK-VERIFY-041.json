@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-VERIFY-041",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "summary": "Added and verified local-only ecosystem replay for registry resolution, inert staging, activation preview and deterministic evidence output.",
+  "artifacts": [
+    {
+      "path": "scripts/ecosystem-replay.ps1",
+      "status": "created",
+      "sha256": "72f5d9df0dae378ca3b78bb51975a3210eb3f9f351e7f32c13a7a886c2d9943f"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "793b8a9b4d56a41121c1e9b96ef31b318a8213711954f675125ec39075dba61f"
+    },
+    {
+      "path": ".workflow/artifacts/aom/ecosystem-lock.json",
+      "status": "generated",
+      "sha256": "1479a7f62561f97e2b2d1396d2d98fbc25356ebf34e653237beb132208366037"
+    }
+  ],
+  "acceptance_evidence": [
+    "Replay runs with network=false, external_llm=false, firecracker=false and host_package_manager=false.",
+    "Replay records registry, policy pack, workflow pack, lockfile, staging root and active set hashes.",
+    "Replay verifies staging remains inert: active=false and activation_prepared=false.",
+    "Replay emits release_gate.consumable=true and status=passed for release provenance consumption.",
+    "Running with -EnableUnsafeFixture fails closed before promotion."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed and wrote .workflow/artifacts/ecosystem-replay/result.json."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1 -EnableUnsafeFixture",
+      "result": "expected-failed-closed",
+      "summary": "Unsafe fixture mode fails at adversarial-fixtures before release promotion."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional replay remained green after ecosystem replay was added."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Replay does not depend on external LLM, network, Firecracker or host package manager.",
+    "Install/stage is not treated as activation.",
+    "Unsafe fixture failure is explicit and not silently skipped."
+  ],
+  "promotion_impact": "Production release gates can now consume a deterministic local ecosystem replay result."
+}

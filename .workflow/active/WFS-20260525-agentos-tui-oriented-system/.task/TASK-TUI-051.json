@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI-051",
+  "title": "Add TUI-ready boot marker and initramfs manifest fields",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "packaging",
+  "owner": "image",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-050"],
+  "purpose": "Make image and initramfs artifacts prove that the packaged system includes a TUI-ready operator console.",
+  "scope": [
+    "Add TUI-ready marker to initramfs or boot handoff evidence.",
+    "Add TUI config hash and operator command registry hash to image manifest.",
+    "Expose marker through boot smoke output.",
+    "Keep AGENTD_HANDOFF_OK and runtime manifest markers intact.",
+    "Fail build when TUI defaults are missing or invalid."
+  ],
+  "deliverables": [
+    "image/build-initramfs.ps1",
+    "image/build-alpha-rootfs.ps1",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-051.json"
+  ],
+  "acceptance_criteria": [
+    "Initramfs or image manifest contains TUI-ready console evidence.",
+    "Manifest records hashes for TUI config and operator command registry.",
+    "Boot marker is observable without interactive terminal control.",
+    "Existing runtime-aware boot markers remain present."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File image\\build-initramfs.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "TUI-ready claim exists only in documentation.",
+    "Boot smoke cannot observe the TUI marker.",
+    "New marker breaks existing handoff or runtime manifest checks."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-052", "TASK-TUI-062"],
+    "blocked_until": ["TASK-TUI-050"]
+  }
+}

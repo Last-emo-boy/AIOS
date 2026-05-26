@@ -1,0 +1,47 @@
+{
+  "workflow_id": "WFS-20260525-agentos-console-beta-production-ux",
+  "name": "AgentOS Console Beta And Production UX",
+  "status": "completed",
+  "created_at": "2026-05-25T21:15:00+08:00",
+  "updated_at": "2026-05-26T08:20:11+08:00",
+  "source": "post TUI-oriented Alpha brainstorm",
+  "previous_workflow": ".workflow/active/WFS-20260525-agentos-tui-oriented-system",
+  "brainstorm": ".workflow/.csv-wave/20260525-brainstorm-agentos-tui-prod-next",
+  "goal": "Move AgentOS from line-oriented TUI Alpha into a long-running Console Beta and Production UX path with stronger operator experience, workbenches, capability discovery, release evidence and governance previews.",
+  "core_thesis": "Improve the operator surface before broadening capability count: full-screen TUI shell, deterministic projections, command palette and workbenches must preserve AgentCore, SecurityExecutionEngine and ecosystem ownership boundaries.",
+  "entry_contract": ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/FINAL-AUDIT-20260525-tui-oriented-agentos.json",
+  "non_goals": [
+    "Do not make TUI a runtime owner.",
+    "Do not add normal-mode arbitrary shell or shortcut bypasses.",
+    "Do not move planner, resolver, policy or side-effect logic into agentd.",
+    "Do not require network, external LLM, Firecracker or host package manager for baseline.",
+    "Do not claim GA production readiness from Console Beta."
+  ],
+  "primary_acceptance": [
+    "Full-screen TUI shell exists with deterministic wide and narrow layouts.",
+    "Command palette previews typed actions before dispatch and preserves fail-closed behavior.",
+    "Projection snapshots and event feed derive from durable sources, not render cache.",
+    "Approval, recovery and support workflows are first-class operator workbenches.",
+    "Capability catalog exposes operational workflows without direct execution or activation.",
+    "Release evidence center projects promotion blockers, rootfs/QEMU/replay/signing status.",
+    "Fleet and governance previews are local-first, optional and fail closed."
+  ],
+  "plan": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/plan.json",
+  "task_dir": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/.task",
+  "docs": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/console-beta-architecture.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/console-beta-task-chain.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/final-console-beta-audit-summary.md"
+  ],
+  "final_audit": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json",
+  "decision": "console-beta",
+  "production_ready_claim": false,
+  "inherited_gates": {
+    "workspace_tests": "cargo test --workspace",
+    "agentd_tui_tests": "cargo test -p agentd tui --no-fail-fast",
+    "tui_replay": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "production_runbook_smoke": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "release_gate": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "qemu_runtime_smoke": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "task_id": "TASK-ECO-025",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "summary": "Added deterministic ecosystem hash projection to release provenance and Alpha runtime artifact gates.",
+  "artifacts": [
+    {
+      "path": "scripts/build-release.ps1",
+      "status": "updated",
+      "sha256": "5460A62EC013704C4849EF5C51D7E5BA7E1D7739BE1296CDD0EEEB14E643BD0E"
+    },
+    {
+      "path": "scripts/boot-smoke-test.ps1",
+      "status": "updated",
+      "sha256": "2326B834DC525648C3974388FC50D67F3B07E96562F45B8D787FFE8F430B1736"
+    },
+    {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "status": "generated",
+      "sha256": "46A9B56B34570B1A46C3014D687A2840865253D5515601DB446CAB45ED6569C7"
+    }
+  ],
+  "acceptance_evidence": [
+    "build-release.ps1 writes provenance.ecosystem with registry_snapshot, lockfile, staged_set, active_set and replay hash projections.",
+    "Directory hashes are deterministic over sorted relative file paths and file hashes.",
+    "The registry snapshot projection is required and present.",
+    "Staged, active and replay projections are distinct and currently optional until later activation/replay tasks.",
+    "The provenance records install_stage_is_activation=false and activation_authority=AgentCore PlanSpec + SecurityExecutionEngine.",
+    "Alpha runtime artifact gates now include ecosystem.registry_snapshot."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1 -SkipTests -SkipBootSmoke -SkipFunctionalReplay",
+      "result": "passed",
+      "summary": "Release provenance generated with ecosystem hash projection; promotion status remains blocked because heavyweight gates were intentionally skipped."
+    },
+    {
+      "command": "Get-Content -Raw .workflow\\artifacts\\release\\provenance.json | ConvertFrom-Json",
+      "result": "passed",
+      "summary": "Provenance JSON parses and contains provenance.ecosystem.registry_snapshot.present=true."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Staged and active artifact hashes are not conflated.",
+    "Missing ecosystem replay is not a Wave 4 hard blocker; it is recorded as required after TASK-VERIFY-041.",
+    "Provenance does not mark skipped release gates as promotable."
+  ],
+  "promotion_impact": "Release provenance can now bind local ecosystem inputs before activation and ecosystem replay gates are implemented."
+}

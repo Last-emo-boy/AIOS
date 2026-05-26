@@ -1,0 +1,44 @@
+{
+  "id": "TASK-ECO-051",
+  "title": "Define knowledge pack schema with trust labels and memory quarantine",
+  "status": "completed",
+  "wave": 8,
+  "priority": "P1",
+  "type": "ecosystem",
+  "owner": "agent_core",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ARUN-022", "TASK-ECO-020"],
+  "purpose": "Define knowledge packs as trusted or untrusted retrieval artifacts that cannot poison privileged AgentOS behavior.",
+  "scope": [
+    "Define knowledge-pack manifest fields.",
+    "Represent trust labels, source provenance, TTL, content digest and allowed memory scope.",
+    "Define quarantine behavior for suspicious or untrusted content.",
+    "Define how knowledge enters planner context as bounded, labeled context."
+  ],
+  "deliverables": [
+    "crates/runtime_contracts/src/ecosystem.rs",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/knowledge-pack.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-051.json"
+  ],
+  "acceptance_criteria": [
+    "Knowledge pack cannot create approval claims.",
+    "Untrusted knowledge is quarantined or sanitized.",
+    "Raw secrets are rejected or redacted.",
+    "Planner context remains bounded and source-labeled."
+  ],
+  "verification": [
+    "cargo test -p agent_core memory",
+    "cargo test -p agentd agent_core::adversarial"
+  ],
+  "failure_modes": [
+    "Knowledge pack writes privileged policy instructions.",
+    "Source trust label is omitted.",
+    "Suspicious content becomes long-term trusted memory."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-052"],
+    "blocked_until": ["TASK-ARUN-022", "TASK-ECO-020"]
+  },
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-051.json"
+}

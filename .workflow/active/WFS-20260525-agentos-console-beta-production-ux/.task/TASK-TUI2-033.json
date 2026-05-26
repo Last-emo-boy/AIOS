@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-033",
+  "title": "Add QEMU rootfs replay gate status panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T06:05:13+08:00",
+  "wave": 4,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-030"],
+  "purpose": "Make boot, rootfs and replay gate evidence visible in the operator console.",
+  "scope": [
+    "Render QEMU boot smoke result and observed markers.",
+    "Render rootfs runtime manifest hash and runtime artifact ids.",
+    "Render TUI replay, ecosystem replay, functional replay and production runbook smoke statuses.",
+    "Show missing or stale gate artifacts as degraded or blocker state.",
+    "Keep gate execution in scripts and CI paths."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui gate status panel",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-033.json"
+  ],
+  "acceptance_criteria": [
+    "Gate panel shows AGENTOS_TUI_CONSOLE_READY when observed.",
+    "Missing gate artifact is visible and cannot be treated as pass.",
+    "Rootfs manifest hash is tied to release provenance.",
+    "Panel is read-only projection over gate artifacts."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_gate_status",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120"
+  ],
+  "failure_modes": [
+    "Missing QEMU smoke is shown as pass.",
+    "Panel executes QEMU unexpectedly.",
+    "Gate status ignores TUI console marker."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-034", "TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-030"]
+  }
+}

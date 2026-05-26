@@ -1,0 +1,43 @@
+{
+  "task_id": "TASK-TUI2-003",
+  "status": "completed",
+  "completed_at": "2026-05-26T00:13:11+08:00",
+  "evidence_type": "tui-full-screen-layout-model",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/layout.rs"
+  ],
+  "verified": [
+    "PanelLayout is a pure TUI layout model and does not read RunStore, AuditJournal, AOM state or support bundle files.",
+    "Wide layout defines stable panes for status bar, navigation rail, run workspace, event feed and command palette.",
+    "Narrow layout falls back to a status bar, tab strip, focused panel and command palette.",
+    "Pane dimensions are deterministic and validated for bounds, overlap and title fit.",
+    "Initial layout snapshot rendering consumes ProjectionSnapshot as immutable render input with source_of_truth=false.",
+    "Existing scripted TUI output remains available for automation."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_layout --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "cargo_fmt_check": "passed",
+    "tui_layout_tests": {
+      "status": "passed",
+      "passed": 3,
+      "failed": 0
+    },
+    "agentd_tui_tests": {
+      "status": "passed",
+      "passed": 19,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "blockers": []
+}

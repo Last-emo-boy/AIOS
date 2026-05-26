@@ -1,0 +1,80 @@
+{
+  "task_id": "TASK-TUI2-032",
+  "title": "Add local update and rollback drill view",
+  "status": "completed",
+  "completed_at": "2026-05-26T05:20:24+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/update_rollback_panel.rs",
+    "crates/agentd/src/tui/release_provenance_panel.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "scripts/tui-replay.ps1",
+    "scripts/production-runbook-smoke.ps1",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/artifacts/release/update-metadata.json",
+    ".workflow/artifacts/release/provenance.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json"
+  ],
+  "verified": [
+    "update.rollback.show renders release update metadata, detached signature state, A/B rootfs strategy and rollback drill evidence as a read-only TUI projection.",
+    "The panel exposes active, pending and rollback slot evidence using release artifacts and update_readiness fields.",
+    "Failed health, missing compatibility, incompatible active artifacts, failed ecosystem replay, failed rollback preservation and unsigned or unbound metadata are visible as blockers.",
+    "Failure links point to promotion.blockers.show and do not clear or mutate blockers.",
+    "TUI projection exposes update_authority=false, rollback_authority=false, direct_update=false, direct_rollback=false and host_mutation_in_tui=false.",
+    "tui-replay and production-runbook-smoke include update.rollback.show and assert the update rollback panel remains read-only.",
+    "Full release build passed with promotion.status=promotable, blockers=[], and QEMU observed AGENTOS_TUI_CONSOLE_READY."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_update_rollback --no-fail-fast",
+    "cargo test -p agent_core rootfs_update",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
+  ],
+  "test_result": {
+    "focused_tests": {
+      "command": "cargo test -p agentd tui_update_rollback --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "rootfs_update_runtime": {
+      "command": "cargo test -p agent_core rootfs_update",
+      "passed": 5,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json",
+      "check": "update-rollback-rendered"
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json"
+    },
+    "release_gate": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "result": "passed",
+      "provenance": ".workflow/artifacts/release/provenance.json",
+      "promotion_status": "promotable",
+      "blockers": [],
+      "qemu_marker": "AGENTOS_TUI_CONSOLE_READY"
+    }
+  },
+  "risk_notes": [
+    "Update rollback panel reads local release artifacts only and never stages, commits or rolls back rootfs slots.",
+    "A/B rootfs execution authority remains AgentCore rootfs_update plus SecurityExecutionEngine.",
+    "The TUI cannot mutate update metadata, release provenance, slot state, rollback state or promotion blocker state."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-033",
+    "TASK-TUI2-040"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "TASK-TUI-063",
+  "title": "Run final TUI-oriented AgentOS audit",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "audit",
+  "owner": "workflow",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-024", "TASK-TUI-043", "TASK-TUI-052", "TASK-TUI-060", "TASK-TUI-061", "TASK-TUI-062"],
+  "purpose": "Decide whether AgentOS can claim TUI-oriented Alpha status and identify blockers for the next Production Distro wave.",
+  "scope": [
+    "Parse all TUI task JSON and evidence files.",
+    "Run workspace tests and TUI-specific test suites.",
+    "Run functional, ecosystem, production runbook, TUI replay, release and QEMU gates.",
+    "Audit ownership boundaries for AgentCore, SecurityExecution, ecosystem resolver and agentd.",
+    "Write final audit decision and next-wave recommendations."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/FINAL-AUDIT-20260525-tui-oriented-agentos.json",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/final-tui-oriented-audit-summary.md"
+  ],
+  "acceptance_criteria": [
+    "Final audit includes pass/fail evidence for every TUI wave.",
+    "Boundary audit confirms TUI is projection-controller only.",
+    "Promotion decision is one of tui-oriented-alpha, remediation-required or rollout-blocked.",
+    "Next Production Distro tasks are listed with blockers if any."
+  ],
+  "verification": [
+    "cargo test --workspace",
+    "cargo test -p agentd tui",
+    "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\tui-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Audit only checks documentation and not executable gates.",
+    "Promotion claim ignores TUI replay or QEMU evidence.",
+    "Audit accepts TUI-owned side effects or resolver logic."
+  ],
+  "handoff": {
+    "next_tasks": ["next-production-distro-wave"],
+    "blocked_until": ["TASK-TUI-024", "TASK-TUI-043", "TASK-TUI-052", "TASK-TUI-060", "TASK-TUI-061", "TASK-TUI-062"]
+  }
+}

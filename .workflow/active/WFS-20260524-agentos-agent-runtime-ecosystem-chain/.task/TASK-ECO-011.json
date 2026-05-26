@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-011",
+  "title": "Add aom CLI surface for local lifecycle",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "operator-ux",
+  "owner": "agentd",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-002", "TASK-ECO-010"],
+  "purpose": "Expose local-first aom lifecycle commands without creating a second runtime authority.",
+  "scope": ["Add search, show, verify, stage and explain command surfaces.", "Keep activate disabled until runtime-mediated activation tasks are complete.", "Route command data through AgentCore/resolver contracts."],
+  "deliverables": ["packaging/agentos/rootfs/etc/agentos/operator-commands.json", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-011.json"],
+  "acceptance_criteria": ["aom commands do not expose shell.exec.", "show/verify/stage/explain work against local fixture.", "activate is gated until TASK-ECO-004 and TASK-ECO-005.", "agentd does not own resolver logic."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1", "cargo test -p agentd operator_projection"],
+  "failure_modes": ["CLI exposes raw shell.", "agentd implements resolver logic internally.", "Stage command activates policy."],
+  "handoff": {"next_tasks": ["TASK-ECO-004", "TASK-ECO-014"], "blocked_until": ["TASK-ECO-002", "TASK-ECO-010"]},
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-011.json"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI-013",
+  "title": "Add TUI controller lifecycle tests",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "test",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-010", "TASK-TUI-011", "TASK-TUI-012"],
+  "purpose": "Prove that the TUI controller drives real AgentCore lifecycle without owning planner, resolver, policy or side-effect logic.",
+  "scope": [
+    "Test submit, plan, advance and completed read-only runs.",
+    "Test pause-for-approval and exact approval success.",
+    "Test denial, timeout or approval mutation fail-closed behavior.",
+    "Test suspend and recover after rebuilding controller from durable paths.",
+    "Test demo mode remains isolated from durable mode."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-013.json"
+  ],
+  "acceptance_criteria": [
+    "Tests fail if TUI bypasses AgentCore lifecycle APIs.",
+    "Tests fail if TUI prepares side effects directly.",
+    "Tests cover restart survival for pending approval and recovery.",
+    "Tests cover redacted error output."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_runtime_controller",
+    "cargo test -p agentd tui_approval",
+    "cargo test -p agentd tui"
+  ],
+  "failure_modes": [
+    "Lifecycle tests only cover demo sessions.",
+    "Approval mutation is not covered.",
+    "Durability is not tested across controller reconstruction."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-020", "TASK-TUI-030"],
+    "blocked_until": ["TASK-TUI-010", "TASK-TUI-011", "TASK-TUI-012"]
+  }
+}

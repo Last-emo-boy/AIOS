@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-PROD-052",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "summary": "Added offline pinned snapshot drill to ecosystem replay and proved expired snapshots degrade/fail closed with an explainable resolver error.",
+  "artifacts": [
+    {
+      "path": "scripts/ecosystem-replay.ps1",
+      "status": "updated",
+      "sha256": "406098f1dbad7f4b4310a9906821a3e80349e6e834f1e1e92e3703e8c949cc92"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "7b3a8b312fb1df1314a89cc568f4dd8c082ea79c25543f71917cd1e496df5720"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/expired-registry-snapshot.json",
+      "status": "generated",
+      "sha256": "35a317e67c4ab4697831fae2dec6ec2715c32045b143741bef2a25302e038dca"
+    }
+  ],
+  "acceptance_evidence": [
+    "Ecosystem replay now includes offline-pinned-snapshot-drill.",
+    "Pinned local registry resolution remains local_only=true and network_required=false.",
+    "Expired snapshot is generated from the pinned local registry with expires_at=1969-12-31T00:00:00Z.",
+    "aom verify exits non-zero for the expired snapshot before resolution is accepted.",
+    "Replay records expired_snapshot_blocked=true, expired_snapshot_degraded_status=degraded-expired-snapshot and the resolver error: expired local registry snapshot cannot be used for resolution.",
+    "Support bundle projection status for the expired snapshot is represented as degraded-expired-snapshot."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed with total=6, passed=6, failed=0 and offline expired snapshot drill recorded."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed after offline drill was added."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed with offline snapshot drill in place."
+    }
+  ],
+  "offline_drill": {
+    "pinned_snapshot_local_only": true,
+    "network_required": false,
+    "expired_snapshot_blocked": true,
+    "expired_snapshot_exit_code": 2,
+    "expired_snapshot_degraded_status": "degraded-expired-snapshot",
+    "expired_snapshot_error": "expired local registry snapshot cannot be used for resolution",
+    "support_bundle_projection_status": "degraded-expired-snapshot"
+  },
+  "blocked_shortcuts": [
+    "Baseline replay does not require a remote registry or network.",
+    "Expired registry snapshots are not silently accepted.",
+    "Offline degraded state is visible in replay/support projections."
+  ],
+  "promotion_impact": "AgentOS can now demonstrate local-first ecosystem operation and explain stale registry snapshot degradation for Production Distro operations."
+}

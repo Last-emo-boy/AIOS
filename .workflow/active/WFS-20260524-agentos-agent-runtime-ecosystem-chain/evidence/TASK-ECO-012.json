@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-ECO-012",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:19:32+08:00",
+  "summary": "Packaged the built-in production-safe core policy pack and added replay/rootfs gates that prove it cannot weaken baseline AgentOS safety invariants.",
+  "artifacts": [
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/core/policy-production-safe.json",
+      "status": "created",
+      "sha256": "947487C36B8E616860B138B66D86B1D9F9BA984977B317FB72F905D69C4A633B"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json",
+      "status": "updated",
+      "sha256": "AEBC9DF789BAB3BFABD5B5EF3DBB6B78D0C78B92B597C7A4330BE993FC0C9F65"
+    },
+    {
+      "path": "scripts/functional-capability-replay.ps1",
+      "status": "updated",
+      "sha256": "1AD9BD9EF637C06D687FD74AC26B1B249EB769578E87BD85BB3D6D293A875B80"
+    },
+    {
+      "path": "scripts/validate-alpha-rootfs.ps1",
+      "status": "updated",
+      "sha256": "832E9C5FAD012E38E5FDD5FD37C7E79ACA9575FF626AB62C2B53182379283A67"
+    }
+  ],
+  "acceptance_evidence": [
+    "policy-production-safe.json declares schema agentos.artifact-manifest.v1 and coordinate agentos:policy-pack/agentos/core-policy@1.0.0.",
+    "The policy pack trust tier is core and production_promotable=true.",
+    "Activation requires AgentCore PlanSpec, SecurityExecutionEngine, exact approval and policy-v1.",
+    "Activation preserved_core_invariants include no-shell, exact-approval, secret-handle, source-to-sink, audit and rollback.",
+    "activation_gates.requires_replay_evidence=true and requires_compatibility_evidence=true.",
+    "pack_behavior keeps normal_shell=deny, broad_approval=deny and denied_decisions_prepare_effect=false.",
+    "pack_behavior.can_deactivate=true and can_rollback=true with rollback://active-set/policy-pack.",
+    "registry-snapshot.json points the core policy coordinate to file:///etc/agentos/ecosystem/core/policy-production-safe.json.",
+    "validate-alpha-rootfs.ps1 now treats the core policy manifest as a required rootfs artifact and checks replay, invariants, exact approval and rollback properties.",
+    "functional-capability-replay.ps1 includes a built-in ecosystem pack replay gate."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional replay passed 9/9 capability checks, including built-in ecosystem packs."
+    },
+    {
+      "command": "cargo test -p agentd safety:: -- --nocapture",
+      "result": "passed",
+      "summary": "19 safety regression tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1",
+      "result": "passed",
+      "summary": "Alpha rootfs validation passed 11/11 required artifacts, including ecosystem.core_policy."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed: agent_core 107, agentd 58, runtime_contracts 23, security_execution 79 plus doctests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "The policy pack does not expose shell.exec as normal-mode authority.",
+    "The policy pack cannot activate without replay and compatibility evidence.",
+    "The pack is staged as an inert artifact before activation.",
+    "The pack does not declare policy broadening as allowed.",
+    "Rollback and deactivation remain explicit requirements."
+  ],
+  "promotion_impact": "AgentOS now has a built-in core policy-pack artifact suitable for production-safe local ecosystem activation rehearsal."
+}

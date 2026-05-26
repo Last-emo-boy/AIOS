@@ -1,0 +1,44 @@
+{
+  "id": "TASK-ECO-050",
+  "title": "Define model profile pack schema and local/stub/remote optionality",
+  "status": "completed",
+  "wave": 8,
+  "priority": "P1",
+  "type": "ecosystem",
+  "owner": "agent_core",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ARUN-013", "TASK-ECO-020", "TASK-ECO-023"],
+  "purpose": "Define how AgentOS manages model routing profiles as artifacts without making remote models mandatory or leaking secrets.",
+  "scope": [
+    "Define model-profile-pack manifest fields.",
+    "Represent local, stub and optional remote provider modes.",
+    "Bind model usage to allowed runtime roles such as plan, classify, summarize and sanitize.",
+    "Forbid embedded production secrets."
+  ],
+  "deliverables": [
+    "crates/runtime_contracts/src/ecosystem.rs",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/model-profile-pack.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-050.json"
+  ],
+  "acceptance_criteria": [
+    "Stub/local provider remains baseline.",
+    "Remote provider is optional and policy-gated.",
+    "Model profile pack cannot contain raw credentials.",
+    "Profile activation does not bypass ModelBroker."
+  ],
+  "verification": [
+    "cargo test -p agent_core model_broker",
+    "cargo test -p runtime_contracts ecosystem"
+  ],
+  "failure_modes": [
+    "Remote model becomes required for boot or replay.",
+    "Profile embeds secret-like values.",
+    "Pack lets workflow call provider directly instead of ModelBroker."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-052"],
+    "blocked_until": ["TASK-ARUN-013", "TASK-ECO-020"]
+  },
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-050.json"
+}

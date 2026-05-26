@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-ECO-060",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "summary": "Defined runtime-adapter-pack contract with semantic tool bindings, risk class mapping, optional dependency degradation and SecurityExecutionEngine authority.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7243c66e3350e40c87022c831135482e7c3984463ab3edbacb5f2b499db10e25"
+    },
+    {
+      "path": "crates/runtime_contracts/src/lib.rs",
+      "status": "updated",
+      "sha256": "7dd7fca8a11fdf5c0ab5c5190bdcda5302c4d50236aef331b95f8831affd024e"
+    },
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-adapter-pack.md",
+      "status": "added",
+      "sha256": "57195451bfb31d00dcdd68a80d50877ccd7e420c063f62db81bea855f5450ee6"
+    }
+  ],
+  "acceptance_evidence": [
+    "RuntimeAdapterPackV1 requires runtime-adapter-pack coordinates and semantic tool bindings.",
+    "RuntimeAdapterToolBinding rejects shell surfaces such as shell.exec and generic exec names.",
+    "Every adapter tool declares risk_class and policy_mapping.",
+    "Missing optional dependencies must degrade read-only before effects.",
+    "direct_host_mutation_allowed=false and requires_security_execution_engine=true are enforced."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem",
+      "result": "passed",
+      "summary": "18 ecosystem-filtered runtime contract tests passed, including adapter no-shell coverage."
+    },
+    {
+      "command": "cargo test -p security_execution",
+      "result": "passed",
+      "summary": "79 SecurityExecution tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 59, runtime_contracts 27 and security_execution 79 tests passed; doctests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Adapter pack cannot expose arbitrary shell.",
+    "Adapter pack cannot mutate host state directly.",
+    "Adapter side effects cannot bypass SecurityExecutionEngine."
+  ],
+  "promotion_impact": "Runtime adapters can be modeled as ecosystem artifacts without becoming a second side-effect runtime."
+}

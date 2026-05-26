@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-031",
+  "title": "Add promotion blocker panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T04:56:46+08:00",
+  "wave": 4,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-030"],
+  "purpose": "Make release blockers visible and actionable from the Console Beta operator shell.",
+  "scope": [
+    "Render promotion.status and promotion.blockers from release provenance.",
+    "Group blockers by tests, boot smoke, replay, signing, provenance and ecosystem readiness.",
+    "Show evidence path and safe next command for each blocker.",
+    "Represent skipped gates as blockers when promotion requires them.",
+    "Avoid allowing TUI to override blocker status."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui promotion blocker panel",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-031.json"
+  ],
+  "acceptance_criteria": [
+    "Promotion blockers are visible when provenance reports blockers.",
+    "Skipped required gates are shown distinctly from passed gates.",
+    "TUI cannot clear blockers or mutate provenance.",
+    "Blocker view is deterministic and redacted."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_promotion_blockers",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -SkipTests -SkipBootSmoke",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
+  ],
+  "failure_modes": [
+    "Skipped tests are displayed as pass.",
+    "Operator can dismiss promotion blocker as UI-only state.",
+    "Blocker panel hides signing or QEMU requirements."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-032", "TASK-TUI2-034"],
+    "blocked_until": ["TASK-TUI2-030"]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "task_id": "TASK-ARUN-023",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:43:34+08:00",
+  "summary": "Defined PID 1 runtime recovery drills for AgentOS, covering read-only, write-with-diff, approval-pending, activation-pending, degraded-dependency and QEMU boot smoke scenarios.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-recovery-drills.md",
+      "sha256": "374eb8ec6bdf687302a1f703e4dee524eb006788b0e6af61c242e38d1b89b872"
+    },
+    {
+      "path": ".workflow/artifacts/boot/boot-smoke-result.json",
+      "status": "completed",
+      "timeout_seconds": 30
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-recovery-drills.md defines drill scenarios for read-only unsealed effects, write-with-diff unsealed effects, approval pending, approval denied, activation pending, degraded dependency and QEMU boot smoke.",
+    "The drill taxonomy maps each simulated interruption to expected recovery state and evidence source.",
+    "Local-only fixture drills are defined without external LLM, remote registry, network or host package manager.",
+    "QEMU drill documents the required markers and the E:\\qemu\\qemu-system-x86_64.exe path.",
+    "boot-smoke-result.json observed AGENTD_HANDOFF_OK, AGENTOS_RUNTIME_ARTIFACTS_OK and runtime manifest marker within 30 seconds."
+  ],
+  "commands": [
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 94 passed; agentd 56 passed; runtime_contracts 9 passed; security_execution 75 passed; doc tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "result": "passed",
+      "summary": "Observed AGENTD_HANDOFF_OK, AGENTOS_RUNTIME_ARTIFACTS_OK and AGENTOS_RUNTIME_MANIFEST_SHA256=24d5e84238bcdd70c1cad67b081e05ac2178d1dcbb9a9877ca6368dfcca37f9f."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No recovery drill depends on external LLM.",
+    "No pending approval is auto-approved after restart.",
+    "No half-committed write or activation is silently completed.",
+    "No missing optional dependency falls back to unsafe host mutation.",
+    "No support bundle evidence may include raw secrets."
+  ],
+  "promotion_impact": "Closes Wave 2 by defining local and QEMU recovery drills that prove AgentOS can recover PID 1 runtime state with durable evidence."
+}

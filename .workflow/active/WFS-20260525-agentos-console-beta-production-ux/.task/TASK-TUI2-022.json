@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-022",
+  "title": "Add launch-intent preview for operational capabilities",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:28:05+08:00",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-021", "TASK-TUI2-004"],
+  "purpose": "Let operators start capabilities safely by previewing the intent and authority path before dispatch.",
+  "scope": [
+    "Generate typed intent.submit previews from selected workflow and input draft.",
+    "Show resulting expected authority path: AgentCore planner, SecurityExecutionEngine, approval and rollback.",
+    "Require explicit dispatch after preview.",
+    "Reject unsafe free-form shell fragments in capability inputs.",
+    "Redact secret-like input before render, history or evidence."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui launch-intent preview",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-022.json"
+  ],
+  "acceptance_criteria": [
+    "Capability launch preview never executes directly.",
+    "High-risk capability launches show approval and rollback expectations.",
+    "Unsafe input fails closed before intent submission.",
+    "Preview output remains deterministic and redacted."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_launch_preview",
+    "cargo test -p agentd tui_adversarial",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Launch preview bypasses typed intent grammar.",
+    "Workflow input shell fragment reaches planner.",
+    "Preview stores raw secret in command history."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-023", "TASK-TUI2-024"],
+    "blocked_until": ["TASK-TUI2-021", "TASK-TUI2-004"]
+  }
+}

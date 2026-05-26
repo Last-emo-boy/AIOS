@@ -6,6 +6,2055 @@ pub fn escape_json(value: &str) -> String {
         .replace('\r', "\\r")
 }
 
+pub mod ecosystem {
+    use std::collections::{BTreeMap, BTreeSet};
+    use std::fmt;
+    use std::fs;
+    use std::path::{Path, PathBuf};
+
+    use crate::escape_json;
+    use crate::model::{
+        ApprovalRequirement, IntentCtx, IntentSource, ModelEvidence, ModelValidationError,
+        PlanSpec, PlanStep, RiskHint, RollbackRequirement, TrustBoundary, VerificationRule,
+    };
+    use runtime_contracts::{
+        ArtifactCoordinate, ArtifactStagingReportV1, ArtifactVerificationReportV1, EcosystemLockV1,
+        ResolvedArtifact, RiskClass, SemanticToolCall, TrustTier, contains_secret_value,
+        stable_contract_hash,
+    };
+
+    pub const LOCAL_REGISTRY_FIXTURE_SCHEMA: &str = "agentos.local-registry-snapshot.v1";
+    pub const LOCAL_REGISTRY_GENERATOR: &str = "agent_core::ecosystem::resolver";
+    pub const ECOSYSTEM_ACTIVATION_PLANNER_VERSION: &str = "agent-core-ecosystem-activation-v1";
+    pub const STEP_VERIFY_REPLAY: &str = "verify-ecosystem-replay";
+    pub const STEP_CHECK_COMPATIBILITY: &str = "check-ecosystem-compatibility";
+    pub const STEP_ACTIVATE_ARTIFACTS: &str = "activate-ecosystem-artifacts";
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct LocalRegistrySnapshot {
+        pub snapshot_id: String,
+        pub generated_at: String,
+        pub expires_at: String,
+        pub local_pinned: bool,
+        pub snapshot_digest: String,
+        pub artifacts: Vec<LocalArtifactRecord>,
+    }
+
+    impl LocalRegistrySnapshot {
+        pub fn from_file(path: impl AsRef<Path>) -> Result<Self, EcosystemResolverError> {
+            let json = fs::read_to_string(path).map_err(EcosystemResolverError::from)?;
+            Self::from_json(&json)
+        }
+
+        pub fn from_json(json: &str) -> Result<Self, EcosystemResolverError> {
+            let schema = required_json_string(json, "schema")?;
+            if schema != LOCAL_REGISTRY_FIXTURE_SCHEMA {
+                return Err(EcosystemResolverError::invalid(
+                    "schema",
+                    "local registry fixture schema is not supported",
+                ));
+            }
+            let artifacts = object_array_field(json, "artifacts")?
+                .into_iter()
+                .map(|artifact| LocalArtifactRecord::from_json(&artifact))
+                .collect::<Result<Vec<_>, _>>()?;
+            let snapshot = Self {
+                snapshot_id: required_json_string(json, "snapshot_id")?,
+                generated_at: required_json_string(json, "generated_at")?,
+                expires_at: required_json_string(json, "expires_at")?,
+                local_pinned: required_json_bool(json, "local_pinned")?,
+                snapshot_digest: required_json_string(json, "snapshot_digest")?,
+                artifacts,
+            };
+            snapshot.validate()?;
+            Ok(snapshot)
+        }
+
+        pub fn validate(&self) -> Result<(), EcosystemResolverError> {
+            ensure_text("snapshot_id", &self.snapshot_id)?;
+            ensure_text("generated_at", &self.generated_at)?;
+            ensure_text("expires_at", &self.expires_at)?;
+            ensure_digest("snapshot_digest", &self.snapshot_digest)?;
+            if !self.local_pinned {
+                return Err(EcosystemResolverError::invalid(
+                    "local_pinned",
+                    "baseline ecosystem resolver requires a pinned local snapshot",
+                ));
+            }
+            if self.artifacts.is_empty() {
+                return Err(EcosystemResolverError::invalid(
+                    "artifacts",
+                    "local registry snapshot must contain artifacts",
+                ));
+            }
+            let mut seen = BTreeSet::new();
+            for artifact in &self.artifacts {
+                artifact.validate()?;
+                if !seen.insert(artifact.coordinate.as_string()) {
+                    return Err(EcosystemResolverError::invalid(
+                        "artifacts",
+                        "duplicate artifact coordinate in local registry snapshot",
+                    ));
+                }
+            }
+            Ok(())
+        }
+
+        pub fn artifact(&self, coordinate: &ArtifactCoordinate) -> Option<&LocalArtifactRecord> {
+            let key = coordinate.as_string();
+            self.artifacts
+                .iter()
+                .find(|artifact| artifact.coordinate.as_string() == key)
+        }
+
+        pub fn to_json(&self) -> String {
+            let mut artifacts = self
+                .artifacts
+                .iter()
+                .map(LocalArtifactRecord::to_json)
+                .collect::<Vec<_>>();
+            artifacts.sort();
+            format!(
+                "{{\"schema\":\"{}\",\"snapshot_id\":\"{}\",\"generated_at\":\"{}\",\"expires_at\":\"{}\",\"local_pinned\":{},\"snapshot_digest\":\"{}\",\"artifacts\":[{}]}}",
+                LOCAL_REGISTRY_FIXTURE_SCHEMA,
+                escape_json(&self.snapshot_id),
+                escape_json(&self.generated_at),
+                escape_json(&self.expires_at),
+                self.local_pinned,
+                escape_json(&self.snapshot_digest),
+                artifacts.join(",")
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct LocalArtifactRecord {
+        pub coordinate: ArtifactCoordinate,
+        pub manifest_digest: String,
+        pub artifact_digest: String,
+        pub declared_artifact_digest: String,
+        pub trust_tier: TrustTier,
+        pub source_uri: String,
+        pub revoked: bool,
+        pub min_runtime_contract_version: String,
+        pub max_runtime_contract_version: String,
+        pub architectures: Vec<String>,
+        pub required_host_features: Vec<String>,
+        pub optional_host_features: Vec<String>,
+        pub dependencies: Vec<ArtifactCoordinate>,
+        pub advisory_refs: Vec<String>,
+    }
+
+    impl LocalArtifactRecord {
+        pub fn from_json(json: &str) -> Result<Self, EcosystemResolverError> {
+            let coordinate = ArtifactCoordinate::parse(&required_json_string(json, "coordinate")?)
+                .map_err(|error| EcosystemResolverError::invalid("coordinate", error.reason()))?;
+            let dependencies = string_array_field(json, "dependencies")?
+                .into_iter()
+                .map(|value| {
+                    ArtifactCoordinate::parse(&value).map_err(|error| {
+                        EcosystemResolverError::invalid("dependencies", error.reason())
+                    })
+                })
+                .collect::<Result<Vec<_>, _>>()?;
+            let trust_tier = TrustTier::from_str(&required_json_string(json, "trust_tier")?)
+                .ok_or_else(|| {
+                    EcosystemResolverError::invalid("trust_tier", "unknown trust tier")
+                })?;
+            let artifact = Self {
+                coordinate,
+                manifest_digest: required_json_string(json, "manifest_digest")?,
+                artifact_digest: required_json_string(json, "artifact_digest")?,
+                declared_artifact_digest: required_json_string(json, "declared_artifact_digest")?,
+                trust_tier,
+                source_uri: required_json_string(json, "source_uri")?,
+                revoked: required_json_bool(json, "revoked")?,
+                min_runtime_contract_version: required_json_string(
+                    json,
+                    "min_runtime_contract_version",
+                )?,
+                max_runtime_contract_version: required_json_string(
+                    json,
+                    "max_runtime_contract_version",
+                )?,
+                architectures: string_array_field(json, "architectures")?,
+                required_host_features: string_array_field(json, "required_host_features")?,
+                optional_host_features: string_array_field(json, "optional_host_features")?,
+                dependencies,
+                advisory_refs: string_array_field(json, "advisory_refs")?,
+            };
+            artifact.validate()?;
+            Ok(artifact)
+        }
+
+        pub fn validate(&self) -> Result<(), EcosystemResolverError> {
+            self.coordinate
+                .validate()
+                .map_err(|error| EcosystemResolverError::invalid("coordinate", error.reason()))?;
+            ensure_digest("manifest_digest", &self.manifest_digest)?;
+            ensure_digest("artifact_digest", &self.artifact_digest)?;
+            ensure_digest("declared_artifact_digest", &self.declared_artifact_digest)?;
+            ensure_local_source_uri("source_uri", &self.source_uri)?;
+            ensure_semver(
+                "min_runtime_contract_version",
+                &self.min_runtime_contract_version,
+            )?;
+            ensure_semver(
+                "max_runtime_contract_version",
+                &self.max_runtime_contract_version,
+            )?;
+            if self.architectures.is_empty() {
+                return Err(EcosystemResolverError::invalid(
+                    "architectures",
+                    "artifact must declare supported architectures",
+                ));
+            }
+            for value in self
+                .architectures
+                .iter()
+                .chain(self.required_host_features.iter())
+                .chain(self.optional_host_features.iter())
+                .chain(self.advisory_refs.iter())
+            {
+                ensure_text("artifact metadata", value)?;
+            }
+            for dependency in &self.dependencies {
+                dependency.validate().map_err(|error| {
+                    EcosystemResolverError::invalid("dependencies", error.reason())
+                })?;
+            }
+            Ok(())
+        }
+
+        pub fn to_resolved_artifact(&self) -> Result<ResolvedArtifact, EcosystemResolverError> {
+            ResolvedArtifact::new(
+                self.coordinate.clone(),
+                self.manifest_digest.clone(),
+                self.artifact_digest.clone(),
+                Some(self.source_uri.clone()),
+                self.trust_tier,
+                self.dependencies.clone(),
+            )
+            .map_err(|error| EcosystemResolverError::invalid("resolved_artifact", error.reason()))
+        }
+
+        pub fn to_json(&self) -> String {
+            let mut architectures = self.architectures.clone();
+            architectures.sort();
+            let mut required = self.required_host_features.clone();
+            required.sort();
+            let mut optional = self.optional_host_features.clone();
+            optional.sort();
+            let mut dependencies = self
+                .dependencies
+                .iter()
+                .map(ArtifactCoordinate::as_string)
+                .collect::<Vec<_>>();
+            dependencies.sort();
+            let mut advisory_refs = self.advisory_refs.clone();
+            advisory_refs.sort();
+            format!(
+                "{{\"coordinate\":\"{}\",\"manifest_digest\":\"{}\",\"artifact_digest\":\"{}\",\"declared_artifact_digest\":\"{}\",\"trust_tier\":\"{}\",\"source_uri\":\"{}\",\"revoked\":{},\"min_runtime_contract_version\":\"{}\",\"max_runtime_contract_version\":\"{}\",\"architectures\":{},\"required_host_features\":{},\"optional_host_features\":{},\"dependencies\":{},\"advisory_refs\":{}}}",
+                escape_json(&self.coordinate.as_string()),
+                escape_json(&self.manifest_digest),
+                escape_json(&self.artifact_digest),
+                escape_json(&self.declared_artifact_digest),
+                self.trust_tier.as_str(),
+                escape_json(&self.source_uri),
+                self.revoked,
+                escape_json(&self.min_runtime_contract_version),
+                escape_json(&self.max_runtime_contract_version),
+                string_array_json(&architectures),
+                string_array_json(&required),
+                string_array_json(&optional),
+                string_array_json(&dependencies),
+                string_array_json(&advisory_refs)
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct EcosystemResolverConfig {
+        pub runtime_contract_version: String,
+        pub architecture: String,
+        pub host_features: Vec<String>,
+        pub now: String,
+        pub allow_network: bool,
+    }
+
+    impl EcosystemResolverConfig {
+        pub fn local_only(
+            runtime_contract_version: impl Into<String>,
+            architecture: impl Into<String>,
+            host_features: Vec<impl Into<String>>,
+            now: impl Into<String>,
+        ) -> Result<Self, EcosystemResolverError> {
+            let config = Self {
+                runtime_contract_version: runtime_contract_version.into(),
+                architecture: architecture.into(),
+                host_features: host_features.into_iter().map(Into::into).collect(),
+                now: now.into(),
+                allow_network: false,
+            };
+            config.validate()?;
+            Ok(config)
+        }
+
+        pub fn validate(&self) -> Result<(), EcosystemResolverError> {
+            ensure_semver("runtime_contract_version", &self.runtime_contract_version)?;
+            ensure_text("architecture", &self.architecture)?;
+            ensure_text("now", &self.now)?;
+            for feature in &self.host_features {
+                ensure_text("host_feature", feature)?;
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct EcosystemResolution {
+        pub requested: Vec<ArtifactCoordinate>,
+        pub lock: EcosystemLockV1,
+        pub resolved_order: Vec<String>,
+        pub network_required: bool,
+        pub blocked_artifacts: Vec<String>,
+        pub degraded_optional_features: Vec<String>,
+    }
+
+    impl EcosystemResolution {
+        pub fn to_json(&self) -> String {
+            let requested = self
+                .requested
+                .iter()
+                .map(ArtifactCoordinate::as_string)
+                .collect::<Vec<_>>();
+            format!(
+                "{{\"requested\":{},\"lock\":{},\"resolved_order\":{},\"network_required\":{},\"blocked_artifacts\":{},\"degraded_optional_features\":{}}}",
+                string_array_json(&requested),
+                self.lock.to_json(),
+                string_array_json(&self.resolved_order),
+                self.network_required,
+                string_array_json(&self.blocked_artifacts),
+                string_array_json(&self.degraded_optional_features)
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct EcosystemResolver {
+        pub config: EcosystemResolverConfig,
+    }
+
+    impl EcosystemResolver {
+        pub fn new(config: EcosystemResolverConfig) -> Result<Self, EcosystemResolverError> {
+            config.validate()?;
+            Ok(Self { config })
+        }
+
+        pub fn resolve_from_file(
+            &self,
+            path: impl AsRef<Path>,
+            requested: Vec<ArtifactCoordinate>,
+        ) -> Result<EcosystemResolution, EcosystemResolverError> {
+            let snapshot = LocalRegistrySnapshot::from_file(path)?;
+            self.resolve(&snapshot, requested)
+        }
+
+        pub fn resolve(
+            &self,
+            snapshot: &LocalRegistrySnapshot,
+            requested: Vec<ArtifactCoordinate>,
+        ) -> Result<EcosystemResolution, EcosystemResolverError> {
+            snapshot.validate()?;
+            self.config.validate()?;
+            if snapshot.expires_at <= self.config.now {
+                return Err(EcosystemResolverError::invalid(
+                    "snapshot.expires_at",
+                    "expired local registry snapshot cannot be used for resolution",
+                ));
+            }
+            if requested.is_empty() {
+                return Err(EcosystemResolverError::invalid(
+                    "requested",
+                    "resolver requires at least one requested artifact",
+                ));
+            }
+            let mut requested = requested;
+            requested.sort();
+            let index = snapshot
+                .artifacts
+                .iter()
+                .map(|artifact| (artifact.coordinate.as_string(), artifact))
+                .collect::<BTreeMap<_, _>>();
+            let mut visiting = BTreeSet::new();
+            let mut visited = BTreeSet::new();
+            let mut resolved = Vec::new();
+            let mut degraded_optional_features = BTreeSet::new();
+            for coordinate in &requested {
+                self.visit(
+                    coordinate,
+                    &index,
+                    &mut visiting,
+                    &mut visited,
+                    &mut resolved,
+                    &mut degraded_optional_features,
+                )?;
+            }
+            let lock_input = format!(
+                "{}:{}:{}",
+                snapshot.snapshot_digest,
+                snapshot.generated_at,
+                resolved
+                    .iter()
+                    .map(ResolvedArtifact::to_json)
+                    .collect::<Vec<_>>()
+                    .join("|")
+            );
+            let lock = EcosystemLockV1::new(
+                format!("lock-{}", stable_contract_hash(&lock_input)),
+                snapshot.snapshot_digest.clone(),
+                snapshot.generated_at.clone(),
+                LOCAL_REGISTRY_GENERATOR,
+                resolved,
+            )
+            .map_err(|error| EcosystemResolverError::invalid("lockfile", error.reason()))?;
+            let resolved_order = lock
+                .resolved_artifacts
+                .iter()
+                .map(|artifact| artifact.coordinate.as_string())
+                .collect::<Vec<_>>();
+            Ok(EcosystemResolution {
+                requested,
+                lock,
+                resolved_order,
+                network_required: false,
+                blocked_artifacts: Vec::new(),
+                degraded_optional_features: degraded_optional_features.into_iter().collect(),
+            })
+        }
+
+        fn visit(
+            &self,
+            coordinate: &ArtifactCoordinate,
+            index: &BTreeMap<String, &LocalArtifactRecord>,
+            visiting: &mut BTreeSet<String>,
+            visited: &mut BTreeSet<String>,
+            resolved: &mut Vec<ResolvedArtifact>,
+            degraded_optional_features: &mut BTreeSet<String>,
+        ) -> Result<(), EcosystemResolverError> {
+            let key = coordinate.as_string();
+            if visited.contains(&key) {
+                return Ok(());
+            }
+            if !visiting.insert(key.clone()) {
+                return Err(EcosystemResolverError::Cycle { coordinate: key });
+            }
+            let artifact =
+                *index
+                    .get(&key)
+                    .ok_or_else(|| EcosystemResolverError::MissingArtifact {
+                        coordinate: key.clone(),
+                    })?;
+            self.validate_artifact(artifact, degraded_optional_features)?;
+            let mut dependencies = artifact.dependencies.clone();
+            dependencies.sort();
+            for dependency in &dependencies {
+                self.visit(
+                    dependency,
+                    index,
+                    visiting,
+                    visited,
+                    resolved,
+                    degraded_optional_features,
+                )?;
+            }
+            visiting.remove(&key);
+            visited.insert(key);
+            resolved.push(artifact.to_resolved_artifact()?);
+            Ok(())
+        }
+
+        fn validate_artifact(
+            &self,
+            artifact: &LocalArtifactRecord,
+            degraded_optional_features: &mut BTreeSet<String>,
+        ) -> Result<(), EcosystemResolverError> {
+            artifact.validate()?;
+            let coordinate = artifact.coordinate.as_string();
+            if artifact.revoked {
+                return Err(EcosystemResolverError::RevokedArtifact {
+                    coordinate,
+                    advisories: artifact.advisory_refs.clone(),
+                });
+            }
+            if artifact.artifact_digest != artifact.declared_artifact_digest {
+                return Err(EcosystemResolverError::DigestMismatch {
+                    coordinate,
+                    expected: artifact.declared_artifact_digest.clone(),
+                    actual: artifact.artifact_digest.clone(),
+                });
+            }
+            if !self.config.allow_network && is_network_uri(&artifact.source_uri) {
+                return Err(EcosystemResolverError::NetworkRequired {
+                    coordinate,
+                    source_uri: artifact.source_uri.clone(),
+                });
+            }
+            if !runtime_in_range(
+                &self.config.runtime_contract_version,
+                &artifact.min_runtime_contract_version,
+                &artifact.max_runtime_contract_version,
+            ) {
+                return Err(EcosystemResolverError::IncompatibleArtifact {
+                    coordinate,
+                    reason: "runtime contract version is outside artifact compatibility range"
+                        .to_string(),
+                });
+            }
+            if !artifact
+                .architectures
+                .iter()
+                .any(|architecture| architecture == &self.config.architecture)
+            {
+                return Err(EcosystemResolverError::IncompatibleArtifact {
+                    coordinate,
+                    reason: "host architecture is not supported by artifact".to_string(),
+                });
+            }
+            for feature in &artifact.required_host_features {
+                if !self
+                    .config
+                    .host_features
+                    .iter()
+                    .any(|actual| actual == feature)
+                {
+                    return Err(EcosystemResolverError::IncompatibleArtifact {
+                        coordinate,
+                        reason: format!("required host feature missing: {feature}"),
+                    });
+                }
+            }
+            for feature in &artifact.optional_host_features {
+                if !self
+                    .config
+                    .host_features
+                    .iter()
+                    .any(|actual| actual == feature)
+                {
+                    degraded_optional_features.insert(format!(
+                        "{}:{}",
+                        artifact.coordinate.as_string(),
+                        feature
+                    ));
+                }
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct StagedArtifactEvidence {
+        pub coordinate: ArtifactCoordinate,
+        pub publisher: String,
+        pub registry_snapshot_digest: String,
+        pub lock_hash: String,
+        pub verification_report: ArtifactVerificationReportV1,
+        pub staging_report: ArtifactStagingReportV1,
+        pub compatibility_summary: String,
+        pub degraded_optional_features: Vec<String>,
+        pub host_mutation_attempted: bool,
+    }
+
+    impl StagedArtifactEvidence {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"coordinate\":\"{}\",\"publisher\":\"{}\",\"registry_snapshot_digest\":\"{}\",\"lock_hash\":\"{}\",\"verification_report\":{},\"staging_report\":{},\"compatibility_summary\":\"{}\",\"degraded_optional_features\":{},\"host_mutation_attempted\":{}}}",
+                escape_json(&self.coordinate.as_string()),
+                escape_json(&self.publisher),
+                escape_json(&self.registry_snapshot_digest),
+                escape_json(&self.lock_hash),
+                self.verification_report.to_json(),
+                self.staging_report.to_json(),
+                escape_json(&self.compatibility_summary),
+                string_array_json(&self.degraded_optional_features),
+                self.host_mutation_attempted
+            )
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct ArtifactStagingStore {
+        root: PathBuf,
+    }
+
+    impl ArtifactStagingStore {
+        pub fn new(root: impl Into<PathBuf>) -> Self {
+            Self { root: root.into() }
+        }
+
+        pub fn root(&self) -> &Path {
+            &self.root
+        }
+
+        pub fn stage_resolution(
+            &self,
+            snapshot: &LocalRegistrySnapshot,
+            resolution: &EcosystemResolution,
+        ) -> Result<Vec<StagedArtifactEvidence>, EcosystemResolverError> {
+            snapshot.validate()?;
+            ensure_staging_root(&self.root)?;
+            fs::create_dir_all(&self.root)?;
+            let lock_hash = resolution.lock.stable_hash();
+            let mut staged = Vec::new();
+            for artifact in &resolution.lock.resolved_artifacts {
+                let record = snapshot.artifact(&artifact.coordinate).ok_or_else(|| {
+                    EcosystemResolverError::MissingArtifact {
+                        coordinate: artifact.coordinate.as_string(),
+                    }
+                })?;
+                record.validate()?;
+                if record.artifact_digest != artifact.artifact_digest {
+                    return Err(EcosystemResolverError::DigestMismatch {
+                        coordinate: artifact.coordinate.as_string(),
+                        expected: record.artifact_digest.clone(),
+                        actual: artifact.artifact_digest.clone(),
+                    });
+                }
+                if record.revoked {
+                    return Err(EcosystemResolverError::RevokedArtifact {
+                        coordinate: artifact.coordinate.as_string(),
+                        advisories: record.advisory_refs.clone(),
+                    });
+                }
+                let artifact_dir = self.root.join(coordinate_slug(&artifact.coordinate));
+                fs::create_dir_all(&artifact_dir)?;
+                let staged_artifact_path = artifact_dir.join("artifact.json");
+                let verification_path = artifact_dir.join("verification-report.json");
+                let staging_path = artifact_dir.join("staging-report.json");
+                let verification_report = ArtifactVerificationReportV1::new(
+                    format!("verify-{}", coordinate_slug(&artifact.coordinate)),
+                    artifact.coordinate.clone(),
+                    artifact.manifest_digest.clone(),
+                    artifact.artifact_digest.clone(),
+                    true,
+                    true,
+                    true,
+                    false,
+                    true,
+                    artifact.trust_tier,
+                    artifact.trust_tier.production_eligible(),
+                    None::<String>,
+                )
+                .map_err(|error| {
+                    EcosystemResolverError::invalid("verification_report", error.reason())
+                })?;
+                let verification_report_json = verification_report.to_json();
+                let verification_report_digest = stable_contract_hash(&verification_report_json);
+                let staging_report = ArtifactStagingReportV1::new(
+                    format!("stage-{}", coordinate_slug(&artifact.coordinate)),
+                    artifact.coordinate.clone(),
+                    staged_artifact_path.to_string_lossy().replace('\\', "/"),
+                    artifact.manifest_digest.clone(),
+                    artifact.artifact_digest.clone(),
+                    verification_report_digest.clone(),
+                    true,
+                    false,
+                )
+                .map_err(|error| {
+                    EcosystemResolverError::invalid("staging_report", error.reason())
+                })?;
+                let degraded_optional_features = resolution
+                    .degraded_optional_features
+                    .iter()
+                    .filter(|feature| feature.starts_with(&artifact.coordinate.as_string()))
+                    .cloned()
+                    .collect::<Vec<_>>();
+                let compatibility_summary = format!(
+                    "snapshot={} runtime_contract_range={}..{} architectures={} required_host_features={} degraded_optional_features={} host_mutation_attempted=false",
+                    snapshot.snapshot_digest,
+                    record.min_runtime_contract_version,
+                    record.max_runtime_contract_version,
+                    record.architectures.join("|"),
+                    record.required_host_features.join("|"),
+                    degraded_optional_features.join("|")
+                );
+                let staged_payload = format!(
+                    "{{\"coordinate\":\"{}\",\"source_uri\":\"{}\",\"registry_snapshot_digest\":\"{}\",\"lock_hash\":\"{}\",\"artifact_digest\":\"{}\",\"manifest_digest\":\"{}\",\"inert\":true,\"activation_prepared\":false}}",
+                    escape_json(&artifact.coordinate.as_string()),
+                    escape_json(&record.source_uri),
+                    escape_json(&snapshot.snapshot_digest),
+                    escape_json(&lock_hash),
+                    escape_json(&artifact.artifact_digest),
+                    escape_json(&artifact.manifest_digest)
+                );
+                ensure_no_secret("staged_artifact", &staged_payload)?;
+                ensure_no_secret("verification_report", &verification_report_json)?;
+                let staging_report_json = staging_report.to_json();
+                ensure_no_secret("staging_report", &staging_report_json)?;
+                fs::write(&staged_artifact_path, staged_payload)?;
+                fs::write(&verification_path, verification_report_json)?;
+                fs::write(&staging_path, staging_report_json)?;
+                staged.push(StagedArtifactEvidence {
+                    coordinate: artifact.coordinate.clone(),
+                    publisher: artifact.coordinate.publisher.clone(),
+                    registry_snapshot_digest: snapshot.snapshot_digest.clone(),
+                    lock_hash: lock_hash.clone(),
+                    verification_report,
+                    staging_report,
+                    compatibility_summary,
+                    degraded_optional_features,
+                    host_mutation_attempted: false,
+                });
+            }
+            Ok(staged)
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct ActivationPlanningRequest {
+        pub actor: String,
+        pub staged_artifacts: Vec<StagedArtifactEvidence>,
+        pub replay_evidence_hash: Option<String>,
+        pub compatibility_evidence_hash: Option<String>,
+        pub previous_active_set_hash: String,
+        pub policy_version: String,
+        pub rollback_handle: String,
+        pub policy_broadening: bool,
+    }
+
+    impl ActivationPlanningRequest {
+        pub fn new(
+            actor: impl Into<String>,
+            staged_artifacts: Vec<StagedArtifactEvidence>,
+            replay_evidence_hash: impl Into<String>,
+            compatibility_evidence_hash: impl Into<String>,
+        ) -> Result<Self, ActivationPlanningError> {
+            let staged_digest = stable_contract_hash(
+                &staged_artifacts
+                    .iter()
+                    .map(StagedArtifactEvidence::to_json)
+                    .collect::<Vec<_>>()
+                    .join("|"),
+            );
+            let request = Self {
+                actor: actor.into(),
+                staged_artifacts,
+                replay_evidence_hash: Some(replay_evidence_hash.into()),
+                compatibility_evidence_hash: Some(compatibility_evidence_hash.into()),
+                previous_active_set_hash: stable_contract_hash("agentos-active-set-empty-v1"),
+                policy_version: "policy-v1".to_string(),
+                rollback_handle: format!("rollback-ecosystem-activation-{staged_digest}"),
+                policy_broadening: false,
+            };
+            request.validate()?;
+            Ok(request.with_inferred_policy_broadening())
+        }
+
+        pub fn without_replay(mut self) -> Self {
+            self.replay_evidence_hash = None;
+            self
+        }
+
+        pub fn without_compatibility(mut self) -> Self {
+            self.compatibility_evidence_hash = None;
+            self
+        }
+
+        pub fn with_policy_broadening(mut self, policy_broadening: bool) -> Self {
+            self.policy_broadening = policy_broadening;
+            self
+        }
+
+        pub fn lock_hash(&self) -> Option<&str> {
+            self.staged_artifacts
+                .first()
+                .map(|artifact| artifact.lock_hash.as_str())
+        }
+
+        pub fn registry_snapshot_digest(&self) -> Option<&str> {
+            self.staged_artifacts
+                .first()
+                .map(|artifact| artifact.registry_snapshot_digest.as_str())
+        }
+
+        fn activated_artifact_strings(&self) -> Vec<String> {
+            let mut artifacts = self
+                .staged_artifacts
+                .iter()
+                .map(|artifact| artifact.coordinate.as_string())
+                .collect::<Vec<_>>();
+            artifacts.sort();
+            artifacts
+        }
+
+        fn activation_diff_hash(&self) -> String {
+            stable_contract_hash(&format!(
+                "lock={};previous={};artifacts={}",
+                self.lock_hash().unwrap_or("missing-lock"),
+                self.previous_active_set_hash,
+                self.activated_artifact_strings().join("|")
+            ))
+        }
+
+        fn with_inferred_policy_broadening(mut self) -> Self {
+            self.policy_broadening = self.policy_broadening
+                || self
+                    .staged_artifacts
+                    .iter()
+                    .any(|artifact| artifact.coordinate.kind.as_str() == "policy-pack");
+            self
+        }
+
+        fn validate(&self) -> Result<(), ActivationPlanningError> {
+            ensure_text("activation.actor", &self.actor)?;
+            if self.staged_artifacts.is_empty() {
+                return Err(ActivationPlanningError::InvalidRequest {
+                    reason: "activation planning requires staged artifact evidence".to_string(),
+                });
+            }
+            ensure_digest(
+                "activation.replay_evidence_hash",
+                self.replay_evidence_hash.as_deref().ok_or_else(|| {
+                    ActivationPlanningError::InvalidRequest {
+                        reason: "activation planning requires local replay evidence".to_string(),
+                    }
+                })?,
+            )?;
+            ensure_digest(
+                "activation.compatibility_evidence_hash",
+                self.compatibility_evidence_hash.as_deref().ok_or_else(|| {
+                    ActivationPlanningError::InvalidRequest {
+                        reason: "activation planning requires compatibility evidence".to_string(),
+                    }
+                })?,
+            )?;
+            ensure_digest(
+                "activation.previous_active_set_hash",
+                &self.previous_active_set_hash,
+            )?;
+            ensure_text("activation.policy_version", &self.policy_version)?;
+            ensure_text("activation.rollback_handle", &self.rollback_handle)?;
+            let lock_hash =
+                self.lock_hash()
+                    .ok_or_else(|| ActivationPlanningError::InvalidRequest {
+                        reason: "activation planning requires lock hash".to_string(),
+                    })?;
+            let registry_snapshot_digest = self.registry_snapshot_digest().ok_or_else(|| {
+                ActivationPlanningError::InvalidRequest {
+                    reason: "activation planning requires registry snapshot digest".to_string(),
+                }
+            })?;
+            ensure_digest("activation.lock_hash", lock_hash)?;
+            ensure_digest(
+                "activation.registry_snapshot_digest",
+                registry_snapshot_digest,
+            )?;
+
+            for artifact in &self.staged_artifacts {
+                artifact.coordinate.validate().map_err(|error| {
+                    ActivationPlanningError::InvalidRequest {
+                        reason: error.reason(),
+                    }
+                })?;
+                if !artifact.coordinate.kind.alpha_activatable() {
+                    return Err(ActivationPlanningError::InvalidRequest {
+                        reason: format!(
+                            "artifact kind cannot activate in alpha: {}",
+                            artifact.coordinate.kind.as_str()
+                        ),
+                    });
+                }
+                if artifact.lock_hash != lock_hash {
+                    return Err(ActivationPlanningError::InvalidRequest {
+                        reason: "staged artifacts must share the same lock hash".to_string(),
+                    });
+                }
+                if artifact.registry_snapshot_digest != registry_snapshot_digest {
+                    return Err(ActivationPlanningError::InvalidRequest {
+                        reason: "staged artifacts must share the same registry snapshot digest"
+                            .to_string(),
+                    });
+                }
+                if !artifact.staging_report.inert || artifact.staging_report.activation_prepared {
+                    return Err(ActivationPlanningError::InvalidRequest {
+                        reason: "staged artifacts must remain inert and activation_prepared=false"
+                            .to_string(),
+                    });
+                }
+                if artifact.host_mutation_attempted {
+                    return Err(ActivationPlanningError::InvalidRequest {
+                        reason: "activation planning rejects staged evidence with host mutation"
+                            .to_string(),
+                    });
+                }
+                if !artifact.verification_report.accepted_for_production() {
+                    return Err(ActivationPlanningError::InvalidRequest {
+                        reason: format!(
+                            "artifact verification is not production-accepted: {}",
+                            artifact.coordinate.as_string()
+                        ),
+                    });
+                }
+                ensure_no_secret(
+                    "activation.compatibility_summary",
+                    &artifact.compatibility_summary,
+                )?;
+            }
+            Ok(())
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct ActivationPlanPreview {
+        pub plan: PlanSpec,
+        pub activated_artifacts: Vec<String>,
+        pub activation_diff_hash: String,
+        pub replay_evidence_hash: String,
+        pub compatibility_evidence_hash: String,
+        pub approval_required: bool,
+        pub rollback_required: bool,
+        pub policy_broadening: bool,
+        pub security_execution_required: bool,
+        pub planner_can_execute_directly: bool,
+        pub active_mutated: bool,
+        pub status: String,
+    }
+
+    impl ActivationPlanPreview {
+        pub fn to_json(&self) -> String {
+            format!(
+                "{{\"schema\":\"agentos.ecosystem-activation-plan-preview.v1\",\"status\":\"{}\",\"plan\":{},\"activated_artifacts\":{},\"activation_diff_hash\":\"{}\",\"replay_evidence_hash\":\"{}\",\"compatibility_evidence_hash\":\"{}\",\"approval_required\":{},\"rollback_required\":{},\"policy_broadening\":{},\"security_execution_required\":{},\"planner_can_execute_directly\":{},\"active_mutated\":{}}}",
+                escape_json(&self.status),
+                self.plan.to_json(),
+                string_array_json(&self.activated_artifacts),
+                escape_json(&self.activation_diff_hash),
+                escape_json(&self.replay_evidence_hash),
+                escape_json(&self.compatibility_evidence_hash),
+                self.approval_required,
+                self.rollback_required,
+                self.policy_broadening,
+                self.security_execution_required,
+                self.planner_can_execute_directly,
+                self.active_mutated
+            )
+        }
+    }
+
+    #[derive(Debug, Default, Clone, Copy)]
+    pub struct EcosystemActivationPlanner;
+
+    impl EcosystemActivationPlanner {
+        pub fn plan(
+            &self,
+            request: &ActivationPlanningRequest,
+        ) -> Result<ActivationPlanPreview, ActivationPlanningError> {
+            request.validate()?;
+            let lock_hash = request.lock_hash().expect("validated lock hash");
+            let registry_snapshot_digest = request
+                .registry_snapshot_digest()
+                .expect("validated registry snapshot digest");
+            let replay_hash = request
+                .replay_evidence_hash
+                .as_deref()
+                .expect("validated replay evidence");
+            let compatibility_hash = request
+                .compatibility_evidence_hash
+                .as_deref()
+                .expect("validated compatibility evidence");
+            let activated_artifacts = request.activated_artifact_strings();
+            let activation_diff_hash = request.activation_diff_hash();
+            let preserved_invariants = [
+                "no-shell",
+                "exact-approval",
+                "secret-handle",
+                "source-to-sink",
+                "audit",
+                "rollback",
+            ]
+            .join("|");
+            let intent = IntentCtx::new(
+                &request.actor,
+                TrustBoundary::Operator,
+                IntentSource::Cli,
+                "agentos:ecosystem-activation",
+                format!(
+                    "activate staged AgentOS artifacts via PlanSpec and SecurityExecutionEngine lock_hash={lock_hash}"
+                ),
+            )
+            .map_err(ActivationPlanningError::Model)?;
+            let replay_step = activation_step(
+                STEP_VERIFY_REPLAY,
+                "ecosystem.replay.verify",
+                vec![
+                    ("replay_hash", replay_hash),
+                    ("lock_hash", lock_hash),
+                    ("registry_snapshot_digest", registry_snapshot_digest),
+                ],
+                Vec::new(),
+                RiskClass::ReadOnly,
+                false,
+                false,
+                None,
+                "local replay evidence must pass before activation",
+            )?;
+            let compatibility_step = activation_step(
+                STEP_CHECK_COMPATIBILITY,
+                "ecosystem.compatibility.check",
+                vec![
+                    ("compatibility_hash", compatibility_hash),
+                    ("lock_hash", lock_hash),
+                    ("artifact_count", &activated_artifacts.len().to_string()),
+                ],
+                vec![STEP_VERIFY_REPLAY],
+                RiskClass::ReadOnly,
+                false,
+                false,
+                None,
+                "runtime compatibility evidence must pass before activation",
+            )?;
+            let activation_step = activation_step(
+                STEP_ACTIVATE_ARTIFACTS,
+                "ecosystem.activate",
+                vec![
+                    ("lock_hash", lock_hash),
+                    ("registry_snapshot_digest", registry_snapshot_digest),
+                    ("activation_diff_hash", &activation_diff_hash),
+                    (
+                        "previous_active_set_hash",
+                        &request.previous_active_set_hash,
+                    ),
+                    ("rollback_id", &request.rollback_handle),
+                    ("policy_version", &request.policy_version),
+                    ("artifacts", &activated_artifacts.join("|")),
+                    ("preserved_invariants", &preserved_invariants),
+                ],
+                vec![STEP_VERIFY_REPLAY, STEP_CHECK_COMPATIBILITY],
+                RiskClass::PrivilegedWithHumanApproval,
+                true,
+                true,
+                Some(&request.rollback_handle),
+                "active artifact set mutation requires exact approval and rollback",
+            )?;
+            let plan = PlanSpec::new(
+                format!("plan-ecosystem-activation-{}", activation_diff_hash),
+                ECOSYSTEM_ACTIVATION_PLANNER_VERSION,
+                intent,
+                vec![replay_step, compatibility_step, activation_step],
+                vec![
+                    "replay and compatibility evidence are verified before activation".to_string(),
+                    "activation side effects are prepared only by SecurityExecutionEngine"
+                        .to_string(),
+                    "active artifact set is unchanged during planning".to_string(),
+                    "rollback handle is bound before active artifact mutation".to_string(),
+                ],
+                ModelEvidence::stub(),
+            )
+            .map_err(ActivationPlanningError::Model)?;
+            Ok(ActivationPlanPreview {
+                plan,
+                activated_artifacts,
+                activation_diff_hash,
+                replay_evidence_hash: replay_hash.to_string(),
+                compatibility_evidence_hash: compatibility_hash.to_string(),
+                approval_required: true,
+                rollback_required: true,
+                policy_broadening: request.policy_broadening,
+                security_execution_required: true,
+                planner_can_execute_directly: false,
+                active_mutated: false,
+                status: if request.policy_broadening {
+                    "awaiting-policy-broadening-approval".to_string()
+                } else {
+                    "awaiting-operator-approval".to_string()
+                },
+            })
+        }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum ActivationPlanningError {
+        InvalidRequest { reason: String },
+        Model(ModelValidationError),
+        SecretValue { field: &'static str },
+    }
+
+    impl ActivationPlanningError {
+        pub fn reason(&self) -> String {
+            match self {
+                Self::InvalidRequest { reason } => reason.clone(),
+                Self::Model(error) => error.to_string(),
+                Self::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
+            }
+        }
+    }
+
+    impl fmt::Display for ActivationPlanningError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl std::error::Error for ActivationPlanningError {}
+
+    impl From<ModelValidationError> for ActivationPlanningError {
+        fn from(error: ModelValidationError) -> Self {
+            Self::Model(error)
+        }
+    }
+
+    impl From<EcosystemResolverError> for ActivationPlanningError {
+        fn from(error: EcosystemResolverError) -> Self {
+            match error {
+                EcosystemResolverError::SecretValue { field } => Self::SecretValue { field },
+                other => Self::InvalidRequest {
+                    reason: other.reason(),
+                },
+            }
+        }
+    }
+
+    fn activation_step(
+        step_id: &str,
+        tool: &str,
+        params: Vec<(&str, &str)>,
+        dependencies: Vec<&str>,
+        risk: RiskClass,
+        approval_required: bool,
+        rollback_required: bool,
+        rollback_id: Option<&str>,
+        reason: &str,
+    ) -> Result<PlanStep, ActivationPlanningError> {
+        let approval = if approval_required {
+            ApprovalRequirement::operator_required(format!("{tool} requires exact approval"))?
+        } else {
+            ApprovalRequirement::not_required(format!("{tool} is a verification gate"))?
+        };
+        let rollback = if rollback_required {
+            RollbackRequirement::new(
+                true,
+                rollback_id.map(str::to_string),
+                format!("{tool} requires rollback handle before active set mutation"),
+            )?
+        } else {
+            RollbackRequirement::not_required(format!("{tool} has no host mutation"))?
+        };
+        PlanStep::new(
+            step_id,
+            SemanticToolCall::new(tool, params),
+            dependencies.into_iter().map(str::to_string).collect(),
+            vec![reason.to_string()],
+            vec![format!("{tool} evidence is recorded in audit")],
+            VerificationRule::new(
+                format!("verify-{step_id}"),
+                format!("verify {tool} activation gate"),
+                tool,
+            )?,
+            approval,
+            1,
+            vec![RiskHint::new(
+                risk,
+                format!("{tool} ecosystem activation risk"),
+            )?],
+            rollback,
+        )
+        .map_err(ActivationPlanningError::Model)
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum EcosystemResolverError {
+        Io(String),
+        InvalidFixture {
+            field: &'static str,
+            reason: String,
+        },
+        MissingArtifact {
+            coordinate: String,
+        },
+        RevokedArtifact {
+            coordinate: String,
+            advisories: Vec<String>,
+        },
+        DigestMismatch {
+            coordinate: String,
+            expected: String,
+            actual: String,
+        },
+        IncompatibleArtifact {
+            coordinate: String,
+            reason: String,
+        },
+        NetworkRequired {
+            coordinate: String,
+            source_uri: String,
+        },
+        Cycle {
+            coordinate: String,
+        },
+        StagingViolation {
+            reason: String,
+        },
+        SecretValue {
+            field: &'static str,
+        },
+    }
+
+    impl EcosystemResolverError {
+        fn invalid(field: &'static str, reason: impl Into<String>) -> Self {
+            Self::InvalidFixture {
+                field,
+                reason: reason.into(),
+            }
+        }
+
+        pub fn reason(&self) -> String {
+            match self {
+                Self::Io(reason) => format!("local registry io error: {reason}"),
+                Self::InvalidFixture { reason, .. } => reason.clone(),
+                Self::MissingArtifact { coordinate } => {
+                    format!("artifact is missing from local registry: {coordinate}")
+                }
+                Self::RevokedArtifact {
+                    coordinate,
+                    advisories,
+                } => {
+                    format!(
+                        "artifact is revoked: {coordinate} advisories={}",
+                        advisories.join(",")
+                    )
+                }
+                Self::DigestMismatch {
+                    coordinate,
+                    expected,
+                    actual,
+                } => format!(
+                    "artifact digest mismatch for {coordinate}: expected {expected} actual {actual}"
+                ),
+                Self::IncompatibleArtifact { coordinate, reason } => {
+                    format!("artifact is incompatible: {coordinate}: {reason}")
+                }
+                Self::NetworkRequired {
+                    coordinate,
+                    source_uri,
+                } => {
+                    format!("local resolver refuses network source for {coordinate}: {source_uri}")
+                }
+                Self::Cycle { coordinate } => {
+                    format!("artifact dependency cycle detected at {coordinate}")
+                }
+                Self::StagingViolation { reason } => reason.clone(),
+                Self::SecretValue { field } => {
+                    format!("secret-like value is not allowed in {field}")
+                }
+            }
+        }
+    }
+
+    impl fmt::Display for EcosystemResolverError {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str(&self.reason())
+        }
+    }
+
+    impl std::error::Error for EcosystemResolverError {}
+
+    impl From<std::io::Error> for EcosystemResolverError {
+        fn from(error: std::io::Error) -> Self {
+            Self::Io(error.to_string())
+        }
+    }
+
+    fn ensure_text(field: &'static str, value: &str) -> Result<(), EcosystemResolverError> {
+        if value.trim().is_empty() {
+            return Err(EcosystemResolverError::invalid(
+                field,
+                "value must not be empty",
+            ));
+        }
+        if contains_secret_value(value) {
+            return Err(EcosystemResolverError::SecretValue { field });
+        }
+        Ok(())
+    }
+
+    fn ensure_no_secret(field: &'static str, value: &str) -> Result<(), EcosystemResolverError> {
+        if contains_secret_value(value) {
+            return Err(EcosystemResolverError::SecretValue { field });
+        }
+        Ok(())
+    }
+
+    fn ensure_digest(field: &'static str, value: &str) -> Result<(), EcosystemResolverError> {
+        ensure_text(field, value)?;
+        if !value.starts_with("sha256:") || value.len() <= "sha256:".len() {
+            return Err(EcosystemResolverError::invalid(
+                field,
+                "digest must be sha256-bound",
+            ));
+        }
+        Ok(())
+    }
+
+    fn ensure_semver(field: &'static str, value: &str) -> Result<(), EcosystemResolverError> {
+        ensure_text(field, value)?;
+        if semver_core(value).is_none() {
+            return Err(EcosystemResolverError::invalid(
+                field,
+                "value must be semver-like",
+            ));
+        }
+        Ok(())
+    }
+
+    fn ensure_local_source_uri(
+        field: &'static str,
+        value: &str,
+    ) -> Result<(), EcosystemResolverError> {
+        ensure_text(field, value)?;
+        if !(value.starts_with("file://") || value.starts_with("artifact://")) {
+            return Err(EcosystemResolverError::invalid(
+                field,
+                "local registry fixture source_uri must be file:// or artifact://",
+            ));
+        }
+        Ok(())
+    }
+
+    fn is_network_uri(value: &str) -> bool {
+        value.starts_with("http://") || value.starts_with("https://")
+    }
+
+    fn ensure_staging_root(path: &Path) -> Result<(), EcosystemResolverError> {
+        if path.as_os_str().is_empty() {
+            return Err(EcosystemResolverError::StagingViolation {
+                reason: "staging root must not be empty".to_string(),
+            });
+        }
+        if path.components().any(|component| {
+            component
+                .as_os_str()
+                .to_string_lossy()
+                .eq_ignore_ascii_case("active")
+        }) {
+            return Err(EcosystemResolverError::StagingViolation {
+                reason: "staging store must not target active artifact state".to_string(),
+            });
+        }
+        Ok(())
+    }
+
+    fn coordinate_slug(coordinate: &ArtifactCoordinate) -> String {
+        coordinate
+            .as_string()
+            .chars()
+            .map(|ch| if ch.is_ascii_alphanumeric() { ch } else { '_' })
+            .collect()
+    }
+
+    fn runtime_in_range(runtime: &str, min: &str, max: &str) -> bool {
+        matches!(
+            (compare_semver(runtime, min), compare_semver(runtime, max)),
+            (
+                Some(std::cmp::Ordering::Equal | std::cmp::Ordering::Greater),
+                Some(std::cmp::Ordering::Equal | std::cmp::Ordering::Less)
+            )
+        )
+    }
+
+    fn compare_semver(left: &str, right: &str) -> Option<std::cmp::Ordering> {
+        Some(semver_core(left)?.cmp(&semver_core(right)?))
+    }
+
+    fn semver_core(value: &str) -> Option<(u64, u64, u64)> {
+        let core = value.split_once('-').map(|(core, _)| core).unwrap_or(value);
+        let parts = core.split('.').collect::<Vec<_>>();
+        if parts.len() != 3 {
+            return None;
+        }
+        Some((
+            parts[0].parse().ok()?,
+            parts[1].parse().ok()?,
+            parts[2].parse().ok()?,
+        ))
+    }
+
+    fn required_json_string(
+        json: &str,
+        key: &'static str,
+    ) -> Result<String, EcosystemResolverError> {
+        let start = field_value_start(json, key)
+            .ok_or_else(|| EcosystemResolverError::invalid(key, "missing required field"))?;
+        parse_json_string(&json[start..])
+            .map(|(value, _)| value)
+            .ok_or_else(|| EcosystemResolverError::invalid(key, "field must be a string"))
+    }
+
+    fn required_json_bool(json: &str, key: &'static str) -> Result<bool, EcosystemResolverError> {
+        let start = field_value_start(json, key)
+            .ok_or_else(|| EcosystemResolverError::invalid(key, "missing required field"))?;
+        if json[start..].starts_with("true") {
+            Ok(true)
+        } else if json[start..].starts_with("false") {
+            Ok(false)
+        } else {
+            Err(EcosystemResolverError::invalid(
+                key,
+                "field must be a boolean",
+            ))
+        }
+    }
+
+    fn string_array_field(
+        json: &str,
+        key: &'static str,
+    ) -> Result<Vec<String>, EcosystemResolverError> {
+        let array = array_field(json, key)?;
+        parse_string_array(&array)
+    }
+
+    fn object_array_field(
+        json: &str,
+        key: &'static str,
+    ) -> Result<Vec<String>, EcosystemResolverError> {
+        let array = array_field(json, key)?;
+        let inner = array
+            .trim()
+            .strip_prefix('[')
+            .and_then(|value| value.strip_suffix(']'))
+            .ok_or_else(|| EcosystemResolverError::invalid(key, "field must be an array"))?;
+        let mut objects = Vec::new();
+        let mut in_string = false;
+        let mut escaped = false;
+        let mut depth = 0usize;
+        let mut object_start = None;
+        for (index, ch) in inner.char_indices() {
+            if escaped {
+                escaped = false;
+                continue;
+            }
+            if ch == '\\' && in_string {
+                escaped = true;
+                continue;
+            }
+            if ch == '"' {
+                in_string = !in_string;
+                continue;
+            }
+            if in_string {
+                continue;
+            }
+            match ch {
+                '{' => {
+                    if depth == 0 {
+                        object_start = Some(index);
+                    }
+                    depth += 1;
+                }
+                '}' => {
+                    if depth == 0 {
+                        return Err(EcosystemResolverError::invalid(
+                            key,
+                            "object array has unbalanced braces",
+                        ));
+                    }
+                    depth -= 1;
+                    if depth == 0 {
+                        let start = object_start.ok_or_else(|| {
+                            EcosystemResolverError::invalid(key, "object start was not found")
+                        })?;
+                        objects.push(inner[start..=index].to_string());
+                        object_start = None;
+                    }
+                }
+                _ => {}
+            }
+        }
+        if depth != 0 || in_string {
+            return Err(EcosystemResolverError::invalid(
+                key,
+                "object array is not closed",
+            ));
+        }
+        Ok(objects)
+    }
+
+    fn array_field(json: &str, key: &'static str) -> Result<String, EcosystemResolverError> {
+        let start = field_value_start(json, key)
+            .ok_or_else(|| EcosystemResolverError::invalid(key, "missing required field"))?;
+        let mut in_string = false;
+        let mut escaped = false;
+        let mut depth = 0usize;
+        let mut array_start = None;
+        for (offset, ch) in json[start..].char_indices() {
+            if escaped {
+                escaped = false;
+                continue;
+            }
+            if ch == '\\' && in_string {
+                escaped = true;
+                continue;
+            }
+            if ch == '"' {
+                in_string = !in_string;
+                continue;
+            }
+            if in_string {
+                continue;
+            }
+            match ch {
+                '[' => {
+                    if depth == 0 {
+                        array_start = Some(start + offset);
+                    }
+                    depth += 1;
+                }
+                ']' => {
+                    if depth == 0 {
+                        return Err(EcosystemResolverError::invalid(
+                            key,
+                            "array has unbalanced brackets",
+                        ));
+                    }
+                    depth -= 1;
+                    if depth == 0 {
+                        let begin = array_start.ok_or_else(|| {
+                            EcosystemResolverError::invalid(key, "array start was not found")
+                        })?;
+                        return Ok(json[begin..=start + offset].to_string());
+                    }
+                }
+                _ if depth == 0 && !ch.is_whitespace() => {
+                    return Err(EcosystemResolverError::invalid(
+                        key,
+                        "field must be an array",
+                    ));
+                }
+                _ => {}
+            }
+        }
+        Err(EcosystemResolverError::invalid(
+            key,
+            "array field is not closed",
+        ))
+    }
+
+    fn parse_string_array(array: &str) -> Result<Vec<String>, EcosystemResolverError> {
+        let inner = array
+            .trim()
+            .strip_prefix('[')
+            .and_then(|value| value.strip_suffix(']'))
+            .ok_or_else(|| EcosystemResolverError::invalid("array", "field must be an array"))?;
+        let mut values = Vec::new();
+        let mut index = 0usize;
+        while index < inner.len() {
+            index = skip_json_ws(inner, index);
+            if index >= inner.len() {
+                break;
+            }
+            if inner[index..].starts_with(',') {
+                index += 1;
+                continue;
+            }
+            let (value, consumed) = parse_json_string(&inner[index..]).ok_or_else(|| {
+                EcosystemResolverError::invalid("array", "array values must be strings")
+            })?;
+            values.push(value);
+            index += consumed;
+            index = skip_json_ws(inner, index);
+            if index < inner.len() && inner[index..].starts_with(',') {
+                index += 1;
+            }
+        }
+        Ok(values)
+    }
+
+    fn field_value_start(json: &str, key: &str) -> Option<usize> {
+        let needle = format!("\"{key}\"");
+        let key_index = json.find(&needle)?;
+        let after_key = key_index + needle.len();
+        let colon_offset = json[after_key..].find(':')?;
+        Some(skip_json_ws(json, after_key + colon_offset + 1))
+    }
+
+    fn skip_json_ws(json: &str, mut index: usize) -> usize {
+        while index < json.len() && json.as_bytes()[index].is_ascii_whitespace() {
+            index += 1;
+        }
+        index
+    }
+
+    fn parse_json_string(value: &str) -> Option<(String, usize)> {
+        let bytes = value.as_bytes();
+        if bytes.first().copied()? != b'"' {
+            return None;
+        }
+        let mut output = String::new();
+        let mut escaped = false;
+        for (index, ch) in value[1..].char_indices() {
+            if escaped {
+                output.push(match ch {
+                    '"' => '"',
+                    '\\' => '\\',
+                    '/' => '/',
+                    'n' => '\n',
+                    'r' => '\r',
+                    't' => '\t',
+                    other => other,
+                });
+                escaped = false;
+                continue;
+            }
+            if ch == '\\' {
+                escaped = true;
+                continue;
+            }
+            if ch == '"' {
+                return Some((output, index + 2));
+            }
+            output.push(ch);
+        }
+        None
+    }
+
+    fn string_array_json(values: &[String]) -> String {
+        format!(
+            "[{}]",
+            values
+                .iter()
+                .map(|value| format!("\"{}\"", escape_json(value)))
+                .collect::<Vec<_>>()
+                .join(",")
+        )
+    }
+
+    #[cfg(test)]
+    mod resolver {
+        use super::*;
+        use std::sync::atomic::{AtomicU64, Ordering};
+
+        static FIXTURE_COUNTER: AtomicU64 = AtomicU64::new(0);
+
+        fn coord(name: &str) -> ArtifactCoordinate {
+            ArtifactCoordinate::parse(&format!("agentos:workflow-pack/agentos/{name}@1.0.0"))
+                .expect("coordinate")
+        }
+
+        fn fixture_json() -> String {
+            format!(
+                "{{\"schema\":\"{}\",\"snapshot_id\":\"agentos-local-alpha\",\"generated_at\":\"2026-05-25T01:00:00Z\",\"expires_at\":\"2026-06-01T00:00:00Z\",\"local_pinned\":true,\"snapshot_digest\":\"sha256:local-snapshot\",\"artifacts\":[{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-base\",\"artifact_digest\":\"sha256:artifact-base\",\"declared_artifact_digest\":\"sha256:artifact-base\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/base-workflow.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[],\"dependencies\":[],\"advisory_refs\":[]}},{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-setup\",\"artifact_digest\":\"sha256:artifact-setup\",\"declared_artifact_digest\":\"sha256:artifact-setup\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/setup-workflow.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[\"kvm\"],\"dependencies\":[\"{}\"],\"advisory_refs\":[]}}]}}",
+                LOCAL_REGISTRY_FIXTURE_SCHEMA,
+                coord("base").as_string(),
+                coord("setup").as_string(),
+                coord("base").as_string()
+            )
+        }
+
+        fn resolver() -> EcosystemResolver {
+            EcosystemResolver::new(
+                EcosystemResolverConfig::local_only(
+                    "0.1.0",
+                    "x86_64",
+                    vec!["audit-journal"],
+                    "2026-05-25T00:00:00Z",
+                )
+                .expect("config"),
+            )
+            .expect("resolver")
+        }
+
+        fn write_fixture(json: &str) -> std::path::PathBuf {
+            let counter = FIXTURE_COUNTER.fetch_add(1, Ordering::SeqCst);
+            let path = std::env::temp_dir().join(format!(
+                "agentos-local-registry-{counter}-{}.json",
+                std::process::id()
+            ));
+            fs::write(&path, json).expect("write fixture");
+            path
+        }
+
+        #[test]
+        fn resolves_local_snapshot_deterministically_without_network() {
+            let path = write_fixture(&fixture_json());
+            let snapshot = LocalRegistrySnapshot::from_file(&path).expect("snapshot");
+            let first = resolver()
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect("resolve");
+            let second = resolver()
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect("resolve again");
+
+            assert!(!first.network_required);
+            assert_eq!(first.lock.stable_hash(), second.lock.stable_hash());
+            assert_eq!(
+                first.resolved_order,
+                vec![coord("base").as_string(), coord("setup").as_string()]
+            );
+            assert_eq!(
+                first.degraded_optional_features,
+                vec![format!("{}:kvm", coord("setup").as_string())]
+            );
+            assert!(first.lock.to_json().contains("sha256:artifact-setup"));
+        }
+
+        #[test]
+        fn revoked_artifact_fails_closed() {
+            let json = fixture_json().replace("\"revoked\":false", "\"revoked\":true");
+            let snapshot = LocalRegistrySnapshot::from_json(&json).expect("snapshot");
+            let error = resolver()
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect_err("revoked artifact rejected");
+            assert!(error.reason().contains("revoked"));
+        }
+
+        #[test]
+        fn missing_dependency_fails_closed() {
+            let json = fixture_json().replace(
+                &format!("\"dependencies\":[\"{}\"]", coord("base").as_string()),
+                "\"dependencies\":[\"agentos:workflow-pack/agentos/missing@1.0.0\"]",
+            );
+            let snapshot = LocalRegistrySnapshot::from_json(&json).expect("snapshot");
+            let error = resolver()
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect_err("missing dependency rejected");
+            assert!(error.reason().contains("missing"));
+        }
+
+        #[test]
+        fn digest_mismatch_fails_closed() {
+            let json = fixture_json().replace(
+                "\"declared_artifact_digest\":\"sha256:artifact-setup\"",
+                "\"declared_artifact_digest\":\"sha256:expected-other\"",
+            );
+            let snapshot = LocalRegistrySnapshot::from_json(&json).expect("snapshot");
+            let error = resolver()
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect_err("digest mismatch rejected");
+            assert!(error.reason().contains("digest mismatch"));
+        }
+
+        #[test]
+        fn incompatible_runtime_blocks_resolution() {
+            let config = EcosystemResolverConfig::local_only(
+                "1.0.0",
+                "x86_64",
+                vec!["audit-journal"],
+                "2026-05-25T00:00:00Z",
+            )
+            .expect("config");
+            let snapshot = LocalRegistrySnapshot::from_json(&fixture_json()).expect("snapshot");
+            let error = EcosystemResolver::new(config)
+                .expect("resolver")
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect_err("incompatible runtime rejected");
+            assert!(error.reason().contains("runtime contract version"));
+        }
+    }
+
+    #[cfg(test)]
+    mod staging {
+        use super::*;
+        use std::sync::atomic::{AtomicU64, Ordering};
+
+        static STAGING_COUNTER: AtomicU64 = AtomicU64::new(0);
+
+        fn coord(name: &str) -> ArtifactCoordinate {
+            ArtifactCoordinate::parse(&format!("agentos:workflow-pack/agentos/{name}@1.0.0"))
+                .expect("coordinate")
+        }
+
+        fn fixture_json() -> String {
+            format!(
+                "{{\"schema\":\"{}\",\"snapshot_id\":\"agentos-local-alpha\",\"generated_at\":\"2026-05-25T01:00:00Z\",\"expires_at\":\"2026-06-01T00:00:00Z\",\"local_pinned\":true,\"snapshot_digest\":\"sha256:local-snapshot\",\"artifacts\":[{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-base\",\"artifact_digest\":\"sha256:artifact-base\",\"declared_artifact_digest\":\"sha256:artifact-base\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/base-workflow.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[],\"dependencies\":[],\"advisory_refs\":[]}},{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-setup\",\"artifact_digest\":\"sha256:artifact-setup\",\"declared_artifact_digest\":\"sha256:artifact-setup\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/setup-workflow.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[\"kvm\"],\"dependencies\":[\"{}\"],\"advisory_refs\":[]}}]}}",
+                LOCAL_REGISTRY_FIXTURE_SCHEMA,
+                coord("base").as_string(),
+                coord("setup").as_string(),
+                coord("base").as_string()
+            )
+        }
+
+        fn temp_root(name: &str) -> PathBuf {
+            let counter = STAGING_COUNTER.fetch_add(1, Ordering::SeqCst);
+            let path = std::env::temp_dir().join(format!(
+                "agentos-ecosystem-staging-{name}-{counter}-{}",
+                std::process::id()
+            ));
+            let _ = fs::remove_dir_all(&path);
+            path
+        }
+
+        fn resolver() -> EcosystemResolver {
+            EcosystemResolver::new(
+                EcosystemResolverConfig::local_only(
+                    "0.1.0",
+                    "x86_64",
+                    vec!["audit-journal"],
+                    "2026-05-25T00:00:00Z",
+                )
+                .expect("config"),
+            )
+            .expect("resolver")
+        }
+
+        fn resolved_fixture() -> (LocalRegistrySnapshot, EcosystemResolution) {
+            let snapshot = LocalRegistrySnapshot::from_json(&fixture_json()).expect("snapshot");
+            let resolution = resolver()
+                .resolve(&snapshot, vec![coord("setup")])
+                .expect("resolve");
+            (snapshot, resolution)
+        }
+
+        #[test]
+        fn stage_resolution_writes_inert_reports_without_activation() {
+            let (snapshot, resolution) = resolved_fixture();
+            let root = temp_root("happy").join("staged");
+            let staged = ArtifactStagingStore::new(&root)
+                .stage_resolution(&snapshot, &resolution)
+                .expect("stage");
+
+            assert_eq!(staged.len(), 2);
+            assert!(root.exists());
+            assert!(staged.iter().all(|entry| entry.staging_report.inert));
+            assert!(
+                staged
+                    .iter()
+                    .all(|entry| !entry.staging_report.activation_prepared)
+            );
+            assert!(staged.iter().all(|entry| !entry.host_mutation_attempted));
+            assert!(
+                staged
+                    .iter()
+                    .all(|entry| entry.registry_snapshot_digest == "sha256:local-snapshot")
+            );
+            assert!(
+                staged
+                    .iter()
+                    .all(|entry| entry.verification_report.digest_match)
+            );
+
+            let setup = staged
+                .iter()
+                .find(|entry| entry.coordinate == coord("setup"))
+                .expect("setup");
+            assert_eq!(
+                setup.degraded_optional_features,
+                vec![format!("{}:kvm", coord("setup").as_string())]
+            );
+            assert!(
+                setup
+                    .compatibility_summary
+                    .contains("host_mutation_attempted=false")
+            );
+            assert!(setup.to_json().contains("\"activation_prepared\":false"));
+            assert!(
+                fs::read_to_string(&setup.staging_report.staged_path)
+                    .expect("staged artifact")
+                    .contains("\"inert\":true")
+            );
+        }
+
+        #[test]
+        fn staging_rejects_active_state_paths() {
+            let (snapshot, resolution) = resolved_fixture();
+            let active_root = temp_root("reject-active").join("active");
+            let error = ArtifactStagingStore::new(active_root)
+                .stage_resolution(&snapshot, &resolution)
+                .expect_err("active path rejected");
+            assert!(error.reason().contains("active artifact state"));
+        }
+
+        #[test]
+        fn staging_digest_mismatch_fails_closed_before_write() {
+            let (snapshot, mut resolution) = resolved_fixture();
+            resolution.lock.resolved_artifacts[0].artifact_digest = "sha256:tampered".to_string();
+            let root = temp_root("digest").join("staged");
+            let error = ArtifactStagingStore::new(&root)
+                .stage_resolution(&snapshot, &resolution)
+                .expect_err("digest mismatch rejected");
+            assert!(error.reason().contains("digest mismatch"));
+        }
+
+        #[test]
+        fn staging_does_not_create_active_state() {
+            let (snapshot, resolution) = resolved_fixture();
+            let root = temp_root("no-active").join("staged");
+            ArtifactStagingStore::new(&root)
+                .stage_resolution(&snapshot, &resolution)
+                .expect("stage");
+            let sibling_active = root.parent().expect("parent").join("active");
+            assert!(!sibling_active.exists());
+        }
+    }
+
+    #[cfg(test)]
+    mod activation {
+        use super::*;
+        use std::sync::atomic::{AtomicU64, Ordering};
+
+        static ACTIVATION_COUNTER: AtomicU64 = AtomicU64::new(0);
+
+        fn workflow_coord(name: &str) -> ArtifactCoordinate {
+            ArtifactCoordinate::parse(&format!("agentos:workflow-pack/agentos/{name}@1.0.0"))
+                .expect("coordinate")
+        }
+
+        fn policy_coord() -> ArtifactCoordinate {
+            ArtifactCoordinate::parse("agentos:policy-pack/agentos/core-policy@1.0.0")
+                .expect("policy coordinate")
+        }
+
+        fn workflow_fixture_json() -> String {
+            format!(
+                "{{\"schema\":\"{}\",\"snapshot_id\":\"agentos-local-alpha\",\"generated_at\":\"2026-05-25T01:00:00Z\",\"expires_at\":\"2026-06-01T00:00:00Z\",\"local_pinned\":true,\"snapshot_digest\":\"sha256:local-snapshot\",\"artifacts\":[{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-base\",\"artifact_digest\":\"sha256:artifact-base\",\"declared_artifact_digest\":\"sha256:artifact-base\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/base-workflow.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[],\"dependencies\":[],\"advisory_refs\":[]}},{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-setup\",\"artifact_digest\":\"sha256:artifact-setup\",\"declared_artifact_digest\":\"sha256:artifact-setup\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/setup-workflow.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[\"kvm\"],\"dependencies\":[\"{}\"],\"advisory_refs\":[]}}]}}",
+                LOCAL_REGISTRY_FIXTURE_SCHEMA,
+                workflow_coord("base").as_string(),
+                workflow_coord("setup").as_string(),
+                workflow_coord("base").as_string()
+            )
+        }
+
+        fn policy_fixture_json() -> String {
+            format!(
+                "{{\"schema\":\"{}\",\"snapshot_id\":\"agentos-local-policy\",\"generated_at\":\"2026-05-25T01:00:00Z\",\"expires_at\":\"2026-06-01T00:00:00Z\",\"local_pinned\":true,\"snapshot_digest\":\"sha256:local-policy-snapshot\",\"artifacts\":[{{\"coordinate\":\"{}\",\"manifest_digest\":\"sha256:manifest-policy\",\"artifact_digest\":\"sha256:artifact-policy\",\"declared_artifact_digest\":\"sha256:artifact-policy\",\"trust_tier\":\"core\",\"source_uri\":\"file:///etc/agentos/ecosystem/artifacts/core-policy.json\",\"revoked\":false,\"min_runtime_contract_version\":\"0.1.0\",\"max_runtime_contract_version\":\"0.9.0\",\"architectures\":[\"x86_64\"],\"required_host_features\":[\"audit-journal\"],\"optional_host_features\":[],\"dependencies\":[],\"advisory_refs\":[]}}]}}",
+                LOCAL_REGISTRY_FIXTURE_SCHEMA,
+                policy_coord().as_string()
+            )
+        }
+
+        fn temp_root(name: &str) -> PathBuf {
+            let counter = ACTIVATION_COUNTER.fetch_add(1, Ordering::SeqCst);
+            let path = std::env::temp_dir().join(format!(
+                "agentos-ecosystem-activation-{name}-{counter}-{}",
+                std::process::id()
+            ));
+            let _ = fs::remove_dir_all(&path);
+            path
+        }
+
+        fn resolver() -> EcosystemResolver {
+            EcosystemResolver::new(
+                EcosystemResolverConfig::local_only(
+                    "0.1.0",
+                    "x86_64",
+                    vec!["audit-journal"],
+                    "2026-05-25T00:00:00Z",
+                )
+                .expect("config"),
+            )
+            .expect("resolver")
+        }
+
+        fn staged_workflow_fixture(root: &Path) -> Vec<StagedArtifactEvidence> {
+            let snapshot =
+                LocalRegistrySnapshot::from_json(&workflow_fixture_json()).expect("snapshot");
+            let resolution = resolver()
+                .resolve(&snapshot, vec![workflow_coord("setup")])
+                .expect("resolve");
+            ArtifactStagingStore::new(root)
+                .stage_resolution(&snapshot, &resolution)
+                .expect("stage")
+        }
+
+        fn staged_policy_fixture(root: &Path) -> Vec<StagedArtifactEvidence> {
+            let snapshot =
+                LocalRegistrySnapshot::from_json(&policy_fixture_json()).expect("snapshot");
+            let resolution = resolver()
+                .resolve(&snapshot, vec![policy_coord()])
+                .expect("resolve");
+            ArtifactStagingStore::new(root)
+                .stage_resolution(&snapshot, &resolution)
+                .expect("stage")
+        }
+
+        fn planning_request(staged: Vec<StagedArtifactEvidence>) -> ActivationPlanningRequest {
+            ActivationPlanningRequest::new(
+                "operator",
+                staged,
+                stable_contract_hash("activation-replay-v1"),
+                stable_contract_hash("activation-compatibility-v1"),
+            )
+            .expect("activation request")
+        }
+
+        #[test]
+        fn staged_fixture_yields_plan_with_runtime_mediated_activation_step() {
+            let root = temp_root("plan").join("staged");
+            let request = planning_request(staged_workflow_fixture(&root));
+            let preview = EcosystemActivationPlanner
+                .plan(&request)
+                .expect("activation plan");
+
+            assert_eq!(preview.plan.steps().len(), 3);
+            assert_eq!(
+                preview.plan.steps()[0].call().name,
+                "ecosystem.replay.verify"
+            );
+            assert_eq!(
+                preview.plan.steps()[1].call().name,
+                "ecosystem.compatibility.check"
+            );
+            let activation_step = &preview.plan.steps()[2];
+            assert_eq!(activation_step.call().name, "ecosystem.activate");
+            assert!(activation_step.approval().required());
+            assert!(activation_step.rollback().required());
+            assert_eq!(
+                activation_step.rollback().rollback_id(),
+                Some(request.rollback_handle.as_str())
+            );
+            assert!(preview.approval_required);
+            assert!(preview.rollback_required);
+            assert!(preview.security_execution_required);
+            assert!(!preview.planner_can_execute_directly);
+            assert!(!preview.active_mutated);
+            assert_eq!(preview.status, "awaiting-operator-approval");
+        }
+
+        #[test]
+        fn missing_replay_or_compatibility_evidence_rejects_activation() {
+            let root = temp_root("missing-evidence").join("staged");
+            let staged = staged_workflow_fixture(&root);
+
+            let replay_error = EcosystemActivationPlanner
+                .plan(&planning_request(staged.clone()).without_replay())
+                .expect_err("replay evidence required");
+            assert!(replay_error.reason().contains("replay"));
+
+            let compatibility_error = EcosystemActivationPlanner
+                .plan(&planning_request(staged).without_compatibility())
+                .expect_err("compatibility evidence required");
+            assert!(compatibility_error.reason().contains("compatibility"));
+        }
+
+        #[test]
+        fn planning_does_not_create_active_state() {
+            let root = temp_root("no-active");
+            let staged_root = root.join("staged");
+            let request = planning_request(staged_workflow_fixture(&staged_root));
+            let preview = EcosystemActivationPlanner
+                .plan(&request)
+                .expect("activation plan");
+
+            assert!(!preview.active_mutated);
+            assert!(!root.join("active").exists());
+            assert!(staged_root.exists());
+        }
+
+        #[test]
+        fn policy_pack_activation_pauses_for_policy_broadening_approval() {
+            let root = temp_root("policy-broadening").join("staged");
+            let request = planning_request(staged_policy_fixture(&root));
+            let preview = EcosystemActivationPlanner
+                .plan(&request)
+                .expect("activation plan");
+
+            assert!(preview.policy_broadening);
+            assert_eq!(preview.status, "awaiting-policy-broadening-approval");
+            assert!(preview.to_json().contains("\"policy_broadening\":true"));
+            assert!(preview.to_json().contains("\"ecosystem.activate\""));
+        }
+    }
+}
+
 pub mod model {
     use std::fmt;
 
@@ -9321,12 +11370,10 @@ pub mod package_install {
         PackageAdapterPhase, PackageAdapterReport, PackageIdentity, RiskClass, SemanticToolCall,
     };
     use security_execution::audit::AuditJournal;
-    use security_execution::policy::{ApprovalToken, PolicyRequest};
-    use security_execution::policy_adapter::{
-        PlanStepPolicyAdapter, StepPolicyOutcomeKind,
-    };
-    use security_execution::tools::ToolRouter;
     use security_execution::policy::PolicyEvaluator;
+    use security_execution::policy::{ApprovalToken, PolicyRequest};
+    use security_execution::policy_adapter::{PlanStepPolicyAdapter, StepPolicyOutcomeKind};
+    use security_execution::tools::ToolRouter;
 
     pub use super::host_promotion::{HostPromotionDecision, HostPromotionDecisionKind};
     use super::host_promotion::{
@@ -9737,9 +11784,7 @@ pub mod package_install {
                 HostPromotionDecisionKind::Allowed => PackageAdapterPhase::HostPromotion,
                 HostPromotionDecisionKind::AwaitingApproval => PackageAdapterPhase::HostCheckpoint,
                 HostPromotionDecisionKind::Denied => PackageAdapterPhase::Denied,
-                HostPromotionDecisionKind::RollbackPending => {
-                    PackageAdapterPhase::RollbackPrepared
-                }
+                HostPromotionDecisionKind::RollbackPending => PackageAdapterPhase::RollbackPrepared,
                 HostPromotionDecisionKind::FailedClosed => PackageAdapterPhase::FailedClosed,
             };
             PackageAdapterReport::new(
@@ -9891,11 +11936,7 @@ pub mod package_install {
                     });
                 }
                 StepPolicyOutcomeKind::Allowed | StepPolicyOutcomeKind::AwaitingApproval => {
-                    checked.push(format!(
-                        "{}:{}",
-                        step.call().name,
-                        outcome.kind.as_str()
-                    ));
+                    checked.push(format!("{}:{}", step.call().name, outcome.kind.as_str()));
                 }
             }
         }
@@ -10245,7 +12286,9 @@ pub mod package_install {
             })
         {
             return Err(PackageInstallError::InvalidRequest {
-                reason: format!("{field} must be a typed package value, not a raw apt/dpkg/shell command"),
+                reason: format!(
+                    "{field} must be a typed package value, not a raw apt/dpkg/shell command"
+                ),
             });
         }
         Ok(())
@@ -10267,7 +12310,8 @@ pub mod package_install {
                 .any(|ch| matches!(ch, ';' | '|' | '`' | '$' | '\n' | '\r'))
         {
             return Err(PackageInstallError::InvalidRequest {
-                reason: "package source uri must not contain raw apt/dpkg/shell fragments".to_string(),
+                reason: "package source uri must not contain raw apt/dpkg/shell fragments"
+                    .to_string(),
             });
         }
         Ok(())
@@ -10448,11 +12492,15 @@ pub mod package_install {
                 plan.semantic_tools
                     .contains(&"pkg.isolate.install".to_string())
             );
-            assert!(plan.semantic_tools.contains(&"pkg.host.install".to_string()));
-            assert!(plan
-                .semantic_tools
-                .iter()
-                .all(|tool| !tool.starts_with("apt.") && !tool.starts_with("dpkg.")));
+            assert!(
+                plan.semantic_tools
+                    .contains(&"pkg.host.install".to_string())
+            );
+            assert!(
+                plan.semantic_tools
+                    .iter()
+                    .all(|tool| !tool.starts_with("apt.") && !tool.starts_with("dpkg."))
+            );
             assert!(!plan.to_json().contains("shell.exec"));
             assert!(!plan.to_json().contains("apt install"));
         }
@@ -10493,21 +12541,27 @@ pub mod package_install {
                 evidence.host_promotion.evidence.rollback_id,
                 request.rollback_id
             );
-            assert!(evidence
-                .policy_checked_phases
-                .iter()
-                .any(|phase| phase == "pkg.host.install:awaiting-approval"));
+            assert!(
+                evidence
+                    .policy_checked_phases
+                    .iter()
+                    .any(|phase| phase == "pkg.host.install:awaiting-approval")
+            );
             let contract = evidence.contract_report().expect("contract report");
-            assert!(contract
-                .to_json()
-                .contains("agentos.package-adapter-report.v1"));
+            assert!(
+                contract
+                    .to_json()
+                    .contains("agentos.package-adapter-report.v1")
+            );
             assert_eq!(contract.identity.repository_identity, "agentos-stable");
             assert!(contract.host_promotion_approved);
-            assert!(journal
-                .event_lines()
-                .expect("journal")
-                .iter()
-                .any(|line| line.contains("pkg.host.install")));
+            assert!(
+                journal
+                    .event_lines()
+                    .expect("journal")
+                    .iter()
+                    .any(|line| line.contains("pkg.host.install"))
+            );
         }
 
         #[test]
@@ -10541,14 +12595,18 @@ pub mod package_install {
                 HostPromotionDecisionKind::AwaitingApproval
             );
             assert!(!evidence.host_promotion.host_modified);
-            assert!(evidence
-                .policy_checked_phases
-                .iter()
-                .any(|phase| phase == "pkg.isolate.install:awaiting-approval"));
-            assert!(evidence
-                .policy_checked_phases
-                .iter()
-                .any(|phase| phase == "pkg.host.install:awaiting-approval"));
+            assert!(
+                evidence
+                    .policy_checked_phases
+                    .iter()
+                    .any(|phase| phase == "pkg.isolate.install:awaiting-approval")
+            );
+            assert!(
+                evidence
+                    .policy_checked_phases
+                    .iter()
+                    .any(|phase| phase == "pkg.host.install:awaiting-approval")
+            );
         }
 
         #[test]
@@ -11609,9 +13667,11 @@ pub mod untrusted_content {
             let contract = output
                 .contract_report(false, false)
                 .expect("contract report");
-            assert!(contract
-                .to_json()
-                .contains("agentos.content-adapter-report.v1"));
+            assert!(
+                contract
+                    .to_json()
+                    .contains("agentos.content-adapter-report.v1")
+            );
             assert!(!contract.direct_tool_call_allowed);
         }
 
@@ -11911,7 +13971,10 @@ pub mod rootfs_update {
             Ok(artifacts)
         }
 
-        pub fn with_validation_hash(mut self, hash: impl Into<String>) -> Result<Self, RootfsUpdateError> {
+        pub fn with_validation_hash(
+            mut self,
+            hash: impl Into<String>,
+        ) -> Result<Self, RootfsUpdateError> {
             self.production_rootfs_validation_sha256 = Some(hash.into());
             self.validate()?;
             Ok(self)
@@ -12016,7 +14079,8 @@ pub mod rootfs_update {
             require_non_empty("actor", &self.actor)?;
             require_non_empty("run_id", &self.run_id)?;
             require_non_empty("source_uri", &self.source_uri)?;
-            if !(self.source_uri.starts_with("https://") || self.source_uri.starts_with("file://")) {
+            if !(self.source_uri.starts_with("https://") || self.source_uri.starts_with("file://"))
+            {
                 return Err(RootfsUpdateError::InvalidArtifact(
                     "source_uri must use https:// or file://".to_string(),
                 ));
@@ -12047,7 +14111,9 @@ pub mod rootfs_update {
                 return Err(RootfsUpdateError::MissingGate("sbom".to_string()));
             }
             if !self.update_metadata_verified {
-                return Err(RootfsUpdateError::MissingGate("update-metadata".to_string()));
+                return Err(RootfsUpdateError::MissingGate(
+                    "update-metadata".to_string(),
+                ));
             }
             if !self.state_backup_ready {
                 return Err(RootfsUpdateError::MissingGate("state-backup".to_string()));
@@ -12253,7 +14319,10 @@ pub mod rootfs_update {
                 AuditEventType::RollbackPending,
                 request,
                 UpdateState::RollbackScheduled,
-                &format!("pending slot health failed; rollback scheduled: {}", health.summary),
+                &format!(
+                    "pending slot health failed; rollback scheduled: {}",
+                    health.summary
+                ),
             )?;
             Ok(RootfsUpdateDecision {
                 state: UpdateState::RollbackScheduled,
@@ -12286,7 +14355,9 @@ pub mod rootfs_update {
                 Self::InvalidArtifact(reason) => write!(formatter, "invalid artifact: {reason}"),
                 Self::InvalidSlot(reason) => write!(formatter, "invalid slot: {reason}"),
                 Self::MissingGate(gate) => write!(formatter, "missing update gate: {gate}"),
-                Self::ActiveSlotMutation(reason) => write!(formatter, "active slot mutation denied: {reason}"),
+                Self::ActiveSlotMutation(reason) => {
+                    write!(formatter, "active slot mutation denied: {reason}")
+                }
                 Self::Audit(reason) => write!(formatter, "audit failed: {reason}"),
             }
         }
@@ -12418,7 +14489,11 @@ pub mod rootfs_update {
             assert!(decision.activation_scheduled);
             let lines = journal.event_lines().expect("audit");
             assert!(lines.iter().any(|line| line.contains("EffectPrepared")));
-            assert!(lines.iter().any(|line| line.contains("InactiveSlotPrepared")));
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("InactiveSlotPrepared"))
+            );
             assert!(lines.iter().any(|line| line.contains("CommitSealed")));
         }
 

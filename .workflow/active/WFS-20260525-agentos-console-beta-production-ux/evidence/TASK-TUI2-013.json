@@ -1,0 +1,54 @@
+{
+  "task_id": "TASK-TUI2-013",
+  "title": "Add rollback consequence preview",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:03:15+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/rollback_preview.rs",
+    "crates/agentd/src/tui/recovery_workbench.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "Rollback consequence preview renders under Recovery Workbench for needs-rollback state.",
+    "Preview states source=run-store+audit-journal and truth_source=audit-journal.",
+    "Preview is execution=preview-only and mutates_state=false.",
+    "Rollback handle, target resource, base hash, proposed hash and final hash are rendered when audit evidence provides them.",
+    "Failed verification and half-committed effect state are visible.",
+    "Rollback preview is linked to audit evidence lines.",
+    "Rendering recovery.show repeatedly does not append RollbackObserved or mutate run state.",
+    "Secret-like rollback summaries are redacted at render level."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_rollback_preview --no-fail-fast",
+    "cargo test -p security_execution rollback",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "test_result": {
+    "targeted": {
+      "command": "cargo test -p agentd tui_rollback_preview --no-fail-fast",
+      "passed": 2,
+      "failed": 0
+    },
+    "security_execution_rollback": {
+      "command": "cargo test -p security_execution rollback",
+      "passed": 9,
+      "failed": 0
+    },
+    "agentd_tui": {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "passed": 45,
+      "failed": 0
+    }
+  },
+  "risk_notes": [
+    "Rollback preview is a read-only projection and does not introduce rollback execution commands.",
+    "AuditJournal remains the rollback truth source.",
+    "RecoveryWorkbench composes RollbackConsequencePreview instead of owning rollback preview logic."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-014",
+    "TASK-TUI2-015"
+  ]
+}

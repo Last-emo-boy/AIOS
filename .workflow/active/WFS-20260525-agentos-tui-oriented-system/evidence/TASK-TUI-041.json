@@ -1,0 +1,22 @@
+{
+  "task_id": "TASK-TUI-041",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "activation-preview",
+  "artifacts": [
+    "crates/agentd/src/aom.rs",
+    "crates/agent_core/src/lib.rs",
+    ".workflow/artifacts/ecosystem-replay/result.json"
+  ],
+  "verified": [
+    "aom.activate.preview returns an AgentCore PlanSpec activation preview",
+    "stage output is staged_only=true active=false activation_prepared=false",
+    "activation preview requires SecurityExecutionEngine, exact approval and rollback",
+    "ecosystem replay activation_prepared=false"
+  ],
+  "commands": [
+    "cargo test -p agentd aom --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "blockers": []
+}

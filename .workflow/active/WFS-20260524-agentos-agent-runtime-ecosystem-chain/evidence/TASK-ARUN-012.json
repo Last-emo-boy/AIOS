@@ -1,0 +1,49 @@
+{
+  "task_id": "TASK-ARUN-012",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:27:20+08:00",
+  "summary": "Defined scheduler, quota, backpressure and autonomous action-budget rules for AgentOS so Agent Runtime can operate the OS without unbounded retries, unsafe replanning or hidden host fallback.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-scheduler-budget.md",
+      "sha256": "08277f1426854fb4d77039ccb2158b097c1ff8b52295c1797a03e66fe486f9bc"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-scheduler-budget.md defines sequential-first scheduling, durable dependency truth, risk-class budget policy, autonomous action budgets, quotas, backpressure and operator escalation states.",
+    "High-risk and mutating actions are constrained to a single mutating lane and must still pass approval, policy and SecurityExecutionEngine before any side effect.",
+    "Retry exhaustion is specified to produce Suspended, RollbackPending or FailedClosed states rather than indefinite autonomous retry.",
+    "Observation-triggered replanning consumes a replan budget, preserves trust labels and cannot reset retry budget or turn untrusted content into operator intent.",
+    "Sandbox resource denials are treated as backpressure or failure evidence and cannot fall back to host execution."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core scheduler",
+      "result": "passed",
+      "summary": "7 passed; scheduler rejects dependency bypass, cycles and retry exhaustion, and produces deterministic decisions."
+    },
+    {
+      "command": "cargo test -p agentd safety::resource",
+      "result": "passed",
+      "summary": "0 matched; command completed successfully but current test names do not include this module-style filter."
+    },
+    {
+      "command": "cargo test -p agentd resource_abuse_hits_configured_sandbox_limits",
+      "result": "passed",
+      "summary": "1 passed; sandbox limits deny fork, denied syscall and persistent write abuse."
+    },
+    {
+      "command": "cargo test -p security_execution resource_abuse_still_hits_configured_limits",
+      "result": "passed",
+      "summary": "1 passed; security_execution sandbox profile still denies resource abuse and projects pids_max audit metadata."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No infinite retry after unresolved EffectPrepared attempts.",
+    "No observation-only dependency satisfaction.",
+    "No planner hint can downgrade authority or reset budgets.",
+    "No sandbox/resource failure can trigger host execution fallback.",
+    "No scheduler policy is moved into agentd."
+  ],
+  "promotion_impact": "Completes the bounded-autonomy contract needed before durable runtime reconciliation, approval survival, ecosystem activation and long-running Production Distro operation."
+}

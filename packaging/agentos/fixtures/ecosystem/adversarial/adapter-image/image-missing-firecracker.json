@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "image-missing-firecracker",
+  "artifact_kind": "execution-image-pack",
+  "coordinate": "agentos:execution-image-pack/adversarial/missing-firecracker@1.0.0",
+  "attempt": "image pack tries to activate when Firecracker or KVM dependency is unavailable",
+  "forbidden_surface": "execution image activation",
+  "expected_outcome": "denied",
+  "denial_reason": "missing Firecracker or KVM fails closed before EffectPrepared",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

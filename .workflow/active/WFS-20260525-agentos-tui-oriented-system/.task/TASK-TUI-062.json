@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-062",
+  "title": "Gate release provenance on TUI replay",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "release",
+  "owner": "scripts",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-052", "TASK-TUI-060", "TASK-TUI-061"],
+  "purpose": "Make TUI-oriented readiness a release/provenance gate instead of an informal claim.",
+  "scope": [
+    "Update build-release.ps1 to require TUI replay evidence.",
+    "Record TUI replay hash, TUI config hash, command registry hash and QEMU TUI marker status.",
+    "Add promotion blocker when replay is missing, failed or stale.",
+    "Record adversarial TUI fixture status.",
+    "Preserve existing functional, ecosystem and QEMU gates."
+  ],
+  "deliverables": [
+    "scripts/build-release.ps1",
+    ".workflow/artifacts/release/provenance.json",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-062.json"
+  ],
+  "acceptance_criteria": [
+    "Release gate blocks TUI-oriented promotion when TUI replay is missing or failed.",
+    "Provenance records deterministic TUI evidence hashes.",
+    "QEMU TUI-ready marker is represented in release evidence.",
+    "Existing promotion blockers remain intact."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\tui-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Release can claim TUI-oriented readiness without replay.",
+    "Provenance omits TUI config or command registry hash.",
+    "TUI replay failure is downgraded to warning."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-052", "TASK-TUI-060", "TASK-TUI-061"]
+  }
+}

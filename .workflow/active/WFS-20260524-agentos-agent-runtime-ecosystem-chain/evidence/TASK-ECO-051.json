@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-ECO-051",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "summary": "Defined knowledge-pack contract with trust labels, source provenance, TTL, content digest, memory scope and quarantine rules.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7243c66e3350e40c87022c831135482e7c3984463ab3edbacb5f2b499db10e25"
+    },
+    {
+      "path": "crates/runtime_contracts/src/lib.rs",
+      "status": "updated",
+      "sha256": "7dd7fca8a11fdf5c0ab5c5190bdcda5302c4d50236aef331b95f8831affd024e"
+    },
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/knowledge-pack.md",
+      "status": "added",
+      "sha256": "e993764be2cd77f4106bb723abfa2c45b4024b2ee478de44bec4e296f2769f3a"
+    }
+  ],
+  "acceptance_evidence": [
+    "KnowledgePackV1 requires source labels and bounded planner context.",
+    "KnowledgeSourceV1 binds provenance URI, sha256 content digest, TTL and bounded context bytes.",
+    "Untrusted and suspicious labels require quarantined memory scope.",
+    "approval_claims_allowed and privileged_policy_instructions_allowed must be false.",
+    "Raw secret-like values are rejected by shared ecosystem text validation."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem",
+      "result": "passed",
+      "summary": "18 ecosystem-filtered runtime contract tests passed, including knowledge quarantine coverage."
+    },
+    {
+      "command": "cargo test -p agent_core memory",
+      "result": "passed",
+      "summary": "6 memory tests passed, including poisoning and quarantine paths."
+    },
+    {
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "result": "passed",
+      "summary": "1 agentd AgentCore adversarial facade test passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Knowledge pack cannot create approval claims.",
+    "Knowledge pack cannot write privileged policy instructions.",
+    "Suspicious or untrusted knowledge cannot become long-term trusted planner memory."
+  ],
+  "promotion_impact": "AgentOS can consume ecosystem knowledge as bounded evidence without turning retrieval content into OS authority."
+}

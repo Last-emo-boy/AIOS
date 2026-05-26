@@ -1,0 +1,80 @@
+{
+  "task_id": "TASK-TUI2-041",
+  "title": "Add rollout ring projection prototype",
+  "status": "completed",
+  "completed_at": "2026-05-26T07:45:28+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/rollout_ring_panel.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "scripts/tui-replay.ps1",
+    "scripts/production-runbook-smoke.ps1",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json"
+  ],
+  "verified": [
+    "rollout.rings.show and alias fleet.rollout.show render TUI Rollout Rings as a read-only projection.",
+    "The projection defines local, canary, staging and production rings with preview-only status for non-local rings.",
+    "The panel exposes read_only=true, projection_controller_only=true, preview_only=true, remote_rollout_authority=false, direct_rollout=false and remote_command_dispatch=false.",
+    "The local ring derives readiness from local release provenance, TUI replay, production runbook smoke and ecosystem replay evidence.",
+    "Rollback readiness and rollout blockers remain visible, including missing local proof gates and production rollout authority blockers.",
+    "Command palette preview describes rollout rings as read-only and explicitly denies remote rollout execution, fleet mutation and rollback execution.",
+    "Scripted TUI replay and production runbook smoke both assert rollout rings are projected without remote rollout authority."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_rollout_ring --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1 -SkipCargoTests",
+    "Test-Json (Get-Content -Raw 'packaging/agentos/rootfs/etc/agentos/operator-commands.json')"
+  ],
+  "test_result": {
+    "format": {
+      "command": "cargo fmt --check",
+      "result": "passed"
+    },
+    "focused_tests": {
+      "command": "cargo test -p agentd tui_rollout_ring --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "tui_tests": {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "passed": 84,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json",
+      "check": "rollout-rings-rendered"
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1 -SkipCargoTests",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json",
+      "assertion": "rollout_rings_projected"
+    },
+    "operator_registry_json": {
+      "command": "Test-Json (Get-Content -Raw 'packaging/agentos/rootfs/etc/agentos/operator-commands.json')",
+      "result": "passed"
+    }
+  },
+  "risk_notes": [
+    "Rollout rings are fixture/local-evidence projections only and cannot execute remote rollout commands.",
+    "TUI remains projection-controller only and does not gain production signing, rollout, rollback or remote command dispatch authority.",
+    "Production rollout remains blocked until future RC0 work supplies production signatures, rollout drills, node-level audit evidence and real fleet authority."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-042",
+    "TASK-TUI2-043",
+    "TASK-TUI2-044",
+    "TASK-TUI2-050"
+  ]
+}

@@ -6,6 +6,7 @@ param(
     [string]$KernelUrl = "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/netboot/vmlinuz-virt",
     [string]$KernelCachePath = "image/cache/vmlinuz-virt",
     [string]$ArtifactDir = ".workflow/artifacts/boot",
+    [string[]]$MachineCandidates = @("microvm", "pc"),
     [int]$TimeoutSeconds = 20,
     [switch]$DependencyCheckOnly,
     [switch]$SkipKernelDownload,
@@ -144,7 +145,9 @@ $requiredRuntimeArtifactIds = @(
     "policy.pack",
     "tools.semantic",
     "operator.commands",
+    "ecosystem.registry_snapshot",
     "model_broker.config",
+    "tui.config",
     "state.runs",
     "state.audit",
     "state.rollback",
@@ -160,11 +163,15 @@ $handoffMarker = if ([string]::IsNullOrWhiteSpace($initramfsManifest.handoff_mar
     $initramfsManifest.handoff_marker
 }
 $runtimeMarker = $initramfsManifest.runtime_marker
+$tuiMarker = $initramfsManifest.tui_marker
 $runtimeManifestMarker = $initramfsManifest.runtime_manifest_marker
 $requiredMarkers = @($handoffMarker)
 if (-not $AllowHandoffOnly) {
     if (-not [string]::IsNullOrWhiteSpace($runtimeMarker)) {
         $requiredMarkers += $runtimeMarker
+    }
+    if (-not [string]::IsNullOrWhiteSpace($tuiMarker)) {
+        $requiredMarkers += $tuiMarker
     }
     if (-not [string]::IsNullOrWhiteSpace($runtimeManifestMarker)) {
         $requiredMarkers += $runtimeManifestMarker
@@ -193,6 +200,7 @@ $dependency = [ordered]@{
     initramfs_manifest_path = $resolvedInitramfsManifest
     handoff_marker = $handoffMarker
     runtime_marker = $runtimeMarker
+    tui_marker = $tuiMarker
     runtime_manifest_marker = $runtimeManifestMarker
     required_markers = @($requiredMarkers)
     runtime_artifact_ids = @($runtimeArtifactIds)
@@ -211,6 +219,7 @@ if (-not $resolvedInitramfs) { $dependency.missing += "agentos-initramfs.cpio.gz
 if (-not $resolvedInitramfsManifest) { $dependency.missing += "agentos-initramfs.manifest.json" }
 if (-not $AllowHandoffOnly) {
     if ([string]::IsNullOrWhiteSpace($runtimeMarker)) { $dependency.missing += "runtime-marker" }
+    if ([string]::IsNullOrWhiteSpace($tuiMarker)) { $dependency.missing += "tui-marker" }
     if ([string]::IsNullOrWhiteSpace($runtimeManifestMarker)) { $dependency.missing += "runtime-manifest-marker" }
     foreach ($id in $missingRuntimeArtifactIds) { $dependency.missing += "runtime-artifact:$id" }
     foreach ($id in $failedRuntimeArtifactIds) { $dependency.missing += "runtime-artifact-failed:$id" }
@@ -235,49 +244,109 @@ $bootStderrLog = Join-Path $artifactRoot "boot-smoke.stderr.log"
 $resultPath = Join-Path $artifactRoot "boot-smoke-result.json"
 Remove-Item -LiteralPath $bootLog, $bootStdoutLog, $bootStderrLog -ErrorAction SilentlyContinue
 $bootArgs = "console=ttyS0 rdinit=/sbin/agentd panic=-1"
-$qemuArgs = @(
-    "-M", "microvm",
-    "-nodefaults",
-    "-no-reboot",
-    "-display", "none",
-    "-serial", "stdio",
-    "-kernel", $resolvedKernel,
-    "-initrd", $resolvedInitramfs,
-    "-append", $bootArgs
+
+$normalizedMachineCandidates = @(
+    $MachineCandidates |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        ForEach-Object { $_.Trim() } |
+        Select-Object -Unique
 )
-
-$formattedQemuArgs = @($qemuArgs | ForEach-Object { Format-ProcessArgument $_ })
-$process = Start-Process `
-    -FilePath $resolvedQemu `
-    -ArgumentList $formattedQemuArgs `
-    -RedirectStandardOutput $bootStdoutLog `
-    -RedirectStandardError $bootStderrLog `
-    -WindowStyle Hidden `
-    -PassThru
-$deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
-$observedMarkers = [ordered]@{}
-foreach ($marker in $requiredMarkers) {
-    $observedMarkers[$marker] = $false
+if ($normalizedMachineCandidates.Count -eq 0) {
+    throw "At least one QEMU machine candidate is required"
 }
 
-while (-not $process.HasExited -and [DateTime]::UtcNow -lt $deadline) {
-    $currentOutput = (Read-SharedText $bootStdoutLog) + "`n" + (Read-SharedText $bootStderrLog)
-    Update-ObservedMarkers -Content $currentOutput -ObservedMarkers $observedMarkers
-    if (Test-AllMarkersObserved -ObservedMarkers $observedMarkers) { break }
-    Start-Sleep -Milliseconds 100
+$attempts = @()
+$selectedAttempt = $null
+
+foreach ($machine in $normalizedMachineCandidates) {
+    $machineLogName = $machine -replace '[^A-Za-z0-9_.-]', '_'
+    $attemptStdoutLog = Join-Path $artifactRoot "boot-smoke.$machineLogName.stdout.log"
+    $attemptStderrLog = Join-Path $artifactRoot "boot-smoke.$machineLogName.stderr.log"
+    $attemptBootLog = Join-Path $artifactRoot "boot-smoke.$machineLogName.log"
+    Remove-Item -LiteralPath $attemptStdoutLog, $attemptStderrLog, $attemptBootLog -ErrorAction SilentlyContinue
+
+    $qemuArgs = @(
+        "-M", $machine,
+        "-nodefaults",
+        "-no-reboot",
+        "-display", "none",
+        "-serial", "stdio",
+        "-kernel", $resolvedKernel,
+        "-initrd", $resolvedInitramfs,
+        "-append", $bootArgs
+    )
+
+    $formattedQemuArgs = @($qemuArgs | ForEach-Object { Format-ProcessArgument $_ })
+    $process = Start-Process `
+        -FilePath $resolvedQemu `
+        -ArgumentList $formattedQemuArgs `
+        -RedirectStandardOutput $attemptStdoutLog `
+        -RedirectStandardError $attemptStderrLog `
+        -WindowStyle Hidden `
+        -PassThru
+    $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+    $observedMarkers = [ordered]@{}
+    foreach ($marker in $requiredMarkers) {
+        $observedMarkers[$marker] = $false
+    }
+
+    while (-not $process.HasExited -and [DateTime]::UtcNow -lt $deadline) {
+        $currentOutput = (Read-SharedText $attemptStdoutLog) + "`n" + (Read-SharedText $attemptStderrLog)
+        Update-ObservedMarkers -Content $currentOutput -ObservedMarkers $observedMarkers
+        if (Test-AllMarkersObserved -ObservedMarkers $observedMarkers) { break }
+        Start-Sleep -Milliseconds 100
+    }
+
+    if (-not $process.HasExited) {
+        $process.Kill()
+        $process.WaitForExit()
+    } else {
+        $process.WaitForExit()
+    }
+    $finalOutput = (Read-SharedText $attemptStdoutLog) + "`n" + (Read-SharedText $attemptStderrLog)
+    Update-ObservedMarkers -Content $finalOutput -ObservedMarkers $observedMarkers
+    $finalOutput | Set-Content -LiteralPath $attemptBootLog -Encoding UTF8
+
+    $observed = Test-AllMarkersObserved -ObservedMarkers $observedMarkers
+    $missingMarkers = @($observedMarkers.GetEnumerator() | Where-Object { -not $_.Value } | ForEach-Object { $_.Key })
+    $attempt = [ordered]@{
+        machine = $machine
+        status = if ($observed) { "completed" } else { "failed" }
+        observed_all_markers = $observed
+        observed_markers = $observedMarkers
+        missing_markers = @($missingMarkers)
+        exit_code = $process.ExitCode
+        stdout_log_path = $attemptStdoutLog
+        stderr_log_path = $attemptStderrLog
+        log_path = $attemptBootLog
+    }
+    $attempts += $attempt
+
+    if ($observed) {
+        $selectedAttempt = $attempt
+        Copy-Item -LiteralPath $attemptStdoutLog -Destination $bootStdoutLog -Force
+        Copy-Item -LiteralPath $attemptStderrLog -Destination $bootStderrLog -Force
+        Copy-Item -LiteralPath $attemptBootLog -Destination $bootLog -Force
+        break
+    }
 }
 
-if (-not $process.HasExited) {
-    $process.Kill()
-    $process.WaitForExit()
-} else {
-    $process.WaitForExit()
+if (-not $selectedAttempt) {
+    $combinedLog = [Text.StringBuilder]::new()
+    foreach ($attempt in $attempts) {
+        $null = $combinedLog.AppendLine("=== QEMU machine: $($attempt.machine) ===")
+        $null = $combinedLog.AppendLine((Read-SharedText $attempt.log_path))
+    }
+    $combinedLog.ToString() | Set-Content -LiteralPath $bootLog -Encoding UTF8
+    if ($attempts.Count -gt 0) {
+        $lastAttempt = $attempts[$attempts.Count - 1]
+        Copy-Item -LiteralPath $lastAttempt.stdout_log_path -Destination $bootStdoutLog -Force
+        Copy-Item -LiteralPath $lastAttempt.stderr_log_path -Destination $bootStderrLog -Force
+    }
 }
-$finalOutput = (Read-SharedText $bootStdoutLog) + "`n" + (Read-SharedText $bootStderrLog)
-Update-ObservedMarkers -Content $finalOutput -ObservedMarkers $observedMarkers
 
-$observed = Test-AllMarkersObserved -ObservedMarkers $observedMarkers
-$finalOutput | Set-Content -LiteralPath $bootLog -Encoding UTF8
+$observed = [bool]$selectedAttempt
+$observedMarkers = if ($selectedAttempt) { $selectedAttempt.observed_markers } else { $attempts[$attempts.Count - 1].observed_markers }
 $result = [ordered]@{
     status = if ($observed) { "completed" } else { "failed" }
     observed_all_markers = $observed
@@ -285,6 +354,7 @@ $result = [ordered]@{
     required_markers = @($requiredMarkers)
     marker = $handoffMarker
     runtime_marker = $runtimeMarker
+    tui_marker = $tuiMarker
     runtime_manifest_marker = $runtimeManifestMarker
     runtime_artifact_ids = @($runtimeArtifactIds)
     missing_runtime_artifact_ids = @($missingRuntimeArtifactIds)
@@ -296,6 +366,10 @@ $result = [ordered]@{
     initramfs_sha256 = $initramfsManifest.artifact_sha256
     rootfs_runtime_manifest_sha256 = $initramfsManifest.alpha_rootfs.rootfs_runtime_manifest_sha256
     boot_args = $bootArgs
+    machine_candidates = @($normalizedMachineCandidates)
+    attempted_machines = @($attempts | ForEach-Object { $_.machine })
+    selected_machine = if ($selectedAttempt) { $selectedAttempt.machine } else { $null }
+    attempts = @($attempts)
     timeout_seconds = $TimeoutSeconds
     log_path = $bootLog
     checked_at = $checkedAt
@@ -308,4 +382,4 @@ if (-not $observed) {
     exit 1
 }
 
-Write-Host "Boot smoke test observed required markers: $($requiredMarkers -join ', ')"
+Write-Host "Boot smoke test observed required markers on QEMU machine '$($selectedAttempt.machine)': $($requiredMarkers -join ', ')"

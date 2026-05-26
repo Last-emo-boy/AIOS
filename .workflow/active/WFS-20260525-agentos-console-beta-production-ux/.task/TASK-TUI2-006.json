@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-006",
+  "title": "Add live event feed from durable audit and runtime projections",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:13:44+08:00",
+  "wave": 1,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-002", "TASK-TUI2-003"],
+  "purpose": "Show live operator-relevant events without making event cursors authoritative.",
+  "scope": [
+    "Define EventCursor over durable projection snapshots.",
+    "Render latest audit, run, approval, recovery and support events in a bounded feed.",
+    "Support deterministic replay with fixed event order.",
+    "Show source freshness and degraded source warnings.",
+    "Avoid polling side effects or hidden runtime mutation."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui event feed code",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-006.json"
+  ],
+  "acceptance_criteria": [
+    "Event feed is derived from durable sources only.",
+    "Event ordering is deterministic.",
+    "Refreshing the event feed does not mutate run state.",
+    "Degraded or missing event sources remain visible."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_event",
+    "cargo test -p agentd tui_refresh",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Event cursor becomes recovery source of truth.",
+    "Live feed hides rollback-pending state.",
+    "Feed refresh creates nondeterministic replay output."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-010", "TASK-TUI2-014"],
+    "blocked_until": ["TASK-TUI2-002", "TASK-TUI2-003"]
+  }
+}

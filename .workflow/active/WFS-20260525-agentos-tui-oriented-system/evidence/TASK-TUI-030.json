@@ -1,0 +1,19 @@
+{
+  "task_id": "TASK-TUI-030",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "typed-loop",
+  "artifacts": [
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "--tui-interactive now constructs TuiRuntimeController in durable mode",
+    "interactive and scripted modes dispatch through the same typed parser",
+    "--tui-demo remains explicit and separate from durable mode"
+  ],
+  "commands": [
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "blockers": []
+}

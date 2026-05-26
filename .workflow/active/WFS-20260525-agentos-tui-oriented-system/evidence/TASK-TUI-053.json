@@ -1,0 +1,26 @@
+{
+  "task_id": "TASK-TUI-053",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "headless-compatibility",
+  "artifacts": [
+    ".workflow/artifacts/functional-replay/result.json",
+    ".workflow/artifacts/ecosystem-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "functional replay passed",
+    "ecosystem replay passed",
+    "production runbook smoke passed",
+    "TUI replay passed without terminal control dependency",
+    "operator-project-tui remains noninteractive"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

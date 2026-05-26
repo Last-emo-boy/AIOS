@@ -1,0 +1,41 @@
+{
+  "id": "TASK-TUI-052",
+  "title": "Add QEMU TUI console smoke",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-051"],
+  "purpose": "Extend QEMU smoke so it proves the AgentOS boot path exposes a TUI-ready console, not only agentd handoff.",
+  "scope": [
+    "Update boot-smoke-test.ps1 or add a TUI-specific smoke mode.",
+    "Use QEMU path E:\\qemu\\qemu-system-x86_64.exe when provided.",
+    "Assert AGENTD_HANDOFF_OK, runtime marker and TUI-ready marker.",
+    "Capture console output evidence under workflow artifacts.",
+    "Keep timeout and headless execution suitable for CI."
+  ],
+  "deliverables": [
+    "scripts/boot-smoke-test.ps1",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-052.json"
+  ],
+  "acceptance_criteria": [
+    "QEMU smoke can prove TUI-ready boot marker.",
+    "Smoke fails if TUI marker is missing while handoff still succeeds.",
+    "Smoke evidence records QEMU path, timeout, observed markers and result.",
+    "No network or external LLM dependency is introduced."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  ],
+  "failure_modes": [
+    "Boot smoke remains handoff-only.",
+    "TUI smoke requires manual interactive input.",
+    "Smoke output is not persisted as evidence."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-053", "TASK-TUI-062", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-051"]
+  }
+}

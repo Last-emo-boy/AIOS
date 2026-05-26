@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "workflow-shell-exec",
+  "artifact_kind": "workflow-pack",
+  "coordinate": "agentos:workflow-pack/adversarial/shell-restart@1.0.0",
+  "attempt": "workflow tries to introduce shell.exec as restart authority",
+  "forbidden_surface": "normal-mode shell",
+  "expected_outcome": "denied",
+  "denial_reason": "workflow packs must compile into AgentCore PlanSpec with semantic tools only",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

@@ -1,0 +1,38 @@
+{
+  "task_id": "TASK-ECO-000",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:49:08+08:00",
+  "summary": "Froze the aom ecosystem scope and install/stage-is-not-activation invariant for AgentOS artifact lifecycle.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md",
+      "status": "reviewed"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-ecosystem-architecture.md states that staged artifacts must be inert and that active artifacts must be recoverable and explainable.",
+    "runtime-ecosystem-architecture.md defines the activation boundary: aom activate must not mutate runtime state directly and must produce AgentCore PlanSpec plus SecurityExecutionEngine-mediated effects.",
+    "The first implementation slice is frozen to policy-pack, workflow-pack and test-replay-pack.",
+    "Deferred artifact kinds are listed: capability-pack, semantic-tool-pack, model-profile-pack, knowledge-pack, runtime-adapter-pack, execution-image-pack and trust-metadata-pack.",
+    "Community artifacts are sandbox-only by default and local-dev artifacts are not production-promotable by default."
+  ],
+  "commands": [
+    {
+      "command": "Select-String -Path .workflow\\active\\WFS-20260524-agentos-agent-runtime-ecosystem-chain\\docs\\runtime-ecosystem-architecture.md -Pattern 'policy-pack|workflow-pack|test-replay-pack|stage|activate|community'",
+      "result": "passed",
+      "summary": "Confirmed required first artifact kinds, inert staging, activation boundary and community/local-dev restrictions are present."
+    },
+    {
+      "command": "Get-Content -Raw .workflow\\active\\WFS-20260524-agentos-agent-runtime-ecosystem-chain\\evidence\\TASK-ECO-000.json | ConvertFrom-Json",
+      "result": "passed",
+      "summary": "Evidence JSON parses after creation."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No install or stage operation may activate runtime behavior.",
+    "No artifact activation may bypass AgentCore PlanSpec and SecurityExecutionEngine.",
+    "No public marketplace or network registry is required for baseline.",
+    "No community or local-dev artifact is production-promotable by default."
+  ],
+  "promotion_impact": "Starts Wave 3 by freezing aom as a local-first AgentOS artifact ecosystem with inert staging and runtime-mediated activation."
+}

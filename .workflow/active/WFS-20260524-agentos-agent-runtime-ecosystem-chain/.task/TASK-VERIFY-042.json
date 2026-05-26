@@ -1,0 +1,20 @@
+{
+  "id": "TASK-VERIFY-042",
+  "title": "Add adversarial ecosystem artifact fixtures",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-VERIFY-041", "TASK-ARUN-022"],
+  "purpose": "Add malicious artifact fixtures that prove the ecosystem cannot weaken AgentOS safety invariants.",
+  "scope": ["Workflow pack attempts shell execution.", "Policy pack attempts exact-approval disable.", "Capability pack attempts self-grant.", "Knowledge pack attempts memory poisoning.", "Model profile embeds secret-like content.", "Adapter pack attempts direct host mutation."],
+  "deliverables": ["packaging/agentos/fixtures/ecosystem/adversarial/", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-042.json"],
+  "acceptance_criteria": ["All adversarial fixtures are denied before unsafe effect.", "Denied outcomes are audit/projectable.", "No fixture can create normal-mode shell.", "Memory poisoning is quarantined."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1", "cargo test -p agentd safety::", "cargo test -p agentd agent_core::adversarial"],
+  "failure_modes": ["Adversarial fixture is skipped by default.", "Denial lacks audit evidence.", "Unsafe fixture reaches EffectPrepared."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-043", "TASK-ECO-052", "TASK-ECO-062"], "blocked_until": ["TASK-VERIFY-041"]},
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-VERIFY-042.json"
+}

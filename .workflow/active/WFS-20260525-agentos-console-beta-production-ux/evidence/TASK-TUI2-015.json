@@ -1,0 +1,54 @@
+{
+  "task_id": "TASK-TUI2-015",
+  "title": "Add degraded-state explainer and evidence path actions",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:43:36+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/degraded_state.rs",
+    "crates/agentd/src/tui/support_console.rs",
+    "crates/agentd/src/tui/snapshot.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "Support Console now renders a degraded_explainer section with cause, impact, source authority, typed next_action and evidence_path.",
+    "Degraded items are derived from ProjectionSnapshot, SupportBundleProjection and OperatorProjection only.",
+    "Evidence paths are display-safe and secret-like paths are replaced with [REDACTED-PATH].",
+    "Next actions are constrained to typed TUI commands and do not introduce shell open or host file manager shortcuts.",
+    "Remote audit mirror degradation is represented as optional_dependency=true and does not block baseline operation.",
+    "AOM degraded state suggests aom.search or aom.verify only; activation remains gated outside the TUI projection layer."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_degraded --no-fail-fast",
+    "cargo test -p agentd support_bundle --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "test_result": {
+    "targeted": {
+      "command": "cargo test -p agentd tui_degraded --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "support_bundle": {
+      "command": "cargo test -p agentd support_bundle --no-fail-fast",
+      "passed": 2,
+      "failed": 0
+    },
+    "ecosystem_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+      "status": "passed",
+      "artifact": ".workflow/artifacts/ecosystem-replay/result.json"
+    }
+  },
+  "risk_notes": [
+    "TUI remains projection-controller only and does not become recovery, resolver or side-effect authority.",
+    "Evidence paths are display references, not open-file actions.",
+    "Optional remote dependency degradation is surfaced without treating remote mirror as recovery authority.",
+    "Normal shell remains unavailable and no host shell/file manager command was added."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-020",
+    "TASK-TUI2-030"
+  ]
+}

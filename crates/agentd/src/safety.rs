@@ -114,7 +114,7 @@ pub fn assess_external_content(fixture: &AdversarialFixture) -> InjectionAssessm
 mod prompt_injection {
     use super::*;
     use crate::api::RiskClass;
-    use crate::audit::{extract_json_string_for_tests, AuditJournal};
+    use crate::audit::{AuditJournal, extract_json_string_for_tests};
     use crate::security_execution::source_to_sink::{
         ContentSource, SinkDescriptor, SourceToSinkDecisionKind, SourceToSinkPolicy,
         SourceToSinkRequest,
@@ -254,14 +254,18 @@ mod prompt_injection {
             )
             .expect("execute decision");
         assert_eq!(execute.kind, SourceToSinkDecisionKind::Denied);
-        assert!(execute.to_json().contains("\"original_trust_boundary\":\"external-untrusted\""));
+        assert!(
+            execute
+                .to_json()
+                .contains("\"original_trust_boundary\":\"external-untrusted\"")
+        );
     }
 }
 
 #[cfg(test)]
 mod secret {
     use crate::api::RiskClass;
-    use crate::audit::{redact_summary, AuditJournal};
+    use crate::audit::{AuditJournal, redact_summary};
     use crate::policy::{ApprovalToken, CapabilityLease, PolicyRequest};
     use crate::security_execution::secret_runtime::{
         BoundaryDisposition, RuntimeMemoryEntry, SecretHandle, SecretRuntimePolicy, SecretSurface,
@@ -323,11 +327,9 @@ mod secret {
 
     #[test]
     fn raw_secret_values_are_blocked_from_model_and_memory() {
-        let model = SecretRuntimePolicy::inspect_boundary(
-            SecretSurface::ModelContext,
-            "api_key=abc123",
-        )
-        .expect_err("model context rejects raw secret");
+        let model =
+            SecretRuntimePolicy::inspect_boundary(SecretSurface::ModelContext, "api_key=abc123")
+                .expect_err("model context rejects raw secret");
         assert!(model.reason().contains("model-context"));
 
         let memory = RuntimeMemoryEntry::new("session", "token=abc123")
@@ -336,19 +338,19 @@ mod secret {
 
         let memory_handle = RuntimeMemoryEntry::new("session", "use secret://prod/db")
             .expect("memory can retain handle ref");
-        assert_eq!(memory_handle.handle_refs, vec!["secret://prod/db".to_string()]);
+        assert_eq!(
+            memory_handle.handle_refs,
+            vec!["secret://prod/db".to_string()]
+        );
     }
 
     #[test]
     fn secret_use_requires_exact_one_shot_capability_lease() {
         let handle = handle();
         let capability = capability_for(&handle);
-        let mut lease = SecretRuntimePolicy::require_secret_use_lease(
-            Some(&capability),
-            &handle,
-            0,
-        )
-        .expect("secret use lease");
+        let mut lease =
+            SecretRuntimePolicy::require_secret_use_lease(Some(&capability), &handle, 0)
+                .expect("secret use lease");
         assert!(lease.one_shot);
         assert!(!lease.consumed);
         lease.consume(1).expect("consume once");
@@ -389,12 +391,8 @@ mod secret {
     fn secret_use_audit_is_handle_only() {
         let handle = handle();
         let capability = capability_for(&handle);
-        let lease = SecretRuntimePolicy::require_secret_use_lease(
-            Some(&capability),
-            &handle,
-            0,
-        )
-        .expect("secret use lease");
+        let lease = SecretRuntimePolicy::require_secret_use_lease(Some(&capability), &handle, 0)
+            .expect("secret use lease");
         let journal = test_journal("audit");
         SecretRuntimePolicy::record_secret_use(
             &journal,
@@ -430,23 +428,21 @@ mod tests {
         PackageInstallWorkflow,
     };
     use crate::agent_core::untrusted_content::{
-        UntrustedContentRequest, UntrustedContentWorkflow, STEP_POLICY_CHECK,
+        STEP_POLICY_CHECK, UntrustedContentRequest, UntrustedContentWorkflow,
     };
-    use crate::audit::extract_json_string_for_tests;
-    use crate::audit::{redact_summary, AuditEvent, AuditEventType, AuditJournal};
     use crate::api::RiskClass;
+    use crate::audit::extract_json_string_for_tests;
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal, redact_summary};
     use crate::policy::{
-        stable_parameter_hash, ApprovalToken, PolicyDecisionKind, PolicyEvaluator, PolicyRequest,
+        ApprovalToken, PolicyDecisionKind, PolicyEvaluator, PolicyRequest, stable_parameter_hash,
     };
     use crate::recovery::{RecoveryClassification, RecoveryReconciler};
     use crate::rollback::{WriteDiffExecutor, WriteRequest};
     use crate::sandbox::{SandboxCompiler, SandboxDecision, SandboxExecutor, SandboxOperation};
 
     fn temp_dir(name: &str) -> PathBuf {
-        let path = std::env::temp_dir().join(format!(
-            "agentd-safety-{name}-{}",
-            std::process::id()
-        ));
+        let path =
+            std::env::temp_dir().join(format!("agentd-safety-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&path);
         fs::create_dir_all(&path).expect("temp dir");
         path
@@ -462,12 +458,19 @@ mod tests {
         assert_eq!(gate.name, SAFETY_GATE_NAME);
         assert!(gate.fail_closed);
         assert!(gate.command.contains("cargo test -p agentd safety::"));
-        assert!(gate
-            .command
-            .contains("cargo test -p agentd agent_core::adversarial"));
-        assert_eq!(gate.required_scenarios.len(), REQUIRED_SAFETY_SCENARIOS.len());
+        assert!(
+            gate.command
+                .contains("cargo test -p agentd agent_core::adversarial")
+        );
+        assert_eq!(
+            gate.required_scenarios.len(),
+            REQUIRED_SAFETY_SCENARIOS.len()
+        );
         for expected in REQUIRED_SAFETY_SCENARIOS {
-            assert!(gate.required_scenarios.contains(expected), "missing {expected}");
+            assert!(
+                gate.required_scenarios.contains(expected),
+                "missing {expected}"
+            );
             assert!(gate.to_json().contains(expected));
         }
         for runtime_expected in [
@@ -541,7 +544,10 @@ mod tests {
     fn package_manager_adapter_rejects_raw_apt_dpkg_and_shell_bypass() {
         for tool in ["apt.install", "dpkg.install", "shell.exec"] {
             let rejection = ToolRouter
-                .route(&SemanticToolCall::new(tool, vec![("cmd", "apt install nginx")]))
+                .route(&SemanticToolCall::new(
+                    tool,
+                    vec![("cmd", "apt install nginx")],
+                ))
                 .expect_err("raw package manager or shell tool denied");
             assert!(
                 rejection.reason.contains("unknown semantic tool")
@@ -555,7 +561,10 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
-                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
+                    (
+                        "source_uri",
+                        "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+                    ),
                     ("source_digest", "sha256:0123456789abcdef"),
                     ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                 ],
@@ -569,7 +578,10 @@ mod tests {
                 vec![
                     ("package", "nginx-agent-plugin"),
                     ("version", "1.2.3"),
-                    ("source_uri", "https://packages.example/nginx-agent-plugin_1.2.3.deb"),
+                    (
+                        "source_uri",
+                        "https://packages.example/nginx-agent-plugin_1.2.3.deb",
+                    ),
                     ("source_digest", "sha256:0123456789abcdef"),
                     ("rollback_id", "rollback-package-nginx-agent-plugin-1.2.3"),
                     ("cmd", "apt install nginx"),
@@ -618,7 +630,11 @@ mod tests {
         assert!(projection.steps.iter().any(|step| {
             step.step_id == STEP_POLICY_CHECK
                 && step.status == "denied"
-                && step.policy_summary.as_deref().unwrap_or("").contains("source_label=external-untrusted-content")
+                && step
+                    .policy_summary
+                    .as_deref()
+                    .unwrap_or("")
+                    .contains("source_label=external-untrusted-content")
                 && !step.effect_prepared
         }));
         assert!(!projection.to_json().contains("EffectPrepared"));
@@ -696,7 +712,10 @@ mod tests {
     #[test]
     fn resource_abuse_hits_configured_sandbox_limits() {
         let routed = ToolRouter
-            .route(&SemanticToolCall::new("svc.status", vec![("service", "nginx")]))
+            .route(&SemanticToolCall::new(
+                "svc.status",
+                vec![("service", "nginx")],
+            ))
             .expect("route");
         let request = PolicyRequest::from_routed("operator", &routed);
         let decision = PolicyEvaluator.evaluate(&request, None);

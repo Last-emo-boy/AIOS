@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI2-041",
+  "title": "Add rollout ring projection prototype",
+  "status": "completed",
+  "completed_at": "2026-05-26T07:45:28+08:00",
+  "wave": 5,
+  "priority": "P2",
+  "type": "design",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-040"],
+  "purpose": "Prototype how rollout rings would be projected in TUI without enabling remote rollout execution.",
+  "scope": [
+    "Define ring labels such as local, canary, staging and production as projection-only concepts.",
+    "Render node count, gate status and rollback readiness using fixture data.",
+    "Show preview-only status and disabled execution commands.",
+    "Document required future authority before real rollout.",
+    "Add snapshot tests for ring projection."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui rollout ring projection prototype",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-041.json"
+  ],
+  "acceptance_criteria": [
+    "Rollout ring view is clearly marked preview-only.",
+    "No remote rollout command is executable.",
+    "Rollback readiness and blockers are visible.",
+    "Fixture projection is deterministic."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_rollout_ring",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "failure_modes": [
+    "Prototype exposes remote execution controls.",
+    "Preview state is confused with real fleet state.",
+    "Rollout blocker is hidden."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-042", "TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-040"]
+  }
+}

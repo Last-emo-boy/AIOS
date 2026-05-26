@@ -1,7 +1,7 @@
-use crate::escape_json;
-    use runtime_contracts::RiskClass;
 use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+use crate::escape_json;
 use crate::policy::CapabilityLease;
+use runtime_contracts::RiskClass;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SandboxError {
@@ -12,7 +12,9 @@ pub enum SandboxError {
 impl SandboxError {
     pub fn reason(&self) -> String {
         match self {
-            SandboxError::EmptyResource => "sandbox profile requires a bounded resource".to_string(),
+            SandboxError::EmptyResource => {
+                "sandbox profile requires a bounded resource".to_string()
+            }
             SandboxError::UnsupportedRisk(risk) => {
                 format!("sandbox profile does not support {} leases", risk.as_str())
             }
@@ -374,14 +376,21 @@ impl SandboxExecutor {
             }
             SandboxOperation::WritePersistentPath { path } => {
                 if !profile.filesystem.persistent_write_allowed
-                    && !profile.filesystem.writable_tmpfs.iter().any(|tmp| path.starts_with(tmp))
+                    && !profile
+                        .filesystem
+                        .writable_tmpfs
+                        .iter()
+                        .any(|tmp| path.starts_with(tmp))
                 {
                     self.deny(
                         profile,
                         format!("read-only sandbox denied persistent write to {path}"),
                     )
                 } else {
-                    self.allow(profile, format!("write constrained to sandbox tmpfs: {path}"))
+                    self.allow(
+                        profile,
+                        format!("write constrained to sandbox tmpfs: {path}"),
+                    )
                 }
             }
             SandboxOperation::SpawnProcesses { count } => {
@@ -401,7 +410,12 @@ impl SandboxExecutor {
                 }
             }
             SandboxOperation::Syscall { name } => {
-                if profile.seccomp.denied_syscalls.iter().any(|syscall| *syscall == name) {
+                if profile
+                    .seccomp
+                    .denied_syscalls
+                    .iter()
+                    .any(|syscall| *syscall == name)
+                {
                     self.deny(profile, format!("seccomp denied syscall {name}"))
                 } else {
                     self.allow(profile, format!("syscall {name} allowed by profile"))
@@ -409,7 +423,11 @@ impl SandboxExecutor {
             }
             SandboxOperation::NetworkConnect { target } => {
                 if profile.network.allow_network
-                    && profile.network.allowlist.iter().any(|allowed| target.starts_with(allowed))
+                    && profile
+                        .network
+                        .allowlist
+                        .iter()
+                        .any(|allowed| target.starts_with(allowed))
                 {
                     self.allow(profile, format!("network target allowed: {target}"))
                 } else {
@@ -509,18 +527,25 @@ mod tests {
         assert!(profile.namespaces.pid);
         assert!(profile.namespaces.cgroup);
         assert!(!profile.filesystem.persistent_write_allowed);
-        assert!(profile
-            .filesystem
-            .read_only_binds
-            .iter()
-            .any(|bind| bind.source == "/var/log/agentd.log" && bind.access == FileAccess::ReadOnly));
+        assert!(
+            profile
+                .filesystem
+                .read_only_binds
+                .iter()
+                .any(|bind| bind.source == "/var/log/agentd.log"
+                    && bind.access == FileAccess::ReadOnly)
+        );
         assert!(profile.landlock.enabled_when_supported);
     }
 
     #[test]
     fn read_only_profile_denies_persistent_host_writes() {
         let profile = SandboxCompiler
-            .compile(&lease_for("fs.read", "/var/log/agentd.log", RiskClass::ReadOnly))
+            .compile(&lease_for(
+                "fs.read",
+                "/var/log/agentd.log",
+                RiskClass::ReadOnly,
+            ))
             .expect("profile");
         let report = SandboxExecutor.evaluate(
             &profile,
@@ -530,7 +555,12 @@ mod tests {
         );
         assert_eq!(report.decision, SandboxDecision::Denied);
         assert!(report.reason.contains("persistent write"));
-        assert!(report.logs.iter().any(|entry| entry.event == "SandboxDenied"));
+        assert!(
+            report
+                .logs
+                .iter()
+                .any(|entry| entry.event == "SandboxDenied")
+        );
     }
 
     #[test]

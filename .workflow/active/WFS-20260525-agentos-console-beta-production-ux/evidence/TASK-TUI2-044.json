@@ -1,0 +1,48 @@
+{
+  "task_id": "TASK-TUI2-044",
+  "title": "Add organization policy overlay preview",
+  "status": "completed",
+  "completed_at": "2026-05-26T08:04:30+08:00",
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/organization-policy-overlay-preview.md",
+    ".workflow/artifacts/ecosystem-replay/result.json"
+  ],
+  "verified": [
+    "Organization policy overlays are explicitly preview-only until a future implementation task is approved.",
+    "Core local invariants no-shell, exact-approval, secret-handle, source-to-sink, audit and rollback are non-removable.",
+    "Overlay states are defined as absent, compatible, stricter, incompatible, unsigned and revoked.",
+    "Unsigned, revoked and incompatible overlays are visible blockers.",
+    "Policy broadening must be projected with authority_broadening=true, runtime_mediation_required=true and activation_blocked=true.",
+    "Future activation requires AgentCore PlanRun, exact approval, ecosystem replay and SecurityExecutionEngine commit with rollback evidence.",
+    "TUI remains a projection layer and may not activate overlays, sign overlays, clear blockers or mutate local policy files."
+  ],
+  "commands": [
+    "rg -n \"preview-only|no-shell|exact-approval|secret-handle|source-to-sink|audit|rollback|absent|compatible|stricter|incompatible|unsigned|revoked|authority_broadening=true|runtime_mediation_required=true|activation_blocked=true|unsigned_blocked=true|revoked_blocked=true|No overlay execution\" .workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/organization-policy-overlay-preview.md",
+    "cargo test -p runtime_contracts ecosystem",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "test_result": {
+    "manual_review": {
+      "result": "passed",
+      "document": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/organization-policy-overlay-preview.md"
+    },
+    "runtime_contracts_ecosystem": {
+      "command": "cargo test -p runtime_contracts ecosystem",
+      "passed": 18,
+      "failed": 0
+    },
+    "ecosystem_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/ecosystem-replay/result.json"
+    }
+  },
+  "risk_notes": [
+    "Overlay execution remains unimplemented in Console Beta.",
+    "Organization policy cannot override local safety invariants or become remote authority over local runtime behavior.",
+    "Policy broadening requires a future mediated activation flow and cannot bypass exact approval."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-050"
+  ]
+}

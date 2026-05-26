@@ -1,0 +1,75 @@
+{
+  "task_id": "TASK-ECO-014",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:19:32+08:00",
+  "summary": "Expanded terminal-first operator visibility for ecosystem state while keeping agentd read-only and outside resolver or activation authority.",
+  "artifacts": [
+    {
+      "path": "crates/agentd/src/operator_projection.rs",
+      "status": "updated",
+      "sha256": "DD42CF5D4CCD5EEEB12D6D2AB46A10AFBCCBBAF578CE0954BF893FF235DD5EC5"
+    },
+    {
+      "path": "crates/agentd/src/tui.rs",
+      "status": "updated",
+      "sha256": "31C22613C3E214EF130F52A1F4B9EB5A94E93814574F6FA1F65D9E82C661E2DB"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+      "status": "updated",
+      "sha256": "83548DDBAED72B80FF4CD7DAEC53F2FEA752CD0762960E59E122C57060B0F28F"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json",
+      "status": "updated",
+      "sha256": "AEBC9DF789BAB3BFABD5B5EF3DBB6B78D0C78B92B597C7A4330BE993FC0C9F65"
+    }
+  ],
+  "acceptance_evidence": [
+    "OperatorProjection ecosystem section remains read_only through the parent projection source agentd-read-only.",
+    "Projection reads durable registry, staging root, lockfile path and active-set path as status data only.",
+    "Projection exposes registry_snapshot_digest, registry_artifact_count, core_artifacts, staged_artifact_count, active_artifact_count and pending_activation_count.",
+    "Projection keeps activation_status=gated and activation_authority=AgentCore PlanSpec + SecurityExecutionEngine.",
+    "Projection declares agentd_resolver_logic=false and resolver_owner=agent_core::ecosystem.",
+    "Projection reports required_approvals including exact approval token for ecosystem.activate.",
+    "Projection reports blocked_until including local replay evidence, compatibility evidence, exact approval token, rollback handle and audit journal seal.",
+    "Projection reports blocked_reasons explaining that install/stage are inert until an approved activation PlanSpec.",
+    "TUI render_operator_projection surfaces ecosystem registry, activation_status, required_approvals and blocked_until.",
+    "operator-commands.json updates aom.activate to AgentCore PlanSpec activation preview and removes old task-ID blockers."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd operator_projection -- --nocapture",
+      "result": "passed",
+      "summary": "6 operator projection tests passed with ecosystem status assertions."
+    },
+    {
+      "command": "cargo test -p agentd tui -- --nocapture",
+      "result": "passed",
+      "summary": "6 TUI tests passed, including ecosystem status rendering."
+    },
+    {
+      "command": "cargo test -p agentd support_bundle -- --nocapture",
+      "result": "passed",
+      "summary": "Support bundle redaction test passed."
+    },
+    {
+      "command": "cargo test -p agentd aom -- --nocapture",
+      "result": "passed",
+      "summary": "2 aom lifecycle tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed: agent_core 107, agentd 58, runtime_contracts 23, security_execution 79 plus doctests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "TUI and projection do not activate artifacts.",
+    "agentd does not resolve dependencies or own staging business logic.",
+    "Projection does not treat staged artifacts as active.",
+    "Projection does not expose normal-mode shell.",
+    "Projection does not include raw secret-like values."
+  ],
+  "promotion_impact": "Operators can now inspect durable ecosystem readiness, blocked activation reasons and approval gates from the terminal while activation authority remains in AgentCore and SecurityExecutionEngine."
+}

@@ -1,0 +1,24 @@
+{
+  "task_id": "TASK-TUI-052",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:45:00+08:00",
+  "evidence_type": "qemu-boot-smoke",
+  "artifacts": [
+    ".workflow/artifacts/boot/boot-smoke-result.json",
+    ".workflow/artifacts/boot/boot-smoke.log",
+    "scripts/boot-smoke-test.ps1",
+    "image/out/agentos-initramfs.manifest.json"
+  ],
+  "verified": [
+    "QEMU full boot smoke completed with TimeoutSeconds=120",
+    "observed AGENTD_HANDOFF_OK",
+    "observed AGENTOS_RUNTIME_ARTIFACTS_OK",
+    "observed AGENTOS_TUI_CONSOLE_READY",
+    "observed AGENTOS_RUNTIME_MANIFEST_SHA256 marker",
+    "boot log shows Run /sbin/agentd as init process before marker output"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -SkipKernelDownload -KernelPath image/cache/vmlinuz-virt -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120"
+  ],
+  "blockers": []
+}

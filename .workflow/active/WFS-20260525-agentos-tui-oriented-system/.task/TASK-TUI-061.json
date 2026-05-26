@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-061",
+  "title": "Add adversarial TUI command fixtures",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "test",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-031", "TASK-TUI-041", "TASK-TUI-060"],
+  "purpose": "Prove the TUI command surface fails closed against shell injection, approval mutation, direct activation and secret leakage attempts.",
+  "scope": [
+    "Add fixtures for shell syntax, pipes, redirects and command substitution.",
+    "Add fixtures for approval parameter mutation and stale token reuse.",
+    "Add fixtures for install/stage pretending to activate artifacts.",
+    "Add fixtures for prompt injection text entered as operator intent.",
+    "Add fixtures for secret-like payloads in commands and render output."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/tests or inline adversarial fixtures",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-061.json"
+  ],
+  "acceptance_criteria": [
+    "Unsafe command fixtures fail before EffectPrepared.",
+    "Approval mutation fixtures are rejected with exact token mismatch.",
+    "Direct activation-by-stage fixtures are rejected.",
+    "Secret-like fixtures do not appear raw in output or evidence."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_adversarial",
+    "cargo test -p agentd agent_core::adversarial",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "Shell injection reaches command dispatch.",
+    "Approval mutation is accepted because only run id is checked.",
+    "Secret-like input is echoed into audit or TUI output."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-062", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-031", "TASK-TUI-041", "TASK-TUI-060"]
+  }
+}

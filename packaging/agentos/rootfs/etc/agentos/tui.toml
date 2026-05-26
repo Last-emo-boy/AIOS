@@ -1,0 +1,20 @@
+schema = "agentos.tui-console.v1"
+default_mode = "durable"
+runtime_authority = "AgentCore PlanSpec + SecurityExecutionEngine"
+projection_controller_only = true
+
+run_store = "/var/lib/agentos/runs"
+audit_journal = "/var/log/agentos/audit/agentos.jsonl"
+support_bundle = "/var/lib/agentos/support/latest-support-bundle.json"
+
+headless_mode_available = true
+scripted_mode_available = true
+interactive_mode_available = true
+demo_mode_default = false
+normal_shell_available = false
+model_output_direct_execution_allowed = false
+
+external_llm_required = false
+network_required = false
+firecracker_required = false
+host_package_manager_required = false

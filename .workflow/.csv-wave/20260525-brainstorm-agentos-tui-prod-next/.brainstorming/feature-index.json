@@ -1,0 +1,88 @@
+{
+  "session_id": "20260525-brainstorm-agentos-tui-prod-next",
+  "topic": "AgentOS next cadence: functional and experience improvements after TUI-oriented Alpha",
+  "decision": "sequence experience primitives before broad capability expansion",
+  "features": [
+    {
+      "id": "F-001",
+      "name": "Full-Screen Operator Shell",
+      "priority": "P0",
+      "phase": "Console Beta",
+      "value": "Turn the line-oriented TUI into a stable all-day operator console.",
+      "owner_boundary": "agentd TUI projection-controller",
+      "must_preserve": ["TUI does not own planner", "TUI does not own side effects", "scripted mode remains stable"],
+      "first_tasks": ["split TUI shell modules", "add pane layout model", "add command palette preview", "add layout snapshot tests"]
+    },
+    {
+      "id": "F-002",
+      "name": "Live Projection And Event Model",
+      "priority": "P0",
+      "phase": "Console Beta",
+      "value": "Make TUI views update predictably from durable runtime state.",
+      "owner_boundary": "RunStore + AuditJournal + active artifact state are truth",
+      "must_preserve": ["render cache is not authority", "refresh is deterministic", "replay remains local-only"],
+      "first_tasks": ["define ProjectionSnapshot", "add EventCursor", "add source hash display", "add refresh soak replay"]
+    },
+    {
+      "id": "F-003",
+      "name": "Approval And Recovery Workbench",
+      "priority": "P0",
+      "phase": "Operations Beta",
+      "value": "Make high-risk decisions and crash recovery inspectable and hard to misuse.",
+      "owner_boundary": "AgentCore owns lifecycle; SecurityExecutionEngine owns side effects",
+      "must_preserve": ["exact approval binding", "deny path equal weight", "no model replay for recovery"],
+      "first_tasks": ["approval detail panel", "recovery action panel", "rollback consequence preview", "stale token UX tests"]
+    },
+    {
+      "id": "F-004",
+      "name": "Operator Session And Profiles",
+      "priority": "P1",
+      "phase": "Operations Beta",
+      "value": "Remember local operator context without turning preferences into authority.",
+      "owner_boundary": "sealed local UI state only",
+      "must_preserve": ["profile is not permission authority", "raw secrets not stored", "history redacted"],
+      "first_tasks": ["OperatorSession schema", "local sealed profile store", "history redaction", "role-scope display"]
+    },
+    {
+      "id": "F-005",
+      "name": "Capability Library And Workflow Catalog",
+      "priority": "P0",
+      "phase": "Operations Beta",
+      "value": "Expose AgentOS as a useful OS with discoverable operational capabilities.",
+      "owner_boundary": "catalog is projection over AgentCore and AOM capabilities",
+      "must_preserve": ["catalog cannot activate directly", "capability launch goes through intent/PlanSpec", "AOM resolver stays in agent_core::ecosystem"],
+      "first_tasks": ["capability index projection", "workflow detail view", "launch intent preview", "catalog replay gate"]
+    },
+    {
+      "id": "F-006",
+      "name": "Production Update And Fleet Readiness",
+      "priority": "P1",
+      "phase": "Distro RC0",
+      "value": "Make update, rollback and release evidence operator-facing before fleet rollout.",
+      "owner_boundary": "release/update authority remains scripted and audited",
+      "must_preserve": ["A/B update rollback evidence", "production signing not faked", "fleet remains later unless local proof passes"],
+      "first_tasks": ["release evidence center", "local update drill view", "rollback drill replay", "promotion blocker panel"]
+    },
+    {
+      "id": "F-007",
+      "name": "Observability And Support Console",
+      "priority": "P0",
+      "phase": "Operations Beta",
+      "value": "Give operators one place for health, degraded state, audit evidence and support bundle workflow.",
+      "owner_boundary": "support console projects existing support_bundle and audit sources",
+      "must_preserve": ["support bundle redaction", "local audit source of truth", "remote mirror not authority"],
+      "first_tasks": ["support dashboard", "degraded-state explainer", "bundle preview", "evidence path copy/export"]
+    },
+    {
+      "id": "F-008",
+      "name": "Ecosystem Governance And Trust UX",
+      "priority": "P1",
+      "phase": "Distro RC0",
+      "value": "Make artifact trust, revocation, compatibility and activation risk understandable.",
+      "owner_boundary": "AOM projection only; activation remains runtime-mediated",
+      "must_preserve": ["install/stage is not activation", "revoked/incompatible artifacts fail closed", "trust display is not policy authority"],
+      "first_tasks": ["artifact trust panel", "revocation warning UX", "compatibility diff", "policy overlay preview"]
+    }
+  ],
+  "recommended_order": ["F-001", "F-002", "F-003", "F-007", "F-005", "F-004", "F-006", "F-008"]
+}

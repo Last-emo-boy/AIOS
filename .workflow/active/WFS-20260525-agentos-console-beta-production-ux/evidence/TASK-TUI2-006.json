@@ -1,0 +1,61 @@
+{
+  "task_id": "TASK-TUI2-006",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:13:44+08:00",
+  "evidence_type": "tui-durable-event-feed",
+  "artifacts": [
+    "crates/agentd/src/tui/event_feed.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "scripts/tui-replay.ps1"
+  ],
+  "verified": [
+    "events.show renders a bounded TUI Event Feed from ProjectionSnapshot and AuditJournal.",
+    "EventCursor is explicitly non-authoritative with source_of_truth=false and derived render cursor authority.",
+    "Event ordering is deterministic and repeated event feed refreshes do not mutate run state.",
+    "Missing or empty durable sources remain visible through source status lines and event[none].",
+    "Secret-like values in audit text and source details are redacted at render level.",
+    "Scripted replay now includes events.show and validates event feed projection output."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_event --no-fail-fast",
+    "cargo test -p agentd tui_refresh --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "cargo_fmt_check": "passed",
+    "tui_event_tests": {
+      "status": "passed",
+      "passed": 4,
+      "failed": 0
+    },
+    "tui_refresh_tests": {
+      "status": "passed",
+      "passed": 2,
+      "failed": 0
+    },
+    "agentd_tui_tests": {
+      "status": "passed",
+      "passed": 30,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json",
+      "checks": {
+        "passed": 21,
+        "failed": 0
+      },
+      "output_sha256": "c2bdf217192187ef24baf9f57522f009405200834961f2f335cc87f243154cbf",
+      "audit_journal_sha256": "ca9ab40a651f758eb6de82992b3dbede7ba2c59e9e07d5e2de4193206e66d37b",
+      "support_bundle_sha256": "6a366c87733eda25b62035da9cd33fa9a3ae81efbc8fd786ed5c0c483dc65ae3"
+    }
+  },
+  "blockers": []
+}

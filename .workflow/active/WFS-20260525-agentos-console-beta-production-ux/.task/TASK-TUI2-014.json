@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-014",
+  "title": "Build Support Console panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:19:52+08:00",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-006"],
+  "purpose": "Give operators one place to inspect health, degraded state, audit evidence and support bundle export.",
+  "scope": [
+    "Render support bundle readiness and last export path.",
+    "Render runtime health, audit status, ecosystem state and release evidence summary.",
+    "Expose typed support.bundle export action with preview.",
+    "Show remote audit mirror state without making it authoritative.",
+    "Preserve support bundle redaction guarantees."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui support console",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-014.json"
+  ],
+  "acceptance_criteria": [
+    "Support Console can export bundle through typed command.",
+    "Support Console identifies degraded runtime or ecosystem state.",
+    "Support bundle manifest remains deterministic and redacted.",
+    "Remote mirror status is visible but local audit remains authority."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_support_console",
+    "cargo test -p agentd support_bundle",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "Support panel leaks raw secrets or raw prompt text.",
+    "Support export bypasses typed command dispatch.",
+    "Remote mirror state is treated as source of truth."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-015", "TASK-TUI2-020"],
+    "blocked_until": ["TASK-TUI2-006"]
+  }
+}

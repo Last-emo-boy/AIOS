@@ -1,0 +1,48 @@
+{
+  "task_id": "TASK-ECO-034",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "summary": "Extended support bundle projection with read-only ecosystem registry, lockfile, active set, replay, trust and revocation state.",
+  "artifacts": [
+    {
+      "path": "crates/agentd/src/support_bundle.rs",
+      "status": "updated",
+      "sha256": "58c5014340116adf4203da3b3168512ad9ad821bc8d995e77baf1017ea6dfba4"
+    },
+    {
+      "path": "crates/agentd/src/operator_projection.rs",
+      "status": "updated",
+      "sha256": "b4a7cd15d30032994460765b22c6869e5cf8fdd05e108f18f02c1481d18955b8"
+    }
+  ],
+  "acceptance_evidence": [
+    "Support bundle JSON now includes ecosystem registry snapshot hash, lockfile hash, active set hash and replay result hash.",
+    "Support bundle projects trust tiers and active artifact coordinates.",
+    "Revoked/degraded active artifact state is visible through revocation_status.",
+    "Projection excludes raw secrets and private key paths while keeping private_key_paths_included=false.",
+    "agentd_resolver_logic=false; support bundle only reads durable files."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd support_bundle -- --nocapture",
+      "result": "passed",
+      "summary": "2 support bundle tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional replay passed with support bundle checks included."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 59, runtime_contracts 23 and security_execution 79 tests passed; doctests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "support_bundle does not verify signatures or resolve artifacts.",
+    "support_bundle does not activate artifacts.",
+    "support_bundle does not expose raw secret values or local private key paths."
+  ],
+  "promotion_impact": "Production support artifacts can now explain ecosystem trust and revocation state without becoming control-plane authority."
+}

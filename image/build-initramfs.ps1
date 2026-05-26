@@ -248,6 +248,7 @@ foreach ($dir in @("bin", "dev", "etc", "proc", "sbin", "sys", "tmp")) {
 $agentdPath = Join-Path $sourceRoot "sbin/agentd"
 $handoffMarker = "AGENTD_HANDOFF_OK"
 $runtimeMarker = "AGENTOS_RUNTIME_ARTIFACTS_OK"
+$tuiMarker = "AGENTOS_TUI_CONSOLE_READY"
 $runtimeManifestMarker = $null
 $runtimeArtifactIds = @()
 if ($alphaRootfsManifest) {
@@ -257,6 +258,7 @@ if ($alphaRootfsManifest) {
         $handoffMarker,
         $runtimeMarker,
         $runtimeManifestMarker,
+        $tuiMarker,
         "AGENTOS_RUNTIME_ARTIFACT_COUNT=$($runtimeArtifactIds.Count)"
     )
 } else {
@@ -282,6 +284,7 @@ $manifest = [ordered]@{
     boot_args = "console=ttyS0 rdinit=/sbin/agentd panic=-1"
     handoff_marker = $handoffMarker
     runtime_marker = if ($alphaRootfsManifest) { $runtimeMarker } else { $null }
+    tui_marker = if ($alphaRootfsManifest) { $tuiMarker } else { $null }
     runtime_manifest_marker = $runtimeManifestMarker
     boot_markers = @($agentdMessageLines)
     runtime_artifact_ids = $runtimeArtifactIds

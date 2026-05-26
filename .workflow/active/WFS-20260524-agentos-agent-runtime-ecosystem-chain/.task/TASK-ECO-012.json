@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-012",
+  "title": "Package built-in production-safe policy pack",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "packaging",
+  "owner": "packaging",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-004", "TASK-ECO-005"],
+  "purpose": "Create the first core policy-pack artifact that proves policy pack activation without weakening baseline safety.",
+  "scope": ["Package production-safe policy manifest.", "Include replay fixture.", "Prove policy pack can narrow but not weaken safety invariants."],
+  "deliverables": ["packaging/agentos/rootfs/etc/agentos/ecosystem/core/policy-production-safe.json", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-012.json"],
+  "acceptance_criteria": ["Policy pack is core trust tier.", "No-shell and exact approval remain enforced.", "Activation requires replay evidence.", "Pack can be deactivated or rolled back."],
+  "verification": ["powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1", "cargo test -p agentd safety::"],
+  "failure_modes": ["Policy pack disables baseline invariant.", "Pack lacks replay fixture.", "Rollback is undefined."],
+  "handoff": {"next_tasks": ["TASK-VERIFY-041", "TASK-VERIFY-042"], "blocked_until": ["TASK-ECO-005"]},
+  "completed_at": "2026-05-25T03:19:32+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-012.json"
+}

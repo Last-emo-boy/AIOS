@@ -1,0 +1,39 @@
+{
+  "task_id": "TASK-ARUN-022",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:39:35+08:00",
+  "summary": "Defined OS memory governance and knowledge quarantine rules so AgentOS can use memory and future knowledge packs as bounded context without granting privileged OS authority.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-memory-governance.md",
+      "sha256": "6226b5ee395fb7e3b1f3c1c2f1ac9c1e9367801a53581ed7184c8fabc635e7b3"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-memory-governance.md defines memory scopes for session, run, audit-derived, ecosystem-reserved and quarantined content.",
+    "Trust labels from observation and runtime sources must travel with memory into bounded planner context.",
+    "Knowledge pack rules require staged knowledge to remain inert and suspicious policy/approval/capability claims to be quarantined.",
+    "Planner context is limited to entry id, scope, trust label, source ref, integrity hash, redacted summary and truncation marker.",
+    "Raw secrets are rejected, redacted or represented only as secret:// handles; memory cannot create approval, policy override or capability lease authority."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core memory",
+      "result": "passed",
+      "summary": "6 passed; bounded planner context, secret redaction, TTL expiry, quarantine and cross-run memory poisoning protections all passed."
+    },
+    {
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "result": "passed",
+      "summary": "1 passed; planner risk downgrade still pauses before protected effects."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No untrusted knowledge can become privileged instruction.",
+    "No memory entry can claim approval, policy override or capability lease authority.",
+    "No raw secret may enter planner context or normal memory storage.",
+    "No quarantined memory is included in planner context by default.",
+    "No future knowledge pack activation may bypass SecurityExecutionEngine."
+  ],
+  "promotion_impact": "Completes memory and knowledge governance needed before model profile packs, knowledge packs and adversarial ecosystem fixtures are introduced."
+}

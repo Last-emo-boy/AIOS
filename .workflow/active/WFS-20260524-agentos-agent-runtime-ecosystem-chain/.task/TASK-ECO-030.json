@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-030",
+  "title": "Define trust tier and channel policy",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "security",
+  "owner": "packaging",
+  "source": "production ecosystem brainstorm",
+  "depends_on": ["TASK-ECO-000"],
+  "purpose": "Define trust tiers and channels for AgentOS artifacts before any public or verified ecosystem work.",
+  "scope": ["Define core, verified, organization, community and local-dev trust tiers.", "Define stable, beta, edge and local channels.", "Define production defaults and blocked promotions."],
+  "deliverables": [".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/ecosystem-trust-policy.md", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-030.json"],
+  "acceptance_criteria": ["Unsigned artifacts are blocked in production.", "Community/local-dev artifacts are not production-promotable by default.", "Core artifacts are release-gated."],
+  "verification": ["Validate evidence JSON parses.", "Check trust policy references all five tiers."],
+  "failure_modes": ["Trust tier is implied by registry URL only.", "Local-dev artifact promotes to production.", "Channel policy lacks revocation behavior."],
+  "handoff": {"next_tasks": ["TASK-ECO-015", "TASK-ECO-031", "TASK-ECO-033"], "blocked_until": ["TASK-ECO-000"]},
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-030.json"
+}

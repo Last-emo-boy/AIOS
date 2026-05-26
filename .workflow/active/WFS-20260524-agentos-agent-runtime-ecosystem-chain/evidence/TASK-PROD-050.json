@@ -1,0 +1,50 @@
+{
+  "task_id": "TASK-PROD-050",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "summary": "Extended agentd support bundle projection with runtime loop, recovery, ecosystem and offline snapshot status while keeping agentd read-only and resolver-free.",
+  "artifacts": [
+    {
+      "path": "crates/agentd/src/support_bundle.rs",
+      "status": "updated",
+      "sha256": "1656fa0e9aa89ab3a9d0c6c51a80e93a6b70fbc32d39d51a5ce941c994e66dfd"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "7b3a8b312fb1df1314a89cc568f4dd8c082ea79c25543f71917cd1e496df5720"
+    }
+  ],
+  "acceptance_evidence": [
+    "SupportBundleProjection now contains runtime, recovery and ecosystem sections.",
+    "Runtime projection reports loop status, latest run, event counts, unresolved effects, rollback pending count and fixed no-shell/no-direct-model-execution invariants.",
+    "Recovery projection reports recovery counts, unresolved effects, human review requirement and run-store+audit-journal as source of truth.",
+    "Ecosystem projection reports registry snapshot hash, expires_at, freshness, pinned-local status, lockfile, active set hash, active artifact coordinates, replay status, revocation state and offline baseline status.",
+    "Support bundle tests assert normal_shell_available=false, model_output_direct_execution_allowed=false, model_replay_authority=false, agentd_resolver_logic=false and network_required=false.",
+    "Secret-like raw content and private key paths are excluded from support bundle projections."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd support_bundle",
+      "result": "passed",
+      "summary": "2 support bundle tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed and included support bundle regression coverage."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 59, runtime_contracts 27 and security_execution 79 tests passed; doctests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "agentd does not own ecosystem resolver logic.",
+    "Support bundle is read-only projection, not activation authority.",
+    "Raw secrets and private key paths are not included.",
+    "Model replay is not recovery authority."
+  ],
+  "promotion_impact": "Production support evidence can now explain Agent Runtime health and ecosystem state without leaking secrets or expanding agentd ownership."
+}

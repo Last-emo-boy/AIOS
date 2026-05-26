@@ -1,0 +1,56 @@
+{
+  "task_id": "TASK-ECO-006",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:54:06+08:00",
+  "summary": "Kept agentd ecosystem visibility read-only while adding operator projection and aom activation preview output that distinguishes staged, active and activation-prepared states.",
+  "artifacts": [
+    {
+      "path": "crates/agentd/src/operator_projection.rs",
+      "status": "updated",
+      "sha256": "03BF38F5B897CB3303010A7F618131B6FD1C2CF313D7A8B3B3F52949115CE24A"
+    },
+    {
+      "path": "crates/agentd/src/aom.rs",
+      "status": "updated",
+      "sha256": "54EAC61971335973129438729C4D20B5A282BFCEE10613306379B41CE6CA9A5D"
+    }
+  ],
+  "acceptance_evidence": [
+    "OperatorProjection exposes ecosystem registry status, lifecycle commands, staging root, activation authority and blocked prerequisites as read-only data.",
+    "Projection reports activation_status=gated, staged_artifacts_active=false and staged_and_active_separated=true.",
+    "Projection declares resolver_owner=agent_core::ecosystem and agentd_resolver_logic=false.",
+    "aom activate projects AgentCore plan_spec and activation_plan_preview while keeping active=false and activation_prepared=false.",
+    "aom stage remains inert and does not create an active directory.",
+    "Projection and support bundle tests verify redaction behavior and avoid leaking raw secret-like content."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd aom -- --nocapture",
+      "result": "passed",
+      "summary": "2 aom lifecycle tests passed."
+    },
+    {
+      "command": "cargo test -p agentd operator_projection -- --nocapture",
+      "result": "passed",
+      "summary": "6 operator projection tests passed."
+    },
+    {
+      "command": "cargo test -p agentd support_bundle -- --nocapture",
+      "result": "passed",
+      "summary": "Support bundle redaction test passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed with 58 agentd tests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "agentd does not own resolver business logic.",
+    "agentd does not execute activation side effects.",
+    "Projection does not mark staged artifacts as active.",
+    "Projection does not expose raw manifest secret-like fields.",
+    "Activation preview does not imply activation_prepared or active state."
+  ],
+  "promotion_impact": "Operators now get a read-only view of ecosystem activation readiness while runtime-mediated activation remains owned by AgentCore and SecurityExecutionEngine."
+}

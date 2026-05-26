@@ -1,0 +1,72 @@
+{
+  "task_id": "TASK-ECO-052",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "summary": "Added model and knowledge adversarial fixtures and promoted recursive replay coverage for nested fixture categories.",
+  "artifacts": [
+    {
+      "path": "scripts/ecosystem-replay.ps1",
+      "status": "updated",
+      "sha256": "2bef365c48f731244fb2e3c39e1f2ae9d53a1232f8d1df6fbaf58af0e67d538f"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/model-knowledge/model-profile-secret-like-v2.json",
+      "status": "added",
+      "sha256": "fb1405a5765812713f83c71423669c7500e91a8fd5a7aa5415d860d10f19fd2e"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/model-knowledge/model-profile-direct-provider.json",
+      "status": "added",
+      "sha256": "6fb3ac6a546bf5997eff5fff261024e63886f21764670147814ed9262cb6426e"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/model-knowledge/knowledge-policy-override.json",
+      "status": "added",
+      "sha256": "377f0ef806173902001263aa069a7f85b31fa7bac370322a0d6ec8c21cf862b7"
+    },
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/model-knowledge/knowledge-approval-claim.json",
+      "status": "added",
+      "sha256": "ec91d15d0bb49410c202f45d609b2c9c42e967fb0e686103760baf88680b7665"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "d67268a02530fe4af175262640e9465bf38329d87158421e5d83e52e56205d80"
+    }
+  ],
+  "acceptance_evidence": [
+    "Replay recursively scans adversarial fixture subdirectories.",
+    "Replay requires at least four model-knowledge fixtures.",
+    "Replay result records 14 total fixtures, 4 model-knowledge fixtures and 14 denied outcomes.",
+    "Model secret embedding and direct provider bypass fixtures are denied before EffectPrepared.",
+    "Knowledge policy override and approval claim fixtures are denied and marked memory_quarantined=true."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed with fixture_count=14, model_knowledge_fixture_count=4, denied_count=14."
+    },
+    {
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "result": "passed",
+      "summary": "1 agentd AgentCore adversarial facade test passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gate consumed ecosystem replay as a required gate."
+    }
+  ],
+  "hashes": {
+    "ecosystem_replay_result": "d67268a02530fe4af175262640e9465bf38329d87158421e5d83e52e56205d80",
+    "adversarial_evidence_hash": "061275fe3673bc04e0bbb9d075fa2ea09ae4def7d530b86d002a0b90779ea54f"
+  },
+  "blocked_shortcuts": [
+    "Replay no longer skips nested model/knowledge fixtures.",
+    "Rejected fixtures remain audit-projectable.",
+    "Knowledge poisoning cannot enter trusted planner context."
+  ],
+  "promotion_impact": "Model and knowledge ecosystem expansion now has local adversarial replay evidence before production promotion."
+}

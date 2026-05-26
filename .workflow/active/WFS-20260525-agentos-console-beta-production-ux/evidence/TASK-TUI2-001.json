@@ -1,0 +1,40 @@
+{
+  "task_id": "TASK-TUI2-001",
+  "status": "completed",
+  "completed_at": "2026-05-25T23:49:01+08:00",
+  "evidence_type": "tui-runtime-module-split",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/legacy.rs"
+  ],
+  "verified": [
+    "TUI public exports remain available through crates/agentd/src/tui.rs.",
+    "Typed command parsing is isolated in tui/parser.rs and still rejects shell-like input.",
+    "Durable runtime dispatch is isolated in tui/runtime.rs and still delegates PlanRun lifecycle to AgentCore.",
+    "Projection rendering helpers are isolated in tui/render.rs and remain pure render adapters.",
+    "Legacy demo session and diff preview compatibility are isolated in tui/legacy.rs.",
+    "agentd TUI remains projection-controller only and does not own planner, resolver, policy or side-effect execution."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "cargo_fmt_check": "passed",
+    "agentd_tui_tests": {
+      "status": "passed",
+      "passed": 14,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "blockers": []
+}

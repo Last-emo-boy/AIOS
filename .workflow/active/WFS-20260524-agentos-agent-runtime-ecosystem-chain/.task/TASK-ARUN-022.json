@@ -1,0 +1,54 @@
+{
+  "id": "TASK-ARUN-022",
+  "title": "Define OS memory governance and knowledge quarantine",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P0",
+  "type": "runtime",
+  "owner": "agent_core",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-ARUN-011"],
+  "purpose": "Define how AgentOS uses memory and knowledge while preventing poisoned context from becoming privileged OS behavior.",
+  "scope": [
+    "Define memory scopes for session, run, audit-derived, ecosystem and quarantined content.",
+    "Define knowledge pack trust labels.",
+    "Define secret-like redaction and raw secret rejection.",
+    "Define planner context bounds and quarantine rules."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-memory-governance.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-022.json"
+  ],
+  "read_first": [
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-008-memory.json",
+    "crates/agent_core/src/lib.rs",
+    ".workflow/.csv-wave/20260524-brainstorm-agentos-production-ecosystem/.brainstorming/synthesis-specification.md"
+  ],
+  "implementation_steps": [
+    "Define memory governance table.",
+    "Define knowledge pack quarantine behavior.",
+    "Define what memory may enter Planner context.",
+    "Record evidence with memory poisoning examples."
+  ],
+  "acceptance_criteria": [
+    "Untrusted knowledge cannot become privileged instruction.",
+    "Raw secrets are rejected or redacted.",
+    "Memory cannot create approval claims.",
+    "Planner context remains bounded and labeled."
+  ],
+  "verification": [
+    "cargo test -p agent_core memory",
+    "cargo test -p agentd agent_core::adversarial"
+  ],
+  "failure_modes": [
+    "Knowledge pack writes trusted policy instruction.",
+    "Memory stores raw secret.",
+    "Planner accepts memory as approval authority."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-050", "TASK-ECO-051", "TASK-VERIFY-042"],
+    "blocked_until": ["TASK-ARUN-011"]
+  },
+  "completed_at": "2026-05-25T00:39:35+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-022.json"
+}

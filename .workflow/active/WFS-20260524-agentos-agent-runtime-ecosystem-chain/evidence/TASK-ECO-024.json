@@ -1,0 +1,43 @@
+{
+  "task_id": "TASK-ECO-024",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "summary": "Added digest-bound revocation advisory metadata and active artifact degraded projection contracts.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "6887D4B6D4F79755FE24434DA8524C5C3C7D3187F48AC7A26380C2FB135AB50F"
+    },
+    {
+      "path": "crates/runtime_contracts/src/lib.rs",
+      "status": "updated",
+      "sha256": "C24F27406468C88BFD146ED511CE643B9EFC9D5670C545810BAF2C7C0B1FC301"
+    }
+  ],
+  "acceptance_evidence": [
+    "RevocationAdvisoryV1 now requires artifact_digest and severity.",
+    "Revocation advisories are digest-bound so stale advisories do not degrade unrelated artifact digests.",
+    "ActiveArtifactSetV1 can produce ActiveArtifactRevocationProjectionV1 from a registry snapshot.",
+    "Active revoked artifacts are marked degraded and carry advisory ids.",
+    "runtime_contracts exports the revocation projection schema and status types."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem::revocation",
+      "result": "passed",
+      "summary": "3 revocation tests passed."
+    },
+    {
+      "command": "cargo test -p agent_core ecosystem::resolver",
+      "result": "passed",
+      "summary": "5 resolver tests passed, including revoked artifact fail-closed coverage."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Revocation is not only a warning.",
+    "Advisory metadata cannot omit sha256 artifact digest binding.",
+    "Active revoked artifacts are not invisible to projections."
+  ],
+  "promotion_impact": "Prepares support/provenance and later replay tasks to explain revoked or degraded active artifact state."
+}

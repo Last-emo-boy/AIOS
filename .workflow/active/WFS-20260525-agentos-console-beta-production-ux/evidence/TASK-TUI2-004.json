@@ -1,0 +1,52 @@
+{
+  "task_id": "TASK-TUI2-004",
+  "status": "completed",
+  "completed_at": "2026-05-26T00:25:28+08:00",
+  "evidence_type": "tui-command-palette-preview",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs"
+  ],
+  "verified": [
+    "CommandPalette suggestions map only to existing typed TUI commands.",
+    "High-risk approval, recovery, support export and AOM activation preview commands require preview.",
+    "palette.preview renders target, risk, authority path and expected state change without dispatching the target command.",
+    "Unsafe shell-like input fails closed through the same typed parser and is not normalized into a safe-looking command.",
+    "Command palette remains compatible with full-screen and scripted-compatible modes.",
+    "TUI dispatch still routes execution through TuiRuntimeController and does not add planner, resolver, policy or side-effect authority."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_command_palette --no-fail-fast",
+    "cargo test -p agentd tui_adversarial --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "cargo_fmt_check": "passed",
+    "tui_command_palette_tests": {
+      "status": "passed",
+      "passed": 4,
+      "failed": 0
+    },
+    "tui_adversarial_tests": {
+      "status": "passed",
+      "passed": 1,
+      "failed": 0
+    },
+    "agentd_tui_tests": {
+      "status": "passed",
+      "passed": 23,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    }
+  },
+  "blockers": []
+}

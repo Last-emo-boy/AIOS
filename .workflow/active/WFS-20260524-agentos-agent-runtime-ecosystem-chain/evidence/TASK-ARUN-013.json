@@ -1,0 +1,43 @@
+{
+  "task_id": "TASK-ARUN-013",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:30:02+08:00",
+  "summary": "Defined degraded mode and local/stub fallback behavior for AgentOS so missing optional dependencies reduce capability without expanding authority or triggering unsafe host mutation.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-degraded-mode.md",
+      "sha256": "19a60993df0caf689313b33633e306746eaba7cdfc83aa67bfbea06a01ea48f0"
+    },
+    {
+      "path": ".workflow/artifacts/functional-replay/result.json",
+      "status": "passed"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime-degraded-mode.md defines degraded classes for remote model, network, microVM, host package manager, adapter, remote audit and registry unavailability.",
+    "The contract preserves local/stub ModelBroker operation with network_required=false and remote provider optionality.",
+    "The degraded capability matrix keeps boot, projection, local audit, support bundle and read-only diagnostics available while blocking unverifiable high-risk effects.",
+    "Missing Firecracker or package-manager dependencies are specified to fail closed before EffectPrepared and cannot fall back to direct host execution.",
+    "Projection requirements expose degraded class, missing dependencies, limited capabilities, blocked effects, fallback provider and next operator action without authorizing action."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed and wrote .workflow/artifacts/functional-replay/result.json; covered capability, service recovery, package install, untrusted content, Firecracker, support bundle, operator projection and safety tests."
+    },
+    {
+      "command": "cargo test -p agent_core model_broker",
+      "result": "passed",
+      "summary": "8 passed; stub provider plans without network/effects, malformed output and provider failures fail closed, call logs remain metadata-only and secrets are rejected."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No degraded mode broadens side-effect authority.",
+    "No missing optional dependency may trigger host mutation.",
+    "No missing microVM isolation may fall back to host execution.",
+    "No remote model is required for baseline acceptance.",
+    "No adapter-unavailable path may be substituted by agentd-owned business logic."
+  ],
+  "promotion_impact": "Closes Wave 1 by defining how AgentOS remains locally operable and explainably degraded when optional Production Distro dependencies are unavailable."
+}

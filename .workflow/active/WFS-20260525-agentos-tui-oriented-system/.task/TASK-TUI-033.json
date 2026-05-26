@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-033",
+  "title": "Add noninteractive scripted TUI mode for replay",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-030", "TASK-TUI-031", "TASK-TUI-032"],
+  "purpose": "Allow CI and release gates to drive the same TUI command path without an interactive terminal.",
+  "scope": [
+    "Add a scripted TUI input mode that reads commands from a fixture file or stdin.",
+    "Emit deterministic text and JSON evidence outputs.",
+    "Use the same parser and controller as interactive mode.",
+    "Fail with nonzero exit on rejected required command or safety violation.",
+    "Preserve existing --operator-project-tui behavior."
+  ],
+  "deliverables": [
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-033.json"
+  ],
+  "acceptance_criteria": [
+    "Scripted mode and interactive mode share command parsing and dispatch.",
+    "Replay fixtures can assert command results and final snapshots.",
+    "Rejected unsafe commands fail closed with machine-readable evidence.",
+    "No terminal control library is required for baseline replay."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_scripted_mode",
+    "cargo run -p agentd -- --tui-scripted --help",
+    "powershell -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1"
+  ],
+  "failure_modes": [
+    "Scripted mode uses a separate parser from interactive mode.",
+    "Replay cannot distinguish expected rejections from unexpected failures.",
+    "Scripted mode bypasses approval token checks."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-040", "TASK-TUI-060", "TASK-TUI-062"],
+    "blocked_until": ["TASK-TUI-030", "TASK-TUI-031", "TASK-TUI-032"]
+  }
+}

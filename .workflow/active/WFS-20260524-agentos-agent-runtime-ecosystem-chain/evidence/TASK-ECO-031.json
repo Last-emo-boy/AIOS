@@ -1,0 +1,33 @@
+{
+  "task_id": "TASK-ECO-031",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "summary": "Defined ecosystem signing, key rotation and revocation requirements for Production Distro promotion.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/ecosystem-signing-revocation.md",
+      "status": "created",
+      "sha256": "ffcfbded67ba5c066878067711fc3bd6f8d5f0923a7bffcd83d407423ea95073"
+    }
+  ],
+  "acceptance_evidence": [
+    "Unsigned production activation is blocked.",
+    "Signed objects include manifests, payloads, registry snapshots, lockfiles, policy packs, adapter packs, image packs and revocation metadata.",
+    "Revoked staged artifacts cannot activate.",
+    "Revoked active artifacts are degraded and remain visible in operator projection and support bundles.",
+    "Local-dev unsigned exception is explicit and non-promotable."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Replay passed with revoked staged artifact blocked and active revoked artifact degraded evidence."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Candidate hash-bound release signatures do not satisfy production trust root requirements.",
+    "Revocation metadata is not optional for production promotion.",
+    "Copying local-dev artifacts into a trusted path does not upgrade them."
+  ],
+  "promotion_impact": "Production Distro now has documented signing and revocation requirements before public registry or verified publisher work."
+}

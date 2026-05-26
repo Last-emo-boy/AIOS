@@ -1,0 +1,40 @@
+{
+  "task_id": "TASK-ECO-020",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "summary": "Defined AgentOS artifact coordinate, manifest, file, dependency, activation requirement and trust binding schema.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7DFF92B146194EF0EA423AB1579FAFDDBB2E6220286103858E3FBA421D3F31A4"
+    }
+  ],
+  "acceptance_evidence": [
+    "ArtifactCoordinate parses and emits agentos:<kind>/<publisher>/<name>@<version> deterministically.",
+    "AgentOsArtifactManifestV1 binds coordinate, artifact digest, runtime contract version, compatibility, dependencies, files, activation requirements, trust and replay path.",
+    "Manifest validation rejects invalid digest prefixes, invalid versions and unknown required fields.",
+    "ActivationRequirement requires AgentCore PlanSpec, SecurityExecutionEngine, exact approval and preservation of core invariants."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem::manifest",
+      "result": "passed",
+      "summary": "3 manifest tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace test suite passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Unknown required manifest fields fail closed.",
+    "Invalid kind, version or digest cannot be accepted.",
+    "Manifest activation requirements cannot omit AgentCore PlanSpec or SecurityExecutionEngine."
+  ],
+  "optional_dependencies": [
+    "Optional dependencies are represented explicitly and cannot fall back to host mutation."
+  ],
+  "promotion_impact": "Gives local fixtures and future registries a deterministic artifact identity and manifest contract."
+}

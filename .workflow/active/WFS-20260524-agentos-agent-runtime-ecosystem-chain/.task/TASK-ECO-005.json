@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-005",
+  "title": "Route activation side effects through SecurityExecutionEngine",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "security_execution",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-004"],
+  "purpose": "Make ecosystem activation a first-class SecurityExecutionEngine effect with policy, leases, audit and rollback.",
+  "scope": ["Define activation effect envelope.", "Compile activation capability lease.", "Record policy evaluation and exact approval binding.", "Seal only after verification succeeds."],
+  "deliverables": ["crates/security_execution/src/lib.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-005.json"],
+  "acceptance_criteria": ["No active artifact mutation happens before EffectPrepared.", "Denied activation has no effect.", "Rollback handle is recorded.", "Policy packs cannot remove safety invariants."],
+  "verification": ["cargo test -p security_execution ecosystem", "cargo test -p agentd safety::"],
+  "failure_modes": ["Activation bypasses EffectEnvelope.", "Policy pack weakens no-shell rule.", "Denied activation updates active state."],
+  "handoff": {"next_tasks": ["TASK-ECO-006", "TASK-ECO-043"], "blocked_until": ["TASK-ECO-004"]},
+  "completed_at": "2026-05-25T02:54:06+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-005.json"
+}

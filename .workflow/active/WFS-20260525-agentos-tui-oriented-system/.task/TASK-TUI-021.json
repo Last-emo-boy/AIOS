@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-021",
+  "title": "Build run detail and audit timeline view",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-002", "TASK-TUI-010"],
+  "purpose": "Expose a durable run detail view that combines RunProjection with redacted audit timeline evidence.",
+  "scope": [
+    "Render run id, status, intent summary and freeze hash.",
+    "Render step states, dependencies, observations and blockers.",
+    "Render audit timeline ranges related to the run.",
+    "Render effect envelope state without raw sensitive payloads.",
+    "Support latest-run and explicit run-id lookup."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/agent_core.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-021.json"
+  ],
+  "acceptance_criteria": [
+    "Run detail view is stable for golden snapshot tests.",
+    "Audit timeline order is deterministic.",
+    "Denied, paused, rollback-pending and failed-closed states are explicit.",
+    "Unknown run id returns a typed not-found view, not an empty success."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_run_detail",
+    "cargo test -p agentd agent_core::run_loop",
+    "cargo test -p agentd audit_projection"
+  ],
+  "failure_modes": [
+    "Run detail view omits audit evidence for effect state.",
+    "Unknown run id silently falls back to latest run.",
+    "Raw observation or secret-like text leaks into TUI output."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-024", "TASK-TUI-031", "TASK-TUI-060"],
+    "blocked_until": ["TASK-TUI-010"]
+  }
+}

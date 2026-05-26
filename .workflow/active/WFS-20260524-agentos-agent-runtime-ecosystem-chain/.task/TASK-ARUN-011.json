@@ -1,0 +1,54 @@
+{
+  "id": "TASK-ARUN-011",
+  "title": "Define observation fabric and operator event intake",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "owner": "agent_core",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-CHAIN-001"],
+  "purpose": "Define the observation fabric that lets Agent Runtime understand OS state without letting observations directly trigger unsafe actions.",
+  "scope": [
+    "Classify observation sources: kernel/runtime/service/audit/operator/ecosystem/external.",
+    "Define trust labels and sanitization requirements.",
+    "Define operator event intake and command normalization.",
+    "Define projection and audit references for observations."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-observation-fabric.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-011.json"
+  ],
+  "read_first": [
+    "crates/agent_core/src/lib.rs",
+    "crates/security_execution/src/lib.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-007-observations.json"
+  ],
+  "implementation_steps": [
+    "Define observation source schema and trust labels.",
+    "Define source-to-sink checks for observation-derived replanning.",
+    "Define operator command normalization path.",
+    "Record evidence with denied direct-action examples."
+  ],
+  "acceptance_criteria": [
+    "External observations are untrusted by default.",
+    "Observation content cannot directly create tool calls.",
+    "Operator events are distinguishable from external content.",
+    "Observation references appear in audit/projection."
+  ],
+  "verification": [
+    "cargo test -p agent_core observation",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "External content is treated as operator intent.",
+    "Observation text can smuggle shell or secret access.",
+    "Projection omits observation trust label."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ARUN-012", "TASK-ARUN-022"],
+    "blocked_until": ["TASK-CHAIN-001"]
+  },
+  "completed_at": "2026-05-25T00:23:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-011.json"
+}

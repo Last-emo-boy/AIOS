@@ -1,0 +1,39 @@
+{
+  "task_id": "TASK-CHAIN-000",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "summary": "Frozen the unified Agent-operated OS and ecosystem chain: Linux is the deterministic substrate, Agent Runtime is the OS control plane, agentd remains thin, and aom extends the OS through runtime-mediated artifacts.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/agent-operated-os-chain.md",
+      "sha256": "108a7ce07c456f089c933f866341c9505c4b3e57b46be533e1d62ba9fdaf5780"
+    },
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-ecosystem-architecture.md",
+      "sha256": "9235be069b02b4cc1a765b6a2b87f8f1608e7075da409e7b9f60f81467c77966"
+    }
+  ],
+  "acceptance_evidence": [
+    "agent-operated-os-chain.md defines Agent Runtime as the control layer after agentd PID 1.",
+    "agent-operated-os-chain.md states agentd is PID 1 but not the large agent brain and keeps lifecycle/projection/process integration responsibilities.",
+    "runtime-ecosystem-architecture.md states aom artifact activation must become PlanSpec and pass through SecurityExecutionEngine.",
+    "acceptance-gates.md blocks normal-mode arbitrary shell and activation bypass."
+  ],
+  "blocked_shortcuts": [
+    "No normal-mode arbitrary shell.",
+    "No ecosystem activation outside AgentCore and SecurityExecutionEngine.",
+    "No agentd-owned resolver or adapter business logic.",
+    "No install/stage side effects."
+  ],
+  "verification": [
+    {
+      "command": "Select-String docs for AgentCore, SecurityExecutionEngine, aom and shell blockers",
+      "result": "passed"
+    },
+    {
+      "command": "ConvertFrom-Json evidence parse",
+      "result": "pending-final-json-sweep"
+    }
+  ],
+  "promotion_impact": "Enables ordered execution of Agent Runtime and ecosystem tasks without changing baseline runtime code."
+}

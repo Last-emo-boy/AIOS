@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-015",
+  "title": "Add degraded-state explainer and evidence path actions",
+  "status": "completed",
+  "completed_at": "2026-05-26T02:43:36+08:00",
+  "wave": 2,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-014"],
+  "purpose": "Make degraded state actionable by explaining cause, authority, impact and evidence paths.",
+  "scope": [
+    "Render degraded state causes from runtime, support bundle, AOM and release evidence.",
+    "Show impact and safe next action for each degraded state.",
+    "Show evidence artifact paths or ids for operator handoff.",
+    "Provide typed commands for export or view, not shell open.",
+    "Add redaction and path safety tests."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui degraded-state explainer",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-015.json"
+  ],
+  "acceptance_criteria": [
+    "Degraded state includes cause, impact, source and next action.",
+    "Evidence paths are safe to display and do not expose secrets.",
+    "Optional dependency degradation does not block baseline operation.",
+    "No shell open or host file manager shortcut is introduced."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_degraded",
+    "cargo test -p agentd support_bundle",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "failure_modes": [
+    "Degraded state is hidden behind healthy status.",
+    "Evidence path action becomes arbitrary file open.",
+    "Optional dependency warning is treated as fatal baseline failure."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-020", "TASK-TUI2-030"],
+    "blocked_until": ["TASK-TUI2-014"]
+  }
+}

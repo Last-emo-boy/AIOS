@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-010",
+  "title": "Build Approval Center panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:25:27+08:00",
+  "wave": 2,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-004", "TASK-TUI2-005"],
+  "purpose": "Turn approval visibility into a focused operator workflow that makes risky decisions easier to inspect and deny.",
+  "scope": [
+    "Render pending, expired, denied and stale approvals in a dedicated panel.",
+    "Show exact binding context, policy reason, expiry and target resource.",
+    "Show approve and deny commands with equal visual weight.",
+    "Separate actionable approvals from expired or stale approvals.",
+    "Keep approval authority in AgentCore and SecurityExecutionEngine."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui approval center panel",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-010.json"
+  ],
+  "acceptance_criteria": [
+    "Approval Center cannot render an actionable approval without exact binding context.",
+    "Expired and stale approvals are visible but not actionable.",
+    "Deny path remains as discoverable as approve path.",
+    "No raw secret-like values appear in approval panels."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_approval_center",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "failure_modes": [
+    "Approval Center encourages broad approval.",
+    "Stale token can be reused through focused panel state.",
+    "Approval panel hides policy reason or rollback consequence."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-011", "TASK-TUI2-012"],
+    "blocked_until": ["TASK-TUI2-004", "TASK-TUI2-005"]
+  }
+}

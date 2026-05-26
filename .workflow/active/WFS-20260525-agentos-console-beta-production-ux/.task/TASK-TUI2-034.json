@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-034",
+  "title": "Add candidate signing status view",
+  "status": "completed",
+  "completed_at": "2026-05-26T06:38:29+08:00",
+  "wave": 4,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-030", "TASK-TUI2-031"],
+  "purpose": "Expose candidate signatures and production signing readiness without implying production key ceremony is complete.",
+  "scope": [
+    "Render detached candidate signature files for dependency inventory, SBOM, update metadata and provenance.",
+    "Render algorithm, key id, production_key_required and fail_closed policy.",
+    "Show production signature missing as non-GA blocker when required.",
+    "Link to verification script status when present.",
+    "Avoid storing or displaying private key material."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui signing status view",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-034.json"
+  ],
+  "acceptance_criteria": [
+    "Candidate signatures are visible as candidate signatures only.",
+    "Production signing requirement is explicit.",
+    "Missing production signature cannot be shown as production-ready.",
+    "No secret key material appears in view, support bundle or evidence."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_signing_status",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1"
+  ],
+  "failure_modes": [
+    "Candidate hash-bound record is mislabeled production signature.",
+    "Private key path or secret value is displayed.",
+    "Production signing missing state is hidden."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-040", "TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-030", "TASK-TUI2-031"]
+  }
+}

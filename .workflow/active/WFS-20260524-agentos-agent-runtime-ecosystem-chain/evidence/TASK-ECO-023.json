@@ -1,0 +1,40 @@
+{
+  "task_id": "TASK-ECO-023",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "summary": "Defined compatibility and migration validation contracts that block unsupported runtime versions, unsafe optional dependency fallback and downgrade without rollback.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7DFF92B146194EF0EA423AB1579FAFDDBB2E6220286103858E3FBA421D3F31A4"
+    }
+  ],
+  "acceptance_evidence": [
+    "CompatibilityRequirement validates runtime contract version range, supported architectures, host feature requirements and migration rules.",
+    "CompatibilityValidationReportV1 blocks activation when runtime version or architecture is unsupported or required host features are missing.",
+    "Optional host features can degrade but do not authorize host mutation.",
+    "MigrationRule rejects downgrade paths without explicit rollback contract."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem::compatibility",
+      "result": "passed",
+      "summary": "3 compatibility tests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed and wrote .workflow/artifacts/functional-replay/result.json."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Unsupported runtime versions block activation.",
+    "Missing optional dependencies cannot mutate the host.",
+    "Downgrade cannot proceed without rollback contract."
+  ],
+  "optional_dependencies": [
+    "KVM/Firecracker-like optional host features can be represented as missing optional features without enabling host fallback."
+  ],
+  "promotion_impact": "Adds compatibility gates required before execution-image, runtime-adapter and future model/knowledge packs can activate safely."
+}

@@ -1,0 +1,31 @@
+{
+  "task_id": "TASK-CHAIN-003",
+  "status": "completed",
+  "completed_at": "2026-05-25T00:12:00+08:00",
+  "summary": "Defined chain acceptance gates for runtime control, ecosystem activation, adversarial fixtures, release provenance and QEMU promotion proof.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/acceptance-gates.md",
+      "sha256": "c4d4d0e5558e6d24646db894d1ce748cc5ce23db0e9898214f69c8cc69709b6d"
+    }
+  ],
+  "acceptance_evidence": [
+    "acceptance-gates.md lists baseline cargo, functional replay and release commands.",
+    "acceptance-gates.md lists QEMU command with E:\\qemu\\qemu-system-x86_64.exe.",
+    "acceptance-gates.md defines runtime gates for PlanRun persistence, no model direct execution, observation boundaries, memory safety and degraded mode.",
+    "acceptance-gates.md defines ecosystem gates for inert staging, AgentCore PlanSpec activation, SecurityExecutionEngine effects, deterministic manifests and provenance hashes.",
+    "acceptance-gates.md defines blocking conditions for shell exposure and activation bypass."
+  ],
+  "blocked_shortcuts": [
+    "No release promotion when required replay is skipped.",
+    "No support bundle with raw secrets.",
+    "No active artifact set that cannot be reconstructed after restart."
+  ],
+  "verification": [
+    {
+      "command": "Select-String acceptance-gates.md for QEMU path, runtime gates and ecosystem gates",
+      "result": "passed"
+    }
+  ],
+  "promotion_impact": "Defines the evidence model for all later runtime, ecosystem and Production Distro tasks."
+}

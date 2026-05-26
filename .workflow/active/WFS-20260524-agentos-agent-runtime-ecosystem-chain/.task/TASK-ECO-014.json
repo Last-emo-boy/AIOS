@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-014",
+  "title": "Add ecosystem status to TUI and operator projection",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P1",
+  "type": "operator-ux",
+  "owner": "agentd",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-006", "TASK-ECO-012", "TASK-ECO-013"],
+  "purpose": "Make ecosystem status visible in terminal-first AgentOS operation.",
+  "scope": ["Show active artifact set.", "Show staged artifacts.", "Show blocked activations and required approvals.", "Show registry snapshot and lockfile hash."],
+  "deliverables": ["crates/agentd/src/operator_projection.rs", "packaging/agentos/rootfs/etc/agentos/operator-commands.json", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-014.json"],
+  "acceptance_criteria": ["TUI/projection is read-only.", "Operator can see why artifact is blocked.", "No raw secrets appear.", "Status survives restart through durable state."],
+  "verification": ["cargo test -p agentd operator_projection", "cargo test -p agentd support_bundle"],
+  "failure_modes": ["TUI becomes activation authority.", "Blocked reason is unclear.", "Projection loses active state after restart."],
+  "handoff": {"next_tasks": ["TASK-PROD-050"], "blocked_until": ["TASK-ECO-006"]},
+  "completed_at": "2026-05-25T03:19:32+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-014.json"
+}

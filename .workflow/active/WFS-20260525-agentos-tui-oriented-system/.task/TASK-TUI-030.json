@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-030",
+  "title": "Replace demo interactive loop with safe typed command loop",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-001", "TASK-TUI-010", "TASK-TUI-020"],
+  "purpose": "Turn --tui-interactive into a real operator loop backed by typed commands and durable runtime state.",
+  "scope": [
+    "Remove default demo-session behavior from --tui-interactive.",
+    "Accept only typed TUI commands defined by the grammar.",
+    "Route each command to TuiRuntimeController or read-only projection handlers.",
+    "Render updated snapshot after each accepted command.",
+    "Provide explicit --tui-demo for demo-only behavior."
+  ],
+  "deliverables": [
+    "crates/agentd/src/main.rs",
+    "crates/agentd/src/tui.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-030.json"
+  ],
+  "acceptance_criteria": [
+    "--tui-interactive can create a durable run from an intent.",
+    "Unknown or shell-like input is rejected with typed help, not executed.",
+    "Interactive loop can render dashboard, run, approvals, recovery and audit views.",
+    "Demo mode is explicit and cannot be confused with durable mode."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_command_loop",
+    "cargo test -p agentd tui_runtime_controller",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "--tui-interactive still builds only a suspended demo session.",
+    "Unknown input reaches host shell.",
+    "Interactive loop hides command errors or runtime path errors."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-031", "TASK-TUI-032", "TASK-TUI-033"],
+    "blocked_until": ["TASK-TUI-001", "TASK-TUI-010"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-024",
+  "title": "Add revocation and advisory metadata model",
+  "status": "completed",
+  "wave": 4,
+  "priority": "P0",
+  "type": "security",
+  "owner": "runtime_contracts",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-021"],
+  "purpose": "Represent revoked artifacts, publisher keys and vulnerability advisories in local registry snapshots.",
+  "scope": ["Define RevocationAdvisoryV1.", "Bind advisories to artifact coordinates and digests.", "Define active-artifact degraded projection when revoked content is present."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-024.json"],
+  "acceptance_criteria": ["Revoked artifact cannot activate.", "Existing active revoked artifact is flagged degraded.", "Advisory metadata is included in support/provenance projections."],
+  "verification": ["cargo test -p runtime_contracts ecosystem::revocation", "cargo test -p agent_core ecosystem::resolver"],
+  "failure_modes": ["Revocation only logs warning.", "Advisory is not bound to digest.", "Active revoked artifact remains invisible."],
+  "handoff": {"next_tasks": ["TASK-ECO-044", "TASK-ECO-034"], "blocked_until": ["TASK-ECO-021"]},
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-024.json"
+}

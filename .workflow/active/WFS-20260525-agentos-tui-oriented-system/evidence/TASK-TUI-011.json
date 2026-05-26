@@ -1,0 +1,23 @@
+{
+  "task_id": "TASK-TUI-011",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "durable-paths",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/main.rs",
+    "packaging/agentos/rootfs/etc/agentos/tui.toml",
+    ".workflow/artifacts/alpha-rootfs-validation/result.json"
+  ],
+  "verified": [
+    "TUI accepts explicit --run-store, --audit-journal and --support-bundle paths",
+    "TUI defaults use durable AgentOS runtime paths",
+    "dashboard renders durable mode and path projection",
+    "alpha rootfs validation passed tui.config durable path checks"
+  ],
+  "commands": [
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1"
+  ],
+  "blockers": []
+}

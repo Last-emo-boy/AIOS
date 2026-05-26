@@ -1,0 +1,54 @@
+{
+  "id": "TASK-ARUN-021",
+  "title": "Define approval, escalation and interrupt survival",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P0",
+  "type": "runtime",
+  "owner": "security_execution",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-ARUN-020"],
+  "purpose": "Ensure approvals, denials, pending escalations and operator interrupts survive AgentOS restarts.",
+  "scope": [
+    "Define durable approval request and token state.",
+    "Define interrupt, timeout, denial and escalation transitions.",
+    "Bind approval token to actor, tool, resource, parameter hash, expiry and policy version.",
+    "Define projection for pending approvals."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-approval-survival.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-021.json"
+  ],
+  "read_first": [
+    "crates/security_execution/src/lib.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-SEF-002-policy-adapter.json",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-005-run-loop.json"
+  ],
+  "implementation_steps": [
+    "Define approval persistence model.",
+    "Define restart behavior for AwaitingApproval and Suspended runs.",
+    "Define exact-token validation after restart.",
+    "Record evidence with mutation and replay attempts."
+  ],
+  "acceptance_criteria": [
+    "Broad approvals are rejected.",
+    "Expired approvals do not resume execution.",
+    "Pending approvals survive restart as pending or expired.",
+    "Parameter mutation invalidates approval."
+  ],
+  "verification": [
+    "cargo test -p agentd agent_core::adversarial",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "Approval survives with widened scope.",
+    "Restart auto-approves pending action.",
+    "Approval token omits parameter hash."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ECO-004", "TASK-ECO-005"],
+    "blocked_until": ["TASK-ARUN-020"]
+  },
+  "completed_at": "2026-05-25T00:37:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-021.json"
+}

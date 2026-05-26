@@ -1,0 +1,81 @@
+{
+  "task_id": "TASK-TUI2-034",
+  "title": "Add candidate signing status view",
+  "status": "completed",
+  "completed_at": "2026-05-26T06:38:29+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/signing_status_panel.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "scripts/tui-replay.ps1",
+    "scripts/production-runbook-smoke.ps1",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json",
+    ".workflow/artifacts/production-signature-verification/result.json"
+  ],
+  "verified": [
+    "signing.status.show renders TUI Signing Status as a read-only projection over candidate signatures and production signing readiness evidence.",
+    "Candidate detached signatures for dependency_inventory, sbom, update_metadata and provenance are labeled candidate-only and production_signature=false.",
+    "The panel renders algorithm, key_id, production_key_required and fail_closed policy from release provenance signing metadata.",
+    "Production signing status is explicitly separate from candidate signing; missing .prod.sig.json artifacts render missing_production_signature=true and production_ready=false.",
+    "Production signature verification result is linked when present and remains production_ready_claim=false.",
+    "TUI exposes signing_authority=false, production_signing_authority=false, direct_sign=false and direct_promote=false.",
+    "No private key path, private key material or secret-like value is rendered by the signing status view."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_signing_status --no-fail-fast",
+    "cargo test -p agentd tui_gate_status --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1"
+  ],
+  "test_result": {
+    "focused_tests": {
+      "command": "cargo test -p agentd tui_signing_status --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json",
+      "check": "signing-status-rendered"
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json",
+      "assertion": "signing_status_projected"
+    },
+    "build_release": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/release/provenance.json"
+    },
+    "production_signature_verification": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify-production-signatures.ps1",
+      "result": "blocked",
+      "artifact": ".workflow/artifacts/production-signature-verification/result.json",
+      "production_ready_claim": false,
+      "blockers": 16,
+      "expected_for_current_candidate_only_state": true
+    }
+  },
+  "risk_notes": [
+    "Candidate hash-bound signatures are never accepted as production signatures.",
+    "TUI reads signing artifacts only and never signs, verifies cryptographic material, promotes candidates or handles keys.",
+    "Production signing remains fail-closed until production keyring and production detached signatures are installed and verified outside the TUI.",
+    "TUI remains projection-controller only; AgentCore and SecurityExecutionEngine authority boundaries are unchanged."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-040",
+    "TASK-TUI2-050"
+  ]
+}

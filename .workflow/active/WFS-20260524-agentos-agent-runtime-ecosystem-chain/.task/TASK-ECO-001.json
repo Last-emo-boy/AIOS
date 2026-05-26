@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-001",
+  "title": "Define runtime_contracts::ecosystem module boundary",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "runtime_contracts",
+  "source": "runtime-ecosystem-architecture.md",
+  "depends_on": ["TASK-ECO-000"],
+  "purpose": "Define which ecosystem schemas belong in runtime_contracts so other crates share stable artifact contracts.",
+  "scope": ["Create module boundary for manifest, registry, lockfile, verification, staging, activation and active set reports.", "Prevent runtime_contracts from depending on execution crates.", "Document serialization and stable hash expectations."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-001.json"],
+  "acceptance_criteria": ["Contracts are serializable and deterministic.", "No side-effect logic exists in runtime_contracts.", "Schemas can be used by agent_core, security_execution, agentd and scripts."],
+  "verification": ["cargo test -p runtime_contracts", "cargo test --workspace"],
+  "failure_modes": ["runtime_contracts imports execution logic.", "Schema hashes are nondeterministic.", "Manifest fields cannot express activation requirements."],
+  "handoff": {"next_tasks": ["TASK-ECO-020", "TASK-ECO-021", "TASK-ECO-022"], "blocked_until": ["TASK-ECO-000"]},
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-001.json"
+}

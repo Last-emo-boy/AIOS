@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-TUI2-021",
+  "title": "Add workflow catalog view",
+  "status": "completed",
+  "completed_at": "2026-05-26T03:08:11+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/workflow_catalog.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "crates/agentd/src/tui.rs"
+  ],
+  "verified": [
+    "Workflow catalog renders grouped service, package, content, update, support and ecosystem workflows.",
+    "Workflow detail shows input schema, risk, approval requirements, rollback expectation and evidence outputs.",
+    "Catalog exposes local-only and optional external dependency status while baseline remains local-only.",
+    "Workflow launch points are preview commands and do not create PlanSpec or run snapshots.",
+    "Catalog is projection-only and does not suggest direct execution."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_workflow_catalog --no-fail-fast",
+    "cargo test -p agent_core package_install",
+    "cargo test -p agent_core untrusted_content"
+  ],
+  "test_result": {
+    "targeted": {
+      "command": "cargo test -p agentd tui_workflow_catalog --no-fail-fast",
+      "passed": 4,
+      "failed": 0
+    },
+    "package_install": {
+      "command": "cargo test -p agent_core package_install",
+      "passed": 10,
+      "failed": 0
+    },
+    "untrusted_content": {
+      "command": "cargo test -p agent_core untrusted_content",
+      "passed": 8,
+      "failed": 0
+    }
+  },
+  "risk_notes": [
+    "Workflow Catalog consumes CapabilityIndexProjection and does not own planner, resolver or side-effect authority.",
+    "Launch preview is typed-command-only and remains separate from PlanSpec creation.",
+    "Host-changing workflows display rollback and exact approval requirements.",
+    "External dependencies are explicitly optional for baseline operation."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-022",
+    "TASK-TUI2-023"
+  ]
+}

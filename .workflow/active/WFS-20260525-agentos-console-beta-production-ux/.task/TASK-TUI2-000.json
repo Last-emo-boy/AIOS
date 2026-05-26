@@ -1,0 +1,42 @@
+{
+  "id": "TASK-TUI2-000",
+  "title": "Freeze Console Beta boundary and module ownership",
+  "status": "completed",
+  "wave": 0,
+  "priority": "P0",
+  "type": "architecture",
+  "owner": "workflow",
+  "source": "Console Beta plan",
+  "depends_on": [],
+  "purpose": "Freeze the next TUI architecture before implementation so the full-screen console improves UX without turning agentd into a runtime owner.",
+  "scope": [
+    "Define TuiShell, OperatorSession, PanelLayout, CommandPalette, ProjectionSnapshot, ViewRenderer and TypedCommandDispatch ownership.",
+    "Document which modules may read RunStore, AuditJournal, support bundle and AOM projections.",
+    "Document which modules may dispatch typed commands into AgentCore, support bundle and AOM APIs.",
+    "Reaffirm that planner, resolver, policy and side-effect logic stay outside TUI.",
+    "Define Console Beta promotion language and non-GA boundary."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/console-beta-architecture.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-000.json"
+  ],
+  "acceptance_criteria": [
+    "TUI ownership is frozen as projection-controller only.",
+    "AgentCore, SecurityExecutionEngine and agent_core::ecosystem ownership is explicitly preserved.",
+    "OperatorSession is defined as UI state only and not permission authority.",
+    "Implementation tasks can reference the boundary doc before editing code."
+  ],
+  "verification": [
+    "manual review of console-beta-architecture.md",
+    "cargo test -p agentd tui --no-fail-fast"
+  ],
+  "failure_modes": [
+    "Full-screen TUI design implies direct execution authority.",
+    "Operator profiles are mistaken for access-control authority.",
+    "AOM resolver logic is moved into agentd."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-001", "TASK-TUI2-002"],
+    "blocked_until": []
+  }
+}

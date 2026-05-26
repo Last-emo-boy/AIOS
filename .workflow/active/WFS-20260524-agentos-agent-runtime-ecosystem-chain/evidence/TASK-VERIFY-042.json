@@ -1,0 +1,48 @@
+{
+  "task_id": "TASK-VERIFY-042",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "summary": "Added adversarial ecosystem fixtures and replay coverage for shell bypass, policy weakening, capability self-grant, memory poisoning, secret embedding and adapter bypass.",
+  "artifacts": [
+    {
+      "path": "packaging/agentos/fixtures/ecosystem/adversarial/",
+      "status": "created",
+      "sha256": "3f5aa0538112dbe57f6c5c95c9c8d799ecbefe4dc999909754ba339afdc2e00d"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "793b8a9b4d56a41121c1e9b96ef31b318a8213711954f675125ec39075dba61f"
+    }
+  ],
+  "acceptance_evidence": [
+    "Six adversarial fixtures are present: workflow shell exec, policy exact-approval disable, capability self-grant, knowledge memory poisoning, model profile secret-like content and adapter direct host mutation.",
+    "Replay denied all six fixtures before EffectPrepared.",
+    "Denied outcomes are audit/projectable.",
+    "No fixture creates a normal-mode shell.",
+    "Knowledge memory poisoning is marked quarantined."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Adversarial fixture count=6 and denied_count=6."
+    },
+    {
+      "command": "cargo test -p agentd safety::",
+      "result": "passed",
+      "summary": "19 safety tests passed."
+    },
+    {
+      "command": "cargo test -p agentd agent_core::adversarial",
+      "result": "passed",
+      "summary": "AgentCore adversarial facade test passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Adversarial fixtures are not optional in the default replay.",
+    "Denial happens before unsafe effect preparation.",
+    "Artifact metadata cannot self-grant policy authority."
+  ],
+  "promotion_impact": "Ecosystem artifacts now have malicious fixture coverage before new artifact kinds are promoted."
+}

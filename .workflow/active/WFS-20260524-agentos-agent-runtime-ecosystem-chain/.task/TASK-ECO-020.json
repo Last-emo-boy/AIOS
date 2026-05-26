@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-020",
+  "title": "Define artifact coordinate and manifest schema",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "runtime_contracts",
+  "source": "runtime-ecosystem-architecture.md",
+  "depends_on": ["TASK-ECO-001"],
+  "purpose": "Define AgentOS artifact identity and manifest schema for local registry and future verified channels.",
+  "scope": ["Define coordinate format agentos:<kind>/<publisher>/<name>@<version>.", "Define manifest fields for identity, compatibility, dependencies, files, trust, replay and activation.", "Define unknown required field rejection."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-020.json"],
+  "acceptance_criteria": ["Coordinate parser is deterministic.", "Manifest binds publisher, version, content digest and activation requirements.", "Invalid kind/version/digest fails closed."],
+  "verification": ["cargo test -p runtime_contracts ecosystem::manifest", "cargo test --workspace"],
+  "failure_modes": ["Coordinate identity is ambiguous.", "Manifest cannot express optional dependencies.", "Unknown required fields are ignored."],
+  "handoff": {"next_tasks": ["TASK-ECO-021", "TASK-ECO-002"], "blocked_until": ["TASK-ECO-001"]},
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-020.json"
+}

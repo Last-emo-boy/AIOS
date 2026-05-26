@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-024",
+  "title": "Add TUI golden snapshot and redaction tests",
+  "status": "completed",
+  "wave": 2,
+  "priority": "P0",
+  "type": "test",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-020", "TASK-TUI-021", "TASK-TUI-022", "TASK-TUI-023"],
+  "purpose": "Lock the operator-facing TUI views with deterministic snapshots and secret redaction checks.",
+  "scope": [
+    "Add golden snapshots for dashboard, run detail, approval queue and recovery view.",
+    "Add redaction fixtures with secret-like values and secret handles.",
+    "Add deterministic ordering checks for runs, events and ecosystem artifacts.",
+    "Add tests that fail on raw secret leakage.",
+    "Keep snapshots line-oriented to avoid terminal library dependency churn."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/tests or inline snapshot fixtures",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-024.json"
+  ],
+  "acceptance_criteria": [
+    "Snapshot tests are stable across repeated local runs.",
+    "Secret-like payloads are redacted while handles remain explainable.",
+    "Approval and rollback states are visible in snapshots.",
+    "Test failures identify the view and leak category."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_snapshot",
+    "cargo test -p agentd tui_redaction",
+    "cargo test -p agentd support_bundle"
+  ],
+  "failure_modes": [
+    "Snapshots require external terminal rendering state.",
+    "Secret redaction tests miss audit timeline output.",
+    "View ordering is nondeterministic."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-030", "TASK-TUI-060", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-020", "TASK-TUI-021", "TASK-TUI-022", "TASK-TUI-023"]
+  }
+}

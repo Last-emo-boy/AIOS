@@ -1,0 +1,42 @@
+{
+  "task_id": "TASK-ECO-030",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "summary": "Defined AgentOS ecosystem trust tiers, channels, production defaults, blocked promotions and revocation behavior.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/ecosystem-trust-policy.md",
+      "status": "created",
+      "sha256": "DB2B99CDDAD2212ACB97C86C371A0D5F179EB01A8C95F277004C36FCB3DCC0E4"
+    },
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "updated",
+      "sha256": "7DFF92B146194EF0EA423AB1579FAFDDBB2E6220286103858E3FBA421D3F31A4"
+    }
+  ],
+  "acceptance_evidence": [
+    "ecosystem-trust-policy.md defines core, verified, organization, community and local-dev trust tiers.",
+    "ecosystem-trust-policy.md defines stable, beta, edge and local channels.",
+    "Production defaults block unsigned artifacts, community artifacts and local-dev artifacts from production promotion by default.",
+    "Core artifacts require release gate coverage.",
+    "Revocation behavior blocks future activation and marks active revoked artifacts degraded."
+  ],
+  "commands": [
+    {
+      "command": "Select-String -Path .workflow\\active\\WFS-20260524-agentos-agent-runtime-ecosystem-chain\\docs\\ecosystem-trust-policy.md -Pattern 'core|verified|organization|community|local-dev|stable|beta|edge|local|revocation'",
+      "result": "passed",
+      "summary": "Confirmed all required trust tiers, channels and revocation references are present."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Trust is not inferred from registry URL or local path.",
+    "Community and local-dev artifacts are not production-promotable by default.",
+    "Unsigned production artifacts are blocked.",
+    "Policy packs cannot weaken core safety invariants."
+  ],
+  "optional_dependencies": [
+    "Revocation checks must work from pinned local snapshots; live network access is optional."
+  ],
+  "promotion_impact": "Freezes production trust defaults before public registry, verified publisher or organization overlay work begins."
+}

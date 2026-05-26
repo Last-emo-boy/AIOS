@@ -1,0 +1,43 @@
+{
+  "id": "TASK-ECO-062",
+  "title": "Add adapter and image optional dependency fail-closed replay",
+  "status": "completed",
+  "wave": 8,
+  "priority": "P1",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "acceptance-gates.md",
+  "depends_on": ["TASK-ECO-060", "TASK-ECO-061", "TASK-VERIFY-042"],
+  "purpose": "Prove adapter and image packs fail closed when optional dependencies are missing and never fall back to unsafe host behavior.",
+  "scope": [
+    "Replay adapter pack with missing host dependency.",
+    "Replay image pack with missing KVM or Firecracker.",
+    "Replay direct-host-mutation bypass attempt.",
+    "Record denied outcomes and provenance hashes."
+  ],
+  "deliverables": [
+    "packaging/agentos/fixtures/ecosystem/adversarial/adapter-image/",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-062.json"
+  ],
+  "acceptance_criteria": [
+    "Missing optional dependency fails before EffectPrepared.",
+    "No host fallback executes.",
+    "Denied reason is visible in projection.",
+    "Replay remains local-only."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "cargo test -p security_execution firecracker"
+  ],
+  "failure_modes": [
+    "Adapter uses host fallback after missing dependency.",
+    "Image pack activation reaches EffectPrepared without required image.",
+    "Replay requires real Firecracker."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-PROD-053"],
+    "blocked_until": ["TASK-ECO-060", "TASK-ECO-061"]
+  },
+  "completed_at": "2026-05-25T04:14:02+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-062.json"
+}

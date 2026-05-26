@@ -1,0 +1,66 @@
+{
+  "task_id": "TASK-TUI2-011",
+  "status": "completed",
+  "completed_at": "2026-05-26T01:39:02+08:00",
+  "evidence_type": "tui-approval-binding-diff-stale-expired-ux",
+  "artifacts": [
+    "crates/agentd/src/tui/approval_center.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs"
+  ],
+  "verified": [
+    "Approval Center now renders parameter_summary, requested_binding_hash, bound_token_hash and binding_diff side by side.",
+    "Matching binding renders preview_state=ready with deterministic expires_at and expires_in fields.",
+    "Changed parameter hash renders binding_diff=mismatch-denied-preview, preview_state=denied-preview and disables approve/deny commands.",
+    "Expired approvals render preview_state=expired with disabled_reason and no approve/deny command surface.",
+    "Palette suggestions do not expose run.approve after expired approval projection.",
+    "TUI run.approve dispatch performs approval preflight and rejects stale or expired shortcuts before AgentCore approve_step.",
+    "Focused stale-token reuse leaves restart-service without EffectPrepared.",
+    "Binding diff renderer redacts secret-like text."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_approval_binding --no-fail-fast",
+    "cargo test -p agentd tui_adversarial --no-fail-fast",
+    "cargo test -p agentd safety:: --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "test_result": {
+    "cargo_fmt_check": "passed",
+    "tui_approval_binding_tests": {
+      "status": "passed",
+      "passed": 4,
+      "failed": 0
+    },
+    "tui_adversarial_tests": {
+      "status": "passed",
+      "passed": 1,
+      "failed": 0
+    },
+    "safety_tests": {
+      "status": "passed",
+      "passed": 19,
+      "failed": 0
+    },
+    "agentd_tui_tests": {
+      "status": "passed",
+      "passed": 39,
+      "failed": 0
+    },
+    "tui_replay": {
+      "status": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json",
+      "checks": {
+        "passed": 21,
+        "failed": 0
+      },
+      "output_sha256": "7e67198af458f65eabb94ab04db113a3b25c24edd45eaa05aec9ced0dde9b99c",
+      "audit_journal_sha256": "ca9ab40a651f758eb6de82992b3dbede7ba2c59e9e07d5e2de4193206e66d37b",
+      "support_bundle_sha256": "6a366c87733eda25b62035da9cd33fa9a3ae81efbc8fd786ed5c0c483dc65ae3"
+    }
+  },
+  "blockers": []
+}

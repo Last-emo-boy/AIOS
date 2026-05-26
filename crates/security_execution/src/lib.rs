@@ -68,15 +68,15 @@ fn test_step_fixture(
 pub mod effect_envelope {
     use std::fmt;
 
-    use runtime_contracts::contains_secret_value;
-    use crate::{escape_json, CommitId, VerificationResult};
-    use runtime_contracts::RiskClass;
     use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
     use crate::policy::{
-        stable_parameter_hash, CapabilityLease, PolicyDecision, PolicyDecisionKind,
+        CapabilityLease, PolicyDecision, PolicyDecisionKind, stable_parameter_hash,
     };
     use crate::rollback::RollbackHandle;
     use crate::sandbox::SandboxProfile;
+    use crate::{CommitId, VerificationResult, escape_json};
+    use runtime_contracts::RiskClass;
+    use runtime_contracts::contains_secret_value;
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum EffectEnvelopeState {
@@ -896,11 +896,13 @@ pub mod effect_envelope {
                 )
                 .expect_err("seal needs verification");
             assert!(error.reason().contains("expected Verified"));
-            assert!(!journal
-                .event_lines()
-                .expect("journal")
-                .iter()
-                .any(|line| line.contains("CommitSealed")));
+            assert!(
+                !journal
+                    .event_lines()
+                    .expect("journal")
+                    .iter()
+                    .any(|line| line.contains("CommitSealed"))
+            );
 
             envelope
                 .verify(
@@ -963,9 +965,11 @@ pub mod effect_envelope {
             let lines = journal.event_lines().expect("journal");
             assert!(lines.iter().any(|line| line.contains("RollbackPending")));
             assert!(!lines.iter().any(|line| line.contains("CommitSealed")));
-            assert!(envelope
-                .seal(&journal, "operator", CommitId("commit-write".to_string()))
-                .is_err());
+            assert!(
+                envelope
+                    .seal(&journal, "operator", CommitId("commit-write".to_string()))
+                    .is_err()
+            );
             assert!(envelope.fail_closed("skip rollback").is_err());
         }
 
@@ -1036,16 +1040,16 @@ pub mod effect_envelope {
 pub mod policy_adapter {
     use std::fmt;
 
-    use runtime_contracts::contains_secret_value;
-    use crate::escape_json;
-    use runtime_contracts::RiskClass;
     use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+    use crate::escape_json;
     use crate::policy::{
-        stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyDecision, PolicyDecisionKind,
-        PolicyEvaluator, PolicyRequest,
+        ApprovalToken, CapabilityLease, PolicyDecision, PolicyDecisionKind, PolicyEvaluator,
+        PolicyRequest, stable_parameter_hash,
     };
-    use runtime_contracts::ExecutionStep;
     use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
+    use runtime_contracts::ExecutionStep;
+    use runtime_contracts::RiskClass;
+    use runtime_contracts::contains_secret_value;
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum StepPolicyOutcomeKind {
@@ -1540,11 +1544,13 @@ pub mod policy_adapter {
                 token.parameter_hash,
                 mutated.request.as_ref().expect("request").parameter_hash
             );
-            assert!(!mutation_journal
-                .event_lines()
-                .expect("journal")
-                .iter()
-                .any(|line| line.contains("EffectPrepared")));
+            assert!(
+                !mutation_journal
+                    .event_lines()
+                    .expect("journal")
+                    .iter()
+                    .any(|line| line.contains("EffectPrepared"))
+            );
         }
 
         #[test]
@@ -1628,11 +1634,11 @@ pub mod sandbox_profile {
     use std::fmt;
     use std::path::Path;
 
-    use runtime_contracts::contains_secret_value;
     use crate::escape_json;
-    use runtime_contracts::RiskClass;
     use crate::policy::CapabilityLease;
     use crate::sandbox::{SandboxCompiler, SandboxError, SandboxProfile};
+    use runtime_contracts::RiskClass;
+    use runtime_contracts::contains_secret_value;
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum SandboxProfileClass {
@@ -2209,9 +2215,9 @@ pub mod sandbox_profile {
     mod tests {
         use super::*;
         use crate::audit::AuditJournal;
-        use crate::policy::{stable_parameter_hash, PolicyDecision, PolicyDecisionKind};
-        use crate::sandbox::{SandboxDecision, SandboxExecutor, SandboxOperation};
         use crate::effect_envelope::{EffectEnvelope, EffectEnvelopeState};
+        use crate::policy::{PolicyDecision, PolicyDecisionKind, stable_parameter_hash};
+        use crate::sandbox::{SandboxDecision, SandboxExecutor, SandboxOperation};
 
         fn lease_for(
             tool: &str,
@@ -2302,18 +2308,22 @@ pub mod sandbox_profile {
             assert_eq!(binding.class, SandboxProfileClass::ReadOnlyDiagnostic);
             assert_eq!(binding.profile.lease_id, lease.lease_id);
             assert!(!binding.profile.filesystem.persistent_write_allowed);
-            assert!(!binding
-                .profile
-                .filesystem
-                .writable_tmpfs
-                .iter()
-                .any(|path| path == "/etc" || path == "/"));
+            assert!(
+                !binding
+                    .profile
+                    .filesystem
+                    .writable_tmpfs
+                    .iter()
+                    .any(|path| path == "/etc" || path == "/")
+            );
             assert!(!binding.profile.network.allow_network);
             assert!(binding.profile.network.allowlist.is_empty());
             assert_eq!(binding.ignored_planner_hints.len(), 4);
-            assert!(binding
-                .audit_summary
-                .contains("persistent_write_allowed:false"));
+            assert!(
+                binding
+                    .audit_summary
+                    .contains("persistent_write_allowed:false")
+            );
         }
 
         #[test]
@@ -2339,12 +2349,14 @@ pub mod sandbox_profile {
                 binding.profile.network.allowlist,
                 vec!["https://example.test/health".to_string()]
             );
-            assert!(!binding
-                .profile
-                .network
-                .allowlist
-                .iter()
-                .any(|target| target.contains("evil") || target == "0.0.0.0/0"));
+            assert!(
+                !binding
+                    .profile
+                    .network
+                    .allowlist
+                    .iter()
+                    .any(|target| target.contains("evil") || target == "0.0.0.0/0")
+            );
             assert_eq!(binding.ignored_planner_hints.len(), 1);
         }
 
@@ -2361,9 +2373,11 @@ pub mod sandbox_profile {
                     .compile(&lease, None)
                     .expect_err("unsupported profile fails closed");
                 assert!(error.reason().contains("unsupported"));
-                assert!(error
-                    .reason()
-                    .contains(SandboxProfileClass::for_risk(risk).as_str()));
+                assert!(
+                    error
+                        .reason()
+                        .contains(SandboxProfileClass::for_risk(risk).as_str())
+                );
             }
         }
 
@@ -2479,21 +2493,29 @@ pub mod sandbox_profile {
             assert_eq!(binding.profile.snapshot_policy, "same-host-only");
             assert!(binding.profile.jailer_enabled);
             assert_eq!(binding.ignored_planner_hints.len(), 4);
-            assert!(binding
-                .ignored_planner_hints
-                .iter()
-                .any(|reason| reason.contains("0.0.0.0/0")));
-            assert!(!binding
-                .profile
-                .block_devices
-                .iter()
-                .any(|device| device == "/"));
-            assert!(binding
-                .audit_summary
-                .contains("snapshot_trust=not-portable"));
-            assert!(binding
-                .audit_summary
-                .contains("host_trust=same-host-trusted"));
+            assert!(
+                binding
+                    .ignored_planner_hints
+                    .iter()
+                    .any(|reason| reason.contains("0.0.0.0/0"))
+            );
+            assert!(
+                !binding
+                    .profile
+                    .block_devices
+                    .iter()
+                    .any(|device| device == "/")
+            );
+            assert!(
+                binding
+                    .audit_summary
+                    .contains("snapshot_trust=not-portable")
+            );
+            assert!(
+                binding
+                    .audit_summary
+                    .contains("host_trust=same-host-trusted")
+            );
             assert!(binding.audit_summary.contains("ignored_planner_hints=4"));
             assert!(!binding.audit_summary.contains("host-profile"));
         }
@@ -2510,8 +2532,13 @@ pub mod sandbox_profile {
                 std::fs::write(path, "fixture").expect("write dependency fixture");
             }
 
-            let probe =
-                FirecrackerDependencyProbe::from_paths(&kvm, &firecracker, &jailer, &kernel, &rootfs);
+            let probe = FirecrackerDependencyProbe::from_paths(
+                &kvm,
+                &firecracker,
+                &jailer,
+                &kernel,
+                &rootfs,
+            );
 
             assert!(probe.missing_dependencies().is_empty());
             assert!(probe.to_json().contains("\"kvm_available\":true"));
@@ -2565,20 +2592,20 @@ pub mod engine {
     use std::fs;
     use std::path::PathBuf;
 
-    use runtime_contracts::contains_secret_value;
-    use crate::{escape_json, CommitId, VerificationResult};
-    use runtime_contracts::RiskClass;
     use crate::audit::AuditJournal;
-    use crate::policy::{ApprovalToken, PolicyEvaluator};
+    use crate::policy::{ApprovalToken, CapabilityLease, PolicyEvaluator};
     use crate::rollback::{
-        content_hash, PreparedWrite, RollbackReport, WriteDiffError, WriteDiffExecutor,
-        WriteRequest,
+        PreparedWrite, RollbackHandle, RollbackReport, WriteDiffError, WriteDiffExecutor,
+        WriteRequest, content_hash,
     };
-    use runtime_contracts::{ExecutionStep, ExecutionStepSnapshot};
     use crate::sandbox::{
         SandboxCompiler, SandboxDecision, SandboxExecutor, SandboxOperation, SandboxReport,
     };
     use crate::tools::ToolRouter;
+    use crate::{CommitId, VerificationResult, escape_json};
+    use runtime_contracts::RiskClass;
+    use runtime_contracts::contains_secret_value;
+    use runtime_contracts::{ExecutionStep, ExecutionStepSnapshot};
 
     use super::effect_envelope::{EffectEnvelope, EffectEnvelopeError, EffectEnvelopeState};
     use super::policy_adapter::{
@@ -2804,6 +2831,12 @@ pub mod engine {
                 .prepared_write
                 .as_ref()
                 .map(|prepared| prepared.handle.to_json())
+                .or_else(|| {
+                    self.envelope
+                        .as_ref()
+                        .and_then(|envelope| envelope.rollback_handle.as_ref())
+                        .map(RollbackHandle::to_json)
+                })
                 .unwrap_or_else(|| "null".to_string());
             let execution_report = self
                 .execution_report
@@ -3069,6 +3102,17 @@ pub mod engine {
                 )?;
                 rollback_handle = Some(write.handle.clone());
                 prepared_write = Some(write);
+            } else if routed.tool == "ecosystem.activate" {
+                if !request.step.rollback_required() {
+                    return Err(invalid(
+                        "prepare",
+                        "ecosystem activation requires rollback metadata",
+                    ));
+                }
+                rollback_handle = Some(activation_rollback_handle(
+                    &routed.normalized_params,
+                    lease,
+                )?);
             }
 
             if let Some(profile_request) = &request.firecracker_profile {
@@ -3174,6 +3218,11 @@ pub mod engine {
                     }
                 }
                 RiskClass::ExecuteWithConfirmation | RiskClass::PrivilegedWithHumanApproval => {
+                    let rollback_id = prepared
+                        .envelope
+                        .as_ref()
+                        .and_then(|envelope| envelope.rollback_handle.as_ref())
+                        .map(|handle| handle.rollback_id.clone());
                     let summary = if let Some(binding) = &prepared.firecracker_binding {
                         format!(
                             "firecracker controlled effect profile selected class={} lease_id={} tool={} resource={} parameter_hash={} policy_reason={} snapshot_trust=not-portable no_host_fallback=true",
@@ -3196,7 +3245,7 @@ pub mod engine {
                         success: true,
                         summary,
                         sandbox_report: None,
-                        rollback_id: None,
+                        rollback_id,
                     }
                 }
                 RiskClass::Never => {
@@ -3404,6 +3453,94 @@ pub mod engine {
         Ok(())
     }
 
+    fn activation_rollback_handle(
+        params: &[(String, String)],
+        lease: &CapabilityLease,
+    ) -> Result<RollbackHandle, SecurityExecutionError> {
+        if lease.tool != "ecosystem.activate" {
+            return Err(invalid(
+                "prepare",
+                "ecosystem activation rollback can only bind ecosystem.activate leases",
+            ));
+        }
+        if lease.risk != RiskClass::PrivilegedWithHumanApproval {
+            return Err(invalid(
+                "prepare",
+                "ecosystem activation requires privileged human approval risk",
+            ));
+        }
+
+        let rollback_id = required_param(params, "rollback_id")?;
+        let previous_active_set_hash = required_param(params, "previous_active_set_hash")?;
+        let activation_diff_hash = required_param(params, "activation_diff_hash")?;
+        let lock_hash = required_param(params, "lock_hash")?;
+        let policy_version = required_param(params, "policy_version")?;
+        let artifacts = required_param(params, "artifacts")?;
+        let preserved_invariants = required_param(params, "preserved_invariants")?;
+
+        for (field, value) in [
+            ("rollback_id", rollback_id.as_str()),
+            (
+                "previous_active_set_hash",
+                previous_active_set_hash.as_str(),
+            ),
+            ("activation_diff_hash", activation_diff_hash.as_str()),
+            ("lock_hash", lock_hash.as_str()),
+            ("policy_version", policy_version.as_str()),
+            ("artifacts", artifacts.as_str()),
+            ("preserved_invariants", preserved_invariants.as_str()),
+        ] {
+            ensure_no_secret(format!("ecosystem.activate.{field}"), value)?;
+            if value.trim().is_empty() {
+                return Err(invalid(
+                    "prepare",
+                    format!("ecosystem.activate requires non-empty {field}"),
+                ));
+            }
+        }
+
+        if policy_version != lease.policy_version {
+            return Err(invalid(
+                "prepare",
+                "ecosystem activation policy_version must match approved lease",
+            ));
+        }
+        for invariant in [
+            "no-shell",
+            "exact-approval",
+            "secret-handle",
+            "source-to-sink",
+            "audit",
+            "rollback",
+        ] {
+            if !preserved_invariants
+                .split('|')
+                .any(|candidate| candidate == invariant)
+            {
+                return Err(invalid(
+                    "prepare",
+                    format!("ecosystem activation must preserve {invariant} invariant"),
+                ));
+            }
+        }
+
+        Ok(RollbackHandle {
+            rollback_id: rollback_id.clone(),
+            target_path: PathBuf::from("/var/lib/agentos/ecosystem/active-set.json"),
+            base_hash: previous_active_set_hash,
+            proposed_hash: activation_diff_hash,
+            parameter_hash: lease.parameter_hash.clone(),
+            policy_version: lease.policy_version.clone(),
+            previous_content_path: PathBuf::from(format!(
+                "/var/lib/agentos/rollback/ecosystem/{rollback_id}/previous-active-set.json"
+            )),
+            proposed_content_path: PathBuf::from(format!(
+                "/var/lib/agentos/rollback/ecosystem/{rollback_id}/proposed-active-set.json"
+            )),
+            committed: false,
+        })
+    }
+
     fn sandbox_operation_for(tool: &str, resource: &str) -> SandboxOperation {
         match tool {
             "http.check" => SandboxOperation::NetworkConnect {
@@ -3420,6 +3557,14 @@ pub mod engine {
             .iter()
             .find(|(candidate, _)| candidate == key)
             .map(|(_, value)| value.clone())
+    }
+
+    fn required_param(
+        params: &[(String, String)],
+        key: &'static str,
+    ) -> Result<String, SecurityExecutionError> {
+        param_value(params, key)
+            .ok_or_else(|| invalid("prepare", format!("ecosystem.activate requires {key}")))
     }
 
     fn invalid(action: &'static str, reason: impl Into<String>) -> SecurityExecutionError {
@@ -3453,9 +3598,7 @@ pub mod engine {
 
         use super::*;
         use crate::audit::extract_json_string_for_tests;
-        use crate::sandbox_profile::{
-            FirecrackerDependencyProbe, FirecrackerProfileRequest,
-        };
+        use crate::sandbox_profile::{FirecrackerDependencyProbe, FirecrackerProfileRequest};
         use crate::test_step_fixture;
 
         fn temp_dir(name: &str) -> PathBuf {
@@ -3516,6 +3659,26 @@ pub mod engine {
             }
         }
 
+        fn activation_step(preserved_invariants: &str) -> crate::StepFixture {
+            step(
+                "activate-ecosystem-artifacts",
+                "ecosystem.activate",
+                vec![
+                    ("lock_hash", "sha256:lock"),
+                    ("registry_snapshot_digest", "sha256:snapshot"),
+                    ("activation_diff_hash", "sha256:diff"),
+                    ("previous_active_set_hash", "sha256:previous"),
+                    ("rollback_id", "rollback-ecosystem-activation"),
+                    ("policy_version", "policy-v1"),
+                    ("artifacts", "agentos:workflow-pack/agentos/setup@1.0.0"),
+                    ("preserved_invariants", preserved_invariants),
+                ],
+                RiskClass::PrivilegedWithHumanApproval,
+                true,
+                true,
+            )
+        }
+
         #[test]
         fn read_only_step_runs_under_sandbox_and_seals() {
             let root = temp_dir("read-only");
@@ -3574,18 +3737,26 @@ pub mod engine {
                 EffectEnvelopeState::Sealed
             );
             let lines = journal.event_lines().expect("journal");
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"EffectObserved\"")));
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"CommitSealed\"")));
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\""))
+            );
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"EffectPrepared\""))
+            );
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"EffectObserved\""))
+            );
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"CommitSealed\""))
+            );
         }
 
         #[test]
@@ -3639,6 +3810,120 @@ pub mod engine {
                     .count(),
                 2
             );
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn ecosystem_activation_requires_exact_approval_before_effect_prepare() {
+            let root = temp_dir("ecosystem-activation-awaiting-approval");
+            let journal = test_journal(&root);
+            let activation = activation_step(
+                "no-shell|exact-approval|secret-handle|source-to-sink|audit|rollback",
+            );
+
+            let paused = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-activation", "operator", activation)
+                        .expect("request"),
+                )
+                .expect("pause");
+
+            assert_eq!(paused.status, PreparedExecutionStatus::AwaitingApproval);
+            assert!(paused.envelope.is_none());
+            assert!(
+                paused
+                    .to_json()
+                    .expect("json")
+                    .contains("\"rollback_handle\":null")
+            );
+            let lines = journal.event_lines().expect("journal");
+            assert!(lines.iter().any(|line| line.contains("PolicyEvaluated")));
+            assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
+        }
+
+        #[test]
+        fn ecosystem_activation_binds_rollback_handle_after_exact_approval() {
+            let root = temp_dir("ecosystem-activation-approved");
+            let journal = test_journal(&root);
+            let activation = activation_step(
+                "no-shell|exact-approval|secret-handle|source-to-sink|audit|rollback",
+            );
+            let initial = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-activation", "operator", activation.clone())
+                        .expect("request"),
+                )
+                .expect("initial pause");
+            let token = approval_for(&initial);
+
+            let mut prepared = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-activation", "operator", activation)
+                        .expect("request")
+                        .with_approval(token),
+                )
+                .expect("approved prepare");
+
+            assert_eq!(prepared.status, PreparedExecutionStatus::Prepared);
+            let json = prepared.to_json().expect("json");
+            assert!(json.contains("\"tool\":\"ecosystem.activate\""));
+            assert!(json.contains("\"rollback_id\":\"rollback-ecosystem-activation\""));
+            assert!(json.contains("/var/lib/agentos/ecosystem/active-set.json"));
+            let handle = prepared
+                .envelope
+                .as_ref()
+                .and_then(|envelope| envelope.rollback_handle.as_ref())
+                .expect("rollback handle");
+            assert_eq!(handle.base_hash, "sha256:previous");
+            assert_eq!(handle.proposed_hash, "sha256:diff");
+            assert!(!handle.committed);
+
+            let report = engine(&root)
+                .execute(&journal, &mut prepared)
+                .expect("controlled effect");
+            assert_eq!(report.kind, ExecutionReportKind::ControlledEffect);
+            assert_eq!(
+                report.rollback_id.as_deref(),
+                Some("rollback-ecosystem-activation")
+            );
+            assert!(report.summary.contains("ecosystem.activate"));
+            let lines = journal.event_lines().expect("journal");
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"EffectPrepared\""))
+            );
+        }
+
+        #[test]
+        fn ecosystem_activation_policy_pack_cannot_remove_safety_invariants() {
+            let root = temp_dir("ecosystem-activation-invariants");
+            let journal = test_journal(&root);
+            let activation = activation_step("audit|rollback");
+            let initial = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-activation", "operator", activation.clone())
+                        .expect("request"),
+                )
+                .expect("initial pause");
+            let token = approval_for(&initial);
+
+            let error = engine(&root)
+                .prepare(
+                    &journal,
+                    StepExecutionRequest::new("run-activation", "operator", activation)
+                        .expect("request")
+                        .with_approval(token),
+                )
+                .expect_err("missing invariants fail closed");
+
+            assert_eq!(error.failure_class(), ExecutionFailureClass::FailedClosed);
+            assert!(error.to_string().contains("no-shell"));
+            let lines = journal.event_lines().expect("journal");
             assert!(!lines.iter().any(|line| line.contains("EffectPrepared")));
         }
 
@@ -3703,10 +3988,12 @@ pub mod engine {
                     CommitId("commit-run-restart".to_string()),
                 )
                 .expect("seal");
-            assert!(engine(&root)
-                .explain(&prepared)
-                .expect("explain")
-                .contains("envelope=Sealed"));
+            assert!(
+                engine(&root)
+                    .explain(&prepared)
+                    .expect("explain")
+                    .contains("envelope=Sealed")
+            );
         }
 
         #[test]
@@ -3759,34 +4046,44 @@ pub mod engine {
                 .expect("firecracker binding");
             assert_eq!(binding.class.as_str(), "firecracker-executor");
             assert_eq!(binding.ignored_planner_hints.len(), 4);
-            assert!(binding
-                .audit_summary
-                .contains("snapshot_trust=not-portable"));
+            assert!(
+                binding
+                    .audit_summary
+                    .contains("snapshot_trust=not-portable")
+            );
             let json = prepared.to_json().expect("prepared json");
             assert!(json.contains("\"firecracker_binding\""));
             assert!(json.contains("firecracker-executor"));
-            assert!(engine(&root)
-                .explain(&prepared)
-                .expect("explain")
-                .contains("firecracker=true"));
+            assert!(
+                engine(&root)
+                    .explain(&prepared)
+                    .expect("explain")
+                    .contains("firecracker=true")
+            );
 
             let report = engine(&root)
                 .execute(&journal, &mut prepared)
                 .expect("execute controlled effect");
             assert_eq!(report.kind, ExecutionReportKind::ControlledEffect);
-            assert!(report
-                .summary
-                .contains("firecracker controlled effect profile selected"));
+            assert!(
+                report
+                    .summary
+                    .contains("firecracker controlled effect profile selected")
+            );
             assert!(report.summary.contains("no_host_fallback=true"));
             assert!(!report.summary.contains("host-exec"));
 
             let lines = journal.event_lines().expect("journal");
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("firecracker_profile")));
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"EffectPrepared\""))
+            );
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("firecracker_profile"))
+            );
             assert!(lines.iter().any(|line| {
                 line.contains("policy_reason=matching approval token bound to exact parameters")
             }));
@@ -3835,12 +4132,16 @@ pub mod engine {
             assert!(error.reason().contains("firecracker dependencies missing"));
             assert!(error.reason().contains("no host fallback"));
             let lines = journal.event_lines().expect("journal");
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\"")));
-            assert!(!lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"EffectPrepared\"")));
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"PolicyEvaluated\""))
+            );
+            assert!(
+                !lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"EffectPrepared\""))
+            );
         }
 
         #[test]
@@ -3888,12 +4189,14 @@ pub mod engine {
                 .expect("prepare write");
 
             assert!(prepared.prepared_write.is_some());
-            assert!(prepared
-                .envelope
-                .as_ref()
-                .expect("envelope")
-                .rollback_handle
-                .is_some());
+            assert!(
+                prepared
+                    .envelope
+                    .as_ref()
+                    .expect("envelope")
+                    .rollback_handle
+                    .is_some()
+            );
             assert_eq!(
                 fs::read_to_string(&target).expect("read target"),
                 "port=80\n"
@@ -3935,12 +4238,16 @@ pub mod engine {
                 EffectEnvelopeState::RolledBack
             );
             let lines = journal.event_lines().expect("journal");
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"RollbackPending\"")));
-            assert!(lines
-                .iter()
-                .any(|line| line.contains("\"event_type\":\"RollbackObserved\"")));
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"RollbackPending\""))
+            );
+            assert!(
+                lines
+                    .iter()
+                    .any(|line| line.contains("\"event_type\":\"RollbackObserved\""))
+            );
             assert!(!lines.iter().any(|line| {
                 extract_json_string_for_tests(line, "event_type").as_deref() == Some("CommitSealed")
             }));
@@ -3994,11 +4301,11 @@ pub mod engine {
 pub mod source_to_sink {
     use std::fmt;
 
-    use runtime_contracts::{contains_secret_value, TrustBoundary};
-    use crate::escape_json;
-    use runtime_contracts::RiskClass;
     use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
+    use crate::escape_json;
     use crate::policy::stable_parameter_hash;
+    use runtime_contracts::RiskClass;
+    use runtime_contracts::{TrustBoundary, contains_secret_value};
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum SourceLabel {
@@ -4703,11 +5010,11 @@ pub mod source_to_sink {
 pub mod secret_runtime {
     use std::fmt;
 
-    use runtime_contracts::contains_secret_value;
+    use crate::audit::{AuditEvent, AuditEventType, AuditJournal, redact_summary};
     use crate::escape_json;
+    use crate::policy::{ApprovalToken, CapabilityLease, PolicyRequest, stable_parameter_hash};
     use runtime_contracts::RiskClass;
-    use crate::audit::{redact_summary, AuditEvent, AuditEventType, AuditJournal};
-    use crate::policy::{stable_parameter_hash, ApprovalToken, CapabilityLease, PolicyRequest};
+    use runtime_contracts::contains_secret_value;
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum SecretSurface {

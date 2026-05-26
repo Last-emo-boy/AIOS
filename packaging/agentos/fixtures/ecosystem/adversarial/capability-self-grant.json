@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "capability-self-grant",
+  "artifact_kind": "capability-pack",
+  "coordinate": "agentos:capability-pack/adversarial/self-grant@1.0.0",
+  "attempt": "capability pack tries to grant itself privileged host mutation rights",
+  "forbidden_surface": "capability lease",
+  "expected_outcome": "denied",
+  "denial_reason": "capability leases are issued by SecurityExecutionEngine policy, not artifact metadata",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

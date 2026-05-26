@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-012",
+  "title": "Add approval, denial, suspend and recover handlers",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-010", "TASK-TUI-011"],
+  "purpose": "Make TUI operator actions first-class durable AgentCore lifecycle commands with exact approval token semantics.",
+  "scope": [
+    "Map typed approve command to AgentCore approve_step.",
+    "Map typed deny command to AgentCore deny_step.",
+    "Map typed suspend command to AgentCore suspend_run.",
+    "Map typed recover command to AgentCore recover_run.",
+    "Render exact token binding and failure reasons without raw secrets."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/main.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-012.json"
+  ],
+  "acceptance_criteria": [
+    "Approval requires run id, step id, actor and exact token binding.",
+    "Mutated tool, resource or parameter hash is rejected before effect preparation.",
+    "Deny and suspend never prepare side effects.",
+    "Recover uses RunStore and AuditJournal truth, not model replay."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_approval",
+    "cargo test -p agentd agent_core::adversarial",
+    "cargo test -p agentd safety::"
+  ],
+  "failure_modes": [
+    "Approval command accepts partial or broad approval.",
+    "Denial still prepares a side effect.",
+    "Recovery replans from model output instead of durable state."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-013", "TASK-TUI-022", "TASK-TUI-023", "TASK-TUI-031"],
+    "blocked_until": ["TASK-TUI-010", "TASK-TUI-011"]
+  }
+}

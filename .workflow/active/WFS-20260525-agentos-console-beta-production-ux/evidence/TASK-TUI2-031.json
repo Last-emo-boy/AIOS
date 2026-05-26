@@ -1,0 +1,79 @@
+{
+  "task_id": "TASK-TUI2-031",
+  "title": "Add promotion blocker panel",
+  "status": "completed",
+  "completed_at": "2026-05-26T04:56:46+08:00",
+  "artifacts": [
+    "crates/agentd/src/tui/promotion_blocker_panel.rs",
+    "crates/agentd/src/tui/release_provenance_panel.rs",
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/tui/parser.rs",
+    "crates/agentd/src/tui/runtime.rs",
+    "crates/agentd/src/tui/palette.rs",
+    "crates/agentd/src/tui/render.rs",
+    "scripts/tui-replay.ps1",
+    "scripts/production-runbook-smoke.ps1",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    ".workflow/artifacts/release/provenance.json",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/artifacts/production-runbook-smoke/result.json"
+  ],
+  "verified": [
+    "promotion.blockers.show renders promotion.status and release provenance promotion.blockers as a read-only TUI projection.",
+    "Blockers are grouped by tests, boot smoke, replay, signing, provenance, ecosystem readiness and other.",
+    "Each blocker renders severity, status, evidence path, safe next command and operator-facing message.",
+    "Skipped required gates from release provenance are represented as blockers with gate evidence paths.",
+    "TUI projection exposes blocker_override_allowed=false, clear_blocker_allowed=false, direct_sign=false and direct_promote=false.",
+    "Skipped release build verification produced promotion.status=blocked with tests-skipped and qemu-runtime-smoke-skipped.",
+    "Full release build restored promotion.status=promotable with no blockers."
+  ],
+  "commands": [
+    "cargo fmt",
+    "cargo fmt --check",
+    "cargo test -p agentd tui_promotion_blockers --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -SkipTests -SkipBootSmoke",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
+  ],
+  "test_result": {
+    "focused_tests": {
+      "command": "cargo test -p agentd tui_promotion_blockers --no-fail-fast",
+      "passed": 3,
+      "failed": 0
+    },
+    "tui_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/tui-replay/result.json"
+    },
+    "production_runbook_smoke": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/production-runbook-smoke/result.json"
+    },
+    "blocked_release_gate": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -SkipTests -SkipBootSmoke",
+      "result": "passed",
+      "provenance": ".workflow/artifacts/release/provenance.json",
+      "promotion_status": "blocked",
+      "blockers": ["tests-skipped", "qemu-runtime-smoke-skipped"]
+    },
+    "release_gate": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+      "result": "passed",
+      "provenance": ".workflow/artifacts/release/provenance.json",
+      "promotion_status": "promotable",
+      "blockers": []
+    }
+  },
+  "risk_notes": [
+    "Promotion blocker panel reads release provenance only and does not clear blockers.",
+    "Safe next commands point to release scripts or focused gates; they are displayed only, not executed by the panel.",
+    "TUI still cannot generate provenance, sign candidates, promote releases or mutate release authority state."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-032",
+    "TASK-TUI2-034"
+  ]
+}

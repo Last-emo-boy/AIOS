@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-023",
+  "title": "Define compatibility and migration validation",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P0",
+  "type": "contract",
+  "owner": "runtime_contracts",
+  "source": "runtime-ecosystem-architecture.md",
+  "depends_on": ["TASK-ECO-020", "TASK-ECO-021"],
+  "purpose": "Define compatibility checks that block unsafe artifact activation across AgentOS runtime versions and host capabilities.",
+  "scope": ["Define runtime contract version compatibility.", "Define architecture and host feature requirements.", "Define migration and downgrade rules.", "Define optional dependency behavior."],
+  "deliverables": ["crates/runtime_contracts/src/ecosystem.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-023.json"],
+  "acceptance_criteria": ["Incompatible runtime versions block activation.", "Optional dependencies can degrade but not mutate host.", "Downgrade requires explicit rollback contract."],
+  "verification": ["cargo test -p runtime_contracts ecosystem::compatibility", "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1"],
+  "failure_modes": ["Artifact activates on unsupported runtime.", "Missing KVM/Firecracker falls back to host mutation.", "Downgrade corrupts active state."],
+  "handoff": {"next_tasks": ["TASK-ECO-003", "TASK-ECO-061"], "blocked_until": ["TASK-ECO-020"]},
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-023.json"
+}

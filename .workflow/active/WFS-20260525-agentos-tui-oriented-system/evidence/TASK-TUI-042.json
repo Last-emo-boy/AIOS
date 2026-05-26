@@ -1,0 +1,23 @@
+{
+  "task_id": "TASK-TUI-042",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "support-bundle",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    "crates/agentd/src/support_bundle.rs",
+    ".workflow/artifacts/tui-replay/support-bundle.json",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "support.bundle status/export is available through TUI",
+    "export delegates to SupportBundleProjection",
+    "TUI replay exported support bundle and recorded hash",
+    "support bundle tests passed in functional replay"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1"
+  ],
+  "blockers": []
+}

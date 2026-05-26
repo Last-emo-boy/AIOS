@@ -1,0 +1,20 @@
+{
+  "task_id": "TASK-TUI-020",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "dashboard-projection",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/artifacts/tui-replay/output.txt"
+  ],
+  "verified": [
+    "dashboard.show renders TUI Dashboard",
+    "dashboard output states mode=durable projection_controller=true",
+    "dashboard consumes OperatorProjection and does not own runtime logic"
+  ],
+  "commands": [
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

@@ -60,6 +60,174 @@
       "blocked_prerequisites": ["redacted audit projection", "support bundle manifest"]
     },
     {
+      "name": "tui.dashboard",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI dashboard.show -> OperatorProjection read-only projection",
+      "local_only": true,
+      "blocked_prerequisites": ["RunStore path", "AuditJournal path", "redaction manifest"]
+    },
+    {
+      "name": "tui.intent.submit",
+      "owner": "agent_core",
+      "risk": "plan-only",
+      "semantic_mapping": "TUI intent.submit -> AgentCore accept_intent -> plan_run",
+      "local_only": true,
+      "blocked_prerequisites": ["typed TUI command", "secret-like value rejection", "stub/local model broker"]
+    },
+    {
+      "name": "tui.run.advance",
+      "owner": "agent_core",
+      "risk": "runtime-gated",
+      "semantic_mapping": "TUI run.advance -> AgentCore advance_run -> SecurityExecutionEngine for side effects",
+      "local_only": true,
+      "blocked_prerequisites": ["durable RunStore snapshot", "frozen PlanSpec", "policy evaluation"]
+    },
+    {
+      "name": "tui.run.approve",
+      "owner": "agent_core",
+      "risk": "approval-binding",
+      "semantic_mapping": "TUI run.approve -> exact AgentCore approval token binding",
+      "local_only": true,
+      "blocked_prerequisites": ["exact step id", "matching actor", "policy-bound parameter hash"]
+    },
+    {
+      "name": "tui.run.deny",
+      "owner": "agent_core",
+      "risk": "deny-before-effect",
+      "semantic_mapping": "TUI run.deny -> AgentCore deny_step before high-risk EffectPrepared",
+      "local_only": true,
+      "blocked_prerequisites": ["exact step id", "actor", "denial reason"]
+    },
+    {
+      "name": "tui.run.recover",
+      "owner": "agent_core",
+      "risk": "recovery",
+      "semantic_mapping": "TUI run.recover -> AgentCore recover_run from RunStore + AuditJournal",
+      "local_only": true,
+      "blocked_prerequisites": ["durable run snapshot", "audit timeline"]
+    },
+    {
+      "name": "tui.audit.show",
+      "owner": "security_execution",
+      "risk": "read-only",
+      "semantic_mapping": "TUI audit.show -> AuditJournal redacted run timeline",
+      "local_only": true,
+      "blocked_prerequisites": ["audit journal", "redaction manifest"]
+    },
+    {
+      "name": "tui.support.bundle",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI support.bundle -> redacted SupportBundleProjection export",
+      "local_only": true,
+      "blocked_prerequisites": ["support bundle manifest", "redacted audit projection"]
+    },
+    {
+      "name": "tui.release.provenance",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI release.provenance.show -> local release provenance projection",
+      "local_only": true,
+      "blocked_prerequisites": ["release provenance artifact", "dependency inventory", "SBOM", "update metadata", "detached signatures"]
+    },
+    {
+      "name": "tui.promotion.blockers",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI promotion.blockers.show -> release provenance promotion blocker projection",
+      "local_only": true,
+      "blocked_prerequisites": ["release provenance artifact", "gate evidence", "promotion blockers", "dependency inventory", "SBOM", "detached signatures"]
+    },
+    {
+      "name": "tui.update.rollback",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI update.rollback.show -> release update metadata and rollback drill evidence projection",
+      "local_only": true,
+      "blocked_prerequisites": ["update metadata", "update metadata detached signature", "active artifact set evidence", "ecosystem replay evidence", "rollback preservation evidence"]
+    },
+    {
+      "name": "tui.gate.status",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI gate.status.show -> QEMU/rootfs/replay gate evidence projection",
+      "local_only": true,
+      "blocked_prerequisites": ["boot smoke artifact", "rootfs validation artifact", "replay artifacts", "release provenance"]
+    },
+    {
+      "name": "tui.signing.status",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI signing.status.show -> candidate signature and production signing readiness projection",
+      "local_only": true,
+      "blocked_prerequisites": ["release provenance artifact", "candidate detached signatures", "production signature verification artifact"]
+    },
+    {
+      "name": "tui.rollout.rings",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "TUI rollout.rings.show -> preview-only fleet rollout ring projection",
+      "local_only": true,
+      "blocked_prerequisites": ["local fleet model", "local gate evidence", "production signing verification", "rollback drill evidence"]
+    },
+    {
+      "name": "tui.aom.lifecycle",
+      "owner": "agent_core",
+      "risk": "activation-gated",
+      "semantic_mapping": "TUI aom.* -> agent_core::ecosystem search/show/verify/stage/explain/activate preview",
+      "local_only": true,
+      "blocked_prerequisites": ["local registry snapshot", "stage is inert", "activation requires AgentCore PlanSpec + SecurityExecutionEngine"]
+    },
+    {
+      "name": "aom.search",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "aom search -> agent_core::ecosystem local registry snapshot",
+      "local_only": true,
+      "blocked_prerequisites": ["local registry snapshot"]
+    },
+    {
+      "name": "aom.show",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "aom show -> agent_core::ecosystem artifact record",
+      "local_only": true,
+      "blocked_prerequisites": ["local registry snapshot", "artifact coordinate"]
+    },
+    {
+      "name": "aom.verify",
+      "owner": "agent_core",
+      "risk": "read-only",
+      "semantic_mapping": "aom verify -> local resolver -> digest and compatibility verification",
+      "local_only": true,
+      "blocked_prerequisites": ["local registry snapshot", "digest-bound artifact record"]
+    },
+    {
+      "name": "aom.stage",
+      "owner": "agent_core",
+      "risk": "read-only",
+      "semantic_mapping": "aom stage -> inert ArtifactStagingStore",
+      "local_only": true,
+      "blocked_prerequisites": ["verification report", "staging root outside active state"]
+    },
+    {
+      "name": "aom.explain",
+      "owner": "agentd",
+      "risk": "read-only",
+      "semantic_mapping": "aom explain -> operator-facing artifact projection",
+      "local_only": true,
+      "blocked_prerequisites": ["local registry snapshot", "artifact coordinate"]
+    },
+    {
+      "name": "aom.activate",
+      "owner": "agent_core",
+      "risk": "activation-gated",
+      "semantic_mapping": "aom activate -> AgentCore PlanSpec activation preview -> SecurityExecutionEngine gated execution",
+      "local_only": true,
+      "blocked_prerequisites": ["local replay evidence", "compatibility evidence", "exact approval token", "rollback handle", "audit journal seal"]
+    },
+    {
       "name": "rollback.trigger",
       "owner": "security_execution",
       "risk": "execute-with-confirmation",

@@ -1,0 +1,113 @@
+{
+  "plan_id": "PLAN-AIOS-TUI-ORIENTED-SYSTEM-20260525",
+  "workflow_id": "WFS-20260525-agentos-tui-oriented-system",
+  "title": "AgentOS TUI Oriented System",
+  "status": "completed",
+  "source": "TUI oriented AgentOS request; Agent Runtime + Ecosystem final audit",
+  "created_at": "2026-05-25T05:05:00+08:00",
+  "updated_at": "2026-05-25T20:55:00+08:00",
+  "objective": "Promote TUI from demo/projection surface into the primary operator console for AgentOS while preserving AgentCore, SecurityExecution and aom ownership boundaries.",
+  "entry_criteria": [
+    "Agent Runtime + Ecosystem Chain final audit is completed.",
+    "AgentCore durable run APIs exist and remain authoritative.",
+    "SecurityExecutionEngine remains the only side-effect path.",
+    "aom install/stage remains inert and activation remains runtime-mediated.",
+    "Baseline TUI gates remain local-only and do not depend on network, external LLM, Firecracker or host package manager."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "TUI OS Contract Freeze",
+      "purpose": "Freeze TUI-oriented AgentOS ownership, command grammar, state model and safety gates before implementation.",
+      "tasks": ["TASK-TUI-000", "TASK-TUI-001", "TASK-TUI-002", "TASK-TUI-003"],
+      "exit_criteria": [
+        "TUI is defined as operator surface, not runtime owner.",
+        "TUI command grammar rejects shell-like execution.",
+        "TUI evidence and replay gates are defined."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Durable AgentCore TUI Bridge",
+      "purpose": "Connect TUI to real AgentCore durable run operations instead of demo sessions.",
+      "tasks": ["TASK-TUI-010", "TASK-TUI-011", "TASK-TUI-012", "TASK-TUI-013"],
+      "exit_criteria": [
+        "TUI can submit, plan, advance, approve, deny, suspend and recover real AgentCore runs.",
+        "RunStore and AuditJournal remain source of truth.",
+        "TUI controller is thin and typed."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Operator Console Views",
+      "purpose": "Build production TUI projections for dashboard, run detail, approvals, audit, recovery and support.",
+      "tasks": ["TASK-TUI-020", "TASK-TUI-021", "TASK-TUI-022", "TASK-TUI-023", "TASK-TUI-024"],
+      "exit_criteria": [
+        "Operator can inspect current OS/runtime status from TUI.",
+        "Run, audit, rollback, recovery and support views are deterministic and redacted.",
+        "TUI text snapshots are testable."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Interactive Command Loop",
+      "purpose": "Replace demo prompt with a safe TUI command loop and deterministic event/update model.",
+      "tasks": ["TASK-TUI-030", "TASK-TUI-031", "TASK-TUI-032", "TASK-TUI-033"],
+      "exit_criteria": [
+        "TUI accepts typed operator actions, not shell fragments.",
+        "Exact approval and denial flows are first-class.",
+        "Refresh/recovery behavior is deterministic and restart-safe."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Ecosystem And Production Operations In TUI",
+      "purpose": "Expose aom lifecycle, support bundle export and production runbook operations through TUI without bypassing runtime boundaries.",
+      "tasks": ["TASK-TUI-040", "TASK-TUI-041", "TASK-TUI-042", "TASK-TUI-043"],
+      "exit_criteria": [
+        "TUI can explain ecosystem registry/staged/active/blocked state.",
+        "TUI can trigger safe support bundle export.",
+        "Production runbooks can consume TUI projections."
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Boot And Distro Packaging",
+      "purpose": "Make TUI the default packaged operator console while preserving headless and CI smoke paths.",
+      "tasks": ["TASK-TUI-050", "TASK-TUI-051", "TASK-TUI-052", "TASK-TUI-053"],
+      "exit_criteria": [
+        "Rootfs config declares TUI console defaults.",
+        "QEMU smoke can prove TUI-ready boot markers.",
+        "Headless mode remains available for automation."
+      ]
+    },
+    {
+      "wave": 6,
+      "name": "TUI Safety Replay And Final Audit",
+      "purpose": "Add TUI replay, adversarial command tests, release gating and final promotion audit.",
+      "tasks": ["TASK-TUI-060", "TASK-TUI-061", "TASK-TUI-062", "TASK-TUI-063"],
+      "exit_criteria": [
+        "TUI replay is release-gated.",
+        "Command injection, approval mutation and secret leak fixtures fail closed.",
+        "Final audit decides whether AgentOS can claim TUI-oriented Alpha status."
+      ]
+    }
+  ],
+  "risk_policy": {
+    "tui_runtime_authority": "projection-controller only",
+    "normal_shell": "deny",
+    "model_output_direct_execution": "forbidden",
+    "tui_state_authority": "RunStore + AuditJournal + active artifact state",
+    "side_effect_authority": "SecurityExecutionEngine only",
+    "ecosystem_activation_authority": "AgentCore PlanSpec + SecurityExecutionEngine only",
+    "external_dependency_baseline": "forbidden"
+  },
+  "recommended_first_execution_slice": [
+    "TASK-TUI-000",
+    "TASK-TUI-001",
+    "TASK-TUI-002",
+    "TASK-TUI-003",
+    "TASK-TUI-010",
+    "TASK-TUI-011"
+  ]
+}

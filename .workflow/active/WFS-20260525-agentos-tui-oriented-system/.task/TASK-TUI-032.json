@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI-032",
+  "title": "Add deterministic TUI refresh and event model",
+  "status": "completed",
+  "wave": 3,
+  "priority": "P1",
+  "type": "implementation",
+  "owner": "agentd",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-030"],
+  "purpose": "Make TUI updates predictable by rebuilding snapshots from authoritative runtime state after commands and refresh events.",
+  "scope": [
+    "Define refresh triggers for command completion, timer tick and explicit refresh.",
+    "Rebuild snapshots from RunStore, AuditJournal and projection sources.",
+    "Avoid mutable render cache as authoritative state.",
+    "Render transient errors separately from durable run state.",
+    "Support deterministic replay with fixed fixture clocks where needed."
+  ],
+  "deliverables": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-032.json"
+  ],
+  "acceptance_criteria": [
+    "Refresh cannot mask failed-closed, rollback-pending or approval-pending state.",
+    "Repeated refresh with unchanged sources produces identical output.",
+    "Transient command errors do not mutate durable run state.",
+    "Replay can force deterministic time."
+  ],
+  "verification": [
+    "cargo test -p agentd tui_refresh",
+    "cargo test -p agentd tui_snapshot",
+    "cargo test -p agentd agent_core::recovery"
+  ],
+  "failure_modes": [
+    "Render cache becomes source of truth.",
+    "Timer refresh creates nondeterministic snapshots.",
+    "Transient error state overwrites run status."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-033", "TASK-TUI-060"],
+    "blocked_until": ["TASK-TUI-030"]
+  }
+}

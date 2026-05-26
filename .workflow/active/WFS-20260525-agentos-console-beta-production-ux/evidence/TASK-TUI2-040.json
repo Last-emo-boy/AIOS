@@ -1,0 +1,40 @@
+{
+  "task_id": "TASK-TUI2-040",
+  "title": "Draft local-first fleet operations model",
+  "status": "completed",
+  "completed_at": "2026-05-26T06:48:16+08:00",
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/local-first-fleet-operations.md"
+  ],
+  "verified": [
+    "Fleet model is explicitly preview-only and not a GA fleet manager, remote command plane or production rollout authority.",
+    "Single-node local proof remains complete without network, external LLM, Firecracker, host package manager, remote registry, remote audit mirror or hosted control plane.",
+    "Remote commands cannot bypass local AgentCore and SecurityExecutionEngine; future remote requests must enter as local intents and be evaluated locally.",
+    "Rollout expectations require local PlanRun, exact approval, inactive-slot or inert staging, health checks, SecurityExecutionEngine commit and rollback evidence.",
+    "Rollback ownership is local-first and remote orchestration cannot directly mutate nodes."
+  ],
+  "commands": [
+    "rg -n \"preview|single-node|Remote commands|AgentCore|SecurityExecutionEngine|Rollout|Rollback|local-only|production-ready|Non-Goals\" .workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/local-first-fleet-operations.md",
+    "cargo test --workspace"
+  ],
+  "test_result": {
+    "workspace_tests": {
+      "command": "cargo test --workspace",
+      "result": "passed"
+    },
+    "manual_review": {
+      "result": "passed",
+      "document": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/local-first-fleet-operations.md"
+    }
+  },
+  "risk_notes": [
+    "Fleet concepts remain projection/design-only in Console Beta.",
+    "TUI does not become remote rollout authority.",
+    "Production rollout remains blocked on future RC0 evidence, production signatures, rollout rollback drills and node-level audit evidence."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-041",
+    "TASK-TUI2-042",
+    "TASK-TUI2-043"
+  ]
+}

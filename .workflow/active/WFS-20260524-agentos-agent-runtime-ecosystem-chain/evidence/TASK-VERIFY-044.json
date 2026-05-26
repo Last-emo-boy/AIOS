@@ -1,0 +1,54 @@
+{
+  "task_id": "TASK-VERIFY-044",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "summary": "Integrated ecosystem replay and hashes into release provenance and promotion gates.",
+  "artifacts": [
+    {
+      "path": "scripts/build-release.ps1",
+      "status": "updated",
+      "sha256": "ea95c2c4c2f1c10bbf231b8855952523bda6f739db3276ebade2c7e4a3d39021"
+    },
+    {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "status": "generated",
+      "sha256": "5f3b9577df2866643596548ccc6f28bf4906c0d607f874f48c3439aa3cc55eaf"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json",
+      "status": "verified",
+      "sha256": "aebc9df789bab3bfabd5b5ef3dbb6b78d0c78b92b597c7a4330be993fc0c9f65"
+    }
+  ],
+  "acceptance_evidence": [
+    "build-release.ps1 runs ecosystem replay by default and records it in gates.",
+    "required_gate_commands includes scripts/ecosystem-replay.ps1.",
+    "Provenance ecosystem replay_gate_current_status=passed.",
+    "Provenance records registry snapshot, lockfile, staged set, active set and replay hashes.",
+    "Promotion status is promotable with zero blockers after all gates pass.",
+    "QEMU runtime smoke used E:\\qemu\\qemu-system-x86_64.exe."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gates passed, including ecosystem replay, image build, service recovery smoke and QEMU runtime smoke."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Replay result remained consumable by release provenance."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1",
+      "result": "passed",
+      "summary": "Alpha rootfs validation passed with ecosystem artifacts included."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Release cannot treat a stale replay file as sufficient when the default gate is run.",
+    "Skipping ecosystem replay becomes an explicit promotion blocker.",
+    "Provenance distinguishes staged and active artifact projections."
+  ],
+  "promotion_impact": "Production Candidate provenance now binds ecosystem inputs and replay results as first-class release gates."
+}

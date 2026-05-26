@@ -1,0 +1,22 @@
+{
+  "task_id": "TASK-TUI-050",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "rootfs-defaults",
+  "artifacts": [
+    "packaging/agentos/rootfs/etc/agentos/tui.toml",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    "scripts/validate-alpha-rootfs.ps1",
+    ".workflow/artifacts/alpha-rootfs-validation/result.json"
+  ],
+  "verified": [
+    "tui.config artifact exists and validates",
+    "default mode is durable and projection_controller_only=true",
+    "interactive, scripted and headless modes are declared",
+    "operator registry includes TUI commands and no shell mapping"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate-alpha-rootfs.ps1"
+  ],
+  "blockers": []
+}

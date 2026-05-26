@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI-060",
+  "title": "Add local TUI replay script",
+  "status": "completed",
+  "wave": 6,
+  "priority": "P0",
+  "type": "verification",
+  "owner": "scripts",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-003", "TASK-TUI-033", "TASK-TUI-040", "TASK-TUI-042", "TASK-TUI-053"],
+  "purpose": "Create a deterministic local replay that proves the TUI-oriented operator workflows end to end.",
+  "scope": [
+    "Add scripts/tui-replay.ps1.",
+    "Run scripted TUI flows for dashboard, submit, plan, advance, approve, deny, recover, audit, support and aom projection.",
+    "Record command evidence, output hashes and final status JSON.",
+    "Fail closed when any required TUI flow is missing.",
+    "Keep replay local-only with no external LLM, network, Firecracker or host package manager requirement."
+  ],
+  "deliverables": [
+    "scripts/tui-replay.ps1",
+    ".workflow/artifacts/tui-replay/result.json",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-060.json"
+  ],
+  "acceptance_criteria": [
+    "TUI replay exercises the same parser and controller as interactive mode.",
+    "Replay evidence includes command list, expected rejections and output hashes.",
+    "Replay fails if approval, recovery, support or ecosystem views are absent.",
+    "Replay has deterministic output across repeated runs."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\tui-replay.ps1",
+    "cargo test -p agentd tui_scripted_mode",
+    "cargo test -p agentd tui_snapshot"
+  ],
+  "failure_modes": [
+    "Replay only renders demo sessions.",
+    "Replay bypasses TUI parser or controller.",
+    "Replay depends on host network or external services."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-061", "TASK-TUI-062", "TASK-TUI-063"],
+    "blocked_until": ["TASK-TUI-033", "TASK-TUI-053"]
+  }
+}

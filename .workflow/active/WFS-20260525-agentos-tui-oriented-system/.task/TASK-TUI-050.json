@@ -1,0 +1,45 @@
+{
+  "id": "TASK-TUI-050",
+  "title": "Add rootfs TUI console defaults",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "packaging",
+  "owner": "packaging",
+  "source": "TUI oriented AgentOS plan",
+  "depends_on": ["TASK-TUI-011", "TASK-TUI-043"],
+  "purpose": "Package TUI as the default AgentOS operator console while preserving headless and scripted automation paths.",
+  "scope": [
+    "Add rootfs config defaults for TUI durable runtime paths and operator mode.",
+    "Update operator command registry with TUI commands.",
+    "Declare demo, durable, scripted and headless modes explicitly.",
+    "Validate config during alpha rootfs validation.",
+    "Document default console behavior in packaging evidence."
+  ],
+  "deliverables": [
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    "packaging/agentos/rootfs/etc/agentos/tui.toml or equivalent config",
+    "scripts/validate-alpha-rootfs.ps1",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-050.json"
+  ],
+  "acceptance_criteria": [
+    "Packaged rootfs declares TUI as primary operator console.",
+    "Headless mode remains available for CI and automation.",
+    "Validator fails if TUI config is missing required durable paths.",
+    "Operator registry does not include arbitrary shell command entries."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1",
+    "cargo test -p agentd operator_projection",
+    "cargo test -p agentd tui_command_parser"
+  ],
+  "failure_modes": [
+    "Rootfs defaults point TUI at transient state.",
+    "Packaging removes headless automation mode.",
+    "Operator registry adds shell escape commands."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI-051", "TASK-TUI-052", "TASK-TUI-053"],
+    "blocked_until": ["TASK-TUI-011", "TASK-TUI-043"]
+  }
+}

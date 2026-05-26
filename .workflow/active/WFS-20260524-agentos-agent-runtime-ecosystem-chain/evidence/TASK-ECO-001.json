@@ -1,0 +1,45 @@
+{
+  "task_id": "TASK-ECO-001",
+  "status": "completed",
+  "completed_at": "2026-05-25T01:11:04+08:00",
+  "summary": "Added runtime_contracts::ecosystem as the shared, dependency-free ecosystem contract boundary for AgentOS artifacts.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "created",
+      "sha256": "7DFF92B146194EF0EA423AB1579FAFDDBB2E6220286103858E3FBA421D3F31A4"
+    },
+    {
+      "path": "crates/runtime_contracts/src/lib.rs",
+      "status": "updated",
+      "sha256": "0C5A7FA96424FEE7B26668AB2D4FCA3CF430B510F9AD6F10FAA9A94369DC7FCA"
+    }
+  ],
+  "acceptance_evidence": [
+    "runtime_contracts now exposes ecosystem schemas without importing agent_core, security_execution or agentd.",
+    "The module defines deterministic to_json and stable_contract_hash helpers for shared schema fingerprints.",
+    "Manifest, registry, lockfile, verification, staging, activation, active set, compatibility and trust policy contract types are present.",
+    "Side-effect behavior is represented as reports and validation state only; no execution crate or runtime mutation logic is introduced."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts",
+      "result": "passed",
+      "summary": "20 runtime_contracts tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 94, agentd 56, runtime_contracts 20 and security_execution 75 tests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "runtime_contracts does not import execution crates.",
+    "No artifact contract can activate by staging alone.",
+    "No normal-mode shell semantic tool is introduced."
+  ],
+  "optional_dependencies": [
+    "No external network, remote LLM, Firecracker binary or host package manager dependency is required."
+  ],
+  "promotion_impact": "Creates the stable contract surface required before local registry, staging and runtime-mediated activation work."
+}

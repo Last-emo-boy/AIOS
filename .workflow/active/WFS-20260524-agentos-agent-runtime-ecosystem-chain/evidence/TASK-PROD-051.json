@@ -1,0 +1,71 @@
+{
+  "task_id": "TASK-PROD-051",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "summary": "Added active artifact set awareness to release update metadata, provenance and promotion blockers.",
+  "artifacts": [
+    {
+      "path": "scripts/build-release.ps1",
+      "status": "updated",
+      "sha256": "cac2baf128e29fec445df2d8e8b4a1cf2c3f51425727416fe66e68072f25df7c"
+    },
+    {
+      "path": ".workflow/artifacts/release/update-metadata.json",
+      "status": "generated",
+      "sha256": "a3fc64730af8f5b0298d1f188a53502dbd6c43bd199fa89256abcdd28d653351"
+    },
+    {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "status": "generated",
+      "sha256": "9fa14bbdcc336b7ee3e83f3c299e94da3953d901a70b31ee5340eff674affa1a"
+    },
+    {
+      "path": ".workflow/artifacts/boot/boot-smoke-result.json",
+      "status": "generated",
+      "sha256": "1d9abf97ece0e458d6df3e77a50e4b09a749812847a02a9e3db2e89fdcc7ce45"
+    }
+  ],
+  "acceptance_evidence": [
+    "Candidate update metadata includes active_artifact_set path, hash and required status.",
+    "Update readiness records active_artifact_set_hash=6303e3017128f76d3162e1b59e43dabd1040e1a2dd6f732e75435aa08e7ed886.",
+    "runtime_contract_compatibility_checked=true is derived from ecosystem replay status passed.",
+    "incompatible_active_artifacts is empty and promotion_allowed=true.",
+    "Rollback readiness records matching previous_active_set_hash and restored_active_set_hash.",
+    "Release provenance stores ecosystem.update_readiness and blocks promotion on missing active set, missing compatibility replay or missing rollback evidence.",
+    "QEMU runtime smoke observed required AgentOS runtime markers."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gate passed, wrote update metadata/provenance and reported promotion.status=promotable with no blockers."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "result": "passed",
+      "summary": "Observed AGENTD_HANDOFF_OK, AGENTOS_RUNTIME_ARTIFACTS_OK and runtime manifest sha256 marker."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed after release readiness changes."
+    }
+  ],
+  "readiness": {
+    "active_artifact_set_present": true,
+    "active_artifact_set_hash": "6303e3017128f76d3162e1b59e43dabd1040e1a2dd6f732e75435aa08e7ed886",
+    "runtime_contract_compatibility_checked": true,
+    "incompatible_active_artifacts": [],
+    "rollback_preserves_previous_active_set": true,
+    "previous_active_set_hash": "0404b746f509843feff651c6133404a026f0758e82fc8fd5aeb85c9171d96b25",
+    "restored_active_set_hash": "0404b746f509843feff651c6133404a026f0758e82fc8fd5aeb85c9171d96b25",
+    "ecosystem_replay_status": "passed",
+    "promotion_allowed": true
+  },
+  "blocked_shortcuts": [
+    "Update promotion cannot ignore active ecosystem artifacts.",
+    "Promotion fails closed if active artifact set hash or rollback evidence is missing.",
+    "A/B update metadata does not mutate the active slot in place."
+  ],
+  "promotion_impact": "Release candidates now bind distro update readiness to the active AgentOS ecosystem state."
+}

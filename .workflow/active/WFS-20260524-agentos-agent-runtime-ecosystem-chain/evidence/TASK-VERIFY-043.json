@@ -1,0 +1,48 @@
+{
+  "task_id": "TASK-VERIFY-043",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "summary": "Added activation rollback and revocation replay evidence to ecosystem replay.",
+  "artifacts": [
+    {
+      "path": "scripts/ecosystem-replay.ps1",
+      "status": "updated",
+      "sha256": "72f5d9df0dae378ca3b78bb51975a3210eb3f9f351e7f32c13a7a886c2d9943f"
+    },
+    {
+      "path": ".workflow/artifacts/ecosystem-replay/result.json",
+      "status": "generated",
+      "sha256": "793b8a9b4d56a41121c1e9b96ef31b318a8213711954f675125ec39075dba61f"
+    },
+    {
+      "path": ".workflow/artifacts/aom/active-set.json",
+      "status": "generated",
+      "sha256": "6303e3017128f76d3162e1b59e43dabd1040e1a2dd6f732e75435aa08e7ed886"
+    }
+  ],
+  "acceptance_evidence": [
+    "Rollback replay restores the previous active set hash.",
+    "Revoked staged artifact cannot activate.",
+    "Revoked active artifact is projected as degraded.",
+    "Revocation evidence hash is present: 028742ad7d87a59487f1512e2a7f1c535679642e802bdbdf5bf3905f16e457dd.",
+    "Advisory metadata is bound to digest in replay evidence."
+  ],
+  "commands": [
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Rollback and revocation replay passed with rollback_restored_previous=true."
+    },
+    {
+      "command": "cargo test -p agent_core ecosystem",
+      "result": "passed",
+      "summary": "13 AgentCore ecosystem tests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Rollback is not represented as activation success.",
+    "Revoked staged artifacts remain blocked before EffectPrepared.",
+    "Revoked active artifacts are visible as degraded rather than silently ignored."
+  ],
+  "promotion_impact": "Production operations can reason about active artifact rollback and revocation before long-running distro activation."
+}

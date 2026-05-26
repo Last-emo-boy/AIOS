@@ -1,0 +1,43 @@
+{
+  "task_id": "TASK-ECO-010",
+  "status": "completed",
+  "completed_at": "2026-05-25T02:09:07+08:00",
+  "summary": "Added operator-facing ecosystem explanation and projection surfaces that keep aom lifecycle visibility read-only and activation-gated.",
+  "artifacts": [
+    {
+      "path": "crates/agentd/src/operator_projection.rs",
+      "status": "updated",
+      "sha256": "03BF38F5B897CB3303010A7F618131B6FD1C2CF313D7A8B3B3F52949115CE24A"
+    },
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/aom-operator-explain.md",
+      "status": "created",
+      "sha256": "63064814A90ED3E673F57042E2316AD7DBE3CD952D7A09B5A01E61E78CBB5523"
+    }
+  ],
+  "acceptance_evidence": [
+    "OperatorProjection now includes an ecosystem section with local registry status, aom lifecycle commands, staging root, activation authority and blocked prerequisites.",
+    "The projection explicitly reports activation_status=gated, staged_artifacts_active=false and staged_and_active_separated=true.",
+    "The projection declares resolver_owner=agent_core::ecosystem and agentd_resolver_logic=false.",
+    "The operator explain document defines schema fields, lifecycle flags, trust/advisory visibility and raw secret exclusions."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agentd operator_projection",
+      "result": "passed",
+      "summary": "6 operator projection tests passed, including ecosystem projection assertions."
+    },
+    {
+      "command": "cargo test -p agentd support_bundle",
+      "result": "passed",
+      "summary": "Support bundle redaction and manifest test passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Operator projection does not stage or activate artifacts.",
+    "agentd does not own resolver or staging business logic.",
+    "The projection does not expose normal-mode shell.",
+    "Staged artifacts are not represented as active."
+  ],
+  "promotion_impact": "Operators can see local ecosystem readiness and blocked activation prerequisites before runtime-mediated activation exists."
+}

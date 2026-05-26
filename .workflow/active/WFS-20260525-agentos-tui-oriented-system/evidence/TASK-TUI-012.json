@@ -1,0 +1,22 @@
+{
+  "task_id": "TASK-TUI-012",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "lifecycle-handlers",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "run.approve routes to AgentCore approve_step",
+    "run.deny routes to AgentCore deny_step",
+    "run.suspend routes to AgentCore suspend_run",
+    "run.recover routes to AgentCore recover_run",
+    "TUI replay denied restart-service without EffectPrepared"
+  ],
+  "commands": [
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

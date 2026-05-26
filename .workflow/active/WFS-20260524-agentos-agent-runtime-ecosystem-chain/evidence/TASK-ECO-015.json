@@ -1,0 +1,33 @@
+{
+  "task_id": "TASK-ECO-015",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:51:15+08:00",
+  "summary": "Defined AgentOS ecosystem channel policy across core, verified, organization, community and local-dev trust tiers.",
+  "artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/ecosystem-channel-policy.md",
+      "status": "created",
+      "sha256": "690d839b35793fdfef5553ac9318ffac9cfed71307f0392d0ed74f52cd03d16c"
+    }
+  ],
+  "acceptance_evidence": [
+    "Core on stable is enabled by default for Production Distro release images.",
+    "Verified requires signed publisher, signed registry snapshot, lockfile, replay evidence and revocation metadata.",
+    "Community is discoverable and stageable only after schema and digest verification, and is sandbox-only by default.",
+    "Local-dev is developer-mode only and not production-promotable by default.",
+    "Offline pinned snapshots preserve availability but do not upgrade trust."
+  ],
+  "commands": [
+    {
+      "command": "Select-String -Path .workflow\\active\\WFS-20260524-agentos-agent-runtime-ecosystem-chain\\docs\\ecosystem-channel-policy.md -Pattern 'core|verified|organization|community|local-dev|stable|beta|edge|local'",
+      "result": "passed",
+      "summary": "Channel policy names all required trust tiers and channels."
+    }
+  ],
+  "blocked_shortcuts": [
+    "Local path placement does not upgrade trust.",
+    "Community and local-dev cannot become production-promotable by default.",
+    "Channels do not grant runtime activation authority."
+  ],
+  "promotion_impact": "Freezes channel defaults before verified publisher, organization overlay and remote registry work."
+}

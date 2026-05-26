@@ -1,0 +1,131 @@
+{
+  "audit_id": "FINAL-AUDIT-20260524-agent-runtime-ecosystem-chain",
+  "workflow_id": "WFS-20260524-agentos-agent-runtime-ecosystem-chain",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "decision": "promote-to-next-production-distro-stage",
+  "production_ready_claim": false,
+  "summary": "The Agent Runtime and ecosystem chain passed all required local gates for the next Production Distro iteration. AgentOS now has a local-first ecosystem manager, runtime-mediated activation, support bundle projections, active artifact update readiness and offline pinned snapshot drills.",
+  "scope": {
+    "waves_audited": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "required_evidence": [
+      "TASK-PROD-050",
+      "TASK-PROD-051",
+      "TASK-PROD-052",
+      "TASK-VERIFY-044",
+      "TASK-ECO-052",
+      "TASK-ECO-062"
+    ],
+    "baseline_constraints": [
+      "no normal-mode arbitrary shell",
+      "install/stage is not activation",
+      "model output cannot directly execute",
+      "artifact activation authority is AgentCore PlanSpec + SecurityExecutionEngine",
+      "agentd remains projection/CLI thin layer",
+      "baseline is local-only and does not require network, external LLM, Firecracker or host package manager"
+    ]
+  },
+  "verification": [
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 59, runtime_contracts 27 and security_execution 79 tests passed; doctests passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed and generated .workflow/artifacts/functional-replay/result.json."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed with total=6, passed=6, failed=0; adversarial denied_count=14; offline expired snapshot drill passed."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\build-release.ps1",
+      "result": "passed",
+      "summary": "Release gate passed, generated update metadata/provenance and reported promotion.status=promotable with no blockers."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30",
+      "result": "passed",
+      "summary": "Observed AGENTD_HANDOFF_OK, AGENTOS_RUNTIME_ARTIFACTS_OK and runtime manifest sha256 marker."
+    }
+  ],
+  "artifact_hashes": {
+    "support_bundle_rs": "1656fa0e9aa89ab3a9d0c6c51a80e93a6b70fbc32d39d51a5ce941c994e66dfd",
+    "build_release_ps1": "cac2baf128e29fec445df2d8e8b4a1cf2c3f51425727416fe66e68072f25df7c",
+    "ecosystem_replay_ps1": "406098f1dbad7f4b4310a9906821a3e80349e6e834f1e1e92e3703e8c949cc92",
+    "ecosystem_replay_result": "7b3a8b312fb1df1314a89cc568f4dd8c082ea79c25543f71917cd1e496df5720",
+    "functional_replay_result": "acc6117724e770ddc115fb3eb21032b8e14a063422ba1fde3d1a4d75dbf47bc8",
+    "release_update_metadata": "a3fc64730af8f5b0298d1f188a53502dbd6c43bd199fa89256abcdd28d653351",
+    "release_provenance": "9fa14bbdcc336b7ee3e83f3c299e94da3953d901a70b31ee5340eff674affa1a",
+    "boot_smoke_result": "1d9abf97ece0e458d6df3e77a50e4b09a749812847a02a9e3db2e89fdcc7ce45"
+  },
+  "ecosystem_replay": {
+    "status": "passed",
+    "total_steps": 6,
+    "passed_steps": 6,
+    "failed_steps": 0,
+    "fixture_count": 14,
+    "denied_count": 14,
+    "model_knowledge_fixture_count": 4,
+    "adapter_image_fixture_count": 4,
+    "offline": {
+      "pinned_snapshot_local_only": true,
+      "network_required": false,
+      "expired_snapshot_blocked": true,
+      "expired_snapshot_exit_code": 2,
+      "expired_snapshot_degraded_status": "degraded-expired-snapshot",
+      "expired_snapshot_error": "expired local registry snapshot cannot be used for resolution",
+      "support_bundle_projection_status": "degraded-expired-snapshot"
+    }
+  },
+  "release_readiness": {
+    "promotion_status": "promotable",
+    "promotion_blockers": [],
+    "active_artifact_set_present": true,
+    "active_artifact_set_hash": "6303e3017128f76d3162e1b59e43dabd1040e1a2dd6f732e75435aa08e7ed886",
+    "runtime_contract_compatibility_checked": true,
+    "incompatible_active_artifacts": [],
+    "rollback_preserves_previous_active_set": true,
+    "ecosystem_replay_status": "passed"
+  },
+  "boundary_audit": {
+    "normal_shell_available": false,
+    "install_stage_is_activation": false,
+    "model_output_direct_execution_allowed": false,
+    "agentd_resolver_logic": false,
+    "activation_authority": "AgentCore PlanSpec + SecurityExecutionEngine",
+    "local_only_baseline": true,
+    "network_required": false,
+    "external_llm_required": false,
+    "firecracker_required_for_baseline": false,
+    "host_package_manager_required_for_baseline": false,
+    "raw_secret_leak_found": false
+  },
+  "remaining_risks": [
+    "Production signatures and key ceremony remain a separate release decision.",
+    "Remote registry, public marketplace and multi-tenant organization policy distribution are not GA-ready.",
+    "Firecracker-backed execution image runtime is contract-gated but still not a required baseline dependency.",
+    "Long-running fleet telemetry, update rollout orchestration and incident response policy still need later Production Distro waves."
+  ],
+  "next_recommended_waves": [
+    "Fleet operations and telemetry control plane.",
+    "Production signing ceremony and key rotation.",
+    "Remote registry mirror with offline snapshot pinning.",
+    "Public/private ecosystem governance and artifact review workflow.",
+    "Long-running Agent Runtime soak and update rollback drills."
+  ]
+}

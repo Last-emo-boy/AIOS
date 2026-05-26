@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-ECO-013",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:19:32+08:00",
+  "summary": "Packaged the built-in service recovery workflow as a core workflow-pack artifact bound to AgentCore service recovery and local-only replay.",
+  "artifacts": [
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/core/workflow-service-recovery.json",
+      "status": "created",
+      "sha256": "F13523E89C2A470AD2E39DA1301028EA5E42E4A3B1C48DF4A3F2A76516C22AEE"
+    },
+    {
+      "path": "packaging/agentos/rootfs/etc/agentos/ecosystem/registry-snapshot.json",
+      "status": "updated",
+      "sha256": "AEBC9DF789BAB3BFABD5B5EF3DBB6B78D0C78B92B597C7A4330BE993FC0C9F65"
+    },
+    {
+      "path": "scripts/functional-capability-replay.ps1",
+      "status": "updated",
+      "sha256": "1AD9BD9EF637C06D687FD74AC26B1B249EB769578E87BD85BB3D6D293A875B80"
+    },
+    {
+      "path": "scripts/validate-alpha-rootfs.ps1",
+      "status": "updated",
+      "sha256": "832E9C5FAD012E38E5FDD5FD37C7E79ACA9575FF626AB62C2B53182379283A67"
+    }
+  ],
+  "acceptance_evidence": [
+    "workflow-service-recovery.json declares coordinate agentos:workflow-pack/agentos/service-recovery@1.0.0 and core trust tier.",
+    "The workflow pack depends on agentos:policy-pack/agentos/core-policy@1.0.0 with missing_behavior=block-activation and no host mutation fallback.",
+    "workflow.compile_target is agent_core::service_recovery::AgentCoreServiceRecovery.",
+    "workflow.plan_spec_owner is AgentCore and restart_action_tool is svc.restart.",
+    "workflow.restart_requires_exact_approval=true and workflow.denied_path_effect_prepared=false.",
+    "workflow.direct_shell_authority=false and local_replay_fixture=true.",
+    "Activation requires AgentCore PlanSpec, SecurityExecutionEngine, exact approval, replay evidence and compatibility evidence.",
+    "registry-snapshot.json points the service recovery coordinate to file:///etc/agentos/ecosystem/core/workflow-service-recovery.json.",
+    "validate-alpha-rootfs.ps1 now treats the service recovery workflow manifest as a required rootfs artifact.",
+    "functional-capability-replay.ps1 checks the built-in workflow pack alongside existing service recovery tests."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p agent_core service_recovery -- --nocapture",
+      "result": "passed",
+      "summary": "5 AgentCore service recovery tests passed, including denied path with no restart effect."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional replay passed 9/9 capability checks, including built-in ecosystem packs."
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1",
+      "result": "passed",
+      "summary": "Alpha rootfs validation passed 11/11 required artifacts, including ecosystem.workflow_service_recovery."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "Workspace tests passed: agent_core 107, agentd 58, runtime_contracts 23, security_execution 79 plus doctests."
+    }
+  ],
+  "blocked_shortcuts": [
+    "The workflow pack does not execute shell directly.",
+    "svc.restart remains an exact-approval semantic tool action.",
+    "Denied restart paths do not prepare effects.",
+    "The workflow cannot activate when the core policy dependency is missing.",
+    "Replay fixture remains local-only."
+  ],
+  "promotion_impact": "AgentOS now has a built-in service recovery workflow-pack that can be activated only through the AgentCore and SecurityExecution activation chain."
+}

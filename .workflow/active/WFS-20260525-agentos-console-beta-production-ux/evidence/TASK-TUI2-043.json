@@ -1,0 +1,43 @@
+{
+  "task_id": "TASK-TUI2-043",
+  "title": "Add remote registry mirror UX design",
+  "status": "completed",
+  "completed_at": "2026-05-26T07:57:20+08:00",
+  "artifacts": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/remote-registry-mirror-ux.md",
+    ".workflow/artifacts/ecosystem-replay/result.json"
+  ],
+  "verified": [
+    "Remote registry mirrors are explicitly optional future UX and not baseline authority.",
+    "Pinned local registry snapshot, local lockfile, staged set, active set and local replay evidence remain the ecosystem source of truth.",
+    "Mirror states are defined as not-configured, available, stale, failed, untrusted and disabled.",
+    "Expired local snapshots remain fail-closed unless a future explicit refresh PlanRun is approved and implemented.",
+    "Mirror trust, endpoint identity, signature status, signer key id, channel, trust tier, provenance, SBOM and revocation status must be visible.",
+    "Network or mirror failure does not break local baseline operation when the pinned local snapshot is fresh.",
+    "Future refresh must stage inertly, run ecosystem replay and commit only through SecurityExecutionEngine."
+  ],
+  "commands": [
+    "rg -n \"optional future|pinned local|not baseline authority|not-configured|available|stale|failed|untrusted|disabled|Expired local|fail-closed|signature_status|trust_status|Network|No silent registry refresh\" .workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/remote-registry-mirror-ux.md",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "test_result": {
+    "manual_review": {
+      "result": "passed",
+      "document": ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/remote-registry-mirror-ux.md"
+    },
+    "ecosystem_replay": {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+      "result": "passed",
+      "artifact": ".workflow/artifacts/ecosystem-replay/result.json"
+    }
+  },
+  "risk_notes": [
+    "Remote mirror refresh execution remains unimplemented and intentionally projection-only in Console Beta.",
+    "Network remains optional; local pinned snapshots remain sufficient for baseline operation while fresh.",
+    "Mirror inconsistencies, signature failures and trust failures must block refresh instead of silently overriding local evidence."
+  ],
+  "next_tasks": [
+    "TASK-TUI2-044",
+    "TASK-TUI2-050"
+  ]
+}

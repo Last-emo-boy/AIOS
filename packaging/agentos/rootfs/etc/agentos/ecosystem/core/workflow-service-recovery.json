@@ -1,0 +1,69 @@
+{
+  "schema": "agentos.artifact-manifest.v1",
+  "coordinate": "agentos:workflow-pack/agentos/service-recovery@1.0.0",
+  "artifact_digest": "sha256:agentos-service-recovery-artifact",
+  "runtime_contract_version": "0.1.0",
+  "compatibility": {
+    "min_runtime_contract_version": "0.1.0",
+    "max_runtime_contract_version": "0.9.0",
+    "architectures": ["x86_64"],
+    "required_host_features": ["audit-journal", "rollback-store"],
+    "optional_host_features": ["kvm"],
+    "migration_rules": []
+  },
+  "dependencies": [
+    {
+      "coordinate": "agentos:policy-pack/agentos/core-policy@1.0.0",
+      "optional": false,
+      "missing_behavior": "block-activation",
+      "allows_host_mutation_when_missing": false
+    }
+  ],
+  "files": [
+    {
+      "path": "agent-core/workflows/service-recovery.json",
+      "digest": "sha256:agentos-service-recovery-plan",
+      "bytes": 2048,
+      "executable": false
+    }
+  ],
+  "activation": {
+    "requires_agent_core_plan_spec": true,
+    "requires_security_execution_engine": true,
+    "requires_exact_approval": true,
+    "required_policy_version": "policy-v1",
+    "preserved_core_invariants": [
+      "no-shell",
+      "exact-approval",
+      "secret-handle",
+      "source-to-sink",
+      "audit",
+      "rollback"
+    ],
+    "required_runtime_capabilities": ["audit-journal", "rollback-store"]
+  },
+  "trust": {
+    "tier": "core",
+    "signed_by": "agentos-release",
+    "provenance_digest": "sha256:agentos-service-recovery-provenance",
+    "sbom_digest": "sha256:agentos-service-recovery-sbom",
+    "release_gate_digest": "sha256:agentos-service-recovery-release-gate",
+    "production_promotable": true
+  },
+  "workflow": {
+    "compile_target": "agent_core::service_recovery::AgentCoreServiceRecovery",
+    "plan_spec_owner": "AgentCore",
+    "restart_action_tool": "svc.restart",
+    "restart_requires_exact_approval": true,
+    "denied_path_effect_prepared": false,
+    "direct_shell_authority": false,
+    "local_replay_fixture": true
+  },
+  "activation_gates": {
+    "requires_replay_evidence": true,
+    "requires_compatibility_evidence": true,
+    "staged_artifact_is_inert": true
+  },
+  "local_replay": "cargo test -p agent_core service_recovery",
+  "unknown_required_fields": []
+}

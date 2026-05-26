@@ -1,0 +1,20 @@
+{
+  "id": "TASK-ECO-006",
+  "title": "Add read-only ecosystem projection in agentd",
+  "status": "completed",
+  "wave": 5,
+  "priority": "P0",
+  "type": "operator-ux",
+  "owner": "agentd",
+  "source": "production ecosystem roadmap",
+  "depends_on": ["TASK-ECO-004", "TASK-ECO-005"],
+  "purpose": "Expose staged, active, blocked and degraded artifact state without moving resolver or activation logic into agentd.",
+  "scope": ["Add projection over ecosystem reports.", "Show activation status and audit range.", "Show blocked prerequisites and degraded reasons.", "Redact secret-like content."],
+  "deliverables": ["crates/agentd/src/operator_projection.rs", ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-006.json"],
+  "acceptance_criteria": ["agentd projection is read-only.", "Projection distinguishes staged from active.", "Projection explains denied and failed-closed activation.", "No adapter business logic enters agentd."],
+  "verification": ["cargo test -p agentd operator_projection", "cargo test -p agentd support_bundle"],
+  "failure_modes": ["agentd resolves dependencies.", "Projection leaks raw manifest secret-like fields.", "Blocked state is hidden."],
+  "handoff": {"next_tasks": ["TASK-ECO-014", "TASK-PROD-050"], "blocked_until": ["TASK-ECO-004", "TASK-ECO-005"]},
+  "completed_at": "2026-05-25T02:54:06+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ECO-006.json"
+}

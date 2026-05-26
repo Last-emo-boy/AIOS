@@ -1,0 +1,22 @@
+{
+  "task_id": "TASK-TUI-032",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:47:41+08:00",
+  "evidence_type": "deterministic-refresh-model",
+  "artifacts": [
+    "crates/agentd/src/tui.rs",
+    ".workflow/artifacts/tui-replay/result.json"
+  ],
+  "verified": [
+    "tui_refresh_is_deterministic_and_does_not_mutate_state proves repeated refresh renders identical output from unchanged sources",
+    "refresh rebuilds projections from durable RunStore and AuditJournal rather than authoritative render cache",
+    "failed-closed command errors remain transient and do not overwrite run state",
+    "scripted replay uses deterministic command sequence and local-only runtime state"
+  ],
+  "commands": [
+    "cargo test -p agentd tui_ --no-fail-fast",
+    "cargo test -p agentd tui --no-fail-fast",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/tui-replay.ps1"
+  ],
+  "blockers": []
+}

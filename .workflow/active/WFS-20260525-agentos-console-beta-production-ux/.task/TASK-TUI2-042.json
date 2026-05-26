@@ -1,0 +1,43 @@
+{
+  "id": "TASK-TUI2-042",
+  "title": "Add support bundle upload policy design",
+  "status": "completed",
+  "completed_at": "2026-05-26T07:52:10+08:00",
+  "wave": 5,
+  "priority": "P1",
+  "type": "architecture",
+  "owner": "workflow",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-014", "TASK-TUI2-040"],
+  "purpose": "Define future support bundle upload behavior while preserving local redaction and explicit operator consent.",
+  "scope": [
+    "Define local-only default for support bundles.",
+    "Define future upload preconditions, approval, destination trust and redaction checks.",
+    "Define what metadata can be uploaded and what must remain local.",
+    "Define failure policy for unavailable or untrusted upload endpoints.",
+    "Document evidence needed before implementation."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/support-bundle-upload-policy.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-042.json"
+  ],
+  "acceptance_criteria": [
+    "Upload is explicitly future work and not enabled by baseline.",
+    "Raw secrets and raw prompts remain forbidden surfaces.",
+    "Operator approval and destination trust are required for future upload.",
+    "Failure policy is fail-closed for untrusted destinations."
+  ],
+  "verification": [
+    "manual review of support-bundle-upload-policy.md",
+    "cargo test -p agentd support_bundle"
+  ],
+  "failure_modes": [
+    "Support bundle upload becomes implicit.",
+    "Redaction policy is weaker for uploaded bundles.",
+    "Untrusted destination can receive support data."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-043", "TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-014", "TASK-TUI2-040"]
+  }
+}

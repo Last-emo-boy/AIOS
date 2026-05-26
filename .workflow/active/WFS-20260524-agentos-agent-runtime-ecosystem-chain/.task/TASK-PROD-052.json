@@ -1,0 +1,43 @@
+{
+  "id": "TASK-PROD-052",
+  "title": "Add offline operation and pinned snapshot drills",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:29:59+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-PROD-052.json",
+  "wave": 9,
+  "priority": "P0",
+  "type": "operations",
+  "owner": "scripts",
+  "source": "production distro task chain",
+  "depends_on": ["TASK-ARUN-020", "TASK-ECO-002", "TASK-VERIFY-041"],
+  "purpose": "Prove AgentOS can operate and explain ecosystem state from pinned local registry snapshots without network.",
+  "scope": [
+    "Run ecosystem replay in offline mode.",
+    "Boot/operate with pinned registry snapshot.",
+    "Verify search/show/stage behavior without remote registry.",
+    "Verify degraded projection when snapshot is expired."
+  ],
+  "deliverables": [
+    "scripts/ecosystem-replay.ps1",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-PROD-052.json"
+  ],
+  "acceptance_criteria": [
+    "Offline replay passes with pinned snapshot.",
+    "Expired snapshot produces explainable degraded state.",
+    "No network is required for baseline.",
+    "Support bundle includes snapshot status."
+  ],
+  "verification": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+    "powershell -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1"
+  ],
+  "failure_modes": [
+    "Baseline replay requires remote registry.",
+    "Expired snapshot is silently accepted.",
+    "Offline mode hides blocked ecosystem actions."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-PROD-053"],
+    "blocked_until": ["TASK-ECO-002", "TASK-VERIFY-041"]
+  }
+}

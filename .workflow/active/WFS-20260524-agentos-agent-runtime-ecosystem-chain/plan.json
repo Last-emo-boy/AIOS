@@ -1,0 +1,149 @@
+{
+  "plan_id": "PLAN-AIOS-AGENT-RUNTIME-ECOSYSTEM-CHAIN-20260524",
+  "workflow_id": "WFS-20260524-agentos-agent-runtime-ecosystem-chain",
+  "title": "AgentOS Agent Runtime And Ecosystem Chain",
+  "status": "completed",
+  "completed_at": "2026-05-25T04:32:00+08:00",
+  "source": "research.md; TASK.md; production ecosystem brainstorm",
+  "created_at": "2026-05-24T23:40:00+08:00",
+  "updated_at": "2026-05-25T04:32:00+08:00",
+  "objective": "Advance AgentOS toward Production Distro by strengthening the Agent Runtime as the OS control plane and adding a local-first ecosystem manager for safe capability expansion.",
+  "entry_criteria": [
+    "Functional iteration final audit is functional-ready.",
+    "AgentCore and SecurityExecution boundaries remain accepted.",
+    "No normal-mode arbitrary shell is introduced.",
+    "Baseline gates remain local-only and do not depend on external LLM, network, Firecracker or host package manager."
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "name": "Chain Freeze And Invariants",
+      "purpose": "Freeze the unified Agent-operated OS and ecosystem chain before implementation.",
+      "tasks": ["TASK-CHAIN-000", "TASK-CHAIN-001", "TASK-CHAIN-002", "TASK-CHAIN-003"],
+      "exit_criteria": [
+        "Agent-operated OS lifecycle is defined.",
+        "aom install/stage/activate boundary is frozen.",
+        "Production Distro acceptance gates are mapped."
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Agent Runtime OS Control Loops",
+      "purpose": "Design runtime loops that let AgentOS operate through Agent Runtime rather than ad hoc scripts.",
+      "tasks": ["TASK-ARUN-010", "TASK-ARUN-011", "TASK-ARUN-012", "TASK-ARUN-013"],
+      "exit_criteria": [
+        "Boot, steady-state, recovery, update and degraded loops are specified.",
+        "Observation fabric and event intake boundaries are defined.",
+        "Schedulers and quotas prevent autonomous runaway behavior."
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Durable Agent Runtime State",
+      "purpose": "Make Agent Runtime state durable enough for PID 1 operation and long-running distro use.",
+      "tasks": ["TASK-ARUN-020", "TASK-ARUN-021", "TASK-ARUN-022", "TASK-ARUN-023"],
+      "exit_criteria": [
+        "PlanRun, audit and recovery truth are reconciled on boot.",
+        "Approval and escalation semantics survive restart.",
+        "OS memory and knowledge governance cannot poison privileged action."
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Ecosystem Object Model",
+      "purpose": "Define AgentOS-native artifact objects and local registry foundations.",
+      "tasks": ["TASK-ECO-000", "TASK-ECO-001", "TASK-ECO-020", "TASK-ECO-021", "TASK-ECO-022", "TASK-ECO-023", "TASK-ECO-030"],
+      "exit_criteria": [
+        "Artifact coordinate, manifest, snapshot, lockfile and activation report schemas are defined.",
+        "First artifact kinds are policy-pack, workflow-pack and test-pack.",
+        "Trust tier and channel policy are documented."
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Local-First aom Lifecycle",
+      "purpose": "Create the local-first ecosystem manager lifecycle before remote registry or public marketplace work.",
+      "tasks": ["TASK-ECO-002", "TASK-ECO-003", "TASK-ECO-010", "TASK-ECO-011", "TASK-ECO-024", "TASK-ECO-025"],
+      "exit_criteria": [
+        "aom search/show/verify/stage/explain works against local fixtures.",
+        "Staged artifacts are inert.",
+        "Digest mismatch, revocation and incompatibility fail closed."
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Runtime-Mediated Activation",
+      "purpose": "Connect ecosystem activation to AgentCore and SecurityExecution instead of direct install behavior.",
+      "tasks": ["TASK-ECO-004", "TASK-ECO-005", "TASK-ECO-006", "TASK-ECO-012", "TASK-ECO-013", "TASK-ECO-014"],
+      "exit_criteria": [
+        "aom activate produces AgentCore PlanSpec.",
+        "Activation side effects go through SecurityExecutionEngine.",
+        "agentd projects staged/active/blocked artifacts without owning resolver logic."
+      ]
+    },
+    {
+      "wave": 6,
+      "name": "Safety Replay And Production Gates",
+      "purpose": "Promote ecosystem and runtime changes only with replay, adversarial fixtures, rollback drills and provenance.",
+      "tasks": ["TASK-VERIFY-040", "TASK-VERIFY-041", "TASK-VERIFY-042", "TASK-VERIFY-043", "TASK-VERIFY-044"],
+      "exit_criteria": [
+        "Ecosystem replay is release-gated.",
+        "Adversarial fixtures cover policy weakening, shell bypass, memory poisoning, secret embedding and adapter bypass.",
+        "Provenance records registry snapshot, lockfile and replay hashes."
+      ]
+    },
+    {
+      "wave": 7,
+      "name": "Trust And Organization Controls",
+      "purpose": "Add trust tiers, signing, revocation, organization policy overlays and support visibility for ecosystem artifacts.",
+      "tasks": ["TASK-ECO-015", "TASK-ECO-031", "TASK-ECO-032", "TASK-ECO-033", "TASK-ECO-034", "TASK-ECO-035"],
+      "exit_criteria": [
+        "Production Distro can pin channels and reject unsigned artifacts.",
+        "Community and local-dev artifacts are sandbox-only or non-promotable by default.",
+        "Support bundle can explain active artifact trust state without secrets."
+      ]
+    },
+    {
+      "wave": 8,
+      "name": "Model Knowledge Adapter And Image Packs",
+      "purpose": "Extend the ecosystem beyond policy/workflow/test packs into model profiles, knowledge, runtime adapters and execution images.",
+      "tasks": ["TASK-ECO-050", "TASK-ECO-051", "TASK-ECO-052", "TASK-ECO-060", "TASK-ECO-061", "TASK-ECO-062"],
+      "exit_criteria": [
+        "Model and knowledge packs preserve secret-handle and memory quarantine rules.",
+        "Adapter packs cannot bypass SecurityExecutionEngine.",
+        "Image packs prove provenance, compatibility and rollback rules before activation."
+      ]
+    },
+    {
+      "wave": 9,
+      "name": "Production Distro Operations",
+      "purpose": "Turn the runtime and ecosystem chain into long-running production distro operations.",
+      "tasks": ["TASK-PROD-050", "TASK-PROD-051", "TASK-PROD-052", "TASK-PROD-053"],
+      "exit_criteria": [
+        "Support bundle includes runtime and ecosystem state without secrets.",
+        "A/B update and rollback readiness include active artifact set.",
+        "Long-running recovery and offline mode are validated."
+      ]
+    }
+  ],
+  "risk_policy": {
+    "normal_shell": "deny",
+    "install_equals_activate": "forbidden",
+    "model_output_direct_execution": "forbidden",
+    "agentd_business_logic_growth": "forbidden",
+    "external_dependency_baseline": "forbidden",
+    "artifact_activation_authority": "AgentCore PlanSpec + SecurityExecutionEngine only"
+  },
+  "recommended_first_execution_slice": [
+    "TASK-CHAIN-000",
+    "TASK-CHAIN-001",
+    "TASK-CHAIN-002",
+    "TASK-CHAIN-003",
+    "TASK-ARUN-010",
+    "TASK-ARUN-011",
+    "TASK-ECO-000",
+    "TASK-ECO-001",
+    "TASK-ECO-020",
+    "TASK-ECO-021"
+  ]
+}

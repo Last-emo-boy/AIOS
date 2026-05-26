@@ -1,0 +1,245 @@
+{
+  "audit_id": "FINAL-AUDIT-20260525-tui-oriented-agentos",
+  "workflow_id": "WFS-20260525-agentos-tui-oriented-system",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:55:00+08:00",
+  "decision": "tui-oriented-alpha",
+  "production_ready_claim": false,
+  "summary": "AgentOS passed the TUI-oriented Alpha audit. The TUI is now the primary durable operator console for AgentCore runs, approvals, denial, recovery, audit, support bundle export and ecosystem activation previews while remaining a projection-controller rather than a second runtime.",
+  "scope": {
+    "waves_audited": [0, 1, 2, 3, 4, 5, 6],
+    "task_total": 29,
+    "task_status": {
+      "completed": 29,
+      "planned": 0,
+      "in_progress": 0,
+      "blocked": 0
+    },
+    "baseline_constraints": [
+      "TUI is projection-controller only",
+      "AgentCore owns PlanRun lifecycle",
+      "SecurityExecutionEngine remains the only side-effect authority",
+      "RunStore plus AuditJournal plus active artifact state are the durable sources of truth",
+      "normal-mode arbitrary shell is denied",
+      "aom install/stage remains inert and is not activation",
+      "activation remains AgentCore PlanSpec plus SecurityExecutionEngine",
+      "baseline does not require network, external LLM, Firecracker or host package manager"
+    ]
+  },
+  "wave_evidence": [
+    {
+      "wave": 0,
+      "name": "TUI OS Contract Freeze",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-command-grammar.md",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-state-render-model.md",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-release-gate.md"
+      ]
+    },
+    {
+      "wave": 1,
+      "name": "Durable AgentCore TUI Bridge",
+      "status": "passed",
+      "evidence": [
+        "crates/agentd/src/tui.rs",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-010.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-013.json"
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Operator Console Views",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-020.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-021.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-022.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-023.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-024.json"
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "Interactive Command Loop",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-030.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-031.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-032.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-033.json"
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Ecosystem And Production Operations In TUI",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-040.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-041.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-042.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-043.json"
+      ]
+    },
+    {
+      "wave": 5,
+      "name": "Boot And Distro Packaging",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-050.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-051.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-052.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-053.json",
+        ".workflow/artifacts/boot/boot-smoke-result.json"
+      ]
+    },
+    {
+      "wave": 6,
+      "name": "TUI Safety Replay And Final Audit",
+      "status": "passed",
+      "evidence": [
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-060.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-061.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/TASK-TUI-062.json",
+        ".workflow/active/WFS-20260525-agentos-tui-oriented-system/evidence/FINAL-AUDIT-20260525-tui-oriented-agentos.json"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "command": "cargo fmt --check",
+      "result": "passed",
+      "summary": "Rust formatting gate passed after cargo fmt."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 67, runtime_contracts 27 and security_execution 79 tests passed; doctests passed."
+    },
+    {
+      "command": "cargo test -p agentd tui_ --no-fail-fast",
+      "result": "passed",
+      "summary": "5 targeted TUI tests passed: approval queue, recovery view, snapshot redaction, deterministic refresh and adversarial fixtures."
+    },
+    {
+      "command": "cargo test -p agentd tui --no-fail-fast",
+      "result": "passed",
+      "summary": "14 TUI tests passed, covering parser, durable controller, runtime audit projection, approvals, recovery, support and adversarial behavior."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\functional-capability-replay.ps1",
+      "result": "passed",
+      "summary": "Functional capability replay passed with total=9, passed=9, failed=0."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\ecosystem-replay.ps1",
+      "result": "passed",
+      "summary": "Ecosystem replay passed with total=6, passed=6, failed=0; adversarial denied_count=14."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\production-runbook-smoke.ps1",
+      "result": "passed",
+      "summary": "Production runbook smoke passed with 12/12 cases, including tui-scripted-operator-runbook."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\tui-replay.ps1",
+      "result": "passed",
+      "summary": "TUI replay passed with 20/20 checks, including exact approval binding, recovery source, activation preview gating, shell rejection and secret redaction."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\validate-alpha-rootfs.ps1",
+      "result": "passed",
+      "summary": "Alpha rootfs validation passed with TUI config and operator command registry present."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\build-release.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -QemuTimeoutSeconds 120",
+      "result": "passed",
+      "summary": "Full release gate passed and generated dependency inventory, SBOM, update metadata, provenance and detached candidate signatures."
+    },
+    {
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\boot-smoke-test.ps1 -SkipKernelDownload -KernelPath image\\cache\\vmlinuz-virt -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 120",
+      "result": "passed",
+      "summary": "QEMU smoke observed AGENTD_HANDOFF_OK, AGENTOS_RUNTIME_ARTIFACTS_OK, AGENTOS_TUI_CONSOLE_READY and runtime manifest hash marker."
+    }
+  ],
+  "artifact_hashes": {
+    "release_provenance": "26fadf66a2e581596b7ac0d89987fdd4fd013b235256ea28857bc17bb93982fa",
+    "release_provenance_signature": "e300de594801cc8f7f35bf6a74283bd006ecf6ebb4f63a1d5822fde5687bfdcc",
+    "tui_replay_result": "598272106452fcf4818b988858c51d62e143be969f0f31cdfcaa83e7efb3bdee",
+    "production_runbook_smoke_result": "283457b50bea1964ab1e6143cc82ba562120847ccffe5da38153fd0287d752df",
+    "ecosystem_replay_result": "7b3a8b312fb1df1314a89cc568f4dd8c082ea79c25543f71917cd1e496df5720",
+    "functional_replay_result": "64e2d03719654ad024dd98c70c6f99eceebbb0a3500769d709a5acdb72d7ec7e",
+    "boot_smoke_result": "31052584ce679a5cf07a4bd30195177247fe9f6d6e563480bc2a61fad502b0b9"
+  },
+  "tui_replay": {
+    "status": "passed",
+    "total_checks": 20,
+    "passed_checks": 20,
+    "failed_checks": 0,
+    "projection_controller_only": true,
+    "local_only": true,
+    "run_store_snapshot_count": 28,
+    "approval_queue_rendered": true,
+    "recovery_rendered": true,
+    "activation_preview_rendered": true,
+    "unsafe_command_rejected": true,
+    "direct_shell_rejected": true,
+    "secret_like_command_redacted": true,
+    "denied_restart_no_effect_prepared": true
+  },
+  "runbook": {
+    "status": "passed",
+    "total_cases": 12,
+    "passed_cases": 12,
+    "tui_scripted_operator_runbook": {
+      "support_bundle_exported": true,
+      "unsafe_command_rejected": true,
+      "security_execution_required": true,
+      "durable_projection_controller": true,
+      "activation_prepared": false,
+      "recovery_source": "run-store+audit-journal",
+      "approvals_exact_binding": true
+    }
+  },
+  "release_readiness": {
+    "promotion_status": "promotable",
+    "promotion_blockers": [],
+    "tui_replay_status": "passed",
+    "ecosystem_replay_status": "passed",
+    "rootfs_runtime_manifest_sha256": "4fb8cf7a648d5fda53f86b905864007729be0b106790b345aa12fb4314579aa6",
+    "qemu_runtime_smoke_status": "completed",
+    "qemu_observed_tui_marker": true
+  },
+  "boundary_audit": {
+    "tui_runtime_authority": "projection-controller only",
+    "agent_core_authority": "PlanRun lifecycle",
+    "side_effect_authority": "SecurityExecutionEngine only",
+    "ecosystem_resolver_owner": "agent_core::ecosystem",
+    "agentd_resolver_logic": false,
+    "tui_owns_planner": false,
+    "tui_owns_policy": false,
+    "tui_owns_side_effects": false,
+    "normal_shell_available": false,
+    "install_stage_is_activation": false,
+    "model_output_direct_execution_allowed": false,
+    "raw_secret_leak_found": false,
+    "local_only_baseline": true,
+    "network_required": false,
+    "external_llm_required": false,
+    "firecracker_required_for_baseline": false,
+    "host_package_manager_required_for_baseline": false
+  },
+  "remaining_risks": [
+    "This is a TUI-oriented Alpha claim, not a GA production-ready distribution claim.",
+    "Production signatures and key ceremony remain a later release wave.",
+    "Fleet telemetry, rollout orchestration, remote registry governance and incident response operations still need Production Distro waves.",
+    "The TUI currently remains line-oriented typed command output rather than a full-screen terminal application with layout widgets and live event streaming."
+  ],
+  "next_recommended_waves": [
+    "Production Distro Wave 1: full-screen TUI shell with pane layout, navigation model and live event stream.",
+    "Production Distro Wave 2: operator session model, role-aware command scopes and sealed local profile state.",
+    "Production Distro Wave 3: fleet/update operations with rollout rings, rollback drills and support bundle upload policy.",
+    "Production Distro Wave 4: production signing ceremony, key rotation and release decision evidence.",
+    "Production Distro Wave 5: remote registry mirror, marketplace governance and organization policy overlays."
+  ]
+}

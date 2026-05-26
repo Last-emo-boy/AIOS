@@ -1,0 +1,15 @@
+{
+  "schema": "agentos.ecosystem-adversarial-fixture.v1",
+  "fixture_id": "adapter-direct-host-mutation",
+  "artifact_kind": "runtime-adapter-pack",
+  "coordinate": "agentos:runtime-adapter-pack/adversarial/direct-host-mutation@1.0.0",
+  "attempt": "adapter pack tries to mutate host state without SecurityExecutionEngine",
+  "forbidden_surface": "host mutation",
+  "expected_outcome": "denied",
+  "denial_reason": "adapter packs cannot bypass AgentCore PlanSpec and SecurityExecutionEngine",
+  "effect_prepared": false,
+  "audit_projectable": true,
+  "no_normal_shell": true,
+  "memory_quarantined": false,
+  "unsafe_activation_allowed": false
+}

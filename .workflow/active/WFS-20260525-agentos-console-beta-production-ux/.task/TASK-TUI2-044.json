@@ -1,0 +1,44 @@
+{
+  "id": "TASK-TUI2-044",
+  "title": "Add organization policy overlay preview",
+  "status": "completed",
+  "completed_at": "2026-05-26T08:04:30+08:00",
+  "wave": 5,
+  "priority": "P1",
+  "type": "design",
+  "owner": "workflow",
+  "source": "Console Beta plan",
+  "depends_on": ["TASK-TUI2-023", "TASK-TUI2-043"],
+  "purpose": "Design how organization policy overlays would be previewed without weakening local safety invariants.",
+  "scope": [
+    "Define overlay states: absent, compatible, stricter, incompatible, unsigned and revoked.",
+    "Define policy diff UX for added restrictions and attempted broadening.",
+    "Require local safety invariants to remain non-removable.",
+    "Define activation preview and approval requirements for overlays.",
+    "Document audit and rollback expectations."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/docs/organization-policy-overlay-preview.md",
+    ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/TASK-TUI2-044.json"
+  ],
+  "acceptance_criteria": [
+    "Overlay preview cannot disable exact approval or no-shell invariants.",
+    "Policy broadening requires explicit approval and runtime mediation.",
+    "Unsigned or revoked overlays are visibly blocked.",
+    "Preview remains design/projection until implementation task is approved."
+  ],
+  "verification": [
+    "manual review of organization-policy-overlay-preview.md",
+    "cargo test -p runtime_contracts ecosystem",
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1"
+  ],
+  "failure_modes": [
+    "Overlay design allows weakening local core policy.",
+    "Unsigned overlay appears compatible.",
+    "Policy broadening bypasses approval."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-TUI2-050"],
+    "blocked_until": ["TASK-TUI2-023", "TASK-TUI2-043"]
+  }
+}

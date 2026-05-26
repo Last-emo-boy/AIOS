@@ -1,0 +1,44 @@
+{
+  "workflow_id": "WFS-20260525-agentos-tui-oriented-system",
+  "name": "AgentOS TUI Oriented System",
+  "status": "completed",
+  "created_at": "2026-05-25T05:05:00+08:00",
+  "updated_at": "2026-05-25T20:55:00+08:00",
+  "source": "user request: TUI oriented AgentOS; previous workflow final audit",
+  "previous_workflow": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain",
+  "goal": "Turn AgentOS from a runtime-and-ecosystem Alpha with demo/projection TUI into a TUI-oriented operating system where the terminal console is the primary durable operator surface for AgentCore runs, approvals, recovery, audit, support and ecosystem lifecycle.",
+  "core_thesis": "TUI is the OS operator surface, not a second runtime. It must control AgentCore and SecurityExecution through typed APIs, display durable projections, and never own planner, resolver, policy or side-effect logic.",
+  "entry_contract": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/FINAL-AUDIT-20260524-agent-runtime-ecosystem-chain.json",
+  "non_goals": [
+    "Do not make a GUI or web UI the primary surface.",
+    "Do not add arbitrary shell escape as a TUI feature.",
+    "Do not duplicate AgentCore, SecurityExecution, aom resolver or support bundle logic inside TUI.",
+    "Do not require network, external LLM, host package manager or Firecracker for baseline TUI operation.",
+    "Do not make TUI-only state authoritative over RunStore or AuditJournal."
+  ],
+  "primary_acceptance": [
+    "Operator can submit an intent from TUI and see a durable AgentCore run projection.",
+    "Operator can advance safe read-only steps, approve/deny gated steps and recover interrupted runs through TUI commands.",
+    "TUI can explain why an action is blocked, paused, denied, rollback-pending or degraded.",
+    "TUI can project aom ecosystem state and create activation previews without activating by stage/install.",
+    "Boot/runtime packaging exposes TUI as the default operator console while preserving noninteractive smoke gates.",
+    "Release gates include TUI replay, production runbook smoke and QEMU console proof."
+  ],
+  "plan": ".workflow/active/WFS-20260525-agentos-tui-oriented-system/plan.json",
+  "task_dir": ".workflow/active/WFS-20260525-agentos-tui-oriented-system/.task",
+  "docs": [
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-oriented-architecture.md",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/tui-oriented-task-chain.md",
+    ".workflow/active/WFS-20260525-agentos-tui-oriented-system/docs/final-tui-oriented-audit-summary.md"
+  ],
+  "inherited_gates": {
+    "workspace_tests": "cargo test --workspace",
+    "agentd_tui_tests": "cargo test -p agentd tui",
+    "operator_projection_tests": "cargo test -p agentd operator_projection",
+    "functional_replay": "powershell -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1",
+    "ecosystem_replay": "powershell -ExecutionPolicy Bypass -File scripts/ecosystem-replay.ps1",
+    "production_runbook_smoke": "powershell -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1",
+    "release_gate": "powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1",
+    "qemu_runtime_smoke": "powershell -ExecutionPolicy Bypass -File scripts/boot-smoke-test.ps1 -QemuPath E:\\qemu\\qemu-system-x86_64.exe -TimeoutSeconds 30"
+  }
+}

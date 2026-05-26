@@ -1,0 +1,63 @@
+{
+  "schema": "agentos.artifact-manifest.v1",
+  "coordinate": "agentos:policy-pack/agentos/core-policy@1.0.0",
+  "artifact_digest": "sha256:agentos-core-policy-artifact",
+  "runtime_contract_version": "0.1.0",
+  "compatibility": {
+    "min_runtime_contract_version": "0.1.0",
+    "max_runtime_contract_version": "0.9.0",
+    "architectures": ["x86_64"],
+    "required_host_features": ["audit-journal", "rollback-store"],
+    "optional_host_features": [],
+    "migration_rules": []
+  },
+  "dependencies": [],
+  "files": [
+    {
+      "path": "etc/agentos/policy/policy-pack.json",
+      "digest": "sha256:agentos-policy-pack-json",
+      "bytes": 1379,
+      "executable": false
+    }
+  ],
+  "activation": {
+    "requires_agent_core_plan_spec": true,
+    "requires_security_execution_engine": true,
+    "requires_exact_approval": true,
+    "required_policy_version": "policy-v1",
+    "preserved_core_invariants": [
+      "no-shell",
+      "exact-approval",
+      "secret-handle",
+      "source-to-sink",
+      "audit",
+      "rollback"
+    ],
+    "required_runtime_capabilities": ["audit-journal", "rollback-store"]
+  },
+  "trust": {
+    "tier": "core",
+    "signed_by": "agentos-release",
+    "provenance_digest": "sha256:agentos-core-policy-provenance",
+    "sbom_digest": "sha256:agentos-core-policy-sbom",
+    "release_gate_digest": "sha256:agentos-core-policy-release-gate",
+    "production_promotable": true
+  },
+  "activation_gates": {
+    "requires_replay_evidence": true,
+    "requires_compatibility_evidence": true,
+    "policy_broadening_allowed": false,
+    "staged_artifact_is_inert": true
+  },
+  "pack_behavior": {
+    "narrows_only": true,
+    "normal_shell": "deny",
+    "broad_approval": "deny",
+    "denied_decisions_prepare_effect": false,
+    "can_deactivate": true,
+    "can_rollback": true,
+    "rollback_contract": "rollback://active-set/policy-pack"
+  },
+  "local_replay": "scripts/functional-capability-replay.ps1 --ecosystem policy-production-safe",
+  "unknown_required_fields": []
+}

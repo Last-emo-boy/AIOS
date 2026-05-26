@@ -1,0 +1,53 @@
+{
+  "id": "TASK-ARUN-012",
+  "title": "Define scheduler, quotas, backpressure and autonomous action budget",
+  "status": "completed",
+  "wave": 1,
+  "priority": "P0",
+  "type": "runtime",
+  "owner": "agent_core",
+  "source": "agent-operated-os-chain.md",
+  "depends_on": ["TASK-ARUN-010", "TASK-ARUN-011"],
+  "purpose": "Prevent AgentOS autonomy from becoming unbounded by defining scheduling, retry, quota and action-budget rules.",
+  "scope": [
+    "Extend dependency-aware scheduling into OS control loops.",
+    "Define per-risk-class retry budgets.",
+    "Define concurrency and resource quotas.",
+    "Define operator escalation when budget is exhausted."
+  ],
+  "deliverables": [
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/docs/runtime-scheduler-budget.md",
+    ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-012.json"
+  ],
+  "read_first": [
+    "crates/agent_core/src/lib.rs",
+    ".workflow/active/WFS-20260522-agentos-runtime-foundation/evidence/TASK-ACR-006-scheduler.json"
+  ],
+  "implementation_steps": [
+    "Define scheduling policy per loop and risk class.",
+    "Define retry and timeout behavior.",
+    "Define metrics for blocked, throttled and exhausted runs.",
+    "Record evidence with runaway prevention scenarios."
+  ],
+  "acceptance_criteria": [
+    "High-risk actions cannot retry indefinitely.",
+    "Read-only loops have bounded resource use.",
+    "Backpressure is visible to operator projection.",
+    "Budget exhaustion produces suspended or failed-closed state."
+  ],
+  "verification": [
+    "cargo test -p agent_core scheduler",
+    "cargo test -p agentd safety::resource"
+  ],
+  "failure_modes": [
+    "Autonomous loops can create infinite retries.",
+    "Backpressure is not persisted.",
+    "Budget rules are bypassable by planner hints."
+  ],
+  "handoff": {
+    "next_tasks": ["TASK-ARUN-020"],
+    "blocked_until": ["TASK-ARUN-010", "TASK-ARUN-011"]
+  },
+  "completed_at": "2026-05-25T00:27:20+08:00",
+  "evidence": ".workflow/active/WFS-20260524-agentos-agent-runtime-ecosystem-chain/evidence/TASK-ARUN-012.json"
+}

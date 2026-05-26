@@ -1,0 +1,23 @@
+{
+  "task_id": "TASK-TUI-062",
+  "status": "completed",
+  "completed_at": "2026-05-25T20:35:00+08:00",
+  "evidence_type": "release-gate",
+  "artifacts": [
+    "scripts/build-release.ps1",
+    ".workflow/artifacts/release/provenance.json",
+    ".workflow/artifacts/release/provenance.json.sig.json"
+  ],
+  "verified": [
+    "build-release.ps1 invokes TUI replay unless -SkipTuiReplay is set",
+    "release provenance records tui.replay_status=passed",
+    "promotion blockers remain when tests or QEMU runtime smoke are skipped",
+    "light release gate completed with -SkipTests -SkipBootSmoke"
+  ],
+  "commands": [
+    "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1 -SkipTests -SkipBootSmoke"
+  ],
+  "blockers": [
+    "full promotion still requires non-skipped workspace tests and QEMU runtime smoke"
+  ]
+}

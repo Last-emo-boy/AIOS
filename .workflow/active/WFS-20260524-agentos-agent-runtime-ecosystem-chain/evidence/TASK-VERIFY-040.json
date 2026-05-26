@@ -1,0 +1,44 @@
+{
+  "task_id": "TASK-VERIFY-040",
+  "status": "completed",
+  "completed_at": "2026-05-25T03:40:11+08:00",
+  "summary": "Verified ecosystem schemas and resolver behavior with local-only schema, resolver and workspace tests.",
+  "artifacts": [
+    {
+      "path": "crates/runtime_contracts/src/ecosystem.rs",
+      "status": "verified"
+    },
+    {
+      "path": "crates/agent_core/src/lib.rs",
+      "status": "verified"
+    }
+  ],
+  "acceptance_evidence": [
+    "Invalid manifest and unknown required fields fail closed in runtime_contracts ecosystem tests.",
+    "Lockfile hash behavior is deterministic.",
+    "AgentCore resolver rejects revoked, digest-mismatched, incompatible and missing-dependency artifacts.",
+    "Resolver and schema tests are local-only and do not require network access."
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p runtime_contracts ecosystem",
+      "result": "passed",
+      "summary": "14 ecosystem tests passed."
+    },
+    {
+      "command": "cargo test -p agent_core ecosystem::resolver",
+      "result": "passed",
+      "summary": "5 resolver tests passed."
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "passed",
+      "summary": "agent_core 107, agentd 58, runtime_contracts 23 and security_execution 79 tests passed; doctests passed."
+    }
+  ],
+  "blocked_shortcuts": [
+    "No live registry or network access is used for resolver verification.",
+    "Digest mismatch, revocation and incompatibility are not treated as warnings."
+  ],
+  "promotion_impact": "Schema and resolver gates are green before ecosystem replay and release provenance promotion."
+}
