@@ -1,0 +1,263 @@
+{
+  "schema": "agentos.rc16-rollback-support-package-evidence.v1",
+  "generated_at": "2026-06-09T23:55:00+08:00",
+  "task": "RC16-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
+  "script": {
+    "path": "scripts/project-rc16-rollback-support-package.ps1",
+    "sha256": "faa197362203251ec7011667c45149725029f5fff2a08af3132507d38e01fffd"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc16-rollback-support-package/result.json",
+    "status": "passed",
+    "sha256": "0ac94932712ddda54b34945b1312f3f9cac911acd7662b0d93cf39da3ed9549a"
+  },
+  "outputs": {
+    "rollback_support_package": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/rollback-support-package.json",
+      "sha256": "6e25d7266e76242bc331151231a95521d0b2a71d4189966d993379d92c879118",
+      "rollback_support_package_core_hash": "62fe9e2064682453bbb153e23ffdaf14bb005373ec96d910532e2d444d00dbe7"
+    }
+  },
+  "rollback_support_surface": {
+    "state": "rollback-support-package-bound-install-update-effects-still-denied",
+    "rollback_support_package_bound": true,
+    "install_update_binding_bound": true,
+    "package_identity_bound": true,
+    "rollback_baseline_bound": true,
+    "support_index_bound": true,
+    "rc15_rollback_support_bound": true,
+    "support_bundle_manifest_bound": true,
+    "recovery_reference_bound": true,
+    "post_install_update_observation_needs_bound": true,
+    "support_bundle_local_only": true,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "install_effect_preparation_allowed": false,
+    "update_effect_preparation_allowed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "private_signing_material_handled": false,
+    "production_ring_mutation_allowed": false,
+    "rollback_support_package_core_hash": "62fe9e2064682453bbb153e23ffdaf14bb005373ec96d910532e2d444d00dbe7",
+    "blockers": [
+      "rc16-exact-install-update-target-not-bound",
+      "rc16-exact-install-update-approval-not-bound",
+      "rc16-install-update-planspec-not-executable",
+      "rc16-security-execution-install-update-allow-not-bound",
+      "rc16-local-release-channel-consumer-smoke-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "support_bundle_local_only": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "rollback_execution_performed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "completion": {
+    "rc16_022_complete": true,
+    "next_task": "RC16-030",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc16_022",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-022 must run after RC16-021 completed, either while current_task is RC16-022 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC16-030",
+        "rc16_021_status": "completed",
+        "rc16_022_status": "completed"
+      }
+    },
+    {
+      "id": "contract.rollback_support.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-022 must consume the RC16 rollback/support package contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+        "sha256": "c018c551c44c3f7ba834e6281e85073a887f4e3f595de3e44b08b07004e6eb34",
+        "size_bytes": 7043,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.install_update_binding.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-022 must consume completed RC16-021 install/update PlanSpec and SecurityExecution envelope evidence without effects.",
+      "evidence": {
+        "status": "passed",
+        "planspec_bound": true,
+        "security_envelope_bound": true,
+        "effect_prepared": false
+      }
+    },
+    {
+      "id": "source.rollback_support.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback baseline, support index, and package/media identity must be hash-bound for distributable install/update.",
+      "evidence": {
+        "package_identity_bound": true,
+        "rollback_baseline_bound": true,
+        "support_index_bound": true
+      }
+    },
+    {
+      "id": "source.rc15.rollback_support.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-022 must bind RC15 controlled rollback/support evidence while not executing rollback in RC16.",
+      "evidence": {
+        "rc15_rollback_performed": true,
+        "rc15_support_local_only": true,
+        "rc15_support_upload_performed": false
+      }
+    },
+    {
+      "id": "support.bundle.manifest.redacted_local",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support bundle manifest and recovery references must be redacted, local-only, and non-executing.",
+      "evidence": {
+        "support_bundle_local_only": true,
+        "uploaded": false,
+        "redacted": true,
+        "recovery_execution_performed": false
+      }
+    },
+    {
+      "id": "post_install.observation_needs.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Package must list post-install/update observation needs before any future effect authority can be prepared.",
+      "evidence": {
+        "needs": [
+          {
+            "id": "pre-install-active-artifact-set-hash",
+            "required": true,
+            "bound_before_effect": true
+          },
+          {
+            "id": "post-install-active-artifact-set-hash",
+            "required": true,
+            "bound_after_effect": false
+          },
+          {
+            "id": "boot-metadata-before-after-hash",
+            "required": true,
+            "bound_after_effect": false
+          },
+          {
+            "id": "audit-journal-seal",
+            "required": true,
+            "bound_after_effect": false
+          },
+          {
+            "id": "rollback-restore-equality-proof",
+            "required": true,
+            "bound_after_effect": false
+          },
+          {
+            "id": "support-bundle-redaction-proof",
+            "required": true,
+            "bound_before_effect": true
+          },
+          {
+            "id": "recovery-reference-index-proof",
+            "required": true,
+            "bound_before_effect": true
+          },
+          {
+            "id": "health-gate-observation",
+            "required": true,
+            "bound_after_effect": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "docs.code.contracts.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release artifact documentation and agentd support bundle code must encode recovery source of truth and redaction expectations.",
+      "evidence": {
+        "release_artifacts_doc_sha256": "9814c9e00b2b2c5263b76051da99eafc446eed56aa1fc0095960e88f14b1677a",
+        "support_bundle_code_sha256": "5d08dd701b83467bf5d4a1afb3f86a2cece3aa7fae642c6462adbbfa3acb6b93"
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing rollback/support refs, unredacted bundles, support upload, recovery execution, remote dispatch, mutation, private material, and display-surface authority cases must fail closed.",
+      "evidence": {
+        "cases": 23,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "authority.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-022 must not install, update, rollback, upload support, execute recovery, dispatch remotely, mutate slots/boot metadata/artifact sets, handle private signing material, or mutate production rings.",
+      "evidence": {
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_prepared": false,
+        "rollback_execution_performed": false,
+        "support_bundle_projected": true,
+        "support_bundle_local_only": true,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-022 package output must not contain key blocks, private key paths, auth tokens, or public identity markers.",
+      "evidence": null
+    }
+  ]
+}
