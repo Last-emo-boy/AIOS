@@ -1,0 +1,410 @@
+{
+  "schema": "agentos.rc14-controlled-local-activation-denial-evidence.v1",
+  "generated_at": "2026-06-09T16:10:00+08:00",
+  "task": "RC14-040",
+  "status": "controlled-local-activation-denied",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "denied": true,
+  "activation_allowed": false,
+  "activation_performed": false,
+  "activation_attempt_digest": "c2010eb9d4d466cab70b8f6f15849582cde775393ab3e2e164d2430a9f918d21",
+  "denial_cases": [
+    {
+      "id": "object-trust-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-object-trust-not-proved"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Object trust is not locally proved.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "quarantine-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-quarantine-not-verified"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Quarantine preflight is not verified.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "target-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-target-identity-set-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Two-target identity set is not bound.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "approval-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-exact-approval-not-granted"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Exact approval is not granted.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "audit-sink-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-audit-sink-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Audit sink is not bound.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "nonce-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-nonce-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Nonce is not bound.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "expiry-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-expiry-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Approval expiry is not bound.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "agentcore-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-agentcore-planspec-not-executable"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "AgentCore PlanSpec is non-executable.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "security-execution-gate-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-security-execution-not-allowed"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "SecurityExecution did not allow the effect.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch-boundary-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-remote-dispatch-forbidden"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Remote dispatch remains forbidden.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-mutation-boundary-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "activation-production-mutation-forbidden"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Production ring mutation remains forbidden.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "controlled-local-activation-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "expected_blockers": [
+        "controlled-local-activation-not-authorized"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "reason": "Controlled activation is not authorized while any gate is missing.",
+      "side_effects": {
+        "activation_audit_fabricated": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "security-execution-envelope-not-bound",
+    "controlled-effect-execution-not-authorized",
+    "security-execution-effect-envelope-denied",
+    "target-identity-enrollment-not-run",
+    "fewer-than-two-local-canary-identities",
+    "target-identity-a-missing",
+    "target-identity-b-missing",
+    "target-identities-missing",
+    "target-identity-set-not-bound",
+    "duplicate-local-canary-identity",
+    "stale-local-canary-identity",
+    "incompatible-local-canary-identity",
+    "broad-target-selector",
+    "target-identity-release-mismatch",
+    "target-identity-object-mismatch",
+    "target-identity-planspec-mismatch",
+    "target-identity-security-envelope-mismatch",
+    "target-identity-rollback-baseline-mismatch",
+    "target-identity-support-recovery-mismatch",
+    "target-identity-audit-sink-not-bound",
+    "target-identity-replay-detected",
+    "remote-dispatch-authority-broadening",
+    "production-mutation-authority-broadening",
+    "exact-approval-execution-binding-not-bound",
+    "approval-id-not-bound",
+    "approval-actor-not-bound",
+    "approval-actor-authority-not-bound",
+    "approval-target-identities-not-bound",
+    "approval-audit-sink-not-bound",
+    "approval-nonce-not-bound",
+    "approval-policy-version-not-bound",
+    "approval-signature-not-bound",
+    "approval-stale",
+    "approval-replay-detected",
+    "approval-broad-scope",
+    "approval-actor-mismatch",
+    "approval-release-mismatch",
+    "approval-object-digest-mismatch",
+    "approval-target-set-mismatch",
+    "approval-agentcore-planspec-mismatch",
+    "approval-security-envelope-mismatch",
+    "approval-rollback-baseline-mismatch",
+    "approval-support-recovery-mismatch",
+    "approval-before-target-identity-set-bound",
+    "approval-implies-execution-denied",
+    "activation-target-identity-set-not-bound",
+    "activation-exact-approval-not-granted",
+    "activation-audit-sink-not-bound",
+    "activation-nonce-not-bound",
+    "activation-expiry-not-bound",
+    "activation-agentcore-planspec-not-executable",
+    "activation-security-execution-not-allowed",
+    "activation-remote-dispatch-forbidden",
+    "activation-production-mutation-forbidden",
+    "controlled-local-activation-not-authorized"
+  ],
+  "side_effects": {
+    "activation_attempt_recorded": true,
+    "activation_audit_fabricated": false,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false
+  }
+}
