@@ -1,0 +1,32 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-001",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:05:00+08:00",
+  "summary": "Defined the RC4 hosted release transport, remote registry mirror, and fleet-ring boundary. The contract starts from RC3 final audit evidence and preserves no-local-private-key, immutable publication, rollback/revocation, support redaction, TUI projection-only, and AgentCore/SecurityExecution authority boundaries.",
+  "deliverables": {
+    "contract": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-release-transport-fleet-contract.md",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-001-hosted-release-transport-fleet-contract.json"
+  },
+  "source_inputs": [
+    ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/FINAL-AUDIT-20260531-production-distro-rc3.json",
+    ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/final-rc3-closeout-summary.md"
+  ],
+  "acceptance_coverage": {
+    "hosted_release_transport_scope_defined": true,
+    "remote_registry_mirror_scope_defined": true,
+    "fleet_ring_boundary_defined": true,
+    "agentcore_security_execution_authority_preserved": true,
+    "tui_authority": false,
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "handoff": {
+    "next_task": "RC4-002",
+    "required_next": "Define staged rollout authority and rollback boundary before implementation tasks write hosted transport, mirror, fleet, or promotion artifacts."
+  }
+}
