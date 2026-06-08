@@ -1,179 +1,179 @@
 {
-    "schema":  "agentos.workflow-plan.v1",
-    "workflow_id":  "WFS-20260609-agentos-production-distro-rc12",
-    "milestone":  "Production Distro RC12",
-    "status":  "active",
-    "objective":  "Move AIOS from RC11 non-GA fail-closed evidence toward a controlled unblock path: bind a real immutable credential-free HTTPS object URI if present, reconcile declared/current drift to zero or emit exact blockers, verify descriptor freshness and revocation, run quarantine fetch verification before interpretation, bind AgentCore executable PlanSpec and SecurityExecution allow package, enroll two canary targets with exact approval, then execute or deny controlled canary activation and a separately approved rollback drill without mirror, signer, frontend, remote service, or production ring infrastructure changes.",
-    "scope":  {
-                  "included":  [
-                                   "AIOS-body real object publication binding",
-                                   "declared/current artifact drift-zero or exact repair blockers",
-                                   "descriptor freshness revocation and object trust verification",
-                                   "installer quarantine fetch verification before payload interpretation",
-                                   "AgentCore executable PlanSpec package binding",
-                                   "SecurityExecution effect allow package binding",
-                                   "two-target canary enrollment evidence",
-                                   "exact approval package with audit sink nonce and expiry",
-                                   "controlled canary activation execution or denial",
-                                   "separate rollback approval and rollback drill execution or denial",
-                                   "support/recovery evidence binding",
-                                   "final closeout audit"
-                               ],
-                  "excluded":  [
-                                   "mirror frontend redesign",
-                                   "nginx or TLS infrastructure changes",
-                                   "remote signer service changes",
-                                   "private signing material handling",
-                                   "production signing ceremony",
-                                   "large payload storage service provisioning",
-                                   "remote fleet dispatch infrastructure",
-                                   "production ring mutation",
-                                   "GA production-ready claim"
-                               ]
-              },
-    "waves":  [
-                  {
-                      "id":  "wave-0",
-                      "name":  "RC12 contract and planning",
-                      "tasks":  [
-                                    {
-                                        "id":  "RC12-000",
-                                        "status":  "completed",
-                                        "title":  "plan Production Distro RC12 real-object controlled unblock",
-                                        "deliverable":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-000-planning.json"
-                                    },
-                                    {
-                                        "id":  "RC12-001",
-                                        "status":  "pending",
-                                        "title":  "freeze RC12 real object publication, drift-zero, and controlled execution contract",
-                                        "deliverable":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md"
-                                    }
-                                ]
-                  },
-                  {
-                      "id":  "wave-1",
-                      "name":  "object publication drift-zero and trust verification",
-                      "tasks":  [
-                                    {
-                                        "id":  "RC12-010",
-                                        "status":  "pending",
-                                        "title":  "bind or deny immutable external object publication evidence for current payload bytes",
-                                        "deliverable":  ".workflow/artifacts/rc12-external-object-publication-binding/result.json"
-                                    },
-                                    {
-                                        "id":  "RC12-011",
-                                        "status":  "pending",
-                                        "title":  "reconcile declared and current artifact identity to zero or emit repair blockers",
-                                        "deliverable":  ".workflow/artifacts/rc12-declared-current-drift-zero/result.json"
-                                    },
-                                    {
-                                        "id":  "RC12-012",
-                                        "status":  "pending",
-                                        "title":  "verify external descriptor freshness revocation and object trust before installer authority",
-                                        "deliverable":  ".workflow/artifacts/rc12-object-trust-verification/result.json"
-                                    }
-                                ]
-                  },
-                  {
-                      "id":  "wave-2",
-                      "name":  "installer quarantine and execution package",
-                      "tasks":  [
-                                    {
-                                        "id":  "RC12-020",
-                                        "status":  "pending",
-                                        "title":  "run installer quarantine fetch verification or deny before network and interpretation",
-                                        "deliverable":  ".workflow/artifacts/rc12-quarantine-fetch-verification/result.json"
-                                    },
-                                    {
-                                        "id":  "RC12-021",
-                                        "status":  "pending",
-                                        "title":  "bind verified quarantine preflight to executable AgentCore and SecurityExecution package",
-                                        "deliverable":  ".workflow/artifacts/rc12-agentcore-security-execution-package/result.json"
-                                    }
-                                ]
-                  },
-                  {
-                      "id":  "wave-3",
-                      "name":  "canary targets and exact approval",
-                      "tasks":  [
-                                    {
-                                        "id":  "RC12-030",
-                                        "status":  "pending",
-                                        "title":  "enroll two canary targets and bind exact approval with audit sink nonce and expiry",
-                                        "deliverable":  ".workflow/artifacts/rc12-canary-target-approval-binding/result.json"
-                                    }
-                                ]
-                  },
-                  {
-                      "id":  "wave-4",
-                      "name":  "controlled activation and rollback drill",
-                      "tasks":  [
-                                    {
-                                        "id":  "RC12-040",
-                                        "status":  "pending",
-                                        "title":  "execute or deny controlled canary activation through AgentCore and SecurityExecution",
-                                        "deliverable":  ".workflow/artifacts/rc12-controlled-canary-activation/result.json"
-                                    },
-                                    {
-                                        "id":  "RC12-041",
-                                        "status":  "pending",
-                                        "title":  "execute or deny separately approved rollback drill with support recovery evidence",
-                                        "deliverable":  ".workflow/artifacts/rc12-controlled-rollback-drill/result.json"
-                                    }
-                                ]
-                  },
-                  {
-                      "id":  "wave-5",
-                      "name":  "RC12 closeout",
-                      "tasks":  [
-                                    {
-                                        "id":  "RC12-050",
-                                        "status":  "pending",
-                                        "title":  "run Production Distro RC12 final closeout audit",
-                                        "deliverable":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json"
-                                    }
-                                ]
-                  }
-              ],
-    "current_task":  "RC12-001",
-    "previous_workflow":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
-    "acceptance_gates":  {
-                             "hosted_endpoint_domain":  "aios.w33d.xyz",
-                             "signer_endpoint_domain":  "sign.w33d.xyz",
-                             "aios_body_only":  true,
-                             "mirror_frontend_infra_out_of_scope":  true,
-                             "signer_infra_out_of_scope":  true,
-                             "remote_service_infra_out_of_scope":  true,
-                             "external_object_uri_must_be_https_hash_bound_size_bound_immutable_and_credential_free":  true,
-                             "external_object_reachability_is_not_trust":  true,
-                             "declared_current_artifact_drift_must_be_zero_before_trust":  true,
-                             "freshness_and_revocation_required_before_trust":  true,
-                             "installer_must_fetch_to_quarantine_before_interpretation":  true,
-                             "controlled_execution_requires_two_or_more_enrolled_targets":  true,
-                             "controlled_execution_requires_exact_operator_approval_with_audit_sink_nonce_and_expiry":  true,
-                             "controlled_execution_requires_agentcore_executable_planspec":  true,
-                             "controlled_execution_requires_security_execution_engine_allow":  true,
-                             "controlled_activation_evidence_required_before_rollback_execution":  true,
-                             "rollback_execution_requires_separate_exact_approval":  true,
-                             "support_recovery_binding_required_before_activation_or_rollback":  true,
-                             "private_signing_material_forbidden":  true,
-                             "production_ready_claim":  false,
-                             "frontend_authority":  false,
-                             "mirror_authority":  false,
-                             "signer_reachability_authority":  false,
-                             "remote_dispatch_enabled":  false,
-                             "production_ring_mutation_allowed":  false,
-                             "tui_authority":  false,
-                             "model_replay_authority":  false
-                         },
-    "confidence":  {
-                       "overall":  0.85,
-                       "requirements_coverage":  0.92,
-                       "task_quality":  0.85,
-                       "dependency_correctness":  0.87,
-                       "estimation_accuracy":  0.77,
-                       "collision_safety":  0.83,
-                       "weakest_dimension":  "estimation_accuracy",
-                       "basis":  "RC12 tasks are derived from RC11 final audit blockers and keep AIOS-body-only scope. The plan is gate-driven: tasks may produce controlled unblock evidence only when every upstream trust, approval, AgentCore, SecurityExecution, audit, rollback, and support/recovery gate is proved; otherwise they emit precise fail-closed blockers."
-                   }
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc12",
+  "milestone": "Production Distro RC12",
+  "status": "active",
+  "objective": "Move AIOS from RC11 non-GA fail-closed evidence toward a controlled unblock path: bind a real immutable credential-free HTTPS object URI if present, reconcile declared/current drift to zero or emit exact blockers, verify descriptor freshness and revocation, run quarantine fetch verification before interpretation, bind AgentCore executable PlanSpec and SecurityExecution allow package, enroll two canary targets with exact approval, then execute or deny controlled canary activation and a separately approved rollback drill without mirror, signer, frontend, remote service, or production ring infrastructure changes.",
+  "scope": {
+    "included": [
+      "AIOS-body real object publication binding",
+      "declared/current artifact drift-zero or exact repair blockers",
+      "descriptor freshness revocation and object trust verification",
+      "installer quarantine fetch verification before payload interpretation",
+      "AgentCore executable PlanSpec package binding",
+      "SecurityExecution effect allow package binding",
+      "two-target canary enrollment evidence",
+      "exact approval package with audit sink nonce and expiry",
+      "controlled canary activation execution or denial",
+      "separate rollback approval and rollback drill execution or denial",
+      "support/recovery evidence binding",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload storage service provisioning",
+      "remote fleet dispatch infrastructure",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC12 contract and planning",
+      "tasks": [
+        {
+          "id": "RC12-000",
+          "status": "completed",
+          "title": "plan Production Distro RC12 real-object controlled unblock",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-000-planning.json"
+        },
+        {
+          "id": "RC12-001",
+          "status": "completed",
+          "title": "freeze RC12 real object publication, drift-zero, and controlled execution contract",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "object publication drift-zero and trust verification",
+      "tasks": [
+        {
+          "id": "RC12-010",
+          "status": "pending",
+          "title": "bind or deny immutable external object publication evidence for current payload bytes",
+          "deliverable": ".workflow/artifacts/rc12-external-object-publication-binding/result.json"
+        },
+        {
+          "id": "RC12-011",
+          "status": "pending",
+          "title": "reconcile declared and current artifact identity to zero or emit repair blockers",
+          "deliverable": ".workflow/artifacts/rc12-declared-current-drift-zero/result.json"
+        },
+        {
+          "id": "RC12-012",
+          "status": "pending",
+          "title": "verify external descriptor freshness revocation and object trust before installer authority",
+          "deliverable": ".workflow/artifacts/rc12-object-trust-verification/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "installer quarantine and execution package",
+      "tasks": [
+        {
+          "id": "RC12-020",
+          "status": "pending",
+          "title": "run installer quarantine fetch verification or deny before network and interpretation",
+          "deliverable": ".workflow/artifacts/rc12-quarantine-fetch-verification/result.json"
+        },
+        {
+          "id": "RC12-021",
+          "status": "pending",
+          "title": "bind verified quarantine preflight to executable AgentCore and SecurityExecution package",
+          "deliverable": ".workflow/artifacts/rc12-agentcore-security-execution-package/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "canary targets and exact approval",
+      "tasks": [
+        {
+          "id": "RC12-030",
+          "status": "pending",
+          "title": "enroll two canary targets and bind exact approval with audit sink nonce and expiry",
+          "deliverable": ".workflow/artifacts/rc12-canary-target-approval-binding/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "controlled activation and rollback drill",
+      "tasks": [
+        {
+          "id": "RC12-040",
+          "status": "pending",
+          "title": "execute or deny controlled canary activation through AgentCore and SecurityExecution",
+          "deliverable": ".workflow/artifacts/rc12-controlled-canary-activation/result.json"
+        },
+        {
+          "id": "RC12-041",
+          "status": "pending",
+          "title": "execute or deny separately approved rollback drill with support recovery evidence",
+          "deliverable": ".workflow/artifacts/rc12-controlled-rollback-drill/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-5",
+      "name": "RC12 closeout",
+      "tasks": [
+        {
+          "id": "RC12-050",
+          "status": "pending",
+          "title": "run Production Distro RC12 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC12-010",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "signer_endpoint_domain": "sign.w33d.xyz",
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "external_object_uri_must_be_https_hash_bound_size_bound_immutable_and_credential_free": true,
+    "external_object_reachability_is_not_trust": true,
+    "declared_current_artifact_drift_must_be_zero_before_trust": true,
+    "freshness_and_revocation_required_before_trust": true,
+    "installer_must_fetch_to_quarantine_before_interpretation": true,
+    "controlled_execution_requires_two_or_more_enrolled_targets": true,
+    "controlled_execution_requires_exact_operator_approval_with_audit_sink_nonce_and_expiry": true,
+    "controlled_execution_requires_agentcore_executable_planspec": true,
+    "controlled_execution_requires_security_execution_engine_allow": true,
+    "controlled_activation_evidence_required_before_rollback_execution": true,
+    "rollback_execution_requires_separate_exact_approval": true,
+    "support_recovery_binding_required_before_activation_or_rollback": true,
+    "private_signing_material_forbidden": true,
+    "production_ready_claim": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.85,
+    "requirements_coverage": 0.92,
+    "task_quality": 0.85,
+    "dependency_correctness": 0.87,
+    "estimation_accuracy": 0.77,
+    "collision_safety": 0.83,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC12 tasks are derived from RC11 final audit blockers and keep AIOS-body-only scope. The plan is gate-driven: tasks may produce controlled unblock evidence only when every upstream trust, approval, AgentCore, SecurityExecution, audit, rollback, and support/recovery gate is proved; otherwise they emit precise fail-closed blockers."
+  }
 }

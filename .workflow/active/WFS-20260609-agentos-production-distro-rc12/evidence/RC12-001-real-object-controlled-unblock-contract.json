@@ -1,0 +1,106 @@
+{
+  "schema": "agentos.rc12-real-object-controlled-unblock-contract-evidence.v1",
+  "generated_at": "2026-06-09T04:00:00+08:00",
+  "task": "RC12-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
+  "source": {
+    "rc12_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
+      "sha256": "a928e26c32ad5d6b9f5004ea9c1e28e6d49ae46422f6cf65bd5bbb43a160525c",
+      "status": "active",
+      "current_task": "RC12-001"
+    },
+    "rc11_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+      "sha256": "b0ad13de3bc7f83d1cc7a7be21d399e7ab623bfd96fb3317455c24ae87ea9470",
+      "verdict": "PASS",
+      "production_ready_claim": false
+    },
+    "rc11_remaining_blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "two-target-canary-not-enrolled",
+      "target-node-ids-missing",
+      "exact-operator-approval-not-granted",
+      "approval-audit-sink-not-bound",
+      "approval-expiry-not-bound",
+      "approval-nonce-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-activation-not-authorized",
+      "controlled-canary-activation-not-performed",
+      "rollback-exact-operator-approval-not-granted",
+      "agentcore-rollback-planspec-not-bound",
+      "security-execution-rollback-effect-envelope-not-bound",
+      "rollback-audit-journal-not-bound",
+      "post-rollback-observations-missing",
+      "remote-fleet-execution-not-enabled"
+    ]
+  },
+  "outputs": {
+    "contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+      "sha256": "3b5560e2f67231551d85117a8ae1841175872ccfe67015dd079baa31e2bd4f8d"
+    }
+  },
+  "contract_surface": {
+    "gate_order_frozen": true,
+    "external_object_transport_is_not_authority": true,
+    "declared_current_drift_zero_required": true,
+    "freshness_and_revocation_required": true,
+    "quarantine_fetch_before_interpretation_required": true,
+    "agentcore_executable_planspec_required": true,
+    "security_execution_allow_required": true,
+    "two_target_canary_required": true,
+    "exact_approval_audit_sink_nonce_expiry_required": true,
+    "separate_rollback_approval_required": true,
+    "support_recovery_binding_required": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "remote_dispatch_infra_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc12_001_complete": true,
+    "next_task": "RC12-010",
+    "commit_required": true
+  }
+}

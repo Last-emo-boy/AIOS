@@ -1,30 +1,30 @@
 {
-    "schema":  "agentos.task.v1",
-    "id":  "RC12-001",
-    "title":  "freeze RC12 real object publication, drift-zero, and controlled execution contract",
-    "status":  "pending",
-    "wave":  "wave-0",
-    "read_first":  [
-                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
-                       ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
-                       ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md"
-                   ],
-    "files":  [
-                  {
-                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
-                      "role":  "contract document"
-                  },
-                  {
-                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-001-real-object-controlled-unblock-contract.json",
-                      "role":  "task evidence"
-                  }
-              ],
-    "convergence":  {
-                        "criteria":  [
-                                         "Contract names the exact gate order from external object transport into local AIOS trust.",
-                                         "Contract preserves AIOS-body-only scope and excludes mirror frontend, nginx, remote signer infrastructure, object storage provisioning, remote dispatch, and production ring mutation.",
-                                         "Contract defines fail-closed cases for missing object URI, drift-zero, freshness, quarantine fetch, signature, revocation, compatibility, rollback, exact approval, AgentCore, SecurityExecutionEngine, support/recovery, audit, and authority broadening.",
-                                         "Next task is RC12-010."
-                                     ]
-                    }
+  "schema": "agentos.task.v1",
+  "id": "RC12-001",
+  "title": "freeze RC12 real object publication, drift-zero, and controlled execution contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-001-real-object-controlled-unblock-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract names the exact gate order from external object transport into local AIOS trust.",
+      "Contract preserves AIOS-body-only scope and excludes mirror frontend, nginx, remote signer infrastructure, object storage provisioning, remote dispatch, and production ring mutation.",
+      "Contract defines fail-closed cases for missing object URI, drift-zero, freshness, quarantine fetch, signature, revocation, compatibility, rollback, exact approval, AgentCore, SecurityExecutionEngine, support/recovery, audit, and authority broadening.",
+      "Next task is RC12-010."
+    ]
+  }
 }
