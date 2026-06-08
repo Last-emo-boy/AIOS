@@ -1,0 +1,46 @@
+{
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc6",
+  "name": "Production Distro RC6",
+  "status": "active",
+  "created_at": "2026-06-08T12:55:00+08:00",
+  "updated_at": "2026-06-08T12:55:00+08:00",
+  "source": "TASK.md; RC5 final audit; maestro-managed continuation",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "goal": "Turn the RC5 hosted metadata mirror into an installable signed payload channel and controlled canary execution readiness path while preserving signing, installer, activation, rollback, fleet, and TUI authority boundaries.",
+  "core_thesis": "AIOS becomes Ubuntu-like only when users can inspect and consume signed, hash-bound payload metadata through a bootstrap/installer path; the hosted mirror remains transport, and all install, activation, rollback, signing, and canary execution authority stays with verified local clients, AgentCore, and SecurityExecutionEngine.",
+  "non_goals": [
+    "Do not claim GA production readiness.",
+    "Do not store or read private production signing material on the mirror service.",
+    "Do not upload large release payloads to the limited mirror host until storage policy is defined and evidenced.",
+    "Do not allow nginx, static files, shell scripts, TUI, or model replay to install, activate, rollback, or mutate fleet rings.",
+    "Do not treat payload metadata reachability as payload trust without schema, hash, signature, revocation, freshness, and rollback verification."
+  ],
+  "primary_acceptance": [
+    "The installable signed payload channel contract defines endpoint layout, payload metadata schema expectations, trust inputs, storage boundaries, and fail-closed behavior.",
+    "Bootstrap and installer consumption boundaries explain how a user can inspect AIOS payload metadata while install/activation remains blocked until signed payload and rollback evidence exist.",
+    "Hosted payload metadata is hash-bound to RC5 final audit and current release artifacts, but does not store large payloads in RC6 unless storage policy is upgraded.",
+    "Fail-closed fixtures reject unsigned, stale, revoked, oversized, hash-mismatched, or authority-broadening payload metadata.",
+    "Controlled canary execution remains exact-approval gated and rollback-ready; no production ring mutation is allowed by default."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC6-001",
+      "completed_at": "2026-06-08T12:55:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-001-installable-signed-payload-channel-contract.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC6-002",
+  "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/workflow-session.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-001.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-001-installable-signed-payload-channel-contract.json"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc6",
+  "milestone": "Production Distro RC6",
+  "status": "active",
+  "objective": "Move AIOS from hosted metadata-only distribution toward an installable signed payload channel and controlled canary execution path without claiming GA readiness.",
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "installable payload contracts",
+      "tasks": [
+        {
+          "id": "RC6-001",
+          "status": "completed",
+          "title": "define installable signed payload channel contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md"
+        },
+        {
+          "id": "RC6-002",
+          "status": "pending",
+          "title": "define bootstrap and installer consumption boundary for hosted payload metadata",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md"
+        },
+        {
+          "id": "RC6-003",
+          "status": "pending",
+          "title": "define TLS storage and signed payload threat model",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "signed payload metadata framework",
+      "tasks": [
+        {
+          "id": "RC6-010",
+          "status": "pending",
+          "title": "project installable payload manifest from current AIOS release artifacts",
+          "deliverable": ".workflow/artifacts/rc6-installable-payload-manifest/result.json"
+        },
+        {
+          "id": "RC6-011",
+          "status": "pending",
+          "title": "publish bounded payload metadata index to hosted mirror without large artifact storage",
+          "deliverable": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json"
+        },
+        {
+          "id": "RC6-012",
+          "status": "pending",
+          "title": "add signed payload metadata fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc6-signed-payload-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "installer bootstrap consumption",
+      "tasks": [
+        {
+          "id": "RC6-020",
+          "status": "pending",
+          "title": "project bootstrap installer preflight against hosted payload metadata",
+          "deliverable": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json"
+        },
+        {
+          "id": "RC6-021",
+          "status": "pending",
+          "title": "prove installer fail-closed behavior for unsigned stale revoked or oversized payload metadata",
+          "deliverable": ".workflow/artifacts/rc6-installer-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "controlled canary execution readiness",
+      "tasks": [
+        {
+          "id": "RC6-030",
+          "status": "pending",
+          "title": "project exact-approved canary execution packet and rollback execution preconditions",
+          "deliverable": ".workflow/artifacts/rc6-canary-execution-packet/result.json"
+        },
+        {
+          "id": "RC6-031",
+          "status": "pending",
+          "title": "prove rollback execution drill preconditions for installable payload channel",
+          "deliverable": ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "RC6 closeout",
+      "tasks": [
+        {
+          "id": "RC6-040",
+          "status": "pending",
+          "title": "run Production Distro RC6 final audit and next milestone planning",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC6-002",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "payload_metadata_allowed": true,
+    "large_artifact_storage_deferred_until_policy": true,
+    "payload_channel_must_be_hash_bound_to_rc5": true,
+    "signed_payload_required_before_install": true,
+    "tls_required_before_ga_claim": true,
+    "installer_must_verify_schema_hash_signature_revocation_freshness": true,
+    "installer_must_fail_closed_before_activation": true,
+    "remote_service_must_not_sign": true,
+    "remote_service_must_not_activate": true,
+    "remote_service_must_not_execute_rollback": true,
+    "remote_service_must_not_mutate_active_slot": true,
+    "remote_service_must_not_mutate_production_ring": true,
+    "fleet_canary_requires_exact_operator_approval": true,
+    "rollback_execution_evidence_required_before_ga": true,
+    "tui_authority": false,
+    "local_private_key_material_forbidden": true,
+    "production_ready_claim": false
+  }
+}

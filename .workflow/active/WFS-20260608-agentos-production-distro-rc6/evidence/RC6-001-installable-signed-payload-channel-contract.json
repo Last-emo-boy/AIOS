@@ -1,0 +1,78 @@
+{
+  "schema": "agentos.rc6-installable-signed-payload-channel-contract-evidence.v1",
+  "generated_at": "2026-06-08T12:55:00+08:00",
+  "task": "RC6-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "source": {
+    "rc5_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+      "decision": "rc5-closeout-pass-next-milestone-planning",
+      "next_milestone": "Production Distro RC6"
+    }
+  },
+  "contract": {
+    "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    "scope": "installable signed payload metadata and bootstrap verification boundary",
+    "payload_metadata_allowed": true,
+    "large_artifact_storage_deferred_until_policy": true,
+    "install_allowed_by_contract": false,
+    "activation_allowed_by_mirror": false,
+    "rollback_execution_allowed_by_mirror": false,
+    "support_upload_allowed_by_mirror": false
+  },
+  "defined_endpoints": [
+    "/payloads/index.json",
+    "/payloads/aios/<release-id>/manifest.json",
+    "/payloads/aios/<release-id>/checksums.json",
+    "/payloads/aios/<release-id>/signatures.json",
+    "/install/bootstrap.json",
+    "/releases/README.txt"
+  ],
+  "trust_inputs_required": [
+    "rc5-final-audit-hash",
+    "release-provenance-hash",
+    "installable-media-or-image-manifest-hash",
+    "payload-manifest-hash",
+    "payload-content-hashes",
+    "public-signature-or-signed-metadata-reference",
+    "revocation-snapshot-hash",
+    "rollback-baseline-hash",
+    "installer-compatibility-contract"
+  ],
+  "fail_closed_cases": [
+    "missing-payload-manifest",
+    "malformed-schema",
+    "production-ready-claim",
+    "missing-rc5-final-audit-binding",
+    "missing-release-provenance-binding",
+    "missing-signature-reference",
+    "hash-mismatch",
+    "revoked-key-or-missing-revocation-snapshot",
+    "stale-metadata",
+    "oversized-payload-reference-before-storage-policy",
+    "missing-rollback-baseline",
+    "missing-installer-compatibility-contract",
+    "authority-broadening"
+  ],
+  "invariants": {
+    "mirror_is_root_of_trust": false,
+    "metadata_only_initially": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_001_complete": true,
+    "next_task": "RC6-002",
+    "commit_required": true
+  }
+}

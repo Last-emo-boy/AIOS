@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-001",
+  "title": "define installable signed payload channel contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-001-installable-signed-payload-channel-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC6 workflow is active and follows RC5 final audit next-milestone direction.",
+      "Payload metadata endpoints, trust inputs, installer boundary, authority boundary, and fail-closed cases are defined.",
+      "The contract keeps mirror-hosted payload metadata non-GA and non-authoritative.",
+      "The next task is RC6-002 bootstrap/installer consumption boundary."
+    ]
+  }
+}
