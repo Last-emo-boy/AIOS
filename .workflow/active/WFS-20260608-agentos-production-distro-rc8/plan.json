@@ -1,0 +1,147 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc8",
+  "milestone": "Production Distro RC8",
+  "status": "active",
+  "objective": "Move AIOS from RC7 metadata-only signed-status projections toward real installable payload bytes and controlled execution smoke, while preserving fail-closed install, activation, rollback, mirror, signer, AgentCore, SecurityExecutionEngine, and TUI boundaries.",
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "real payload and execution contracts",
+      "tasks": [
+        {
+          "id": "RC8-001",
+          "status": "completed",
+          "title": "freeze real installable payload and controlled execution smoke contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/real-installable-payload-controlled-execution-contract.md"
+        },
+        {
+          "id": "RC8-002",
+          "status": "pending",
+          "title": "define immutable payload object descriptor and byte boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/immutable-payload-object-descriptor-contract.md"
+        },
+        {
+          "id": "RC8-003",
+          "status": "pending",
+          "title": "define public signature artifact ingestion and receipt boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/public-signature-artifact-ingestion-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "real payload metadata and signature ingestion",
+      "tasks": [
+        {
+          "id": "RC8-010",
+          "status": "pending",
+          "title": "project real installable payload object descriptor from current build artifacts",
+          "deliverable": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json"
+        },
+        {
+          "id": "RC8-011",
+          "status": "pending",
+          "title": "ingest public signature artifacts without private key use",
+          "deliverable": ".workflow/artifacts/rc8-public-signature-ingestion/result.json"
+        },
+        {
+          "id": "RC8-012",
+          "status": "pending",
+          "title": "verify signed object descriptor fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "installer VM smoke and mirror consistency",
+      "tasks": [
+        {
+          "id": "RC8-020",
+          "status": "pending",
+          "title": "run installer VM preflight and quarantined object-fetch smoke",
+          "deliverable": ".workflow/artifacts/rc8-installer-vm-preflight/result.json"
+        },
+        {
+          "id": "RC8-021",
+          "status": "pending",
+          "title": "verify installer byte, signature, storage, and compatibility fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json"
+        },
+        {
+          "id": "RC8-022",
+          "status": "pending",
+          "title": "publish RC8 mirror metadata and frontend consistency refresh",
+          "deliverable": ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "controlled execution smoke",
+      "tasks": [
+        {
+          "id": "RC8-030",
+          "status": "pending",
+          "title": "produce exact-approved canary activation smoke packet under AgentCore and SecurityExecutionEngine",
+          "deliverable": ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json"
+        },
+        {
+          "id": "RC8-031",
+          "status": "pending",
+          "title": "execute or deny rollback drill through AgentCore rollback PlanSpec and SecurityExecutionEngine gates",
+          "deliverable": ".workflow/artifacts/rc8-controlled-rollback-drill/result.json"
+        },
+        {
+          "id": "RC8-032",
+          "status": "pending",
+          "title": "bind support and recovery evidence to the RC8 controlled execution smoke",
+          "deliverable": ".workflow/artifacts/rc8-controlled-execution-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "RC8 closeout",
+      "tasks": [
+        {
+          "id": "RC8-040",
+          "status": "pending",
+          "title": "run Production Distro RC8 final audit and next milestone planning",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC8-002",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "signer_endpoint_domain": "sign.w33d.xyz",
+    "mirror_and_signer_must_remain_separate": true,
+    "mirror_must_remain_metadata_only": true,
+    "large_payload_bytes_must_use_immutable_object_descriptor": true,
+    "object_descriptor_must_be_https_hash_bound_size_bound_and_credential_free": true,
+    "payload_bytes_must_be_downloaded_to_quarantine_before_digest_verification": true,
+    "payload_signature_required_before_install": true,
+    "public_signature_artifact_ingestion_only": true,
+    "private_key_material_forbidden": true,
+    "revocation_snapshot_required_before_install": true,
+    "installer_compatibility_required_before_install": true,
+    "rollback_baseline_required_before_activation": true,
+    "installer_vm_smoke_required_before_canary": true,
+    "installer_must_fail_closed_before_activation": true,
+    "controlled_execution_requires_agentcore_planspec": true,
+    "controlled_execution_requires_security_execution_engine": true,
+    "fleet_canary_requires_exact_operator_approval": true,
+    "fleet_canary_requires_two_or_more_enrolled_targets": true,
+    "rollback_execution_evidence_required_before_ga": true,
+    "remote_service_must_not_activate": true,
+    "remote_service_must_not_execute_rollback": true,
+    "remote_service_must_not_mutate_active_slot": true,
+    "remote_service_must_not_mutate_production_ring": true,
+    "tui_authority": false,
+    "production_ready_claim": false
+  }
+}

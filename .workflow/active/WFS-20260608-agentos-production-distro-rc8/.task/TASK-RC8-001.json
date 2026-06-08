@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-001",
+  "title": "freeze real installable payload and controlled execution smoke contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/FINAL-AUDIT-20260608-production-distro-rc7.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/final-rc7-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/real-installable-payload-controlled-execution-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-001-real-installable-payload-controlled-execution-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC8 workflow is active and follows RC7 final audit next-milestone direction.",
+      "The contract defines real payload byte boundary, immutable object descriptor requirements, public signature ingestion boundary, installer VM smoke boundary, controlled execution boundary, and fail-closed cases.",
+      "The contract preserves non-GA status and forbids private key use, mirror large-payload storage, mirror signing, install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, and TUI authority from contract work.",
+      "The next task is RC8-002 immutable payload object descriptor and byte boundary."
+    ]
+  }
+}
