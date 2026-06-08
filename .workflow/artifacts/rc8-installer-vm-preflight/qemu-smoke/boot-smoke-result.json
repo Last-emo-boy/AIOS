@@ -1,0 +1,81 @@
+{
+  "status": "completed",
+  "observed_all_markers": true,
+  "observed_markers": {
+    "AGENTD_HANDOFF_OK": true,
+    "AGENTOS_RUNTIME_ARTIFACTS_OK": true,
+    "AGENTOS_TUI_CONSOLE_READY": true,
+    "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305": true
+  },
+  "required_markers": [
+    "AGENTD_HANDOFF_OK",
+    "AGENTOS_RUNTIME_ARTIFACTS_OK",
+    "AGENTOS_TUI_CONSOLE_READY",
+    "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305"
+  ],
+  "marker": "AGENTD_HANDOFF_OK",
+  "runtime_marker": "AGENTOS_RUNTIME_ARTIFACTS_OK",
+  "tui_marker": "AGENTOS_TUI_CONSOLE_READY",
+  "runtime_manifest_marker": "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+  "additional_marker_manifest_path": "",
+  "additional_marker_manifest_sha256": null,
+  "additional_required_markers": [],
+  "runtime_artifact_ids": [
+    "policy.pack",
+    "tools.semantic",
+    "operator.commands",
+    "production_signing.key_custody",
+    "production_signing.key_rotation_log",
+    "production_signing.key_revocation_log",
+    "ecosystem.registry_snapshot",
+    "ecosystem.core_policy",
+    "ecosystem.workflow_service_recovery",
+    "model_broker.config",
+    "tui.config",
+    "state.runs",
+    "state.audit",
+    "state.rollback",
+    "state.memory"
+  ],
+  "missing_runtime_artifact_ids": [],
+  "failed_runtime_artifact_ids": [],
+  "qemu_path": "E:\\qemu\\qemu-system-x86_64.exe",
+  "kernel_path": "E:\\Playground\\AIOS\\image\\cache\\vmlinuz-virt",
+  "initramfs_path": "E:\\Playground\\AIOS\\image\\out\\agentos-initramfs.cpio.gz",
+  "initramfs_manifest_path": "E:\\Playground\\AIOS\\image\\out\\agentos-initramfs.manifest.json",
+  "initramfs_build_out_dir": "image\\out",
+  "initramfs_source_dir": "image/initramfs",
+  "alpha_rootfs_path": "packaging/agentos/rootfs",
+  "initramfs_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+  "rootfs_runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+  "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+  "machine_candidates": [
+    "microvm",
+    "pc"
+  ],
+  "attempted_machines": [
+    "microvm"
+  ],
+  "selected_machine": "microvm",
+  "attempts": [
+    {
+      "machine": "microvm",
+      "status": "completed",
+      "observed_all_markers": true,
+      "observed_markers": {
+        "AGENTD_HANDOFF_OK": true,
+        "AGENTOS_RUNTIME_ARTIFACTS_OK": true,
+        "AGENTOS_TUI_CONSOLE_READY": true,
+        "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305": true
+      },
+      "missing_markers": [],
+      "exit_code": -1,
+      "stdout_log_path": "E:\\Playground\\AIOS\\.workflow\\artifacts\\rc8-installer-vm-preflight\\qemu-smoke\\boot-smoke.microvm.stdout.log",
+      "stderr_log_path": "E:\\Playground\\AIOS\\.workflow\\artifacts\\rc8-installer-vm-preflight\\qemu-smoke\\boot-smoke.microvm.stderr.log",
+      "log_path": "E:\\Playground\\AIOS\\.workflow\\artifacts\\rc8-installer-vm-preflight\\qemu-smoke\\boot-smoke.microvm.log"
+    }
+  ],
+  "timeout_seconds": 120,
+  "log_path": "E:\\Playground\\AIOS\\.workflow\\artifacts\\rc8-installer-vm-preflight\\qemu-smoke\\boot-smoke.log",
+  "checked_at": "1970-01-01T00:00:00Z"
+}

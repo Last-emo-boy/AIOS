@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc8",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC8-020",
+    "current_task":  "RC8-021",
     "lifecycle_position":  "rc8-active-real-installable-payload-controlled-execution",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc8-020-installer-vm-preflight-quarantined-object-fetch-smoke",
+    "next_allowed_action":  "execute-rc8-021-installer-byte-signature-storage-compatibility-fail-closed-fixtures",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T19:35:00+08:00",
+    "updated_at":  "2026-06-08T19:55:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but installer VM smoke, exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is active: RC8 Wave 0 is complete; RC8-010 projected a real payload object descriptor candidate from current build bytes; RC8-011 ingested the existing public detached signature for that payload with crypto verification and redacted receipt; RC8-012 proved signed object descriptor fail-closed fixtures across descriptor, signature, receipt, revocation, freshness, redaction, and authority broadening cases. The payload remains non-GA and install-blocked because external HTTPS object publication, installer VM smoke, and declared/current drift reconciliation are still missing. Next work is RC8-020 installer VM preflight and quarantined object-fetch smoke.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is active: RC8 Wave 0 is complete; RC8-010 projected a real payload object descriptor candidate from current build bytes; RC8-011 ingested the existing public detached signature for that payload with crypto verification and redacted receipt; RC8-012 proved signed object descriptor fail-closed fixtures across descriptor, signature, receipt, revocation, freshness, redaction, and authority broadening cases; RC8-020 ran QEMU installer VM preflight and repo-local quarantine byte smoke. The payload remains non-GA and install-blocked because external HTTPS object publication and declared/current drift reconciliation are still missing. Next work is RC8-021 installer byte, signature, storage, and compatibility fail-closed fixtures.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1767,6 +1767,38 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-012-signed-object-descriptor-fail-closed.json"
+                      },
+                      {
+                          "type":  "rc8_script",
+                          "path":  "scripts/project-rc8-installer-vm-preflight.ps1"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-installer-vm-preflight/result.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/boot-smoke-result.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/dependency-check.json"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-020.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-020-installer-vm-preflight.json"
                       }
                   ]
 }

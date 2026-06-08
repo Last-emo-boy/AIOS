@@ -1,0 +1,52 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-020",
+  "title": "run installer VM preflight and quarantined object-fetch smoke",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+    "scripts/boot-smoke-test.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc8-installer-vm-preflight.ps1",
+      "role": "installer VM preflight and quarantine smoke harness"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json",
+      "role": "preflight report"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json",
+      "role": "quarantined object-fetch report"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/boot-smoke-result.json",
+      "role": "QEMU boot smoke evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/dependency-check.json",
+      "role": "QEMU dependency evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-020-installer-vm-preflight.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "QEMU boot smoke runs against the current AIOS initramfs and observes required runtime markers.",
+      "The booted initramfs hash matches the RC8 payload descriptor object digest.",
+      "Repo-local payload bytes are copied into a strict quarantine child path and verified by size and SHA-256.",
+      "External HTTPS object fetch remains blocked until a real external object URI is published.",
+      "The task does not publish remotely, upload payload bytes, remotely download payload bytes, install, activate, rollback, mutate boot or active slot state, mutate production rings, upload support bundles, enable remote dispatch, or grant TUI authority."
+    ]
+  }
+}

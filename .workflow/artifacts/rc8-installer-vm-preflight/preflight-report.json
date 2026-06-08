@@ -1,0 +1,121 @@
+{
+  "schema": "agentos.rc8-installer-vm-preflight-report.v1",
+  "generated_at": "2026-06-08T16:08:00.9908818+08:00",
+  "task": "RC8-020",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "production_ready_claim": false,
+  "preflight_state": "verification-blocked",
+  "installer_vm_smoke_run": true,
+  "object_fetch_smoke_mode": "repo-local-source-quarantine-smoke",
+  "external_object_fetch_allowed": false,
+  "exact_approval_required_before_install": true,
+  "steps": [
+    {
+      "id": "verify-descriptor-source-and-signature",
+      "status": "passed",
+      "message": "Descriptor schema and public signature ingestion are verified.",
+      "evidence": {
+        "descriptor_schema": "agentos.payload-object-descriptor.v1",
+        "crypto_verified": true
+      }
+    },
+    {
+      "id": "run-installer-vm-boot-smoke",
+      "status": "passed",
+      "message": "Installer VM preflight can boot the current AIOS initramfs and observe runtime markers.",
+      "evidence": {
+        "selected_machine": "microvm",
+        "required_markers": 4
+      }
+    },
+    {
+      "id": "prepare-quarantine-root",
+      "status": "passed",
+      "message": "Quarantine root is a strict child of the RC8 preflight artifact directory.",
+      "evidence": {
+        "quarantine_root": ".workflow/artifacts/rc8-installer-vm-preflight/quarantine",
+        "object_dir": ".workflow/artifacts/rc8-installer-vm-preflight/quarantine/sha256-9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b"
+      }
+    },
+    {
+      "id": "verify-source-payload-before-quarantine",
+      "status": "passed",
+      "message": "Repo-local source payload still matches descriptor before quarantine smoke.",
+      "evidence": {
+        "source_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "descriptor_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "source_size": 377,
+        "descriptor_size": 377
+      }
+    },
+    {
+      "id": "repo-local-quarantine-byte-smoke",
+      "status": "passed",
+      "message": "Repo-local payload bytes can be copied into quarantine and verified by size and digest.",
+      "evidence": {
+        "mode": "repo-local-source-quarantine-smoke",
+        "quarantine_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "quarantine_size": 377
+      }
+    },
+    {
+      "id": "external-https-object-fetch",
+      "status": "blocked",
+      "message": "External HTTPS object URI must be published before real installer object fetch can run.",
+      "evidence": {
+        "uri_class": "not-external-https",
+        "remote_download_attempted": false
+      }
+    },
+    {
+      "id": "install-gate-remains-closed",
+      "status": "passed",
+      "message": "Installer preflight must not authorize install, activation, or rollback.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false
+      }
+    }
+  ],
+  "blockers": [
+    {
+      "id": "external-https-object-fetch",
+      "status": "blocked",
+      "message": "External HTTPS object URI must be published before real installer object fetch can run.",
+      "evidence": {
+        "uri_class": "not-external-https",
+        "remote_download_attempted": false
+      }
+    }
+  ],
+  "qemu_smoke": {
+    "result_path": ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/boot-smoke-result.json",
+    "result_sha256": "1bc41d64f3376be8c4656a16a95da2749c30f43f7d207af9adcd4041dcb128cd",
+    "dependency_path": ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/dependency-check.json",
+    "dependency_sha256": "d7b189e05f563cc454588df21ef3e6f9f62aebfda240fdc72cb983e1c108ad26",
+    "selected_machine": "microvm",
+    "observed_all_markers": true,
+    "initramfs_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b"
+  },
+  "object_fetch_report": {
+    "path": ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json",
+    "sha256": "5f4fa581da36ec6716d7adc71e39849e63f28900f17d344f151f9eab6fe8b638"
+  },
+  "side_effects": {
+    "remote_publication_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "repo_local_quarantine_copy_performed": true,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  }
+}

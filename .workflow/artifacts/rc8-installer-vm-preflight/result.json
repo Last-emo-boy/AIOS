@@ -1,0 +1,304 @@
+{
+  "schema": "agentos.rc8-installer-vm-preflight-result.v1",
+  "generated_at": "2026-06-08T16:08:01.0111156+08:00",
+  "task": "RC8-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "source": {
+    "descriptor_result": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+      "sha256": "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+      "present": true,
+      "schema": "agentos.rc8-real-payload-object-descriptor-result.v1",
+      "status": "passed"
+    },
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "signature_ingestion_result": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "sha256": "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+      "status": "passed"
+    },
+    "signed_descriptor_fail_closed": {
+      "path": ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+      "sha256": "67acffa942e5dda3c2a37f70ca03349bc15a7dc452ad5715fd7f77934efbff52",
+      "present": true,
+      "schema": "agentos.rc8-signed-object-descriptor-fail-closed-result.v1",
+      "status": "passed"
+    }
+  },
+  "outputs": {
+    "preflight_report": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json",
+      "sha256": "2050d393437f4570020952a8145e40a7fcff73db1ab5a3ab8e428ae3dadfa705"
+    },
+    "object_fetch_report": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json",
+      "sha256": "5f4fa581da36ec6716d7adc71e39849e63f28900f17d344f151f9eab6fe8b638"
+    }
+  },
+  "vm_surface": {
+    "qemu_boot_smoke_completed": true,
+    "selected_machine": "microvm",
+    "observed_all_markers": true,
+    "qemu_result_sha256": "1bc41d64f3376be8c4656a16a95da2749c30f43f7d207af9adcd4041dcb128cd"
+  },
+  "object_fetch_surface": {
+    "external_https_object_uri_published": false,
+    "remote_download_attempted": false,
+    "repo_local_quarantine_smoke_performed": true,
+    "quarantine_digest_verified": true,
+    "quarantine_size_verified": true
+  },
+  "payload_blockers": [
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-unresolved"
+  ],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_publication_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "repo_local_quarantine_copy_performed": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "source.rc8_010.result",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-010 descriptor projection must be passed before VM preflight.",
+      "evidence": {
+        "checks": 9,
+        "blockers": 0,
+        "payload_blockers": 4,
+        "rc8_010_complete": true,
+        "next_task": "RC8-011"
+      }
+    },
+    {
+      "id": "source.rc8_011.result",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-011 public signature ingestion must be passed and crypto verified before VM preflight.",
+      "evidence": {
+        "checks": 12,
+        "blockers": 0,
+        "payload_blockers": 3,
+        "rc8_011_complete": true,
+        "next_task": "RC8-012"
+      }
+    },
+    {
+      "id": "source.rc8_012.result",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-012 fail-closed fixtures must pass before VM preflight.",
+      "evidence": {
+        "checks": 5,
+        "blockers": 0,
+        "cases": 34,
+        "passed_cases": 34,
+        "failed_cases": 0,
+        "rc8_012_complete": true,
+        "next_task": "RC8-020"
+      }
+    },
+    {
+      "id": "vm.qemu_smoke_completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "QEMU boot smoke must complete before installer preflight can claim VM readiness.",
+      "evidence": {
+        "skipped": false,
+        "exit_code": 0,
+        "status": "completed",
+        "observed_all_markers": true
+      }
+    },
+    {
+      "id": "vm.payload_matches_descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "QEMU smoke initramfs hash must match the RC8 payload descriptor.",
+      "evidence": {
+        "qemu_initramfs_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "descriptor_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b"
+      }
+    },
+    {
+      "id": "preflight.expected_blockers",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-020 must record external object publication as the remaining object-fetch blocker.",
+      "evidence": {
+        "expected": [
+          "external-https-object-fetch"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "id": "preflight.report.generated",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Preflight and object-fetch reports must be generated.",
+      "evidence": {
+        "preflight": ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json",
+        "object_fetch": ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json"
+      }
+    },
+    {
+      "id": "preflight.expected_state",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-020 should remain verification-blocked only on external HTTPS object publication.",
+      "evidence": {
+        "state": "verification-blocked",
+        "blockers": [
+          "external-https-object-fetch"
+        ]
+      }
+    },
+    {
+      "id": "preflight.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-020 must not publish, upload, remotely download, install, activate, rollback, dispatch, or grant TUI authority.",
+      "evidence": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "repo_local_quarantine_copy_performed": true,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "preflight.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-020 reports must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "task_blockers": [],
+  "preflight_steps": [
+    {
+      "id": "verify-descriptor-source-and-signature",
+      "status": "passed",
+      "message": "Descriptor schema and public signature ingestion are verified.",
+      "evidence": {
+        "descriptor_schema": "agentos.payload-object-descriptor.v1",
+        "crypto_verified": true
+      }
+    },
+    {
+      "id": "run-installer-vm-boot-smoke",
+      "status": "passed",
+      "message": "Installer VM preflight can boot the current AIOS initramfs and observe runtime markers.",
+      "evidence": {
+        "selected_machine": "microvm",
+        "required_markers": 4
+      }
+    },
+    {
+      "id": "prepare-quarantine-root",
+      "status": "passed",
+      "message": "Quarantine root is a strict child of the RC8 preflight artifact directory.",
+      "evidence": {
+        "quarantine_root": ".workflow/artifacts/rc8-installer-vm-preflight/quarantine",
+        "object_dir": ".workflow/artifacts/rc8-installer-vm-preflight/quarantine/sha256-9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b"
+      }
+    },
+    {
+      "id": "verify-source-payload-before-quarantine",
+      "status": "passed",
+      "message": "Repo-local source payload still matches descriptor before quarantine smoke.",
+      "evidence": {
+        "source_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "descriptor_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "source_size": 377,
+        "descriptor_size": 377
+      }
+    },
+    {
+      "id": "repo-local-quarantine-byte-smoke",
+      "status": "passed",
+      "message": "Repo-local payload bytes can be copied into quarantine and verified by size and digest.",
+      "evidence": {
+        "mode": "repo-local-source-quarantine-smoke",
+        "quarantine_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "quarantine_size": 377
+      }
+    },
+    {
+      "id": "external-https-object-fetch",
+      "status": "blocked",
+      "message": "External HTTPS object URI must be published before real installer object fetch can run.",
+      "evidence": {
+        "uri_class": "not-external-https",
+        "remote_download_attempted": false
+      }
+    },
+    {
+      "id": "install-gate-remains-closed",
+      "status": "passed",
+      "message": "Installer preflight must not authorize install, activation, or rollback.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false
+      }
+    }
+  ],
+  "preflight_blockers": [
+    {
+      "id": "external-https-object-fetch",
+      "status": "blocked",
+      "message": "External HTTPS object URI must be published before real installer object fetch can run.",
+      "evidence": {
+        "uri_class": "not-external-https",
+        "remote_download_attempted": false
+      }
+    }
+  ],
+  "summary": {
+    "checks": 10,
+    "task_blockers": 0,
+    "preflight_steps": 7,
+    "preflight_blockers": 1,
+    "preflight_state": "verification-blocked",
+    "rc8_020_complete": true,
+    "next_task": "RC8-021"
+  }
+}

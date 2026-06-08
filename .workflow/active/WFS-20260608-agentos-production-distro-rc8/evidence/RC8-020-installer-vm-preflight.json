@@ -1,0 +1,83 @@
+{
+  "schema": "agentos.rc8-installer-vm-preflight-evidence.v1",
+  "generated_at": "2026-06-08T19:55:00+08:00",
+  "task": "RC8-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": {
+    "path": "scripts/project-rc8-installer-vm-preflight.ps1",
+    "sha256": "e87309b51aa734190a349d6c51ba9a4e6e5e2eec7ecea3ffc7fecfab79726db3"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+    "status": "passed",
+    "sha256": "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b"
+  },
+  "outputs": {
+    "preflight_report": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json",
+      "sha256": "2050d393437f4570020952a8145e40a7fcff73db1ab5a3ab8e428ae3dadfa705"
+    },
+    "object_fetch_report": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json",
+      "sha256": "5f4fa581da36ec6716d7adc71e39849e63f28900f17d344f151f9eab6fe8b638"
+    },
+    "qemu_boot_smoke": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/boot-smoke-result.json",
+      "sha256": "1bc41d64f3376be8c4656a16a95da2749c30f43f7d207af9adcd4041dcb128cd"
+    },
+    "qemu_dependency": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/qemu-smoke/dependency-check.json",
+      "sha256": "d7b189e05f563cc454588df21ef3e6f9f62aebfda240fdc72cb983e1c108ad26"
+    }
+  },
+  "vm_surface": {
+    "qemu_boot_smoke_completed": true,
+    "selected_machine": "microvm",
+    "observed_all_markers": true,
+    "initramfs_matches_descriptor": true
+  },
+  "object_fetch_surface": {
+    "external_https_object_uri_published": false,
+    "remote_download_attempted": false,
+    "repo_local_quarantine_smoke_performed": true,
+    "quarantine_digest_verified": true,
+    "quarantine_size_verified": true,
+    "preflight_state": "verification-blocked",
+    "preflight_blockers": [
+      "external-https-object-fetch"
+    ],
+    "payload_blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_publication_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "repo_local_quarantine_copy_performed": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc8_020_complete": true,
+    "next_task": "RC8-021",
+    "commit_required": true
+  }
+}
