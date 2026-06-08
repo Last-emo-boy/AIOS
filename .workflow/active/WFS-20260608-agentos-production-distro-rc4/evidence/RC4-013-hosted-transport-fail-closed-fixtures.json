@@ -1,0 +1,61 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-013",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:50:00+08:00",
+  "summary": "Implemented and ran hosted transport fail-closed fixtures for RC4. The harness created 13 isolated negative cases and verified each case caused the fleet-ring rollout precondition audit to block without granting rollout approval, executing activation or rollback, mutating active state, dispatching remote commands, or broadening TUI/model/shell authority.",
+  "deliverables": {
+    "script": "scripts/verify-rc4-hosted-transport-fail-closed-fixtures.ps1",
+    "precondition_audit_script": "scripts/audit-rc4-fleet-ring-rollout-preconditions.ps1",
+    "result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/result.json",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-013-hosted-transport-fail-closed-fixtures.json"
+  },
+  "hashes": {
+    "precondition_audit_script_sha256": "010279e87670a9b9fcbb8471c1246fdb4757d53532e0b362d04efe80325f0d9c",
+    "script_sha256": "1965344e0866e54572749a7ba4882d8bf384beb54425a0397f23078166ba7275",
+    "result_sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-hosted-transport-fail-closed-fixtures.v1",
+    "result_status": "passed",
+    "cases": 13,
+    "passed_cases": 13,
+    "failed_cases": 0,
+    "blockers": 0,
+    "rc4_013_complete": true,
+    "hosted_transport_fail_closed_ready": true,
+    "hosted_manifest_hash_drift": "passed",
+    "missing_rc3_final_audit_binding": "passed",
+    "stale_mirror_snapshot": "passed",
+    "unsigned_mirror_metadata": "passed",
+    "revoked_mirror_artifact": "passed",
+    "registry_lockfile_mismatch": "passed",
+    "fleet_target_set_drift": "passed",
+    "ring_skip_attempt": "passed",
+    "missing_rollback_baseline": "passed",
+    "tui_rollout_authority_attempt": "passed",
+    "model_replay_rollout_authority_attempt": "passed",
+    "remote_dispatch_mutation_attempt": "passed",
+    "unredacted_support_bundle": "passed",
+    "rollout_plan_created": false,
+    "rollout_plan_executed": false,
+    "exact_operator_approval_granted": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "verification": {
+    "command": ".\\scripts\\verify-rc4-hosted-transport-fail-closed-fixtures.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": "RC4-020"
+  }
+}

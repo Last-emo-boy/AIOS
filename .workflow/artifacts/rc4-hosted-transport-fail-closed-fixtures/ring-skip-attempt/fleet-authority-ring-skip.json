@@ -1,0 +1,172 @@
+{
+  "schema": "agentos.fleet-rollout-authority.v1",
+  "generated_at": "1970-01-01T00:00:00Z",
+  "production_ready_claim": false,
+  "status": "passed",
+  "source": {
+    "git_commit": "f7434a40cd2371a116f4de7b949d775412abd5c2",
+    "git_branch": "main"
+  },
+  "scope": {
+    "release_phase": "rc0",
+    "objective": "split fleet rollout execution authority from TUI projection panels",
+    "local_only_baseline": true,
+    "remote_services_required": false,
+    "remote_fleet_execution_ready": false,
+    "node_enrollment_required_after": null,
+    "node_enrollment_local_proof_required": true,
+    "incident_drill_required_after": null,
+    "incident_runbook_local_drill_required": true
+  },
+  "authority": {
+    "execution_authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+    "plan_authority": "AgentCore",
+    "side_effect_authority": "SecurityExecutionEngine",
+    "recovery_authority": "RunStore + AuditJournal + release rollback evidence",
+    "tui_authority": false,
+    "projection_controller_only": true,
+    "rollout_execution_in_tui": false,
+    "rollout_mutation_in_tui": false,
+    "remote_command_dispatch_in_tui": false,
+    "rollback_execution_in_tui": false,
+    "promotion_authority_in_tui": false,
+    "signing_authority_in_tui": false,
+    "remote_operator_bypass_allowed": false,
+    "normal_shell_rollout_allowed": false
+  },
+  "release_bindings": {
+    "release_channel_metadata": {
+      "path": "release-channel-metadata.json",
+      "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80"
+    },
+    "update_metadata": {
+      "path": "update-metadata.json",
+      "sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47"
+    },
+    "qemu_runtime_smoke": {
+      "artifact_class": "qemu_runtime_smoke",
+      "required": true,
+      "status": "passed",
+      "hash_bound_in_provenance": true,
+      "candidate_metadata_hash_bound": false
+    },
+    "ecosystem_replay": {
+      "path": ".workflow\\artifacts\\ecosystem-replay\\result.json",
+      "sha256": "7b3a8b312fb1df1314a89cc568f4dd8c082ea79c25543f71917cd1e496df5720",
+      "present": true,
+      "required": true
+    },
+    "node_enrollment_fleet_audit_replay": {
+      "artifact_class": "node_enrollment_fleet_audit_replay",
+      "required": true,
+      "status": "passed",
+      "hash_bound_in_provenance": true,
+      "candidate_metadata_hash_bound": false
+    },
+    "production_incident_runbook_replay": {
+      "artifact_class": "production_incident_runbook_replay",
+      "required": true,
+      "status": "passed",
+      "hash_bound_in_provenance": true,
+      "candidate_metadata_hash_bound": false
+    },
+    "tui_replay": {
+      "path": ".workflow\\artifacts\\tui-replay\\result.json",
+      "required": true,
+      "status": "passed"
+    },
+    "active_artifact_set": {
+      "path": ".workflow\\artifacts\\aom\\active-set.json",
+      "sha256": "6303e3017128f76d3162e1b59e43dabd1040e1a2dd6f732e75435aa08e7ed886",
+      "present": true,
+      "required": false
+    }
+  },
+  "local_proof": {
+    "status": "passed",
+    "tui_replay_status": "passed",
+    "ecosystem_replay_status": "passed",
+    "node_enrollment_status": "passed",
+    "node_enrollment_local_identity_authoritative": true,
+    "node_enrollment_audit_sealed": true,
+    "production_incident_runbook_status": "passed",
+    "incident_recovery_truth": "RunStore + AuditJournal + release rollback evidence",
+    "incident_rollback_verified": true,
+    "incident_support_bundle_redacted": true,
+    "incident_remote_dispatch_enabled": false,
+    "release_channel_gate_status": "passed",
+    "qemu_runtime_smoke_hash_present": true,
+    "active_artifact_update_readiness": true,
+    "execution_authority_required": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+    "tui_panel_may_execute_rollout": false
+  },
+  "rings": [
+    [
+      {
+        "name": "local",
+        "status": "local-proof-ready",
+        "node_count": 1,
+        "authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+        "tui_projection_only": true,
+        "rollout_dispatch_enabled_in_tui": false,
+        "rollback_dispatch_enabled_in_tui": false,
+        "required_evidence": [
+          "tui_replay",
+          "ecosystem_replay",
+          "node_enrollment_fleet_audit_replay",
+          "production_incident_runbook_replay",
+          "qemu_runtime_smoke",
+          "release_channel_metadata"
+        ]
+      }
+    ],
+    [
+      {
+        "name": "staging",
+        "status": "authority-defined-not-enrolled",
+        "node_count": 0,
+        "authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+        "tui_projection_only": true,
+        "rollout_dispatch_enabled_in_tui": false,
+        "rollback_dispatch_enabled_in_tui": false,
+        "blocker": "remote-fleet-execution-not-enabled"
+      }
+    ],
+    [
+      {
+        "name": "canary",
+        "status": "local-enrollment-proof-defined",
+        "node_count": 1,
+        "authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+        "tui_projection_only": true,
+        "rollout_dispatch_enabled_in_tui": false,
+        "rollback_dispatch_enabled_in_tui": false,
+        "blocker": "remote-fleet-execution-not-enabled"
+      }
+    ],
+    [
+      {
+        "name": "production",
+        "status": "authority-defined-not-enrolled",
+        "node_count": 0,
+        "authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+        "tui_projection_only": true,
+        "rollout_dispatch_enabled_in_tui": false,
+        "rollback_dispatch_enabled_in_tui": false,
+        "blocker": "remote-fleet-execution-not-enabled"
+      }
+    ]
+  ],
+  "promotion_gate": {
+    "fleet_rollout_authority_required": true,
+    "tui_projection_only_required": true,
+    "agentcore_security_execution_required": true,
+    "remote_rollout_from_tui_allowed": false,
+    "status": "passed",
+    "blockers": []
+  },
+  "signature_policy": {
+    "status": "candidate-hash-bound",
+    "note": "Fleet rollout authority metadata is hash-bound for promotion verification; the TUI may project it but cannot execute rollout or rollback."
+  }
+}

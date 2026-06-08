@@ -1,0 +1,62 @@
+{
+  "schema": "agentos.rc4-remote-registry-mirror-publication.v1",
+  "generated_at": "2026-06-08T09:30:00+08:00",
+  "status": "published-locally",
+  "production_ready_claim": false,
+  "task": "RC4-011",
+  "mirror": {
+    "id": "rc4-remote-registry-mirror-publication",
+    "source_fixture": "local-rc4-hosted-transport-mirror",
+    "authoritative_remote": false,
+    "local_replay_only": true,
+    "network_transfer_performed": false,
+    "active_registry_mutated": false,
+    "snapshot_freshness_status": "fresh-fixture",
+    "immutable": true,
+    "append_only": true,
+    "content_addressed": true
+  },
+  "bindings": {
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "local_mirror_fixture_sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+    "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+    "rc3_final_audit_sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+    "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+    "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+    "signing_publication_gate_sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+    "revocation_log_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+  },
+  "fail_closed_cases_required": [
+    "hosted-manifest-hash-drift",
+    "missing-rc3-final-audit-binding",
+    "stale-mirror-snapshot",
+    "unsigned-mirror-metadata",
+    "revoked-mirror-metadata",
+    "registry-lockfile-mismatch",
+    "rollback-baseline-missing",
+    "remote-dispatch-mutation-attempt"
+  ],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "cryptographic_verification_performed": false,
+    "network_transfer_performed": false,
+    "remote_upload_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": true,
+    "active_slot_mutated": false,
+    "production_ring_mutated": true,
+    "remote_dispatch_enabled": true,
+    "tui_authority": false
+  },
+  "handoff": {
+    "next_task": "RC4-012",
+    "rc4_012_consumes": [
+      "hosted_transport_manifest",
+      "local_mirror_fixture",
+      "mirror_lockfile",
+      "mirror_publication"
+    ]
+  }
+}

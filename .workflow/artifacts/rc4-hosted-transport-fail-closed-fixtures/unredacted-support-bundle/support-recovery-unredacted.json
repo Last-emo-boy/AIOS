@@ -1,0 +1,677 @@
+{
+  "schema": "agentos.rc3-published-release-support-recovery.v1",
+  "generated_at": "2026-06-08T08:46:12.9060381+08:00",
+  "checked_at": "2026-06-08T08:49:54.6370742+08:00",
+  "task": "RC3-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc3_022_complete": true,
+  "support_recovery_ready": true,
+  "support_bundle_redacted": false,
+  "recovery_projection_emitted": true,
+  "support_index_written": true,
+  "local_only": true,
+  "network_required": false,
+  "external_llm_required": false,
+  "remote_upload_performed": false,
+  "remote_bytes_sent": false,
+  "remote_support_authority": false,
+  "model_replay_authority": false,
+  "normal_shell_authority": false,
+  "tui_authority": true,
+  "local_private_key_material_used": false,
+  "cryptographic_signing_performed": false,
+  "cryptographic_verification_performed": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "boot_metadata_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": true,
+  "inputs": {
+    "support_recovery_preconditions": ".workflow/artifacts/rc3-published-release-support-recovery-preconditions/result.json",
+    "support_recovery_preconditions_sha256": "cdf0fad13342619d90f741fc125e2a34ca3c614fec411f564d33527d97b8aeea",
+    "consumer_smoke": ".workflow/artifacts/rc3-signed-channel-consumer/result.json",
+    "consumer_smoke_sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+    "publication_manifest": ".workflow/artifacts/rc3-release-channel-publication/publication-manifest.json",
+    "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+    "channel_index": ".workflow/artifacts/rc3-release-channel-publication/channel-index.json",
+    "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+    "production_completion": ".workflow/artifacts/rc3-production-signature-verification/completion-result.json",
+    "production_completion_sha256": "88a7a4f66e77567cd53df2054fa8dda2a345eb1d6bc15b2ee464074b37ac95f1",
+    "production_verification": ".workflow/artifacts/rc3-production-signature-verification/result.json",
+    "production_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+    "rc2_true_block_release_gate": ".workflow/artifacts/release/rc2-true-block-release-gate.json",
+    "rc2_true_block_release_gate_sha256": "7de1e8b2314177578c1e73a5bb99553d455f47522ba753a7a0fc4013c328e1ec",
+    "rc2_support_recovery": ".workflow/artifacts/rc2-block-support-recovery/result.json",
+    "rc2_support_recovery_sha256": "ff59d3d8de7851b03968d85a131b231e73198fae69d9362d4f5e0ec0b9928508",
+    "rc2_rollback_drill": ".workflow/artifacts/rc2-block-rollback-drill/result.json",
+    "rc2_rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+    "support_upload_replay": ".workflow/artifacts/support-bundle-upload-replay/result.json",
+    "support_upload_replay_sha256": "2b8e6aa9beab8bea865f1aa90e5f7090869b25f9db20b9a467d280351ffbd61a",
+    "incident_runbook_replay": ".workflow/artifacts/production-incident-runbook-replay/result.json",
+    "incident_runbook_replay_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521"
+  },
+  "source_artifacts": {
+    "support_recovery_preconditions": {
+      "path": ".workflow/artifacts/rc3-published-release-support-recovery-preconditions/result.json",
+      "sha256": "cdf0fad13342619d90f741fc125e2a34ca3c614fec411f564d33527d97b8aeea",
+      "present": true,
+      "schema": "agentos.rc3-published-release-support-recovery-preconditions.v1",
+      "status": "ready-for-support-recovery-projection"
+    },
+    "consumer_smoke": {
+      "path": ".workflow/artifacts/rc3-signed-channel-consumer/result.json",
+      "sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+      "present": true,
+      "schema": "agentos.signed-release-channel-consumer-smoke.v1",
+      "status": "passed"
+    },
+    "publication_manifest": {
+      "path": ".workflow/artifacts/rc3-release-channel-publication/publication-manifest.json",
+      "sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+      "present": true,
+      "schema": "agentos.immutable-release-channel-publication.v1",
+      "status": "published-locally"
+    },
+    "channel_index": {
+      "path": ".workflow/artifacts/rc3-release-channel-publication/channel-index.json",
+      "sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+      "present": true,
+      "schema": "agentos.release-channel-index.v1",
+      "status": "updated"
+    },
+    "production_completion": {
+      "path": ".workflow/artifacts/rc3-production-signature-verification/completion-result.json",
+      "sha256": "88a7a4f66e77567cd53df2054fa8dda2a345eb1d6bc15b2ee464074b37ac95f1",
+      "present": true,
+      "schema": "agentos.rc3-production-signature-verification-completion.v1",
+      "status": "passed"
+    },
+    "production_verification": {
+      "path": ".workflow/artifacts/rc3-production-signature-verification/result.json",
+      "sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+      "present": true,
+      "schema": "agentos.production-signature-verification.v1",
+      "status": "passed"
+    },
+    "rc2_true_block_release_gate": {
+      "path": ".workflow/artifacts/release/rc2-true-block-release-gate.json",
+      "sha256": "7de1e8b2314177578c1e73a5bb99553d455f47522ba753a7a0fc4013c328e1ec",
+      "present": true,
+      "schema": "agentos.rc2-true-block-release-gate.v1",
+      "status": "passed"
+    },
+    "rc2_support_recovery": {
+      "path": ".workflow/artifacts/rc2-block-support-recovery/result.json",
+      "sha256": "ff59d3d8de7851b03968d85a131b231e73198fae69d9362d4f5e0ec0b9928508",
+      "present": true,
+      "schema": "agentos.rc2-block-support-recovery-projection-result.v1",
+      "status": "passed"
+    },
+    "rc2_rollback_drill": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/result.json",
+      "sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+      "present": true,
+      "schema": "agentos.rc2-block-rollback-drill-result.v1",
+      "status": "passed"
+    },
+    "support_upload_replay": {
+      "path": ".workflow/artifacts/support-bundle-upload-replay/result.json",
+      "sha256": "2b8e6aa9beab8bea865f1aa90e5f7090869b25f9db20b9a467d280351ffbd61a",
+      "present": true,
+      "schema": "agentos.support-bundle-upload-replay.v1",
+      "status": "passed"
+    },
+    "incident_runbook_replay": {
+      "path": ".workflow/artifacts/production-incident-runbook-replay/result.json",
+      "sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+      "present": true,
+      "schema": "agentos.production-incident-runbook-replay.v1",
+      "status": "passed"
+    }
+  },
+  "artifacts": {
+    "support_bundle_redacted": {
+      "path": ".workflow/artifacts/rc3-published-release-support-recovery/support-bundle-redacted.json",
+      "sha256": "64d89f29598e94a200da6a323f7e9a50649169c2abf813edefdb000d0ac33fee",
+      "schema": "agentos.rc3-published-release-support-bundle-redacted.v1",
+      "status": "redacted"
+    },
+    "recovery_projection": {
+      "path": ".workflow/artifacts/rc3-published-release-support-recovery/recovery-projection.json",
+      "sha256": "984f47ebc174f07d32b736dadae1094c77c1984befc31316596fd15ca0aa6c9c",
+      "schema": "agentos.rc3-published-release-recovery-projection.v1",
+      "status": "projected"
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc3-published-release-support-recovery/support-index.json",
+      "sha256": "4e5462d337fe5aab0e70b724f1474370df410ae2853183628b93dc407d720038",
+      "schema": "agentos.rc3-published-release-support-index.v1",
+      "status": "indexed"
+    }
+  },
+  "evidence_chain": {
+    "publication_id": "9815fce0d73f47a643d21b62d11ae9c8de66a5aa9c383e2876ea697a0cb87d50",
+    "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+    "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+    "production_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+    "consumer_smoke_sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+    "rc2_true_block_release_gate_sha256": "7de1e8b2314177578c1e73a5bb99553d455f47522ba753a7a0fc4013c328e1ec",
+    "rc2_support_recovery_sha256": "ff59d3d8de7851b03968d85a131b231e73198fae69d9362d4f5e0ec0b9928508",
+    "rc2_rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+    "support_bundle_sha256": "64d89f29598e94a200da6a323f7e9a50649169c2abf813edefdb000d0ac33fee",
+    "recovery_projection_sha256": "984f47ebc174f07d32b736dadae1094c77c1984befc31316596fd15ca0aa6c9c",
+    "support_index_sha256": "4e5462d337fe5aab0e70b724f1474370df410ae2853183628b93dc407d720038"
+  },
+  "checks": [
+    {
+      "id": "support_recovery_preconditions.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3-022 support/recovery preconditions must be ready with zero blockers.",
+      "evidence": {
+        "status": "ready-for-support-recovery-projection",
+        "support_recovery_ready": true,
+        "blockers": 0,
+        "rc3_022_may_complete": true
+      }
+    },
+    {
+      "id": "consumer_smoke.passed_no_mutation",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3-021 consumer smoke must pass and report no mutation.",
+      "evidence": {
+        "status": "passed",
+        "rc3_021_complete": true,
+        "verified": {
+          "publication_manifest": true,
+          "channel_index": true,
+          "production_signatures": true,
+          "rc2_true_block_evidence": true,
+          "rollback_target": true,
+          "revocation_state": true
+        },
+        "mutation": {
+          "active_slot_mutated": false,
+          "active_artifact_set_mutated": false,
+          "boot_metadata_mutated": false,
+          "production_ring_mutated": false,
+          "activation_performed": false,
+          "rollback_execution_performed": false,
+          "remote_dispatch_enabled": false,
+          "tui_authority": false
+        }
+      }
+    },
+    {
+      "id": "publication.binding",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support/recovery projection must bind publication manifest and channel index by publication id and hash.",
+      "evidence": {
+        "publication_id": "9815fce0d73f47a643d21b62d11ae9c8de66a5aa9c383e2876ea697a0cb87d50",
+        "manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+        "channel_entry": {
+          "sequence": 1,
+          "publication_id": "9815fce0d73f47a643d21b62d11ae9c8de66a5aa9c383e2876ea697a0cb87d50",
+          "publication_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+          "release_id": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+          "previous_publication_id": null,
+          "revocation_log_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+          "rc2_true_block_release_gate_sha256": "7de1e8b2314177578c1e73a5bb99553d455f47522ba753a7a0fc4013c328e1ec",
+          "production_signature_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba"
+        }
+      }
+    },
+    {
+      "id": "production_signatures.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Production signature completion and verification must remain passed.",
+      "evidence": {
+        "completion_status": "passed",
+        "verification_status": "passed",
+        "blockers": 0
+      }
+    },
+    {
+      "id": "rc2_true_block.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support/recovery projection must remain bound to RC2 true attached block-device release evidence.",
+      "evidence": {
+        "status": "passed",
+        "true_block_disk_boot": true,
+        "block_device_attached": true,
+        "projected_initramfs_smoke": false,
+        "host_kernel_override_used": false
+      }
+    },
+    {
+      "id": "rc2_support_recovery.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC2 support/recovery baseline must be redacted and deny remote, model, TUI, and shell authority.",
+      "evidence": {
+        "status": "passed",
+        "support_bundle_redacted": true,
+        "recovery_projection_emitted": true,
+        "remote_support_authority": false,
+        "model_replay_authority": false,
+        "tui_authority": false,
+        "normal_shell_authority": false
+      }
+    },
+    {
+      "id": "rollback.bound_no_mutation",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback evidence must prove previous/restored active sets match with no mutation or remote/TUI authority.",
+      "evidence": {
+        "status": "passed",
+        "previous": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "restored": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "previous_equals_restored": true,
+        "active_slot_mutated": false,
+        "activation_attempted": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "support_upload.local_spool_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support upload replay must remain local-spool only and non-authoritative for recovery.",
+      "evidence": {
+        "status": "passed",
+        "local_only": true,
+        "real_network_transfer_enabled": false,
+        "remote_support_authority": false,
+        "remote_authoritative_for_recovery": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "incident_replay.local_recovery_truth",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Incident runbook replay must keep recovery truth local, redacted, no-model-replay, and no active mutation.",
+      "evidence": {
+        "status": "passed",
+        "local_only": true,
+        "remote_dispatch_enabled": false,
+        "no_model_replay": true,
+        "support_bundle_redacted": true,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "support_bundle.written_redacted",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Writer must emit the redacted support bundle.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc3-published-release-support-recovery/support-bundle-redacted.json",
+        "sha256": "64d89f29598e94a200da6a323f7e9a50649169c2abf813edefdb000d0ac33fee",
+        "schema": "agentos.rc3-published-release-support-bundle-redacted.v1"
+      }
+    },
+    {
+      "id": "recovery_projection.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Writer must emit the published-release recovery projection.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc3-published-release-support-recovery/recovery-projection.json",
+        "sha256": "984f47ebc174f07d32b736dadae1094c77c1984befc31316596fd15ca0aa6c9c",
+        "schema": "agentos.rc3-published-release-recovery-projection.v1"
+      }
+    },
+    {
+      "id": "support_index.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Writer must emit the support/recovery index.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc3-published-release-support-recovery/support-index.json",
+        "sha256": "4e5462d337fe5aab0e70b724f1474370df410ae2853183628b93dc407d720038",
+        "schema": "agentos.rc3-published-release-support-index.v1"
+      }
+    },
+    {
+      "id": "support_recovery.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated support/recovery artifacts must not contain private keys, signer tokens, passwords, or private authority paths.",
+      "evidence": {
+        "paths": [
+          ".workflow/artifacts/rc3-published-release-support-recovery/support-bundle-redacted.json",
+          ".workflow/artifacts/rc3-published-release-support-recovery/recovery-projection.json",
+          ".workflow/artifacts/rc3-published-release-support-recovery/support-index.json"
+        ]
+      }
+    },
+    {
+      "id": "support_recovery.host_path_free",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated support/recovery artifacts must not contain host-local absolute paths.",
+      "evidence": {
+        "paths": [
+          ".workflow/artifacts/rc3-published-release-support-recovery/support-bundle-redacted.json",
+          ".workflow/artifacts/rc3-published-release-support-recovery/recovery-projection.json",
+          ".workflow/artifacts/rc3-published-release-support-recovery/support-index.json"
+        ]
+      }
+    },
+    {
+      "id": "support_recovery.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support/recovery projection writes local redacted metadata only and must not sign, verify production crypto, upload remotely, activate, rollback, mutate active artifacts, or use TUI authority.",
+      "evidence": {
+        "remote_upload_performed": false,
+        "remote_bytes_sent": false,
+        "local_private_key_material_used": false,
+        "cryptographic_signing_performed": false,
+        "cryptographic_verification_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "blockers": [],
+  "failure_scenarios": [
+    {
+      "name": "missing_publication_manifest",
+      "status": "failed-closed",
+      "reason": "support/recovery cannot project without an immutable publication manifest",
+      "blocked_at": "publication-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "missing_channel_index",
+      "status": "failed-closed",
+      "reason": "support/recovery cannot project without an append-only channel index",
+      "blocked_at": "publication-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "missing_consumer_smoke",
+      "status": "failed-closed",
+      "reason": "support/recovery requires consumer verification from installed block-device evidence",
+      "blocked_at": "consumer-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "production_signature_verification_blocked",
+      "status": "failed-closed",
+      "reason": "support/recovery cannot explain a release with blocked production signature verification",
+      "blocked_at": "signature-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "rc2_true_block_evidence_missing",
+      "status": "failed-closed",
+      "reason": "support/recovery must remain bound to RC2 true attached block-device evidence",
+      "blocked_at": "rc2-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "rollback_hash_mismatch",
+      "status": "failed-closed",
+      "reason": "recovery projection cannot proceed when previous/restored rollback hashes differ",
+      "blocked_at": "rollback-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "revoked_or_unknown_signer",
+      "status": "failed-closed",
+      "reason": "support/recovery refuses revoked, unknown, retired, or drifted signer state",
+      "blocked_at": "revocation-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "remote_support_claims_authority",
+      "status": "failed-closed",
+      "reason": "remote support cannot authorize recovery mutation",
+      "blocked_at": "authority-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "model_or_shell_replay_claims_truth",
+      "status": "failed-closed",
+      "reason": "model replay and shell transcripts cannot be recovery truth",
+      "blocked_at": "authority-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "tui_attempts_recovery_mutation",
+      "status": "failed-closed",
+      "reason": "TUI projections cannot mutate active artifacts or recovery state",
+      "blocked_at": "authority-preflight",
+      "support_bundle_written": false,
+      "recovery_projection_written": false,
+      "remote_upload_performed": false,
+      "remote_bytes_sent": false,
+      "local_private_key_material_used": false,
+      "cryptographic_signing_performed": false,
+      "cryptographic_verification_performed": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_slot_mutated": false,
+      "active_artifact_set_mutated": false,
+      "boot_metadata_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "normal_shell_authority": false,
+      "tui_authority": false,
+      "raw_secret_echoed": false
+    }
+  ],
+  "handoff": {
+    "next_task": "RC3-023",
+    "rc3_023_consumes": [
+      "support_recovery_preconditions",
+      "publication_manifest",
+      "channel_index",
+      "consumer_smoke",
+      "support_bundle_redacted",
+      "recovery_projection",
+      "support_index"
+    ],
+    "closeout_task": "RC3-030"
+  },
+  "summary": {
+    "checks": 15,
+    "blockers": 0,
+    "rc3_022_complete": true,
+    "support_bundle_redacted": false,
+    "recovery_projection_emitted": true,
+    "support_index_written": true,
+    "failure_scenarios": 10,
+    "remote_upload_performed": false,
+    "remote_bytes_sent": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false
+  }
+}

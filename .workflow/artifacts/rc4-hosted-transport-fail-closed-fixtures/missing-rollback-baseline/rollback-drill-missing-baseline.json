@@ -1,0 +1,581 @@
+{
+  "schema": "agentos.rc2-block-rollback-drill-result.v1",
+  "generated_at": "1970-01-01T00:00:00Z",
+  "task": "RC2-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "local_only": true,
+  "network_required": false,
+  "external_llm_required": false,
+  "execution_model": "true-block-device-evidence-bound-rollback-drill",
+  "true_block_disk_boot_consumed": true,
+  "active_slot": "A",
+  "inactive_slot": "B",
+  "stage_target": "inactive-slot",
+  "health_gate_status": "failed",
+  "activation_allowed": false,
+  "rollback_verified": true,
+  "rollback_previous_equals_restored": true,
+  "previous_active_artifact_set_sha256": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+  "restored_active_artifact_set_sha256": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+  "candidate_artifact_set_sha256": "25abdb3b690deaf4c2db6fad22be442d18fe1cb7b27f5b9096635f50a475ad04",
+  "target_disk_mutated": false,
+  "active_slot_mutated": false,
+  "active_slot_modified_in_place": false,
+  "boot_metadata_switched": false,
+  "persistent_state_mutated": false,
+  "recovery_mutation_prepared": false,
+  "activation_attempted": false,
+  "release_promotion_prepared": false,
+  "remote_dispatch_enabled": false,
+  "remote_support_authority": false,
+  "model_replay_authority": false,
+  "tui_authority": false,
+  "normal_shell_authority": false,
+  "source_artifacts": {
+    "true_boot_result": {
+      "path": ".workflow/artifacts/rc2-true-block-boot/result.json",
+      "sha256": "c8e27c9030ddbe3b120124bed4426c39d27d11eafdcb46f1cdd931020f74f047",
+      "present": true,
+      "schema": "agentos.true-block-device-boot-smoke.v1",
+      "status": "passed"
+    },
+    "block_support_recovery_result": {
+      "path": ".workflow/artifacts/rc2-block-support-recovery/result.json",
+      "sha256": "ff59d3d8de7851b03968d85a131b231e73198fae69d9362d4f5e0ec0b9928508",
+      "present": true,
+      "schema": "agentos.rc2-block-support-recovery-projection-result.v1",
+      "status": "passed"
+    },
+    "bootable_disk_manifest": {
+      "path": ".workflow/artifacts/rc2-bootable-disk/bootable-disk-manifest.json",
+      "sha256": "83896e76a9de9d5f148bc8b47f56424fbd97d2c54c74a1679625449b4f75b50f",
+      "present": true,
+      "schema": "agentos.bootable-disk-manifest.v1",
+      "status": "passed"
+    },
+    "installer_replay_result": {
+      "path": ".workflow/artifacts/rc2-installer-replay/result.json",
+      "sha256": "9f0882c9d0a3937322c373cfcb7f004cc4ef7f0aa1834f72829796997268a224",
+      "present": true,
+      "schema": "agentos.rc2-installer-replay-result.v1",
+      "status": "passed"
+    },
+    "disk_write_result": {
+      "path": ".workflow/artifacts/rc2-installer-replay/disk-write-result.json",
+      "sha256": "ad06ae63cf87f45bd693ed2863ca353637ec3e6dade84e1ed2793315e63ec500",
+      "present": true,
+      "schema": "agentos.installer-disk-write-result.v1",
+      "status": "passed"
+    },
+    "slot_metadata": {
+      "path": ".workflow/artifacts/rc2-bootable-disk/metadata/slot-metadata.json",
+      "sha256": "242087c34cd6a3ad14ddde0e3e64401a656ffc48bacfd973fc1ad7070a1057f9",
+      "present": true,
+      "schema": "agentos.rc2-rootfs-slot-metadata.v1",
+      "status": null
+    },
+    "state_mount_truth": {
+      "path": ".workflow/artifacts/rc2-block-support-recovery/persistent-state-mount-truth.json",
+      "sha256": "ce4ad847b5d70240a7f3d90a3606c7df4457b985081318940e9f6859f1322b7b",
+      "present": true,
+      "schema": "agentos.persistent-state-mount-truth.v1",
+      "status": "passed"
+    },
+    "first_boot_disk_seal": {
+      "path": ".workflow/artifacts/rc2-block-support-recovery/first-boot-disk-seal.json",
+      "sha256": "ee7c1e897c8b771f83d5880aa7f95eac55935db24c4b44c4fa02a35d7c3080c7",
+      "present": true,
+      "schema": "agentos.first-boot-disk-seal.v1",
+      "status": "passed"
+    },
+    "recovery_projection": {
+      "path": ".workflow/artifacts/rc2-block-support-recovery/recovery-projection.json",
+      "sha256": "b91e49d0fd54d3f10a87757344d03a9b53d520fb359cd23263099fd864a3ca29",
+      "present": true,
+      "schema": "agentos.rc2-block-recovery-projection.v1",
+      "status": "projected"
+    }
+  },
+  "artifacts": {
+    "inactive_slot_update_plan": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/inactive-slot-update-plan.json",
+      "sha256": "5e96a2c86da8e647d12f4b2e42438623aa7a6d9d3b98d881cf4e59f17d46f64b",
+      "schema": "agentos.rc2-block-inactive-slot-update-plan.v1",
+      "status": "prepared"
+    },
+    "inactive_slot_staged_candidate": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/inactive-slot-staged-candidate.json",
+      "sha256": "5d76595d38654cff45c9e84a8d20f0197ebb4d1f3149176b45cdade4f09a8ed6",
+      "schema": "agentos.rc2-block-inactive-slot-staged-candidate.v1",
+      "status": "staged-projected"
+    },
+    "candidate_health_report": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/candidate-health-report.json",
+      "sha256": "3a38fad68d73924e7652f912fb6dd99403632fdb6392d5ff867b628e4cd66790",
+      "schema": "agentos.rc2-block-candidate-health-report.v1",
+      "status": "failed"
+    },
+    "rollback_report": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/rollback-report.json",
+      "sha256": "3243b8758de6f4ef5ed6bd83905e8afc24d283397249d71de27bd2ae2aa1ef98",
+      "schema": "agentos.rc2-block-rollback-report.v1",
+      "status": "passed"
+    },
+    "rollback_index": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/rollback-index.json",
+      "sha256": "47addbcf7c4361b06d25a48700dbabc0924274e51bc08f864ad3e17de40498b3",
+      "schema": "agentos.rc2-block-rollback-drill-index.v1"
+    }
+  },
+  "evidence_chain": {
+    "disk_image_sha256": "cb8e78e2d4566a17f294bb0ce36d85247df28b6bd281af7addd156ea33f1cd25",
+    "true_boot_result_sha256": "c8e27c9030ddbe3b120124bed4426c39d27d11eafdcb46f1cdd931020f74f047",
+    "slot_metadata_sha256": "242087c34cd6a3ad14ddde0e3e64401a656ffc48bacfd973fc1ad7070a1057f9",
+    "state_mount_truth_sha256": "ce4ad847b5d70240a7f3d90a3606c7df4457b985081318940e9f6859f1322b7b",
+    "first_boot_disk_seal_sha256": "ee7c1e897c8b771f83d5880aa7f95eac55935db24c4b44c4fa02a35d7c3080c7",
+    "rollback_baseline_sha256": null,
+    "recovery_projection_sha256": "b91e49d0fd54d3f10a87757344d03a9b53d520fb359cd23263099fd864a3ca29",
+    "staging_plan_sha256": "df6830ec2c84163c84b4ea9aa9b7715321e179a7848f10954071f35226481e2f",
+    "rollback_decision_sha256": "f564fc4127195e8b1238318e04bb268eafce185290269f069d038d787ec68606"
+  },
+  "checks": [
+    {
+      "name": "source.true-block-boot-passed",
+      "status": "passed",
+      "message": "rollback drill requires passed true block-device boot"
+    },
+    {
+      "name": "source.support-recovery-passed",
+      "status": "passed",
+      "message": "support/recovery projection must pass"
+    },
+    {
+      "name": "source.installer-disk-write-passed",
+      "status": "passed",
+      "message": "installer replay and disk write result must pass"
+    },
+    {
+      "name": "state.mount-truth-passed",
+      "status": "passed",
+      "message": "state mount truth must be booted-disk evidence"
+    },
+    {
+      "name": "seal.first-boot-disk-sealed",
+      "status": "passed",
+      "message": "first boot disk seal must be present"
+    },
+    {
+      "name": "recovery.projection-bound",
+      "status": "passed",
+      "message": "recovery projection must bind state truth and seal"
+    },
+    {
+      "name": "disk.hash-bound",
+      "status": "passed",
+      "message": "rollback drill must bind one target disk hash"
+    },
+    {
+      "name": "slot.single-active",
+      "status": "passed",
+      "message": "slot metadata must identify one active and one inactive slot"
+    },
+    {
+      "name": "slot.stage-target-inactive",
+      "status": "passed",
+      "message": "candidate must stage only to inactive slot"
+    },
+    {
+      "name": "slot.active-not-mutated",
+      "status": "passed",
+      "message": "active slot must not be mutated in place"
+    },
+    {
+      "name": "slot.disk-write-not-performed-by-drill",
+      "status": "passed",
+      "message": "drill must not mutate the target disk outside future SecurityExecution effects"
+    },
+    {
+      "name": "health.failure-blocks-activation",
+      "status": "passed",
+      "message": "failed health gate must block activation and boot metadata switch"
+    },
+    {
+      "name": "rollback.baseline-bound",
+      "status": "passed",
+      "message": "rollback must bind first-boot rollback baseline"
+    },
+    {
+      "name": "rollback.previous-restored-match",
+      "status": "passed",
+      "message": "rollback must restore previous active artifact set hash"
+    },
+    {
+      "name": "rollback.keeps-last-known-active",
+      "status": "passed",
+      "message": "rollback must keep last-known active slot"
+    },
+    {
+      "name": "state.outside-rootfs",
+      "status": "passed",
+      "message": "state must remain outside rootfs"
+    },
+    {
+      "name": "authority.local-only",
+      "status": "passed",
+      "message": "rollback drill must be local-only"
+    },
+    {
+      "name": "authority.no-model-remote-tui-shell",
+      "status": "passed",
+      "message": "rollback drill must not grant remote, model, TUI, or shell authority"
+    },
+    {
+      "name": "authority.no-effects-prepared",
+      "status": "passed",
+      "message": "rollback drill must not prepare mutation, activation, or promotion effects"
+    },
+    {
+      "name": "support.bundle-redacted",
+      "status": "passed",
+      "message": "support bundle must remain redacted"
+    },
+    {
+      "name": "failure-scenarios-covered",
+      "status": "passed",
+      "message": "rollback drill must include fail-closed scenarios"
+    },
+    {
+      "name": "failure-scenarios-fail-closed",
+      "status": "passed",
+      "message": "all rollback scenarios must fail closed"
+    },
+    {
+      "name": "secret-free.inactive-slot-update-plan.json",
+      "status": "passed",
+      "message": "generated rollback artifact must be secret-safe"
+    },
+    {
+      "name": "host-path-free.inactive-slot-update-plan.json",
+      "status": "passed",
+      "message": "generated rollback artifact must not include host-local absolute paths"
+    },
+    {
+      "name": "secret-free.inactive-slot-staged-candidate.json",
+      "status": "passed",
+      "message": "generated rollback artifact must be secret-safe"
+    },
+    {
+      "name": "host-path-free.inactive-slot-staged-candidate.json",
+      "status": "passed",
+      "message": "generated rollback artifact must not include host-local absolute paths"
+    },
+    {
+      "name": "secret-free.candidate-health-report.json",
+      "status": "passed",
+      "message": "generated rollback artifact must be secret-safe"
+    },
+    {
+      "name": "host-path-free.candidate-health-report.json",
+      "status": "passed",
+      "message": "generated rollback artifact must not include host-local absolute paths"
+    },
+    {
+      "name": "secret-free.rollback-report.json",
+      "status": "passed",
+      "message": "generated rollback artifact must be secret-safe"
+    },
+    {
+      "name": "host-path-free.rollback-report.json",
+      "status": "passed",
+      "message": "generated rollback artifact must not include host-local absolute paths"
+    },
+    {
+      "name": "secret-free.rollback-index.json",
+      "status": "passed",
+      "message": "generated rollback artifact must be secret-safe"
+    },
+    {
+      "name": "host-path-free.rollback-index.json",
+      "status": "passed",
+      "message": "generated rollback artifact must not include host-local absolute paths"
+    },
+    {
+      "name": "secret-free.result.json",
+      "status": "passed",
+      "message": "result must be secret-safe"
+    },
+    {
+      "name": "host-path-free.result.json",
+      "status": "passed",
+      "message": "result must not include host-local absolute paths"
+    }
+  ],
+  "failed_checks": [],
+  "failure_scenarios": [
+    {
+      "name": "missing_true_block_boot",
+      "status": "failed-closed",
+      "reason": "rollback drill cannot run without true block-device boot evidence",
+      "blocked_at": "source-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "missing_support_recovery_projection",
+      "status": "failed-closed",
+      "reason": "rollback drill requires persistent state and recovery projection evidence",
+      "blocked_at": "source-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "missing_rollback_baseline",
+      "status": "failed-closed",
+      "reason": "rollback baseline is missing before slot switch",
+      "blocked_at": "rollback-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "active_slot_write_attempt",
+      "status": "failed-closed",
+      "reason": "update attempts to mutate active slot in place",
+      "blocked_at": "staging-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "boot_metadata_switch_before_health",
+      "status": "failed-closed",
+      "reason": "boot metadata switches to candidate before health gate passes",
+      "blocked_at": "health-gate",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "rollback_hash_mismatch",
+      "status": "failed-closed",
+      "reason": "restored active artifact set does not equal previous active set",
+      "blocked_at": "rollback-verify",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "both_slots_active_or_no_active_slot",
+      "status": "failed-closed",
+      "reason": "slot metadata does not contain exactly one active slot",
+      "blocked_at": "slot-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "state_inside_rootfs_or_not_booted_disk",
+      "status": "failed-closed",
+      "reason": "rollback state is not mounted from the booted disk outside rootfs",
+      "blocked_at": "state-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "missing_exact_operator_consent_for_future_switch",
+      "status": "failed-closed",
+      "reason": "future slot switch lacks exact operator approval",
+      "blocked_at": "authority-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "remote_dispatch_attempt",
+      "status": "failed-closed",
+      "reason": "rollback drill attempts remote command dispatch",
+      "blocked_at": "authority-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "model_replay_recovery",
+      "status": "failed-closed",
+      "reason": "rollback uses model replay as recovery truth",
+      "blocked_at": "authority-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    },
+    {
+      "name": "tui_or_shell_mutation_attempt",
+      "status": "failed-closed",
+      "reason": "TUI or normal shell attempts to execute update or rollback",
+      "blocked_at": "authority-preflight",
+      "target_disk_mutated": false,
+      "inactive_slot_mutated": false,
+      "active_slot_mutated": false,
+      "boot_metadata_switched": false,
+      "persistent_state_mutated": false,
+      "rollback_authority_changed": false,
+      "recovery_mutation_prepared": false,
+      "activation_attempted": false,
+      "release_promotion_prepared": false,
+      "remote_dispatch_enabled": false,
+      "remote_support_authority": false,
+      "model_replay_authority": false,
+      "tui_authority": false,
+      "normal_shell_authority": false,
+      "raw_secret_echoed": false
+    }
+  ],
+  "handoff": {
+    "next_task": "RC2-023",
+    "rc2_023_consumes": [
+      "true block-device boot result",
+      "block support/recovery result",
+      "inactive-slot rollback drill result",
+      "previous/restored active artifact set hash",
+      "first-boot disk seal",
+      "state mount truth"
+    ],
+    "closeout_task": "RC2-030"
+  }
+}

@@ -1,0 +1,519 @@
+{
+  "schema": "agentos.rc4-hosted-transport-fail-closed-fixtures.v1",
+  "generated_at": "2026-06-08T09:50:00+08:00",
+  "checked_at": "2026-06-08T09:32:28.5636574+08:00",
+  "task": "RC4-013",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc4_013_complete": true,
+  "hosted_transport_fail_closed_ready": true,
+  "rollout_preconditions_ready": false,
+  "rollout_plan_created": false,
+  "rollout_plan_executed": false,
+  "exact_operator_approval_granted": false,
+  "local_private_key_material_used": false,
+  "cryptographic_signing_performed": false,
+  "cryptographic_verification_performed": false,
+  "network_transfer_performed": false,
+  "remote_upload_performed": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_registry_mutated": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "boot_metadata_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": false,
+  "model_replay_authority": false,
+  "normal_shell_authority": false,
+  "tui_authority": false,
+  "inputs": {
+    "precondition_audit_script": "scripts/audit-rc4-fleet-ring-rollout-preconditions.ps1",
+    "precondition_audit_script_sha256": "010279e87670a9b9fcbb8471c1246fdb4757d53532e0b362d04efe80325f0d9c",
+    "rc4_plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+    "rc4_plan_sha256": "dc736db5b68cf3fca4a7cd36cc1d635a40647f37d322574ffbf880a3a828dd22",
+    "rollout_boundary": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-002-staged-rollout-authority-rollback-boundary.json",
+    "rollout_boundary_sha256": "69b933d3cde8799639bf4e3c15c6edb17755c0a66b0011beceb913b3e65d746b",
+    "hosted_transport_manifest": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "mirror_publication": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "fleet_rollout_authority": ".workflow/artifacts/release/fleet-rollout-authority.json",
+    "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+    "rollback_drill": ".workflow/artifacts/rc2-block-rollback-drill/result.json",
+    "rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+    "support_recovery": ".workflow/artifacts/rc3-published-release-support-recovery/result.json",
+    "support_recovery_sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d"
+  },
+  "cases": [
+    {
+      "id": "hosted-manifest-hash-drift",
+      "description": "Rejects mirror publication when the hosted transport manifest hash drifts.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "mirror_publication.ready_no_mutation"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.ready_no_mutation"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/hosted-manifest-hash-drift/audit-result.json",
+      "audit_result_sha256": "5b3cc03b9edd0186eda5fdc62561a92548331d6d4e38de2c29febacc07a42b82",
+      "override_inputs": {
+        "MirrorPublicationPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\hosted-manifest-hash-drift\\mirror-publication-hosted-hash-drift.json"
+      }
+    },
+    {
+      "id": "missing-rc3-final-audit-binding",
+      "description": "Rejects hosted transport metadata missing the RC3 final audit binding.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "hosted_mirror.release_bindings_consistent"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.ready_no_mutation",
+        "hosted_mirror.release_bindings_consistent"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 2,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/missing-rc3-final-audit-binding/audit-result.json",
+      "audit_result_sha256": "d08de2effd667e3ad51bc9e42eb4d659783fdda5e1f61229eb8b5896c9754e23",
+      "override_inputs": {
+        "HostedTransportManifestPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\missing-rc3-final-audit-binding\\hosted-manifest-missing-rc3-final-audit.json"
+      }
+    },
+    {
+      "id": "stale-mirror-snapshot",
+      "description": "Rejects stale or replayed mirror snapshot state.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "mirror_publication.ready_no_mutation",
+        "mirror_publication.fresh_fixture"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.ready_no_mutation",
+        "mirror_publication.fresh_fixture"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 2,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/stale-mirror-snapshot/audit-result.json",
+      "audit_result_sha256": "8f6065b3d9a6b073da0bd06d9aee91f81cffa4f10ee93b396da6706ccefbe692",
+      "override_inputs": {
+        "MirrorPublicationPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\stale-mirror-snapshot\\mirror-publication-stale-snapshot.json"
+      }
+    },
+    {
+      "id": "unsigned-mirror-metadata",
+      "description": "Rejects mirror publication that no longer declares unsigned metadata as a fail-closed case.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "mirror_publication.fail_closed_cases_declared"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.fail_closed_cases_declared"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/unsigned-mirror-metadata/audit-result.json",
+      "audit_result_sha256": "6c457ea3446061336515921a0501700dc408631d9c6972ab7e1cdb702d80bf31",
+      "override_inputs": {
+        "MirrorPublicationPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\unsigned-mirror-metadata\\mirror-publication-no-unsigned-case.json"
+      }
+    },
+    {
+      "id": "revoked-mirror-artifact",
+      "description": "Rejects mirror publication that no longer declares revoked mirror metadata as a fail-closed case.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "mirror_publication.fail_closed_cases_declared"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.fail_closed_cases_declared"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/revoked-mirror-artifact/audit-result.json",
+      "audit_result_sha256": "673ae83256a2bce3a755600fdeadb0d14c8fc100a58e0d63da11055ae235c7a8",
+      "override_inputs": {
+        "MirrorPublicationPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\revoked-mirror-artifact\\mirror-publication-no-revoked-case.json"
+      }
+    },
+    {
+      "id": "registry-lockfile-mismatch",
+      "description": "Rejects mirror publication when the lockfile hash no longer matches.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "mirror_publication.ready_no_mutation"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.ready_no_mutation"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/registry-lockfile-mismatch/audit-result.json",
+      "audit_result_sha256": "de0d52630ad4825616f4f9e0fdd92bac0232b05ac9e49269a77906cede41521f",
+      "override_inputs": {
+        "MirrorPublicationPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\registry-lockfile-mismatch\\mirror-publication-lockfile-mismatch.json"
+      }
+    },
+    {
+      "id": "fleet-target-set-drift",
+      "description": "Rejects changed local fleet target set cardinality before approval.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "fleet_rings.staged_boundary_ready"
+      ],
+      "observed_blocker_ids": [
+        "fleet_rings.staged_boundary_ready"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/fleet-target-set-drift/audit-result.json",
+      "audit_result_sha256": "4e70d447f9c739b3e4d2eaabab418782e8284f18dbe0d97294c5cd236539de2e",
+      "override_inputs": {
+        "FleetRolloutAuthorityPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\fleet-target-set-drift\\fleet-authority-target-set-drift.json"
+      }
+    },
+    {
+      "id": "ring-skip-attempt",
+      "description": "Rejects rollout ring order that skips canary before staging.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "fleet_rings.staged_boundary_ready",
+        "fleet_rings.staged_order"
+      ],
+      "observed_blocker_ids": [
+        "fleet_rings.staged_boundary_ready",
+        "fleet_rings.staged_order"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 2,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/ring-skip-attempt/audit-result.json",
+      "audit_result_sha256": "537cfc329c50d26bfed79d51b524343431f1d1bb8e8d2d18ff35ed47e9694648",
+      "override_inputs": {
+        "FleetRolloutAuthorityPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\ring-skip-attempt\\fleet-authority-ring-skip.json"
+      }
+    },
+    {
+      "id": "missing-rollback-baseline",
+      "description": "Rejects rollout preconditions without rollback baseline hash.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "rollback_baseline.ready_no_mutation"
+      ],
+      "observed_blocker_ids": [
+        "rollback_baseline.ready_no_mutation"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/missing-rollback-baseline/audit-result.json",
+      "audit_result_sha256": "0224b1755b9713e19a38d152a0a5455ccb30ca097f841f519fe2e7fe8e9818b7",
+      "override_inputs": {
+        "RollbackDrillPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\missing-rollback-baseline\\rollback-drill-missing-baseline.json"
+      }
+    },
+    {
+      "id": "tui-rollout-authority-attempt",
+      "description": "Rejects fleet authority or ring metadata that grants rollout authority to TUI.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "fleet_authority.ready",
+        "fleet_rings.staged_boundary_ready"
+      ],
+      "observed_blocker_ids": [
+        "fleet_authority.ready",
+        "fleet_rings.staged_boundary_ready"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 2,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/tui-rollout-authority-attempt/audit-result.json",
+      "audit_result_sha256": "16ff24cac9f108b56c438c0711791d69e7211d49622faba81c8a7e3af977fe2e",
+      "override_inputs": {
+        "FleetRolloutAuthorityPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\tui-rollout-authority-attempt\\fleet-authority-tui-rollout.json"
+      }
+    },
+    {
+      "id": "model-replay-rollout-authority-attempt",
+      "description": "Rejects rollout boundary evidence that grants rollout authority to model replay.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "rc4.rollout_boundary.ready"
+      ],
+      "observed_blocker_ids": [
+        "rc4.rollout_boundary.ready"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/model-replay-rollout-authority-attempt/audit-result.json",
+      "audit_result_sha256": "5c18addddcdf57eb936ed5bf22360e22f5a51721ca694e7d7dbd440c7c301d59",
+      "override_inputs": {
+        "Rc4RolloutBoundaryEvidencePath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\model-replay-rollout-authority-attempt\\rollout-boundary-model-replay-authority.json"
+      }
+    },
+    {
+      "id": "remote-dispatch-mutation-attempt",
+      "description": "Rejects mirror publication metadata that enables remote dispatch or active mutation.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "mirror_publication.ready_no_mutation"
+      ],
+      "observed_blocker_ids": [
+        "mirror_publication.ready_no_mutation"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/remote-dispatch-mutation-attempt/audit-result.json",
+      "audit_result_sha256": "5d22438547ba6afef932ba8c9204812d2dc72635b17b63c647d6481cf15c6e51",
+      "override_inputs": {
+        "MirrorPublicationPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\remote-dispatch-mutation-attempt\\mirror-publication-remote-dispatch.json"
+      }
+    },
+    {
+      "id": "unredacted-support-bundle",
+      "description": "Rejects support/recovery evidence that is no longer redacted and local-only.",
+      "status": "passed",
+      "expected_blocker_ids": [
+        "support_recovery.redacted_local_only"
+      ],
+      "observed_blocker_ids": [
+        "support_recovery.redacted_local_only"
+      ],
+      "missing_expected_blocker_ids": [],
+      "audit_status": "blocked",
+      "audit_blockers": 1,
+      "rollout_preconditions_ready": false,
+      "production_ready_claim": false,
+      "rollout_plan_created": false,
+      "rollout_plan_executed": false,
+      "exact_operator_approval_granted": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false,
+      "exit_code": 0,
+      "error": null,
+      "audit_result": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/unredacted-support-bundle/audit-result.json",
+      "audit_result_sha256": "7e3a226c253c701a325497cbd4baab6f8bf9cd8b18c9514dfff67d2634ecef03",
+      "override_inputs": {
+        "SupportRecoveryPath": ".workflow\\artifacts\\rc4-hosted-transport-fail-closed-fixtures\\unredacted-support-bundle\\support-recovery-unredacted.json"
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "cases": 13,
+    "passed_cases": 13,
+    "failed_cases": 0,
+    "child_audit_exit_zero_cases": 13,
+    "blockers": 0,
+    "expected_fail_closed_cases": [
+      "hosted-manifest-hash-drift",
+      "missing-rc3-final-audit-binding",
+      "stale-mirror-snapshot",
+      "unsigned-mirror-metadata",
+      "revoked-mirror-artifact",
+      "registry-lockfile-mismatch",
+      "fleet-target-set-drift",
+      "ring-skip-attempt",
+      "missing-rollback-baseline",
+      "tui-rollout-authority-attempt",
+      "model-replay-rollout-authority-attempt",
+      "remote-dispatch-mutation-attempt",
+      "unredacted-support-bundle"
+    ],
+    "rc4_013_complete": true,
+    "production_ready_claim": false,
+    "network_transfer_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  }
+}
