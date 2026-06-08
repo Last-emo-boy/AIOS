@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260609-agentos-production-distro-rc13",
   "milestone": "Production Distro RC13",
-  "status": "active",
+  "status": "completed",
   "objective": "Convert RC12 fail-closed blockers into satisfiable local AIOS execution gates: repair declared/current release artifact identity to drift-zero, bind current payload bytes into a local immutable object manifest and descriptor set, prove freshness and revocation authority without private material, run verified quarantine preflight before interpretation, produce executable AgentCore PlanSpec readiness, bind SecurityExecution allow preconditions, enroll two local canary identities with exact approval and audit sink nonce expiry, then execute or deny controlled activation and separately approved rollback without mirror, signer, frontend, remote dispatch, object storage provisioning, or production ring infrastructure changes.",
   "scope": {
     "included": [
@@ -141,14 +141,14 @@
       "tasks": [
         {
           "id": "RC13-050",
-          "status": "pending",
+          "status": "completed",
           "title": "run Production Distro RC13 final closeout audit",
           "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
         }
       ]
     }
   ],
-  "current_task": "RC13-050",
+  "current_task": null,
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
   "acceptance_gates": {
     "hosted_endpoint_domain": "aios.w33d.xyz",

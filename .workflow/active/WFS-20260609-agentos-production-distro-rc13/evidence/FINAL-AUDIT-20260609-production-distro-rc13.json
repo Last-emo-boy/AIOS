@@ -1,0 +1,701 @@
+{
+  "schema": "agentos.production-distro-rc13-final-audit.v1",
+  "generated_at": "2026-06-09T11:05:00+08:00",
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc13",
+  "milestone": "Production Distro RC13",
+  "verdict": "PASS",
+  "decision": "rc13-closeout-pass-next-milestone-planning",
+  "production_ready_claim": false,
+  "objective": "AIOS-body local trust unblock audit for drift-zero repair, object manifest binding, freshness/revocation authority, quarantine preflight, AgentCore, SecurityExecution, target identity, exact approval, activation, rollback, support, and recovery evidence",
+  "task_results": [
+    {
+      "id": "RC13-000",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-001",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-010",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-011",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-012",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-020",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-021",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-022",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-030",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-031",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-040",
+      "status": "completed"
+    },
+    {
+      "id": "RC13-041",
+      "status": "completed"
+    }
+  ],
+  "acceptance_coverage": [
+    {
+      "requirement": "declared/current drift repair is explicit and hash-bound, but drift-zero remains denied",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-declared-current-drift-zero/result.json"
+      ]
+    },
+    {
+      "requirement": "current payload bytes, descriptor, manifest, checksums, compatibility, rollback, and support/recovery references are locally consistent",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json"
+      ]
+    },
+    {
+      "requirement": "public signature and revocation authority are bound without private material, but freshness remains missing",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-freshness-revocation-authority/result.json"
+      ]
+    },
+    {
+      "requirement": "quarantine preflight denies before network, payload download, quarantine write, or interpretation",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-quarantine-preflight/result.json"
+      ]
+    },
+    {
+      "requirement": "AgentCore PlanSpec readiness binds release object and quarantine evidence but stays non-executable",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json"
+      ]
+    },
+    {
+      "requirement": "SecurityExecution allow preconditions deny effect preparation and controlled effects",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json"
+      ]
+    },
+    {
+      "requirement": "two-target local identity enrollment remains denied with zero enrolled target identities",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json"
+      ]
+    },
+    {
+      "requirement": "exact approval audit binding records required fields but remains denied",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json"
+      ]
+    },
+    {
+      "requirement": "controlled activation remains denied and side-effect free",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-controlled-activation/result.json"
+      ]
+    },
+    {
+      "requirement": "separate rollback/support/recovery remains denied with redacted local support evidence",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc13-controlled-rollback-support-recovery/result.json"
+      ]
+    }
+  ],
+  "controlled_unblock_status": {
+    "moved_beyond_fail_closed": false,
+    "drift_zero": false,
+    "object_manifest_descriptor_binding_allowed": false,
+    "freshness_revocation_authority_bound": false,
+    "object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "target_identity_set_bound": false,
+    "exact_approval_granted": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false
+  },
+  "execution_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "current_payload_matches_rc12": true,
+    "current_payload_size_bytes": 377,
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "drift_state": "declared-current-drift-denied",
+    "drift_zero": false,
+    "drift_count": 19,
+    "local_descriptor_manifest_consistent": true,
+    "comparison_drifts": 0,
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "revocation_authority_bound": true,
+    "freshness_window_bound": false,
+    "quarantine_preflight_state": "quarantine-preflight-denied-before-network",
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "enrolled_target_identity_count": 0,
+    "exact_approval_bound": false,
+    "exact_approval_granted": false,
+    "audit_sink_bound": false,
+    "nonce_bound": false,
+    "expiry_bound": false,
+    "activation_state": "controlled-activation-denied",
+    "activation_allowed": false,
+    "activation_performed": false,
+    "rollback_state": "controlled-rollback-support-recovery-denied",
+    "rollback_baseline_bound": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "support_recovery_reference_bound": true,
+    "support_bundle_redacted": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "invariants_verified": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_is_trust": false,
+    "external_payload_bytes_uploaded": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "source_artifacts": {
+    "plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+      "sha256": "02eda36c069c9132ba22ac3f1a4abac63e8889eaff9f60a8f21f79dc49ec8afe",
+      "size_bytes": 8841,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "completed"
+    },
+    "workflow_session": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/workflow-session.json",
+      "sha256": "800dee5a4c367284c48f50ab8d6997757f1be8738dfa35fa8c66238e25ecfb47",
+      "size_bytes": 15790,
+      "present": true,
+      "schema": null,
+      "status": "completed"
+    },
+    "rc12_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
+      "sha256": "f7fbcdb58ef3a711e69459c2d292fb1bc0eb3997a736bffdf5b1fe2bb377219d",
+      "size_bytes": 22611,
+      "present": true,
+      "schema": "agentos.production-distro-rc12-final-audit.v1",
+      "status": null
+    },
+    "rc13_plan_doc": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-plan.md",
+      "sha256": "2713f1c8dfc7f9867ddc4d9da067d83c12594f8c0965c1a46c74a88e5da8909d",
+      "size_bytes": 2247,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc13_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+      "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+      "size_bytes": 8971,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "planning_evidence": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-000-planning.json",
+      "sha256": "eef478dc05e18389ad0328c1579c052d2dde78818ffbb7268ea4382d3f74c50d",
+      "size_bytes": 3984,
+      "present": true,
+      "schema": "agentos.rc13-planning-evidence.v1",
+      "status": "completed"
+    },
+    "contract_evidence": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-001-local-trust-unblock-contract.json",
+      "sha256": "0c274471fbd999851f79d6fdb0cbca8dd1c10b88afa796323e58bd80f412129c",
+      "size_bytes": 4432,
+      "present": true,
+      "schema": "agentos.rc13-local-trust-unblock-contract-evidence.v1",
+      "status": "completed"
+    },
+    "drift_result": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+      "sha256": "c9fb476d7eb3cd61fb335bd32f1eff7f868d9edbd4095951f27532c943ab1d25",
+      "size_bytes": 13439,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-result.v1",
+      "status": "passed"
+    },
+    "object_manifest_result": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+      "sha256": "47794372cb1fd3a66fea12b47d34f91abf23fc0543c063d00ec377516b22fe79",
+      "size_bytes": 16931,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding-result.v1",
+      "status": "passed"
+    },
+    "freshness_result": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+      "sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db",
+      "size_bytes": 16454,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-result.v1",
+      "status": "passed"
+    },
+    "quarantine_result": {
+      "path": ".workflow/artifacts/rc13-quarantine-preflight/result.json",
+      "sha256": "10dbac19d183fc9598259ff2357b66e0a8a472c6d02517d2b9248a8a9ce8ed00",
+      "size_bytes": 18109,
+      "present": true,
+      "schema": "agentos.rc13-quarantine-preflight-result.v1",
+      "status": "passed"
+    },
+    "agentcore_result": {
+      "path": ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json",
+      "sha256": "7c731f10dc863ffbd7a52d476b62524d5d027bd056268fac0cc53a9012b660c7",
+      "size_bytes": 14677,
+      "present": true,
+      "schema": "agentos.rc13-agentcore-executable-planspec-readiness-result.v1",
+      "status": "passed"
+    },
+    "security_result": {
+      "path": ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json",
+      "sha256": "ce35b5d76980c755ee0150f667c5d6e51b76f386e7ae3f3ec21cb0c9e3ce1de3",
+      "size_bytes": 16980,
+      "present": true,
+      "schema": "agentos.rc13-security-execution-allow-preconditions-result.v1",
+      "status": "passed"
+    },
+    "target_result": {
+      "path": ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json",
+      "sha256": "b1ae4aadea9cf0fcaf3f9f7b6ddf4284d804cf234bdc5e5e8589e66fa5b89a12",
+      "size_bytes": 15307,
+      "present": true,
+      "schema": "agentos.rc13-two-target-identity-enrollment-result.v1",
+      "status": "passed"
+    },
+    "approval_result": {
+      "path": ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json",
+      "sha256": "e75f68b49cfeca286e61b800a2dcb0c9c5d9b6266639fc1398e3df71323546f4",
+      "size_bytes": 19461,
+      "present": true,
+      "schema": "agentos.rc13-exact-approval-audit-binding-result.v1",
+      "status": "passed"
+    },
+    "activation_result": {
+      "path": ".workflow/artifacts/rc13-controlled-activation/result.json",
+      "sha256": "963d13cbd02e6d25bd7cbfd231866bfb4a0b841bbd7c0578356f204317e77b63",
+      "size_bytes": 17965,
+      "present": true,
+      "schema": "agentos.rc13-controlled-activation-result.v1",
+      "status": "passed"
+    },
+    "rollback_result": {
+      "path": ".workflow/artifacts/rc13-controlled-rollback-support-recovery/result.json",
+      "sha256": "97abce132ee1d8e4605f535e7e850e7f6a1f31ff1d511a6f11180e1493670660",
+      "size_bytes": 29261,
+      "present": true,
+      "schema": "agentos.rc13-controlled-rollback-support-recovery-result.v1",
+      "status": "passed"
+    }
+  },
+  "remaining_blockers_before_ga_or_execution": [
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "declared-current-drift-zero-not-proved",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "object-manifest-descriptor-binding-not-allowed",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed",
+    "freshness-window-stale-or-missing",
+    "quarantine-preflight-not-allowed",
+    "network-fetch-denied-before-object-trust",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "payload-interpretation-not-allowed",
+    "install-not-allowed",
+    "verified-quarantine-preflight-not-bound",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "controlled-effect-execution-not-authorized",
+    "security-execution-effect-envelope-denied",
+    "canary-target-identity-enrollment-not-run",
+    "fewer-than-two-local-canary-identities",
+    "target-identity-a-missing",
+    "target-identity-b-missing",
+    "target-identities-missing",
+    "target-identity-set-not-bound",
+    "duplicate-local-canary-identity",
+    "stale-local-canary-identity",
+    "incompatible-local-canary-identity",
+    "broad-target-selector",
+    "target-identity-release-mismatch",
+    "target-identity-object-mismatch",
+    "target-identity-planspec-mismatch",
+    "target-identity-security-envelope-mismatch",
+    "target-identity-audit-sink-not-bound",
+    "target-identity-replay-detected",
+    "remote-dispatch-authority-broadening",
+    "production-mutation-authority-broadening",
+    "exact-approval-audit-binding-not-bound",
+    "approval-id-not-bound",
+    "approval-actor-not-bound",
+    "approval-actor-authority-not-bound",
+    "approval-target-identities-not-bound",
+    "approval-audit-sink-not-bound",
+    "approval-nonce-not-bound",
+    "approval-policy-version-not-bound",
+    "approval-signature-not-bound",
+    "approval-stale",
+    "approval-replay-detected",
+    "approval-broad-scope",
+    "approval-actor-mismatch",
+    "approval-release-mismatch",
+    "approval-object-digest-mismatch",
+    "approval-target-set-mismatch",
+    "approval-agentcore-planspec-mismatch",
+    "approval-security-envelope-mismatch",
+    "approval-rollback-baseline-mismatch",
+    "approval-support-recovery-mismatch",
+    "approval-before-target-identity-set-bound",
+    "approval-implies-execution-denied",
+    "activation-object-trust-not-proved",
+    "activation-quarantine-not-verified",
+    "activation-target-identity-set-not-bound",
+    "activation-exact-approval-not-granted",
+    "activation-audit-sink-not-bound",
+    "activation-nonce-not-bound",
+    "activation-expiry-not-bound",
+    "activation-agentcore-planspec-not-executable",
+    "activation-security-execution-not-allowed",
+    "activation-remote-dispatch-forbidden",
+    "activation-production-mutation-forbidden",
+    "rollback-target-identities-missing",
+    "controlled-activation-not-performed",
+    "rollback-exact-operator-approval-not-granted",
+    "agentcore-rollback-planspec-not-bound",
+    "agentcore-rollback-planspec-not-executable",
+    "security-execution-rollback-effect-envelope-not-bound",
+    "rollback-audit-journal-not-bound",
+    "post-rollback-observations-missing",
+    "remote-fleet-execution-not-enabled",
+    "rollback-baseline-not-approved-for-execution",
+    "support-recovery-not-approved-for-execution",
+    "support-upload-not-authorized",
+    "recovery-execution-not-authorized",
+    "rollback-execution-not-authorized"
+  ],
+  "next_milestone": {
+    "id": "Production Distro RC14",
+    "title": "turn RC13 local trust gates from denial into satisfiable execution readiness",
+    "direction": "repair declared/current drift to zero, bind freshness window, prove object trust, perform verified quarantine preflight, enroll two local target identities, bind exact approval with audit sink nonce and expiry, make AgentCore PlanSpec executable, allow SecurityExecution effects, then rerun controlled activation and separately approved rollback."
+  },
+  "checks": [
+    {
+      "id": "rc13.plan.precloseout_complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC13 pre-closeout tasks must be completed and RC13-050 must be pending before first audit or completed on rerun.",
+      "evidence": {
+        "completed": 12,
+        "expected": 12,
+        "current_task": null,
+        "rc13_050_status": "completed",
+        "plan_status": "completed"
+      }
+    },
+    {
+      "id": "rc13.docs_and_contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 planning evidence, plan doc, and local trust unblock contract must exist.",
+      "evidence": {
+        "plan_doc": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-plan.md",
+        "contract": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md"
+      }
+    },
+    {
+      "id": "rc12.previous_milestone.closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 final audit must inherit a PASS RC12 final audit without GA claim.",
+      "evidence": {
+        "verdict": "PASS",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc13.drift_zero.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 declared/current drift repair must pass while drift-zero and object trust remain denied.",
+      "evidence": {
+        "checks": 9,
+        "failed_checks": 0,
+        "drift_count": 19,
+        "drift_zero_denied_as_expected": true,
+        "rc13_010_complete": true,
+        "next_task": "RC13-011"
+      }
+    },
+    {
+      "id": "rc13.object_manifest.consistent_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 object manifest and descriptor binding must prove local consistency while authority remains denied.",
+      "evidence": {
+        "checks": 9,
+        "failed_checks": 0,
+        "comparisons": 36,
+        "comparison_drifts": 0,
+        "local_descriptor_manifest_consistent": true,
+        "authority_denied_as_expected": true,
+        "rc13_011_complete": true,
+        "next_task": "RC13-012"
+      }
+    },
+    {
+      "id": "rc13.freshness_revocation.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 public signature and revocation authority must be bound without freshness-window authority.",
+      "evidence": {
+        "checks": 9,
+        "failed_checks": 0,
+        "comparisons": 20,
+        "comparison_drifts": 0,
+        "fail_closed_cases": 14,
+        "failed_fail_closed_cases": 0,
+        "public_signature_bound": true,
+        "revocation_authority_bound": true,
+        "freshness_window_bound": false,
+        "authority_denied_as_expected": true,
+        "rc13_012_complete": true,
+        "next_task": "RC13-020"
+      }
+    },
+    {
+      "id": "rc13.quarantine.denied_before_network",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 quarantine preflight must deny before network, quarantine writes, or payload interpretation.",
+      "evidence": {
+        "checks": 12,
+        "failed_checks": 0,
+        "cases": 26,
+        "failed_cases": 0,
+        "preflight_denied_before_network": true,
+        "payload_interpretation_denied": true,
+        "rc13_020_complete": true,
+        "next_task": "RC13-021"
+      }
+    },
+    {
+      "id": "rc13.agentcore.non_executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 AgentCore PlanSpec readiness must stay non-executable without verified quarantine, target, approval, audit, nonce, expiry, and policy bindings.",
+      "evidence": {
+        "checks": 8,
+        "failed_checks": 0,
+        "cases": 16,
+        "failed_cases": 0,
+        "quarantine_evidence_bound": true,
+        "verified_quarantine_preflight_bound": false,
+        "release_object_bound": true,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "rc13_021_complete": true,
+        "next_task": "RC13-022"
+      }
+    },
+    {
+      "id": "rc13.security_execution.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 SecurityExecution allow preconditions must deny effect preparation and controlled effects.",
+      "evidence": {
+        "checks": 8,
+        "failed_checks": 0,
+        "cases": 17,
+        "failed_cases": 0,
+        "security_execution_allowed": false,
+        "effect_preparation_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "rc13_022_complete": true,
+        "next_task": "RC13-030"
+      }
+    },
+    {
+      "id": "rc13.target_identity.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 two-target identity enrollment must remain denied with zero enrolled identities.",
+      "evidence": {
+        "checks": 10,
+        "failed_checks": 0,
+        "cases": 16,
+        "failed_cases": 0,
+        "rc13_030_complete": true,
+        "target_identity_set_bound": false,
+        "enrolled_target_identity_count": 0,
+        "exact_approval_bound": false,
+        "approval_granted": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "next_task": "RC13-031"
+      }
+    },
+    {
+      "id": "rc13.exact_approval.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 exact approval audit binding must remain denied without target identities, actor signature, audit sink, nonce, and expiry.",
+      "evidence": {
+        "checks": 10,
+        "failed_checks": 0,
+        "cases": 22,
+        "failed_cases": 0,
+        "rc13_031_complete": true,
+        "exact_approval_bound": false,
+        "approval_granted": false,
+        "audit_sink_bound": false,
+        "nonce_bound": false,
+        "expiry_bound": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "next_task": "RC13-040"
+      }
+    },
+    {
+      "id": "rc13.activation.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 controlled activation must remain denied and side-effect free.",
+      "evidence": {
+        "checks": 8,
+        "failed_checks": 0,
+        "cases": 12,
+        "failed_cases": 0,
+        "rc13_040_complete": true,
+        "activation_allowed": false,
+        "activation_performed": false,
+        "activation_audit_fabricated": false,
+        "rollback_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "next_task": "RC13-041"
+      }
+    },
+    {
+      "id": "rc13.rollback_support_recovery.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 rollback, support upload, and recovery execution must remain denied while redacted local support evidence is bound.",
+      "evidence": {
+        "checks": 11,
+        "failed_checks": 0,
+        "cases": 14,
+        "failed_cases": 0,
+        "rc13_041_complete": true,
+        "rollback_state": "controlled-rollback-support-recovery-denied",
+        "rollback_baseline_bound": true,
+        "rollback_execution_allowed": false,
+        "rollback_execution_performed": false,
+        "controlled_activation_performed": false,
+        "support_upload_allowed": false,
+        "support_upload_performed": false,
+        "recovery_execution_allowed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ready_claim": false,
+        "next_task": "RC13-050"
+      }
+    },
+    {
+      "id": "rc13.no_invariant_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13 task invariants must not broaden signing, mirror, frontend, install, activation, rollback, support, recovery, remote dispatch, or production authority.",
+      "evidence": {
+        "violations": []
+      }
+    }
+  ]
+}
