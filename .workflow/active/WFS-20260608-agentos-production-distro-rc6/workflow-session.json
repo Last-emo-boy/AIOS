@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260608-agentos-production-distro-rc6",
   "name": "Production Distro RC6",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-08T12:55:00+08:00",
-  "updated_at": "2026-06-08T14:45:00+08:00",
+  "updated_at": "2026-06-08T14:55:00+08:00",
   "source": "TASK.md; RC5 final audit; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
   "goal": "Turn the RC5 hosted metadata mirror into an installable signed payload channel and controlled canary execution readiness path while preserving signing, installer, activation, rollback, fleet, and TUI authority boundaries.",
@@ -94,9 +94,15 @@
       "completed_at": "2026-06-08T14:45:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-031-rollback-execution-preconditions.json",
       "commit": null
+    },
+    {
+      "task": "RC6-040",
+      "completed_at": "2026-06-08T14:55:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-040-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC6-040",
+  "next_task": null,
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
@@ -163,6 +169,12 @@
     ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
     ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-031.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-031-rollback-execution-preconditions.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-031-rollback-execution-preconditions.json",
+    "scripts/run-rc6-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc6-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/final-rc6-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-040.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-040-final-closeout-audit.json"
   ]
 }

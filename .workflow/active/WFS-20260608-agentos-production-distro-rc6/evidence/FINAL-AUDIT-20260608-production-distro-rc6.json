@@ -1,0 +1,365 @@
+﻿{
+    "schema":  "agentos.production-distro-rc6-final-audit.v1",
+    "generated_at":  "2026-06-08T12:44:03.3727598+08:00",
+    "workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+    "milestone":  "Production Distro RC6",
+    "verdict":  "PASS",
+    "decision":  "rc6-closeout-pass-next-milestone-planning",
+    "production_ready_claim":  false,
+    "hosted_domain":  "aios.w33d.xyz",
+    "objective":  "installable signed payload channel metadata, bootstrap preflight, installer fail-closed proof, mirror frontend, canary packet, and rollback preconditions without GA claim",
+    "task_results":  [
+                         {
+                             "id":  "RC6-001",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-002",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-003",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-004",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-010",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-011",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-012",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-020",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-021",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-022",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-030",
+                             "status":  "completed"
+                         },
+                         {
+                             "id":  "RC6-031",
+                             "status":  "completed"
+                         }
+                     ],
+    "acceptance_coverage":  [
+                                {
+                                    "requirement":  "RC6 contract and threat controls are documented",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+                                                     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+                                                     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md"
+                                                 ]
+                                },
+                                {
+                                    "requirement":  "hosted mirror exposes bounded RC6 payload and install metadata",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/artifacts/rc6-mirror-portal/result.json",
+                                                     ".workflow/artifacts/rc6-hosted-payload-metadata/result.json"
+                                                 ]
+                                },
+                                {
+                                    "requirement":  "payload metadata is hash-bound, drift-aware, unsigned, verification-blocked, and install-blocked",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+                                                     ".workflow/artifacts/rc6-hosted-payload-metadata/result.json"
+                                                 ]
+                                },
+                                {
+                                    "requirement":  "signed payload and installer negative fixtures fail closed",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/artifacts/rc6-signed-payload-fail-closed/result.json",
+                                                     ".workflow/artifacts/rc6-installer-fail-closed/result.json"
+                                                 ]
+                                },
+                                {
+                                    "requirement":  "bootstrap preflight explains missing signature, revocation, compatibility, and rollback baseline gates",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+                                                     ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json"
+                                                 ]
+                                },
+                                {
+                                    "requirement":  "mirror frontend remains static, metadata-preserving, dependency-free, and non-authoritative",
+                                    "status":  "proved",
+                                    "evidence":  ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json"
+                                },
+                                {
+                                    "requirement":  "canary execution packet and rollback preconditions are exact-approval gated and execution-blocked",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+                                                     ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json"
+                                                 ]
+                                }
+                            ],
+    "payload_surface":  {
+                            "release_id":  "production-distro-rc6-current-artifacts",
+                            "status":  "verification-blocked",
+                            "signature_available":  false,
+                            "install_allowed":  false,
+                            "rollback_execution_allowed":  false,
+                            "install_state":  "verification-blocked",
+                            "drifted_components":  [
+                                                       "update_metadata",
+                                                       "release_channel_metadata",
+                                                       "qemu_runtime_smoke"
+                                                   ]
+                        },
+    "invariants_verified":  {
+                                "metadata_only":  true,
+                                "mirror_is_root_of_trust":  false,
+                                "production_ready_claim":  false,
+                                "local_private_key_material_used":  false,
+                                "cryptographic_signing_performed_by_rc6":  false,
+                                "signature_available":  false,
+                                "install_allowed":  false,
+                                "install_performed":  false,
+                                "activation_performed":  false,
+                                "rollback_execution_performed":  false,
+                                "canary_execution_performed":  false,
+                                "active_slot_mutated":  false,
+                                "boot_metadata_mutated":  false,
+                                "active_artifact_set_mutated":  false,
+                                "production_ring_mutated":  false,
+                                "support_upload_performed":  false,
+                                "remote_dispatch_enabled":  false,
+                                "model_replay_authority":  false,
+                                "normal_shell_authority":  false,
+                                "tui_authority":  false
+                            },
+    "source_artifacts":  {
+                             "plan":  {
+                                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
+                                          "sha256":  "2c2ac50d41dbf4037d89fd27e438fef85279e694952be24175bb4344d15d8a35",
+                                          "present":  true,
+                                          "schema":  "agentos.workflow-plan.v1",
+                                          "status":  "active"
+                                      },
+                             "workflow_session":  {
+                                                      "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/workflow-session.json",
+                                                      "sha256":  "0f8304b300a65975faaa21dd28914252da1b33ae0d658a22d08e1c9efd4a6bfd",
+                                                      "present":  true,
+                                                      "schema":  null,
+                                                      "status":  "active"
+                                                  },
+                             "rc5_final_audit":  {
+                                                     "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+                                                     "sha256":  "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+                                                     "present":  true,
+                                                     "schema":  "agentos.production-distro-rc5-final-audit.v1",
+                                                     "status":  null
+                                                 },
+                             "contract":  {
+                                              "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+                                              "sha256":  "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+                                              "present":  true,
+                                              "schema":  null,
+                                              "status":  null
+                                          },
+                             "boundary":  {
+                                              "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+                                              "sha256":  "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+                                              "present":  true,
+                                              "schema":  null,
+                                              "status":  null
+                                          },
+                             "threat_model":  {
+                                                  "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+                                                  "sha256":  "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873",
+                                                  "present":  true,
+                                                  "schema":  null,
+                                                  "status":  null
+                                              },
+                             "mirror_portal":  {
+                                                   "path":  ".workflow/artifacts/rc6-mirror-portal/result.json",
+                                                   "sha256":  "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc6-mirror-portal-result.v1",
+                                                   "status":  "passed"
+                                               },
+                             "payload_manifest":  {
+                                                      "path":  ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+                                                      "sha256":  "8ac90ee712b5964d0c3c306d4581ba40fb48837896d1c79c720c2b12f52f37d8",
+                                                      "present":  true,
+                                                      "schema":  "agentos.rc6-installable-payload-manifest-result.v1",
+                                                      "status":  "passed"
+                                                  },
+                             "hosted_payload":  {
+                                                    "path":  ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+                                                    "sha256":  "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc6-hosted-payload-metadata-result.v1",
+                                                    "status":  "passed"
+                                                },
+                             "signed_payload_fail_closed":  {
+                                                                "path":  ".workflow/artifacts/rc6-signed-payload-fail-closed/result.json",
+                                                                "sha256":  "798100ba8f9eeb45d71328f948c83ca50b8719c4085965cb6ea8c43eb6c994f7",
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc6-signed-payload-fail-closed-result.v1",
+                                                                "status":  "passed"
+                                                            },
+                             "bootstrap_preflight":  {
+                                                         "path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+                                                         "sha256":  "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc6-bootstrap-installer-preflight-result.v1",
+                                                         "status":  "passed"
+                                                     },
+                             "bootstrap_preflight_report":  {
+                                                                "path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+                                                                "sha256":  "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc6-bootstrap-installer-preflight-report.v1",
+                                                                "status":  null
+                                                            },
+                             "installer_fail_closed":  {
+                                                           "path":  ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+                                                           "sha256":  "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc6-installer-fail-closed-result.v1",
+                                                           "status":  "passed"
+                                                       },
+                             "mirror_frontend":  {
+                                                     "path":  ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
+                                                     "sha256":  "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc6-mirror-frontend-refresh-result.v1",
+                                                     "status":  "passed"
+                                                 },
+                             "canary_packet":  {
+                                                   "path":  ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+                                                   "sha256":  "8246b22c23d45c0e53fcbbe998398ba53f2a041054717a1bab57dc0de6679cf5",
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc6-canary-execution-packet-result.v1",
+                                                   "status":  "passed"
+                                               },
+                             "canary_packet_doc":  {
+                                                       "path":  ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+                                                       "sha256":  "f30b8b8e32940c84f165fe9a9de5bdd069178517deadb3cdf6396c1994355f27",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc6-canary-execution-packet.v1",
+                                                       "status":  "packet-projected-execution-blocked"
+                                                   },
+                             "canary_rollback_preconditions":  {
+                                                                   "path":  ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+                                                                   "sha256":  "89f4e8d7fe5a48fc521914878c54fa7a8d85d90054d89eafc9530b2f6f048821",
+                                                                   "present":  true,
+                                                                   "schema":  "agentos.rc6-rollback-execution-preconditions.v1",
+                                                                   "status":  "rollback-preconditions-projected-execution-blocked"
+                                                               },
+                             "rollback_preconditions":  {
+                                                            "path":  ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json",
+                                                            "sha256":  "6c102a9c02573ee170e4c54d3aed4f3719720cf8834fb1d3d0fcc07857cf1cbd",
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc6-rollback-execution-preconditions-result.v1",
+                                                            "status":  "passed"
+                                                        },
+                             "rollback_matrix":  {
+                                                     "path":  ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+                                                     "sha256":  "f1003164ddc8b5e068ed0b7d49fc951e122d0d410783f0e9913cd564f8313b27",
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc6-rollback-drill-precondition-matrix.v1",
+                                                     "status":  "preconditions-projected-execution-blocked"
+                                                 },
+                             "rollback_blockers":  {
+                                                       "path":  ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json",
+                                                       "sha256":  "da75bad9a2b8b6da49e7a9244a4a91dd376c6c788cf9b8fdbe2ba8d2edbe6f0c",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc6-rollback-execution-blockers.v1",
+                                                       "status":  "execution-blocked-by-required-gates"
+                                                   }
+                         },
+    "live_endpoint_bindings":  {
+                                   "root":  {
+                                                "path":  "/",
+                                                "status_code":  200,
+                                                "body_sha256":  "f386da714e5c57bfa41ab40896227df3444baefbaf4bc4d2e264f38739a74c37"
+                                            },
+                                   "health":  {
+                                                  "path":  "/health.json",
+                                                  "status_code":  200,
+                                                  "body_sha256":  "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25"
+                                              },
+                                   "descriptor":  {
+                                                      "path":  "/.well-known/aios/mirror.json",
+                                                      "status_code":  200,
+                                                      "body_sha256":  "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5"
+                                                  },
+                                   "channel":  {
+                                                   "path":  "/channel/index.json",
+                                                   "status_code":  200,
+                                                   "body_sha256":  "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6"
+                                               },
+                                   "payload_index":  {
+                                                         "path":  "/payloads/index.json",
+                                                         "status_code":  200,
+                                                         "body_sha256":  "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151"
+                                                     },
+                                   "install_bootstrap":  {
+                                                             "path":  "/install/bootstrap.json",
+                                                             "status_code":  200,
+                                                             "body_sha256":  "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd"
+                                                         },
+                                   "payload_manifest":  {
+                                                            "path":  "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+                                                            "status_code":  200,
+                                                            "body_sha256":  "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a"
+                                                        },
+                                   "payload_checksums":  {
+                                                             "path":  "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+                                                             "status_code":  200,
+                                                             "body_sha256":  "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2"
+                                                         },
+                                   "payload_signatures":  {
+                                                              "path":  "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+                                                              "status_code":  200,
+                                                              "body_sha256":  "93d8583a8e0af983a4df2ede5909d167280834195114bc0d94826aaf87303a1e"
+                                                          },
+                                   "support_recovery":  {
+                                                            "path":  "/support/recovery.json",
+                                                            "status_code":  200,
+                                                            "body_sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                                                        }
+                               },
+    "remaining_blockers_before_ga_or_execution":  [
+                                                      "payload-signature-not-published",
+                                                      "revocation-snapshot-not-published",
+                                                      "installer-compatibility-contract-pending",
+                                                      "rollback-baseline-not-published-to-install-metadata",
+                                                      "large-payload-storage-policy-and-object-storage-pending",
+                                                      "installable-media-declared-hash-drift",
+                                                      "SecurityExecutionEngine-rollback-PlanSpec-not-approved",
+                                                      "canary-activation-evidence-not-present",
+                                                      "two-or-more-enrolled-canary-target-nodes",
+                                                      "remote-fleet-execution-not-enabled",
+                                                      "exact-operator-approval-not-granted",
+                                                      "tls-required-before-ga-claim"
+                                                  ],
+    "next_milestone":  {
+                           "id":  "Production Distro RC7",
+                           "title":  "signed payload consumption and controlled execution evidence",
+                           "reason":  "RC6 closes hosted installable payload metadata, bootstrap preflight, fail-closed behavior, canary packet, and rollback preconditions. RC7 should turn the blocked gates into evidence: real signed payload metadata, revocation snapshot, installer compatibility contract, rollback baseline publication, TLS, and exact-approved canary/rollback execution."
+                       }
+}

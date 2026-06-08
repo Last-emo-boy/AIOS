@@ -1,0 +1,62 @@
+{
+  "schema": "agentos.rc6-final-closeout-task-evidence.v1",
+  "generated_at": "2026-06-08T14:55:00+08:00",
+  "task": "RC6-040",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "runner": {
+    "path": "scripts/run-rc6-final-closeout-audit.ps1",
+    "sha256": "26b4f2d2636ca5de97bdf6ea41c7f9c26cdfc87a84727a1241745e6ba19fae5c"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc6-final-closeout-audit/result.json",
+    "sha256": "86300503185cc758dd8538e2549d0b1e1ef02b9708025b2e3ba1852562de7208",
+    "status": "passed",
+    "checks": 19,
+    "blockers": 0
+  },
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+      "sha256": "bf61926c2e60d9dd190202c42dc11bcbb636a66199f45b522e83a6f52c133286",
+      "verdict": "PASS"
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/final-rc6-closeout-summary.md",
+      "sha256": "e3155a85473f70395a7ead20f5c84a22d1d3c9f10c42dec2d37f9135ab8575a7"
+    }
+  },
+  "verified_controls": {
+    "contracts_present": true,
+    "hosted_payload_metadata_ready": true,
+    "signed_payload_fail_closed_ready": true,
+    "bootstrap_preflight_verification_blocked": true,
+    "installer_fail_closed_ready": true,
+    "mirror_frontend_ready": true,
+    "canary_packet_projected_execution_blocked": true,
+    "rollback_preconditions_ready_execution_blocked": true,
+    "live_endpoint_ready": true,
+    "production_ready_claim": false
+  },
+  "remaining_blockers_before_ga_or_execution": [
+    "payload-signature-not-published",
+    "revocation-snapshot-not-published",
+    "installer-compatibility-contract-pending",
+    "rollback-baseline-not-published-to-install-metadata",
+    "large-payload-storage-policy-and-object-storage-pending",
+    "installable-media-declared-hash-drift",
+    "SecurityExecutionEngine-rollback-PlanSpec-not-approved",
+    "canary-activation-evidence-not-present",
+    "two-or-more-enrolled-canary-target-nodes",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "tls-required-before-ga-claim"
+  ],
+  "completion": {
+    "rc6_040_complete": true,
+    "workflow_complete": true,
+    "next_milestone": "Production Distro RC7",
+    "commit_required": true
+  }
+}

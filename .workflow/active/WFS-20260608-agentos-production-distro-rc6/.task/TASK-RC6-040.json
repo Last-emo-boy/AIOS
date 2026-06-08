@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-040",
+  "title": "run Production Distro RC6 final audit and next milestone planning",
+  "status": "completed",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+    ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+    ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc6-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/final-rc6-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-040-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "All RC6 pre-closeout tasks are completed.",
+      "RC6 contracts, payload metadata, fail-closed fixtures, bootstrap preflight, frontend, canary packet, and rollback precondition evidence all pass.",
+      "Live hosted endpoints are reachable through curl --resolve and remain non-GA, current-artifacts, verification-blocked, unsigned, install-blocked, rollback-blocked, and non-authoritative.",
+      "Final audit records remaining GA/execution blockers and next milestone planning for RC7.",
+      "No signing, install, activation, rollback, active slot, boot metadata, production ring, support upload, remote dispatch, model, shell, or TUI authority is granted."
+    ]
+  }
+}
