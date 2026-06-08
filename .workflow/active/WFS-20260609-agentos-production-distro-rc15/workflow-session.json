@@ -3,7 +3,7 @@
   "name": "Production Distro RC15",
   "status": "active",
   "created_at": "2026-06-09T17:35:00+08:00",
-  "updated_at": "2026-06-09T20:05:00+08:00",
+  "updated_at": "2026-06-09T20:35:00+08:00",
   "source": "RC14 final audit; maestro-managed RC15 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
   "goal": "Plan and execute AIOS-body controlled local execution readiness by binding target identities, audit sink, nonce, expiry, policy version, exact approval, executable AgentCore PlanSpec, SecurityExecution allow, activation, rollback, support, and recovery evidence.",
@@ -63,9 +63,15 @@
       "completed_at": "2026-06-09T20:05:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-022-security-execution-allow-decision.json",
       "commit": null
+    },
+    {
+      "task": "RC15-030",
+      "completed_at": "2026-06-09T20:35:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-030-controlled-local-activation.json",
+      "commit": null
     }
   ],
-  "next_task": "RC15-030",
+  "next_task": "RC15-031",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
@@ -124,6 +130,12 @@
     ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-allow-decision.json",
     ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-fail-closed-matrix.json",
     ".workflow/artifacts/rc15-security-execution-allow-decision/controlled-local-activation-handoff.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-022-security-execution-allow-decision.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-022-security-execution-allow-decision.json",
+    "scripts/project-rc15-controlled-local-activation.ps1",
+    ".workflow/artifacts/rc15-controlled-local-activation/result.json",
+    ".workflow/artifacts/rc15-controlled-local-activation/activation-gate-report.json",
+    ".workflow/artifacts/rc15-controlled-local-activation/activation-execute-or-deny-evidence.json",
+    ".workflow/artifacts/rc15-controlled-local-activation/controlled-activation-rollback-handoff.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-030-controlled-local-activation.json"
   ]
 }
