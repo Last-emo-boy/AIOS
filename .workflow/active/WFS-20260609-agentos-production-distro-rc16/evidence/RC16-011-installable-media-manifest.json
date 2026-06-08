@@ -1,0 +1,88 @@
+{
+  "schema": "agentos.rc16-installable-media-manifest-evidence.v1",
+  "generated_at": "2026-06-09T22:25:00+08:00",
+  "task": "RC16-011",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
+  "script": {
+    "path": "scripts/project-rc16-installable-media-manifest.ps1",
+    "sha256": "51d28693a498b8a84904cc05f6a5d6874e20dbe840543d1d4d0749a24585722b"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+    "status": "passed",
+    "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef"
+  },
+  "outputs": {
+    "installable_media_manifest": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+      "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec"
+    }
+  },
+  "media_surface": {
+    "state": "installable-media-manifest-projected-install-update-gated",
+    "manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+    "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "current_payload_size_bytes": 377,
+    "initramfs_manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+    "alpha_rootfs_manifest_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+    "alpha_rootfs_validation_sha256": "2464e285719878781976ad63d07c73fa48aaf5534fe8551e26775787d5a7ff8f",
+    "target_arch": [
+      "x86_64"
+    ],
+    "kernel_family": "linux-lts",
+    "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "install_allowed": false,
+    "update_allowed": false,
+    "activation_allowed": false,
+    "active_slot_mutation_allowed": false,
+    "boot_metadata_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "payload_published": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "object_storage_ui_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc16_011_complete": true,
+    "next_task": "RC16-012",
+    "commit_required": true
+  }
+}

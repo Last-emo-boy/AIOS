@@ -1,0 +1,532 @@
+{
+  "schema": "agentos.rc16-installable-media-manifest.v1",
+  "generated_at": "2026-06-09T22:25:00+08:00",
+  "task": "RC16-011",
+  "status": "installable-media-manifest-projected-install-update-gated",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "production_ready_claim": false,
+  "source_release_package": {
+    "result": {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+      "sha256": "53a01b6836f62dac4a9ba4c69c9f87ca319ea524ee06695f8e92aae2d2d90188",
+      "size_bytes": 26797,
+      "present": true,
+      "schema": "agentos.rc16-release-package-artifact-set-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "artifact_set": {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/release-package-artifact-set.json",
+      "sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+      "size_bytes": 35232,
+      "present": true,
+      "schema": "agentos.rc16-release-package-artifact-set.v1",
+      "status": "repo-local-distributable-release-package-artifact-set-projected",
+      "production_ready_claim": false
+    },
+    "artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+    "package_surface_state": "repo-local-package-artifact-set-projected-install-update-gated",
+    "rc15_controlled_execution_ready": true
+  },
+  "media_identity": {
+    "content_addressed": true,
+    "hash_algorithm": "sha256",
+    "generated_from_repo_local_evidence": true,
+    "large_payload_uploaded": false,
+    "payload_published": false,
+    "network_fetch_attempted": false,
+    "machine_local_paths_in_media_id": false
+  },
+  "release_bytes": {
+    "payload": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "object_kind": "update-bundle"
+    },
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "size_bytes": 2130,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "checksum_set": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+      "size_bytes": 554,
+      "present": true,
+      "schema": "agentos.rc8-payload-object-checksums.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "initramfs_manifest": {
+      "path": "image/out/agentos-initramfs.manifest.json",
+      "sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "size_bytes": 7380,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "release_provenance": {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "size_bytes": 824088,
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "update_metadata": {
+      "path": ".workflow/artifacts/release/update-metadata.json",
+      "sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+      "size_bytes": 4062,
+      "present": true,
+      "schema": "agentos.candidate-update-metadata.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "release_channel_metadata": {
+      "path": ".workflow/artifacts/release/release-channel-metadata.json",
+      "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "size_bytes": 3538,
+      "present": true,
+      "schema": "agentos.release-channel-metadata.v1",
+      "status": null,
+      "production_ready_claim": false
+    }
+  },
+  "rootfs_initramfs_provenance": {
+    "initramfs": {
+      "artifact": "agentos-initramfs.cpio.gz",
+      "artifact_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "source_dir": "image/initramfs",
+      "generated_agentd": "sbin/agentd",
+      "generated_agentd_sha256": "0b76993a7347e95603f62bcddbbef48d0c08b91f3780a0e0ebc3586c9993a222",
+      "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+      "boot_markers": [
+        "AGENTD_HANDOFF_OK",
+        "AGENTOS_RUNTIME_ARTIFACTS_OK",
+        "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "AGENTOS_TUI_CONSOLE_READY",
+        "AGENTOS_RUNTIME_ARTIFACT_COUNT=15"
+      ],
+      "runtime_artifact_ids": [
+        "policy.pack",
+        "tools.semantic",
+        "operator.commands",
+        "production_signing.key_custody",
+        "production_signing.key_rotation_log",
+        "production_signing.key_revocation_log",
+        "ecosystem.registry_snapshot",
+        "ecosystem.core_policy",
+        "ecosystem.workflow_service_recovery",
+        "model_broker.config",
+        "tui.config",
+        "state.runs",
+        "state.audit",
+        "state.rollback",
+        "state.memory"
+      ]
+    },
+    "alpha_rootfs": {
+      "manifest": {
+        "path": "image/out/agentos-alpha-rootfs.manifest.json",
+        "sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "size_bytes": 5151,
+        "present": true,
+        "schema": "agentos.alpha-rootfs-assembly.v1",
+        "status": null,
+        "production_ready_claim": null
+      },
+      "validation": {
+        "path": "image/out/agentos-alpha-rootfs.validation.json",
+        "sha256": "2464e285719878781976ad63d07c73fa48aaf5534fe8551e26775787d5a7ff8f",
+        "size_bytes": 54723,
+        "present": true,
+        "schema": "agentos.alpha-rootfs-validation.v1",
+        "status": null,
+        "production_ready_claim": null
+      },
+      "source_rootfs": "packaging\\agentos\\rootfs",
+      "staged_rootfs": "image\\out\\agentos-alpha-rootfs",
+      "rootfs_runtime_manifest": "image\\out\\agentos-alpha-rootfs\\usr\\lib\\agentos\\release\\rootfs-runtime-manifest.json",
+      "rootfs_runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "runtime_artifact_count": 15,
+      "validation_result": "passed"
+    }
+  },
+  "architecture_and_compatibility": {
+    "target_arch": [
+      "x86_64"
+    ],
+    "image_format": [
+      "agentos-current-artifacts-metadata-preview",
+      "installable-media-projection"
+    ],
+    "boot_modes": [
+      "uefi",
+      "bios"
+    ],
+    "kernel_family": "linux-lts",
+    "initramfs_contract": "agentos-initramfs-stage-copy-only",
+    "console_readiness_marker_required": true,
+    "minimum_runtime": {
+      "agentd_contract": "rc7",
+      "agent_core_contract": "production-distro-rc7",
+      "security_execution_engine_contract": "planspec-approval-required",
+      "installer_contract": "signed-consumption-v1"
+    },
+    "constraints": [
+      "developer-vm-first",
+      "cloud-vm-compatible",
+      "x86_64-linux-vm",
+      "no-remote-llm-required",
+      "no-arbitrary-root-shell-normal-mode"
+    ],
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "compatibility-projected-verification-blocked",
+      "production_ready_claim": false
+    }
+  },
+  "verification_references": {
+    "public_signature_artifact": {
+      "path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+      "sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+      "size_bytes": 1653,
+      "present": true,
+      "schema": "agentos.production-detached-signature.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "size_bytes": 1533,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "size_bytes": 1011,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "revocation_snapshot": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "size_bytes": 1451,
+      "present": true,
+      "schema": "agentos.rc7-revocation-snapshot.v1",
+      "status": "revocation-current-projected",
+      "production_ready_claim": false
+    },
+    "freshness_revocation_binding": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-binding.json",
+      "sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8",
+      "size_bytes": 18148,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-binding.v1",
+      "status": "freshness-revocation-authority-denied",
+      "production_ready_claim": false
+    },
+    "signature_target_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+    "freshness_window_bound": false,
+    "crypto_verified": true
+  },
+  "rollback_support": {
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked",
+      "production_ready_claim": false
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only",
+      "production_ready_claim": false
+    },
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false
+  },
+  "install_update_gate": {
+    "installer_updater_preflight_required": true,
+    "package_descriptor_fail_closed_required": true,
+    "agentcore_install_update_planspec_required": true,
+    "security_execution_install_update_allow_required": true,
+    "rollback_support_binding_required": true,
+    "install_allowed": false,
+    "update_allowed": false,
+    "activation_allowed": false,
+    "active_slot_mutation_allowed": false,
+    "boot_metadata_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "next_task": "RC16-012"
+  },
+  "authority": {
+    "aios_body_only": true,
+    "repo_local_projection_only": true,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "nginx_or_tls_authority": false,
+    "signer_reachability_authority": false,
+    "object_storage_ui_authority": false,
+    "normal_shell_authority": false,
+    "model_replay_authority": false,
+    "tui_authority": false,
+    "install_authority": false,
+    "update_authority": false,
+    "activation_authority": false,
+    "rollback_execution_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "production_ring_mutation_authority": false,
+    "signing_authority": false
+  },
+  "source": {
+    "rc16_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+      "sha256": "949578936163dbc084e43bc440a6e80e021efb56e3e38705019f5c23d27ff7a3",
+      "size_bytes": 7456,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc16_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+      "sha256": "c018c551c44c3f7ba834e6281e85073a887f4e3f595de3e44b08b07004e6eb34",
+      "size_bytes": 7043,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc16_release_package_result": {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+      "sha256": "53a01b6836f62dac4a9ba4c69c9f87ca319ea524ee06695f8e92aae2d2d90188",
+      "size_bytes": 26797,
+      "present": true,
+      "schema": "agentos.rc16-release-package-artifact-set-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_release_package_artifact_set": {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/release-package-artifact-set.json",
+      "sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+      "size_bytes": 35232,
+      "present": true,
+      "schema": "agentos.rc16-release-package-artifact-set.v1",
+      "status": "repo-local-distributable-release-package-artifact-set-projected",
+      "production_ready_claim": false
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "initramfs_manifest": {
+      "path": "image/out/agentos-initramfs.manifest.json",
+      "sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "size_bytes": 7380,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "alpha_rootfs_manifest": {
+      "path": "image/out/agentos-alpha-rootfs.manifest.json",
+      "sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+      "size_bytes": 5151,
+      "present": true,
+      "schema": "agentos.alpha-rootfs-assembly.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "alpha_rootfs_validation": {
+      "path": "image/out/agentos-alpha-rootfs.validation.json",
+      "sha256": "2464e285719878781976ad63d07c73fa48aaf5534fe8551e26775787d5a7ff8f",
+      "size_bytes": 54723,
+      "present": true,
+      "schema": "agentos.alpha-rootfs-validation.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "release_provenance": {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "size_bytes": 824088,
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "update_metadata": {
+      "path": ".workflow/artifacts/release/update-metadata.json",
+      "sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+      "size_bytes": 4062,
+      "present": true,
+      "schema": "agentos.candidate-update-metadata.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "release_channel_metadata": {
+      "path": ".workflow/artifacts/release/release-channel-metadata.json",
+      "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "size_bytes": 3538,
+      "present": true,
+      "schema": "agentos.release-channel-metadata.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "payload_descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "size_bytes": 2130,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "object_checksums": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+      "size_bytes": 554,
+      "present": true,
+      "schema": "agentos.rc8-payload-object-checksums.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "public_signature_artifact": {
+      "path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+      "sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+      "size_bytes": 1653,
+      "present": true,
+      "schema": "agentos.production-detached-signature.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "size_bytes": 1533,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "size_bytes": 1011,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "revocation_snapshot": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "size_bytes": 1451,
+      "present": true,
+      "schema": "agentos.rc7-revocation-snapshot.v1",
+      "status": "revocation-current-projected",
+      "production_ready_claim": false
+    },
+    "freshness_revocation_binding": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-binding.json",
+      "sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8",
+      "size_bytes": 18148,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-binding.v1",
+      "status": "freshness-revocation-authority-denied",
+      "production_ready_claim": false
+    },
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "compatibility-projected-verification-blocked",
+      "production_ready_claim": false
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked",
+      "production_ready_claim": false
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only",
+      "production_ready_claim": false
+    },
+    "rc15_final_audit": {
+      "path": ".workflow/artifacts/rc15-final-closeout-audit/result.json",
+      "sha256": "49ae3d0288b2b6dc58786179b0e772aa3822763b22a93b8ff0ac7a2bacaa4fd4",
+      "size_bytes": 15729,
+      "present": true,
+      "schema": "agentos.rc15-final-closeout-audit-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc15_agentcore_planspec": {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/agentcore-planspec.json",
+      "sha256": "a43f5cb909c2dbfb2c374485402f05ace5b51d38cc49744f0fa26abbb28f1ab7",
+      "size_bytes": 5076,
+      "present": true,
+      "schema": "agentos.rc15-agentcore-planspec.v1",
+      "status": "agentcore-planspec-executable",
+      "production_ready_claim": false
+    },
+    "rc15_security_execution_decision": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-allow-decision.json",
+      "sha256": "15b631b5ef370365b93b4963bbefff7912d23e5d69ee3a601be0308a17596618",
+      "size_bytes": 2499,
+      "present": true,
+      "schema": "agentos.rc15-security-execution-allow-decision.v1",
+      "status": "security-execution-allow-bound",
+      "production_ready_claim": false
+    }
+  }
+}
