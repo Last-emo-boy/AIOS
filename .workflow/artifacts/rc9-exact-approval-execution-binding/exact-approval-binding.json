@@ -1,0 +1,76 @@
+{
+  "schema": "agentos.rc9-exact-approval-binding.v1",
+  "generated_at": "2026-06-08T23:20:00+08:00",
+  "task": "RC9-021",
+  "status": "exact-approval-denied",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "exact_approval_required": true,
+  "exact_approval_bound": false,
+  "approval_granted": false,
+  "executable": false,
+  "approval_binding": {
+    "approval_id": null,
+    "approving_actor": null,
+    "actor_authority_scope": null,
+    "release_id": "production-distro-rc8-current-artifacts",
+    "payload_object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "object_descriptor_digest": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "declared_current_reconciliation_digest": "6e51c6e4a27a2dfd94af5e7e80fbe4513ad4fdea3d332a7359870a0f88ece2b6",
+    "target_set_digest": "bd344c900486c9e3936e67ada67bc19637b44b6a2aee61fc709ed45f8455d2bd",
+    "target_node_ids": [],
+    "requested_effect_set": [
+      "controlled-canary-activation"
+    ],
+    "agentcore_planspec_id": "rc9-controlled-canary-activation-planspec-required",
+    "agentcore_planspec_hash": "0671387cea8344d1092ff94b0b5bdf4ab67f734f13790e8d2af1aeb9f9bead41",
+    "security_execution_policy_id": "rc9-controlled-canary-activation-policy",
+    "security_execution_decision_id": "rc9-controlled-canary-activation-decision-denied",
+    "rollback_baseline_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "expiry": null,
+    "nonce": null,
+    "policy_version": "rc9-controlled-execution-binding-v1",
+    "audit_sink": null
+  },
+  "missing_required_fields": [
+    "approval_id",
+    "approving_actor",
+    "actor_authority_scope",
+    "target_node_ids",
+    "expiry",
+    "nonce",
+    "audit_sink"
+  ],
+  "upstream_gates": {
+    "external_object_url_published": false,
+    "declared_current_artifact_drift_reconciled": false,
+    "installer_quarantine_fetch_verified": false,
+    "target_set_enrolled": false,
+    "observed_target_count": 1,
+    "enrolled_target_count": 0,
+    "required_target_count": 2,
+    "remote_fleet_execution_enabled": false
+  },
+  "denial_reasons": [
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "controlled-execution-not-authorized"
+  ],
+  "authority": {
+    "mirror_authority": false,
+    "object_storage_authority": false,
+    "signer_authority": false,
+    "frontend_authority": false,
+    "tui_authority": false,
+    "shell_authority": false,
+    "model_replay_authority": false
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "agentos.rc9-agentcore-planspec-binding.v1",
+  "generated_at": "2026-06-08T23:20:00+08:00",
+  "task": "RC9-021",
+  "status": "planspec-binding-denied",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "planspec_required": true,
+  "planspec_bound": false,
+  "executable": false,
+  "planspec_core_hash": "0671387cea8344d1092ff94b0b5bdf4ab67f734f13790e8d2af1aeb9f9bead41",
+  "planspec_core": {
+    "planspec_id": "rc9-controlled-canary-activation-planspec-required",
+    "plan_kind": "controlled-canary-activation",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "payload_object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "object_descriptor_digest": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "external_object_publication_digest": "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b",
+    "declared_current_reconciliation_digest": "6e51c6e4a27a2dfd94af5e7e80fbe4513ad4fdea3d332a7359870a0f88ece2b6",
+    "installer_fetch_digest": "d179794c07e41181d4461fe35f808efde97b56b74304a778d3ec02f448e0e4f1",
+    "target_set_digest": "bd344c900486c9e3936e67ada67bc19637b44b6a2aee61fc709ed45f8455d2bd",
+    "exact_approval_digest": "not-bound",
+    "security_execution_policy_decision_digest": "not-bound",
+    "rollback_baseline_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "expected_observations": [
+      "activation-denied-while-target-set-not-enrolled",
+      "activation-denied-while-exact-approval-not-granted",
+      "no-side-effects-observed"
+    ],
+    "rollback_path": "required-before-execution",
+    "audit_journal_path": "required-before-execution",
+    "expiry": "required-before-execution",
+    "policy_version": "rc9-controlled-execution-binding-v1"
+  },
+  "exact_approval_binding_sha256": "00ac16cb0dfa4715f46a1700008eaac499cfa8dec957d7c36f60ab2cd5cb0baa",
+  "security_execution_decision_sha256": "5dadba3cfb8ae04f1a5663a7322563a00262e8f38cdbd0e1cf998262479c6f14",
+  "denied_because": [
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "controlled-execution-not-authorized"
+  ],
+  "forbidden_authority_scan": {
+    "shell_commands_embedded": false,
+    "private_material_embedded": false,
+    "broad_target_selectors_embedded": false,
+    "mutable_object_references_embedded": false,
+    "support_upload_authority_embedded": false,
+    "production_ring_mutation_authority_embedded": false,
+    "model_authority_embedded": false,
+    "tui_authority_embedded": false,
+    "mirror_authority_embedded": false
+  }
+}

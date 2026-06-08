@@ -1,0 +1,97 @@
+{
+  "schema": "agentos.rc9-exact-approval-execution-binding-evidence.v1",
+  "generated_at": "2026-06-08T23:20:00+08:00",
+  "task": "RC9-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": "scripts/project-rc9-exact-approval-execution-binding.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+    "status": "passed",
+    "sha256": "56fce75e99de12333a10f7abe40a5b1d27f6924bab1b7e64ec0a440267e580a3"
+  },
+  "outputs": {
+    "exact_approval_binding": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/exact-approval-binding.json",
+      "sha256": "00675e5f8d03be8d9691d95a8ec823ab72b5489846e652cc8ba031aa26b98a6a",
+      "binding_digest": "00ac16cb0dfa4715f46a1700008eaac499cfa8dec957d7c36f60ab2cd5cb0baa"
+    },
+    "agentcore_planspec_binding": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/agentcore-planspec-binding.json",
+      "sha256": "69a75cd4bd8cb79f77b897c3c29389105d98251c142e82394024293456a40807",
+      "planspec_core_hash": "0671387cea8344d1092ff94b0b5bdf4ab67f734f13790e8d2af1aeb9f9bead41"
+    },
+    "security_execution_decision": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/security-execution-decision.json",
+      "sha256": "1b3c488f56df5b7d4de9d78837ac02bc30623ae07c7b453efc4ba2e9ffa350dc",
+      "decision_digest": "5dadba3cfb8ae04f1a5663a7322563a00262e8f38cdbd0e1cf998262479c6f14"
+    },
+    "execution_binding_denial": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/execution-binding-denial.json",
+      "sha256": "dc98a46c39aacfbc3360d8bd621a1d32b49c9abd4c487f7d4bb3b39a5f326432"
+    }
+  },
+  "binding_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "execution-binding-denied",
+    "exact_approval_required": true,
+    "exact_approval_bound": false,
+    "exact_approval_granted": false,
+    "agentcore_planspec_required": true,
+    "agentcore_planspec_bound": false,
+    "agentcore_planspec_hash": "0671387cea8344d1092ff94b0b5bdf4ab67f734f13790e8d2af1aeb9f9bead41",
+    "security_execution_required": true,
+    "security_execution_decision_bound": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "two-or-more-enrolled-canary-target-nodes-required",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "exact-operator-approval-not-granted",
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-denied",
+      "installer-quarantine-fetch-not-run",
+      "AgentCore-PlanSpec-not-bound",
+      "SecurityExecutionEngine-approval-not-bound",
+      "controlled-execution-not-authorized"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "executable_planspec_created": false,
+    "security_execution_effect_allowed": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_021_complete": true,
+    "next_task": "RC9-022",
+    "commit_required": true
+  }
+}

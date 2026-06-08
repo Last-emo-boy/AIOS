@@ -3,7 +3,7 @@
   "name": "Production Distro RC9",
   "status": "active",
   "created_at": "2026-06-08T22:10:00+08:00",
-  "updated_at": "2026-06-08T23:10:00+08:00",
+  "updated_at": "2026-06-08T23:20:00+08:00",
   "source": "RC8 final audit; TASK.md; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
   "goal": "Publish or strictly deny an immutable external object storage reference for real AIOS payload bytes, reconcile declared/current artifact drift, and move controlled canary activation plus rollback drill work through exact approval, AgentCore PlanSpec, and SecurityExecutionEngine gates.",
@@ -65,9 +65,15 @@
       "completed_at": "2026-06-08T23:10:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-020-two-node-canary-enrollment.json",
       "commit": null
+    },
+    {
+      "task": "RC9-021",
+      "completed_at": "2026-06-08T23:20:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-021-exact-approval-execution-binding.json",
+      "commit": null
     }
   ],
-  "next_task": "RC9-021",
+  "next_task": "RC9-022",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
@@ -94,7 +100,13 @@
     ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
     ".workflow/artifacts/rc9-two-node-canary-enrollment/canary-target-set.json",
     ".workflow/artifacts/rc9-two-node-canary-enrollment/target-enrollment-denial.json",
-    ".workflow/artifacts/rc9-two-node-canary-enrollment/controlled-execution-handoff.json"
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/controlled-execution-handoff.json",
+    "scripts/project-rc9-exact-approval-execution-binding.ps1",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/exact-approval-binding.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/agentcore-planspec-binding.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/security-execution-decision.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/execution-binding-denial.json"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
@@ -135,6 +147,14 @@
     ".workflow/artifacts/rc9-two-node-canary-enrollment/target-enrollment-denial.json",
     ".workflow/artifacts/rc9-two-node-canary-enrollment/controlled-execution-handoff.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc9/.task/TASK-RC9-020.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-020-two-node-canary-enrollment.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-020-two-node-canary-enrollment.json",
+    "scripts/project-rc9-exact-approval-execution-binding.ps1",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/exact-approval-binding.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/agentcore-planspec-binding.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/security-execution-decision.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/execution-binding-denial.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/.task/TASK-RC9-021.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-021-exact-approval-execution-binding.json"
   ]
 }

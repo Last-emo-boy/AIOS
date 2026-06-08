@@ -1,0 +1,79 @@
+{
+  "schema": "agentos.rc9-execution-binding-denial.v1",
+  "generated_at": "2026-06-08T23:20:00+08:00",
+  "task": "RC9-021",
+  "status": "execution-binding-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_set_digest": "bd344c900486c9e3936e67ada67bc19637b44b6a2aee61fc709ed45f8455d2bd",
+  "exact_approval_digest": "00ac16cb0dfa4715f46a1700008eaac499cfa8dec957d7c36f60ab2cd5cb0baa",
+  "planspec_hash": "0671387cea8344d1092ff94b0b5bdf4ab67f734f13790e8d2af1aeb9f9bead41",
+  "security_execution_decision_digest": "5dadba3cfb8ae04f1a5663a7322563a00262e8f38cdbd0e1cf998262479c6f14",
+  "denial_cases": [
+    {
+      "id": "external-https-object-uri-not-published",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "declared-current-artifact-drift-denied",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "installer-quarantine-fetch-not-run",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "target-set-not-enrolled",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "exact-operator-approval-not-granted",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "agentcore-planspec-not-bound",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "security-execution-approval-not-bound",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "remote-fleet-execution-disabled",
+      "status": "passed",
+      "execution_allowed": false
+    }
+  ],
+  "preserved_boundaries": {
+    "exact_approval_granted": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "blockers": [
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "controlled-execution-not-authorized"
+  ],
+  "next_task": "RC9-022"
+}

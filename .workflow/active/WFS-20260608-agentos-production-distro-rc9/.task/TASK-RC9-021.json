@@ -1,0 +1,55 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-021",
+  "title": "bind exact operator approval to AgentCore PlanSpec and SecurityExecutionEngine approval",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md",
+    ".workflow/artifacts/rc9-external-object-publication/result.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+    ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/canary-target-set.json",
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/controlled-execution-handoff.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc9-exact-approval-execution-binding.ps1",
+      "role": "exact approval, AgentCore PlanSpec, and SecurityExecutionEngine denial projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/exact-approval-binding.json",
+      "role": "exact approval binding denial artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/agentcore-planspec-binding.json",
+      "role": "AgentCore PlanSpec binding denial artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/security-execution-decision.json",
+      "role": "SecurityExecutionEngine denial decision artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/execution-binding-denial.json",
+      "role": "combined execution binding denial handoff"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-021-exact-approval-execution-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC9-020 target enrollment denial and upstream RC9 publication, drift, and fetch denial evidence before evaluating exact approval binding.",
+      "The exact approval artifact records exact-approval-denied with approval_granted=false and exact_approval_bound=false.",
+      "The AgentCore PlanSpec binding artifact records planspec-binding-denied with executable=false and a deterministic PlanSpec core hash.",
+      "The SecurityExecutionEngine decision artifact records security-execution-denied with allowed_effect_set empty, controlled-canary-activation denied, and no side effects.",
+      "The task preserves production_ready_claim=false and moves the next task to RC9-022 controlled canary activation."
+    ]
+  }
+}
