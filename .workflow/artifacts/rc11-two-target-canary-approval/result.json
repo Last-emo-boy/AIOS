@@ -1,0 +1,352 @@
+{
+  "schema": "agentos.rc11-two-target-canary-approval-result.v1",
+  "generated_at": "2026-06-09T02:45:00+08:00",
+  "task": "RC11-030",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "approval_surface": {
+    "state": "target-and-approval-denied",
+    "required_minimum_target_count": 2,
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0,
+    "target_set_enrolled": false,
+    "target_set_digest": "88bf0c27f6ef3a398fe9a91cfae6f255cd18b4ba710b85e819fe1f1e0c85d41b",
+    "exact_approval_required": true,
+    "exact_approval_bound": false,
+    "approval_granted": false,
+    "approval_binding_digest": "859de9f18fd47256891ef43e0ed57d68389ce01ab20f4e6b19bd3e3805f62655",
+    "agentcore_planspec_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822",
+    "security_execution_policy_id": "rc11-installer-agentcore-security-policy",
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "external-descriptor-verification-denied",
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized",
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "exact-operator-approval-not-granted",
+      "controlled-execution-not-authorized",
+      "target-node-ids-missing",
+      "approval-audit-sink-not-bound",
+      "approval-expiry-not-bound",
+      "approval-nonce-not-bound"
+    ]
+  },
+  "outputs": {
+    "canary_target_set": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/canary-target-set.json",
+      "sha256": "e9030c6e3ac491005d5a7edb79b3b8e4b7bee35c944d426f06bb59330ff8cc78",
+      "target_set_digest": "88bf0c27f6ef3a398fe9a91cfae6f255cd18b4ba710b85e819fe1f1e0c85d41b"
+    },
+    "exact_approval_package": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/exact-approval-package.json",
+      "sha256": "057afe23f88d6e87715d6f4cf457275a6738572c149d08b7bdc4436e8499c148",
+      "approval_binding_digest": "859de9f18fd47256891ef43e0ed57d68389ce01ab20f4e6b19bd3e3805f62655"
+    },
+    "approval_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/approval-fail-closed-matrix.json",
+      "sha256": "a5be9521cd0e97c5831beedfd4467b035d83e5d1f8910cf7a853478f731431f7"
+    },
+    "controlled_activation_approval_handoff": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/controlled-activation-approval-handoff.json",
+      "sha256": "349c2f742134279f4c6ba099c38b761a0b11624c4128ddd0c8f07fde5a70c122"
+    }
+  },
+  "source": {
+    "installer_agentcore_security_handoff_result": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+      "sha256": "b92cfb75f23f3f5123328925a739582874df5cafe8a9ba70a7b9541a133eea58",
+      "size_bytes": 12421,
+      "present": true,
+      "schema": "agentos.rc11-installer-agentcore-security-handoff-result.v1",
+      "status": "passed"
+    },
+    "agentcore_planspec_handoff": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/agentcore-planspec-handoff.json",
+      "sha256": "aed9ca7c1f4c0841c5e7c649c36a3dec25eaeffd4383995d774a71888571c1f6",
+      "size_bytes": 7508,
+      "present": true,
+      "schema": "agentos.rc11-agentcore-installer-planspec-handoff.v1",
+      "status": "planspec-candidate-projected-denied"
+    },
+    "security_execution_effect_envelope": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/security-execution-effect-envelope.json",
+      "sha256": "b73c836e131fab43a0d1c57852e1428f565cdf7a39486a0e3746a36f6d5e193c",
+      "size_bytes": 3082,
+      "present": true,
+      "schema": "agentos.rc11-security-execution-installer-effect-envelope.v1",
+      "status": "security-execution-denied"
+    },
+    "rc10_target_enrollment_result": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+      "sha256": "cb7f4ae28701c598771af25c32cf49b80905aca95cb1429869108193293fc4b9",
+      "size_bytes": 11694,
+      "present": true,
+      "schema": "agentos.rc10-two-node-canary-enrollment-result.v1",
+      "status": "passed"
+    },
+    "rc10_target_set": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/canary-target-set.json",
+      "sha256": "e678d5a0a00a1b0c52896f8c3e97fecc243e0abe82800c7f1f3608676144e193",
+      "size_bytes": 5638,
+      "present": true,
+      "schema": "agentos.rc10-canary-target-set.v1",
+      "status": "target-set-enrollment-denied"
+    },
+    "rc10_exact_approval_result": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json",
+      "sha256": "560ae82282462fb2d8ea6e61cbbda97ef190c1b8b3df966c3272486cee81395c",
+      "size_bytes": 12745,
+      "present": true,
+      "schema": "agentos.rc10-exact-approval-execution-enable-result.v1",
+      "status": "passed"
+    },
+    "rc10_exact_approval_binding": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/exact-approval-binding.json",
+      "sha256": "1b3bd36161af7c30d4caeb72fc5976ec275ecc64cf54b1c91ecd276a8a161cd8",
+      "size_bytes": 3261,
+      "present": true,
+      "schema": "agentos.rc10-exact-approval-binding.v1",
+      "status": "exact-approval-denied"
+    },
+    "installer_quarantine_result": {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+      "sha256": "17da779b4aea1f8cf109ab3a734a2298037a3cd25532191c870c8f8fc36a8a03",
+      "size_bytes": 9932,
+      "present": true,
+      "schema": "agentos.rc11-installer-quarantine-verifier-result.v1",
+      "status": "passed"
+    },
+    "quarantine_fetch_report": {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/quarantine-fetch-report.json",
+      "sha256": "6b96cb46070830e78d7c510926b7d3ff8d088249d40cb788c3afc90d5790ff60",
+      "size_bytes": 2788,
+      "present": true,
+      "schema": "agentos.rc11-installer-quarantine-fetch-report.v1",
+      "status": "quarantine-fetch-denied-before-network"
+    },
+    "fleet_authority": {
+      "path": ".workflow/artifacts/release/fleet-rollout-authority.json",
+      "sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+      "size_bytes": 6191,
+      "present": true,
+      "schema": "agentos.fleet-rollout-authority.v1",
+      "status": "passed"
+    }
+  },
+  "checks": [
+    {
+      "id": "source.rc11_021.handoff_complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-030 must consume completed RC11-021 installer AgentCore/SecurityExecution handoff evidence.",
+      "evidence": {
+        "status": "passed",
+        "handoff_state": "installer-agentcore-security-handoff-denied",
+        "planspec_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822"
+      }
+    },
+    {
+      "id": "source.rc10_target_and_approval_denials_carried",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-030 must carry forward RC10 target-set and exact-approval denial context.",
+      "evidence": {
+        "rc10_target_state": "target-set-enrollment-denied",
+        "rc10_exact_state": "execution-binding-denied"
+      }
+    },
+    {
+      "id": "target_set.two_slots_or_denial",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target set must contain two required target slots or record a target-set denial.",
+      "evidence": {
+        "slots": 2,
+        "enrolled": 0,
+        "required": 2,
+        "state": "target-set-denied"
+      }
+    },
+    {
+      "id": "target_set.no_duplicate_enrollment",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target set denial must preserve duplicate and stale target checks.",
+      "evidence": {
+        "duplicate": false,
+        "stale": false
+      }
+    },
+    {
+      "id": "approval.required_binding_contract_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Exact approval package must record the required binding contract and available hash-bound fields.",
+      "evidence": {
+        "required_fields": [
+          "actor",
+          "release_id",
+          "object_digest",
+          "target_ids",
+          "target_set_digest",
+          "agentcore_planspec_hash",
+          "security_execution_policy_id",
+          "rollback_baseline_digest",
+          "support_recovery_digest",
+          "audit_sink",
+          "expiry",
+          "nonce",
+          "policy_version"
+        ],
+        "missing": [
+          "approval_id",
+          "approving_actor",
+          "target_ids",
+          "audit_sink",
+          "expiry",
+          "nonce"
+        ]
+      }
+    },
+    {
+      "id": "approval.denied_until_exact_fields_present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Exact approval must deny until target ids, approval actor, audit sink, expiry, and nonce are bound.",
+      "evidence": {
+        "status": "exact-approval-denied",
+        "missing": [
+          "approval_id",
+          "approving_actor",
+          "target_ids",
+          "audit_sink",
+          "expiry",
+          "nonce"
+        ]
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Broad, stale, missing, single-target, duplicate-target, and mismatched approval cases must fail closed.",
+      "evidence": {
+        "cases": 15,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-030 must not authorize activation, rollback, support upload, remote dispatch, or production ring mutation.",
+      "evidence": {
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-030 outputs must not contain PEM blocks, auth tokens, private key paths, or signer internals.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "external-descriptor-verification-denied",
+    "external-https-object-uri-not-published",
+    "declared-current-drift-zero-not-proved",
+    "object-trust-not-allowed",
+    "freshness-window-missing",
+    "installer-quarantine-fetch-not-run",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "installer-preflight-not-verified",
+    "two-target-canary-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-effect-envelope-denied",
+    "controlled-install-activation-rollback-not-authorized",
+    "fewer-than-two-eligible-targets",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "exact-operator-approval-not-granted",
+    "controlled-execution-not-authorized",
+    "target-node-ids-missing",
+    "approval-audit-sink-not-bound",
+    "approval-expiry-not-bound",
+    "approval-nonce-not-bound"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "target_enrollment_fabricated": false,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "executable_planspec_created": false,
+    "security_execution_effect_allowed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "cases": 15,
+    "failed_cases": 0,
+    "rc11_030_complete": true,
+    "target_set_enrolled": false,
+    "exact_approval_bound": false,
+    "approval_granted": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "next_task": "RC11-031"
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "schema": "agentos.rc11-two-target-approval-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T02:45:00+08:00",
+  "task": "RC11-030",
+  "status": "passed",
+  "production_ready_claim": false,
+  "cases": [
+    {
+      "id": "broad-target-selector-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-node-ids-missing"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "duplicate-target-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-set-not-enrolled"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-agentcore-planspec-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "agentcore-planspec-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-object-digest-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "controlled-execution-not-authorized"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-release-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "controlled-execution-not-authorized"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-rollback-baseline-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "controlled-execution-not-authorized"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-security-policy-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "security-execution-effect-envelope-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-support-recovery-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "controlled-execution-not-authorized"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-target-set-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-set-not-enrolled"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-approval-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "exact-operator-approval-not-granted"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-audit-sink-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-audit-sink-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-expiry-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-expiry-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-nonce-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-nonce-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "single-target-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "fewer-than-two-eligible-targets"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale-target-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-set-not-enrolled"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "cases": 15,
+    "passed": 15,
+    "failed": 0,
+    "failed_cases": []
+  }
+}

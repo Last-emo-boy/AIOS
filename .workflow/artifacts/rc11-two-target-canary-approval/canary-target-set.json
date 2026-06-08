@@ -1,0 +1,100 @@
+{
+  "schema": "agentos.rc11-two-target-canary-target-set.v1",
+  "generated_at": "2026-06-09T02:45:00+08:00",
+  "task": "RC11-030",
+  "status": "target-set-denied",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "ring": "canary",
+  "required_minimum_target_count": 2,
+  "observed_candidate_node_count": 1,
+  "enrolled_target_count": 0,
+  "target_set_enrolled": false,
+  "target_set_digest": "88bf0c27f6ef3a398fe9a91cfae6f255cd18b4ba710b85e819fe1f1e0c85d41b",
+  "target_selection_policy": "two-or-more-non-duplicate-fresh-enrolled-canary-targets-required",
+  "duplicate_node_check": {
+    "duplicate_node_ids_detected": false,
+    "evaluated_enrolled_node_count": 0
+  },
+  "stale_node_check": {
+    "stale_enrollment_detected": false,
+    "evaluated_enrolled_node_count": 0
+  },
+  "inherited_rc10": {
+    "target_set_state": "target-set-enrollment-denied",
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0,
+    "target_set_enrolled": false
+  },
+  "required_bindings": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "agentcore_planspec_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822",
+    "security_execution_policy_id": "rc11-installer-agentcore-security-policy",
+    "security_execution_decision_hash": "639512673880b4eb98e264b6689b28dc893d65689f725959f83620d13be75307",
+    "rollback_baseline_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+  },
+  "targets": [
+    {
+      "slot": "canary-a",
+      "required": true,
+      "enrollment_state": "missing",
+      "node_id": null,
+      "duplicate_node_id": false,
+      "stale": false,
+      "release_id": "production-distro-rc8-current-artifacts",
+      "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "health_evidence_digest": null,
+      "audit_sink": null,
+      "denial_reasons": [
+        "target-node-record-missing"
+      ]
+    },
+    {
+      "slot": "canary-b",
+      "required": true,
+      "enrollment_state": "missing",
+      "node_id": null,
+      "duplicate_node_id": false,
+      "stale": false,
+      "release_id": "production-distro-rc8-current-artifacts",
+      "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "health_evidence_digest": null,
+      "audit_sink": null,
+      "denial_reasons": [
+        "target-node-record-missing"
+      ]
+    }
+  ],
+  "denial_reasons": [
+    "external-descriptor-verification-denied",
+    "external-https-object-uri-not-published",
+    "declared-current-drift-zero-not-proved",
+    "object-trust-not-allowed",
+    "freshness-window-missing",
+    "installer-quarantine-fetch-not-run",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "installer-preflight-not-verified",
+    "two-target-canary-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-effect-envelope-denied",
+    "controlled-install-activation-rollback-not-authorized",
+    "fewer-than-two-eligible-targets",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "exact-operator-approval-not-granted",
+    "controlled-execution-not-authorized",
+    "target-node-ids-missing",
+    "approval-audit-sink-not-bound",
+    "approval-expiry-not-bound",
+    "approval-nonce-not-bound"
+  ]
+}

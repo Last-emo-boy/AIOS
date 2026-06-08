@@ -1,0 +1,119 @@
+{
+  "schema": "agentos.rc11-two-target-canary-approval-evidence.v1",
+  "generated_at": "2026-06-09T02:45:00+08:00",
+  "task": "RC11-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "script": {
+    "path": "scripts/project-rc11-two-target-canary-approval.ps1",
+    "sha256": "a82bdf0601b415dd7a0e0851a974672b2e65bdeb686c7267d57235473c4a1682"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
+    "status": "passed",
+    "sha256": "f5fd1d7e687ce330b0e83d05ece4466c6ceb74f9585744c4197b7322a1242bf9"
+  },
+  "outputs": {
+    "canary_target_set": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/canary-target-set.json",
+      "sha256": "e9030c6e3ac491005d5a7edb79b3b8e4b7bee35c944d426f06bb59330ff8cc78",
+      "target_set_digest": "88bf0c27f6ef3a398fe9a91cfae6f255cd18b4ba710b85e819fe1f1e0c85d41b"
+    },
+    "exact_approval_package": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/exact-approval-package.json",
+      "sha256": "057afe23f88d6e87715d6f4cf457275a6738572c149d08b7bdc4436e8499c148",
+      "approval_binding_digest": "859de9f18fd47256891ef43e0ed57d68389ce01ab20f4e6b19bd3e3805f62655"
+    },
+    "approval_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/approval-fail-closed-matrix.json",
+      "sha256": "a5be9521cd0e97c5831beedfd4467b035d83e5d1f8910cf7a853478f731431f7"
+    },
+    "controlled_activation_approval_handoff": {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/controlled-activation-approval-handoff.json",
+      "sha256": "349c2f742134279f4c6ba099c38b761a0b11624c4128ddd0c8f07fde5a70c122"
+    }
+  },
+  "approval_surface": {
+    "state": "target-and-approval-denied",
+    "required_minimum_target_count": 2,
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0,
+    "target_set_enrolled": false,
+    "target_set_digest": "88bf0c27f6ef3a398fe9a91cfae6f255cd18b4ba710b85e819fe1f1e0c85d41b",
+    "exact_approval_required": true,
+    "exact_approval_bound": false,
+    "approval_granted": false,
+    "approval_binding_digest": "859de9f18fd47256891ef43e0ed57d68389ce01ab20f4e6b19bd3e3805f62655",
+    "agentcore_planspec_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822",
+    "security_execution_policy_id": "rc11-installer-agentcore-security-policy",
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "external-descriptor-verification-denied",
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized",
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "exact-operator-approval-not-granted",
+      "controlled-execution-not-authorized",
+      "target-node-ids-missing",
+      "approval-audit-sink-not-bound",
+      "approval-expiry-not-bound",
+      "approval-nonce-not-bound"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "target_enrollment_fabricated": false,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "executable_planspec_created": false,
+    "security_execution_effect_allowed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc11_030_complete": true,
+    "next_task": "RC11-031",
+    "commit_required": true
+  }
+}

@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC11-030",
   "title": "build two-target canary enrollment and exact approval package",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-3",
   "read_first": [
     ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
@@ -17,6 +17,26 @@
     {
       "path": ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
       "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/canary-target-set.json",
+      "role": "canary target set"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/exact-approval-package.json",
+      "role": "exact approval package"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/approval-fail-closed-matrix.json",
+      "role": "approval fail-closed matrix"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/controlled-activation-approval-handoff.json",
+      "role": "controlled activation approval handoff"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-030-two-target-canary-approval.json",
+      "role": "task evidence"
     }
   ],
   "convergence": {
