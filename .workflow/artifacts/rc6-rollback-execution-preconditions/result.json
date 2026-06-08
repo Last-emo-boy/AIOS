@@ -1,0 +1,396 @@
+﻿{
+    "schema":  "agentos.rc6-rollback-execution-preconditions-result.v1",
+    "generated_at":  "2026-06-08T12:38:04.0463895+08:00",
+    "checked_at":  "2026-06-08T12:38:04.2283802+08:00",
+    "task":  "RC6-031",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "rollback_precondition_matrix_projected":  true,
+    "rollback_readiness_ready":  true,
+    "rollback_execution_allowed":  false,
+    "rollback_execution_performed":  false,
+    "canary_execution_allowed":  false,
+    "canary_execution_performed":  false,
+    "artifacts":  {
+                      "rollback_drill_precondition_matrix":  {
+                                                                 "path":  ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+                                                                 "sha256":  "f1003164ddc8b5e068ed0b7d49fc951e122d0d410783f0e9913cd564f8313b27",
+                                                                 "schema":  "agentos.rc6-rollback-drill-precondition-matrix.v1",
+                                                                 "status":  "preconditions-projected-execution-blocked"
+                                                             },
+                      "rollback_execution_blockers":  {
+                                                          "path":  ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json",
+                                                          "sha256":  "da75bad9a2b8b6da49e7a9244a4a91dd376c6c788cf9b8fdbe2ba8d2edbe6f0c",
+                                                          "schema":  "agentos.rc6-rollback-execution-blockers.v1",
+                                                          "status":  "execution-blocked-by-required-gates"
+                                                      }
+                  },
+    "source_artifacts":  {
+                             "rc6_canary_result":  {
+                                                       "path":  ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+                                                       "sha256":  "8246b22c23d45c0e53fcbbe998398ba53f2a041054717a1bab57dc0de6679cf5",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc6-canary-execution-packet-result.v1",
+                                                       "status":  "passed"
+                                                   },
+                             "rc6_canary_packet":  {
+                                                       "path":  ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+                                                       "sha256":  "f30b8b8e32940c84f165fe9a9de5bdd069178517deadb3cdf6396c1994355f27",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc6-canary-execution-packet.v1",
+                                                       "status":  "packet-projected-execution-blocked"
+                                                   },
+                             "rc6_rollback_preconditions":  {
+                                                                "path":  ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+                                                                "sha256":  "89f4e8d7fe5a48fc521914878c54fa7a8d85d90054d89eafc9530b2f6f048821",
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc6-rollback-execution-preconditions.v1",
+                                                                "status":  "rollback-preconditions-projected-execution-blocked"
+                                                            },
+                             "rc5_rollback_readiness":  {
+                                                            "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+                                                            "sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc5-canary-rollback-readiness-projection.v1",
+                                                            "status":  "rollback-baseline-bound-execution-not-run"
+                                                        },
+                             "rc4_rollback_drill":  {
+                                                        "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/rollback-drill-projection.json",
+                                                        "sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc4-staged-fleet-rollback-drill-projection.v1",
+                                                        "status":  "projected-passed"
+                                                    },
+                             "rc5_hosted_support_recovery":  {
+                                                                 "path":  ".workflow/artifacts/rc5-hosted-support-recovery/result.json",
+                                                                 "sha256":  "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc5-hosted-support-recovery-result.v1",
+                                                                 "status":  "passed"
+                                                             },
+                             "rc5_recovery_operations":  {
+                                                             "path":  ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+                                                             "sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                                                             "present":  true,
+                                                             "schema":  "agentos.rc5-hosted-recovery-operations.v1",
+                                                             "status":  "projection-only"
+                                                         },
+                             "rc6_hosted_payload_metadata":  {
+                                                                 "path":  ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+                                                                 "sha256":  "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc6-hosted-payload-metadata-result.v1",
+                                                                 "status":  "passed"
+                                                             },
+                             "rc6_bootstrap_preflight":  {
+                                                             "path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+                                                             "sha256":  "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+                                                             "present":  true,
+                                                             "schema":  "agentos.rc6-bootstrap-installer-preflight-result.v1",
+                                                             "status":  "passed"
+                                                         },
+                             "rc6_bootstrap_preflight_report":  {
+                                                                    "path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+                                                                    "sha256":  "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc6-bootstrap-installer-preflight-report.v1",
+                                                                    "status":  null
+                                                                },
+                             "rc6_installer_fail_closed":  {
+                                                               "path":  ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+                                                               "sha256":  "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+                                                               "present":  true,
+                                                               "schema":  "agentos.rc6-installer-fail-closed-result.v1",
+                                                               "status":  "passed"
+                                                           },
+                             "rc6_mirror_frontend_refresh":  {
+                                                                 "path":  ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
+                                                                 "sha256":  "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc6-mirror-frontend-refresh-result.v1",
+                                                                 "status":  "passed"
+                                                             }
+                         },
+    "source_bindings":  {
+                            "rc6_canary_result_sha256":  "8246b22c23d45c0e53fcbbe998398ba53f2a041054717a1bab57dc0de6679cf5",
+                            "rc6_canary_packet_sha256":  "f30b8b8e32940c84f165fe9a9de5bdd069178517deadb3cdf6396c1994355f27",
+                            "rc6_rollback_preconditions_sha256":  "89f4e8d7fe5a48fc521914878c54fa7a8d85d90054d89eafc9530b2f6f048821",
+                            "rc5_rollback_readiness_sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                            "rc4_rollback_drill_sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                            "rc5_hosted_support_recovery_sha256":  "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+                            "rc5_recovery_operations_sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                            "rc6_hosted_payload_metadata_sha256":  "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+                            "rc6_bootstrap_preflight_sha256":  "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+                            "rc6_bootstrap_preflight_report_sha256":  "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+                            "rc6_installer_fail_closed_sha256":  "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+                            "rc6_mirror_frontend_refresh_sha256":  "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+                            "live_channel_sha256":  "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+                            "live_payload_index_sha256":  "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+                            "live_install_bootstrap_sha256":  "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+                            "live_support_index_sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                            "live_support_recovery_sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                        },
+    "live_endpoint_bindings":  {
+                                   "channel":  {
+                                                   "path":  "/channel/index.json",
+                                                   "sha256":  "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6"
+                                               },
+                                   "payload_index":  {
+                                                         "path":  "/payloads/index.json",
+                                                         "sha256":  "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151"
+                                                     },
+                                   "install_bootstrap":  {
+                                                             "path":  "/install/bootstrap.json",
+                                                             "sha256":  "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd"
+                                                         },
+                                   "support_index":  {
+                                                         "path":  "/support/index.json",
+                                                         "sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+                                                     },
+                                   "support_recovery":  {
+                                                            "path":  "/support/recovery.json",
+                                                            "sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                                                        }
+                               },
+    "payload_surface":  {
+                            "release_id":  "production-distro-rc6-current-artifacts",
+                            "status":  "verification-blocked",
+                            "signature_available":  false,
+                            "install_allowed":  false,
+                            "install_state":  "verification-blocked",
+                            "rollback_execution_allowed":  null
+                        },
+    "rollback_surface":  {
+                             "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                             "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                             "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                             "baseline_consistent":  true,
+                             "support_recovery_ready":  true
+                         },
+    "remaining_blockers_before_execution":  [
+                                                "payload-signature-not-published",
+                                                "revocation-snapshot-not-published",
+                                                "installer-compatibility-contract-pending",
+                                                "rollback-baseline-not-published-to-install-metadata",
+                                                "SecurityExecutionEngine-rollback-PlanSpec-not-approved",
+                                                "canary-activation-evidence-not-present",
+                                                "two-or-more-enrolled-canary-target-nodes",
+                                                "remote-fleet-execution-not-enabled",
+                                                "exact-operator-approval-not-granted",
+                                                "tls-required-before-ga-claim"
+                                            ],
+    "checks":  [
+                   {
+                       "id":  "source.artifacts.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC6 rollback execution preconditions must bind all required RC4/RC5/RC6 source artifacts.",
+                       "evidence":  {
+                                        "rc6_canary_result_sha256":  "8246b22c23d45c0e53fcbbe998398ba53f2a041054717a1bab57dc0de6679cf5",
+                                        "rc6_canary_packet_sha256":  "f30b8b8e32940c84f165fe9a9de5bdd069178517deadb3cdf6396c1994355f27",
+                                        "rc6_rollback_preconditions_sha256":  "89f4e8d7fe5a48fc521914878c54fa7a8d85d90054d89eafc9530b2f6f048821",
+                                        "rc5_rollback_readiness_sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                                        "rc4_rollback_drill_sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                                        "rc5_hosted_support_recovery_sha256":  "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+                                        "rc5_recovery_operations_sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                                        "rc6_hosted_payload_metadata_sha256":  "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+                                        "rc6_bootstrap_preflight_sha256":  "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+                                        "rc6_bootstrap_preflight_report_sha256":  "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+                                        "rc6_installer_fail_closed_sha256":  "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+                                        "rc6_mirror_frontend_refresh_sha256":  "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+                                        "live_channel_sha256":  "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+                                        "live_payload_index_sha256":  "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+                                        "live_install_bootstrap_sha256":  "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+                                        "live_support_index_sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                                        "live_support_recovery_sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                                    }
+                   },
+                   {
+                       "id":  "rollback.baseline.consistency",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Rollback baseline and previous/restored artifact hashes must be consistent across RC4, RC5, and RC6 projections.",
+                       "evidence":  {
+                                        "rc6_baseline":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                                        "rc5_baseline":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                                        "rc4_baseline":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169"
+                                    }
+                   },
+                   {
+                       "id":  "canary.packet.rollback_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC6 canary packet and rollback preconditions must remain projection-only, exact-approval gated, and execution-blocked.",
+                       "evidence":  {
+                                        "canary_result_status":  "passed",
+                                        "exact_operator_approval_granted":  false,
+                                        "rollback_execution_allowed":  false
+                                    }
+                   },
+                   {
+                       "id":  "rc4.rc5.rollback.readiness",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC4 rollback drill projection and RC5 rollback readiness must prove rollback baseline readiness without executing rollback.",
+                       "evidence":  {
+                                        "rc5_status":  "rollback-baseline-bound-execution-not-run",
+                                        "rc4_status":  "projected-passed"
+                                    }
+                   },
+                   {
+                       "id":  "support.recovery.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Hosted support/recovery metadata must be present, rollback-explanatory, upload-disabled, and non-authoritative.",
+                       "evidence":  {
+                                        "support_status":  "passed",
+                                        "operation_id":  "rollback-readiness-explain",
+                                        "executable_by_mirror":  false
+                                    }
+                   },
+                   {
+                       "id":  "payload.metadata.execution_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC6 payload metadata must remain current-artifacts, verification-blocked, unsigned, install-blocked, and rollback-not-executed.",
+                       "evidence":  {
+                                        "release_id":  "production-distro-rc6-current-artifacts",
+                                        "status":  "verification-blocked",
+                                        "signature_available":  false
+                                    }
+                   },
+                   {
+                       "id":  "preflight.expected_blockers",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Bootstrap preflight must remain verification-blocked specifically on signature, revocation, installer compatibility, and rollback baseline gates.",
+                       "evidence":  {
+                                        "state":  "verification-blocked",
+                                        "blockers":  [
+                                                         "verify-signature-or-signed-metadata-reference",
+                                                         "verify-revocation-snapshot",
+                                                         "verify-installer-compatibility-contract",
+                                                         "verify-rollback-baseline-hash"
+                                                     ]
+                                    }
+                   },
+                   {
+                       "id":  "installer.fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Installer fail-closed fixtures must pass and keep install, activation, rollback, and production ring mutations false.",
+                       "evidence":  {
+                                        "checks":  5,
+                                        "blockers":  0,
+                                        "cases":  12,
+                                        "passed_cases":  12,
+                                        "failed_cases":  0,
+                                        "rc6_021_complete":  true,
+                                        "next_task":  "RC6-030"
+                                    }
+                   },
+                   {
+                       "id":  "frontend.metadata_preserved",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC6 mirror frontend refresh must preserve metadata and avoid rollback execution authority.",
+                       "evidence":  {
+                                        "checks":  16,
+                                        "blockers":  0,
+                                        "rc6_022_complete":  true,
+                                        "frontend_url":  "http://aios.w33d.xyz/",
+                                        "payload_index":  "http://aios.w33d.xyz/payloads/index.json",
+                                        "install_bootstrap":  "http://aios.w33d.xyz/install/bootstrap.json",
+                                        "production_ready_claim":  false,
+                                        "next_task":  "RC6-030"
+                                    }
+                   },
+                   {
+                       "id":  "live.metadata.rollback_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Live mirror endpoints must be reachable through resolve-pinned HTTP and remain non-GA, unsigned, install-blocked, support-upload-disabled, and rollback-blocked.",
+                       "evidence":  {
+                                        "channel":  200,
+                                        "payload_index":  200,
+                                        "install_bootstrap":  200,
+                                        "support_index":  200,
+                                        "support_recovery":  200,
+                                        "release_id":  "production-distro-rc6-current-artifacts",
+                                        "install_state":  "verification-blocked"
+                                    }
+                   },
+                   {
+                       "id":  "outputs.generated",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Rollback precondition matrix and execution blocker artifacts must be generated.",
+                       "evidence":  {
+                                        "matrix":  ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+                                        "blockers":  ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json"
+                                    }
+                   },
+                   {
+                       "id":  "projection.no_side_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Projection must not sign, install, activate, execute rollback, mutate boot/slot/state/rings, upload support, dispatch remotely, or grant TUI/model/shell authority.",
+                       "evidence":  {
+                                        "local_private_key_material_used":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "remote_mutation_performed":  false,
+                                        "install_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_slot_mutated":  false,
+                                        "boot_metadata_mutated":  false,
+                                        "persistent_state_mutated":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "support_upload_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "model_replay_authority":  false,
+                                        "normal_shell_authority":  false,
+                                        "tui_authority":  false
+                                    }
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "cryptographic_signing_performed":  false,
+                       "remote_mutation_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "persistent_state_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false
+                   },
+    "summary":  {
+                    "checks":  12,
+                    "blockers":  0,
+                    "rc6_031_complete":  true,
+                    "rollback_precondition_matrix_projected":  true,
+                    "rollback_readiness_ready":  true,
+                    "rollback_execution_allowed":  false,
+                    "rollback_execution_performed":  false,
+                    "canary_execution_allowed":  false,
+                    "canary_execution_performed":  false,
+                    "release_id":  "production-distro-rc6-current-artifacts",
+                    "payload_status":  "verification-blocked",
+                    "exact_operator_approval_required":  true,
+                    "exact_operator_approval_granted":  false,
+                    "production_ready_claim":  false,
+                    "next_task":  "RC6-040"
+                }
+}

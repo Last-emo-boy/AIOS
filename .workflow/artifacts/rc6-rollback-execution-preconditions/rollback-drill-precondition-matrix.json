@@ -1,0 +1,159 @@
+﻿{
+    "schema":  "agentos.rc6-rollback-drill-precondition-matrix.v1",
+    "generated_at":  "2026-06-08T12:38:04.0463895+08:00",
+    "status":  "preconditions-projected-execution-blocked",
+    "production_ready_claim":  false,
+    "projection_only":  true,
+    "release_id":  "production-distro-rc6-current-artifacts",
+    "rollback_readiness_ready":  true,
+    "rollback_execution_allowed":  false,
+    "rollback_execution_performed":  false,
+    "rows":  [
+                 {
+                     "id":  "rollback.baseline.consistent",
+                     "state":  "satisfied",
+                     "requirement":  "RC4, RC5, and RC6 rollback projections must agree on rollback baseline and previous/restored artifact hashes.",
+                     "evidence_path":  ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+                     "evidence":  {
+                                      "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                                      "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                                      "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709"
+                                  }
+                 },
+                 {
+                     "id":  "rollback.execution.authority",
+                     "state":  "blocked-by-design",
+                     "requirement":  "Rollback execution must wait for an exact-approved AgentCore PlanSpec executed by SecurityExecutionEngine.",
+                     "evidence_path":  ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+                     "evidence":  {
+                                      "canary_execution_allowed":  false,
+                                      "rollback_execution_allowed":  false,
+                                      "exact_operator_approval_granted":  false
+                                  }
+                 },
+                 {
+                     "id":  "support.recovery.readiness",
+                     "state":  "satisfied",
+                     "requirement":  "Support/recovery metadata must be present, redacted, and non-authoritative before rollback execution can ever be considered.",
+                     "evidence_path":  ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+                     "evidence":  {
+                                      "operation_id":  "rollback-readiness-explain",
+                                      "executable_by_mirror":  false,
+                                      "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169"
+                                  }
+                 },
+                 {
+                     "id":  "payload.signature.revocation",
+                     "state":  "blocked-by-design",
+                     "requirement":  "Payload signature and revocation snapshot remain mandatory before install, activation, canary, or rollback drill execution.",
+                     "evidence_path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+                     "evidence":  {
+                                      "signature_blocked":  true,
+                                      "revocation_blocked":  true
+                                  }
+                 },
+                 {
+                     "id":  "installer.compatibility.rollback-baseline",
+                     "state":  "blocked-by-design",
+                     "requirement":  "Installer compatibility and rollback baseline must be published to install metadata before execution.",
+                     "evidence_path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+                     "evidence":  {
+                                      "compatibility_blocked":  true,
+                                      "rollback_baseline_blocked":  true
+                                  }
+                 },
+                 {
+                     "id":  "installer.fail_closed",
+                     "state":  "satisfied",
+                     "requirement":  "Installer fail-closed fixtures must block unsigned, stale, revoked, oversized, hash-mismatched, and authority-broadening metadata.",
+                     "evidence_path":  ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+                     "evidence":  {
+                                      "cases":  12,
+                                      "failed_cases":  0
+                                  }
+                 },
+                 {
+                     "id":  "live.mirror.current_metadata",
+                     "state":  "satisfied",
+                     "requirement":  "Live mirror metadata must remain reachable, current-artifacts, non-GA, unsigned, install-blocked, and rollback-blocked.",
+                     "evidence_path":  "/payloads/index.json",
+                     "evidence":  {
+                                      "release_id":  "production-distro-rc6-current-artifacts",
+                                      "payload_status":  "verification-blocked",
+                                      "install_state":  "verification-blocked",
+                                      "rollback_execution_allowed":  null
+                                  }
+                 },
+                 {
+                     "id":  "runtime.side_effects",
+                     "state":  "satisfied",
+                     "requirement":  "This RC6-031 projection must not sign, install, activate, rollback, mutate slots/rings, upload support, dispatch remotely, or grant TUI/model/shell authority.",
+                     "evidence_path":  ".workflow/artifacts/rc6-rollback-execution-preconditions",
+                     "evidence":  {
+                                      "projection_only":  true,
+                                      "rollback_execution_performed":  false,
+                                      "active_slot_mutated":  false,
+                                      "production_ring_mutated":  false
+                                  }
+                 }
+             ],
+    "source_bindings":  {
+                            "rc6_canary_result_sha256":  "8246b22c23d45c0e53fcbbe998398ba53f2a041054717a1bab57dc0de6679cf5",
+                            "rc6_canary_packet_sha256":  "f30b8b8e32940c84f165fe9a9de5bdd069178517deadb3cdf6396c1994355f27",
+                            "rc6_rollback_preconditions_sha256":  "89f4e8d7fe5a48fc521914878c54fa7a8d85d90054d89eafc9530b2f6f048821",
+                            "rc5_rollback_readiness_sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                            "rc4_rollback_drill_sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                            "rc5_hosted_support_recovery_sha256":  "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+                            "rc5_recovery_operations_sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                            "rc6_hosted_payload_metadata_sha256":  "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+                            "rc6_bootstrap_preflight_sha256":  "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+                            "rc6_bootstrap_preflight_report_sha256":  "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+                            "rc6_installer_fail_closed_sha256":  "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+                            "rc6_mirror_frontend_refresh_sha256":  "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+                            "live_channel_sha256":  "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+                            "live_payload_index_sha256":  "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+                            "live_install_bootstrap_sha256":  "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+                            "live_support_index_sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                            "live_support_recovery_sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                        },
+    "live_endpoint_bindings":  {
+                                   "channel":  {
+                                                   "path":  "/channel/index.json",
+                                                   "sha256":  "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6"
+                                               },
+                                   "payload_index":  {
+                                                         "path":  "/payloads/index.json",
+                                                         "sha256":  "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151"
+                                                     },
+                                   "install_bootstrap":  {
+                                                             "path":  "/install/bootstrap.json",
+                                                             "sha256":  "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd"
+                                                         },
+                                   "support_index":  {
+                                                         "path":  "/support/index.json",
+                                                         "sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+                                                     },
+                                   "support_recovery":  {
+                                                            "path":  "/support/recovery.json",
+                                                            "sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                                                        }
+                               },
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "cryptographic_signing_performed":  false,
+                       "remote_mutation_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "persistent_state_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false
+                   }
+}

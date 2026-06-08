@@ -1,0 +1,74 @@
+{
+  "schema": "agentos.rc6-rollback-execution-preconditions-evidence.v1",
+  "generated_at": "2026-06-08T14:45:00+08:00",
+  "task": "RC6-031",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/project-rc6-rollback-execution-preconditions.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json",
+    "status": "passed",
+    "checks": 12,
+    "blockers": 0,
+    "rollback_precondition_matrix_projected": true,
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_allowed": false,
+    "canary_execution_performed": false
+  },
+  "artifacts": {
+    "rollback_drill_precondition_matrix": ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+    "rollback_execution_blockers": ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "signature_available": false,
+    "install_allowed": false,
+    "install_state": "verification-blocked",
+    "rollback_execution_allowed": null
+  },
+  "rollback_surface": {
+    "rollback_baseline_consistent": true,
+    "rollback_readiness_ready": true,
+    "support_recovery_ready": true,
+    "previous_restored_artifact_hashes_equal": true
+  },
+  "remaining_blockers_before_execution": [
+    "payload-signature-not-published",
+    "revocation-snapshot-not-published",
+    "installer-compatibility-contract-pending",
+    "rollback-baseline-not-published-to-install-metadata",
+    "SecurityExecutionEngine-rollback-PlanSpec-not-approved",
+    "canary-activation-evidence-not-present",
+    "two-or-more-enrolled-canary-target-nodes",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "tls-required-before-ga-claim"
+  ],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "remote_mutation_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_031_complete": true,
+    "next_task": "RC6-040",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-031",
+  "title": "prove rollback execution drill preconditions for installable payload channel",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+    ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+    ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/rollback-drill-projection.json",
+    ".workflow/artifacts/rc5-hosted-support-recovery/result.json",
+    ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+    ".workflow/artifacts/rc6-installer-fail-closed/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc6-rollback-execution-preconditions.ps1",
+      "role": "rollback execution precondition projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+      "role": "rollback drill precondition matrix"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json",
+      "role": "rollback execution blocker list"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-031-rollback-execution-preconditions.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback precondition matrix binds RC6 canary packet, RC6 rollback preconditions, RC5 rollback readiness, RC4 rollback drill projection, hosted support/recovery metadata, RC6 hosted payload metadata, bootstrap preflight, installer fail-closed fixtures, and live endpoint hashes.",
+      "Rollback baseline and previous/restored artifact set hashes are consistent across RC4, RC5, and RC6 projections.",
+      "Live payload, install, and support metadata remain reachable, non-GA, unsigned, verification-blocked, install-blocked, support-upload-disabled, and rollback-blocked.",
+      "Remaining execution blockers are explicit: payload signature, revocation snapshot, installer compatibility, rollback baseline publication, SecurityExecutionEngine rollback PlanSpec approval, canary activation evidence, multi-node canary target set, remote fleet execution, exact operator approval, and TLS GA gate.",
+      "No signing, install, activation, rollback, boot metadata, active slot, active artifact set, production ring, support upload, remote dispatch, model replay, shell, or TUI authority is granted."
+    ]
+  }
+}
