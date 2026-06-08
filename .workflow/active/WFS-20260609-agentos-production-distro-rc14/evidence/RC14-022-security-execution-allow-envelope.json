@@ -1,0 +1,138 @@
+{
+  "schema": "agentos.rc14-security-execution-allow-envelope-evidence.v1",
+  "generated_at": "2026-06-09T14:45:00+08:00",
+  "task": "RC14-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "script": {
+    "path": "scripts/project-rc14-security-execution-allow-envelope.ps1",
+    "sha256": "3e69fa1db6c6dc27fa7996e8cd7a9407a10b7b6036ffbd4253329ec2143f8858"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/result.json",
+    "status": "passed",
+    "sha256": "82e7fbb1c6d71c4d4e5b66fe55c27960ace28626460936fbb3dc9993b29ea681"
+  },
+  "outputs": {
+    "security_execution_allow_envelope": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-envelope.json",
+      "sha256": "90bd1866086939e41f4423570db44e9c664374f737701f1544e7c0745e0b8dda",
+      "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41"
+    },
+    "security_execution_allow_denial": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-denial.json",
+      "sha256": "c938f9a78dd8fd1f690f09b6c1a302d41cc51ad0adec1e8334286a8244487c3e"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-fail-closed-matrix.json",
+      "sha256": "6f5bc4def43c1e289b34d6ce73339f3d329478314c84a221e629bc089044666c"
+    },
+    "two_target_local_identity_enrollment_handoff": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/two-target-local-identity-enrollment-handoff.json",
+      "sha256": "0e6cc85931f7458b10b948eb389561bc7cdef88d314f600f509973a4a270c288"
+    }
+  },
+  "security_surface": {
+    "state": "security-execution-allow-envelope-denied",
+    "planspec_result_bound": true,
+    "handoff_bound": true,
+    "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+    "required_preconditions": {
+      "object_trust_bound": true,
+      "verified_quarantine_preflight": true,
+      "release_object_bound": true,
+      "agentcore_planspec_candidate_materialized": true,
+      "agentcore_planspec_executable": true,
+      "exact_effect_scope_bound": true,
+      "target_set_bound": true,
+      "exact_approval_bound": true,
+      "audit_sink_bound": true,
+      "nonce_bound": true,
+      "expiry_bound": true,
+      "policy_version_bound": true,
+      "rollback_reference_bound": true,
+      "support_recovery_reference_bound": true,
+      "remote_dispatch_denied": true,
+      "production_mutation_denied": true
+    },
+    "observed_preconditions": {
+      "object_trust_bound": true,
+      "verified_quarantine_preflight": true,
+      "release_object_bound": true,
+      "agentcore_planspec_candidate_materialized": true,
+      "agentcore_planspec_executable": false,
+      "exact_effect_scope_bound": true,
+      "target_set_bound": false,
+      "exact_approval_bound": false,
+      "audit_sink_bound": false,
+      "nonce_bound": false,
+      "expiry_bound": false,
+      "policy_version_bound": false,
+      "rollback_reference_bound": true,
+      "support_recovery_reference_bound": true,
+      "remote_dispatch_denied": true,
+      "production_mutation_denied": true
+    },
+    "security_execution_allowed": false,
+    "effect_preparation_allowed": false,
+    "effect_executed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "target-set-not-bound",
+      "audit-sink-not-bound",
+      "nonce-not-bound",
+      "approval-expiry-not-bound",
+      "policy-version-not-bound",
+      "security-execution-envelope-not-bound",
+      "controlled-effect-execution-not-authorized",
+      "security-execution-effect-envelope-denied",
+      "target-identity-enrollment-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "security_execution_effect_allowed": false,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc14_022_complete": true,
+    "next_task": "RC14-030",
+    "commit_required": true
+  }
+}

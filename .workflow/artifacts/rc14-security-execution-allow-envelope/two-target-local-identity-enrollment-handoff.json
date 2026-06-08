@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.rc14-two-target-local-identity-enrollment-handoff.v1",
+  "generated_at": "2026-06-09T14:45:00+08:00",
+  "task": "RC14-022",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc14-030-two-target-local-identity-enrollment",
+  "production_ready_claim": false,
+  "expected_next_task": "RC14-030",
+  "security_execution": {
+    "allow_envelope_path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-envelope.json",
+    "allow_envelope_sha256": "90bd1866086939e41f4423570db44e9c664374f737701f1544e7c0745e0b8dda",
+    "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+    "security_execution_allowed": false,
+    "effect_preparation_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "target_enrollment": {
+    "minimum_required_targets": 2,
+    "enrolled_target_count": 0,
+    "duplicate_targets_allowed": false,
+    "remote_dispatch_authority": false
+  },
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "security-execution-envelope-not-bound",
+    "controlled-effect-execution-not-authorized",
+    "security-execution-effect-envelope-denied",
+    "target-identity-enrollment-not-run"
+  ]
+}
