@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.rc12-external-object-publication-denial.v1",
+  "generated_at": "2026-06-09T04:15:00+08:00",
+  "task": "RC12-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "external-object-publication-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "denial_reasons": [
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "declared-current-drift-zero-not-proved"
+  ],
+  "failed_requirements": [
+    "external HTTPS object URI must be published",
+    "declared/current drift-zero must be proved before trust",
+    "freshness window must be bound before object trust"
+  ],
+  "authority_denied": [
+    "object-storage-provisioning",
+    "payload-upload",
+    "payload-download",
+    "quarantine-fetch",
+    "install",
+    "activation",
+    "rollback-execution",
+    "support-upload",
+    "remote-dispatch",
+    "production-ring-mutation",
+    "mirror-authority",
+    "signer-authority",
+    "frontend-authority",
+    "tui-authority",
+    "model-replay-authority"
+  ],
+  "side_effects": {
+    "payload_upload_performed": false,
+    "object_storage_provisioned": false,
+    "network_probe_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  }
+}

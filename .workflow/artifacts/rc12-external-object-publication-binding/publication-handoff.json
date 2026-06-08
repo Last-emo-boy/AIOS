@@ -1,0 +1,31 @@
+{
+  "schema": "agentos.rc12-object-publication-binding-handoff.v1",
+  "generated_at": "2026-06-09T04:15:00+08:00",
+  "task": "RC12-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "blocked-before-object-trust",
+  "production_ready_claim": false,
+  "publication_binding": {
+    "path": ".workflow/artifacts/rc12-external-object-publication-binding/publication-binding.json",
+    "sha256": "94fc3176cba8cc7f17eab35331e904ebc0b9ee93e3e1171e1262874450366d8d",
+    "publication_allowed": false,
+    "external_object_uri_published": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "freshness-window-missing",
+      "declared-current-drift-zero-not-proved"
+    ]
+  },
+  "expected_next_task": "RC12-011",
+  "downstream_gates": {
+    "drift_zero_required": true,
+    "descriptor_freshness_required": true,
+    "revocation_required": true,
+    "object_trust_allowed": false,
+    "quarantine_fetch_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  }
+}

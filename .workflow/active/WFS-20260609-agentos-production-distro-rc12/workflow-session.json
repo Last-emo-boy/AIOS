@@ -3,7 +3,7 @@
   "name": "Production Distro RC12",
   "status": "active",
   "created_at": "2026-06-09T03:45:00+08:00",
-  "updated_at": "2026-06-09T04:00:00+08:00",
+  "updated_at": "2026-06-09T04:15:00+08:00",
   "source": "RC11 final audit; maestro-managed RC12 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
   "goal": "Plan and execute AIOS-body controlled unblock for real object publication binding, drift-zero reconciliation, quarantine fetch verification, exact approval with audit binding, AgentCore/SecurityExecution allow, controlled activation, rollback, and support/recovery evidence.",
@@ -33,9 +33,15 @@
       "completed_at": "2026-06-09T04:00:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-001-real-object-controlled-unblock-contract.json",
       "commit": null
+    },
+    {
+      "task": "RC12-010",
+      "completed_at": "2026-06-09T04:15:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-010-external-object-publication-binding.json",
+      "commit": null
     }
   ],
-  "next_task": "RC12-010",
+  "next_task": "RC12-011",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
@@ -60,6 +66,12 @@
     ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-041.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-050.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-001-real-object-controlled-unblock-contract.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-001-real-object-controlled-unblock-contract.json",
+    "scripts/project-rc12-external-object-publication-binding.ps1",
+    ".workflow/artifacts/rc12-external-object-publication-binding/result.json",
+    ".workflow/artifacts/rc12-external-object-publication-binding/publication-binding.json",
+    ".workflow/artifacts/rc12-external-object-publication-binding/publication-denial.json",
+    ".workflow/artifacts/rc12-external-object-publication-binding/publication-handoff.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-010-external-object-publication-binding.json"
   ]
 }
