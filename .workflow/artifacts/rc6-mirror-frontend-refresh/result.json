@@ -1,0 +1,313 @@
+{
+  "schema": "agentos.rc6-mirror-frontend-refresh-result.v1",
+  "generated_at": "2026-06-08T12:23:54.8084511+08:00",
+  "checked_at": "2026-06-08T12:23:59.3059558+08:00",
+  "task": "RC6-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source_artifacts": {
+    "rc6_mirror_portal": {
+      "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+      "sha256": "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+      "present": true
+    },
+    "rc6_hosted_payload_metadata": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+      "sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+      "present": true
+    },
+    "rc6_bootstrap_installer_preflight": {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+      "sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+      "present": true
+    },
+    "rc6_installer_fail_closed": {
+      "path": ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+      "sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+      "present": true
+    }
+  },
+  "published_files": {
+    "index_html": "/srv/aios-mirror/index.html",
+    "mirror_css": "/srv/aios-mirror/assets/mirror.css",
+    "mirror_js": "/srv/aios-mirror/assets/mirror.js",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz"
+  },
+  "local_outputs": {
+    "index_html": ".workflow/artifacts/rc6-mirror-frontend-refresh/index.html",
+    "mirror_css": ".workflow/artifacts/rc6-mirror-frontend-refresh/mirror.css",
+    "mirror_js": ".workflow/artifacts/rc6-mirror-frontend-refresh/mirror.js",
+    "nginx": ".workflow/artifacts/rc6-mirror-frontend-refresh/nginx-aios.w33d.xyz.conf"
+  },
+  "frontend_hashes": {
+    "index_html_sha256": "f386da714e5c57bfa41ab40896227df3444baefbaf4bc4d2e264f38739a74c37",
+    "mirror_css_sha256": "2448f6158c038a41e6407924d97b696c01cf4ebbf833e6b4f43c34f5485ed696",
+    "mirror_js_sha256": "992f8f7f0035e1d8050556f0c510161e482070e1ace622bed3cc2d1b8c8a7a70",
+    "nginx_config_sha256": "ebdeb73f31c89797de6c4030cdfbd82a449f7fbbceaf6a54b80a99525e0ffea6"
+  },
+  "preserved_metadata_hashes": {
+    "health_sha256": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+    "descriptor_sha256": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+    "channel_sha256": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+    "payload_index_sha256": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+    "install_bootstrap_sha256": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+    "support_index_sha256": "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "install_state": "verification-blocked",
+    "signature_available": false,
+    "install_allowed": false
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "no_external_dependencies": true,
+    "metadata_preserved": true,
+    "metadata_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "tls_required_before_ga_claim": true
+  },
+  "checks": [
+    {
+      "id": "source.artifacts.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend refresh must bind prior RC6 portal, payload, preflight, and fail-closed evidence.",
+      "evidence": {
+        "rc6_mirror_portal": {
+          "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+          "sha256": "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+          "present": true
+        },
+        "rc6_hosted_payload_metadata": {
+          "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+          "sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+          "present": true
+        },
+        "rc6_bootstrap_installer_preflight": {
+          "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+          "sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+          "present": true
+        },
+        "rc6_installer_fail_closed": {
+          "path": ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+          "sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+          "present": true
+        }
+      }
+    },
+    {
+      "id": "live.metadata.before.available",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live mirror metadata must be reachable before frontend refresh.",
+      "evidence": {
+        "health": 200,
+        "channel": 200,
+        "payload_index": 200,
+        "install_bootstrap": 200
+      }
+    },
+    {
+      "id": "live.metadata.before.current_artifacts",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend refresh must start from the current RC6 payload metadata, not the older preview payload.",
+      "evidence": {
+        "release_id": "production-distro-rc6-current-artifacts"
+      }
+    },
+    {
+      "id": "local.outputs.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend refresh outputs must be generated locally before remote publication.",
+      "evidence": {
+        "files": [
+          "index_html",
+          "mirror_css",
+          "mirror_js",
+          "nginx"
+        ]
+      }
+    },
+    {
+      "id": "local.outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated frontend and nginx config must not contain private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "local.outputs.size_bounded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated frontend assets must stay bounded for the small mirror host.",
+      "evidence": {
+        "index_html": 4448,
+        "mirror_css": 6276,
+        "mirror_js": 10896,
+        "nginx": 2574
+      }
+    },
+    {
+      "id": "nginx.reload",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nginx must validate and reload with the refreshed RC6 mirror frontend config.",
+      "evidence": [
+        "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r",
+        "nginx: configuration file /etc/nginx/nginx.conf test is successful\r",
+        "active\r",
+        "aios/production-distro-rc6-current-artifacts/checksums.json 3173\r",
+        "aios/production-distro-rc6-current-artifacts/manifest.json 8204\r",
+        "aios/production-distro-rc6-current-artifacts/signatures.json 732\r",
+        "aios/production-distro-rc6-metadata-preview/checksums.json 1032\r",
+        "aios/production-distro-rc6-metadata-preview/manifest.json 2465\r",
+        "aios/production-distro-rc6-metadata-preview/signatures.json 758\r",
+        "bootstrap.json 3052\r",
+        "index.json 3654\r",
+        "index.json 5517\r",
+        "index.json 5785\r",
+        "manifest.json 1377\r",
+        "mirror.css 6274\r",
+        "mirror.js 10894\r",
+        "README.txt 266\r",
+        "README.txt 298\r",
+        "recovery.json 6211\r",
+        "user-release.json 1756\r",
+        "f386da714e5c57bfa41ab40896227df3444baefbaf4bc4d2e264f38739a74c37  index.html\r",
+        "2448f6158c038a41e6407924d97b696c01cf4ebbf833e6b4f43c34f5485ed696  assets/mirror.css\r",
+        "992f8f7f0035e1d8050556f0c510161e482070e1ace622bed3cc2d1b8c8a7a70  assets/mirror.js\r",
+        "820aeb893dc1ecbba09b8dedbe1fbf92471c3781dfb9139c4d0b9c62d655ce11  channel/index.json\r",
+        "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845  payloads/index.json\r",
+        "62958f7564a75f52267ee2d95bc940f81f8c73b1ca96fdc41d81460e39d331c7  install/bootstrap.json"
+      ]
+    },
+    {
+      "id": "remote.http.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Root frontend, assets, and existing mirror metadata endpoints must return HTTP 200 through resolve-pinned validation.",
+      "evidence": {
+        "root": 200,
+        "css": 200,
+        "js": 200,
+        "health": 200,
+        "channel": 200,
+        "payload_index": 200,
+        "install_bootstrap": 200,
+        "support_index": 200
+      }
+    },
+    {
+      "id": "remote.metadata.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend refresh must not rewrite existing health, descriptor, channel, payload, install, or support metadata.",
+      "evidence": {
+        "channel_before": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+        "channel_after": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+        "payload_before": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+        "payload_after": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+        "install_before": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+        "install_after": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd"
+      }
+    },
+    {
+      "id": "remote.current_artifacts.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live payload and install metadata must remain on production-distro-rc6-current-artifacts and verification-blocked.",
+      "evidence": {
+        "release_id": "production-distro-rc6-current-artifacts",
+        "payload_status": "verification-blocked",
+        "install_state": "verification-blocked"
+      }
+    },
+    {
+      "id": "remote.authority.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live metadata must remain non-GA, unsigned, install-blocked, and non-authoritative.",
+      "evidence": {
+        "production_ready_claim": false,
+        "signature_available": false,
+        "install_allowed": false
+      }
+    },
+    {
+      "id": "frontend.portal.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Root frontend must render the refreshed AIOS mirror shell, directory, payload surface, and canvas trust path.",
+      "evidence": null
+    },
+    {
+      "id": "frontend.no_external_dependencies",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend must not depend on external scripts, styles, images, fonts, or APIs.",
+      "evidence": null
+    },
+    {
+      "id": "remote.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote frontend and metadata responses must not expose private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "remote.directory_listing.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Directory listing must be blocked for payloads and assets.",
+      "evidence": {
+        "payloads": 404,
+        "assets": 404
+      }
+    },
+    {
+      "id": "remote.write_methods.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST must remain blocked for root and payload metadata.",
+      "evidence": {
+        "root": 403,
+        "payload_index": 403
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 16,
+    "blockers": 0,
+    "rc6_022_complete": true,
+    "frontend_url": "http://aios.w33d.xyz/",
+    "payload_index": "http://aios.w33d.xyz/payloads/index.json",
+    "install_bootstrap": "http://aios.w33d.xyz/install/bootstrap.json",
+    "production_ready_claim": false,
+    "next_task": "RC6-030"
+  }
+}

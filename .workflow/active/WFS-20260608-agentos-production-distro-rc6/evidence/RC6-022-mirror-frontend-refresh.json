@@ -1,0 +1,59 @@
+{
+  "schema": "agentos.rc6-mirror-frontend-refresh-evidence.v1",
+  "generated_at": "2026-06-08T14:25:00+08:00",
+  "task": "RC6-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/provision-rc6-mirror-frontend-refresh.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
+    "status": "passed",
+    "checks": 16,
+    "blockers": 0,
+    "frontend_url": "http://aios.w33d.xyz/",
+    "payload_index": "http://aios.w33d.xyz/payloads/index.json",
+    "install_bootstrap": "http://aios.w33d.xyz/install/bootstrap.json"
+  },
+  "published_files": {
+    "index_html": "/srv/aios-mirror/index.html",
+    "mirror_css": "/srv/aios-mirror/assets/mirror.css",
+    "mirror_js": "/srv/aios-mirror/assets/mirror.js",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz"
+  },
+  "verified_surface": {
+    "root_frontend_http_200": true,
+    "assets_http_200": true,
+    "health_descriptor_channel_payload_install_support_http_200": true,
+    "metadata_hashes_preserved": true,
+    "current_payload_release_id": "production-distro-rc6-current-artifacts",
+    "payload_status": "verification-blocked",
+    "install_state": "verification-blocked",
+    "directory_listing_blocked": true,
+    "post_blocked": true,
+    "no_external_dependencies": true
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "metadata_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "tls_required_before_ga_claim": true
+  },
+  "completion": {
+    "rc6_022_complete": true,
+    "next_task": "RC6-030",
+    "commit_required": true
+  }
+}

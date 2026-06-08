@@ -1,0 +1,37 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-022",
+  "title": "refresh RC6 mirror frontend and preserve hosted metadata infrastructure",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc6-mirror-portal/result.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+    ".workflow/artifacts/rc6-installer-fail-closed/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/provision-rc6-mirror-frontend-refresh.ps1",
+      "role": "frontend refresh deployer and verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
+      "role": "deployment and verification result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Root frontend renders an AIOS mirror portal with payload, install, support, verification, directory, hash binding, and canvas trust path views.",
+      "Frontend has no external scripts, styles, images, fonts, or APIs.",
+      "Nginx remains active, directory listing remains blocked, and POST remains blocked.",
+      "Existing health, descriptor, channel, payload, install, and support metadata hashes are preserved.",
+      "Current payload metadata remains production-distro-rc6-current-artifacts and verification-blocked.",
+      "No signing, install, activation, rollback, active slot, production ring, support upload, remote dispatch, or TUI authority is granted."
+    ]
+  }
+}

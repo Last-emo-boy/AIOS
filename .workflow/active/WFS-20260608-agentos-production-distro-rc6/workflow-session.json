@@ -3,7 +3,7 @@
   "name": "Production Distro RC6",
   "status": "active",
   "created_at": "2026-06-08T12:55:00+08:00",
-  "updated_at": "2026-06-08T14:15:00+08:00",
+  "updated_at": "2026-06-08T14:25:00+08:00",
   "source": "TASK.md; RC5 final audit; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
   "goal": "Turn the RC5 hosted metadata mirror into an installable signed payload channel and controlled canary execution readiness path while preserving signing, installer, activation, rollback, fleet, and TUI authority boundaries.",
@@ -76,6 +76,12 @@
       "completed_at": "2026-06-08T14:15:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-021-installer-fail-closed.json",
       "commit": null
+    },
+    {
+      "task": "RC6-022",
+      "completed_at": "2026-06-08T14:25:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json",
+      "commit": null
     }
   ],
   "next_task": "RC6-030",
@@ -129,6 +135,10 @@
     "scripts/verify-rc6-installer-fail-closed.ps1",
     ".workflow/artifacts/rc6-installer-fail-closed/result.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-021.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-021-installer-fail-closed.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-021-installer-fail-closed.json",
+    "scripts/provision-rc6-mirror-frontend-refresh.ps1",
+    ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-022.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json"
   ]
 }
