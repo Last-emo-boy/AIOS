@@ -3,7 +3,7 @@
   "name": "Production Distro RC10",
   "status": "active",
   "created_at": "2026-06-08T23:59:30+08:00",
-  "updated_at": "2026-06-08T23:59:30+08:00",
+  "updated_at": "2026-06-08T23:59:40+08:00",
   "source": "RC9 final audit; TASK.md; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
   "goal": "Publish a real immutable external HTTPS object descriptor for AIOS payload bytes, reconcile drift to zero, verify installer quarantine fetch, enroll at least two canary targets, bind exact approval to AgentCore and SecurityExecutionEngine, and produce controlled canary activation plus rollback evidence.",
@@ -32,20 +32,30 @@
       "completed_at": "2026-06-08T23:59:30+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-001-real-external-object-controlled-execution-enablement-contract.json",
       "commit": null
+    },
+    {
+      "task": "RC10-002",
+      "completed_at": "2026-06-08T23:59:40+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-002-drift-zero-external-object-publication-contract.json",
+      "commit": null
     }
   ],
-  "next_task": "RC10-002",
+  "next_task": "RC10-003",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/final-rc9-closeout-summary.md",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/workflow-session.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/.task/TASK-RC10-001.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-001-real-external-object-controlled-execution-enablement-contract.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-001-real-external-object-controlled-execution-enablement-contract.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/.task/TASK-RC10-002.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-002-drift-zero-external-object-publication-contract.json"
   ]
 }

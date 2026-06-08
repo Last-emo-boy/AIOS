@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-002",
+  "title": "define drift-zero external object descriptor publication contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/.task/TASK-RC10-002.json",
+      "role": "task spec"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-002-drift-zero-external-object-publication-contract.json",
+      "role": "task evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
+      "role": "workflow status"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/workflow-session.json",
+      "role": "workflow status"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The contract defines required inputs and schema fields for drift-zero external immutable HTTPS object descriptor publication.",
+      "The contract defines canonical descriptor hashing, drift-zero reconciliation comparisons, allowed publication states, denial evidence, and superseded metadata handling.",
+      "The contract forbids credential-bearing, mutable, local, authority-bearing, private-material, install, activation, rollback, support upload, remote dispatch, model, shell, frontend, signer, mirror, object storage, and TUI authority content.",
+      "The task preserves production_ready_claim=false and moves the next task to RC10-003 exact approval canary activation and rollback execution contract."
+    ]
+  }
+}
