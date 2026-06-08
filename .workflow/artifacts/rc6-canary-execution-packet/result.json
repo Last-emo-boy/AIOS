@@ -1,0 +1,413 @@
+{
+  "schema": "agentos.rc6-canary-execution-packet-result.v1",
+  "generated_at": "2026-06-08T12:27:06.6063137+08:00",
+  "checked_at": "2026-06-08T12:27:06.7135859+08:00",
+  "task": "RC6-030",
+  "status": "passed",
+  "production_ready_claim": false,
+  "canary_execution_packet_projected": true,
+  "canary_execution_allowed": false,
+  "canary_execution_performed": false,
+  "rollback_preconditions_projected": true,
+  "rollback_execution_allowed": false,
+  "rollback_execution_performed": false,
+  "artifacts": {
+    "canary_execution_packet": {
+      "path": ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+      "sha256": "f30b8b8e32940c84f165fe9a9de5bdd069178517deadb3cdf6396c1994355f27",
+      "schema": "agentos.rc6-canary-execution-packet.v1",
+      "status": "packet-projected-execution-blocked"
+    },
+    "rollback_execution_preconditions": {
+      "path": ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+      "sha256": "89f4e8d7fe5a48fc521914878c54fa7a8d85d90054d89eafc9530b2f6f048821",
+      "schema": "agentos.rc6-rollback-execution-preconditions.v1",
+      "status": "rollback-preconditions-projected-execution-blocked"
+    }
+  },
+  "source_artifacts": {
+    "rc5_canary_result": {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+      "sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+      "present": true,
+      "schema": "agentos.rc5-multi-node-canary-proof-result.v1",
+      "status": "passed"
+    },
+    "rc5_canary_projection": {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+      "sha256": "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+      "present": true,
+      "schema": "agentos.rc5-controlled-multi-node-canary-plan-projection.v1",
+      "status": "preconditions-proven-execution-blocked"
+    },
+    "rc5_rollback_readiness": {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+      "sha256": "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+      "present": true,
+      "schema": "agentos.rc5-canary-rollback-readiness-projection.v1",
+      "status": "rollback-baseline-bound-execution-not-run"
+    },
+    "rc6_hosted_payload_metadata": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+      "sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+      "present": true,
+      "schema": "agentos.rc6-hosted-payload-metadata-result.v1",
+      "status": "passed"
+    },
+    "rc6_bootstrap_preflight": {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+      "sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+      "present": true,
+      "schema": "agentos.rc6-bootstrap-installer-preflight-result.v1",
+      "status": "passed"
+    },
+    "rc6_installer_fail_closed": {
+      "path": ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+      "sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+      "present": true,
+      "schema": "agentos.rc6-installer-fail-closed-result.v1",
+      "status": "passed"
+    },
+    "rc6_mirror_frontend_refresh": {
+      "path": ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
+      "sha256": "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+      "present": true,
+      "schema": "agentos.rc6-mirror-frontend-refresh-result.v1",
+      "status": "passed"
+    },
+    "fleet_rollout_authority": {
+      "path": ".workflow/artifacts/release/fleet-rollout-authority.json",
+      "sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+      "present": true,
+      "schema": "agentos.fleet-rollout-authority.v1",
+      "status": "passed"
+    }
+  },
+  "live_endpoint_bindings": {
+    "channel": {
+      "path": "/channel/index.json",
+      "sha256": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6"
+    },
+    "payload_index": {
+      "path": "/payloads/index.json",
+      "sha256": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151"
+    },
+    "install_bootstrap": {
+      "path": "/install/bootstrap.json",
+      "sha256": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd"
+    },
+    "payload_manifest": {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+      "sha256": "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a"
+    },
+    "payload_checksums": {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+      "sha256": "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2"
+    },
+    "payload_signatures": {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+      "sha256": "93d8583a8e0af983a4df2ede5909d167280834195114bc0d94826aaf87303a1e"
+    }
+  },
+  "source_bindings": {
+    "rc5_canary_result_sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+    "rc5_canary_projection_sha256": "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+    "rc5_rollback_readiness_sha256": "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+    "rc6_hosted_payload_metadata_sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+    "rc6_bootstrap_preflight_sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+    "rc6_installer_fail_closed_sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+    "rc6_mirror_frontend_refresh_sha256": "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+    "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+    "live_channel_sha256": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+    "live_payload_index_sha256": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+    "live_install_bootstrap_sha256": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+    "live_payload_manifest_sha256": "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a",
+    "live_payload_checksums_sha256": "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2",
+    "live_payload_signatures_sha256": "93d8583a8e0af983a4df2ede5909d167280834195114bc0d94826aaf87303a1e"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "signature_available": false,
+    "install_allowed": false,
+    "install_state": "verification-blocked"
+  },
+  "remaining_blockers_before_execution": [
+    "payload-signature-not-published",
+    "revocation-snapshot-not-published",
+    "installer-compatibility-contract-pending",
+    "rollback-baseline-not-published-to-install-metadata",
+    "two-or-more-enrolled-canary-target-nodes",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "tls-required-before-ga-claim"
+  ],
+  "checks": [
+    {
+      "id": "source.artifacts.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 canary packet must bind all required RC5/RC6 source artifacts.",
+      "evidence": {
+        "rc5_canary_result_sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+        "rc5_canary_projection_sha256": "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+        "rc5_rollback_readiness_sha256": "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+        "rc6_hosted_payload_metadata_sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+        "rc6_bootstrap_preflight_sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+        "rc6_installer_fail_closed_sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+        "rc6_mirror_frontend_refresh_sha256": "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+        "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+        "live_channel_sha256": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+        "live_payload_index_sha256": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+        "live_install_bootstrap_sha256": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+        "live_payload_manifest_sha256": "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a",
+        "live_payload_checksums_sha256": "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2",
+        "live_payload_signatures_sha256": "93d8583a8e0af983a4df2ede5909d167280834195114bc0d94826aaf87303a1e"
+      }
+    },
+    {
+      "id": "rc5.canary.preconditions",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC5 canary proof must be passed, rollback-ready, exact-approval-gated, and execution-blocked.",
+      "evidence": {
+        "checks": 19,
+        "blockers": 0,
+        "rc5_021_complete": true,
+        "canary_preconditions_proven": true,
+        "rollback_readiness_proven": true,
+        "canary_execution_allowed": false,
+        "canary_execution_performed": false,
+        "projected_ring": "canary",
+        "minimum_canary_node_count_required": 2,
+        "observed_canary_node_count": 1,
+        "remote_rings_blocked": true,
+        "exact_operator_approval_required": true,
+        "exact_operator_approval_granted": false,
+        "production_ready_claim": false,
+        "remote_mutation_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "rc5.canary.packet_base",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC5 canary plan projection must be non-executable and approval-gated.",
+      "evidence": {
+        "hosted_mirror_service_ready": true,
+        "hosted_endpoint_verifier_ready": true,
+        "hosted_metadata_fail_closed_ready": true,
+        "mirror_frontend_ready": true,
+        "user_release_channel_ready": true,
+        "live_endpoint_metadata_ready": true,
+        "rc4_staged_rollout_smoke_ready": true,
+        "rc4_rollout_projection_ready": true,
+        "fleet_authority_ready": true,
+        "remote_rings_blocked": true,
+        "rollback_readiness_ready": true,
+        "exact_operator_approval_required": true,
+        "exact_operator_approval_granted": false,
+        "multi_node_target_set_enrolled": false,
+        "execution_gate_status": "blocked-by-design"
+      }
+    },
+    {
+      "id": "rc5.rollback.readiness",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback readiness must be bound to equal previous/restored artifact hashes and execute no rollback.",
+      "evidence": {
+        "previous": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "restored": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "baseline": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+        "rollback_execution_performed": false
+      }
+    },
+    {
+      "id": "rc6.payload.metadata",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 hosted payload metadata must point to current artifacts while remaining verification-blocked, unsigned, and install-blocked.",
+      "evidence": {
+        "release_id": "production-distro-rc6-current-artifacts",
+        "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+        "status": "verification-blocked",
+        "storage_mode": "metadata-only",
+        "large_payload_deferred": true,
+        "signature_available": false,
+        "installable_media_declared_hash_drift_count": 3,
+        "install_allowed": false,
+        "activation_allowed": false
+      }
+    },
+    {
+      "id": "rc6.bootstrap.preflight",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 bootstrap installer preflight must be passed as verification-blocked with no side effects.",
+      "evidence": {
+        "report_path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+        "report_sha256": "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+        "state": "verification-blocked",
+        "blockers": 4,
+        "release_id": "production-distro-rc6-current-artifacts"
+      }
+    },
+    {
+      "id": "rc6.installer.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 installer fail-closed fixtures must pass all negative cases without install/activation/rollback side effects.",
+      "evidence": {
+        "checks": 5,
+        "blockers": 0,
+        "cases": 12,
+        "passed_cases": 12,
+        "failed_cases": 0,
+        "rc6_021_complete": true,
+        "next_task": "RC6-030"
+      }
+    },
+    {
+      "id": "rc6.frontend.refresh",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 mirror frontend refresh must be passed, dependency-free, and metadata-preserving.",
+      "evidence": {
+        "checks": 16,
+        "blockers": 0,
+        "rc6_022_complete": true,
+        "frontend_url": "http://aios.w33d.xyz/",
+        "payload_index": "http://aios.w33d.xyz/payloads/index.json",
+        "install_bootstrap": "http://aios.w33d.xyz/install/bootstrap.json",
+        "production_ready_claim": false,
+        "next_task": "RC6-030"
+      }
+    },
+    {
+      "id": "fleet.authority.canary_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fleet authority must remain AgentCore/SecurityExecution-owned; canary ring is not multi-node enrolled and remote execution is disabled.",
+      "evidence": {
+        "observed_canary_nodes": 1,
+        "required_canary_nodes": 2,
+        "canary_blocker": "remote-fleet-execution-not-enabled"
+      }
+    },
+    {
+      "id": "live.metadata.current",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live mirror metadata must be reachable through resolve-pinned HTTP and remain current-artifacts, non-GA, unsigned, and install-blocked.",
+      "evidence": {
+        "root": 200,
+        "channel": 200,
+        "payload": 200,
+        "install": 200,
+        "release_id": "production-distro-rc6-current-artifacts",
+        "payload_status": "verification-blocked",
+        "install_state": "verification-blocked"
+      }
+    },
+    {
+      "id": "packet.execution_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated RC6 canary packet must remain non-executable until signature, revocation, compatibility, rollback, target-set, remote-execution, exact-approval, and TLS gates are satisfied.",
+      "evidence": {
+        "rc5_canary_preconditions_proven": true,
+        "rc5_rollback_readiness_ready": true,
+        "rc6_hosted_payload_metadata_ready": true,
+        "rc6_bootstrap_preflight_verification_blocked": true,
+        "rc6_installer_fail_closed_ready": true,
+        "rc6_mirror_frontend_ready": true,
+        "live_metadata_current_artifacts": true,
+        "fleet_authority_ready": true,
+        "signed_payload_required": true,
+        "signature_available": false,
+        "revocation_snapshot_available": false,
+        "installer_compatibility_contract_available": false,
+        "rollback_baseline_published_to_install_metadata": false,
+        "multi_node_target_set_enrolled": false,
+        "exact_operator_approval_granted": false,
+        "remote_fleet_execution_enabled": false,
+        "execution_gate_status": "blocked-by-design"
+      }
+    },
+    {
+      "id": "packet.outputs.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Canary packet and rollback preconditions artifacts must be generated.",
+      "evidence": {
+        "packet": ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+        "rollback": ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json"
+      }
+    },
+    {
+      "id": "packet.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Projection must not sign, install, activate, rollback, mutate slots/rings, upload support, dispatch remotely, or grant TUI/model/shell authority.",
+      "evidence": {
+        "local_private_key_material_used": false,
+        "cryptographic_signing_performed": false,
+        "remote_mutation_performed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "model_replay_authority": false,
+        "normal_shell_authority": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "blockers": [],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "remote_mutation_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "summary": {
+    "checks": 13,
+    "blockers": 0,
+    "rc6_030_complete": true,
+    "canary_execution_packet_projected": true,
+    "canary_execution_allowed": false,
+    "canary_execution_performed": false,
+    "rollback_preconditions_projected": true,
+    "rollback_execution_performed": false,
+    "release_id": "production-distro-rc6-current-artifacts",
+    "payload_status": "verification-blocked",
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "observed_canary_node_count": 1,
+    "required_canary_node_count": 2,
+    "remote_fleet_execution_enabled": false,
+    "production_ready_claim": false,
+    "next_task": "RC6-031"
+  }
+}

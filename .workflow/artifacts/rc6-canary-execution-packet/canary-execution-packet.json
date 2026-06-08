@@ -1,0 +1,129 @@
+{
+  "schema": "agentos.rc6-canary-execution-packet.v1",
+  "generated_at": "2026-06-08T12:27:06.6063137+08:00",
+  "status": "packet-projected-execution-blocked",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "executable": false,
+  "ring": "canary",
+  "domain": "aios.w33d.xyz",
+  "release_id": "production-distro-rc6-current-artifacts",
+  "payload_state": "verification-blocked",
+  "canary_execution_allowed": false,
+  "canary_execution_performed": false,
+  "activation_allowed": false,
+  "activation_performed": false,
+  "rollback_execution_allowed": false,
+  "rollback_execution_performed": false,
+  "exact_operator_approval_required": true,
+  "exact_operator_approval_granted": false,
+  "exact_operator_approval_packet_hash": null,
+  "execution_authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+  "target_set": {
+    "required_minimum_nodes": 2,
+    "observed_canary_node_count": 1,
+    "multi_node_target_set_enrolled": false,
+    "remote_fleet_execution_enabled": false,
+    "blocker": "remote-fleet-execution-not-enabled"
+  },
+  "approval_binding_requirements": [
+    "payload-index-sha256",
+    "payload-manifest-sha256",
+    "payload-checksums-sha256",
+    "payload-signatures-sha256",
+    "revocation-snapshot-sha256",
+    "installer-compatibility-contract-sha256",
+    "rollback-baseline-sha256",
+    "canary-target-set-sha256",
+    "fleet-policy-version",
+    "exact-operator-approval-hash",
+    "tls-evidence-before-ga-claim"
+  ],
+  "gates": {
+    "rc5_canary_preconditions_proven": true,
+    "rc5_rollback_readiness_ready": true,
+    "rc6_hosted_payload_metadata_ready": true,
+    "rc6_bootstrap_preflight_verification_blocked": true,
+    "rc6_installer_fail_closed_ready": true,
+    "rc6_mirror_frontend_ready": true,
+    "live_metadata_current_artifacts": true,
+    "fleet_authority_ready": true,
+    "signed_payload_required": true,
+    "signature_available": false,
+    "revocation_snapshot_available": false,
+    "installer_compatibility_contract_available": false,
+    "rollback_baseline_published_to_install_metadata": false,
+    "multi_node_target_set_enrolled": false,
+    "exact_operator_approval_granted": false,
+    "remote_fleet_execution_enabled": false,
+    "execution_gate_status": "blocked-by-design"
+  },
+  "remaining_blockers_before_execution": [
+    "payload-signature-not-published",
+    "revocation-snapshot-not-published",
+    "installer-compatibility-contract-pending",
+    "rollback-baseline-not-published-to-install-metadata",
+    "two-or-more-enrolled-canary-target-nodes",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "tls-required-before-ga-claim"
+  ],
+  "source_bindings": {
+    "rc5_canary_result_sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+    "rc5_canary_projection_sha256": "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+    "rc5_rollback_readiness_sha256": "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+    "rc6_hosted_payload_metadata_sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec",
+    "rc6_bootstrap_preflight_sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+    "rc6_installer_fail_closed_sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+    "rc6_mirror_frontend_refresh_sha256": "36f10c2e3073148c97bbb0ac8eca626d71c0394dbd440550c9b036f6d5bc1a57",
+    "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+    "live_channel_sha256": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6",
+    "live_payload_index_sha256": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151",
+    "live_install_bootstrap_sha256": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd",
+    "live_payload_manifest_sha256": "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a",
+    "live_payload_checksums_sha256": "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2",
+    "live_payload_signatures_sha256": "93d8583a8e0af983a4df2ede5909d167280834195114bc0d94826aaf87303a1e"
+  },
+  "live_endpoint_bindings": {
+    "channel": {
+      "path": "/channel/index.json",
+      "sha256": "68f448f54ee57454ac28210049b1ccb783e243b8f5423a188460c9f5376cc9c6"
+    },
+    "payload_index": {
+      "path": "/payloads/index.json",
+      "sha256": "79bfb3cd38165d6eef8d3a81b9994ab17f7756f6f8dba079e365ce091a3aa151"
+    },
+    "install_bootstrap": {
+      "path": "/install/bootstrap.json",
+      "sha256": "669ade4e5990066e331952193f0b0ed91761e6a3552b0244a2479311e7a563dd"
+    },
+    "payload_manifest": {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+      "sha256": "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a"
+    },
+    "payload_checksums": {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+      "sha256": "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2"
+    },
+    "payload_signatures": {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+      "sha256": "93d8583a8e0af983a4df2ede5909d167280834195114bc0d94826aaf87303a1e"
+    }
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "remote_mutation_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  }
+}

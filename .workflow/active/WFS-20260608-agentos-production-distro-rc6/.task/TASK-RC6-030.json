@@ -1,0 +1,47 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-030",
+  "title": "project exact-approved canary execution packet and rollback execution preconditions",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+    ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+    ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc6-canary-execution-packet.ps1",
+      "role": "canary execution packet projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+      "role": "projected canary execution packet"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+      "role": "projected rollback execution preconditions"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-030-canary-execution-packet.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Canary packet binds RC5 canary proof, RC5 rollback readiness, RC6 hosted payload metadata, RC6 preflight, RC6 fail-closed fixtures, RC6 mirror frontend refresh, and live endpoint hashes.",
+      "Packet remains projection-only, non-executable, exact-operator-approval gated, and blocked by design.",
+      "Rollback execution preconditions are projected without executing rollback.",
+      "Payload remains production-distro-rc6-current-artifacts and verification-blocked.",
+      "No signing, install, activation, rollback, active slot, production ring, support upload, remote dispatch, or TUI authority is granted."
+    ]
+  }
+}

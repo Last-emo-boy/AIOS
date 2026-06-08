@@ -1,0 +1,70 @@
+{
+  "schema": "agentos.rc6-canary-execution-packet-evidence.v1",
+  "generated_at": "2026-06-08T14:35:00+08:00",
+  "task": "RC6-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/project-rc6-canary-execution-packet.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+    "status": "passed",
+    "checks": 13,
+    "blockers": 0,
+    "canary_execution_packet_projected": true,
+    "canary_execution_allowed": false,
+    "canary_execution_performed": false,
+    "rollback_preconditions_projected": true,
+    "rollback_execution_performed": false
+  },
+  "artifacts": {
+    "canary_execution_packet": ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+    "rollback_execution_preconditions": ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "signature_available": false,
+    "install_allowed": false,
+    "install_state": "verification-blocked"
+  },
+  "execution_gates": {
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "observed_canary_node_count": 1,
+    "required_canary_node_count": 2,
+    "remote_fleet_execution_enabled": false,
+    "execution_gate_status": "blocked-by-design"
+  },
+  "remaining_blockers_before_execution": [
+    "payload-signature-not-published",
+    "revocation-snapshot-not-published",
+    "installer-compatibility-contract-pending",
+    "rollback-baseline-not-published-to-install-metadata",
+    "two-or-more-enrolled-canary-target-nodes",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "tls-required-before-ga-claim"
+  ],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "remote_mutation_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_030_complete": true,
+    "next_task": "RC6-031",
+    "commit_required": true
+  }
+}

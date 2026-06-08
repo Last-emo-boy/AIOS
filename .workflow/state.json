@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc6",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC6-030",
-    "lifecycle_position":  "rc6-mirror-frontend-refresh-published",
+    "current_task":  "RC6-031",
+    "lifecycle_position":  "rc6-canary-execution-packet-projected",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc6-030-canary-execution-packet",
+    "next_allowed_action":  "execute-rc6-031-rollback-execution-preconditions",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T14:25:00+08:00",
+    "updated_at":  "2026-06-08T14:35:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC5 is closed with hosted mirror service framework, AIOS mirror frontend, user bootstrap/release metadata, multi-node canary precondition proof, hosted support/recovery metadata, and final closeout audit. Production Distro RC6 is active: RC6-001 defines the installable signed payload channel contract for aios.w33d.xyz, RC6-002 defines bootstrap/installer consumption boundaries, RC6-003 freezes TLS/storage/signed-payload threat controls, RC6-004 publishes the RC6 mirror portal plus bounded /payloads and /install metadata, RC6-010 projects current AIOS release artifacts into a verification-blocked payload manifest, RC6-011 publishes that bounded payload metadata to the hosted mirror without large artifact storage, RC6-012 proves signed payload metadata fail-closed fixtures, RC6-020 projects bootstrap installer preflight as verification-blocked, RC6-021 proves installer fail-closed behavior for unsigned, stale, revoked, oversized, hash-mismatched, large-payload, and authority-broadening payload metadata, and RC6-022 refreshes the public AIOS mirror frontend while preserving hosted metadata hashes and non-authoritative nginx boundaries. Next allowed action is RC6-030 canary execution packet projection.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC5 is closed with hosted mirror service framework, AIOS mirror frontend, user bootstrap/release metadata, multi-node canary precondition proof, hosted support/recovery metadata, and final closeout audit. Production Distro RC6 is active: RC6-001 defines the installable signed payload channel contract for aios.w33d.xyz, RC6-002 defines bootstrap/installer consumption boundaries, RC6-003 freezes TLS/storage/signed-payload threat controls, RC6-004 publishes the RC6 mirror portal plus bounded /payloads and /install metadata, RC6-010 projects current AIOS release artifacts into a verification-blocked payload manifest, RC6-011 publishes that bounded payload metadata to the hosted mirror without large artifact storage, RC6-012 proves signed payload metadata fail-closed fixtures, RC6-020 projects bootstrap installer preflight as verification-blocked, RC6-021 proves installer fail-closed behavior for unsigned, stale, revoked, oversized, hash-mismatched, large-payload, and authority-broadening payload metadata, RC6-022 refreshes the public AIOS mirror frontend while preserving hosted metadata hashes and non-authoritative nginx boundaries, and RC6-030 projects an exact-approval-gated canary execution packet plus rollback execution preconditions without executing canary or rollback. Next allowed action is RC6-031 rollback execution drill preconditions.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1275,6 +1275,30 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json"
+                      },
+                      {
+                          "type":  "rc6_script",
+                          "path":  "scripts/project-rc6-canary-execution-packet.ps1"
+                      },
+                      {
+                          "type":  "rc6_artifact",
+                          "path":  ".workflow/artifacts/rc6-canary-execution-packet/result.json"
+                      },
+                      {
+                          "type":  "rc6_artifact",
+                          "path":  ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json"
+                      },
+                      {
+                          "type":  "rc6_artifact",
+                          "path":  ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-030.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-030-canary-execution-packet.json"
                       }
                   ]
 }

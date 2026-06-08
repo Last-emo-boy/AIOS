@@ -3,7 +3,7 @@
   "name": "Production Distro RC6",
   "status": "active",
   "created_at": "2026-06-08T12:55:00+08:00",
-  "updated_at": "2026-06-08T14:25:00+08:00",
+  "updated_at": "2026-06-08T14:35:00+08:00",
   "source": "TASK.md; RC5 final audit; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
   "goal": "Turn the RC5 hosted metadata mirror into an installable signed payload channel and controlled canary execution readiness path while preserving signing, installer, activation, rollback, fleet, and TUI authority boundaries.",
@@ -82,9 +82,15 @@
       "completed_at": "2026-06-08T14:25:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json",
       "commit": null
+    },
+    {
+      "task": "RC6-030",
+      "completed_at": "2026-06-08T14:35:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-030-canary-execution-packet.json",
+      "commit": null
     }
   ],
-  "next_task": "RC6-030",
+  "next_task": "RC6-031",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
@@ -139,6 +145,12 @@
     "scripts/provision-rc6-mirror-frontend-refresh.ps1",
     ".workflow/artifacts/rc6-mirror-frontend-refresh/result.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-022.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-022-mirror-frontend-refresh.json",
+    "scripts/project-rc6-canary-execution-packet.ps1",
+    ".workflow/artifacts/rc6-canary-execution-packet/result.json",
+    ".workflow/artifacts/rc6-canary-execution-packet/canary-execution-packet.json",
+    ".workflow/artifacts/rc6-canary-execution-packet/rollback-execution-preconditions.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-030.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-030-canary-execution-packet.json"
   ]
 }

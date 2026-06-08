@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.rc6-rollback-execution-preconditions.v1",
+  "generated_at": "2026-06-08T12:27:06.6063137+08:00",
+  "status": "rollback-preconditions-projected-execution-blocked",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "rollback_readiness_ready": true,
+  "rollback_execution_allowed": false,
+  "rollback_execution_performed": false,
+  "previous_active_artifact_set_sha256": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+  "restored_active_artifact_set_sha256": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+  "rollback_baseline_sha256": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+  "required_before_canary_execution": [
+    "rollback-baseline-bound-to-exact-operator-approval",
+    "SecurityExecutionEngine-rollback-PlanSpec-approved",
+    "signed-payload-and-revocation-verification-passed",
+    "support-recovery-redaction-evidence-present",
+    "mirror-not-allowed-to-execute-rollback",
+    "TUI-not-allowed-to-execute-rollback"
+  ],
+  "blocked_execution_reason": "RC6 canary packet binds rollback readiness, but rollback execution is still blocked until exact approval and SecurityExecutionEngine PlanSpec execution evidence exist.",
+  "source_bindings": {
+    "rc5_rollback_readiness_sha256": "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+    "rc6_bootstrap_preflight_sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+    "rc6_installer_fail_closed_sha256": "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9"
+  },
+  "invariants": {
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  }
+}
