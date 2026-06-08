@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC16-012",
   "title": "verify distributable package descriptor fail-closed fixtures",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-1",
   "read_first": [
     ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
@@ -33,5 +33,8 @@
       "All fail-closed cases produce no side effects and keep production_ready_claim=false.",
       "Verifier records exact blockers instead of trusting shell output, frontend output, endpoint reachability, signer reachability, or model replay."
     ]
-  }
+  },
+  "completed_at": "2026-06-09T22:45:00+08:00",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-012-package-descriptor-fail-closed.json",
+  "next_task": "RC16-020"
 }

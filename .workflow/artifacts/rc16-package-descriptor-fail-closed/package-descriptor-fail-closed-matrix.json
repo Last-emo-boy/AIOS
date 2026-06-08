@@ -1,0 +1,1048 @@
+{
+  "schema": "agentos.rc16-package-descriptor-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T22:45:00+08:00",
+  "task": "RC16-012",
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "passed",
+  "baseline": {
+    "observed_state": "package-descriptor-valid-non-authoritative",
+    "observed_reasons": [],
+    "install_allowed": false,
+    "update_allowed": false,
+    "activation_allowed": false
+  },
+  "cases": [
+    {
+      "id": "stale.package_descriptor",
+      "status": "passed",
+      "expected_reasons": [
+        "stale-package-descriptor"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "stale-package-descriptor"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "broad.release_scope",
+      "status": "passed",
+      "expected_reasons": [
+        "descriptor-scope-too-broad"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "descriptor-scope-too-broad"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.package_id",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-package-id"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "missing-package-id"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched.package_media_id",
+      "status": "passed",
+      "expected_reasons": [
+        "package-media-id-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "package-media-id-mismatch"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.payload_digest",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-current-payload-sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "missing-current-payload-sha256"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched.payload_digest",
+      "status": "passed",
+      "expected_reasons": [
+        "current-payload-digest-mismatch",
+        "object-id-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "current-payload-digest-mismatch",
+        "object-id-mismatch"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "oversized.payload_size",
+      "status": "passed",
+      "expected_reasons": [
+        "oversized-payload-size"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "oversized-payload-size"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.manifest_digest",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-manifest-sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "missing-manifest-sha256"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched.manifest_digest",
+      "status": "passed",
+      "expected_reasons": [
+        "manifest-digest-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "manifest-digest-mismatch"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched.checksum_set",
+      "status": "passed",
+      "expected_reasons": [
+        "checksum-set-digest-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "checksum-set-digest-mismatch"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "unsigned.signature_artifact_missing",
+      "status": "passed",
+      "expected_reasons": [
+        "unsigned-package-descriptor"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "unsigned-package-descriptor"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "unsigned.signature_receipt_not_verified",
+      "status": "passed",
+      "expected_reasons": [
+        "signature-receipt-not-crypto-verified"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "signature-receipt-not-crypto-verified"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "revoked.package_metadata",
+      "status": "passed",
+      "expected_reasons": [
+        "revoked-package-descriptor"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "revoked-package-descriptor"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale.freshness_window",
+      "status": "passed",
+      "expected_reasons": [
+        "stale-freshness-window"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "stale-freshness-window"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.compatibility",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-compatibility-sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "missing-compatibility-sha256"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.rollback_baseline",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-rollback-baseline-sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "missing-rollback-baseline-sha256"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.support_recovery",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-support-recovery-sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "missing-support-recovery-sha256"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing.rc15_source_evidence",
+      "status": "passed",
+      "expected_reasons": [
+        "rc15-source-evidence-missing"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "rc15-source-evidence-missing"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched.media_payload",
+      "status": "passed",
+      "expected_reasons": [
+        "media-payload-digest-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "media-payload-digest-mismatch"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "unsupported.media_architecture",
+      "status": "passed",
+      "expected_reasons": [
+        "unsupported-architecture"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "unsupported-architecture"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "authority.install_allowed",
+      "status": "passed",
+      "expected_reasons": [
+        "authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "authority-broadening"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "authority.update_allowed",
+      "status": "passed",
+      "expected_reasons": [
+        "authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "authority-broadening"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "authority.activation_allowed",
+      "status": "passed",
+      "expected_reasons": [
+        "authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "authority-broadening"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "authority.remote_dispatch",
+      "status": "passed",
+      "expected_reasons": [
+        "authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "authority-broadening"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "claim.production_ready",
+      "status": "passed",
+      "expected_reasons": [
+        "production-ready-claim"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "production-ready-claim"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "duplicate.descriptor_metadata",
+      "status": "passed",
+      "expected_reasons": [
+        "duplicate-package-descriptor-metadata"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "duplicate-package-descriptor-metadata"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "replayed.descriptor_metadata",
+      "status": "passed",
+      "expected_reasons": [
+        "replayed-package-descriptor"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "replayed-package-descriptor"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "surface.endpoint_reachability",
+      "status": "passed",
+      "expected_reasons": [
+        "endpoint-reachability-is-not-authority"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "endpoint-reachability-is-not-authority"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "surface.frontend_output",
+      "status": "passed",
+      "expected_reasons": [
+        "frontend-output-is-not-authority"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "frontend-output-is-not-authority"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "surface.signer_reachability",
+      "status": "passed",
+      "expected_reasons": [
+        "signer-reachability-is-not-authority"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "signer-reachability-is-not-authority"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "surface.shell_output",
+      "status": "passed",
+      "expected_reasons": [
+        "shell-output-is-not-authority"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "shell-output-is-not-authority"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "surface.model_replay",
+      "status": "passed",
+      "expected_reasons": [
+        "model-replay-is-not-authority"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "model-replay-is-not-authority"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "surface.object_storage_ui_authority",
+      "status": "passed",
+      "expected_reasons": [
+        "authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "package-descriptor-denied",
+      "observed_reasons": [
+        "authority-broadening"
+      ],
+      "production_ready_claim": false,
+      "side_effects": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "cases": 33,
+    "passed_cases": 33,
+    "failed_cases": 0,
+    "failed_case_ids": []
+  }
+}

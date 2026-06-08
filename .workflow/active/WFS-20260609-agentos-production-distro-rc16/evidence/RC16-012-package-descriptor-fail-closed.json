@@ -1,0 +1,83 @@
+{
+  "schema": "agentos.rc16-package-descriptor-fail-closed-evidence.v1",
+  "generated_at": "2026-06-09T22:45:00+08:00",
+  "task": "RC16-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
+  "script": {
+    "path": "scripts/verify-rc16-package-descriptor-fail-closed.ps1",
+    "sha256": "52a96434b7f90efdd0d8425f840b6dd9dd61beaa6468c0325d634420d7b78986"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc16-package-descriptor-fail-closed/result.json",
+    "status": "passed",
+    "sha256": "6a998625300e79f122d57fc22f7a55ae027f70110e6c668c8fa9d7cc736de2cc"
+  },
+  "outputs": {
+    "package_descriptor_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc16-package-descriptor-fail-closed/package-descriptor-fail-closed-matrix.json",
+      "sha256": "a73c653e165954cf66541013b754ab80a32693d19691f75111855da28a072292"
+    }
+  },
+  "descriptor_surface": {
+    "state": "package-descriptor-fail-closed-fixtures-passed-install-update-still-gated",
+    "matrix_sha256": "a73c653e165954cf66541013b754ab80a32693d19691f75111855da28a072292",
+    "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+    "installable_media_manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "current_payload_size_bytes": 377,
+    "cases": 33,
+    "failed_cases": 0,
+    "install_allowed": false,
+    "update_allowed": false,
+    "activation_allowed": false,
+    "active_slot_mutation_allowed": false,
+    "boot_metadata_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "endpoint_reachability_authority": false,
+    "frontend_output_authority": false,
+    "signer_reachability_authority": false,
+    "shell_output_authority": false,
+    "model_replay_authority": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "payload_published": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "object_storage_ui_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc16_012_complete": true,
+    "next_task": "RC16-020",
+    "commit_required": true
+  }
+}
