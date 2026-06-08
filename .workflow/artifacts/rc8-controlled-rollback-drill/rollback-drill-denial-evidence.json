@@ -1,0 +1,96 @@
+{
+    "schema":  "agentos.rc8-controlled-rollback-drill-denial-evidence.v1",
+    "generated_at":  "2026-06-08T17:01:28.9922242+08:00",
+    "status":  "rollback-drill-denied-by-gates",
+    "production_ready_claim":  false,
+    "projection_only":  true,
+    "rollback_execution_allowed":  false,
+    "rollback_execution_performed":  false,
+    "denial_cases":  [
+                         {
+                             "id":  "external-https-object-uri-not-published",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "payload descriptor still uses non-external object identity"
+                         },
+                         {
+                             "id":  "declared-current-artifact-drift-unresolved",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "declared/current artifact drift remains unresolved"
+                         },
+                         {
+                             "id":  "canary-activation-not-performed",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "canary activation evidence is projected but not executed"
+                         },
+                         {
+                             "id":  "canary-target-set-not-enrolled",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "observed canary node count is below required minimum"
+                         },
+                         {
+                             "id":  "exact-operator-approval-not-granted",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "approval packet is not granted"
+                         },
+                         {
+                             "id":  "agentcore-rollback-planspec-not-bound",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "AgentCore rollback PlanSpec binding is absent"
+                         },
+                         {
+                             "id":  "security-execution-rollback-approval-not-bound",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "SecurityExecutionEngine rollback approval is absent"
+                         },
+                         {
+                             "id":  "remote-fleet-execution-disabled",
+                             "status":  "passed",
+                             "rollback_execution_allowed":  false,
+                             "reason":  "remote fleet rollback dispatch remains disabled"
+                         }
+                     ],
+    "remaining_blockers_before_rollback":  [
+                                               "external-https-object-uri-not-published",
+                                               "declared-current-artifact-drift-unresolved",
+                                               "canary-activation-evidence-not-executed",
+                                               "two-or-more-enrolled-canary-target-nodes-required",
+                                               "remote-fleet-execution-not-enabled",
+                                               "exact-operator-approval-not-granted",
+                                               "AgentCore-rollback-PlanSpec-not-bound",
+                                               "SecurityExecutionEngine-rollback-approval-not-bound"
+                                           ],
+    "authority":  {
+                      "plan_authority":  "AgentCore",
+                      "side_effect_authority":  "SecurityExecutionEngine",
+                      "mirror_authority":  false,
+                      "signer_authority":  false,
+                      "tui_authority":  false,
+                      "shell_authority":  false,
+                      "model_replay_authority":  false
+                  },
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "persistent_state_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false
+                   }
+}

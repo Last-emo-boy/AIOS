@@ -1,0 +1,55 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-031",
+  "title": "execute or deny rollback drill through AgentCore rollback PlanSpec and SecurityExecutionEngine gates",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/real-installable-payload-controlled-execution-contract.md",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/exact-approval-packet.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+    ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+    ".workflow/artifacts/release/fleet-rollout-authority.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc8-controlled-rollback-drill.ps1",
+      "role": "RC8 controlled rollback drill gate projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-planspec-requirement.json",
+      "role": "rollback PlanSpec requirement projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-gate-report.json",
+      "role": "rollback drill gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "role": "fail-closed rollback denial evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-031-controlled-rollback-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The rollback drill binds RC8 canary activation smoke, exact approval packet, RC8 payload verification evidence, mirror metadata, rollback baseline, inherited rollback readiness, and fleet authority.",
+      "The rollback PlanSpec requirement demands release-operator approval, canary rollback scope, AgentCore rollback PlanSpec, and SecurityExecutionEngine rollback approval before any side effect.",
+      "Rollback remains denied while external HTTPS object URI publication, declared/current artifact drift reconciliation, canary activation execution, target enrollment, exact approval, AgentCore rollback PlanSpec, SecurityExecutionEngine rollback approval, and remote fleet execution gates are missing.",
+      "The task does not sign, upload payloads, install, activate, rollback, mutate boot metadata, mutate active slots, mutate persistent state, mutate production rings, upload support bundles, dispatch remotely, or grant TUI authority."
+    ]
+  }
+}

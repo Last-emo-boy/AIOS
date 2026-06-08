@@ -3,7 +3,7 @@
   "name": "Production Distro RC8",
   "status": "active",
   "created_at": "2026-06-08T17:35:00+08:00",
-  "updated_at": "2026-06-08T21:05:00+08:00",
+  "updated_at": "2026-06-08T21:20:00+08:00",
   "source": "RC7 final audit; TASK.md; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
   "goal": "Replace RC7 projections with real installable payload byte evidence, public signature artifact ingestion, installer VM smoke, exact-approved canary activation smoke, and rollback drill execution or denial through AgentCore and SecurityExecutionEngine gates.",
@@ -83,9 +83,15 @@
       "completed_at": "2026-06-08T21:05:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-030-exact-approved-canary-smoke.json",
       "commit": null
+    },
+    {
+      "task": "RC8-031",
+      "completed_at": "2026-06-08T21:20:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-031-controlled-rollback-drill.json",
+      "commit": null
     }
   ],
-  "next_task": "RC8-031",
+  "next_task": "RC8-032",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/FINAL-AUDIT-20260608-production-distro-rc7.json",
@@ -115,7 +121,11 @@
     ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
     ".workflow/artifacts/rc8-exact-approved-canary-smoke/exact-approval-packet.json",
     ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
-    ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json"
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-planspec-requirement.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-gate-report.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-denial-evidence.json"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc8/plan.json",
@@ -176,6 +186,13 @@
     ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
     ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-030.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-030-exact-approved-canary-smoke.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-030-exact-approved-canary-smoke.json",
+    "scripts/project-rc8-controlled-rollback-drill.ps1",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-planspec-requirement.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-gate-report.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-031.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-031-controlled-rollback-drill.json"
   ]
 }
