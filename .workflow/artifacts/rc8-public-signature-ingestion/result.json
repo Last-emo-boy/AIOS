@@ -1,0 +1,171 @@
+{
+  "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+  "generated_at": "2026-06-08T19:05:00+08:00",
+  "task": "RC8-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "outputs": {
+    "receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d"
+    },
+    "signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19"
+    }
+  },
+  "signature_surface": {
+    "signature_artifact_ingested": true,
+    "crypto_verified": true,
+    "descriptor_hash_bound": true,
+    "canonical_payload_hash_bound": true,
+    "revocation_current": true,
+    "public_signature_artifact_path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+    "public_signature_artifact_sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "payload_blockers": [
+      "external-https-object-uri-not-published",
+      "installer-vm-smoke-not-run",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "public_key_material_used_for_verification": true,
+    "signature_value_redacted_to_hash": true,
+    "raw_public_identity_redacted": true,
+    "mirror_signing_authority": false,
+    "signer_install_authority": false,
+    "signer_activation_authority": false,
+    "signer_rollback_authority": false,
+    "payload_upload_performed": false,
+    "payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "descriptor.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 descriptor must exist before signature ingestion.",
+      "evidence": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json"
+    },
+    {
+      "id": "signature.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Public signature artifact must exist before ingestion.",
+      "evidence": "image/out/agentos-initramfs.cpio.gz.prod.sig.json"
+    },
+    {
+      "id": "signature.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature artifact schema must be exact.",
+      "evidence": "agentos.production-detached-signature.v1"
+    },
+    {
+      "id": "signature.artifact_path_matches_descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature artifact target path must match descriptor source artifact.",
+      "evidence": {
+        "descriptor": "image/out/agentos-initramfs.cpio.gz",
+        "signature": "image/out/agentos-initramfs.cpio.gz"
+      }
+    },
+    {
+      "id": "signature.artifact_hash_matches_descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature artifact object hash must match descriptor payload hash.",
+      "evidence": {
+        "descriptor": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "signature": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b"
+      }
+    },
+    {
+      "id": "signature.value.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature value must be present in the public artifact.",
+      "evidence": "0c3daedb64364996d2317cded045d5d46f5cac3b20452bb420e10ba7c6e34f3d"
+    },
+    {
+      "id": "signature.canonical_payload_hash_matches",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Canonical payload hash must match the public artifact claim.",
+      "evidence": {
+        "expected": "ea24551cf07595f8369f95592cef61ba9bea80f4eb12bce1727347a54eb9c6ae",
+        "observed": "ea24551cf07595f8369f95592cef61ba9bea80f4eb12bce1727347a54eb9c6ae"
+      }
+    },
+    {
+      "id": "keyring.public_key.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Packaged public key entry must be present.",
+      "evidence": {
+        "key_id": "agentos-production-root-v1",
+        "public_key_present": true
+      }
+    },
+    {
+      "id": "signature.crypto_verified",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Public signature must verify against the canonical payload and packaged public key.",
+      "evidence": null
+    },
+    {
+      "id": "signature.revocation_current",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature key status must be not revoked in signature and packaged revocation metadata.",
+      "evidence": {
+        "key_id": "agentos-production-root-v1",
+        "signature_status": "not-revoked",
+        "packaged_status": "not-revoked"
+      }
+    },
+    {
+      "id": "receipt.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Receipt must not contain private key blocks or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "summary.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature summary must not contain private key blocks or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 12,
+    "blockers": 0,
+    "payload_blockers": 3,
+    "rc8_011_complete": true,
+    "next_task": "RC8-012"
+  }
+}

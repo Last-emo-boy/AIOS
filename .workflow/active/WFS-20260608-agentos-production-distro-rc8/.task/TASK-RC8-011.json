@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-011",
+  "title": "ingest public signature artifacts without private key use",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/public-signature-artifact-ingestion-contract.md",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+    "packaging/agentos/rootfs/etc/agentos/production-signing/key-custody.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc8-public-signature-ingestion.ps1",
+      "role": "ingestion script"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "role": "hash-only receipt"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "role": "redacted signature summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-011-public-signature-ingestion.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Public signature artifact ingestion verifies descriptor target path, object hash, canonical payload hash, revocation status, and cryptographic signature with packaged public key material.",
+      "Generated receipt and summary redact raw public identity and record signature value by hash only.",
+      "The task does not read or use private signing material and does not perform signing.",
+      "The result keeps install_allowed=false and moves the next task to RC8-012 signed object descriptor fail-closed fixtures."
+    ]
+  }
+}
