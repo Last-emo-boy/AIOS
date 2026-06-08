@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC11-021",
   "title": "bind installer preflight evidence to AgentCore and SecurityExecution handoff",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-2",
   "read_first": [
     ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
@@ -18,6 +18,22 @@
     {
       "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
       "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/agentcore-planspec-handoff.json",
+      "role": "AgentCore PlanSpec handoff"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/security-execution-effect-envelope.json",
+      "role": "SecurityExecution effect envelope"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/handoff-denial.json",
+      "role": "handoff denial evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-021-installer-agentcore-security-handoff.json",
+      "role": "task evidence"
     }
   ],
   "convergence": {

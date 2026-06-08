@@ -1,0 +1,527 @@
+{
+  "schema": "agentos.rc11-installer-agentcore-security-handoff-denial.v1",
+  "generated_at": "2026-06-09T02:30:00+08:00",
+  "task": "RC11-021",
+  "status": "installer-agentcore-security-handoff-denied",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "denied": true,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "planspec_core_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822",
+  "security_decision_core_hash": "639512673880b4eb98e264b6689b28dc893d65689f725959f83620d13be75307",
+  "denied_cases": [
+    {
+      "id": "activation-or-rollback-request-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "approval-not-bound-denies-host-install",
+      "status": "passed",
+      "expected_blockers": [
+        "exact-approval-not-bound"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "drift-zero-denied-blocks-handoff",
+      "status": "passed",
+      "expected_blockers": [
+        "declared-current-drift-zero-not-proved"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "installer-preflight-not-verified-denies-handoff",
+      "status": "passed",
+      "expected_blockers": [
+        "installer-preflight-not-verified"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "missing-external-uri-denies-handoff",
+      "status": "passed",
+      "expected_blockers": [
+        "external-https-object-uri-not-published"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "payload-not-quarantined-denies-handoff",
+      "status": "passed",
+      "expected_blockers": [
+        "payload-not-quarantined"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "planspec-not-executable-denies-effect",
+      "status": "passed",
+      "expected_blockers": [
+        "agentcore-planspec-not-executable"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "pre-interpretation-verification-not-run-denies-handoff",
+      "status": "passed",
+      "expected_blockers": [
+        "pre-interpretation-verification-not-run"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "quarantine-fetch-not-run-denies-handoff",
+      "status": "passed",
+      "expected_blockers": [
+        "installer-quarantine-fetch-not-run"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "remote-dispatch-request-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "security-execution-effect-envelope-denied"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "security-envelope-denies-effect",
+      "status": "passed",
+      "expected_blockers": [
+        "security-execution-effect-envelope-denied"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "two-target-approval-not-bound-denies-controlled-execution",
+      "status": "passed",
+      "expected_blockers": [
+        "two-target-canary-approval-not-bound"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "external-descriptor-verification-denied",
+        "external-https-object-uri-not-published",
+        "declared-current-drift-zero-not-proved",
+        "object-trust-not-allowed",
+        "freshness-window-missing",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "exact-approval-not-bound",
+        "agentcore-planspec-not-bound",
+        "security-execution-effect-envelope-not-bound",
+        "installer-preflight-not-verified",
+        "two-target-canary-approval-not-bound",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "controlled-install-activation-rollback-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    }
+  ],
+  "preserved_boundaries": {
+    "installer_preflight_bound": true,
+    "installer_preflight_verified": false,
+    "agentcore_planspec_candidate_projected": true,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "blockers": [
+    "external-descriptor-verification-denied",
+    "external-https-object-uri-not-published",
+    "declared-current-drift-zero-not-proved",
+    "object-trust-not-allowed",
+    "freshness-window-missing",
+    "installer-quarantine-fetch-not-run",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "installer-preflight-not-verified",
+    "two-target-canary-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-effect-envelope-denied",
+    "controlled-install-activation-rollback-not-authorized"
+  ],
+  "next_task": "RC11-030"
+}

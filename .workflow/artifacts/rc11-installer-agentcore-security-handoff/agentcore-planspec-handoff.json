@@ -1,0 +1,190 @@
+{
+  "schema": "agentos.rc11-agentcore-installer-planspec-handoff.v1",
+  "generated_at": "2026-06-09T02:30:00+08:00",
+  "task": "RC11-021",
+  "status": "planspec-candidate-projected-denied",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "installer_preflight_bound": true,
+  "installer_preflight_verified": false,
+  "planspec_candidate_projected": true,
+  "planspec_bound": false,
+  "executable": false,
+  "planspec_core_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822",
+  "planspec_core": {
+    "planspec_id": "rc11-installer-agentcore-security-handoff",
+    "planner_version": "agent-core-release-installer-handoff-v1",
+    "plan_kind": "aios-release-installer-preflight-handoff",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "intent": {
+      "actor": "operator",
+      "source": "maestro-rc11",
+      "trust_boundary": "aios-body-controlled-release-install",
+      "summary": "bind RC11 installer preflight evidence before install, activation, or rollback authority"
+    },
+    "frozen_inputs": {
+      "rc11_020_result_sha256": "17da779b4aea1f8cf109ab3a734a2298037a3cd25532191c870c8f8fc36a8a03",
+      "quarantine_fetch_report_sha256": "6b96cb46070830e78d7c510926b7d3ff8d088249d40cb788c3afc90d5790ff60",
+      "installer_gate_report_sha256": "b66ebe3332a661990e076d277fd9f9fdddf2b8c2ab984f7e6966be5532672850",
+      "installer_fail_closed_matrix_sha256": "8b4770d8a878546d7a934a42bedd2f1e45edb4b82de87185059fd53055002ec0",
+      "release_id": "production-distro-rc8-current-artifacts",
+      "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "payload_size_bytes": 377,
+      "fetch_state": "quarantine-fetch-denied-before-network",
+      "fetch_allowed": false,
+      "payload_quarantined": false,
+      "pre_interpretation_verification_performed": false,
+      "descriptor_matches_current_bytes": true,
+      "required_gates": {
+        "descriptor_verified": false,
+        "descriptor_matches_current_bytes": true,
+        "external_https_object_uri_published": false,
+        "drift_zero": false,
+        "object_trust_allowed": false,
+        "quarantine_fetch_allowed": false,
+        "size_required": true,
+        "sha256_required": true,
+        "manifest_required": true,
+        "checksum_set_required": true,
+        "public_signature_required": true,
+        "revocation_required": true,
+        "freshness_required": true,
+        "compatibility_required": true,
+        "rollback_baseline_required": true,
+        "support_recovery_required": true,
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false
+      }
+    },
+    "steps": [
+      {
+        "id": "bind-installer-preflight-evidence",
+        "tool": "fs.read",
+        "risk": "read-only",
+        "requires_exact_approval": false,
+        "executable": true,
+        "evidence_hash": "17da779b4aea1f8cf109ab3a734a2298037a3cd25532191c870c8f8fc36a8a03"
+      },
+      {
+        "id": "project-quarantine-fetch",
+        "tool": "content.fetch",
+        "risk": "read-only",
+        "requires_exact_approval": false,
+        "executable": false,
+        "denied_before_network": true
+      },
+      {
+        "id": "isolate-install-smoke",
+        "tool": "pkg.isolate.install",
+        "risk": "execute-with-confirmation",
+        "requires_exact_approval": true,
+        "executable": false,
+        "denied_because": [
+          "external-descriptor-verification-denied",
+          "external-https-object-uri-not-published",
+          "declared-current-drift-zero-not-proved",
+          "object-trust-not-allowed",
+          "freshness-window-missing",
+          "installer-quarantine-fetch-not-run",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run",
+          "exact-approval-not-bound",
+          "agentcore-planspec-not-bound",
+          "security-execution-effect-envelope-not-bound",
+          "installer-preflight-not-verified",
+          "two-target-canary-approval-not-bound",
+          "agentcore-planspec-not-executable",
+          "security-execution-effect-envelope-denied",
+          "controlled-install-activation-rollback-not-authorized"
+        ]
+      },
+      {
+        "id": "prepare-host-checkpoint",
+        "tool": "pkg.host.checkpoint",
+        "risk": "write-with-diff",
+        "requires_exact_approval": true,
+        "rollback_required": true,
+        "executable": false
+      },
+      {
+        "id": "host-install",
+        "tool": "pkg.host.install",
+        "risk": "privileged-with-human-approval",
+        "requires_exact_approval": true,
+        "rollback_required": true,
+        "executable": false
+      },
+      {
+        "id": "rollback-trigger",
+        "tool": "rollback.trigger",
+        "risk": "execute-with-confirmation",
+        "requires_separate_rollback_approval": true,
+        "executable": false
+      }
+    ],
+    "invariants": [
+      "installer evidence is immutable and hash-bound before handoff",
+      "quarantine fetch must complete before any payload interpretation",
+      "host install requires exact approval and rollback baseline",
+      "SecurityExecutionEngine owns every side effect",
+      "no mirror, signer, TUI, shell, or model output grants authority"
+    ],
+    "blockers": [
+      "external-descriptor-verification-denied",
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized"
+    ]
+  },
+  "runtime_observations": {
+    "agent_core": {
+      "planspec_type": true,
+      "run_loop": true,
+      "awaiting_approval_state": true,
+      "effect_envelope_import": true
+    },
+    "security_policy": {
+      "policy_evaluator": true,
+      "high_risk_requires_exact_approval": true,
+      "deny_decision_kind": true
+    },
+    "security_tools": {
+      "content_fetch_tool": true,
+      "pkg_isolate_install_tool": true,
+      "pkg_host_install_tool": true,
+      "rollback_trigger_tool": true,
+      "privileged_human_approval_risk": true
+    }
+  },
+  "denied_because": [
+    "external-descriptor-verification-denied",
+    "external-https-object-uri-not-published",
+    "declared-current-drift-zero-not-proved",
+    "object-trust-not-allowed",
+    "freshness-window-missing",
+    "installer-quarantine-fetch-not-run",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "installer-preflight-not-verified",
+    "two-target-canary-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-effect-envelope-denied",
+    "controlled-install-activation-rollback-not-authorized"
+  ]
+}

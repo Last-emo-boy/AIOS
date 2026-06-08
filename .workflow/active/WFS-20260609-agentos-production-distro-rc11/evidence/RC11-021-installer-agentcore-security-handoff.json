@@ -1,0 +1,111 @@
+{
+  "schema": "agentos.rc11-installer-agentcore-security-handoff-evidence.v1",
+  "generated_at": "2026-06-09T02:30:00+08:00",
+  "task": "RC11-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "script": {
+    "path": "scripts/project-rc11-installer-agentcore-security-handoff.ps1",
+    "sha256": "dd567f733511a761157c102ae9d7f13691647a57a7403249a9a8a924f918ef88"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+    "status": "passed",
+    "sha256": "b92cfb75f23f3f5123328925a739582874df5cafe8a9ba70a7b9541a133eea58"
+  },
+  "outputs": {
+    "agentcore_planspec_handoff": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/agentcore-planspec-handoff.json",
+      "sha256": "aed9ca7c1f4c0841c5e7c649c36a3dec25eaeffd4383995d774a71888571c1f6",
+      "planspec_core_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822"
+    },
+    "security_execution_effect_envelope": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/security-execution-effect-envelope.json",
+      "sha256": "b73c836e131fab43a0d1c57852e1428f565cdf7a39486a0e3746a36f6d5e193c",
+      "decision_core_hash": "639512673880b4eb98e264b6689b28dc893d65689f725959f83620d13be75307"
+    },
+    "handoff_denial": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/handoff-denial.json",
+      "sha256": "cb02bbcc5108580c405aa358c1c14142054c29b214bbbcc06178f6bdd2508459"
+    }
+  },
+  "handoff_surface": {
+    "state": "installer-agentcore-security-handoff-denied",
+    "installer_preflight_bound": true,
+    "installer_preflight_verified": false,
+    "agentcore_planspec_candidate_projected": true,
+    "agentcore_planspec_hash": "d6afcf6682661bc57e5628d131c350baf0b9e7bca8bbf7e95d8ef98dcc491822",
+    "agentcore_planspec_bound": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_required": true,
+    "security_execution_decision_bound": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "external-descriptor-verification-denied",
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "installer_preflight_evidence_fabricated": false,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "executable_planspec_created": false,
+    "security_execution_effect_allowed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "network_fetch_attempted": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc11_021_complete": true,
+    "next_task": "RC11-030",
+    "commit_required": true
+  }
+}
