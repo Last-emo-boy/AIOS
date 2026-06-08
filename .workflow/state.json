@@ -1,13 +1,18 @@
 ﻿{
     "project":  "AIOS",
-    "workflow_name":  "agentos-console-beta-production-ux",
-    "current_workflow":  ".workflow/active/WFS-20260525-agentos-console-beta-production-ux",
-    "current_phase":  "console-beta-production-ux",
-    "status":  "completed",
+    "workflow_name":  "agentos-production-distro-rc4",
+    "current_workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
+    "current_phase":  "production-distro-rc4",
+    "status":  "active",
+    "phase_status":  "active",
+    "current_task":  "RC4-021",
+    "lifecycle_position":  "active-rc4-planning",
+    "blockers":  [],
+    "next_allowed_action":  "implement-rc4-staged-fleet-ring-rollout-smoke-and-rollback-drill",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-05-26T08:20:11+08:00",
+    "updated_at":  "2026-06-08T09:00:54+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy; TUI-oriented Alpha is completed with durable AgentCore operations, approvals, recovery, audit, support bundle export and AOM activation previews. AgentOS Console Beta And Production UX is completed with full-screen-oriented operator shell, deterministic projections, command palette, approval/recovery/support workbenches, capability catalog, production evidence center and local-first fleet/governance previews while keeping TUI projection-controller only and not claiming GA production readiness.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC3 is closed with external production signatures verified, immutable local release channel publication, signed channel consumption, support/recovery projection, and signing/publication gate integration. Current active milestone is Production Distro RC4: hosted release transport, fleet rings, remote registry mirroring, staged rollout authority, and GA hardening while preserving RC2/RC3 signing, rollback, support, and TUI authority boundaries. RC4 Wave 0 and Wave 1 are complete, and RC4-020 signed hosted-channel consumer and mirror smoke is complete; the current task is RC4-021 staged fleet-ring rollout smoke and rollback drill. RC4 is not a GA production-ready claim until its gates close.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -622,6 +627,206 @@
                       {
                           "type":  "final_audit",
                           "path":  ".workflow/active/WFS-20260525-agentos-console-beta-production-ux/evidence/FINAL-AUDIT-20260525-console-beta-production-ux.json"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/plan.json"
+                      },
+                      {
+                          "type":  "rc3_doc",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/external-production-signing-publication-contract.md"
+                      },
+                      {
+                          "type":  "rc3_doc",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/signature-bundle-custody-revocation-boundary.md"
+                      },
+                      {
+                          "type":  "rc3_doc",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/release-channel-publication-rollback-boundary.md"
+                      },
+                      {
+                          "type":  "rc3_doc",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/production-signing-publication-threat-model.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-001-external-production-signing-publication-contract.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-002-signature-bundle-custody-revocation-boundary.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-003-release-channel-publication-rollback-boundary.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-004-production-signing-publication-threat-model.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-010-external-signing-request-export.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-011-signature-bundle-intake.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-012-production-signature-verification-blocked.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-013-production-signing-fail-closed-fixtures.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-020-release-channel-publication-preconditions-blocked.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-021-signed-channel-consumer-preconditions-blocked.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-022-published-release-support-recovery-preconditions-blocked.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-023-production-signing-publication-gate-preconditions-blocked.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/RC3-030-final-closeout-preconditions-blocked.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/FINAL-AUDIT-20260531-production-distro-rc3.json"
+                      },
+                      {
+                          "type":  "rc3_doc",
+                          "path":  ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/final-rc3-closeout-summary.md"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json"
+                      },
+                      {
+                          "type":  "rc4_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-release-transport-fleet-contract.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-001-hosted-release-transport-fleet-contract.json"
+                      },
+                      {
+                          "type":  "rc4_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/staged-rollout-authority-rollback-boundary.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-002-staged-rollout-authority-rollback-boundary.json"
+                      },
+                      {
+                          "type":  "rc4_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/ga-hardening-acceptance-gates.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-003-ga-hardening-acceptance-gates.json"
+                      },
+                      {
+                          "type":  "rc4_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-transport-fleet-threat-model.md"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-004-hosted-transport-fleet-threat-model.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/publish-rc4-hosted-release-transport.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-hosted-release-transport/result.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-hosted-release-transport/local-mirror-fixture.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-010-hosted-release-transport.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/replay-rc4-remote-registry-mirror-publication.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-remote-registry-mirror-publication/result.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-011-remote-registry-mirror-publication.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/audit-rc4-fleet-ring-rollout-preconditions.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-fleet-ring-rollout-preconditions/result.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-012-fleet-ring-rollout-preconditions.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/verify-rc4-hosted-transport-fail-closed-fixtures.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/result.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-013-hosted-transport-fail-closed-fixtures.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/run-rc4-signed-hosted-channel-consumer-mirror-smoke.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-signed-hosted-channel-consumer-mirror-smoke/result.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-020-signed-hosted-channel-consumer-mirror-smoke.json"
                       }
                   ]
 }

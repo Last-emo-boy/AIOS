@@ -1,0 +1,53 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-020",
+  "status": "completed",
+  "recorded_at": "2026-06-08T10:00:00+08:00",
+  "summary": "Implemented and ran the signed hosted-channel consumer and mirror smoke. The smoke verified that the hosted transport manifest, local mirror fixture, mirror lockfile/publication, RC4 precondition audit, RC4 fail-closed fixtures, RC3 signed channel consumer, RC3 publication/channel metadata, production signature verification, and packaged revocation snapshot are hash-bound and mutation-free.",
+  "deliverables": {
+    "script": "scripts/run-rc4-signed-hosted-channel-consumer-mirror-smoke.ps1",
+    "result": ".workflow/artifacts/rc4-signed-hosted-channel-consumer-mirror-smoke/result.json",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-020-signed-hosted-channel-consumer-mirror-smoke.json"
+  },
+  "hashes": {
+    "script_sha256": "e09590862b70f4557d432311da6dd3f49dc4bbd956c003c6843dffc78f602059",
+    "result_sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-signed-hosted-channel-consumer-mirror-smoke.v1",
+    "result_status": "passed",
+    "checks": 11,
+    "blockers": 0,
+    "rc4_020_complete": true,
+    "hosted_channel_consumer_ready": true,
+    "mirror_smoke_ready": true,
+    "hosted_transport_manifest_verified": true,
+    "local_mirror_fixture_verified": true,
+    "mirror_publication_verified": true,
+    "rc4_preconditions_verified": true,
+    "rc4_fail_closed_verified": true,
+    "rc3_signed_consumer_verified": true,
+    "production_signatures_bound": true,
+    "revocation_snapshot_bound": true,
+    "rollout_plan_created": false,
+    "rollout_plan_executed": false,
+    "exact_operator_approval_granted": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "verification": {
+    "command": ".\\scripts\\run-rc4-signed-hosted-channel-consumer-mirror-smoke.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": "RC4-021"
+  }
+}

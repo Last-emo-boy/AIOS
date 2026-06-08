@@ -1,0 +1,376 @@
+{
+  "schema": "agentos.rc4-signed-hosted-channel-consumer-mirror-smoke.v1",
+  "generated_at": "2026-06-08T10:00:00+08:00",
+  "checked_at": "2026-06-08T09:32:22.3138996+08:00",
+  "task": "RC4-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc4_020_complete": true,
+  "hosted_channel_consumer_ready": true,
+  "mirror_smoke_ready": true,
+  "rollout_plan_created": false,
+  "rollout_plan_executed": false,
+  "exact_operator_approval_granted": false,
+  "local_private_key_material_used": false,
+  "cryptographic_signing_performed": false,
+  "cryptographic_verification_performed": false,
+  "network_transfer_performed": false,
+  "remote_upload_performed": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_registry_mutated": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "boot_metadata_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": false,
+  "tui_authority": false,
+  "verified": {
+    "hosted_transport_manifest": true,
+    "local_mirror_fixture": true,
+    "mirror_publication": true,
+    "rc4_preconditions": true,
+    "rc4_fail_closed": true,
+    "rc3_signed_consumer": true,
+    "publication_manifest": true,
+    "channel_index": true,
+    "production_signatures": true,
+    "revocation_snapshot": true
+  },
+  "bindings": {
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "local_mirror_fixture_sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+    "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "fleet_rollout_preconditions_sha256": "6e5a63d2ef34b2f643e78ba38cdf915dea66945a7a88c3ca34ef1cdd42d931de",
+    "hosted_transport_fail_closed_sha256": "110e2c45aa3b17007e4846d97f796a6070e69dcbb43d92108492601a87d4c608",
+    "rc3_consumer_smoke_sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+    "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+    "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+    "production_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+    "revocation_log_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+  },
+  "source_artifacts": {
+    "rc4_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+      "sha256": "dc736db5b68cf3fca4a7cd36cc1d635a40647f37d322574ffbf880a3a828dd22",
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "hosted_transport_result": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/result.json",
+      "sha256": "6cf6be3136291d730cad1fd5afefa005772f253ad23d34b756a3aabcdbad0064",
+      "present": true,
+      "schema": "agentos.rc4-hosted-release-transport-result.v1",
+      "status": "passed"
+    },
+    "hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+      "present": true,
+      "schema": "agentos.rc4-hosted-release-transport-manifest.v1",
+      "status": "published-locally"
+    },
+    "local_mirror_fixture": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/local-mirror-fixture.json",
+      "sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+      "present": true,
+      "schema": "agentos.rc4-local-mirror-fixture.v1",
+      "status": "fixture-ready"
+    },
+    "mirror_publication_result": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/result.json",
+      "sha256": "19127e7792e6cdce709884f5f443d7fdaf13071ee79a8fc848e7614ef9a1a097",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-publication-result.v1",
+      "status": "passed"
+    },
+    "mirror_lockfile": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json",
+      "sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-lockfile.v1",
+      "status": "locked-locally"
+    },
+    "mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-publication.v1",
+      "status": "published-locally"
+    },
+    "fleet_rollout_preconditions": {
+      "path": ".workflow/artifacts/rc4-fleet-ring-rollout-preconditions/result.json",
+      "sha256": "6e5a63d2ef34b2f643e78ba38cdf915dea66945a7a88c3ca34ef1cdd42d931de",
+      "present": true,
+      "schema": "agentos.rc4-fleet-ring-rollout-preconditions.v1",
+      "status": "ready-for-fleet-ring-rollout-plan"
+    },
+    "hosted_transport_fail_closed": {
+      "path": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/result.json",
+      "sha256": "110e2c45aa3b17007e4846d97f796a6070e69dcbb43d92108492601a87d4c608",
+      "present": true,
+      "schema": "agentos.rc4-hosted-transport-fail-closed-fixtures.v1",
+      "status": "passed"
+    },
+    "rc3_consumer_smoke": {
+      "path": ".workflow/artifacts/rc3-signed-channel-consumer/result.json",
+      "sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+      "present": true,
+      "schema": "agentos.signed-release-channel-consumer-smoke.v1",
+      "status": "passed"
+    },
+    "publication_manifest": {
+      "path": ".workflow/artifacts/rc3-release-channel-publication/publication-manifest.json",
+      "sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+      "present": true,
+      "schema": "agentos.immutable-release-channel-publication.v1",
+      "status": "published-locally"
+    },
+    "channel_index": {
+      "path": ".workflow/artifacts/rc3-release-channel-publication/channel-index.json",
+      "sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+      "present": true,
+      "schema": "agentos.release-channel-index.v1",
+      "status": "updated"
+    },
+    "production_verification": {
+      "path": ".workflow/artifacts/rc3-production-signature-verification/result.json",
+      "sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+      "present": true,
+      "schema": "agentos.production-signature-verification.v1",
+      "status": "passed"
+    },
+    "revocation_log": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json",
+      "sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+      "present": true,
+      "schema": "agentos.production-key-revocation-log.v1",
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "rc4.plan.current_task",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 plan must point at RC4-020 before the first smoke run, or remain on a later RC4 task after RC4-020 is completed.",
+      "evidence": {
+        "current_task": "RC4-021",
+        "RC4_020": "completed",
+        "RC4_021": "next"
+      }
+    },
+    {
+      "id": "hosted_transport.hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport manifest must be passed, local-only, and hash-bound to RC3 publication, channel, production verification, consumer smoke, and revocation log.",
+      "evidence": {
+        "rc3_final_audit_sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+        "production_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+        "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+        "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+        "consumer_smoke_sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+        "support_recovery_sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+        "signing_publication_gate_sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+        "revocation_log_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+      }
+    },
+    {
+      "id": "local_mirror.fixture_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local mirror fixture must bind the current hosted transport manifest hash and remain local-only.",
+      "evidence": {
+        "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+        "mirror": {
+          "id": "local-rc4-hosted-transport-mirror",
+          "authoritative_remote": false,
+          "local_fixture_only": true,
+          "network_transfer_performed": false,
+          "active_registry_mutated": false,
+          "snapshot_freshness_window": "P7D",
+          "snapshot_state": "fresh-fixture"
+        }
+      }
+    },
+    {
+      "id": "mirror_publication.hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror lockfile and publication must bind hosted manifest, local fixture, and lockfile hashes without active registry mutation.",
+      "evidence": {
+        "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+        "local_mirror_fixture_sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+        "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+        "rc3_final_audit_sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+        "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+        "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+        "signing_publication_gate_sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+        "revocation_log_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+      }
+    },
+    {
+      "id": "rc4.preconditions.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 fleet-ring rollout preconditions must be ready but still not create a rollout plan or approval.",
+      "evidence": {
+        "checks": 18,
+        "blockers": 0,
+        "rc4_012_complete": true,
+        "rollout_preconditions_ready": true,
+        "projected_ring": "local",
+        "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+        "rollout_policy_version": "rc4-rollout-policy-v1",
+        "exact_operator_approval_required": true,
+        "exact_operator_approval_granted": false,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "rc4.fail_closed.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 hosted transport fail-closed fixtures must pass 13 negative cases with zero blockers.",
+      "evidence": {
+        "cases": 13,
+        "passed_cases": 13,
+        "failed_cases": 0,
+        "child_audit_exit_zero_cases": 13,
+        "blockers": 0,
+        "expected_fail_closed_cases": [
+          "hosted-manifest-hash-drift",
+          "missing-rc3-final-audit-binding",
+          "stale-mirror-snapshot",
+          "unsigned-mirror-metadata",
+          "revoked-mirror-artifact",
+          "registry-lockfile-mismatch",
+          "fleet-target-set-drift",
+          "ring-skip-attempt",
+          "missing-rollback-baseline",
+          "tui-rollout-authority-attempt",
+          "model-replay-rollout-authority-attempt",
+          "remote-dispatch-mutation-attempt",
+          "unredacted-support-bundle"
+        ],
+        "rc4_013_complete": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "rc3.consumer_smoke.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 signed channel consumer smoke must pass and remain mutation-free.",
+      "evidence": {
+        "verified": {
+          "publication_manifest": true,
+          "channel_index": true,
+          "production_signatures": true,
+          "rc2_true_block_evidence": true,
+          "rollback_target": true,
+          "revocation_state": true
+        },
+        "mutation": {
+          "active_slot_mutated": false,
+          "active_artifact_set_mutated": false,
+          "boot_metadata_mutated": false,
+          "production_ring_mutated": false,
+          "activation_performed": false,
+          "rollback_execution_performed": false,
+          "remote_dispatch_enabled": false,
+          "tui_authority": false
+        },
+        "sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da"
+      }
+    },
+    {
+      "id": "rc3.publication_and_channel.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 publication manifest and channel index must remain immutable, append-only, and non-GA.",
+      "evidence": {
+        "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+        "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a"
+      }
+    },
+    {
+      "id": "production_signatures.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Production signature verification artifact consumed by hosted smoke must remain passed with zero blockers.",
+      "evidence": {
+        "status": "passed",
+        "blockers": 0,
+        "sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba"
+      }
+    },
+    {
+      "id": "revocation_snapshot.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted smoke must bind packaged revocation/advisory snapshot hash.",
+      "evidence": {
+        "hosted_revocation_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+        "actual_revocation_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+      }
+    },
+    {
+      "id": "hosted_consumer_smoke.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted consumer smoke verifies local evidence only and must not sign, upload, activate, rollback, mutate registry, mutate slots, dispatch remotely, or use TUI authority.",
+      "evidence": {
+        "local_private_key_material_used": false,
+        "cryptographic_signing_performed": false,
+        "cryptographic_verification_performed": false,
+        "network_transfer_performed": false,
+        "remote_upload_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 11,
+    "blockers": 0,
+    "rc4_020_complete": true,
+    "hosted_channel_consumer_ready": true,
+    "mirror_smoke_ready": true,
+    "production_ready_claim": false,
+    "network_transfer_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  }
+}

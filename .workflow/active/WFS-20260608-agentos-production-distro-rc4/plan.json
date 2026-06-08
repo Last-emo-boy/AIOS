@@ -1,0 +1,119 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc4",
+  "milestone": "Production Distro RC4",
+  "status": "active",
+  "objective": "Turn the RC3 signed local publication proof into hosted release transport, fleet-ring rollout, remote registry mirroring, and GA-hardening evidence while preserving RC2/RC3 authority boundaries.",
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "hosted transport and fleet rollout contracts",
+      "tasks": [
+        {
+          "id": "RC4-001",
+          "status": "completed",
+          "title": "define hosted release transport, registry mirror, and fleet-ring boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-release-transport-fleet-contract.md"
+        },
+        {
+          "id": "RC4-002",
+          "status": "completed",
+          "title": "define staged rollout authority and rollback boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/staged-rollout-authority-rollback-boundary.md"
+        },
+        {
+          "id": "RC4-003",
+          "status": "completed",
+          "title": "define GA hardening acceptance gates and non-GA boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/ga-hardening-acceptance-gates.md"
+        },
+        {
+          "id": "RC4-004",
+          "status": "completed",
+          "title": "define hosted transport and fleet rollout threat model",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-transport-fleet-threat-model.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "hosted transport and mirror replay",
+      "tasks": [
+        {
+          "id": "RC4-010",
+          "status": "completed",
+          "title": "implement hosted release transport manifest and local mirror fixture",
+          "deliverable": ".workflow/artifacts/rc4-hosted-release-transport/result.json"
+        },
+        {
+          "id": "RC4-011",
+          "status": "completed",
+          "title": "implement remote registry mirror publication replay",
+          "deliverable": ".workflow/artifacts/rc4-remote-registry-mirror-publication/result.json"
+        },
+        {
+          "id": "RC4-012",
+          "status": "completed",
+          "title": "implement fleet-ring rollout plan precondition audit",
+          "deliverable": ".workflow/artifacts/rc4-fleet-ring-rollout-preconditions/result.json"
+        },
+        {
+          "id": "RC4-013",
+          "status": "completed",
+          "title": "implement hosted transport fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "fleet rollout, support, and gates",
+      "tasks": [
+        {
+          "id": "RC4-020",
+          "status": "completed",
+          "title": "add signed hosted-channel consumer and mirror smoke",
+          "deliverable": ".workflow/artifacts/rc4-signed-hosted-channel-consumer-mirror-smoke/result.json"
+        },
+        {
+          "id": "RC4-021",
+          "status": "next",
+          "title": "add staged fleet-ring rollout smoke and rollback drill"
+        },
+        {
+          "id": "RC4-022",
+          "status": "planned",
+          "title": "add GA-hardening support and recovery projection"
+        },
+        {
+          "id": "RC4-023",
+          "status": "planned",
+          "title": "integrate hosted transport and fleet evidence into promotion gates"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "RC4 closeout",
+      "tasks": [
+        {
+          "id": "RC4-030",
+          "status": "planned",
+          "title": "run Production Distro RC4 final audit and next milestone planning"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC4-021",
+  "previous_workflow": ".workflow/active/WFS-20260531-agentos-production-distro-rc3",
+  "acceptance_gates": {
+    "hosted_transport_must_be_hash_bound": true,
+    "remote_registry_mirror_must_fail_closed": true,
+    "fleet_rollout_authority": "AgentCore PlanSpec + SecurityExecutionEngine",
+    "tui_authority": false,
+    "local_private_key_material_forbidden": true,
+    "production_ready_claim": false,
+    "rollback_and_revocation_required": true,
+    "support_bundle_must_be_redacted": true
+  }
+}
