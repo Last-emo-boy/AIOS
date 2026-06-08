@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-002",
+  "title": "define user-facing install and update channel boundary",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md",
+      "role": "boundary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-002-user-install-update-channel-boundary.json",
+      "role": "evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+      "role": "status update"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json",
+      "role": "status update"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The boundary states the mirror is transport, not a root of trust.",
+      "The boundary requires signature, hash, freshness, revocation, and rollback checks before install or update trust.",
+      "The evidence records no activation authority and no GA claim.",
+      "The next task is RC5-003."
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "agentos.rc5-user-install-update-channel-boundary.v1",
+  "generated_at": "2026-06-08T11:10:00+08:00",
+  "task": "RC5-002",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "source_bindings": {
+    "rc5_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+      "sha256_before_task_update": "5139cb4bd3967f96569d7b37d263e605e9cddd7507805d8d1436b7c4074f661f"
+    },
+    "rc5_001_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
+      "sha256": "e0d9204b7b8409d9cc8be8b29ab2ca231ec2eee9327e33fad4915b23f5c2e4aa"
+    },
+    "rc5_001_evidence": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json",
+      "sha256": "ac4990956a7b7ea1fa16d7ee8c03282e9cf5998963c2b183fa7f13f4ce72a867"
+    }
+  },
+  "install_update_boundary": {
+    "mirror_is_transport_only": true,
+    "mirror_is_not_root_of_trust": true,
+    "bootstrap_projection_only": true,
+    "metadata_only_until_storage_upgrade": true,
+    "signature_verification_required": true,
+    "hash_verification_required": true,
+    "freshness_verification_required": true,
+    "revocation_verification_required": true,
+    "rollback_baseline_required": true,
+    "exact_operator_approval_required_for_activation": true,
+    "execution_authority": "AgentCore PlanSpec + SecurityExecutionEngine",
+    "tui_authority": false
+  },
+  "client_may_fetch": [
+    "/health.json",
+    "/.well-known/aios/mirror.json",
+    "/channel/index.json",
+    "/releases/"
+  ],
+  "client_must_fail_closed_for": [
+    "missing-schema",
+    "missing-production-ready-false",
+    "missing-rc4-final-audit-binding",
+    "missing-hosted-transport-binding",
+    "missing-mirror-publication-binding",
+    "missing-or-invalid-signature",
+    "revoked-metadata",
+    "stale-metadata",
+    "hash-mismatch",
+    "missing-rollback-baseline",
+    "oversized-payload-reference-before-storage-upgrade",
+    "activation-authority-from-mirror",
+    "private-key-or-token-marker"
+  ],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "network_transfer_performed": false,
+    "remote_upload_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false
+  },
+  "completion": {
+    "rc5_002_complete": true,
+    "next_task": "RC5-003",
+    "commit_required": true
+  }
+}
