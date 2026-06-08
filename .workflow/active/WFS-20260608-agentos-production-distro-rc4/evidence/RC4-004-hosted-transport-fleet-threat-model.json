@@ -1,0 +1,26 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-004",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:14:00+08:00",
+  "summary": "Defined hosted transport and fleet rollout threat model with required negative fixtures for manifest drift, stale mirrors, unsigned or revoked metadata, target drift, ring skip, rollback loss, authority creep, and support secret leakage.",
+  "deliverables": {
+    "threat_model": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-transport-fleet-threat-model.md",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-004-hosted-transport-fleet-threat-model.json"
+  },
+  "acceptance_coverage": {
+    "hosted_manifest_drift_covered": true,
+    "mirror_staleness_covered": true,
+    "unsigned_revoked_metadata_covered": true,
+    "fleet_target_substitution_covered": true,
+    "ring_skip_covered": true,
+    "rollback_baseline_loss_covered": true,
+    "remote_control_plane_authority_creep_covered": true,
+    "tui_model_authority_creep_covered": true,
+    "support_secret_leakage_covered": true,
+    "production_ready_claim": false
+  },
+  "handoff": {
+    "next_task": "RC4-010"
+  }
+}
