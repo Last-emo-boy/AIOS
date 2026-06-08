@@ -1,0 +1,94 @@
+{
+  "schema": "agentos.rc7-gated-rollback-drill-evidence.v1",
+  "generated_at": "2026-06-08T16:55:00+08:00",
+  "task": "RC7-032",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/project-rc7-gated-rollback-drill.ps1",
+    "sha256": "7011ab8e5b37c4852482ed5c60bc6d7643c138a6ee7ac1d75bf131b3242a1a6d"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-gated-rollback-drill/result.json",
+    "sha256": "502c65131048dc0fe9af3631d69a0c70ecb03af019c812e475a065bd57f2a375",
+    "status": "passed",
+    "checks": 11,
+    "blockers": 0
+  },
+  "artifacts": {
+    "rollback_drill_gate_report": {
+      "path": ".workflow/artifacts/rc7-gated-rollback-drill/rollback-drill-gate-report.json",
+      "sha256": "58c321129eb883cffcc78ec7051b920565bb58bc0e73820b4cccd63090047b5c",
+      "status": "rollback-drill-gates-evaluated-blocked"
+    },
+    "rollback_drill_denial_evidence": {
+      "path": ".workflow/artifacts/rc7-gated-rollback-drill/rollback-drill-denial-evidence.json",
+      "sha256": "1b48993ec63c517d6f585a69b0e7077a9cb32713dec1761a4fa95594002455ba",
+      "status": "rollback-drill-denied-by-gates"
+    }
+  },
+  "gates": {
+    "signed_metadata_published": true,
+    "revocation_snapshot_published": true,
+    "compatibility_published": true,
+    "rollback_baseline_published": true,
+    "rollback_baseline_consistent": true,
+    "support_recovery_ready": true,
+    "tls_configured": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "canary_activation_evidence_projected": true,
+    "canary_activation_performed": false,
+    "canary_target_set_enrolled": false,
+    "observed_canary_node_count": 1,
+    "required_canary_node_count": 2,
+    "exact_operator_approval_granted": false,
+    "agentcore_rollback_planspec_bound": false,
+    "security_execution_rollback_approval_bound": false,
+    "remote_fleet_execution_enabled": false,
+    "live_metadata_matches_rc7_rollback_baseline": true
+  },
+  "remaining_blockers_before_rollback": [
+    "real-cryptographic-payload-signature-not-present",
+    "canary-activation-evidence-not-executed",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-rollback-PlanSpec-not-bound",
+    "SecurityExecutionEngine-rollback-approval-not-bound"
+  ],
+  "rollback": {
+    "rollback_drill_evidence_projected": true,
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false
+  },
+  "canary": {
+    "canary_activation_allowed": false,
+    "canary_activation_performed": false,
+    "activation_performed": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_032_complete": true,
+    "next_task": "RC7-040",
+    "commit_required": true
+  }
+}

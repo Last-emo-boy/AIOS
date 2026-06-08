@@ -1,0 +1,56 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-032",
+  "title": "produce gated rollback drill evidence under SecurityExecutionEngine PlanSpec approval",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc7-gated-canary-activation/result.json",
+    ".workflow/artifacts/rc7-gated-canary-activation/activation-gate-report.json",
+    ".workflow/artifacts/rc7-gated-canary-activation/activation-denial-evidence.json",
+    ".workflow/artifacts/rc7-multi-node-canary-approval/result.json",
+    ".workflow/artifacts/rc7-multi-node-canary-approval/exact-approval-packet.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json",
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    ".workflow/artifacts/release/fleet-rollout-authority.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc7-gated-rollback-drill.ps1",
+      "role": "gated rollback drill evidence script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-gated-rollback-drill/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-gated-rollback-drill/rollback-drill-gate-report.json",
+      "role": "rollback drill gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-gated-rollback-drill/rollback-drill-denial-evidence.json",
+      "role": "rollback drill denial evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-032-gated-rollback-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The result consumes RC7-031 gated canary activation evidence and verifies canary activation remains denied.",
+      "The rollback drill gate report proves signed metadata, revocation, compatibility, rollback baseline, support/recovery metadata, and TLS are visible before rollback evaluation.",
+      "The rollback drill gate report keeps rollback execution denied until real cryptographic signature, canary activation, two or more enrolled targets, remote fleet execution, exact approval, AgentCore rollback PlanSpec, and SecurityExecutionEngine rollback approval are present.",
+      "The denial evidence covers missing signature, canary activation, target enrollment, exact approval, AgentCore rollback PlanSpec, SecurityExecutionEngine rollback approval, and remote fleet execution as fail-closed cases.",
+      "The task performs no signing, payload upload, install, activation, rollback, boot or active slot mutation, persistent state mutation, active artifact set mutation, production ring mutation, support upload, remote dispatch, or TUI authority broadening.",
+      "The next task is RC7-040 final audit and next milestone planning."
+    ]
+  }
+}
