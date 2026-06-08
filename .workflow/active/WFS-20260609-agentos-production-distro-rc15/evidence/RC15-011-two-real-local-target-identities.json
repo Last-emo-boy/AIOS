@@ -1,0 +1,83 @@
+{
+  "schema": "agentos.rc15-two-real-local-target-identities-evidence.v1",
+  "generated_at": "2026-06-09T18:45:00+08:00",
+  "task": "RC15-011",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc15",
+  "script": {
+    "path": "scripts/project-rc15-two-real-local-target-identities.ps1",
+    "sha256": "5eef89cacd4ab20a7661691189a3530226e33835dd615e4479eaeba4384c6bfa"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc15-two-real-local-target-identities/result.json",
+    "status": "passed",
+    "sha256": "774c15d077f3b9b55dde26bd88a44f60773ff7309bbc1d71c613b736e8038a11"
+  },
+  "outputs": {
+    "target_a_identity": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-a/identity.json",
+      "sha256": "bad6489e20e4033ed58ff7b4f88e04a35ea57dfe688098841ffa38b492877707"
+    },
+    "target_b_identity": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-b/identity.json",
+      "sha256": "65040ea35ac0af44f225d4b9073f9b61ced81f84b66aca2af7cb1c2abdcf811c"
+    },
+    "target_local_identity_set": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/target-local-identity-set.json",
+      "sha256": "65b92d62048ba684f04de19aad2008e40922b672e356f674606ec33d3d8c9f79",
+      "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0"
+    },
+    "target_identity_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/target-identity-fail-closed-matrix.json",
+      "sha256": "52a47a72a107e3fdeca730b82901f7bc64b68a025e6fce60689c787afe970608"
+    },
+    "exact_approval_controlled_execution_handoff": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/exact-approval-controlled-execution-handoff.json",
+      "sha256": "ad88d42496480337ecce92f8d086fd536be9dc2a07f2c042e738d6719f008854"
+    }
+  },
+  "target_surface": {
+    "state": "two-real-local-target-identities-enrolled",
+    "target_identity_set_bound": true,
+    "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+    "enrolled_target_identity_count": 2,
+    "distinct_identity_count": 2,
+    "audit_sink_bound": true,
+    "nonce_bound": true,
+    "expiry_bound": true,
+    "policy_version_bound": true,
+    "exact_approval_ready": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "local_target_identities_repo_local": true,
+    "target_identity_set_bound": true,
+    "exact_approval_granted": false,
+    "security_execution_allowed": false,
+    "effect_prepared": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc15_011_complete": true,
+    "next_task": "RC15-020",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,547 @@
+{
+  "schema": "agentos.rc15-target-identity-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T18:45:00+08:00",
+  "task": "RC15-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "cases": [
+    {
+      "id": "missing-first-target-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-a-missing"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-a-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "First local canary target identity is required.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-second-target-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-b-missing"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-b-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Second local canary target identity is required.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "single-local-canary-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "fewer-than-two-local-canary-identities"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "fewer-than-two-local-canary-identities"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "One target identity is not enough.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "duplicate-local-canary-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "duplicate-local-canary-identity"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "duplicate-local-canary-identity"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Duplicate identities must not satisfy two-target enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale-local-canary-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "stale-local-canary-identity"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "stale-local-canary-identity"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Stale identity evidence must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "incompatible-local-canary-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "incompatible-local-canary-identity"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "incompatible-local-canary-identity"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Incompatible target identity must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "broad-target-selector-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "broad-target-selector"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "broad-target-selector"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Broad target selector must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "release-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-release-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-release-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target release mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "object-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-object-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-object-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target object mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "planspec-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-planspec-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-planspec-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "PlanSpec mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "security-envelope-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-security-envelope-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-security-envelope-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "SecurityExecution envelope mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "audit-sink-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-audit-sink-not-bound"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-audit-sink-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Audit sink mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "nonce-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-nonce-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-nonce-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Nonce mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "policy-version-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-policy-version-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-policy-version-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Policy version mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "rollback-baseline-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-rollback-baseline-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-rollback-baseline-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Rollback baseline mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-recovery-mismatch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-support-recovery-mismatch"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-support-recovery-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Support/recovery mismatch must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "target-identity-replay-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identity-replay-detected"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "target-identity-replay-detected"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Replayed target identity must deny enrollment.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch-authority-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "remote-dispatch-authority-broadening"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "remote-dispatch-authority-broadening"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target enrollment must not enable remote dispatch.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-mutation-authority-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "production-mutation-authority-broadening"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "production-mutation-authority-broadening"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target enrollment must not enable production mutation.",
+      "side_effects": {
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "cases": 19,
+    "passed": 19,
+    "failed": 0,
+    "failed_cases": []
+  }
+}

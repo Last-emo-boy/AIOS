@@ -1,0 +1,306 @@
+{
+  "schema": "agentos.rc15-two-real-local-target-identities-result.v1",
+  "generated_at": "2026-06-09T18:45:00+08:00",
+  "task": "RC15-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_surface": {
+    "state": "two-real-local-target-identities-enrolled",
+    "target_identity_set_bound": true,
+    "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+    "enrolled_target_identity_count": 2,
+    "distinct_identity_count": 2,
+    "audit_sink_bound": true,
+    "nonce_bound": true,
+    "expiry_bound": true,
+    "policy_version_bound": true,
+    "exact_approval_ready": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "outputs": {
+    "target_a_identity": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-a/identity.json",
+      "sha256": "bad6489e20e4033ed58ff7b4f88e04a35ea57dfe688098841ffa38b492877707"
+    },
+    "target_b_identity": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-b/identity.json",
+      "sha256": "65040ea35ac0af44f225d4b9073f9b61ced81f84b66aca2af7cb1c2abdcf811c"
+    },
+    "target_local_identity_set": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/target-local-identity-set.json",
+      "sha256": "65b92d62048ba684f04de19aad2008e40922b672e356f674606ec33d3d8c9f79",
+      "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0"
+    },
+    "target_identity_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/target-identity-fail-closed-matrix.json",
+      "sha256": "52a47a72a107e3fdeca730b82901f7bc64b68a025e6fce60689c787afe970608"
+    },
+    "exact_approval_controlled_execution_handoff": {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/exact-approval-controlled-execution-handoff.json",
+      "sha256": "ad88d42496480337ecce92f8d086fd536be9dc2a07f2c042e738d6719f008854"
+    }
+  },
+  "source": {
+    "rc15_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+      "sha256": "d5f735d062fe395a4a08fa6a198b31c995080dd5846d3e0ae94ffb154f7ec318",
+      "size_bytes": 7269,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc15_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+      "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+      "size_bytes": 4365,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc15_audit_nonce_policy_result": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json",
+      "sha256": "febfad1add0a6689d1de5869a8b6d1fefe7840dfe66c2771f99d6c47f18ecb05",
+      "size_bytes": 8588,
+      "present": true,
+      "schema": "agentos.rc15-audit-nonce-policy-binding-result.v1",
+      "status": "passed"
+    },
+    "rc15_audit_nonce_policy_binding": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-nonce-policy-binding.json",
+      "sha256": "5ef72f72706d30b002379b606df0e0c78b1cc0a4d4dd5500d9c8662306493b01",
+      "size_bytes": 1938,
+      "present": true,
+      "schema": "agentos.rc15-audit-nonce-policy-binding.v1",
+      "status": "audit-nonce-policy-bound"
+    },
+    "rc15_exact_approval_substrate_handoff": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/exact-approval-substrate-handoff.json",
+      "sha256": "c9dcf951a87ba767bb698345f2c4fa7ec71f2750da95758349b1d396775e50ef",
+      "size_bytes": 1349,
+      "present": true,
+      "schema": "agentos.rc15-exact-approval-substrate-handoff.v1",
+      "status": "ready-for-rc15-011-target-identity-enrollment"
+    },
+    "rc14_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
+      "sha256": "dd0ecfd87768b365496e5876ebafb6ab3dbf94badf6fad30e0c933a7e43deca3",
+      "size_bytes": 27556,
+      "present": true,
+      "schema": "agentos.production-distro-rc14-final-audit.v1",
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc15_011",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-011 must run after RC15-010 completed, either while current_task is RC15-011 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC15-020",
+        "rc15_010_status": "completed",
+        "rc15_011_status": "completed"
+      }
+    },
+    {
+      "id": "source.audit_nonce_policy.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-011 must consume completed RC15-010 audit, nonce, expiry, and policy binding.",
+      "evidence": {
+        "status": "passed",
+        "rc15_010_complete": true,
+        "audit_sink_bound": true,
+        "nonce_bound": true,
+        "policy_version_bound": true
+      }
+    },
+    {
+      "id": "source.rc14.trust_and_quarantine_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-011 must inherit RC14 local trust and verified quarantine readiness.",
+      "evidence": {
+        "local_trust_ready": true,
+        "verified_quarantine_ready": true
+      }
+    },
+    {
+      "id": "contract.two_real_targets.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15 contract must require two distinct real local canary target identities.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+        "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+        "size_bytes": 4365,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "target_identity.two_enrolled_distinct",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-011 must enroll two distinct local target identities and bind the target set.",
+      "evidence": {
+        "identities": 2,
+        "distinct": 2,
+        "bound": true,
+        "digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0"
+      }
+    },
+    {
+      "id": "target_identity.files_exist_and_hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Each local target identity must have repo-local evidence bytes and hashes.",
+      "evidence": {
+        "target_a": {
+          "slot": "local-canary-a",
+          "identity_id": "rc15-local-canary-a-834e96734a2cada2",
+          "identity_digest": "834e96734a2cada259fcb6453212810a0122b9fc38d274d26b61f1f017ce98b7",
+          "identity_path": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-a/identity.json",
+          "identity_sha256": "bad6489e20e4033ed58ff7b4f88e04a35ea57dfe688098841ffa38b492877707",
+          "target_root": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-a",
+          "status": "enrolled",
+          "compatible": true,
+          "stale": false,
+          "duplicate": false,
+          "remote_dispatch_authority": false,
+          "production_ring_mutation_allowed": false
+        },
+        "target_b": {
+          "slot": "local-canary-b",
+          "identity_id": "rc15-local-canary-b-f19bef8bea5dfc12",
+          "identity_digest": "f19bef8bea5dfc12a89c8cb23145d58ab9b667123f45164d294c05977d332828",
+          "identity_path": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-b/identity.json",
+          "identity_sha256": "65040ea35ac0af44f225d4b9073f9b61ced81f84b66aca2af7cb1c2abdcf811c",
+          "target_root": ".workflow/artifacts/rc15-two-real-local-target-identities/targets/local-canary-b",
+          "status": "enrolled",
+          "compatible": true,
+          "stale": false,
+          "duplicate": false,
+          "remote_dispatch_authority": false,
+          "production_ring_mutation_allowed": false
+        }
+      }
+    },
+    {
+      "id": "target_identity.binds_execution_inputs",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target identities must bind release object, AgentCore PlanSpec, SecurityExecution envelope, audit sink, nonce, expiry, and policy version.",
+      "evidence": {
+        "release_id": "production-distro-rc8-current-artifacts",
+        "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "required_minimum_target_identities": 2,
+        "enrolled_target_identity_count": 2,
+        "identity_ids": [
+          "rc15-local-canary-a-834e96734a2cada2",
+          "rc15-local-canary-b-f19bef8bea5dfc12"
+        ],
+        "identity_digests": [
+          "834e96734a2cada259fcb6453212810a0122b9fc38d274d26b61f1f017ce98b7",
+          "f19bef8bea5dfc12a89c8cb23145d58ab9b667123f45164d294c05977d332828"
+        ],
+        "agentcore_planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+        "security_execution_effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+        "audit_sink_descriptor_sha256": "87273edab2b62bf546a6dfb52ab938032f034ff2e56f1d96e974e68ee48dd5da",
+        "audit_binding_sha256": "5ef72f72706d30b002379b606df0e0c78b1cc0a4d4dd5500d9c8662306493b01",
+        "nonce_sha256": "4db9f2f01459dca37cf9f97da0f5957da1bf5c6fa06d9666851b688dfe3a1ae6",
+        "approval_valid_until": "2026-06-09T22:20:00.0000000+08:00",
+        "policy_version": "rc15-controlled-local-execution-v1",
+        "rollback_baseline_bound": true,
+        "support_recovery_reference_bound": true
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Duplicate, stale, broad, incompatible, mismatched, replayed, remote, and production mutation target cases must fail closed.",
+      "evidence": {
+        "cases": 19,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "handoff.exact_approval_still_required",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target enrollment must not grant exact approval or activation authority.",
+      "evidence": {
+        "target_identity_set_bound": true,
+        "exact_approval_ready": false,
+        "activation_allowed": false,
+        "next_task": "RC15-020"
+      }
+    },
+    {
+      "id": "authority.remote_dispatch_and_mutation_disabled",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-011 must not enable remote dispatch or production mutation authority.",
+      "evidence": {
+        "remote_dispatch_authority": false,
+        "production_ring_mutation_allowed": false,
+        "handoff_remote_dispatch": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-011 outputs must not contain key material, auth tokens, private signing paths, or sensitive identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "controlled-activation-not-authorized"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_target_identities_repo_local": true,
+    "target_identity_set_bound": true,
+    "exact_approval_granted": false,
+    "security_execution_allowed": false,
+    "effect_prepared": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 11,
+    "failed_checks": 0,
+    "fail_closed_cases": 19,
+    "failed_fail_closed_cases": 0,
+    "rc15_011_complete": true,
+    "target_identity_set_bound": true,
+    "enrolled_target_identity_count": 2,
+    "exact_approval_ready": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "next_task": "RC15-020"
+  }
+}
