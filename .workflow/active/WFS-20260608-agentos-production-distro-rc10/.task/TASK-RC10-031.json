@@ -1,0 +1,56 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-031",
+  "title": "bind support recovery and operator evidence to controlled activation and rollback outcomes",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+    ".workflow/artifacts/rc10-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc10-controlled-canary-activation/activation-denial-evidence.json",
+    ".workflow/artifacts/rc10-controlled-canary-activation/controlled-activation-handoff.json",
+    ".workflow/artifacts/rc10-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-planspec-requirement.json",
+    ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-drill-gate-report.json",
+    ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+    ".workflow/artifacts/rc10-controlled-rollback-drill/controlled-rollback-handoff.json",
+    ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+    ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-controlled-execution-support-recovery.ps1",
+      "role": "RC10 controlled execution support/recovery evidence binding script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/support-recovery-evidence-chain.json",
+      "role": "support/recovery evidence chain"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+      "role": "redacted local support bundle projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-031-controlled-execution-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The support/recovery evidence chain binds RC10 activation denial, rollback denial, rollback PlanSpec requirement, support metadata, recovery operations, compatibility metadata, and rollback baseline.",
+      "The support bundle projection is redacted, local-only, hash-bound, and upload-disabled.",
+      "Recovery references remain projection-only and non-executable until external object publication, drift reconciliation, installer fetch, canary enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, activation execution, rollback approval, and remote fleet execution gates are complete.",
+      "The task preserves production_ready_claim=false and does not sign, upload payloads, install, activate, rollback, recover, mutate boot metadata, mutate active slots, mutate persistent state, mutate production rings, upload support bundles, dispatch remotely, or grant TUI authority."
+    ]
+  }
+}

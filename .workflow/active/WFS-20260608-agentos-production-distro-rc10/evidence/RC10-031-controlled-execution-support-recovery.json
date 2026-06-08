@@ -1,0 +1,81 @@
+{
+  "schema": "agentos.rc10-controlled-execution-support-recovery-evidence.v1",
+  "generated_at": "2026-06-09T00:50:00+08:00",
+  "task": "RC10-031",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "script": {
+    "path": "scripts/project-rc10-controlled-execution-support-recovery.ps1",
+    "sha256": "5031fe24c6800cf0b876e9564d61ab0bbdb332b3c69260ef1e7c52c586a67021"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/result.json",
+    "status": "passed",
+    "sha256": "a99c4d6dc58ca78df33fce297c3c258ee2ba8e789ddebbfaae31c923e3ffce6d"
+  },
+  "outputs": {
+    "support_recovery_evidence_chain": {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "1a9e7a2a9466f6db2db94ab6f30386c92317a86571770d3917ff3b7543d5ee82",
+      "status": "support-recovery-bound-controlled-execution-blocked"
+    },
+    "controlled_execution_support_bundle": {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "9147904a719d90ed7a01f66a0ef02e73fb10f9ae1bd9104e8828ab81676fec9d",
+      "status": "redacted-local-support-projection"
+    },
+    "recovery_reference_index": {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/recovery-reference-index.json",
+      "sha256": "6b3570d4a7bee3cf1295fe67f5a161c75c0d959004bc1e3e6bfe625bf0d3e1b8",
+      "status": "projection-only-recovery-execution-blocked"
+    }
+  },
+  "controlled_execution_surface": {
+    "controlled_execution_support_recovery_bound": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "activation_allowed": false,
+    "activation_performed": false,
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "support_bundle_redacted": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc10_031_complete": true,
+    "next_task": "RC10-040",
+    "commit_required": true
+  }
+}
