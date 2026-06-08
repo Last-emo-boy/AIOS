@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-021",
+  "title": "verify installer byte, signature, storage, and compatibility fail-closed fixtures",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+    ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc8-installer-byte-fail-closed.ps1",
+      "role": "installer byte, signature, storage, and compatibility fail-closed fixture harness"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-021-installer-byte-fail-closed.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The current installer remains verification-blocked while external HTTPS object publication and declared/current drift reconciliation are incomplete.",
+      "Negative fixtures cover byte size and digest mismatch, quarantine path escape, insecure or credential-bearing object URI, descriptor authority broadening, signature ingestion and binding failures, receipt mismatch, redaction failures, missing compatibility, missing rollback baseline, missing revocation snapshot, missing signed metadata, skipped VM smoke, premature ready state, storage authority broadening, and installer side-effect authority broadening.",
+      "All fixtures fail closed without remote publication, payload upload, remote payload download, install, activation, rollback, boot metadata mutation, active slot mutation, production ring mutation, support upload, remote dispatch, or TUI authority.",
+      "The result keeps production_ready_claim=false and moves the next task to RC8-022 mirror metadata and frontend consistency refresh."
+    ]
+  }
+}

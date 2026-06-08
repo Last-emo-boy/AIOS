@@ -1,0 +1,87 @@
+{
+  "schema": "agentos.rc8-installer-byte-fail-closed-evidence.v1",
+  "generated_at": "2026-06-08T20:20:00+08:00",
+  "task": "RC8-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": {
+    "path": "scripts/verify-rc8-installer-byte-fail-closed.ps1",
+    "sha256": "2ea0d6adab5ab8b9541a75790e62c1013f3201622510b07b0efae38c54b820ca"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+    "status": "passed",
+    "sha256": "9391926d751bc42786cee0fcc66e5f65eb9df2a1cb627507954c24ca5abb55be"
+  },
+  "fixture_surface": {
+    "cases": 28,
+    "passed_cases": 28,
+    "failed_cases": 0,
+    "source_signature_ingestion_verified": true,
+    "source_signed_descriptor_fail_closed_verified": true,
+    "source_installer_vm_preflight_verified": true,
+    "current_installer_state": "verification-blocked",
+    "remaining_payload_blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "coverage": [
+    "payload-size",
+    "payload-digest",
+    "quarantine-path",
+    "remote-download-order",
+    "object-uri-scheme",
+    "credential-bearing-object-uri",
+    "descriptor-immutability",
+    "descriptor-authority-broadening",
+    "public-signature-ingestion",
+    "signature-crypto-verification",
+    "signature-descriptor-binding",
+    "signature-canonical-payload-binding",
+    "signature-revocation-binding",
+    "receipt-descriptor-binding",
+    "receipt-object-binding",
+    "receipt-crypto-status",
+    "raw-public-identity-redaction",
+    "raw-signature-value-redaction",
+    "installer-compatibility-binding",
+    "rollback-baseline-binding",
+    "revocation-snapshot-binding",
+    "signed-metadata-binding",
+    "installer-vm-smoke",
+    "preflight-ready-state",
+    "storage-authority",
+    "installer-side-effect-authority"
+  ],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_publication_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "raw_public_identity_redacted_from_result": true,
+    "raw_signature_value_redacted_from_result": true
+  },
+  "completion": {
+    "rc8_021_complete": true,
+    "next_task": "RC8-022",
+    "commit_required": true
+  }
+}

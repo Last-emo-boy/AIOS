@@ -1,0 +1,1002 @@
+{
+  "schema": "agentos.rc8-installer-byte-fail-closed-result.v1",
+  "generated_at": "2026-06-08T16:22:13.7786843+08:00",
+  "task": "RC8-021",
+  "status": "passed",
+  "production_ready_claim": false,
+  "source": {
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "signature_ingestion_result": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "sha256": "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+      "status": "passed"
+    },
+    "signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null
+    },
+    "signed_descriptor_fail_closed": {
+      "path": ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+      "sha256": "67acffa942e5dda3c2a37f70ca03349bc15a7dc452ad5715fd7f77934efbff52",
+      "present": true,
+      "schema": "agentos.rc8-signed-object-descriptor-fail-closed-result.v1",
+      "status": "passed"
+    },
+    "installer_vm_preflight_result": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+      "sha256": "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b",
+      "present": true,
+      "schema": "agentos.rc8-installer-vm-preflight-result.v1",
+      "status": "passed"
+    },
+    "installer_vm_preflight_report": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/preflight-report.json",
+      "sha256": "2050d393437f4570020952a8145e40a7fcff73db1ab5a3ab8e428ae3dadfa705",
+      "present": true,
+      "schema": "agentos.rc8-installer-vm-preflight-report.v1",
+      "status": null
+    },
+    "object_fetch_report": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/object-fetch-report.json",
+      "sha256": "5f4fa581da36ec6716d7adc71e39849e63f28900f17d344f151f9eab6fe8b638",
+      "present": true,
+      "schema": "agentos.rc8-quarantined-object-fetch-report.v1",
+      "status": null
+    }
+  },
+  "cases": [
+    {
+      "id": "base-current-installer-remains-blocked",
+      "status": "passed",
+      "expected_reasons": [
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "payload-size-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "payload-size-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "payload-size-mismatch",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "payload-digest-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "payload-digest-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "payload-digest-mismatch",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "quarantine-path-escape",
+      "status": "passed",
+      "expected_reasons": [
+        "quarantine-path-not-approved"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "quarantine-path-not-approved",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "remote-download-before-external-uri",
+      "status": "passed",
+      "expected_reasons": [
+        "remote-download-before-external-object-uri"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "remote-download-before-external-object-uri",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "descriptor-http-uri",
+      "status": "passed",
+      "expected_reasons": [
+        "credential-or-insecure-object-uri"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "credential-or-insecure-object-uri",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "descriptor-credential-uri",
+      "status": "passed",
+      "expected_reasons": [
+        "credential-or-insecure-object-uri"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "credential-or-insecure-object-uri",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "descriptor-mutable",
+      "status": "passed",
+      "expected_reasons": [
+        "descriptor-not-immutable"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "descriptor-not-immutable",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "descriptor-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "descriptor-authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "descriptor-authority-broadening",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "signature-not-ingested",
+      "status": "passed",
+      "expected_reasons": [
+        "public-signature-artifact-not-ingested"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "public-signature-artifact-not-ingested",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "signature-crypto-failed",
+      "status": "passed",
+      "expected_reasons": [
+        "signature-crypto-verification-failed"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "signature-crypto-verification-failed",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "signature-descriptor-not-bound",
+      "status": "passed",
+      "expected_reasons": [
+        "signature-descriptor-hash-not-bound"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "signature-descriptor-hash-not-bound",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "signature-canonical-not-bound",
+      "status": "passed",
+      "expected_reasons": [
+        "signature-canonical-payload-not-bound"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "signature-canonical-payload-not-bound",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "signature-revoked",
+      "status": "passed",
+      "expected_reasons": [
+        "signature-revocation-not-current"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "signature-revocation-not-current",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "receipt-descriptor-hash-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "receipt-descriptor-hash-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "receipt-descriptor-hash-mismatch",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "receipt-object-hash-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "receipt-object-hash-mismatch"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "receipt-object-hash-mismatch",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "receipt-not-crypto-verified",
+      "status": "passed",
+      "expected_reasons": [
+        "receipt-not-crypto-verified"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "receipt-not-crypto-verified",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "raw-public-identity-leak",
+      "status": "passed",
+      "expected_reasons": [
+        "raw-public-identity-leak"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "raw-public-identity-leak",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "raw-signature-value-leak",
+      "status": "passed",
+      "expected_reasons": [
+        "raw-signature-value-leak"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "raw-signature-value-leak",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "missing-compatibility",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-installer_compatibility_sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "missing-installer_compatibility_sha256",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "missing-rollback-baseline",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-rollback_baseline_sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "missing-rollback_baseline_sha256",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "missing-revocation-snapshot",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-revocation_snapshot_sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "missing-revocation_snapshot_sha256",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "missing-signed-metadata",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-signed_metadata_sha256"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "missing-signed_metadata_sha256",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "installer-vm-smoke-not-run",
+      "status": "passed",
+      "expected_reasons": [
+        "installer-vm-smoke-not-run"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "installer-vm-smoke-not-run",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "preflight-ready-without-external-object",
+      "status": "passed",
+      "expected_reasons": [
+        "preflight-ready-without-external-object"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "preflight-ready-without-external-object",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "storage-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "storage-or-remote-transfer-authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "storage-or-remote-transfer-authority-broadening",
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "mirror-large-payload-storage-enabled",
+      "status": "passed",
+      "expected_reasons": [
+        "large-payload-storage-enabled-on-mirror"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "large-payload-storage-enabled-on-mirror",
+        "declared-current-artifact-drift-unresolved"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "installer-side-effect-authority",
+      "status": "passed",
+      "expected_reasons": [
+        "installer-side-effect-authority-broadening"
+      ],
+      "missing_expected_reasons": [],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved",
+        "installer-side-effect-authority-broadening"
+      ],
+      "install_allowed": false,
+      "side_effects": {
+        "remote_publication_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "failed_cases": [],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_publication_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "source.rc8_011.signature",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-011 signature ingestion must be passed before installer fail-closed fixtures.",
+      "evidence": {
+        "checks": 12,
+        "blockers": 0,
+        "payload_blockers": 3,
+        "rc8_011_complete": true,
+        "next_task": "RC8-012"
+      }
+    },
+    {
+      "id": "source.rc8_012.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-012 signed descriptor fail-closed fixtures must pass before installer fail-closed fixtures.",
+      "evidence": {
+        "checks": 5,
+        "blockers": 0,
+        "cases": 34,
+        "passed_cases": 34,
+        "failed_cases": 0,
+        "rc8_012_complete": true,
+        "next_task": "RC8-020"
+      }
+    },
+    {
+      "id": "source.rc8_020.preflight",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-020 VM preflight and quarantine smoke must pass before installer fail-closed fixtures.",
+      "evidence": {
+        "checks": 10,
+        "task_blockers": 0,
+        "preflight_steps": 7,
+        "preflight_blockers": 1,
+        "preflight_state": "verification-blocked",
+        "rc8_020_complete": true,
+        "next_task": "RC8-021"
+      }
+    },
+    {
+      "id": "fixtures.all_cases_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC8 installer byte/signature/storage/compatibility negative fixtures must fail closed.",
+      "evidence": {
+        "cases": 28,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "fixtures.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fixtures must not perform install, activation, rollback, active slot mutation, production ring mutation, dispatch, or TUI authority.",
+      "evidence": null
+    },
+    {
+      "id": "fixtures.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fixture results must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 6,
+    "blockers": 0,
+    "cases": 28,
+    "passed_cases": 28,
+    "failed_cases": 0,
+    "rc8_021_complete": true,
+    "next_task": "RC8-022"
+  }
+}
