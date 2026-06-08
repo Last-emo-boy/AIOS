@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.rc12-object-trust-verification-handoff.v1",
+  "generated_at": "2026-06-09T04:35:00+08:00",
+  "task": "RC12-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "blocked-by-declared-current-drift",
+  "production_ready_claim": false,
+  "reconciliation": {
+    "path": ".workflow/artifacts/rc12-declared-current-drift-zero/declared-current-drift-zero-reconciliation.json",
+    "sha256": "04b786c13fa63920d1aaee013e3b53878e421103b703aa5147e77f3a9301516f",
+    "drift_zero": false,
+    "drift_count": 17,
+    "expected_next_task": "RC12-012"
+  },
+  "publication_binding": {
+    "path": ".workflow/artifacts/rc12-external-object-publication-binding/publication-binding.json",
+    "sha256": "94fc3176cba8cc7f17eab35331e904ebc0b9ee93e3e1171e1262874450366d8d",
+    "publication_allowed": false,
+    "external_object_uri_published": false
+  },
+  "blocked_authority": {
+    "object_trust_allowed": false,
+    "quarantine_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "blockers": [
+    "nonzero-declared-current-drift-count",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "declared-current-drift-zero-not-proved",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "object-trust-not-allowed",
+    "installer-quarantine-fetch-not-run",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ]
+}
