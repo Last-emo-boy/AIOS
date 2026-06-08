@@ -1,0 +1,48 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-012",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:40:00+08:00",
+  "summary": "Implemented and ran the fleet-ring rollout plan precondition audit. The audit verified hosted transport, mirror publication, fleet rollout authority, rollback baseline, support redaction, target-set hash projection, rollout policy hash projection, and exact approval requirements without creating or executing a rollout plan.",
+  "deliverables": {
+    "script": "scripts/audit-rc4-fleet-ring-rollout-preconditions.ps1",
+    "result": ".workflow/artifacts/rc4-fleet-ring-rollout-preconditions/result.json",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-012-fleet-ring-rollout-preconditions.json"
+  },
+  "hashes": {
+    "script_sha256": "010279e87670a9b9fcbb8471c1246fdb4757d53532e0b362d04efe80325f0d9c",
+    "result_sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-fleet-ring-rollout-preconditions.v1",
+    "result_status": "ready-for-fleet-ring-rollout-plan",
+    "checks": 18,
+    "blockers": 0,
+    "rc4_012_complete": true,
+    "rollout_preconditions_ready": true,
+    "projected_ring": "local",
+    "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+    "rollout_policy_version": "rc4-rollout-policy-v1",
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "rollout_plan_created": false,
+    "rollout_plan_executed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "verification": {
+    "command": ".\\scripts\\audit-rc4-fleet-ring-rollout-preconditions.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": "RC4-013"
+  }
+}
