@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260608-agentos-production-distro-rc4",
   "name": "Production Distro RC4",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-08T09:05:00+08:00",
-  "updated_at": "2026-06-08T10:30:00+08:00",
+  "updated_at": "2026-06-08T10:40:00+08:00",
   "source": "TASK.md; RC3 final audit",
   "previous_workflow": ".workflow/active/WFS-20260531-agentos-production-distro-rc3",
   "goal": "Turn RC3 signed local publication into hosted release transport, fleet-ring rollout, remote registry mirroring, and GA-hardening evidence without claiming GA production readiness.",
@@ -94,9 +94,15 @@
       "completed_at": "2026-06-08T10:30:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json",
       "commit": null
+    },
+    {
+      "task": "RC4-030",
+      "completed_at": "2026-06-08T10:40:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-030-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC4-030",
+  "next_task": null,
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
   "docs": [
     ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/final-rc3-closeout-summary.md",
@@ -105,6 +111,7 @@
     ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/staged-rollout-authority-rollback-boundary.md",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/ga-hardening-acceptance-gates.md",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-transport-fleet-threat-model.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/final-rc4-closeout-summary.md",
     "scripts/publish-rc4-hosted-release-transport.ps1",
     "scripts/replay-rc4-remote-registry-mirror-publication.ps1"
   ],
@@ -152,6 +159,11 @@
     "scripts/integrate-rc4-hosted-fleet-promotion-gates.ps1",
     ".workflow/artifacts/rc4-hosted-fleet-promotion-gate-integration/result.json",
     ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json",
+    "scripts/run-rc4-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc4-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/final-rc4-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-030-final-closeout-audit.json"
   ]
 }

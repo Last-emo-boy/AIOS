@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260608-agentos-production-distro-rc4",
   "milestone": "Production Distro RC4",
-  "status": "active",
+  "status": "completed",
   "objective": "Turn the RC3 signed local publication proof into hosted release transport, fleet-ring rollout, remote registry mirroring, and GA-hardening evidence while preserving RC2/RC3 authority boundaries.",
   "waves": [
     {
@@ -101,13 +101,14 @@
       "tasks": [
         {
           "id": "RC4-030",
-          "status": "next",
-          "title": "run Production Distro RC4 final audit and next milestone planning"
+          "status": "completed",
+          "title": "run Production Distro RC4 final audit and next milestone planning",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json"
         }
       ]
     }
   ],
-  "current_task": "RC4-030",
+  "current_task": null,
   "previous_workflow": ".workflow/active/WFS-20260531-agentos-production-distro-rc3",
   "acceptance_gates": {
     "hosted_transport_must_be_hash_bound": true,

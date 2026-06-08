@@ -1,0 +1,82 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-030",
+  "status": "completed",
+  "recorded_at": "2026-06-08T10:40:00+08:00",
+  "summary": "Ran the Production Distro RC4 final closeout audit and next milestone planning. The final audit closes RC4 for hosted transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, and hosted/fleet promotion gate proof scope while preserving the non-GA boundary.",
+  "deliverables": {
+    "script": "scripts/run-rc4-final-closeout-audit.ps1",
+    "result": ".workflow/artifacts/rc4-final-closeout-audit/result.json",
+    "final_audit": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+    "closeout_summary": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/final-rc4-closeout-summary.md",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-030-final-closeout-audit.json"
+  },
+  "hashes": {
+    "script_sha256": "d66efabb7dd03f5c9f45ce9fc183590c0e8a343e76da4d781115e1c5237d0862",
+    "result_sha256": "58fc3664d6ec059f5b9e3ffa0240fd8d24b0752eca1f7f0a10529130ee0cb0d8",
+    "final_audit_sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+    "closeout_summary_sha256": "a5f7a018ac6d484ce91a8018f475efb119d216c633bcbe366a07de868645ceaf",
+    "rc4_plan_sha256": "87a8c69baed8be7e9143b59f5812c22a380d1be3b4d41dc6cfd6bb4b45bcd871",
+    "workflow_session_sha256": "9218fd6055950818edcf1ab0a9feb74445f2c0ce801b4b35fd0649df1e182c20",
+    "workflow_state_sha256": "95c7deeeecb43c7f05317add23a38c67d3e1b2777945fc048669b0e543c35bba",
+    "task_index_sha256": "6ac07ae0294397cdff787b7bd2a2568905362dc1b6644eef74702a2d4b9ee5a7"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-final-closeout-audit-result.v1",
+    "result_status": "passed",
+    "checks": 21,
+    "blockers": 0,
+    "rc4_030_complete": true,
+    "final_audit_written": true,
+    "closeout_summary_written": true,
+    "final_audit_verdict": "PASS",
+    "decision": "rc4-closeout-pass-next-milestone-planning",
+    "hosted_transport_ready": true,
+    "remote_registry_mirror_ready": true,
+    "fleet_rollout_ready": true,
+    "rollback_projection_ready": true,
+    "support_recovery_ready": true,
+    "promotion_gate_ready": true,
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "cryptographic_verification_performed": false,
+    "network_transfer_performed": false,
+    "remote_upload_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "workflow_closure": {
+    "plan_status": "completed",
+    "plan_current_task": null,
+    "rc4_030_status": "completed",
+    "workflow_session_status": "completed",
+    "workflow_session_next_task": null,
+    "state_phase_status": "completed",
+    "state_current_task": null,
+    "next_allowed_action": "plan-production-distro-rc5-controlled-hosted-transport-service-and-multi-node-fleet-canary"
+  },
+  "next_milestone": {
+    "id": "Production Distro RC5",
+    "title": "controlled hosted transport service and multi-node fleet canary execution proof"
+  },
+  "verification": {
+    "command": ".\\scripts\\run-rc4-final-closeout-audit.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "result_hash_match": "passed",
+    "final_audit_hash_match": "passed",
+    "closeout_summary_hash_match": "passed",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": null,
+    "next_allowed_action": "plan-production-distro-rc5-controlled-hosted-transport-service-and-multi-node-fleet-canary"
+  }
+}
