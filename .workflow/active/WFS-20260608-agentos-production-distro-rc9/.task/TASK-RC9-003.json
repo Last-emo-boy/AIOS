@@ -1,0 +1,45 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-003",
+  "title": "define exact approval target enrollment AgentCore and SecurityExecution binding contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/.task/TASK-RC9-003.json",
+      "role": "task spec"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-003-controlled-execution-binding-contract.json",
+      "role": "task evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
+      "role": "workflow status"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/workflow-session.json",
+      "role": "workflow status"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The contract defines two-node target enrollment eligibility and denial states.",
+      "The contract defines exact approval packet fields and denial cases.",
+      "The contract defines AgentCore PlanSpec and SecurityExecutionEngine effect envelope binding requirements for activation and rollback.",
+      "The contract preserves production_ready_claim=false and moves the next task to RC9-010 external object publication candidate."
+    ]
+  }
+}
