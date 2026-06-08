@@ -1,0 +1,60 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-021",
+  "title": "bind exact operator approval to AgentCore PlanSpec and SecurityExecutionEngine effect envelope",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+    ".workflow/artifacts/rc10-external-object-publication/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+    ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+    ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc10-two-node-canary-enrollment/canary-target-set.json",
+    ".workflow/artifacts/rc10-two-node-canary-enrollment/controlled-execution-handoff.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-exact-approval-execution-enable.ps1",
+      "role": "exact approval, AgentCore PlanSpec, and SecurityExecutionEngine binding projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/exact-approval-binding.json",
+      "role": "exact approval binding projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/agentcore-planspec-binding.json",
+      "role": "AgentCore PlanSpec binding projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/security-execution-decision.json",
+      "role": "SecurityExecutionEngine decision projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/execution-binding-denial.json",
+      "role": "execution binding denial evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-021-exact-approval-execution-enable.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC10-020 target enrollment evidence and upstream publication, drift-zero, and installer fetch evidence before evaluating execution binding.",
+      "The exact approval artifact records exact-approval-denied with missing approval id, actor, authority scope, target node ids, expiry, nonce, and audit sink.",
+      "The AgentCore PlanSpec artifact records a deterministic PlanSpec core hash while remaining non-executable because approval and SecurityExecutionEngine binding are missing.",
+      "The SecurityExecutionEngine artifact denies the controlled-canary-activation effect and keeps activation, rollback, support upload, production ring mutation, and remote dispatch disabled.",
+      "The task preserves production_ready_claim=false and moves the next task to RC10-022 controlled canary activation."
+    ]
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc10-exact-approval-execution-enable.ps1 -GeneratedAt '2026-06-09T00:20:00+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}

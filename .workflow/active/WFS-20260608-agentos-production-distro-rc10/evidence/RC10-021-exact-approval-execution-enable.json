@@ -1,0 +1,103 @@
+{
+  "schema": "agentos.rc10-exact-approval-execution-enable-evidence.v1",
+  "generated_at": "2026-06-09T00:20:00+08:00",
+  "task": "RC10-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "script": {
+    "path": "scripts/project-rc10-exact-approval-execution-enable.ps1",
+    "sha256": "e432b0cf5443b8e6155dad618d831e0ac59e67934598bfb9ebfbffbbb8952e71"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json",
+    "status": "passed",
+    "sha256": "560ae82282462fb2d8ea6e61cbbda97ef190c1b8b3df966c3272486cee81395c"
+  },
+  "outputs": {
+    "exact_approval_binding": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/exact-approval-binding.json",
+      "sha256": "1b3bd36161af7c30d4caeb72fc5976ec275ecc64cf54b1c91ecd276a8a161cd8",
+      "binding_digest": "71e98fa0ddb88ad4701840c3a1d6b3a60ab3c9a9e38514e691d41938edc31d51"
+    },
+    "agentcore_planspec_binding": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/agentcore-planspec-binding.json",
+      "sha256": "ec03f87877eab595407cd0274063baf6d8b57711006de0c9d4051a5578de2628",
+      "planspec_core_hash": "fdd9463850f1e7f0a4341f27b060db600d2dce587853c1506c89f1e8a2a5847e"
+    },
+    "security_execution_decision": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/security-execution-decision.json",
+      "sha256": "352a2697d07eb475ea57467013dda0648a939bd1ab8cf92b4cdaae9cab6444f3",
+      "decision_digest": "72cf727afac462f18f1227ba2d8a3ffd5fdf7aee5d9bd5b43a5afc803aa7c0e3"
+    },
+    "execution_binding_denial": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/execution-binding-denial.json",
+      "sha256": "f6d92267635d94480bf951eaabf730da4ad7794101e8d82db981f3de5495d228"
+    }
+  },
+  "binding_surface": {
+    "state": "execution-binding-denied",
+    "exact_approval_required": true,
+    "exact_approval_bound": false,
+    "exact_approval_granted": false,
+    "agentcore_planspec_required": true,
+    "agentcore_planspec_bound": false,
+    "agentcore_planspec_hash": "fdd9463850f1e7f0a4341f27b060db600d2dce587853c1506c89f1e8a2a5847e",
+    "security_execution_required": true,
+    "security_execution_decision_bound": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "checks": 7,
+    "failed_checks": 0,
+    "blockers": [
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "installer-quarantine-fetch-not-verified",
+      "exact-operator-approval-not-granted",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "controlled-execution-not-authorized"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "executable_planspec_created": false,
+    "security_execution_effect_allowed": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc10_021_complete": true,
+    "next_task": "RC10-022",
+    "commit_required": true
+  }
+}

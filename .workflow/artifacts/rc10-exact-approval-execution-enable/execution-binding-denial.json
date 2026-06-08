@@ -1,0 +1,80 @@
+{
+  "schema": "agentos.rc10-execution-binding-denial.v1",
+  "generated_at": "2026-06-09T00:20:00+08:00",
+  "task": "RC10-021",
+  "status": "execution-binding-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_set_digest": "6794d9381551d87939ac2e9638cc459e73e9637aec9c097cd13d9ff9e07d0f68",
+  "exact_approval_digest": "71e98fa0ddb88ad4701840c3a1d6b3a60ab3c9a9e38514e691d41938edc31d51",
+  "planspec_hash": "fdd9463850f1e7f0a4341f27b060db600d2dce587853c1506c89f1e8a2a5847e",
+  "security_execution_decision_digest": "72cf727afac462f18f1227ba2d8a3ffd5fdf7aee5d9bd5b43a5afc803aa7c0e3",
+  "denial_cases": [
+    {
+      "id": "publication-not-published-drift-zero",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "drift-zero-denied",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "installer-quarantine-fetch-not-verified",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "target-set-not-enrolled",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "exact-operator-approval-not-granted",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "agentcore-planspec-not-bound",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "security-execution-effect-envelope-not-bound",
+      "status": "passed",
+      "execution_allowed": false
+    },
+    {
+      "id": "remote-fleet-execution-disabled",
+      "status": "passed",
+      "execution_allowed": false
+    }
+  ],
+  "preserved_boundaries": {
+    "exact_approval_granted": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "blockers": [
+    "fewer-than-two-eligible-targets",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "installer-quarantine-fetch-not-verified",
+    "exact-operator-approval-not-granted",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "controlled-execution-not-authorized"
+  ],
+  "next_task": "RC10-022"
+}
