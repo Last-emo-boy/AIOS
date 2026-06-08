@@ -1,0 +1,32 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-012",
+  "title": "bind freshness revocation and public signature authority without private material",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-freshness-revocation-authority.ps1",
+      "role": "freshness revocation authority binder"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-012-freshness-revocation-authority.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Freshness and revocation are required before object trust.",
+      "Public signature authority is verified without reading or using private material.",
+      "Any stale, revoked, missing, mismatched, or local-private-material case fails closed."
+    ]
+  }
+}

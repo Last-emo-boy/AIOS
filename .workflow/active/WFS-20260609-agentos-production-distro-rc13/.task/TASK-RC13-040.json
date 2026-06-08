@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-040",
+  "title": "execute or deny controlled activation through AgentCore and SecurityExecution gates",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json",
+    ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json",
+    ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-controlled-activation.ps1",
+      "role": "controlled activation gate runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-controlled-activation/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-040-controlled-activation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Activation is allowed only when object trust, quarantine, target, approval, AgentCore, SecurityExecution, audit, rollback, and support/recovery gates are proved.",
+      "If any gate is missing, activation remains denied and side-effect free.",
+      "Production ring mutation and remote dispatch remain disabled."
+    ]
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc13",
+  "milestone": "Production Distro RC13",
+  "status": "active",
+  "objective": "Convert RC12 fail-closed blockers into satisfiable local AIOS execution gates: repair declared/current release artifact identity to drift-zero, bind current payload bytes into a local immutable object manifest and descriptor set, prove freshness and revocation authority without private material, run verified quarantine preflight before interpretation, produce executable AgentCore PlanSpec readiness, bind SecurityExecution allow preconditions, enroll two local canary identities with exact approval and audit sink nonce expiry, then execute or deny controlled activation and separately approved rollback without mirror, signer, frontend, remote dispatch, object storage provisioning, or production ring infrastructure changes.",
+  "scope": {
+    "included": [
+      "AIOS-body local trust unblock planning",
+      "declared/current artifact drift-zero repair plan and verifier",
+      "current payload object manifest and descriptor binding",
+      "freshness revocation and public signature authority binding without private material",
+      "installer quarantine preflight verification before payload interpretation",
+      "AgentCore executable PlanSpec readiness package",
+      "SecurityExecution allow precondition matrix",
+      "two local canary target identity enrollment evidence",
+      "exact approval packet with audit sink nonce and expiry",
+      "controlled activation execution or denial through local gates",
+      "separate rollback PlanSpec and approval drill execution or denial",
+      "support/recovery evidence binding",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload storage service provisioning",
+      "remote fleet dispatch infrastructure",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC13 planning and contract",
+      "tasks": [
+        {
+          "id": "RC13-000",
+          "status": "completed",
+          "title": "plan Production Distro RC13 local trust unblock",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-000-planning.json"
+        },
+        {
+          "id": "RC13-001",
+          "status": "pending",
+          "title": "freeze RC13 local trust unblock and artifact repair contract",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "artifact identity and object trust",
+      "tasks": [
+        {
+          "id": "RC13-010",
+          "status": "pending",
+          "title": "repair or precisely deny declared/current artifact drift-zero for current payload bytes",
+          "deliverable": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json"
+        },
+        {
+          "id": "RC13-011",
+          "status": "pending",
+          "title": "bind current payload object manifest and immutable descriptor consistency",
+          "deliverable": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json"
+        },
+        {
+          "id": "RC13-012",
+          "status": "pending",
+          "title": "bind freshness revocation and public signature authority without private material",
+          "deliverable": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "quarantine and executable execution package",
+      "tasks": [
+        {
+          "id": "RC13-020",
+          "status": "pending",
+          "title": "run verified quarantine preflight before payload interpretation",
+          "deliverable": ".workflow/artifacts/rc13-quarantine-preflight/result.json"
+        },
+        {
+          "id": "RC13-021",
+          "status": "pending",
+          "title": "bind quarantine preflight to AgentCore executable PlanSpec readiness",
+          "deliverable": ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json"
+        },
+        {
+          "id": "RC13-022",
+          "status": "pending",
+          "title": "bind SecurityExecution allow precondition matrix for controlled effects",
+          "deliverable": ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "canary identities and exact approval",
+      "tasks": [
+        {
+          "id": "RC13-030",
+          "status": "pending",
+          "title": "enroll two local canary target identities without remote dispatch authority",
+          "deliverable": ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json"
+        },
+        {
+          "id": "RC13-031",
+          "status": "pending",
+          "title": "bind exact approval packet with audit sink nonce and expiry",
+          "deliverable": ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "controlled activation rollback and support",
+      "tasks": [
+        {
+          "id": "RC13-040",
+          "status": "pending",
+          "title": "execute or deny controlled activation through AgentCore and SecurityExecution gates",
+          "deliverable": ".workflow/artifacts/rc13-controlled-activation/result.json"
+        },
+        {
+          "id": "RC13-041",
+          "status": "pending",
+          "title": "execute or deny separate rollback PlanSpec and approval drill with support recovery evidence",
+          "deliverable": ".workflow/artifacts/rc13-controlled-rollback-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-5",
+      "name": "RC13 closeout",
+      "tasks": [
+        {
+          "id": "RC13-050",
+          "status": "pending",
+          "title": "run Production Distro RC13 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC13-001",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "signer_endpoint_domain": "sign.w33d.xyz",
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "external_transport_uri_input_only": true,
+    "external_object_reachability_is_not_trust": true,
+    "declared_current_artifact_drift_must_be_zero_before_trust": true,
+    "freshness_and_revocation_required_before_trust": true,
+    "installer_must_fetch_to_quarantine_before_interpretation": true,
+    "agentcore_planspec_must_be_executable_before_effects": true,
+    "security_execution_allow_required_before_effects": true,
+    "controlled_execution_requires_two_or_more_enrolled_targets": true,
+    "controlled_execution_requires_exact_operator_approval_with_audit_sink_nonce_and_expiry": true,
+    "controlled_activation_evidence_required_before_rollback_execution": true,
+    "rollback_execution_requires_separate_exact_approval": true,
+    "support_recovery_binding_required_before_activation_or_rollback": true,
+    "private_signing_material_forbidden": true,
+    "production_ready_claim": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.86,
+    "requirements_coverage": 0.93,
+    "task_quality": 0.86,
+    "dependency_correctness": 0.88,
+    "estimation_accuracy": 0.78,
+    "collision_safety": 0.84,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC13 tasks are derived from RC12 final audit blockers and keep AIOS-body-only scope. The plan prioritizes local trust and executable gate repair before any controlled side effect, and every task must either prove the gate or emit precise fail-closed blockers."
+  }
+}

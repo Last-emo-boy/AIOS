@@ -1,0 +1,32 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-021",
+  "title": "bind quarantine preflight to AgentCore executable PlanSpec readiness",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc13-quarantine-preflight/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-agentcore-executable-planspec-readiness.ps1",
+      "role": "AgentCore PlanSpec readiness binder"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-021-agentcore-executable-planspec-readiness.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "AgentCore PlanSpec is executable only after verified quarantine preflight and exact effect scope.",
+      "PlanSpec binds release object, target set, approval, rollback, support/recovery, and audit references.",
+      "No effect is executed by PlanSpec readiness alone."
+    ]
+  }
+}

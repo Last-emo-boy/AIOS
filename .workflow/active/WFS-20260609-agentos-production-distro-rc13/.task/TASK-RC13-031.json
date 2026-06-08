@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-031",
+  "title": "bind exact approval packet with audit sink nonce and expiry",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json",
+    ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json",
+    ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-exact-approval-audit-binding.ps1",
+      "role": "exact approval audit binder"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-031-exact-approval-audit-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Approval binds actor, release, object digest, target set, AgentCore PlanSpec, SecurityExecution envelope, rollback baseline, support/recovery, audit sink, nonce, and expiry.",
+      "Broad, stale, replayed, mismatched, missing, or unsigned approval fails closed.",
+      "Approval does not imply execution without downstream activation task."
+    ]
+  }
+}

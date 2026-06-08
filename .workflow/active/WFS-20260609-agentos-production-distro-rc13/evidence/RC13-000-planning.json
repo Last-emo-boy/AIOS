@@ -1,0 +1,109 @@
+{
+  "schema": "agentos.rc13-planning-evidence.v1",
+  "generated_at": "2026-06-09T07:10:00+08:00",
+  "task": "RC13-000",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc13",
+  "source": {
+    "rc12_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
+      "verdict": "PASS",
+      "next_milestone": "Production Distro RC13",
+      "summary": {
+        "checks": 14,
+        "failed_checks": 0,
+        "moved_beyond_fail_closed": false,
+        "production_ready_claim": false
+      },
+      "remaining_blockers_before_ga_or_execution": [
+        "external-https-object-uri-not-published",
+        "freshness-window-missing",
+        "declared-current-drift-zero-not-proved",
+        "nonzero-declared-current-drift-count",
+        "object-trust-not-allowed",
+        "installer-quarantine-fetch-not-run",
+        "payload-not-quarantined",
+        "pre-interpretation-verification-not-run",
+        "installer-preflight-not-verified",
+        "agentcore-planspec-not-executable",
+        "security-execution-effect-envelope-denied",
+        "two-target-canary-not-enrolled",
+        "exact-operator-approval-not-granted",
+        "audit-sink-not-bound",
+        "nonce-not-bound",
+        "approval-expiry-not-bound",
+        "controlled-activation-not-authorized",
+        "controlled-canary-activation-not-performed",
+        "rollback-exact-operator-approval-not-granted",
+        "agentcore-rollback-planspec-not-bound",
+        "security-execution-rollback-effect-envelope-not-bound",
+        "rollback-audit-journal-not-bound",
+        "post-rollback-observations-missing",
+        "remote-fleet-execution-not-enabled"
+      ]
+    }
+  },
+  "outputs": {
+    "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+    "workflow_session": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/workflow-session.json",
+    "planning_summary": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-plan.md",
+    "maestro_session": ".workflow/.csv-wave/20260609-plan-rc13-local-trust-unblock"
+  },
+  "plan_surface": {
+    "task_count": 13,
+    "completed_tasks": [
+      "RC13-000"
+    ],
+    "next_task": "RC13-001",
+    "waves": [
+      "wave-0",
+      "wave-1",
+      "wave-2",
+      "wave-3",
+      "wave-4",
+      "wave-5"
+    ],
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "remote_dispatch_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc13_000_complete": true,
+    "next_task": "RC13-001",
+    "commit_required": true
+  }
+}

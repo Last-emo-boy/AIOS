@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-050",
+  "title": "run Production Distro RC13 final closeout audit",
+  "status": "pending",
+  "wave": "wave-5",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+    ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+    ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+    ".workflow/artifacts/rc13-quarantine-preflight/result.json",
+    ".workflow/artifacts/rc13-agentcore-executable-planspec-readiness/result.json",
+    ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json",
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json",
+    ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json",
+    ".workflow/artifacts/rc13-controlled-activation/result.json",
+    ".workflow/artifacts/rc13-controlled-rollback-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc13-final-closeout-audit.ps1",
+      "role": "RC13 final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json",
+      "role": "final audit evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit verifies every RC13 planned task result.",
+      "Audit records whether RC13 moved beyond fail-closed denial into controlled local execution readiness.",
+      "Audit keeps production_ready_claim=false unless every GA and execution gate is explicitly proved.",
+      "Audit records next milestone direction."
+    ]
+  }
+}

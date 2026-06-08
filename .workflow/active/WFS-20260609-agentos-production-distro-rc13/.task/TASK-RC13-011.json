@@ -1,0 +1,32 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-011",
+  "title": "bind current payload object manifest and immutable descriptor consistency",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-object-manifest-descriptor-binding.ps1",
+      "role": "object manifest descriptor binder"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-011-object-manifest-descriptor-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Current payload bytes are size-bound and digest-bound.",
+      "Descriptor and manifest agree on release id, artifact ids, digests, sizes, and compatibility metadata.",
+      "No payload upload, remote download, install, activation, rollback, or production mutation is performed."
+    ]
+  }
+}

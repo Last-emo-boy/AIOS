@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-000",
+  "title": "plan Production Distro RC13 local trust unblock",
+  "status": "completed",
+  "completed_at": "2026-06-09T07:10:00+08:00",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/final-rc12-closeout-summary.md",
+    ".workflow/state.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+      "role": "RC13 workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/workflow-session.json",
+      "role": "RC13 workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-plan.md",
+      "role": "planning summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-000-planning.json",
+      "role": "planning evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC13 workflow exists and is active.",
+      "RC13 plan derives task order from RC12 final audit blockers.",
+      "RC13 keeps AIOS-body-only scope and excludes mirror, signer, object storage, remote dispatch, private key, and production ring infrastructure changes.",
+      "RC13 current task advances to RC13-001."
+    ]
+  }
+}

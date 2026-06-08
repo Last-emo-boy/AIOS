@@ -1,0 +1,32 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-030",
+  "title": "enroll two local canary target identities without remote dispatch authority",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc13-security-execution-allow-preconditions/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-two-target-identity-enrollment.ps1",
+      "role": "two-target identity enrollment verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-030-two-target-identity-enrollment.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "At least two distinct local canary identities are required before activation authority.",
+      "Duplicate, stale, incompatible, broad, or missing target identities fail closed.",
+      "Remote dispatch remains disabled."
+    ]
+  }
+}

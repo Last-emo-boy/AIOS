@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-001",
+  "title": "freeze RC13 local trust unblock and artifact repair contract",
+  "status": "pending",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-000-planning.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+      "role": "contract"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-001-local-trust-unblock-contract.json",
+      "role": "contract evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract freezes gate order from artifact repair to controlled execution.",
+      "Contract defines exact fail-closed cases for drift, object trust, quarantine, AgentCore, SecurityExecution, approval, activation, rollback, support, and recovery.",
+      "Contract does not authorize mirror, signer, object storage, remote dispatch, private key, or production ring changes."
+    ]
+  }
+}

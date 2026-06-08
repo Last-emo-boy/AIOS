@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-010",
+  "title": "repair or precisely deny declared/current artifact drift-zero for current payload bytes",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+    ".workflow/artifacts/rc12-declared-current-drift-zero/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-declared-current-drift-zero.ps1",
+      "role": "drift-zero verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-010-declared-current-drift-zero.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Every declared/current comparison is explicit and hash-bound.",
+      "Drift-zero is true only when all required comparisons match.",
+      "If drift remains, object trust and downstream execution remain denied."
+    ]
+  }
+}

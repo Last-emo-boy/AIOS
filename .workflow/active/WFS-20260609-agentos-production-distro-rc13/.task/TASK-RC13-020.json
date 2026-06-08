@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC13-020",
+  "title": "run verified quarantine preflight before payload interpretation",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+    ".workflow/artifacts/rc13-freshness-revocation-authority/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc13-quarantine-preflight.ps1",
+      "role": "quarantine preflight verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc13-quarantine-preflight/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-020-quarantine-preflight.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Quarantine preflight runs only after object trust gates are satisfied.",
+      "Payload interpretation remains forbidden before quarantine verification.",
+      "Missing trust, mismatched bytes, stale freshness, revocation, or bad descriptor fails closed."
+    ]
+  }
+}
