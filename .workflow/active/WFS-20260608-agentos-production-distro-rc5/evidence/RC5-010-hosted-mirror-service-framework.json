@@ -1,0 +1,58 @@
+{
+  "schema": "agentos.rc5-hosted-mirror-service-framework-evidence.v1",
+  "generated_at": "2026-06-08T11:30:00+08:00",
+  "task": "RC5-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "provisioner": {
+    "path": "scripts/provision-rc5-hosted-mirror-service.ps1",
+    "sha256": "b332cf88ace739adcc8250ea30c6f2556976e29d67c2e90a8da9e398a0f6c28d"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-hosted-mirror-service/result.json",
+    "sha256": "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+    "status": "passed",
+    "checks": 10,
+    "blockers": 0
+  },
+  "remote_service": {
+    "host": "47.101.11.109",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "validated_with_local_dns": false,
+    "validation_override": "aios.w33d.xyz:80:47.101.11.109",
+    "tls_verified": false,
+    "tls_required_before_ga_claim": true
+  },
+  "endpoints_verified": [
+    "http://aios.w33d.xyz/health.json",
+    "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+    "http://aios.w33d.xyz/channel/index.json",
+    "http://aios.w33d.xyz/releases/README.txt"
+  ],
+  "hosted_output_hashes": {
+    "health_json_sha256": "101a141d2c1de7e9e73b7261c0972bdc62f54b00ab51e3d211059ffa8cf24fda",
+    "mirror_descriptor_sha256": "09a09c128fa9aa0282528a128bebd96c3f0a6332447dff641faf019d23fbde94",
+    "channel_index_sha256": "d1c062198cf82302d02e03ada299ee17c9a6bf9e8701087264a56b18b44233d8",
+    "releases_readme_sha256": "8eabc846cc238a66eeed77db4986e7c0b0ac459f5efd420b0ca3fbf867d58650"
+  },
+  "invariants": {
+    "metadata_only": true,
+    "large_artifact_storage_deferred": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc5_010_complete": true,
+    "next_task": "RC5-011",
+    "commit_required": true
+  }
+}

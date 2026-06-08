@@ -1,0 +1,34 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-010",
+  "title": "provision remote mirror service framework and nginx reverse proxy for aios.w33d.xyz",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/hosted-mirror-service-threat-model.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/provision-rc5-hosted-mirror-service.ps1",
+      "role": "provisioner"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-hosted-mirror-service/result.json",
+      "role": "remote service evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-010-hosted-mirror-service-framework.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Provisioner creates /srv/aios-mirror static metadata layout on the remote host.",
+      "Nginx serves aios.w33d.xyz health, mirror descriptor, channel index, and release placeholder.",
+      "Hosted channel metadata is hash-bound to RC4 final audit, hosted transport manifest, and mirror publication.",
+      "Evidence records metadata-only storage, no signing authority, no activation authority, and no GA claim."
+    ]
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "schema": "agentos.rc5-hosted-mirror-service-result.v1",
+  "generated_at": "2026-06-08T10:53:14.1197410+08:00",
+  "checked_at": "2026-06-08T10:53:17.9298630+08:00",
+  "task": "RC5-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "tls_verified": false,
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source_artifacts": {
+    "rc4_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+      "sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413"
+    },
+    "rc4_hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335"
+    },
+    "rc4_mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+    },
+    "rc5_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json",
+      "sha256": "ac4990956a7b7ea1fa16d7ee8c03282e9cf5998963c2b183fa7f13f4ce72a867"
+    },
+    "rc5_boundary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-002-user-install-update-channel-boundary.json",
+      "sha256": "15cbf57dfde504abbd8bbf2768b616ce9c025558540775600f5cc96b39191e76"
+    },
+    "rc5_threat_model": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-003-hosted-mirror-service-threat-model.json",
+      "sha256": "800f9ae863ff908da7f12b044e8649a438c8cca9d693e73422f96437b8b004ef"
+    }
+  },
+  "hosted_outputs": {
+    "health_json_sha256": "101a141d2c1de7e9e73b7261c0972bdc62f54b00ab51e3d211059ffa8cf24fda",
+    "mirror_descriptor_sha256": "09a09c128fa9aa0282528a128bebd96c3f0a6332447dff641faf019d23fbde94",
+    "channel_index_sha256": "d1c062198cf82302d02e03ada299ee17c9a6bf9e8701087264a56b18b44233d8",
+    "releases_readme_sha256": "8eabc846cc238a66eeed77db4986e7c0b0ac459f5efd420b0ca3fbf867d58650"
+  },
+  "invariants": {
+    "metadata_only": true,
+    "large_artifact_storage_deferred": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "ssh.remote_access",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote SSH provisioning must reload active nginx.",
+      "evidence": [
+        "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r",
+        "nginx: configuration file /etc/nginx/nginx.conf test is successful\r",
+        "active\r",
+        "channel/index.json 1016\r",
+        "health.json 585\r",
+        "releases/README.txt 266\r",
+        ".well-known/aios/mirror.json 769\r",
+        "101a141d2c1de7e9e73b7261c0972bdc62f54b00ab51e3d211059ffa8cf24fda  /srv/aios-mirror/health.json\r",
+        "09a09c128fa9aa0282528a128bebd96c3f0a6332447dff641faf019d23fbde94  /srv/aios-mirror/.well-known/aios/mirror.json\r",
+        "d1c062198cf82302d02e03ada299ee17c9a6bf9e8701087264a56b18b44233d8  /srv/aios-mirror/channel/index.json\r",
+        "ed35d4499c2ae044f26489fd88272e99a14ae414c5f9c580f27ee49d1d474a44  /srv/aios-mirror/releases/README.txt"
+      ]
+    },
+    {
+      "id": "health.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted health endpoint must return RC5 health schema.",
+      "evidence": "agentos.rc5-hosted-mirror-health.v1"
+    },
+    {
+      "id": "health.non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted health endpoint must remain non-GA.",
+      "evidence": false
+    },
+    {
+      "id": "health.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted health endpoint must not advertise signing or activation authority.",
+      "evidence": {
+        "signing": false,
+        "activation": false
+      }
+    },
+    {
+      "id": "descriptor.metadata_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror descriptor must be metadata-only.",
+      "evidence": "metadata-only"
+    },
+    {
+      "id": "channel.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted channel index must return RC5 channel schema.",
+      "evidence": "agentos.rc5-hosted-channel-index.v1"
+    },
+    {
+      "id": "channel.hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted channel must bind RC4 final audit, hosted manifest, and mirror publication hashes.",
+      "evidence": {
+        "rc4_final": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+        "hosted": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+        "mirror": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+      }
+    },
+    {
+      "id": "channel.no_activation",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted channel must not grant activation or TUI authority.",
+      "evidence": {
+        "signing_authority": false,
+        "activation_authority": false,
+        "rollback_execution_authority": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "release.placeholder",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release directory must remain a metadata-only placeholder.",
+      "evidence": "AIOS RC5 hosted mirror framework\r\n\r\nThis directory is metadata-only for RC5. Large release payload storage is deferred.\r\nTrust requires local verification of signatures, hashes, freshness, revocation, and rollback metadata.\r\nThe mirror is transport, not a root of trust."
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted outputs and captured evidence must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 10,
+    "blockers": 0,
+    "rc5_010_complete": true,
+    "endpoints_verified": [
+      "http://aios.w33d.xyz/health.json",
+      "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+      "http://aios.w33d.xyz/channel/index.json",
+      "http://aios.w33d.xyz/releases/README.txt"
+    ],
+    "tls_required_before_ga_claim": true,
+    "production_ready_claim": false
+  }
+}
