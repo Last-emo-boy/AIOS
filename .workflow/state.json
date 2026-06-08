@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc8",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC8-010",
+    "current_task":  "RC8-011",
     "lifecycle_position":  "rc8-active-real-installable-payload-controlled-execution",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc8-010-real-payload-object-descriptor-projection",
+    "next_allowed_action":  "execute-rc8-011-public-signature-artifact-ingestion",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T18:15:00+08:00",
+    "updated_at":  "2026-06-08T18:40:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but real cryptographic signature, real payload bytes, installer VM smoke, exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is now active: RC8 Wave 0 is complete. RC8-001 freezes the real installable payload and controlled execution smoke contract; RC8-002 defines immutable payload object descriptor and byte quarantine boundaries; RC8-003 defines public signature artifact ingestion and receipt boundaries. Next work is RC8-010 real payload object descriptor projection, still non-GA and install-blocked.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but real cryptographic signature, installer VM smoke, exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is now active: RC8 Wave 0 is complete, and RC8-010 has projected a real payload object descriptor candidate from current build bytes. The descriptor binds image/out/agentos-initramfs.cpio.gz by size and SHA-256, but remains candidate-verification-blocked because external HTTPS object publication, public signature artifact ingestion, installer VM smoke, and declared/current drift reconciliation are still missing. Next work is RC8-011 public signature artifact ingestion. Current payload remains non-GA and install-blocked.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1699,6 +1699,34 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-003-public-signature-artifact-ingestion-boundary.json"
+                      },
+                      {
+                          "type":  "rc8_script",
+                          "path":  "scripts/project-rc8-real-payload-object-descriptor.ps1"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/descriptor-report.json"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-010.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-010-real-payload-object-descriptor.json"
                       }
                   ]
 }

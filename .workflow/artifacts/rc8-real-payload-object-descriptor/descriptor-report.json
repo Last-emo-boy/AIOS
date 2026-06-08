@@ -1,0 +1,118 @@
+{
+  "schema": "agentos.rc8-real-payload-object-descriptor-report.v1",
+  "generated_at": "2026-06-08T18:35:00+08:00",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "descriptor_path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+  "descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+  "payload_path": "image/out/agentos-initramfs.cpio.gz",
+  "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+  "payload_size_bytes": 377,
+  "payload_matches_manifest": true,
+  "source_bindings": {
+    "payload_bytes": {
+      "name": "payload_bytes",
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": "",
+      "status": "present"
+    },
+    "payload_manifest": {
+      "name": "payload_manifest",
+      "path": "image/out/agentos-initramfs.manifest.json",
+      "sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "size_bytes": 7380,
+      "present": true,
+      "schema": "agentos-initramfs-manifest",
+      "status": "present"
+    },
+    "alpha_rootfs_manifest": {
+      "name": "alpha_rootfs_manifest",
+      "path": "image/out/agentos-alpha-rootfs.manifest.json",
+      "sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+      "size_bytes": 5151,
+      "present": true,
+      "schema": "agentos-alpha-rootfs-manifest",
+      "status": "present"
+    },
+    "release_provenance": {
+      "name": "release_provenance",
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "size_bytes": 824088,
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": "promotable"
+    },
+    "rc6_payload_manifest": {
+      "name": "rc6_payload_manifest",
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "size_bytes": 8204,
+      "present": true,
+      "schema": "agentos.rc6-installable-payload-manifest.v1",
+      "status": "verification-blocked"
+    },
+    "rc7_signed_metadata": {
+      "name": "rc7_signed_metadata",
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+      "sha256": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+      "size_bytes": 2790,
+      "present": true,
+      "schema": "agentos.rc7-signed-metadata-projection.v1",
+      "status": "projection"
+    },
+    "rc7_revocation_snapshot": {
+      "name": "rc7_revocation_snapshot",
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "size_bytes": 1451,
+      "present": true,
+      "schema": "agentos.rc7-revocation-snapshot.v1",
+      "status": "projection"
+    },
+    "rc7_compatibility": {
+      "name": "rc7_compatibility",
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "projection"
+    },
+    "rc7_rollback_baseline": {
+      "name": "rc7_rollback_baseline",
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "projection"
+    },
+    "support_recovery": {
+      "name": "support_recovery",
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-recovery-index.v1",
+      "status": "projection"
+    }
+  },
+  "drifted_components": [
+    "update_metadata",
+    "release_channel_metadata",
+    "qemu_runtime_smoke"
+  ],
+  "payload_blockers": [
+    "external-https-object-uri-not-published",
+    "public-signature-artifact-not-ingested",
+    "installer-vm-smoke-not-run",
+    "declared-current-artifact-drift-unresolved"
+  ],
+  "descriptor_state": "candidate-verification-blocked",
+  "install_allowed": false,
+  "activation_allowed": false,
+  "rollback_execution_allowed": false
+}

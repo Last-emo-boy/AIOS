@@ -1,0 +1,47 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-010",
+  "title": "project real installable payload object descriptor from current build artifacts",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/immutable-payload-object-descriptor-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/public-signature-artifact-ingestion-contract.md",
+    "image/out/agentos-initramfs.manifest.json",
+    ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc8-real-payload-object-descriptor.ps1",
+      "role": "projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "role": "payload object descriptor candidate"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "role": "payload byte checksum artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/descriptor-report.json",
+      "role": "projection report"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-010-real-payload-object-descriptor.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script produces a descriptor for a real local payload byte file.",
+      "The descriptor binds source bytes, size, SHA-256, build manifest, release provenance, signed metadata projection, revocation snapshot, compatibility, rollback baseline, and support/recovery metadata.",
+      "The result records external object URI, public signature ingestion, installer VM smoke, and declared/current drift blockers while keeping install_allowed=false.",
+      "The task preserves non-GA status and moves the next task to RC8-011 public signature artifact ingestion."
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "agentos.rc8-real-payload-object-descriptor-evidence.v1",
+  "generated_at": "2026-06-08T18:40:00+08:00",
+  "task": "RC8-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": "scripts/project-rc8-real-payload-object-descriptor.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+    "status": "passed",
+    "sha256": "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43"
+  },
+  "outputs": {
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e"
+    },
+    "checksums": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa"
+    },
+    "report": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/descriptor-report.json",
+      "sha256": "50c6345c08a3dd57496da89256a6489fb5366df860c01cd9c47bd61bc9e7bf83"
+    }
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "descriptor_state": "candidate-verification-blocked",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_path": "image/out/agentos-initramfs.cpio.gz",
+    "payload_size_bytes": 377,
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_matches_manifest": true,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "payload_blockers": [
+      "external-https-object-uri-not-published",
+      "public-signature-artifact-not-ingested",
+      "installer-vm-smoke-not-run",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "invariants": {
+    "mirror_metadata_only": true,
+    "mirror_large_payload_storage_used": false,
+    "descriptor_published_to_mirror": false,
+    "payload_bytes_uploaded": false,
+    "payload_bytes_downloaded": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc8_010_complete": true,
+    "next_task": "RC8-011",
+    "commit_required": true
+  }
+}
