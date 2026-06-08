@@ -1,0 +1,423 @@
+{
+  "schema": "agentos.rc13-quarantine-preflight-result.v1",
+  "generated_at": "2026-06-09T08:45:00+08:00",
+  "task": "RC13-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "preflight_surface": {
+    "state": "quarantine-preflight-denied-before-network",
+    "drift_zero": false,
+    "local_descriptor_manifest_consistent": true,
+    "object_manifest_descriptor_binding_allowed": false,
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "revocation_authority_bound": true,
+    "revocation_snapshot_fresh": true,
+    "freshness_window_bound": false,
+    "freshness_window_current": false,
+    "freshness_revocation_authority_bound": false,
+    "current_bytes_match": true,
+    "object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "network_fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "pre_interpretation_verification_performed": false,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "nonzero-declared-current-drift-count",
+      "rc13-local-trust-gate-drift",
+      "rc12-declared-current-drift-carried-forward",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-https-object-uri-not-published",
+      "freshness-window-missing",
+      "declared-current-drift-zero-not-proved",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "rc12-drift-zero-not-proved",
+      "rc12-object-trust-not-allowed",
+      "rc12-controlled-unblock-not-achieved",
+      "object-manifest-descriptor-binding-not-allowed",
+      "freshness-revocation-authority-not-bound",
+      "quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "object-trust-not-allowed",
+      "freshness-window-stale-or-missing",
+      "quarantine-preflight-not-allowed",
+      "network-fetch-denied-before-object-trust",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "payload-interpretation-not-allowed",
+      "install-not-allowed"
+    ]
+  },
+  "outputs": {
+    "quarantine_preflight_report": {
+      "path": ".workflow/artifacts/rc13-quarantine-preflight/quarantine-preflight-report.json",
+      "sha256": "424b22827f45a5f1d593e4c192ec79c66cd77e1249a9b62e527cecdc62eaca9b"
+    },
+    "quarantine_preflight_denial": {
+      "path": ".workflow/artifacts/rc13-quarantine-preflight/quarantine-preflight-denial.json",
+      "sha256": "efcdf876f655f364b929ee65e478e73fc1bfe9b78b3f14e2011a847f46b75f32"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc13-quarantine-preflight/quarantine-preflight-fail-closed-matrix.json",
+      "sha256": "3002fea3977ed1861d54bd8e5c8e2ddf4b6ad17eb59b5d57a3d18dd1db679d79"
+    },
+    "agentcore_planspec_readiness_handoff": {
+      "path": ".workflow/artifacts/rc13-quarantine-preflight/agentcore-planspec-readiness-handoff.json",
+      "sha256": "dc8421498c7ae8a7f314f0d3824157a16f2f82b2bf612e7f3fd6d6ca0adddba7"
+    }
+  },
+  "source": {
+    "rc13_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+      "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+      "size_bytes": 8971,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "drift_result": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+      "sha256": "c9fb476d7eb3cd61fb335bd32f1eff7f868d9edbd4095951f27532c943ab1d25",
+      "size_bytes": 13439,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-result.v1",
+      "status": "passed"
+    },
+    "object_binding_result": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+      "sha256": "47794372cb1fd3a66fea12b47d34f91abf23fc0543c063d00ec377516b22fe79",
+      "size_bytes": 16931,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding-result.v1",
+      "status": "passed"
+    },
+    "object_binding": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+      "sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8",
+      "size_bytes": 27125,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding.v1",
+      "status": "local-descriptor-manifest-consistent-authority-denied"
+    },
+    "authority_result": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+      "sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db",
+      "size_bytes": 16454,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-result.v1",
+      "status": "passed"
+    },
+    "authority_binding": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-binding.json",
+      "sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8",
+      "size_bytes": 18148,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-binding.v1",
+      "status": "freshness-revocation-authority-denied"
+    },
+    "authority_handoff": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/quarantine-preflight-handoff.json",
+      "sha256": "8546a8d5321560cc7e500ee4c46b00578bf90cd2f295c32944a08536a4ff337a",
+      "size_bytes": 1932,
+      "present": true,
+      "schema": "agentos.rc13-quarantine-preflight-handoff.v1",
+      "status": "blocked-by-freshness-revocation-authority"
+    },
+    "current_payload": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "contract.quarantine_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 must consume the quarantine-before-interpretation gate order.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+        "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+        "size_bytes": 8971,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "source.drift_result.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 requires completed RC13-010 drift evidence.",
+      "evidence": {
+        "status": "passed",
+        "drift_zero": false,
+        "drift_count": 19
+      }
+    },
+    {
+      "id": "source.object_binding.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 requires completed RC13-011 descriptor and manifest binding evidence.",
+      "evidence": {
+        "status": "passed",
+        "local_descriptor_manifest_consistent": true,
+        "binding_allowed": false
+      }
+    },
+    {
+      "id": "source.authority.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 requires completed RC13-012 public signature and revocation evidence.",
+      "evidence": {
+        "status": "passed",
+        "public_signature_bound": true,
+        "revocation_authority_bound": true,
+        "freshness_window_bound": false
+      }
+    },
+    {
+      "id": "source.current_bytes_match_descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current payload bytes must match RC13 object binding before quarantine policy evaluation.",
+      "evidence": {
+        "expected_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "observed_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_size_bytes": 377,
+        "observed_size_bytes": 377
+      }
+    },
+    {
+      "id": "preflight.denied_before_network",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Quarantine preflight must deny before network unless object trust and freshness/revocation gates are proved.",
+      "evidence": {
+        "quarantine_preflight_allowed": false,
+        "object_trust_allowed": false,
+        "freshness_window_bound": false,
+        "blockers": [
+          "nonzero-declared-current-drift-count",
+          "rc13-local-trust-gate-drift",
+          "rc12-declared-current-drift-carried-forward",
+          "rc12-publication-binding-drift",
+          "rc11-declared-current-drift-carried-forward",
+          "external-https-object-uri-not-published",
+          "freshness-window-missing",
+          "declared-current-drift-zero-not-proved",
+          "external-object-publication-not-allowed",
+          "freshness-window-not-bound",
+          "rc12-drift-zero-not-proved",
+          "rc12-object-trust-not-allowed",
+          "rc12-controlled-unblock-not-achieved",
+          "object-manifest-descriptor-binding-not-allowed",
+          "freshness-revocation-authority-not-bound",
+          "quarantine-preflight-not-run",
+          "agentcore-planspec-not-executable",
+          "security-execution-allow-not-bound",
+          "two-target-canary-not-enrolled",
+          "exact-approval-not-bound",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "object-trust-not-allowed",
+          "freshness-window-stale-or-missing",
+          "quarantine-preflight-not-allowed",
+          "network-fetch-denied-before-object-trust",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run",
+          "payload-interpretation-not-allowed",
+          "install-not-allowed"
+        ]
+      }
+    },
+    {
+      "id": "payload.interpretation_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload interpretation must remain denied before quarantine verification succeeds.",
+      "evidence": {
+        "payload_interpretation_allowed": false,
+        "quarantine_payload_written": false,
+        "pre_interpretation_verification_performed": false
+      }
+    },
+    {
+      "id": "pre_interpretation.gates_declared",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Quarantine preflight must declare size, digest, descriptor, manifest, checksum, signature, revocation, freshness, compatibility, rollback, and support gates.",
+      "evidence": {
+        "payload_size_bytes": 377,
+        "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "descriptor_file_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "descriptor_canonical_sha256": "c9a36aab6d80c7b8a698f2b55cccf60b850f753f30cb7a4bd62350130047d36d",
+        "initramfs_manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "payload_manifest_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "checksum_set_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "public_signature_artifact_sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+        "public_signature_receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+        "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+        "freshness_window": null,
+        "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 quarantine negative cases must fail closed before network, quarantine write, interpretation, install, activation, rollback, support upload, remote dispatch, or production mutation.",
+      "evidence": {
+        "cases": 26,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 must not fetch, download, quarantine-write, interpret, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": null
+    },
+    {
+      "id": "handoff.downstream_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 handoff must keep AgentCore PlanSpec readiness and effects blocked while quarantine preflight is denied.",
+      "evidence": {
+        "status": "blocked-before-agentcore-planspec-readiness",
+        "blockers": [
+          "nonzero-declared-current-drift-count",
+          "rc13-local-trust-gate-drift",
+          "rc12-declared-current-drift-carried-forward",
+          "rc12-publication-binding-drift",
+          "rc11-declared-current-drift-carried-forward",
+          "external-https-object-uri-not-published",
+          "freshness-window-missing",
+          "declared-current-drift-zero-not-proved",
+          "external-object-publication-not-allowed",
+          "freshness-window-not-bound",
+          "rc12-drift-zero-not-proved",
+          "rc12-object-trust-not-allowed",
+          "rc12-controlled-unblock-not-achieved",
+          "object-manifest-descriptor-binding-not-allowed",
+          "freshness-revocation-authority-not-bound",
+          "quarantine-preflight-not-run",
+          "agentcore-planspec-not-executable",
+          "security-execution-allow-not-bound",
+          "two-target-canary-not-enrolled",
+          "exact-approval-not-bound",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "object-trust-not-allowed",
+          "freshness-window-stale-or-missing",
+          "quarantine-preflight-not-allowed",
+          "network-fetch-denied-before-object-trust",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run",
+          "payload-interpretation-not-allowed",
+          "install-not-allowed"
+        ]
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-020 outputs must not contain PEM blocks, auth tokens, private key paths, signer internals, or secret identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "declared-current-drift-zero-not-proved",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "object-manifest-descriptor-binding-not-allowed",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed",
+    "freshness-window-stale-or-missing",
+    "quarantine-preflight-not-allowed",
+    "network-fetch-denied-before-object-trust",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "payload-interpretation-not-allowed",
+    "install-not-allowed"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 12,
+    "failed_checks": 0,
+    "cases": 26,
+    "failed_cases": 0,
+    "preflight_denied_before_network": true,
+    "payload_interpretation_denied": true,
+    "rc13_020_complete": true,
+    "next_task": "RC13-021"
+  }
+}

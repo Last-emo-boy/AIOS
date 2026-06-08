@@ -1,0 +1,62 @@
+{
+  "schema": "agentos.rc13-agentcore-executable-planspec-readiness-handoff.v1",
+  "generated_at": "2026-06-09T08:45:00+08:00",
+  "task": "RC13-020",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "blocked-before-agentcore-planspec-readiness",
+  "production_ready_claim": false,
+  "expected_next_task": "RC13-021",
+  "quarantine": {
+    "preflight_allowed": false,
+    "preflight_verified": false,
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false
+  },
+  "agentcore": {
+    "planspec_readiness_allowed": false,
+    "planspec_executable": false,
+    "effect_execution_allowed": false
+  },
+  "bindings": {
+    "drift_result_sha256": "c9fb476d7eb3cd61fb335bd32f1eff7f868d9edbd4095951f27532c943ab1d25",
+    "object_binding_result_sha256": "47794372cb1fd3a66fea12b47d34f91abf23fc0543c063d00ec377516b22fe79",
+    "object_binding_sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8",
+    "authority_result_sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db",
+    "authority_binding_sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8",
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "current_payload_size_bytes": 377
+  },
+  "blockers": [
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "declared-current-drift-zero-not-proved",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "object-manifest-descriptor-binding-not-allowed",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed",
+    "freshness-window-stale-or-missing",
+    "quarantine-preflight-not-allowed",
+    "network-fetch-denied-before-object-trust",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "payload-interpretation-not-allowed",
+    "install-not-allowed"
+  ]
+}
