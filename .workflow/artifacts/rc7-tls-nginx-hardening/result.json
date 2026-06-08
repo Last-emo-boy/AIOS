@@ -1,0 +1,254 @@
+﻿{
+    "schema":  "agentos.rc7-tls-nginx-hardening-result.v1",
+    "generated_at":  "2026-06-08T14:10:11.1563811+08:00",
+    "checked_at":  "2026-06-08T14:10:14.1917845+08:00",
+    "task":  "RC7-021",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "remote":  {
+                   "host":  "47.101.11.109",
+                   "user":  "root",
+                   "domain":  "aios.w33d.xyz",
+                   "static_root":  "/srv/aios-mirror",
+                   "nginx_site":  "/etc/nginx/sites-available/aios.w33d.xyz",
+                   "validation_used_local_dns":  false,
+                   "http_resolve_override":  "aios.w33d.xyz:80:47.101.11.109",
+                   "https_resolve_override":  "aios.w33d.xyz:443:47.101.11.109",
+                   "https_preferred":  true,
+                   "http_legacy_compatibility":  true
+               },
+    "source_artifacts":  {
+                             "rc7_mirror_frontend_signed_status":  {
+                                                                       "path":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+                                                                       "sha256":  "0f76efaaf9859faf00ab10b8e94e8d414d09498fbe85509d37d7f6023d67fc79",
+                                                                       "present":  true,
+                                                                       "schema":  "agentos.rc7-mirror-frontend-signed-status-result.v1",
+                                                                       "status":  "passed"
+                                                                   },
+                             "rc7_install_rollback_baseline":  {
+                                                                   "path":  ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+                                                                   "sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                                                                   "present":  true,
+                                                                   "schema":  "agentos.rc7-install-rollback-baseline-result.v1",
+                                                                   "status":  "passed"
+                                                               },
+                             "rc7_signed_metadata_revocation":  {
+                                                                    "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+                                                                    "sha256":  "8ccf04045c5e6aa63ccc934c46d72f03a17a8484657abd101c5a01a21b7e54a3",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc7-signed-metadata-revocation-result.v1",
+                                                                    "status":  "passed"
+                                                                }
+                         },
+    "local_outputs":  {
+                          "certificate_summary":  ".workflow/artifacts/rc7-tls-nginx-hardening/tls-certificate-summary.json",
+                          "nginx_redacted_config":  ".workflow/artifacts/rc7-tls-nginx-hardening/nginx-aios.w33d.xyz.redacted.conf"
+                      },
+    "certificate":  {
+                        "subject":  "CN = aios.w33d.xyz",
+                        "issuer":  "C = US, O = Let\u0027s Encrypt, CN = YE2",
+                        "not_before":  "Jun  8 05:05:11 2026 GMT",
+                        "not_after":  "Sep  6 05:05:10 2026 GMT",
+                        "domain":  "aios.w33d.xyz",
+                        "private_key_material_captured":  false
+                    },
+    "nginx":  {
+                  "reloaded":  true,
+                  "redacted_config_sha256":  "499fceaf3f177fae8410b461618531b0031931d0557d02cc7cec2b1c4d82b1b8",
+                  "remote_config_sha256_recorded":  true,
+                  "server_tokens_hidden":  true,
+                  "security_headers_present":  true,
+                  "directory_listing_blocked":  true,
+                  "write_methods_blocked":  true
+              },
+    "endpoint_status":  {
+                            "https_root":  200,
+                            "https_health":  200,
+                            "https_channel":  200,
+                            "https_payload_index":  200,
+                            "https_install_bootstrap":  200,
+                            "https_compatibility":  200,
+                            "https_rollback_baseline":  200,
+                            "http_root":  200
+                        },
+    "payload_surface":  {
+                            "release_id":  "production-distro-rc6-current-artifacts",
+                            "status":  "verification-blocked",
+                            "signed_metadata_published":  true,
+                            "revocation_snapshot_published":  true,
+                            "compatibility_published":  true,
+                            "rollback_baseline_published":  true,
+                            "install_allowed":  false,
+                            "activation_allowed":  false,
+                            "rollback_execution_allowed":  false
+                        },
+    "invariants":  {
+                       "tls_configured":  true,
+                       "https_preferred":  true,
+                       "http_legacy_compatibility_kept":  true,
+                       "local_dns_trusted":  false,
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false,
+                       "production_ready_claim":  false
+                   },
+    "checks":  [
+                   {
+                       "id":  "source.artifacts.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "TLS hardening must bind RC7 frontend, rollback baseline, and signed metadata evidence.",
+                       "evidence":  {
+                                        "rc7_mirror_frontend_signed_status":  {
+                                                                                  "path":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+                                                                                  "sha256":  "0f76efaaf9859faf00ab10b8e94e8d414d09498fbe85509d37d7f6023d67fc79",
+                                                                                  "present":  true,
+                                                                                  "schema":  "agentos.rc7-mirror-frontend-signed-status-result.v1",
+                                                                                  "status":  "passed"
+                                                                              },
+                                        "rc7_install_rollback_baseline":  {
+                                                                              "path":  ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+                                                                              "sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                                                                              "present":  true,
+                                                                              "schema":  "agentos.rc7-install-rollback-baseline-result.v1",
+                                                                              "status":  "passed"
+                                                                          },
+                                        "rc7_signed_metadata_revocation":  {
+                                                                               "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+                                                                               "sha256":  "8ccf04045c5e6aa63ccc934c46d72f03a17a8484657abd101c5a01a21b7e54a3",
+                                                                               "present":  true,
+                                                                               "schema":  "agentos.rc7-signed-metadata-revocation-result.v1",
+                                                                               "status":  "passed"
+                                                                           }
+                                    }
+                   },
+                   {
+                       "id":  "local.nginx_config.redacted",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Local nginx evidence config must be redacted and secret safe.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc7-tls-nginx-hardening/nginx-aios.w33d.xyz.redacted.conf",
+                                        "sha256":  "499fceaf3f177fae8410b461618531b0031931d0557d02cc7cec2b1c4d82b1b8"
+                                    }
+                   },
+                   {
+                       "id":  "remote.certificate.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "A public TLS certificate must be present for the mirror domain.",
+                       "evidence":  {
+                                        "subject":  "CN = aios.w33d.xyz",
+                                        "issuer":  "C = US, O = Let\u0027s Encrypt, CN = YE2",
+                                        "not_before":  "Jun  8 05:05:11 2026 GMT",
+                                        "not_after":  "Sep  6 05:05:10 2026 GMT",
+                                        "domain":  "aios.w33d.xyz",
+                                        "private_key_material_captured":  false
+                                    }
+                   },
+                   {
+                       "id":  "remote.nginx.reload",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Nginx must validate, reload, and stay active after TLS hardening.",
+                       "evidence":  [
+                                        "active",
+                                        "aac3d474decee5017b2e13dc79c071ee91e09fefe108fbc00281782ca4e3f511  /etc/nginx/sites-available/aios.w33d.xyz",
+                                        " ",
+                                        "nginx: configuration file /etc/nginx/nginx.conf test is successful"
+                                    ]
+                   },
+                   {
+                       "id":  "remote.https.metadata.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTPS mirror endpoints must return the frontend and RC7 metadata through resolve-pinned validation.",
+                       "evidence":  {
+                                        "root":  200,
+                                        "health":  200,
+                                        "channel":  200,
+                                        "payload_index":  200,
+                                        "install_bootstrap":  200,
+                                        "compatibility":  200,
+                                        "rollback_baseline":  200
+                                    }
+                   },
+                   {
+                       "id":  "remote.http.compatibility.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTP remains read-only compatible during RC7 while HTTPS becomes the preferred mirror endpoint.",
+                       "evidence":  200
+                   },
+                   {
+                       "id":  "remote.security_headers.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTPS responses must include HSTS, nosniff, referrer, frame, CSP, and AIOS mirror headers.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "remote.server_tokens.hidden",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Nginx server tokens must not expose the nginx version on the HTTPS mirror host.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "remote.install.remains_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "TLS hardening must not authorize install, activation, rollback, or GA production readiness.",
+                       "evidence":  {
+                                        "release_id":  "production-distro-rc6-current-artifacts",
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "remote.directory_listing.blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTPS payload directory listing must remain blocked.",
+                       "evidence":  404
+                   },
+                   {
+                       "id":  "remote.write_methods.blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTP and HTTPS POST must remain blocked.",
+                       "evidence":  {
+                                        "https_root":  403,
+                                        "http_root":  403
+                                    }
+                   },
+                   {
+                       "id":  "remote.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTPS frontend and metadata responses must not expose private key paths, PEM private blocks, or tokens.",
+                       "evidence":  null
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "summary":  {
+                    "checks":  12,
+                    "blockers":  0,
+                    "rc7_021_complete":  true,
+                    "https_url":  "https://aios.w33d.xyz/",
+                    "next_task":  "RC7-022"
+                }
+}

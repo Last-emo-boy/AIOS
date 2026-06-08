@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-021",
+  "title": "record TLS and nginx hardening evidence for the public mirror",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/provision-rc7-tls-nginx-hardening.ps1",
+      "role": "TLS and nginx hardening evidence script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-tls-nginx-hardening/tls-certificate-summary.json",
+      "role": "public certificate summary without private key material"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-tls-nginx-hardening/nginx-aios.w33d.xyz.redacted.conf",
+      "role": "redacted nginx configuration evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-021-tls-nginx-hardening.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The public mirror has a valid HTTPS endpoint for aios.w33d.xyz and HTTPS becomes the preferred mirror endpoint.",
+      "Nginx validates, reloads, serves the mirror on HTTPS, hides server tokens, and emits hardening headers.",
+      "HTTP remains read-only compatibility transport during RC7 while future installer/updater work moves to HTTPS.",
+      "Directory listing and write methods remain blocked.",
+      "TLS hardening does not authorize install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, signing, private key access, or TUI authority.",
+      "The next task is RC7-022 large payload storage policy and external object storage boundary."
+    ]
+  }
+}

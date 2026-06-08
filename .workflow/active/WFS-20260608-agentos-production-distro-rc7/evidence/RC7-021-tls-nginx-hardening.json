@@ -1,0 +1,93 @@
+{
+  "schema": "agentos.rc7-tls-nginx-hardening-evidence.v1",
+  "generated_at": "2026-06-08T16:15:00+08:00",
+  "task": "RC7-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/provision-rc7-tls-nginx-hardening.ps1",
+    "sha256": "a10cded14de41256ac1ec4a3910a0426b801be1c73337f2801aa3f0b8fc588d0"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    "sha256": "7b426b311f5fbee4ae6392d2ae4325b67034969b60c180e8dad1e0fbc4426fb0",
+    "status": "passed",
+    "checks": 12,
+    "blockers": 0
+  },
+  "local_outputs": {
+    "certificate_summary": {
+      "path": ".workflow/artifacts/rc7-tls-nginx-hardening/tls-certificate-summary.json",
+      "sha256": "1d73141842b17629d014caa57331a4975303b7286b604139897083a58221acf0"
+    },
+    "nginx_redacted_config": {
+      "path": ".workflow/artifacts/rc7-tls-nginx-hardening/nginx-aios.w33d.xyz.redacted.conf",
+      "sha256": "499fceaf3f177fae8410b461618531b0031931d0557d02cc7cec2b1c4d82b1b8"
+    }
+  },
+  "certificate": {
+    "domain": "aios.w33d.xyz",
+    "subject": "CN = aios.w33d.xyz",
+    "issuer": "C = US, O = Let's Encrypt, CN = YE2",
+    "not_before": "Jun  8 05:05:11 2026 GMT",
+    "not_after": "Sep  6 05:05:10 2026 GMT",
+    "private_key_material_captured": false
+  },
+  "endpoint_status": {
+    "https_root": 200,
+    "https_health": 200,
+    "https_channel": 200,
+    "https_payload_index": 200,
+    "https_install_bootstrap": 200,
+    "https_compatibility": 200,
+    "https_rollback_baseline": 200,
+    "http_root": 200
+  },
+  "nginx": {
+    "site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "reloaded": true,
+    "server_tokens_hidden": true,
+    "security_headers_present": true,
+    "hsts_present": true,
+    "directory_listing_blocked": true,
+    "write_methods_blocked": true,
+    "https_preferred": true,
+    "http_legacy_compatibility": true
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "signed_metadata_published": true,
+    "revocation_snapshot_published": true,
+    "compatibility_published": true,
+    "rollback_baseline_published": true,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "invariants": {
+    "tls_configured": true,
+    "https_preferred": true,
+    "http_legacy_compatibility_kept": true,
+    "local_dns_trusted": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc7_021_complete": true,
+    "next_task": "RC7-022",
+    "commit_required": true
+  }
+}
