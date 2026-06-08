@@ -1,0 +1,81 @@
+{
+  "schema": "agentos.rc9-controlled-execution-support-recovery-evidence.v1",
+  "generated_at": "2026-06-08T23:50:00+08:00",
+  "task": "RC9-031",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": {
+    "path": "scripts/project-rc9-controlled-execution-support-recovery.ps1",
+    "sha256": "92829841da59cf02de7bb0035a57c2c844c246f792f28f5362d06dba058f4fd7"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/result.json",
+    "status": "passed",
+    "sha256": "d359543bea833b43f03db4f57476910c45f609ac2451a8df45f4121432d4f953"
+  },
+  "outputs": {
+    "support_recovery_evidence_chain": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "cd313c8fbec1fcf01026677fbda1323153ae261c52b5ff85554d229a7ff79521",
+      "status": "support-recovery-bound-controlled-execution-blocked"
+    },
+    "controlled_execution_support_bundle": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "64b85505891694a44c15bfaaabf4477bbdd764c77f322f55ab4a114b3e53793c",
+      "status": "redacted-local-support-projection"
+    },
+    "recovery_reference_index": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/recovery-reference-index.json",
+      "sha256": "a6bf88252a0d5ac26410ce0bdb92e1e7ca5e2fe3c5615bab6cc645853190256f",
+      "status": "projection-only-recovery-execution-blocked"
+    }
+  },
+  "controlled_execution_surface": {
+    "controlled_execution_support_recovery_bound": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "activation_allowed": false,
+    "activation_performed": false,
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "support_bundle_redacted": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_031_complete": true,
+    "next_task": "RC9-040",
+    "commit_required": true
+  }
+}

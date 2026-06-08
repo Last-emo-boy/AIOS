@@ -1,0 +1,116 @@
+{
+  "schema": "agentos.rc9-controlled-execution-recovery-reference-index.v1",
+  "generated_at": "2026-06-08T23:50:00+08:00",
+  "task": "RC9-031",
+  "status": "projection-only-recovery-execution-blocked",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "entries": [
+    {
+      "id": "activation-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "2271463d2f518a863a3e491dbe55bf36ccb20e61ea6ffabb5823d5cc9f64ed62",
+      "executable": false
+    },
+    {
+      "id": "rollback-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "sha256": "60949c435b71194ed6ee00785edc61524b4248f78861e714001eebeb71f94a29",
+      "executable": false
+    },
+    {
+      "id": "rollback-planspec-requirement",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-planspec-requirement.json",
+      "sha256": "8c97e05bde1a61c4ba9473795440090e873c3fc7db0fd0c2ec6e84e94fee6e4c",
+      "executable": false
+    },
+    {
+      "id": "controlled-rollback-handoff",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/controlled-rollback-handoff.json",
+      "sha256": "f312c8239ff43e2470f14e23f04dfb07fec3a9f7128449814d40b0f171c92ea3",
+      "executable": false
+    },
+    {
+      "id": "support-index",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "executable": false
+    },
+    {
+      "id": "recovery-operations",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+      "sha256": "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+      "executable": false
+    },
+    {
+      "id": "rollback-baseline",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "executable": false
+    },
+    {
+      "id": "compatibility",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "executable": false
+    }
+  ],
+  "recovery_authority": {
+    "plan_authority": "AgentCore",
+    "side_effect_authority": "SecurityExecutionEngine",
+    "mirror_authority": false,
+    "signer_authority": false,
+    "support_metadata_authority": false,
+    "tui_authority": false,
+    "shell_authority": false,
+    "model_replay_authority": false
+  },
+  "required_before_execution": [
+    "external HTTPS object URI",
+    "declared/current artifact drift reconciliation",
+    "quarantine payload fetch verification",
+    "2+ enrolled canary target nodes",
+    "exact operator approval",
+    "AgentCore activation and rollback PlanSpec",
+    "SecurityExecutionEngine activation and rollback approval",
+    "controlled canary activation execution",
+    "remote fleet execution gate"
+  ],
+  "invariants": {
+    "local_projection_only": true,
+    "support_bundle_redacted": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  }
+}
