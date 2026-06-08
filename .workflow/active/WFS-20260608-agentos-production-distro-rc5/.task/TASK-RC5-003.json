@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-003",
+  "title": "define production mirror service threat model and non-GA hosting boundary",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/hosted-mirror-service-threat-model.md",
+      "role": "threat model"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-003-hosted-mirror-service-threat-model.json",
+      "role": "evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+      "role": "status update"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json",
+      "role": "status update"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Threat model covers DNS/routing, TLS, static root, metadata drift, secret leak, authority broadening, storage exhaustion, and cache freshness.",
+      "Threat model keeps RC5 non-GA until hosted verifier, fail-closed, canary, rollback, and support evidence exist.",
+      "Evidence records remote mirror has no signing or activation authority.",
+      "The next task is RC5-010."
+    ]
+  }
+}

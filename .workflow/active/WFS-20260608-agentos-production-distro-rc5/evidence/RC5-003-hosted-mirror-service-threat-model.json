@@ -1,0 +1,68 @@
+{
+  "schema": "agentos.rc5-hosted-mirror-service-threat-model.v1",
+  "generated_at": "2026-06-08T11:20:00+08:00",
+  "task": "RC5-003",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "source_bindings": {
+    "rc5_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+      "sha256_before_task_update": "c763fb34bbfe01dfd038b55251126e75f5ce61a756d84fdf99e36895672c31ee"
+    },
+    "rc5_002_boundary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md",
+      "sha256": "16925cc5c69ccfbd1290531b72c7cb443260231a4bc3e23806c32cdb06c1e37d"
+    },
+    "rc5_002_evidence": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-002-user-install-update-channel-boundary.json",
+      "sha256": "15cbf57dfde504abbd8bbf2768b616ce9c025558540775600f5cc96b39191e76"
+    }
+  },
+  "threat_classes": [
+    "dns-or-routing-misbinding",
+    "tls-absence-or-downgrade",
+    "static-root-escape",
+    "metadata-tamper-or-drift",
+    "secret-or-authority-leak",
+    "authority-broadening",
+    "storage-exhaustion-or-payload-creep",
+    "cache-poisoning-or-stale-cdn-semantics"
+  ],
+  "required_controls": {
+    "static_root": "/srv/aios-mirror",
+    "directory_listing_allowed": false,
+    "script_execution_allowed": false,
+    "upload_endpoint_allowed": false,
+    "metadata_only": true,
+    "tls_required_before_ga_claim": true,
+    "hash_binding_required": true,
+    "freshness_required": true,
+    "secret_scan_required": true,
+    "oversized_payload_block_required": true
+  },
+  "authority_boundaries": {
+    "signing_authority": false,
+    "activation_authority": false,
+    "rollback_execution_authority": false,
+    "active_slot_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "non_ga_gates": [
+    "tls-endpoint-evidence",
+    "hosted-metadata-verifier-evidence",
+    "hosted-metadata-fail-closed-fixtures",
+    "signed-channel-consumption-from-hosted-endpoint",
+    "rollback-execution-drill-evidence",
+    "controlled-multi-node-canary-execution-evidence",
+    "hosted-support-recovery-operations",
+    "storage-upgrade-or-explicit-payload-hosting-policy"
+  ],
+  "completion": {
+    "rc5_003_complete": true,
+    "next_task": "RC5-010",
+    "commit_required": true
+  }
+}
