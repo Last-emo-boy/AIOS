@@ -1,0 +1,81 @@
+{
+  "schema": "agentos.rc10-external-object-publication-evidence.v1",
+  "generated_at": "2026-06-08T23:59:55+08:00",
+  "task": "RC10-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "script": {
+    "path": "scripts/project-rc10-external-object-publication.ps1",
+    "sha256": "2aea45b8394e9152ec5b5b7d0c2076416b540a45a67ba94d457d10b180309bae"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+    "status": "passed",
+    "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0"
+  },
+  "outputs": {
+    "publication_report": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+      "sha256": "ca097beaeec8cc1fc90d5b549693fe4f9ce114b6b50a655cb2f8b418f56fb060"
+    },
+    "descriptor_candidate": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
+      "sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b"
+    },
+    "publication_denial": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-denial.json",
+      "sha256": "5c4e145986c193965f41a15d8cc072455d63605b20e2e88813d6f9113cc38992"
+    },
+    "installer_handoff": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
+      "sha256": "59d8233f7a1c4054b6c93a2428f3a2028ff18082472ad8717ed32cebc37d4fac"
+    }
+  },
+  "publication_surface": {
+    "state": "publication-blocked-drift-nonzero",
+    "publication_allowed": false,
+    "published_drift_zero": false,
+    "external_object_url_published": false,
+    "external_object_uri_classification": "missing",
+    "drift_count": 13,
+    "drift_zero": false,
+    "checks": 8,
+    "failed_checks": 0,
+    "blockers": [
+      "missing-external-https-object-uri",
+      "nonzero-declared-current-drift-count"
+    ]
+  },
+  "invariants": {
+    "mirror_metadata_only": true,
+    "mirror_large_payload_storage_used": false,
+    "signer_separate_from_mirror": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc10_010_complete": true,
+    "next_task": "RC10-011",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "agentos.rc10-external-object-publication-denial.v1",
+  "generated_at": "2026-06-08T23:59:55+08:00",
+  "task": "RC10-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "publication-blocked-drift-nonzero",
+  "production_ready_claim": false,
+  "denied": true,
+  "denial_reasons": [
+    "missing-external-https-object-uri",
+    "nonzero-declared-current-drift-count"
+  ],
+  "failed_requirements": [
+    "immutable credential-free external HTTPS object URI",
+    "declared/current drift count must equal zero"
+  ],
+  "drift": {
+    "previous_artifact": ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+    "comparisons": 30,
+    "matched": 17,
+    "drift_count": 13,
+    "drift_zero": false,
+    "drift_ids": [
+      "declared.rc6_payload_manifest.release_id",
+      "declared.rc7_signed_metadata.release_id",
+      "declared.rc7_signature_claims.release_id",
+      "declared.rc7_revocation.release_id",
+      "declared.rc7_compatibility.release_id",
+      "declared.rc7_rollback.release_id",
+      "declared.rc7_compatibility.payload_manifest_sha256",
+      "declared.rc7_compatibility.payload_checksums_sha256",
+      "declared.rc7_signed_metadata.payload_manifest_sha256",
+      "declared.rc7_signed_metadata.revocation_snapshot_sha256",
+      "declared.rc6_payload_component.update_metadata",
+      "declared.rc6_payload_component.release_channel_metadata",
+      "declared.rc6_payload_component.qemu_runtime_smoke"
+    ]
+  },
+  "authority_denied": [
+    "mirror-signing-authority",
+    "mirror-install-authority",
+    "object-storage-install-authority",
+    "frontend-authority",
+    "tui-authority",
+    "shell-authority",
+    "model-replay-authority",
+    "remote-dispatch-authority",
+    "support-upload-authority",
+    "production-ring-mutation-authority"
+  ],
+  "preserved_boundaries": {
+    "mirror_metadata_only": true,
+    "signer_separate_from_mirror": true,
+    "external_object_storage_is_transport_only": true,
+    "installer_quarantine_required": true,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-010",
+  "title": "publish or reject immutable external object descriptor for current AIOS payload bytes",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-external-object-publication.ps1",
+      "role": "projection and verification script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+      "role": "publication report"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
+      "role": "descriptor candidate"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-denial.json",
+      "role": "denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
+      "role": "installer handoff"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-010-external-object-publication.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The script can produce a published-drift-zero descriptor only when external HTTPS URI policy passes and declared/current drift count is zero.",
+      "The script produces fail-closed denial evidence when external object URI is missing or drift count is nonzero.",
+      "The outputs bind descriptor, payload bytes, public signature receipt, RC9 drift reconciliation, mirror metadata, installer handoff, and downstream blockers.",
+      "The task preserves production_ready_claim=false and keeps install, activation, rollback, support upload, production ring mutation, and remote dispatch disabled."
+    ]
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc10-external-object-publication.ps1 -GeneratedAt '2026-06-08T23:59:55+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}
