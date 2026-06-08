@@ -1,0 +1,300 @@
+{
+  "schema": "agentos.rc15-security-execution-allow-decision-result.v1",
+  "generated_at": "2026-06-09T20:05:00+08:00",
+  "task": "RC15-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "readiness_surface": {
+    "state": "security-execution-allow-controlled-activation-ready",
+    "agentcore_planspec_executable": true,
+    "exact_approval_bound": true,
+    "target_identity_set_bound": true,
+    "audit_sink_bound": true,
+    "nonce_bound": true,
+    "expiry_bound": true,
+    "policy_version_bound": true,
+    "security_execution_allowed": true,
+    "effect_preparation_allowed": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "activation_allowed": true,
+    "activation_performed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+    "decision_material_hash": "36014edc05f0b53a8855fbb0ea5323608cd3bbc2be4c5b7ba349057ef7c042ac"
+  },
+  "outputs": {
+    "security_execution_allow_decision": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-allow-decision.json",
+      "sha256": "15b631b5ef370365b93b4963bbefff7912d23e5d69ee3a601be0308a17596618",
+      "size_bytes": 2499,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "security_execution_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-fail-closed-matrix.json",
+      "sha256": "d51f7d8d2c053d86adc21e7cdcddd077782c9c678cc1ade9d4e5971f29b14933",
+      "size_bytes": 22513,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "controlled_local_activation_handoff": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/controlled-local-activation-handoff.json",
+      "sha256": "24134073b076648a5b85ac196b9530a0babea3ef793b91d29fba99ce3fbff142",
+      "size_bytes": 2237,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "source": {
+    "rc15_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+      "sha256": "bc9164bb9aa984589163080628f620b2d938e4621dd41357c4060d1ecf0e6acd",
+      "size_bytes": 7275,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc15_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+      "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+      "size_bytes": 4365,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc15_agentcore_planspec_result": {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json",
+      "sha256": "767fa7f049da9b075551447cd92c9a0fdaf4f6bf673f445f704d5e455eca84c6",
+      "size_bytes": 16081,
+      "present": true,
+      "schema": "agentos.rc15-agentcore-executable-planspec-result.v1",
+      "status": "passed"
+    },
+    "rc15_agentcore_planspec": {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/agentcore-planspec.json",
+      "sha256": "a43f5cb909c2dbfb2c374485402f05ace5b51d38cc49744f0fa26abbb28f1ab7",
+      "size_bytes": 5076,
+      "present": true,
+      "schema": "agentos.rc15-agentcore-planspec.v1",
+      "status": "agentcore-planspec-executable"
+    },
+    "rc15_agentcore_handoff": {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/security-execution-allow-decision-handoff.json",
+      "sha256": "17eda1200c217613e32a13c0416e694eea7b001d165484ede859084d15396909",
+      "size_bytes": 1314,
+      "present": true,
+      "schema": "agentos.rc15-security-execution-allow-decision-handoff.v1",
+      "status": "ready-for-rc15-022-security-execution-allow-decision"
+    },
+    "rc15_exact_approval_result": {
+      "path": ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json",
+      "sha256": "6ce82b6a95ff33e36bbd93dde4e5da7c9c1ceb1d642e11912d79732fc6521d83",
+      "size_bytes": 12363,
+      "present": true,
+      "schema": "agentos.rc15-exact-approval-controlled-execution-result.v1",
+      "status": "passed"
+    },
+    "rc15_exact_approval_packet": {
+      "path": ".workflow/artifacts/rc15-exact-approval-controlled-execution/exact-approval-packet.json",
+      "sha256": "30a7f1216e2d97883eded955fe3b56e2a20393ef04057257ad31914b0599d20c",
+      "size_bytes": 3268,
+      "present": true,
+      "schema": "agentos.rc15-exact-approval-packet.v1",
+      "status": "exact-approval-bound"
+    },
+    "rc14_security_envelope": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-envelope.json",
+      "sha256": "90bd1866086939e41f4423570db44e9c664374f737701f1544e7c0745e0b8dda",
+      "size_bytes": 4027,
+      "present": true,
+      "schema": "agentos.rc14-security-execution-allow-envelope.v1",
+      "status": "security-execution-allow-envelope-denied"
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc15_022",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must run after RC15-021 completed, either while current_task is RC15-022 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC15-030",
+        "rc15_021_status": "completed",
+        "rc15_022_status": "completed"
+      }
+    },
+    {
+      "id": "source.agentcore_planspec.executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must consume completed RC15-021 executable AgentCore PlanSpec evidence and handoff.",
+      "evidence": {
+        "result_status": "passed",
+        "rc15_021_complete": true,
+        "handoff_status": "ready-for-rc15-022-security-execution-allow-decision",
+        "agentcore_planspec_executable": true
+      }
+    },
+    {
+      "id": "source.exact_approval.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must consume granted exact approval bound to actor, targets, PlanSpec, SecurityExecution envelope, audit, nonce, expiry, and policy.",
+      "evidence": {
+        "approval_id": "rc15-exact-approval-60e7823a1dc33127",
+        "approval_granted": true,
+        "exact_approval_bound": true
+      }
+    },
+    {
+      "id": "contract.security_execution_allow.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must consume the SecurityExecution allow contract and keep rollback separate.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+        "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+        "size_bytes": 4365,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "hashes.effect_envelope.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow decision must bind PlanSpec core hash, exact approval id, and the inherited SecurityExecution effect envelope hash.",
+      "evidence": {
+        "planspec_hash_bound": true,
+        "security_envelope_hash_bound": true,
+        "approval_bound_to_handoff": true,
+        "expected_security_envelope_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41"
+      }
+    },
+    {
+      "id": "preconditions.all_satisfied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow is true only when target identities, approval, audit, nonce, expiry, policy, rollback, and support bindings are all present.",
+      "evidence": {
+        "target_set_bound": true,
+        "audit_nonce_policy_bound": true,
+        "release_object_bound": true,
+        "rollback_support_bound": true,
+        "security_preconditions_bound": true
+      }
+    },
+    {
+      "id": "allow.true_without_execution",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow must not itself prepare or execute the controlled activation effect.",
+      "evidence": {
+        "security_execution_allowed": true,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "activation_performed": false
+      }
+    },
+    {
+      "id": "activation.handoff.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must hand off to RC15-030 controlled local activation without fabricating activation evidence.",
+      "evidence": {
+        "status": "ready-for-rc15-030-controlled-local-activation",
+        "next_task": "RC15-030",
+        "activation_allowed": true,
+        "activation_performed": false
+      }
+    },
+    {
+      "id": "rollback.still_separate",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow for activation must not imply rollback authority.",
+      "evidence": {
+        "decision_rollback_allowed": false,
+        "handoff_rollback_allowed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Policy weakening, shell bypass, broad resource, stale approval, replay, and mismatched envelope cases must fail closed.",
+      "evidence": {
+        "cases": 24,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "authority.remote_dispatch_and_mutation_disabled",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must not enable remote dispatch, support upload, recovery execution, or production mutation authority.",
+      "evidence": {
+        "remote_dispatch_enabled": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 outputs must not contain key blocks, auth tokens, private key paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "controlled-activation-not-executed",
+    "separate-rollback-approval-not-bound",
+    "rollback-execution-not-authorized"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "security_execution_allowed": true,
+    "effect_preparation_allowed": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_release_signing_performed": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 12,
+    "failed_checks": 0,
+    "fail_closed_cases": 24,
+    "failed_fail_closed_cases": 0,
+    "rc15_022_complete": true,
+    "security_execution_allowed": true,
+    "effect_prepared": false,
+    "activation_allowed": true,
+    "activation_performed": false,
+    "rollback_execution_allowed": false,
+    "next_task": "RC15-030"
+  }
+}

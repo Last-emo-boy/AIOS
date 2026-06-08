@@ -1,0 +1,234 @@
+{
+  "schema": "agentos.rc15-security-execution-allow-decision-evidence.v1",
+  "generated_at": "2026-06-09T20:05:00+08:00",
+  "task": "RC15-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc15",
+  "script": {
+    "path": "scripts/project-rc15-security-execution-allow-decision.ps1",
+    "sha256": "7643ab5ffb6a985b9e6e0a89d8008081e12eeb6f839c73a9428e9ebfd081854f"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc15-security-execution-allow-decision/result.json",
+    "status": "passed",
+    "sha256": "811cc8d4f3adfd8fb9738c3836feb22df95619c7621a7d266417382d2571ed8b"
+  },
+  "outputs": {
+    "security_execution_allow_decision": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-allow-decision.json",
+      "sha256": "15b631b5ef370365b93b4963bbefff7912d23e5d69ee3a601be0308a17596618",
+      "size_bytes": 2499,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "security_execution_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-fail-closed-matrix.json",
+      "sha256": "d51f7d8d2c053d86adc21e7cdcddd077782c9c678cc1ade9d4e5971f29b14933",
+      "size_bytes": 22513,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "controlled_local_activation_handoff": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/controlled-local-activation-handoff.json",
+      "sha256": "24134073b076648a5b85ac196b9530a0babea3ef793b91d29fba99ce3fbff142",
+      "size_bytes": 2237,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "readiness_surface": {
+    "state": "security-execution-allow-controlled-activation-ready",
+    "agentcore_planspec_executable": true,
+    "exact_approval_bound": true,
+    "target_identity_set_bound": true,
+    "audit_sink_bound": true,
+    "nonce_bound": true,
+    "expiry_bound": true,
+    "policy_version_bound": true,
+    "security_execution_allowed": true,
+    "effect_preparation_allowed": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "activation_allowed": true,
+    "activation_performed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+    "decision_material_hash": "36014edc05f0b53a8855fbb0ea5323608cd3bbc2be4c5b7ba349057ef7c042ac"
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "security_execution_allowed": true,
+    "effect_preparation_allowed": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_release_signing_performed": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc15_022_complete": true,
+    "next_task": "RC15-030",
+    "current_blockers": [
+      "controlled-activation-not-executed",
+      "separate-rollback-approval-not-bound",
+      "rollback-execution-not-authorized"
+    ]
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc15_022",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must run after RC15-021 completed, either while current_task is RC15-022 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC15-030",
+        "rc15_021_status": "completed",
+        "rc15_022_status": "completed"
+      }
+    },
+    {
+      "id": "source.agentcore_planspec.executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must consume completed RC15-021 executable AgentCore PlanSpec evidence and handoff.",
+      "evidence": {
+        "result_status": "passed",
+        "rc15_021_complete": true,
+        "handoff_status": "ready-for-rc15-022-security-execution-allow-decision",
+        "agentcore_planspec_executable": true
+      }
+    },
+    {
+      "id": "source.exact_approval.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must consume granted exact approval bound to actor, targets, PlanSpec, SecurityExecution envelope, audit, nonce, expiry, and policy.",
+      "evidence": {
+        "approval_id": "rc15-exact-approval-60e7823a1dc33127",
+        "approval_granted": true,
+        "exact_approval_bound": true
+      }
+    },
+    {
+      "id": "contract.security_execution_allow.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must consume the SecurityExecution allow contract and keep rollback separate.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+        "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+        "size_bytes": 4365,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "hashes.effect_envelope.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow decision must bind PlanSpec core hash, exact approval id, and the inherited SecurityExecution effect envelope hash.",
+      "evidence": {
+        "planspec_hash_bound": true,
+        "security_envelope_hash_bound": true,
+        "approval_bound_to_handoff": true,
+        "expected_security_envelope_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41"
+      }
+    },
+    {
+      "id": "preconditions.all_satisfied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow is true only when target identities, approval, audit, nonce, expiry, policy, rollback, and support bindings are all present.",
+      "evidence": {
+        "target_set_bound": true,
+        "audit_nonce_policy_bound": true,
+        "release_object_bound": true,
+        "rollback_support_bound": true,
+        "security_preconditions_bound": true
+      }
+    },
+    {
+      "id": "allow.true_without_execution",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow must not itself prepare or execute the controlled activation effect.",
+      "evidence": {
+        "security_execution_allowed": true,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "activation_performed": false
+      }
+    },
+    {
+      "id": "activation.handoff.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must hand off to RC15-030 controlled local activation without fabricating activation evidence.",
+      "evidence": {
+        "status": "ready-for-rc15-030-controlled-local-activation",
+        "next_task": "RC15-030",
+        "activation_allowed": true,
+        "activation_performed": false
+      }
+    },
+    {
+      "id": "rollback.still_separate",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow for activation must not imply rollback authority.",
+      "evidence": {
+        "decision_rollback_allowed": false,
+        "handoff_rollback_allowed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Policy weakening, shell bypass, broad resource, stale approval, replay, and mismatched envelope cases must fail closed.",
+      "evidence": {
+        "cases": 24,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "authority.remote_dispatch_and_mutation_disabled",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 must not enable remote dispatch, support upload, recovery execution, or production mutation authority.",
+      "evidence": {
+        "remote_dispatch_enabled": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-022 outputs must not contain key blocks, auth tokens, private key paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ]
+}
