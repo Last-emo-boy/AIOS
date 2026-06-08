@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.rc9-target-enrollment-denial.v1",
+  "generated_at": "2026-06-08T23:10:00+08:00",
+  "task": "RC9-020",
+  "status": "target-set-enrollment-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_set_digest": "bd344c900486c9e3936e67ada67bc19637b44b6a2aee61fc709ed45f8455d2bd",
+  "observed_candidate_node_count": 1,
+  "required_minimum_target_count": 2,
+  "enrolled_target_count": 0,
+  "denial_reasons": [
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-pending",
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run"
+  ],
+  "inherited_rc8_target_set": {
+    "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+    "sha256": "81453c21737d4e5184078231f97af6e99fb585cd878e36e304bbbfc40fa2941d",
+    "status": "projected-target-set-enrollment-blocked",
+    "target_set_enrolled": false,
+    "observed_canary_node_count": 1,
+    "enrolled_target_count": 0
+  },
+  "missing_bindings": [
+    "stable-node-id",
+    "node-health-evidence-digest",
+    "node-uniqueness-proof",
+    "audit-journal-sink",
+    "fresh-enrollment-window"
+  ],
+  "preserved_boundaries": {
+    "target_set_enrolled": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "remote_dispatch_enabled": false
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "agentos.rc9-controlled-execution-handoff.v1",
+  "generated_at": "2026-06-08T23:10:00+08:00",
+  "task": "RC9-020",
+  "status": "blocked-by-target-set-denial",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_set": {
+    "path": ".workflow/artifacts/rc9-two-node-canary-enrollment/canary-target-set.json",
+    "digest": "bd344c900486c9e3936e67ada67bc19637b44b6a2aee61fc709ed45f8455d2bd",
+    "state": "target-set-enrollment-denied",
+    "enrolled": false,
+    "required_minimum_target_count": 2,
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0
+  },
+  "upstream_gates": {
+    "external_object_url_published": false,
+    "declared_current_artifact_drift_reconciled": false,
+    "installer_quarantine_fetch_verified": false,
+    "rc8_canary_target_set_inherited": true,
+    "compatibility_binding_present": true,
+    "rollback_baseline_binding_present": true,
+    "support_recovery_binding_present": true
+  },
+  "controlled_execution": {
+    "exact_approval_allowed": false,
+    "agentcore_planspec_allowed": false,
+    "security_execution_approval_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "blockers": [
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-pending",
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run"
+  ],
+  "next_task": "RC9-021"
+}
