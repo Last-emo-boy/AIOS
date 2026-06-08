@@ -1,0 +1,51 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-022",
+  "title": "execute or deny controlled canary activation through AgentCore and SecurityExecutionEngine gates",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md",
+    ".workflow/artifacts/rc9-external-object-publication/result.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+    ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/execution-binding-denial.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc9-controlled-canary-activation.ps1",
+      "role": "controlled canary activation gate evaluation and denial projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/activation-gate-report.json",
+      "role": "activation gate report artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/activation-denial-evidence.json",
+      "role": "activation denial evidence artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/controlled-activation-handoff.json",
+      "role": "controlled activation handoff for rollback drill"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-022-controlled-canary-activation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC9-010 publication denial, RC9-011 drift denial, RC9-012 fetch denial, RC9-020 target enrollment denial, and RC9-021 execution binding denial before evaluating activation.",
+      "The activation gate report records activation-gates-evaluated-denied with activation_allowed=false and activation_performed=false.",
+      "The activation denial evidence covers external object URI, drift, fetch, target enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine, remote dispatch, and controlled execution authorization blockers.",
+      "The controlled activation handoff moves the workflow to RC9-030 while rollback execution remains denied.",
+      "The task preserves production_ready_claim=false and does not mutate install, activation, rollback, active slot, boot metadata, production ring, support upload, or remote dispatch state."
+    ]
+  }
+}

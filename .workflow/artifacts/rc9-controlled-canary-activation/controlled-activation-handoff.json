@@ -1,0 +1,35 @@
+{
+  "schema": "agentos.rc9-controlled-activation-handoff.v1",
+  "generated_at": "2026-06-08T23:30:00+08:00",
+  "task": "RC9-022",
+  "status": "blocked-by-activation-denial",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "activation_state": "activation-denied",
+  "activation_attempt_id": "rc9-controlled-canary-activation-attempt",
+  "activation_attempt_digest": "efca900b2e74c78d9a36e118674945cd4813498d4aa9afd39f5ba9a144b19fef",
+  "activation_allowed": false,
+  "activation_performed": false,
+  "rollback_drill_allowed": false,
+  "rollback_execution_allowed": false,
+  "rollback_prerequisites": {
+    "controlled_canary_activation_evidence_required": true,
+    "controlled_canary_activation_performed": false,
+    "separate_rollback_approval_required": true,
+    "separate_rollback_planspec_required": true,
+    "separate_security_execution_decision_required": true
+  },
+  "blockers": [
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run",
+    "target-set-not-enrolled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "controlled-execution-not-authorized",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled"
+  ],
+  "next_task": "RC9-030"
+}

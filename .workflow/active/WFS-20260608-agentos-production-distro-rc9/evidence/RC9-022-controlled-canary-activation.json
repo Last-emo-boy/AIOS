@@ -1,0 +1,83 @@
+{
+  "schema": "agentos.rc9-controlled-canary-activation-evidence.v1",
+  "generated_at": "2026-06-08T23:30:00+08:00",
+  "task": "RC9-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": "scripts/project-rc9-controlled-canary-activation.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+    "status": "passed",
+    "sha256": "16d868ec4b617851dd4aefc0d846c3a2cf5ca8451a784dc17f716c983ff23eee"
+  },
+  "outputs": {
+    "activation_gate_report": {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/activation-gate-report.json",
+      "sha256": "3d7a72281ba915dd096278ee00bf44e00f0563e8c870db706a602fa3fd9adbe5"
+    },
+    "activation_denial_evidence": {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "2271463d2f518a863a3e491dbe55bf36ccb20e61ea6ffabb5823d5cc9f64ed62"
+    },
+    "controlled_activation_handoff": {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/controlled-activation-handoff.json",
+      "sha256": "46ed3ff2c4b25a760dae494ee32a2feb97884bf0182e96721a4ff91befbf466e"
+    }
+  },
+  "activation_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "activation-denied",
+    "activation_allowed": false,
+    "activation_performed": false,
+    "controlled_execution_authorized": false,
+    "exact_approval_granted": false,
+    "agentcore_planspec_bound": false,
+    "security_execution_approval_bound": false,
+    "remote_dispatch_enabled": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-denied",
+      "installer-quarantine-fetch-not-run",
+      "target-set-not-enrolled",
+      "exact-operator-approval-not-granted",
+      "AgentCore-PlanSpec-not-bound",
+      "SecurityExecutionEngine-approval-not-bound",
+      "controlled-execution-not-authorized",
+      "two-or-more-enrolled-canary-target-nodes-required",
+      "remote-fleet-execution-not-enabled"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "activation_attempt_recorded": true,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_022_complete": true,
+    "next_task": "RC9-030",
+    "commit_required": true
+  }
+}

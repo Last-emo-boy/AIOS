@@ -1,0 +1,136 @@
+{
+  "schema": "agentos.rc9-controlled-canary-activation-denial-evidence.v1",
+  "generated_at": "2026-06-08T23:30:00+08:00",
+  "task": "RC9-022",
+  "status": "activation-denied",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "denied": true,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "activation_attempt_id": "rc9-controlled-canary-activation-attempt",
+  "activation_attempt_digest": "efca900b2e74c78d9a36e118674945cd4813498d4aa9afd39f5ba9a144b19fef",
+  "activation_allowed": false,
+  "activation_performed": false,
+  "denial_cases": [
+    {
+      "id": "external-https-object-uri-not-published",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "No immutable credential-free HTTPS object URI is published for the current payload."
+    },
+    {
+      "id": "declared-current-artifact-drift-denied",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "Declared/current drift remains denied, so external object trust cannot advance."
+    },
+    {
+      "id": "installer-quarantine-fetch-not-run",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "Installer fetch was denied before network and no quarantine payload was verified."
+    },
+    {
+      "id": "target-set-not-enrolled",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "The canary target set is not enrolled."
+    },
+    {
+      "id": "two-or-more-enrolled-canary-target-nodes-required",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "Zero enrolled canary targets are present while two are required."
+    },
+    {
+      "id": "exact-operator-approval-not-granted",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "Exact approval remains unbound and approval_granted=false."
+    },
+    {
+      "id": "AgentCore-PlanSpec-not-bound",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "The activation PlanSpec is projected but non-executable."
+    },
+    {
+      "id": "SecurityExecutionEngine-approval-not-bound",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "SecurityExecutionEngine denied the controlled-canary-activation effect."
+    },
+    {
+      "id": "remote-fleet-execution-not-enabled",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "Remote fleet dispatch remains disabled."
+    },
+    {
+      "id": "controlled-execution-not-authorized",
+      "status": "passed",
+      "activation_allowed": false,
+      "reason": "At least one required controlled execution gate is missing."
+    }
+  ],
+  "blockers": [
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run",
+    "target-set-not-enrolled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "controlled-execution-not-authorized",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled"
+  ],
+  "preserved_boundaries": {
+    "exact_approval_granted": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "side_effects": {
+    "activation_attempt_recorded": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "boot_metadata_mutated": false,
+    "active_slot_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "source_bindings": {
+    "binding_contract_sha256": "feda521e522cbdce15135079a603800fd251a134c8864b1fbadaf946ff50f8d2",
+    "publication_result_sha256": "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b",
+    "drift_result_sha256": "6e51c6e4a27a2dfd94af5e7e80fbe4513ad4fdea3d332a7359870a0f88ece2b6",
+    "installer_fetch_result_sha256": "d179794c07e41181d4461fe35f808efde97b56b74304a778d3ec02f448e0e4f1",
+    "target_enrollment_result_sha256": "fba42f260a31e031acb57cc7d39f43b8ba8b0316a0e1e9d3b319c705c9aa0a62",
+    "target_set_sha256": "6f6aca703803f7677feac8394e5e79b9e029c0770df83d474b39c04e6c17c420",
+    "target_handoff_sha256": "4ba15eae8d2d7bab9f24043277b6ea610b4f8496306b3bdb4a35859986ad253e",
+    "binding_result_sha256": "56fce75e99de12333a10f7abe40a5b1d27f6924bab1b7e64ec0a440267e580a3",
+    "exact_approval_binding_sha256": "00675e5f8d03be8d9691d95a8ec823ab72b5489846e652cc8ba031aa26b98a6a",
+    "exact_approval_binding_digest": "00ac16cb0dfa4715f46a1700008eaac499cfa8dec957d7c36f60ab2cd5cb0baa",
+    "agentcore_planspec_binding_sha256": "69a75cd4bd8cb79f77b897c3c29389105d98251c142e82394024293456a40807",
+    "agentcore_planspec_hash": "0671387cea8344d1092ff94b0b5bdf4ab67f734f13790e8d2af1aeb9f9bead41",
+    "security_execution_decision_sha256": "1b3c488f56df5b7d4de9d78837ac02bc30623ae07c7b453efc4ba2e9ffa350dc",
+    "security_execution_decision_digest": "5dadba3cfb8ae04f1a5663a7322563a00262e8f38cdbd0e1cf998262479c6f14",
+    "execution_binding_denial_sha256": "dc98a46c39aacfbc3360d8bd621a1d32b49c9abd4c487f7d4bb3b39a5f326432",
+    "descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+  }
+}
