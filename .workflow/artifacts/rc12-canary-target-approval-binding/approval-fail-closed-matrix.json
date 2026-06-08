@@ -1,0 +1,453 @@
+{
+  "schema": "agentos.rc12-approval-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T05:55:00+08:00",
+  "task": "RC12-030",
+  "status": "passed",
+  "production_ready_claim": false,
+  "broad_stale_missing_mismatched_replayed_approval_fail_closed": true,
+  "cases": [
+    {
+      "id": "missing-approval-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "exact-approval-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-approval-id-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-id-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-approval-actor-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-actor-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-target-identities-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "target-identities-missing"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "fewer-than-two-target-identities-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "fewer-than-two-canary-target-identities"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "duplicate-target-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "duplicate-canary-target-identity"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale-target-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "stale-canary-target-identity"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "incompatible-target-identity-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "incompatible-canary-target-identity"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "broad-target-selector-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "broad-target-selector"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-audit-sink-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "audit-sink-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-nonce-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "nonce-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-expiry-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-expiry-not-bound"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale-approval-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-stale"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "replayed-approval-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-replay-detected"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "broad-approval-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "broad-approval"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-release-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-release-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-object-digest-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-object-digest-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-target-set-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-target-set-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-agentcore-planspec-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-agentcore-planspec-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-security-envelope-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-security-envelope-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-rollback-baseline-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-rollback-baseline-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-support-recovery-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-support-recovery-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mismatched-audit-sink-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "approval-audit-sink-mismatch"
+      ],
+      "observed_blocked": true,
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "activation_prepared": false,
+        "activation_performed": false,
+        "install_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "cases": 23,
+    "passed": 23,
+    "failed": 0,
+    "failed_cases": []
+  }
+}
