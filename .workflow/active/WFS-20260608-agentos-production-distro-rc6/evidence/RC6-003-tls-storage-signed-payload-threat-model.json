@@ -1,0 +1,102 @@
+{
+  "schema": "agentos.rc6-tls-storage-signed-payload-threat-model-evidence.v1",
+  "generated_at": "2026-06-08T13:15:00+08:00",
+  "task": "RC6-003",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "threat_model": {
+    "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+    "scope": "TLS, DNS, static storage, signed payload metadata, and mirror frontend UX",
+    "hosted_domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "tls_required_before_ga_claim": true,
+    "local_dns_trusted_for_validation": false
+  },
+  "defined_threats": [
+    "dns-misbinding",
+    "local-dns-cache-drift",
+    "http-downgrade",
+    "tls-certificate-expiry-or-misissuance",
+    "stale-cache",
+    "static-root-escape",
+    "directory-listing",
+    "large-payload-storage-exhaustion",
+    "metadata-drift",
+    "mime-confusion",
+    "placeholder-signature-confusion",
+    "revoked-or-stale-key",
+    "signature-manifest-misbinding",
+    "frontend-implied-install-readiness",
+    "authority-broadening"
+  ],
+  "metadata_size_policy": {
+    "health_json_bytes": 32768,
+    "mirror_json_bytes": 65536,
+    "channel_index_json_bytes": 131072,
+    "payloads_index_json_bytes": 262144,
+    "per_release_manifest_checksum_signature_json_bytes": 524288,
+    "install_bootstrap_json_bytes": 131072
+  },
+  "required_controls": [
+    "curl-resolve-validation-when-local-dns-untrusted",
+    "production-ready-claim-false-until-tls-and-ga-gates-pass",
+    "http-metadata-candidate-only",
+    "local-schema-hash-signature-revocation-freshness-verification",
+    "autoindex-off",
+    "get-head-only",
+    "small-client-max-body-size",
+    "no-large-payload-storage-before-policy-upgrade",
+    "content-security-policy-self-only",
+    "placeholder-signature-is-verification-blocked",
+    "frontend-non-ga-and-tls-gate-visible"
+  ],
+  "frontend_constraints": [
+    "static-assets-only",
+    "no-external-dependencies",
+    "no-upload-form",
+    "no-login-flow",
+    "no-signing-button",
+    "no-activation-button",
+    "no-rollback-button",
+    "no-remote-execution-affordance",
+    "payload-signature-status-separated-from-reachability",
+    "storage-mode-and-large-payload-policy-visible"
+  ],
+  "fail_closed_cases": [
+    "missing-or-malformed-policy",
+    "production-ready-claim",
+    "oversized-metadata",
+    "large-payload-url-before-storage-policy",
+    "missing-manifest-checksum-or-signature-metadata",
+    "manifest-hash-mismatch",
+    "checksum-set-mismatch",
+    "missing-or-stale-revocation-snapshot",
+    "revoked-signing-key",
+    "stale-payload-metadata",
+    "missing-rollback-baseline",
+    "missing-installer-compatibility-contract",
+    "authority-broadening",
+    "write-method-accepted"
+  ],
+  "invariants": {
+    "mirror_is_root_of_trust": false,
+    "metadata_reachability_is_trust": false,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_003_complete": true,
+    "next_task": "RC6-004",
+    "commit_required": true
+  }
+}

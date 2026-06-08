@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-003",
+  "title": "define TLS storage and signed payload threat model",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+      "role": "threat model"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-003-tls-storage-signed-payload-threat-model.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "TLS and DNS threats are defined with RC6 controls.",
+      "Static hosting and metadata storage ceilings are defined.",
+      "Signed payload confusion, revocation, and placeholder risks are fail-closed.",
+      "Frontend UX constraints prevent metadata visibility from implying install readiness."
+    ]
+  }
+}
