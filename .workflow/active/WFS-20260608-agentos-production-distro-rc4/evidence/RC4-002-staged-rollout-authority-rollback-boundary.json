@@ -1,0 +1,26 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-002",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:10:00+08:00",
+  "summary": "Defined staged rollout authority and rollback boundary for RC4. Rollout plans remain inert until exact approval, rollback evidence, revocation state, AgentCore PlanSpec, and SecurityExecutionEngine checks are present.",
+  "deliverables": {
+    "contract": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/staged-rollout-authority-rollback-boundary.md",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-002-staged-rollout-authority-rollback-boundary.json"
+  },
+  "acceptance_coverage": {
+    "fleet_rollout_authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+    "exact_operator_approval_required": true,
+    "rollback_baseline_required": true,
+    "target_set_hash_bound": true,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "remote_dispatch_enabled": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "production_ready_claim": false
+  },
+  "handoff": {
+    "next_task": "RC4-003"
+  }
+}
