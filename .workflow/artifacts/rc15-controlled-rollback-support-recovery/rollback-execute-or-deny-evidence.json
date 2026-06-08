@@ -1,0 +1,88 @@
+{
+  "schema": "agentos.rc15-rollback-execute-or-deny-evidence.v1",
+  "generated_at": "2026-06-09T21:00:00+08:00",
+  "task": "RC15-031",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "controlled-rollback-executed",
+  "production_ready_claim": false,
+  "rollback_execution_allowed": true,
+  "rollback_execution_performed": true,
+  "denied": false,
+  "denial_reasons": [],
+  "rollback_approval": {
+    "schema": "agentos.rc15-separate-rollback-approval.v1",
+    "generated_at": "2026-06-09T21:00:00+08:00",
+    "task": "RC15-031",
+    "status": "separate-rollback-approval-bound",
+    "production_ready_claim": false,
+    "approval_id": "rc15-rollback-approval-1a471f6c6b4b33cf",
+    "approval_granted": true,
+    "approval_binding_digest": "1a471f6c6b4b33cfa841c86a1a3037fc4c9ff4d1a8aad5b78d1670b7afb94813",
+    "approval_binding": {
+      "approval_kind": "repo-local-exact-rollback-approval",
+      "approval_actor": "operator",
+      "actor_authority_scope": "repo-local-controlled-rollback",
+      "release_id": "production-distro-rc8-current-artifacts",
+      "activation_attempt_digest": "20bea652b8a2bb55d45ccec20ffbdb9d049c3ad2f222ba3ba9fb7eefe0106387",
+      "activation_audit_record_digest": "fbfe79449c411b1d1c14323951df11b0aee5187a055515ee73cd2851cc18c402",
+      "source_exact_approval_id": "rc15-exact-approval-60e7823a1dc33127",
+      "rollback_baseline_bound": true,
+      "support_recovery_reference_bound": true,
+      "remote_dispatch_enabled": false,
+      "production_ring_mutation_allowed": false
+    }
+  },
+  "rollback_planspec": {
+    "planspec_core": {
+      "planspec_id": "rc15-controlled-rollback-planspec",
+      "schema": "agentos.agentcore.rollback-planspec.v1",
+      "release_id": "production-distro-rc8-current-artifacts",
+      "executable": true,
+      "activation_attempt_digest": "20bea652b8a2bb55d45ccec20ffbdb9d049c3ad2f222ba3ba9fb7eefe0106387",
+      "rollback_approval_id": "rc15-rollback-approval-1a471f6c6b4b33cf",
+      "rollback_approval_digest": "1a471f6c6b4b33cfa841c86a1a3037fc4c9ff4d1a8aad5b78d1670b7afb94813",
+      "support_recovery_reference_bound": true,
+      "remote_dispatch_enabled": false,
+      "production_ring_mutation_allowed": false
+    },
+    "planspec_hash": "36cb4cd46355059987688a15268c42b05349028402a91835bdc1e8aa053117cb"
+  },
+  "rollback_attempt": {
+    "attempt_id": "rc15-controlled-rollback",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "activation_attempt_digest": "20bea652b8a2bb55d45ccec20ffbdb9d049c3ad2f222ba3ba9fb7eefe0106387",
+    "activation_audit_record_digest": "fbfe79449c411b1d1c14323951df11b0aee5187a055515ee73cd2851cc18c402",
+    "rollback_approval_id": "rc15-rollback-approval-1a471f6c6b4b33cf",
+    "rollback_approval_digest": "1a471f6c6b4b33cfa841c86a1a3037fc4c9ff4d1a8aad5b78d1670b7afb94813",
+    "rollback_planspec_hash": "36cb4cd46355059987688a15268c42b05349028402a91835bdc1e8aa053117cb",
+    "support_recovery_reference_bound": true,
+    "execution_mode": "execute"
+  },
+  "rollback_attempt_digest": "e8d433bb5470097749035efbc499465a1265933e6449c8c01f87997174ecb4d8",
+  "rollback_audit_record": {
+    "event_type": "ControlledRollbackExecuted",
+    "generated_at": "2026-06-09T21:00:00+08:00",
+    "actor": "operator",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "rollback_attempt_digest": "e8d433bb5470097749035efbc499465a1265933e6449c8c01f87997174ecb4d8",
+    "rollback_approval_digest": "1a471f6c6b4b33cfa841c86a1a3037fc4c9ff4d1a8aad5b78d1670b7afb94813",
+    "rollback_planspec_hash": "36cb4cd46355059987688a15268c42b05349028402a91835bdc1e8aa053117cb",
+    "fabricated": false
+  },
+  "rollback_audit_digest": "0b7f88ee9b5b7bec520d581108080d43c34ed5a50edaa7e12e9541dd427ecec6",
+  "side_effects": {
+    "rollback_effect_prepared": true,
+    "rollback_effect_executed": true,
+    "rollback_execution_performed": true,
+    "rollback_audit_recorded": true,
+    "rollback_audit_fabricated": false,
+    "support_bundle_local_only": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false
+  }
+}

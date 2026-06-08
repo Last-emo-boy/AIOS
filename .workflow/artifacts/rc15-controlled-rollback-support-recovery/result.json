@@ -1,0 +1,486 @@
+{
+  "schema": "agentos.rc15-controlled-rollback-support-recovery-result.v1",
+  "generated_at": "2026-06-09T21:00:00+08:00",
+  "task": "RC15-031",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "rollback_surface": {
+    "state": "controlled-rollback-executed-support-recovery-bound",
+    "controlled_activation_performed": true,
+    "separate_rollback_approval_bound": true,
+    "rollback_planspec_executable": true,
+    "security_execution_rollback_allowed": true,
+    "rollback_execution_allowed": true,
+    "rollback_execution_performed": true,
+    "support_bundle_local_only": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "rollback_attempt_digest": "e8d433bb5470097749035efbc499465a1265933e6449c8c01f87997174ecb4d8",
+    "rollback_audit_digest": "0b7f88ee9b5b7bec520d581108080d43c34ed5a50edaa7e12e9541dd427ecec6"
+  },
+  "outputs": {
+    "rollback_support_recovery_gate_report": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/rollback-support-recovery-gate-report.json",
+      "sha256": "bb6e1e8f26bbe385f6cede7ed31f13acb8f6e10ad464907e01913b41b9aab1da",
+      "size_bytes": 726,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rollback_execute_or_deny_evidence": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/rollback-execute-or-deny-evidence.json",
+      "sha256": "9507ae066cb50503684c2710eecd1eba289320734a03d9a4a66c5e3b6edb5c9a",
+      "size_bytes": 4357,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "support_recovery_evidence_chain": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "14cddf20cb275582ee0229c724ab39b33d5943c89a0238589ed2a13acacffe7a",
+      "size_bytes": 770,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "controlled_execution_support_bundle": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "cb6cd35c8baf92849d8d789b852dfe49c13e96b6aebc7c669207a9f6a2a286d5",
+      "size_bytes": 731,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "recovery_reference_index": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/recovery-reference-index.json",
+      "sha256": "e16cf80d90b3ee875cd30102d992986f2a703f6bab6532afe44b4108a4067b10",
+      "size_bytes": 725,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "source": {
+    "rc15_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+      "sha256": "b2e9eda09b0df007770c82666b4dfe327b02be128596975b5ac9397f6cf6d7c8",
+      "size_bytes": 7279,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc15_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+      "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+      "size_bytes": 4365,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc15_activation_result": {
+      "path": ".workflow/artifacts/rc15-controlled-local-activation/result.json",
+      "sha256": "4559f98c52a12591d79587e5f6e5cfd57f52dadd4dbe0688c1243c4cf92efe3d",
+      "size_bytes": 19895,
+      "present": true,
+      "schema": "agentos.rc15-controlled-local-activation-result.v1",
+      "status": "passed"
+    },
+    "rc15_activation_handoff": {
+      "path": ".workflow/artifacts/rc15-controlled-local-activation/controlled-activation-rollback-handoff.json",
+      "sha256": "ecd3fc459bec0fce8f143ef1df9af68707d20a171f8cc1242ebb873d60a7269b",
+      "size_bytes": 1120,
+      "present": true,
+      "schema": "agentos.rc15-controlled-activation-rollback-handoff.v1",
+      "status": "ready-for-rc15-031-separate-rollback-support-recovery"
+    },
+    "rc14_rollback_support_recovery_result": {
+      "path": ".workflow/artifacts/rc14-controlled-rollback-support-recovery/result.json",
+      "sha256": "0e254fc89ade2bb6ad39311278b47b64356f3a7fc588565a089ca4665831e175",
+      "size_bytes": 27151,
+      "present": true,
+      "schema": "agentos.rc14-controlled-rollback-support-recovery-result.v1",
+      "status": "passed"
+    },
+    "rc15_exact_approval_result": {
+      "path": ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json",
+      "sha256": "6ce82b6a95ff33e36bbd93dde4e5da7c9c1ceb1d642e11912d79732fc6521d83",
+      "size_bytes": 12363,
+      "present": true,
+      "schema": "agentos.rc15-exact-approval-controlled-execution-result.v1",
+      "status": "passed"
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc15_031",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-031 must run after RC15-030 completed, either while current_task is RC15-031 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC15-050",
+        "rc15_030_status": "completed",
+        "rc15_031_status": "completed"
+      }
+    },
+    {
+      "id": "source.activation.performed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback can execute only after controlled activation executed with non-fabricated audit evidence.",
+      "evidence": {
+        "activation_performed": true,
+        "activation_audit_recorded": true,
+        "activation_audit_fabricated": false
+      }
+    },
+    {
+      "id": "rollback.approval_planspec_security.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-031 must bind separate rollback approval, executable rollback PlanSpec, and SecurityExecution rollback allow.",
+      "evidence": {
+        "rollback_approval_id": "rc15-rollback-approval-1a471f6c6b4b33cf",
+        "rollback_planspec_hash": "36cb4cd46355059987688a15268c42b05349028402a91835bdc1e8aa053117cb",
+        "security_execution_rollback_allowed": true
+      }
+    },
+    {
+      "id": "contract.rollback_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15 rollback contract must require separate approval, rollback PlanSpec, SecurityExecution rollback allow, and support/recovery binding.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+        "sha256": "437443b0274c7974fb82600e1cc4f648c75fa37f456543fd76857dd2d41eb309",
+        "size_bytes": 4365,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "rollback.executed_with_audit",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Allowed rollback must produce non-fabricated rollback audit evidence.",
+      "evidence": {
+        "rollback_execution_performed": true,
+        "rollback_audit_digest": "0b7f88ee9b5b7bec520d581108080d43c34ed5a50edaa7e12e9541dd427ecec6",
+        "fabricated": false
+      }
+    },
+    {
+      "id": "support.bundle.local_redacted",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support bundle must remain redacted and local; recovery execution remains disabled.",
+      "evidence": {
+        "local_only": true,
+        "uploaded": false,
+        "redacted": true,
+        "recovery_execution_performed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing rollback approval, PlanSpec, SecurityExecution allow, audit, support/recovery, upload, recovery, remote dispatch, production mutation, and fabricated audit cases must fail closed.",
+      "evidence": {
+        "cases": 12,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "authority.boundaries.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-031 must not upload support, execute recovery, remote-dispatch, mutate slots, boot metadata, active artifact set, or production rings.",
+      "evidence": {
+        "rollback_effect_prepared": true,
+        "rollback_effect_executed": true,
+        "rollback_execution_performed": true,
+        "rollback_audit_recorded": true,
+        "rollback_audit_fabricated": false,
+        "support_bundle_local_only": true,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC15-031 outputs must not contain key blocks, auth tokens, private key paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "final-closeout-audit-pending"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "rollback_execution_performed": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_release_signing_performed": false,
+    "production_ready_claim": false
+  },
+  "fail_closed_cases": [
+    {
+      "id": "activation-not-performed",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "controlled-activation-not-performed"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-separate-rollback-approval",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "separate-rollback-approval-not-bound"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "rollback-planspec-missing",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-planspec-not-executable"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "security-rollback-allow-missing",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "security-execution-rollback-allow-not-bound"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "rollback-audit-journal-missing",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-audit-journal-not-bound"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-recovery-missing",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-recovery-reference-not-bound"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-mutation-denied"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "active-slot-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "active-slot-mutation-denied"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "fabricated-rollback-audit",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-audit-fabrication-denied"
+      ],
+      "side_effects": {
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "fail_closed_cases": 12,
+    "failed_fail_closed_cases": 0,
+    "rc15_031_complete": true,
+    "rollback_execution_allowed": true,
+    "rollback_execution_performed": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "next_task": "RC15-050"
+  }
+}
