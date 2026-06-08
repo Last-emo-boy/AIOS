@@ -3,7 +3,7 @@
   "name": "Production Distro RC13",
   "status": "active",
   "created_at": "2026-06-09T07:10:00+08:00",
-  "updated_at": "2026-06-09T09:25:00+08:00",
+  "updated_at": "2026-06-09T09:45:00+08:00",
   "source": "RC12 final audit; maestro-managed RC13 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
   "goal": "Plan and execute AIOS-body local trust unblock for drift-zero artifact identity, immutable object descriptor binding, freshness and revocation authority, verified quarantine preflight, executable AgentCore PlanSpec readiness, SecurityExecution allow preconditions, exact approval, controlled activation, rollback, and support/recovery evidence.",
@@ -69,9 +69,15 @@
       "completed_at": "2026-06-09T09:25:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-022-security-execution-allow-preconditions.json",
       "commit": null
+    },
+    {
+      "task": "RC13-030",
+      "completed_at": "2026-06-09T09:45:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-030-two-target-identity-enrollment.json",
+      "commit": null
     }
   ],
-  "next_task": "RC13-030",
+  "next_task": "RC13-031",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
@@ -138,6 +144,13 @@
     ".workflow/artifacts/rc13-security-execution-allow-preconditions/security-execution-allow-denial.json",
     ".workflow/artifacts/rc13-security-execution-allow-preconditions/security-execution-allow-fail-closed-matrix.json",
     ".workflow/artifacts/rc13-security-execution-allow-preconditions/two-target-identity-enrollment-handoff.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-022-security-execution-allow-preconditions.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-022-security-execution-allow-preconditions.json",
+    "scripts/project-rc13-two-target-identity-enrollment.ps1",
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/result.json",
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/target-identity-set.json",
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/target-identity-enrollment-denial.json",
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/target-identity-enrollment-fail-closed-matrix.json",
+    ".workflow/artifacts/rc13-two-target-identity-enrollment/exact-approval-audit-binding-handoff.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-030-two-target-identity-enrollment.json"
   ]
 }
