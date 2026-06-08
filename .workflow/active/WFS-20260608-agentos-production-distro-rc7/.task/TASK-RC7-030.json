@@ -1,0 +1,49 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-030",
+  "title": "project multi-node canary targets and exact approval packet",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+    ".workflow/artifacts/release/fleet-rollout-authority.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc7-multi-node-canary-approval.ps1",
+      "role": "multi-node canary approval packet projection and verification script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-multi-node-canary-approval/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-multi-node-canary-approval/canary-target-set.json",
+      "role": "projected canary target set"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-multi-node-canary-approval/exact-approval-packet.json",
+      "role": "exact approval packet projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-030-multi-node-canary-approval.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The result binds RC7 signed consumption, fail-closed, rollback baseline, mirror frontend, TLS, large payload storage policy, RC6 canary/rollback, and fleet authority evidence.",
+      "The canary target set requires two or more enrolled canary nodes and refuses to fake enrollment when only one node is observed.",
+      "The exact approval packet is hash-bound, projection-only, non-executable, approval-required, and scoped to the canary ring.",
+      "HTTPS live metadata remains current-artifacts, non-GA, verification-blocked, and install/activation/rollback blocked.",
+      "The task performs no signing, payload upload, install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, or TUI authority broadening.",
+      "The next task is RC7-031 gated canary activation evidence."
+    ]
+  }
+}
