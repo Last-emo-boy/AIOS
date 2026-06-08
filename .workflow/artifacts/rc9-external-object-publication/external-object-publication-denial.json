@@ -1,0 +1,38 @@
+{
+    "schema":  "agentos.rc9-external-object-publication-denial.v1",
+    "generated_at":  "2026-06-08T22:40:00+08:00",
+    "task":  "RC9-010",
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "status":  "publication-denied",
+    "production_ready_claim":  false,
+    "denied":  true,
+    "denial_reasons":  [
+                           "external-https-object-uri-not-published",
+                           "declared-current-artifact-drift-unresolved"
+                       ],
+    "missing_requirements":  [
+                                 "immutable credential-free external HTTPS object URI",
+                                 "declared/current artifact reconciliation evidence"
+                             ],
+    "authority_denied":  [
+                             "mirror-signing-authority",
+                             "mirror-install-authority",
+                             "object-storage-install-authority",
+                             "frontend-authority",
+                             "tui-authority",
+                             "shell-authority",
+                             "model-replay-authority",
+                             "remote-dispatch-authority",
+                             "support-upload-authority",
+                             "production-ring-mutation-authority"
+                         ],
+    "preserved_boundaries":  {
+                                 "mirror_metadata_only":  true,
+                                 "signer_separate_from_mirror":  true,
+                                 "external_object_storage_is_transport_only":  true,
+                                 "installer_quarantine_required":  true,
+                                 "install_allowed":  false,
+                                 "activation_allowed":  false,
+                                 "rollback_execution_allowed":  false
+                             }
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-010",
+  "title": "project immutable external object publication candidate for the RC8 payload bytes",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc9-external-object-publication.ps1",
+      "role": "publication projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-publication/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-publication/external-object-publication-candidate.json",
+      "role": "external object publication candidate"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-publication/external-object-publication-denial.json",
+      "role": "publication denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-publication/installer-handoff.json",
+      "role": "installer handoff for RC9-011 and RC9-012"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-010-external-object-publication.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script binds the RC8 descriptor, current payload bytes, public signature receipt, and mirror metadata before any external object publication claim.",
+      "The result records publication_denied_as_expected=true when no immutable external HTTPS object URI exists.",
+      "The denial evidence includes external-https-object-uri-not-published and declared-current-artifact-drift-unresolved blockers.",
+      "The installer handoff keeps quarantine fetch, install, activation, rollback, support upload, and remote dispatch blocked.",
+      "The task preserves production_ready_claim=false and moves the next task to RC9-011 artifact drift reconciliation."
+    ]
+  }
+}

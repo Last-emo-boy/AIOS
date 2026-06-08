@@ -1,0 +1,72 @@
+{
+  "schema": "agentos.rc9-external-object-publication-evidence.v1",
+  "generated_at": "2026-06-08T22:40:00+08:00",
+  "task": "RC9-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": "scripts/project-rc9-external-object-publication.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc9-external-object-publication/result.json",
+    "status": "passed",
+    "sha256": "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b"
+  },
+  "outputs": {
+    "candidate": {
+      "path": ".workflow/artifacts/rc9-external-object-publication/external-object-publication-candidate.json",
+      "sha256": "5ccd1b5e1cadb0a830d385216fc2f21ffee631344a1734ad9d818f92ecb47d2f"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc9-external-object-publication/external-object-publication-denial.json",
+      "sha256": "db63d51c4cf7ffef429deeb0a098879d0392fffd5bff6bd725e8b627168c740c"
+    },
+    "installer_handoff": {
+      "path": ".workflow/artifacts/rc9-external-object-publication/installer-handoff.json",
+      "sha256": "fa966778b8a8cb8a6fb536285022e5dc2ecd4d3ccca11571bd9ac725b34e3548"
+    }
+  },
+  "publication_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "publication-denied",
+    "publication_allowed": false,
+    "external_object_url_published": false,
+    "payload_bytes_uploaded": false,
+    "payload_bytes_downloaded": false,
+    "payload_bytes_hosted_on_mirror": false,
+    "mirror_metadata_mutated": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "invariants": {
+    "mirror_metadata_only": true,
+    "mirror_large_payload_storage_used": false,
+    "signer_separate_from_mirror": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_010_complete": true,
+    "next_task": "RC9-011",
+    "commit_required": true
+  }
+}

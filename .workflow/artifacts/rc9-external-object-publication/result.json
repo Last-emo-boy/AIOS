@@ -1,0 +1,277 @@
+{
+    "schema":  "agentos.rc9-external-object-publication-result.v1",
+    "generated_at":  "2026-06-08T22:40:00+08:00",
+    "task":  "RC9-010",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "publication_surface":  {
+                                "state":  "publication-denied",
+                                "publication_allowed":  false,
+                                "external_object_url_published":  false,
+                                "external_object_uri_classification":  "missing",
+                                "payload_bytes_uploaded":  false,
+                                "payload_bytes_downloaded":  false,
+                                "payload_bytes_hosted_on_mirror":  false,
+                                "mirror_metadata_mutated":  false,
+                                "install_allowed":  false,
+                                "activation_allowed":  false,
+                                "rollback_execution_allowed":  false,
+                                "blockers":  [
+                                                 "external-https-object-uri-not-published",
+                                                 "declared-current-artifact-drift-unresolved"
+                                             ],
+                                "downstream_execution_blockers":  [
+                                                                      "installer-quarantine-fetch-not-run",
+                                                                      "two-node-canary-target-set-not-enrolled",
+                                                                      "exact-operator-approval-pending",
+                                                                      "agentcore-planspec-not-bound",
+                                                                      "security-execution-approval-not-bound",
+                                                                      "controlled-execution-not-authorized"
+                                                                  ]
+                            },
+    "outputs":  {
+                    "candidate":  {
+                                      "path":  ".workflow/artifacts/rc9-external-object-publication/external-object-publication-candidate.json",
+                                      "sha256":  "5ccd1b5e1cadb0a830d385216fc2f21ffee631344a1734ad9d818f92ecb47d2f"
+                                  },
+                    "denial":  {
+                                   "path":  ".workflow/artifacts/rc9-external-object-publication/external-object-publication-denial.json",
+                                   "sha256":  "db63d51c4cf7ffef429deeb0a098879d0392fffd5bff6bd725e8b627168c740c"
+                               },
+                    "installer_handoff":  {
+                                              "path":  ".workflow/artifacts/rc9-external-object-publication/installer-handoff.json",
+                                              "sha256":  "fa966778b8a8cb8a6fb536285022e5dc2ecd4d3ccca11571bd9ac725b34e3548"
+                                          }
+                },
+    "source":  {
+                   "contract":  {
+                                    "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+                                    "sha256":  "c0a4b3d4a4d9de6a89791ea8ce7b9f1c006633e1467e60cff231c8f14c9665af",
+                                    "size_bytes":  9025,
+                                    "present":  true,
+                                    "schema":  null,
+                                    "status":  null
+                                },
+                   "descriptor":  {
+                                      "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+                                      "sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                      "size_bytes":  2130,
+                                      "present":  true,
+                                      "schema":  "agentos.payload-object-descriptor.v1",
+                                      "status":  null
+                                  },
+                   "descriptor_result":  {
+                                             "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+                                             "sha256":  "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+                                             "size_bytes":  10075,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-real-payload-object-descriptor-result.v1",
+                                             "status":  "passed"
+                                         },
+                   "signature_ingestion_result":  {
+                                                      "path":  ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+                                                      "sha256":  "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+                                                      "size_bytes":  6262,
+                                                      "present":  true,
+                                                      "schema":  "agentos.rc8-public-signature-ingestion-result.v1",
+                                                      "status":  "passed"
+                                                  },
+                   "signature_receipt":  {
+                                             "path":  ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+                                             "sha256":  "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+                                             "size_bytes":  1533,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-public-signature-ingestion-receipt.v1",
+                                             "status":  null
+                                         },
+                   "signature_summary":  {
+                                             "path":  ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+                                             "sha256":  "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+                                             "size_bytes":  1011,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-public-signature-artifact-summary.v1",
+                                             "status":  null
+                                         },
+                   "hosted_payload_index":  {
+                                                "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+                                                "sha256":  "77408fab1641702a3a6baaddc1c82dc5e1ec3681dfcc1bc7cc0878c2705e9e6b",
+                                                "size_bytes":  3498,
+                                                "present":  true,
+                                                "schema":  "agentos.rc8-hosted-payload-index.v1",
+                                                "status":  "verification-blocked"
+                                            },
+                   "install_bootstrap":  {
+                                             "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+                                             "sha256":  "7442340caa50a714c838e819fb513ef42594ffdfe00754450521111fa58b3ca2",
+                                             "size_bytes":  2996,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-install-bootstrap.v1",
+                                             "status":  "verification-blocked"
+                                         },
+                   "hosted_channel_index":  {
+                                                "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+                                                "sha256":  "0c72d39c7f8369762d17d7e25f3c8b4f811a6d283fe71465cf31e9118326b60b",
+                                                "size_bytes":  3339,
+                                                "present":  true,
+                                                "schema":  "agentos.rc8-mirror-channel-index.v1",
+                                                "status":  "metadata-only"
+                                            },
+                   "mirror_status":  {
+                                         "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json",
+                                         "sha256":  "4882269fed05866be2bab88cb46caa9ba967c79212d7890b949c4dc28d76a970",
+                                         "size_bytes":  697,
+                                         "present":  true,
+                                         "schema":  "agentos.rc8-mirror-status.v1",
+                                         "status":  "verification-blocked"
+                                     },
+                   "source_payload_bytes":  {
+                                                "path":  "image/out/agentos-initramfs.cpio.gz",
+                                                "sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                                "size_bytes":  377,
+                                                "present":  true,
+                                                "schema":  null,
+                                                "status":  null
+                                            }
+               },
+    "invariants":  {
+                       "mirror_metadata_only":  true,
+                       "mirror_large_payload_storage_used":  false,
+                       "signer_separate_from_mirror":  true,
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "canary_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false,
+                       "production_ready_claim":  false
+                   },
+    "checks":  [
+                   {
+                       "id":  "source.descriptor.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8 payload descriptor must exist and pass before RC9 external object publication.",
+                       "evidence":  {
+                                        "descriptor":  {
+                                                           "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+                                                           "sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                                           "size_bytes":  2130,
+                                                           "present":  true,
+                                                           "schema":  "agentos.payload-object-descriptor.v1",
+                                                           "status":  null
+                                                       },
+                                        "descriptor_result":  {
+                                                                  "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+                                                                  "sha256":  "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+                                                                  "size_bytes":  10075,
+                                                                  "present":  true,
+                                                                  "schema":  "agentos.rc8-real-payload-object-descriptor-result.v1",
+                                                                  "status":  "passed"
+                                                              }
+                                    }
+                   },
+                   {
+                       "id":  "source.payload.bytes_match_descriptor",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Current payload bytes must match the descriptor digest and size.",
+                       "evidence":  {
+                                        "path":  "image/out/agentos-initramfs.cpio.gz",
+                                        "expected_sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                        "observed_sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                        "expected_size_bytes":  377,
+                                        "observed_size_bytes":  377
+                                    }
+                   },
+                   {
+                       "id":  "source.signature.verified",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Public signature receipt must be ingested and crypto verified before publication projection.",
+                       "evidence":  {
+                                        "signature_ingestion_status":  "passed",
+                                        "receipt_crypto_verified":  true
+                                    }
+                   },
+                   {
+                       "id":  "source.mirror.metadata_only",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Mirror must remain metadata-only and must not host payload bytes.",
+                       "evidence":  {
+                                        "payload_index_storage_mode":  "metadata-only",
+                                        "payload_bytes_hosted_on_mirror":  false
+                                    }
+                   },
+                   {
+                       "id":  "publication.uri_policy_handled",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "External object URI policy must either accept a stable HTTPS URI or produce denial evidence.",
+                       "evidence":  {
+                                        "classification":  "missing",
+                                        "blockers":  [
+                                                         "external-https-object-uri-not-published",
+                                                         "declared-current-artifact-drift-unresolved"
+                                                     ]
+                                    }
+                   },
+                   {
+                       "id":  "publication.drift_blocks_install",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Unresolved declared/current drift must block external object trust and install authorization.",
+                       "evidence":  {
+                                        "declared_current_artifact_drift_unresolved":  true
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-010 outputs must not contain secret paths, PEM blocks, auth tokens, or signer host internals.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "outputs.non_ga_side_effects_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Publication projection must remain non-GA and must not authorize install, activation, rollback, or payload interpretation.",
+                       "evidence":  {
+                                        "production_ready_claim":  false,
+                                        "install_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false
+                                    }
+                   }
+               ],
+    "blockers":  [
+                     "external-https-object-uri-not-published",
+                     "declared-current-artifact-drift-unresolved",
+                     "installer-quarantine-fetch-not-run",
+                     "two-node-canary-target-set-not-enrolled",
+                     "exact-operator-approval-pending",
+                     "agentcore-planspec-not-bound",
+                     "security-execution-approval-not-bound",
+                     "controlled-execution-not-authorized"
+                 ],
+    "summary":  {
+                    "checks":  8,
+                    "failed_checks":  0,
+                    "publication_blockers":  2,
+                    "publication_denied_as_expected":  true,
+                    "rc9_010_complete":  true,
+                    "next_task":  "RC9-011"
+                }
+}
