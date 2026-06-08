@@ -1,0 +1,35 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-011",
+  "title": "publish bounded payload metadata index to hosted mirror without large artifact storage",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-010.json",
+    ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/publish-rc6-hosted-payload-metadata.ps1",
+      "role": "hosted payload metadata publisher"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+      "role": "publication result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-011-hosted-payload-metadata.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Remote /payloads/index.json points at production-distro-rc6-current-artifacts.",
+      "Remote manifest, checksums, and signature-required metadata are published under /payloads/aios/production-distro-rc6-current-artifacts/.",
+      "Remote /install/bootstrap.json and /channel/index.json are hash-bound to the hosted payload metadata.",
+      "Large payload storage remains disabled and no signing, install, activation, rollback, support upload, remote dispatch, production ring, or TUI authority is granted.",
+      "Remote validation uses curl --resolve and blocks directory listing and write methods."
+    ]
+  }
+}

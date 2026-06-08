@@ -1,0 +1,82 @@
+{
+  "schema": "agentos.rc6-install-bootstrap.v1",
+  "generated_at": "2026-06-08T12:04:00.9234764+08:00",
+  "status": "metadata-preflight-only",
+  "production_ready_claim": false,
+  "domain": "aios.w33d.xyz",
+  "channel": "production-candidate-rc6",
+  "default_release_id": "production-distro-rc6-current-artifacts",
+  "payload_index_path": "/payloads/index.json",
+  "installer_states": [
+    "metadata-unavailable",
+    "metadata-candidate",
+    "verification-blocked",
+    "install-preflight-ready",
+    "install-authorized",
+    "installed"
+  ],
+  "rc6_allowed_states": [
+    "metadata-unavailable",
+    "metadata-candidate",
+    "verification-blocked",
+    "install-preflight-ready"
+  ],
+  "current_state": "verification-blocked",
+  "install_allowed": false,
+  "activation_allowed": false,
+  "tls_required_before_ga_claim": true,
+  "storage_policy": "metadata-only",
+  "metadata_size_policy": {
+    "health_json_bytes": 32768,
+    "mirror_json_bytes": 65536,
+    "channel_index_json_bytes": 131072,
+    "payloads_index_json_bytes": 262144,
+    "per_release_manifest_checksum_signature_json_bytes": 524288,
+    "install_bootstrap_json_bytes": 131072
+  },
+  "endpoints": {
+    "health": "/health.json",
+    "mirror_descriptor": "/.well-known/aios/mirror.json",
+    "channel_index": "/channel/index.json",
+    "bootstrap_manifest": "/bootstrap/manifest.json",
+    "payload_index": "/payloads/index.json",
+    "payload_manifest": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+    "payload_checksums": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+    "payload_signatures": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+    "support_index": "/support/index.json",
+    "support_recovery": "/support/recovery.json"
+  },
+  "blockers": [
+    "tls-not-yet-ga-gated",
+    "large-payload-storage-deferred",
+    "payload-signature-not-published",
+    "revocation-snapshot-not-published",
+    "installer-compatibility-contract-pending",
+    "installable-media-declared-hash-drift",
+    "rollback-execution-drill-pending",
+    "exact-operator-approval-pending"
+  ],
+  "projection": {
+    "rc6_010_result": ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+    "payload_index_sha256": "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845",
+    "manifest_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+    "checksums_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+    "signatures_sha256": "1e0b8d281ab82d4a01026ed57a8f384d1a4ef6c9dd7967719150752286d2cf29",
+    "drifted_components": [
+      "update_metadata",
+      "release_channel_metadata",
+      "qemu_runtime_smoke"
+    ]
+  },
+  "forbidden_authority": [
+    "signing",
+    "install",
+    "activation",
+    "rollback-execution",
+    "active-slot-mutation",
+    "production-ring-mutation",
+    "support-upload",
+    "remote-dispatch",
+    "tui-authority"
+  ]
+}

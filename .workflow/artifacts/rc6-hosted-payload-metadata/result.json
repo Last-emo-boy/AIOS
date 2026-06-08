@@ -1,0 +1,297 @@
+{
+  "schema": "agentos.rc6-hosted-payload-metadata-result.v1",
+  "generated_at": "2026-06-08T12:04:00.9234764+08:00",
+  "checked_at": "2026-06-08T12:04:06.2482069+08:00",
+  "task": "RC6-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source": {
+    "rc6_010_result": ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+    "rc6_010_result_sha256": "8ac90ee712b5964d0c3c306d4581ba40fb48837896d1c79c720c2b12f52f37d8",
+    "payload_manifest": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+    "payload_checksums": ".workflow/artifacts/rc6-installable-payload-manifest/payload-checksums.json",
+    "payload_signatures": ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json"
+  },
+  "local_outputs": {
+    "hosted_payload_index": ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-payload-index.json",
+    "install_bootstrap": ".workflow/artifacts/rc6-hosted-payload-metadata/install-bootstrap.json",
+    "hosted_channel_index": ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-channel-index-after-payload-metadata.json"
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/payloads/index.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+    "http://aios.w33d.xyz/install/bootstrap.json",
+    "http://aios.w33d.xyz/channel/index.json"
+  ],
+  "output_hashes": {
+    "hosted_payload_index_sha256": "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845",
+    "install_bootstrap_sha256": "62958f7564a75f52267ee2d95bc940f81f8c73b1ca96fdc41d81460e39d331c7",
+    "hosted_channel_index_sha256": "820aeb893dc1ecbba09b8dedbe1fbf92471c3781dfb9139c4d0b9c62d655ce11",
+    "payload_manifest_content_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+    "payload_checksums_content_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+    "payload_signatures_content_sha256": "1e0b8d281ab82d4a01026ed57a8f384d1a4ef6c9dd7967719150752286d2cf29"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "storage_mode": "metadata-only",
+    "large_payload_deferred": true,
+    "signature_available": false,
+    "installable_media_declared_hash_drift_count": 3,
+    "install_allowed": false,
+    "activation_allowed": false
+  },
+  "invariants": {
+    "hosted_metadata_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "tls_required_before_ga_claim": true
+  },
+  "checks": [
+    {
+      "id": "projection.result.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6-010 payload projection must be passed before publication.",
+      "evidence": {
+        "checks": 46,
+        "blockers": 0,
+        "drifted_components": 3,
+        "rc6_010_complete": true,
+        "next_task": "RC6-011"
+      }
+    },
+    {
+      "id": "projection.surface.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Projected payload surface must remain verification-blocked.",
+      "evidence": {
+        "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+        "status": "verification-blocked",
+        "storage_mode": "metadata-only",
+        "large_payload_deferred": true,
+        "signature_available": false,
+        "installable_media_declared_hash_drift_count": 3,
+        "install_allowed": false,
+        "activation_allowed": false
+      }
+    },
+    {
+      "id": "projection.files.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Projection output files must exist.",
+      "evidence": "E:\\Playground\\AIOS\\.workflow\\artifacts\\rc6-installable-payload-manifest"
+    },
+    {
+      "id": "projection.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Projected payload metadata must not grant signing, install, or activation authority.",
+      "evidence": {
+        "install": {
+          "install_allowed": false,
+          "activation_allowed": false,
+          "rollback_execution_allowed": false,
+          "current_state": "verification-blocked",
+          "allowed_rc6_states": [
+            "metadata-unavailable",
+            "metadata-candidate",
+            "verification-blocked",
+            "install-preflight-ready"
+          ]
+        },
+        "signatures": "signature-required-before-install"
+      }
+    },
+    {
+      "id": "remote.channel.before",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted channel index must be reachable before payload metadata publication.",
+      "evidence": 200
+    },
+    {
+      "id": "remote.install.before",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted install bootstrap must be reachable before payload metadata publication.",
+      "evidence": 200
+    },
+    {
+      "id": "local.outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted payload metadata outputs must not contain private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "local.metadata_size_bounded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted payload metadata must remain within RC6 metadata-only size ceilings.",
+      "evidence": {
+        "hosted_payload_index": 5787,
+        "install_bootstrap": 3054,
+        "manifest": 8204,
+        "checksums": 3173,
+        "signatures": 732
+      }
+    },
+    {
+      "id": "hosted.payload.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted payload index must remain metadata-only and non-authoritative.",
+      "evidence": {
+        "id": "production-distro-rc6-current-artifacts",
+        "release_id": "production-distro-rc6-current-artifacts",
+        "status": "verification-blocked",
+        "reason": "Current artifact metadata is published, but install remains blocked by missing signature, deferred large payload storage, TLS GA gate, and declared/current hash drift.",
+        "manifest_path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+        "checksums_path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+        "signatures_path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+        "manifest_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+        "manifest_file_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "checksums_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+        "checksums_file_sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71",
+        "signatures_sha256": "1e0b8d281ab82d4a01026ed57a8f384d1a4ef6c9dd7967719150752286d2cf29",
+        "signatures_file_sha256": "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6",
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "large_payload_deferred": true,
+        "signature_available": false,
+        "installable_media_declared_hash_drift_count": 3
+      }
+    },
+    {
+      "id": "hosted.install.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted install bootstrap must remain preflight-only and blocked.",
+      "evidence": [
+        "tls-not-yet-ga-gated",
+        "large-payload-storage-deferred",
+        "payload-signature-not-published",
+        "revocation-snapshot-not-published",
+        "installer-compatibility-contract-pending",
+        "installable-media-declared-hash-drift",
+        "rollback-execution-drill-pending",
+        "exact-operator-approval-pending"
+      ]
+    },
+    {
+      "id": "remote.nginx.active",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nginx must remain active after bounded payload metadata publication.",
+      "evidence": [
+        "active\r",
+        "aios/production-distro-rc6-current-artifacts/checksums.json 3173\r",
+        "aios/production-distro-rc6-current-artifacts/manifest.json 8204\r",
+        "aios/production-distro-rc6-current-artifacts/signatures.json 732\r",
+        "aios/production-distro-rc6-metadata-preview/checksums.json 1032\r",
+        "aios/production-distro-rc6-metadata-preview/manifest.json 2465\r",
+        "aios/production-distro-rc6-metadata-preview/signatures.json 758\r",
+        "bootstrap.json 3052\r",
+        "index.json 5517\r",
+        "index.json 5785\r",
+        "user-release.json 1756\r",
+        "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845  payloads/index.json\r",
+        "62958f7564a75f52267ee2d95bc940f81f8c73b1ca96fdc41d81460e39d331c7  install/bootstrap.json\r",
+        "820aeb893dc1ecbba09b8dedbe1fbf92471c3781dfb9139c4d0b9c62d655ce11  channel/index.json\r",
+        "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e  payloads/aios/production-distro-rc6-current-artifacts/manifest.json\r",
+        "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71  payloads/aios/production-distro-rc6-current-artifacts/checksums.json\r",
+        "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6  payloads/aios/production-distro-rc6-current-artifacts/signatures.json"
+      ]
+    },
+    {
+      "id": "remote.http.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted payload metadata, install bootstrap, channel index, and portal must be reachable.",
+      "evidence": {
+        "root": 200,
+        "payload_index": 200,
+        "manifest": 200,
+        "checksums": 200,
+        "signatures": 200,
+        "install": 200,
+        "channel": 200
+      }
+    },
+    {
+      "id": "remote.semantics.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live hosted metadata must point at current artifacts while keeping install verification-blocked.",
+      "evidence": {
+        "release_id": "production-distro-rc6-current-artifacts",
+        "payload_status": "verification-blocked",
+        "install_state": "verification-blocked"
+      }
+    },
+    {
+      "id": "remote.hash_bindings.match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live hosted metadata must carry the local projection hashes and endpoint bindings.",
+      "evidence": {
+        "payload_index_expected": "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845",
+        "channel_payload_index_live": "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845",
+        "install_payload_index_live": "fa22de5dbe39f90c3fbaa8069b93153d68e0b6ef8c8a00343a3514782ff87845"
+      }
+    },
+    {
+      "id": "remote.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote payload metadata responses must not expose private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "remote.directory_listing.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload directory listing must remain blocked.",
+      "evidence": 404
+    },
+    {
+      "id": "remote.write_methods.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST to payload metadata must remain blocked.",
+      "evidence": 403
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 17,
+    "blockers": 0,
+    "rc6_011_complete": true,
+    "next_task": "RC6-012"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "agentos.rc6-hosted-payload-index.v1",
+  "generated_at": "2026-06-08T12:04:00.9234764+08:00",
+  "status": "metadata-projected",
+  "production_ready_claim": false,
+  "domain": "aios.w33d.xyz",
+  "channel": "production-candidate-rc6",
+  "storage_mode": "metadata-only",
+  "large_artifact_storage_deferred": true,
+  "tls_required_before_ga_claim": true,
+  "entries": [
+    {
+      "id": "production-distro-rc6-current-artifacts",
+      "release_id": "production-distro-rc6-current-artifacts",
+      "status": "verification-blocked",
+      "reason": "Current artifact metadata is published, but install remains blocked by missing signature, deferred large payload storage, TLS GA gate, and declared/current hash drift.",
+      "manifest_path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+      "checksums_path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+      "signatures_path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+      "manifest_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+      "manifest_file_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "checksums_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+      "checksums_file_sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71",
+      "signatures_sha256": "1e0b8d281ab82d4a01026ed57a8f384d1a4ef6c9dd7967719150752286d2cf29",
+      "signatures_file_sha256": "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6",
+      "install_allowed": false,
+      "activation_allowed": false,
+      "rollback_execution_allowed": false,
+      "large_payload_deferred": true,
+      "signature_available": false,
+      "installable_media_declared_hash_drift_count": 3
+    }
+  ],
+  "source_bindings": {
+    "provenance": {
+      "name": "release_provenance",
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": "promotable"
+    },
+    "release_channel_metadata": {
+      "name": "release_channel_metadata",
+      "path": ".workflow/artifacts/release/release-channel-metadata.json",
+      "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "present": true,
+      "schema": "agentos.release-channel-metadata.v1",
+      "status": "passed"
+    },
+    "installable_media_manifest": {
+      "name": "rc1_installable_media_manifest",
+      "path": ".workflow/artifacts/rc1-installable-media/installable-media-manifest.json",
+      "sha256": "ac252994252a72f6cbc13200b12431221c46584d2950fb80f1dcec7231585694",
+      "present": true,
+      "schema": "agentos.installable-media-manifest.v1",
+      "status": "passed"
+    },
+    "installable_media_result": {
+      "name": "rc1_installable_media_result",
+      "path": ".workflow/artifacts/rc1-installable-media/result.json",
+      "sha256": "ab1925cc37757af014bdc47deb08cae27561dfc0022ace5731d9070cf8abf5a2",
+      "present": true,
+      "schema": "agentos.installable-media-manifest-result.v1",
+      "status": "passed"
+    },
+    "rc5_final_audit": {
+      "name": "rc5_final_audit",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+      "sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+      "present": true,
+      "schema": "agentos.production-distro-rc5-final-audit.v1",
+      "status": "PASS"
+    },
+    "rc6_contract": {
+      "name": "rc6_payload_channel_contract",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+      "sha256": "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_boundary": {
+      "name": "rc6_bootstrap_installer_boundary",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+      "sha256": "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_threat_model": {
+      "name": "rc6_tls_storage_signed_payload_threat_model",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+      "sha256": "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_mirror_portal": {
+      "name": "rc6_mirror_portal_result",
+      "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+      "sha256": "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+      "present": true,
+      "schema": "agentos.rc6-mirror-portal-result.v1",
+      "status": "passed"
+    }
+  },
+  "drift_policy": {
+    "current_artifact_projection": true,
+    "installable_media_declared_hash_drift_count": 3,
+    "drifted_components": [
+      "update_metadata",
+      "release_channel_metadata",
+      "qemu_runtime_smoke"
+    ],
+    "drift_blocks_install": true
+  },
+  "authority": {
+    "mirror_is_root_of_trust": false,
+    "signing_authority": false,
+    "activation_authority": false,
+    "rollback_execution_authority": false,
+    "production_ring_mutation_authority": false,
+    "remote_dispatch_authority": false,
+    "support_upload_authority": false,
+    "tui_authority": false
+  }
+}
