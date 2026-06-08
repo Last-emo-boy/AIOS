@@ -1,0 +1,30 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-021",
+  "title": "bind installer preflight evidence to AgentCore and SecurityExecution handoff",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+    "crates/agent_core/src/lib.rs",
+    "crates/security_execution/src/policy.rs",
+    "crates/security_execution/src/tools.rs"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-installer-agentcore-security-handoff.ps1",
+      "role": "installer handoff evidence projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Installer preflight evidence is bound to an AgentCore PlanSpec handoff candidate.",
+      "SecurityExecutionEngine effect envelope remains deny-by-default unless exact gates are present.",
+      "The handoff records no install, activation, rollback, support upload, remote dispatch, or production ring mutation."
+    ]
+  }
+}

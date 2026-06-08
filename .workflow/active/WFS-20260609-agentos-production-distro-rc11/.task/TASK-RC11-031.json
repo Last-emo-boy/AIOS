@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-031",
+  "title": "execute or deny controlled canary activation through AgentCore and SecurityExecutionEngine",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
+    ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+    ".workflow/artifacts/rc10-controlled-canary-activation/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-controlled-canary-activation.ps1",
+      "role": "controlled activation evidence projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Activation is allowed only if object, drift, quarantine, target, approval, AgentCore, SecurityExecution, rollback, support/recovery, and audit gates pass.",
+      "If any gate is missing, controlled activation is denied with exact blockers.",
+      "No production ring mutation or remote fleet dispatch is performed by this task."
+    ]
+  }
+}

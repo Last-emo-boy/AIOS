@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-020",
+  "title": "add installer quarantine fetch verifier and fail-closed matrix",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
+    "scripts/project-rc10-installer-quarantine-fetch.ps1",
+    "scripts/installer-fail-closed-fixtures.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-installer-quarantine-verifier.ps1",
+      "role": "installer quarantine verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Fetch is allowed only into quarantine and bytes are verified before interpretation.",
+      "Verifier checks size, SHA-256, manifest, checksum set, public signature, revocation, freshness, compatibility, rollback baseline, and support/recovery binding.",
+      "Negative cases fail closed before install, activation, rollback, active slot mutation, support upload, or remote dispatch."
+    ]
+  }
+}

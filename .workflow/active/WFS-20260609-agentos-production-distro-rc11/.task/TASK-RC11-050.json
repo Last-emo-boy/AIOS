@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-050",
+  "title": "run Production Distro RC11 final closeout audit",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+    ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+    ".workflow/artifacts/rc11-declared-current-drift-zero/result.json",
+    ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+    ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+    ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
+    ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc11-final-closeout-audit.ps1",
+      "role": "RC11 final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+      "role": "final audit evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit verifies every RC11 planned task result.",
+      "Audit records whether RC11 moved beyond fail-closed denial into controlled unblock evidence.",
+      "Audit keeps production_ready_claim=false unless every GA and execution gate is explicitly proved.",
+      "Audit records next milestone direction."
+    ]
+  }
+}

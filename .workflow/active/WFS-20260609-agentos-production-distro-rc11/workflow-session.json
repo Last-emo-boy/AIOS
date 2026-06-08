@@ -1,0 +1,56 @@
+{
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc11",
+  "name": "Production Distro RC11",
+  "status": "active",
+  "created_at": "2026-06-09T01:10:00+08:00",
+  "updated_at": "2026-06-09T01:10:00+08:00",
+  "source": "RC10 final audit; maestro-managed RC11 planning",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "goal": "Plan and execute AIOS-body controlled unblock for real object verification, drift-zero reconciliation, installer quarantine fetch verification, exact approval binding, AgentCore/SecurityExecution controlled activation, rollback, and support/recovery evidence.",
+  "core_thesis": "AIOS becomes distributable only when the body can verify immutable release bytes, reconcile artifact identity, quarantine and validate fetched bytes before interpretation, and constrain every activation or rollback effect through exact approval, AgentCore, SecurityExecutionEngine, audit, rollback, and support/recovery evidence.",
+  "non_goals": [
+    "Do not build mirror frontend, nginx, TLS, remote signer, or remote dispatch infrastructure in RC11 body tasks.",
+    "Do not read, copy, print, hash, move, or reference private signing material.",
+    "Do not claim GA production readiness.",
+    "Do not treat mirror reachability, signer reachability, frontend output, shell output, TUI output, model replay, or object storage UI as authority.",
+    "Do not install, activate, rollback, mutate boot metadata, mutate active slots, mutate active artifact sets, mutate production rings, upload support bundles, or dispatch remote fleet actions unless a later task proves every gate and records the effect explicitly."
+  ],
+  "primary_acceptance": [
+    "RC11 plan is active and task-managed with RC11-001 as the next executable task.",
+    "The plan covers real object trust handoff, drift-zero reconciliation, installer quarantine verification, AgentCore/SecurityExecution binding, two-target canary approval, controlled activation, rollback, support/recovery, and final audit.",
+    "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx, signer infrastructure, remote dispatch, and production ring mutation out of scope.",
+    "The plan keeps production_ready_claim=false until final audit proves every required gate."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC11-000",
+      "completed_at": "2026-06-09T01:10:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-000-planning.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC11-001",
+  "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/final-rc10-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/workflow-session.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-000.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-000-planning.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-001.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-010.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-011.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-012.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-020.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-021.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-030.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-031.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-040.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-050.json"
+  ]
+}

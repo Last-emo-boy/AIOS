@@ -1,0 +1,30 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-001",
+  "title": "freeze RC11 real-object trust handoff and AIOS-body execution contract",
+  "status": "pending",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/final-rc10-closeout-summary.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-001-real-object-trust-handoff-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract names the exact trust handoff from external object transport into AIOS local verification.",
+      "Contract preserves AIOS-body-only scope and excludes mirror frontend, nginx, remote signer infrastructure, and production ring mutation.",
+      "Contract defines fail-closed cases for missing object URI, drift, quarantine fetch, signature, revocation, compatibility, rollback, exact approval, AgentCore, SecurityExecutionEngine, support/recovery, and authority broadening.",
+      "Next task is RC11-010."
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "schema": "agentos.rc11-planning-evidence.v1",
+  "generated_at": "2026-06-09T01:10:00+08:00",
+  "task": "RC11-000",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "source": {
+    "rc10_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
+      "verdict": "PASS",
+      "next_milestone": "Production Distro RC11",
+      "remaining_blockers_before_ga_or_execution": [
+        "real-external-https-object-uri-publication",
+        "declared-current-drift-zero-reconciliation",
+        "installer-quarantine-fetch-verification",
+        "two-enrolled-canary-targets",
+        "exact-operator-approval",
+        "AgentCore-PlanSpec-binding",
+        "SecurityExecutionEngine-approval",
+        "controlled-activation-execution",
+        "separate-rollback-approval",
+        "rollback-execution-authorization",
+        "remote-fleet-execution"
+      ]
+    }
+  },
+  "outputs": {
+    "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+    "workflow_session": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/workflow-session.json",
+    "planning_summary": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md",
+    "maestro_session": ".workflow/.csv-wave/20260609-plan-rc11-real-object-controlled-execution-unblock"
+  },
+  "plan_surface": {
+    "task_count": 11,
+    "completed_tasks": [
+      "RC11-000"
+    ],
+    "next_task": "RC11-001",
+    "waves": [
+      "wave-0",
+      "wave-1",
+      "wave-2",
+      "wave-3",
+      "wave-4"
+    ],
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_dispatch_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc11_000_complete": true,
+    "next_task": "RC11-001",
+    "commit_required": true
+  }
+}

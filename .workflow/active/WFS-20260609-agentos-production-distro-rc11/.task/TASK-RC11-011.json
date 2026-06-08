@@ -1,0 +1,28 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-011",
+  "title": "reconcile declared and current release artifact drift to zero or emit blockers",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-declared-current-drift-zero.ps1",
+      "role": "drift-zero reconciliation projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-declared-current-drift-zero/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "All declared/current artifact comparisons are explicit and hash-bound.",
+      "Zero drift is required before object trust, installer authorization, activation, or rollback.",
+      "If drift remains, result records exact drift ids and keeps all side-effect authority false."
+    ]
+  }
+}

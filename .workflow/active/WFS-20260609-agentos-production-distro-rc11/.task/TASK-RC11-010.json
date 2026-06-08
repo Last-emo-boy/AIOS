@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-010",
+  "title": "build current release object byte map and immutable descriptor candidate",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+    "docs/release-artifacts.md",
+    "scripts/build-release.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-release-object-byte-map.ps1",
+      "role": "byte map and descriptor candidate projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Current release object byte map records release id, size, digest, manifest, checksum set, signature target, revocation, compatibility, rollback, and support/recovery references.",
+      "Descriptor candidate is immutable, canonical, size-bound, digest-bound, and credential-free.",
+      "No payload upload, install, activation, rollback, support upload, remote dispatch, or production ring mutation is performed."
+    ]
+  }
+}

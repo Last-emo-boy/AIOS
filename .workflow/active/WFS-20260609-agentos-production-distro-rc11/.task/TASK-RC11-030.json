@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-030",
+  "title": "build two-target canary enrollment and exact approval package",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+    ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-two-target-canary-approval.ps1",
+      "role": "canary enrollment and approval projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Target set contains at least two non-duplicate enrolled canary targets or records a target-set denial.",
+      "Exact approval binds actor, release id, object digest, target ids, target set digest, AgentCore PlanSpec hash, SecurityExecution policy, rollback baseline, support/recovery digest, audit sink, expiry, nonce, and policy version.",
+      "Broad, stale, missing, single-target, duplicate-target, or mismatched approval fails closed."
+    ]
+  }
+}

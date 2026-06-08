@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-040",
+  "title": "execute or deny rollback drill with separate approval and support recovery binding",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc10-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc10-controlled-execution-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc11-controlled-rollback-support-recovery.ps1",
+      "role": "rollback and support/recovery evidence projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json",
+      "role": "task result"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback execution requires controlled activation evidence and separate exact rollback approval.",
+      "Rollback evidence binds previous artifact set, activated artifact set, rollback baseline, target ids, rollback PlanSpec, SecurityExecution effect envelope, support/recovery references, audit journal, and post-rollback observations.",
+      "Support/recovery remains redacted and no support upload or remote dispatch is performed unless explicitly proved by gates."
+    ]
+  }
+}

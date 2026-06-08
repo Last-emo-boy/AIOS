@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC11-000",
+  "title": "plan Production Distro RC11 real-object controlled execution unblock",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/state.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/final-rc10-closeout-summary.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+      "role": "RC11 workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/workflow-session.json",
+      "role": "RC11 workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md",
+      "role": "planning summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-000-planning.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC11 workflow is planned from RC10 final audit blockers.",
+      "RC11 scope is AIOS body only and excludes mirror frontend, nginx, remote signer infrastructure, signing ceremonies, remote dispatch, production ring mutation, and GA claims.",
+      "RC11 plan defines tasks for real object trust handoff, drift-zero reconciliation, installer quarantine verification, AgentCore/SecurityExecution binding, controlled canary activation, rollback, support/recovery, and final audit.",
+      "The active task pointer advances to RC11-001."
+    ]
+  }
+}
