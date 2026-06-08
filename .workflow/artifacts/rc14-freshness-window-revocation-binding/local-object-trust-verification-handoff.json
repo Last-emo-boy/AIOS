@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.rc14-local-object-trust-verification-handoff.v1",
+  "generated_at": "2026-06-09T12:45:00+08:00",
+  "task": "RC14-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc14-012-local-object-trust-verification",
+  "production_ready_claim": false,
+  "expected_next_task": "RC14-012",
+  "authority": {
+    "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window-revocation-binding.json",
+    "sha256": "3e4824789beb960b2717b5168905ef5e4717f487bbc79e8ee8be4d2ae2a12738",
+    "freshness_window_path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window.json",
+    "freshness_window_sha256": "ca6d4328157ea4dab275e64eb27ace7ba96060cba6b23474dd8493cdddf7170c",
+    "freshness_revocation_authority_bound": true,
+    "object_trust_preconditions_ready": true,
+    "local_object_trust_allowed": false
+  },
+  "release_identity": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_path": "image/out/agentos-initramfs.cpio.gz",
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_size_bytes": 377,
+    "content_type": "application/gzip",
+    "compression": "gzip",
+    "immutable": true
+  },
+  "blocked_authority": {
+    "local_object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "blockers": [
+    "local-object-trust-verification-not-run",
+    "verified-quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ]
+}

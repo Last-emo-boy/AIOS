@@ -1,0 +1,124 @@
+{
+  "schema": "agentos.rc14-freshness-window-revocation-binding-evidence.v1",
+  "generated_at": "2026-06-09T12:45:00+08:00",
+  "task": "RC14-011",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "script": {
+    "path": "scripts/project-rc14-freshness-window-revocation-binding.ps1",
+    "sha256": "e442292d39bff388882d7a32409bc7b22f4e9a222582f59e240b6bc68ee07057"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/result.json",
+    "status": "passed",
+    "sha256": "82e6e507bc1e55deda85efbed3204cda0f64edddd735a8ca071505dc7d914602"
+  },
+  "outputs": {
+    "freshness_window": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window.json",
+      "sha256": "ca6d4328157ea4dab275e64eb27ace7ba96060cba6b23474dd8493cdddf7170c"
+    },
+    "binding": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window-revocation-binding.json",
+      "sha256": "3e4824789beb960b2717b5168905ef5e4717f487bbc79e8ee8be4d2ae2a12738"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window-revocation-fail-closed-matrix.json",
+      "sha256": "46745bc657ef492804e656d79742b1d164da2d0c5aa515ef435e34207be039d4"
+    },
+    "downstream_denial": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window-revocation-downstream-denial.json",
+      "sha256": "ed5ac34f3261174a4d23a7cabd89790d2fee95fc0cea32a17ffa69885859863f"
+    },
+    "local_object_trust_verification_handoff": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/local-object-trust-verification-handoff.json",
+      "sha256": "36d8ef520e04244b1ba6aa5439572ebada1afb1fe0c49e5aa4beb80ed16da9ad"
+    }
+  },
+  "authority_surface": {
+    "state": "freshness-window-revocation-bound",
+    "freshness_revocation_authority_bound": true,
+    "freshness_window_bound": true,
+    "freshness_window_current": true,
+    "freshness_valid_from": "2026-06-09T12:45:00+08:00",
+    "freshness_valid_until": "2026-06-10T12:45:00.0000000+08:00",
+    "revocation_snapshot_bound": true,
+    "revocation_snapshot_current": true,
+    "revocation_status_not_revoked": true,
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "identity_set_bound": true,
+    "declared_current_drift_zero": true,
+    "release_identity_bound": true,
+    "comparisons": 20,
+    "comparison_drifts": 0,
+    "fail_closed_cases": 12,
+    "failed_fail_closed_cases": 0,
+    "object_trust_preconditions_ready": true,
+    "local_object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "network_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "local-object-trust-verification-not-run",
+      "verified-quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "freshness_window_written": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "signer_service_called": false,
+    "signature_value_exposed": false,
+    "raw_public_identity_exposed": false,
+    "payload_upload_performed": false,
+    "object_storage_provisioned": false,
+    "network_probe_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "object_trust_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc14_011_complete": true,
+    "next_task": "RC14-012",
+    "commit_required": true
+  }
+}

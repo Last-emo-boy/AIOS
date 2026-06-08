@@ -1,0 +1,374 @@
+{
+  "schema": "agentos.rc14-freshness-window-revocation-binding.v1",
+  "generated_at": "2026-06-09T12:45:00+08:00",
+  "task": "RC14-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "freshness-window-revocation-bound",
+  "production_ready_claim": false,
+  "authority_surface": {
+    "freshness_revocation_authority_bound": true,
+    "freshness_window_bound": true,
+    "freshness_window_current": true,
+    "revocation_snapshot_bound": true,
+    "revocation_snapshot_current": true,
+    "revocation_status_not_revoked": true,
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "identity_set_bound": true,
+    "declared_current_drift_zero": true,
+    "release_identity_bound": true,
+    "comparisons": 20,
+    "comparison_drifts": 0
+  },
+  "freshness_window": {
+    "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window.json",
+    "sha256": "ca6d4328157ea4dab275e64eb27ace7ba96060cba6b23474dd8493cdddf7170c",
+    "valid_from": "2026-06-09T12:45:00+08:00",
+    "valid_until": "2026-06-10T12:45:00.0000000+08:00"
+  },
+  "public_signature": {
+    "key_id": "agentos-production-root-v1",
+    "signature_artifact_path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+    "signature_artifact_sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+    "signature_value_sha256": "0c3daedb64364996d2317cded045d5d46f5cac3b20452bb420e10ba7c6e34f3d",
+    "signature_value_redacted": true,
+    "receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+    "summary_sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+    "raw_public_identity_redacted": true,
+    "crypto_verified": true
+  },
+  "revocation": {
+    "snapshot_path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+    "snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+    "log_path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json",
+    "log_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+    "key_id": "agentos-production-root-v1",
+    "status": "not-revoked",
+    "log_status": "not-revoked",
+    "valid_until": "2026-06-15T12:57:26.9439674+08:00",
+    "current_at_generated_at": true
+  },
+  "consistency": {
+    "comparisons": [
+      {
+        "id": "handoff.identity_set.sha256.result_vs_file",
+        "status": "matched",
+        "expected": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+        "actual": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+        "expected_source": "RC14-010 result identity set sha256",
+        "actual_source": "current RC14 identity set file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "handoff.identity_set.sha256.handoff_vs_file",
+        "status": "matched",
+        "expected": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+        "actual": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+        "expected_source": "RC14-010 handoff identity set sha256",
+        "actual_source": "current RC14 identity set file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "release_id.identity_vs_handoff",
+        "status": "matched",
+        "expected": "production-distro-rc8-current-artifacts",
+        "actual": "production-distro-rc8-current-artifacts",
+        "expected_source": "RC14 identity set release id",
+        "actual_source": "RC14 freshness handoff release id",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.sha256.identity_vs_handoff",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "RC14 identity set payload sha256",
+        "actual_source": "RC14 freshness handoff payload sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.sha256.identity_vs_file",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "RC14 identity set payload sha256",
+        "actual_source": "current payload file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.size.identity_vs_handoff",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "RC14 identity set payload size_bytes",
+        "actual_source": "RC14 freshness handoff payload size_bytes",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.size.identity_vs_file",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "RC14 identity set payload size_bytes",
+        "actual_source": "current payload file size_bytes",
+        "denial_reason": null
+      },
+      {
+        "id": "public_signature.bound.handoff_vs_rc13",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC14 handoff public signature bound",
+        "actual_source": "RC13 freshness result public signature bound",
+        "denial_reason": null
+      },
+      {
+        "id": "public_signature.crypto.handoff_vs_rc13",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC14 handoff public signature crypto verified",
+        "actual_source": "RC13 freshness result public signature crypto verified",
+        "denial_reason": null
+      },
+      {
+        "id": "revocation.bound.handoff_vs_rc13",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC14 handoff revocation authority bound",
+        "actual_source": "RC13 freshness result revocation authority bound",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.artifact.sha256.rc13_vs_file",
+        "status": "matched",
+        "expected": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+        "actual": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+        "expected_source": "RC13 freshness result signature artifact sha256",
+        "actual_source": "current public signature artifact file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.receipt.sha256.rc8_vs_file",
+        "status": "matched",
+        "expected": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+        "actual": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+        "expected_source": "RC8 signature result receipt sha256",
+        "actual_source": "current signature receipt file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.summary.sha256.rc8_vs_file",
+        "status": "matched",
+        "expected": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+        "actual": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+        "expected_source": "RC8 signature result summary sha256",
+        "actual_source": "current signature summary file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.value.sha256.rc13_vs_current",
+        "status": "matched",
+        "expected": "0c3daedb64364996d2317cded045d5d46f5cac3b20452bb420e10ba7c6e34f3d",
+        "actual": "0c3daedb64364996d2317cded045d5d46f5cac3b20452bb420e10ba7c6e34f3d",
+        "expected_source": "RC13 freshness result signature value hash",
+        "actual_source": "current public signature value hash",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.artifact.payload_vs_identity",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "public signature artifact payload sha256",
+        "actual_source": "RC14 identity set payload sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.key_id.snapshot_vs_artifact",
+        "status": "matched",
+        "expected": "agentos-production-root-v1",
+        "actual": "agentos-production-root-v1",
+        "expected_source": "revocation snapshot key id",
+        "actual_source": "public signature artifact key id",
+        "denial_reason": null
+      },
+      {
+        "id": "signature.key_id.log_vs_artifact",
+        "status": "matched",
+        "expected": "agentos-production-root-v1",
+        "actual": "agentos-production-root-v1",
+        "expected_source": "revocation log key id",
+        "actual_source": "public signature artifact key id",
+        "denial_reason": null
+      },
+      {
+        "id": "revocation.snapshot.sha256.rc13_vs_file",
+        "status": "matched",
+        "expected": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+        "actual": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+        "expected_source": "RC13 freshness result revocation snapshot sha256",
+        "actual_source": "current revocation snapshot file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "revocation.log.sha256.rc13_vs_file",
+        "status": "matched",
+        "expected": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+        "actual": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+        "expected_source": "RC13 freshness result revocation log sha256",
+        "actual_source": "current revocation log file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "signed_metadata.sha256.rc13_vs_file",
+        "status": "matched",
+        "expected": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+        "actual": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+        "expected_source": "RC13 freshness result signed metadata sha256",
+        "actual_source": "current signed metadata file sha256",
+        "denial_reason": null
+      }
+    ],
+    "comparison_drifts": []
+  },
+  "trust_decision": {
+    "freshness_revocation_authority_bound": true,
+    "object_trust_preconditions_ready": true,
+    "local_object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "local-object-trust-verification-not-run",
+      "verified-quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "source": {
+    "rc14_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "sha256": "4b3653aea64ecddf5c4d7b9974f1a9439be9810fc0d3955f915b2d57d03b7a52",
+      "size_bytes": 8732,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc14_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+      "size_bytes": 8634,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc14_drift_repair_result": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/result.json",
+      "sha256": "f6de248ca442a2cc0edf76f76dad3ddb9420e1b3bdbe9f94cd0f4664b2870e72",
+      "size_bytes": 13207,
+      "present": true,
+      "schema": "agentos.rc14-declared-current-drift-zero-repair-result.v1",
+      "status": "passed"
+    },
+    "rc14_reconciled_identity_set": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/declared-current-reconciled-identity-set.json",
+      "sha256": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+      "size_bytes": 37104,
+      "present": true,
+      "schema": "agentos.rc14-declared-current-reconciled-identity-set.v1",
+      "status": "local-reconciled-identity-set-drift-zero"
+    },
+    "rc14_freshness_handoff": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/freshness-window-revocation-binding-handoff.json",
+      "sha256": "d04bb2be65725148cf76f4b3180d5aea06232cbf8e265c7d86f4ac11a1da554d",
+      "size_bytes": 2627,
+      "present": true,
+      "schema": "agentos.rc14-freshness-window-revocation-binding-handoff.v1",
+      "status": "ready-for-rc14-011-freshness-window-revocation-binding"
+    },
+    "rc13_freshness_revocation_result": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+      "sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db",
+      "size_bytes": 16454,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-result.v1",
+      "status": "passed"
+    },
+    "rc8_signature_ingestion_result": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "sha256": "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+      "size_bytes": 6262,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+      "status": "passed"
+    },
+    "rc8_signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "size_bytes": 1533,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null
+    },
+    "rc8_signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "size_bytes": 1011,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null
+    },
+    "public_signature_artifact": {
+      "path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+      "sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+      "present": true,
+      "schema": "agentos.production-detached-signature.v1",
+      "signature_value_sha256": "0c3daedb64364996d2317cded045d5d46f5cac3b20452bb420e10ba7c6e34f3d",
+      "raw_signature_value_redacted": true
+    },
+    "revocation_snapshot": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "size_bytes": 1451,
+      "present": true,
+      "schema": "agentos.rc7-revocation-snapshot.v1",
+      "status": "revocation-current-projected"
+    },
+    "revocation_log": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json",
+      "sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+      "present": true,
+      "schema": "agentos.production-key-revocation-log.v1",
+      "authority_refs_redacted": true
+    },
+    "signed_metadata": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+      "sha256": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+      "size_bytes": 2790,
+      "present": true,
+      "schema": "agentos.rc7-signed-metadata-projection.v1",
+      "status": "signed-metadata-projected-verification-blocked"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  }
+}

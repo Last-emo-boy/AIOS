@@ -1,0 +1,265 @@
+{
+  "schema": "agentos.rc14-freshness-window-revocation-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T12:45:00+08:00",
+  "task": "RC14-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "passed",
+  "cases": [
+    {
+      "id": "current.freshness_window_revocation_binding",
+      "status": "accepted",
+      "denied": false,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": []
+    },
+    {
+      "id": "negative.identity_set_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": false,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "identity-set-not-bound"
+      ]
+    },
+    {
+      "id": "negative.drift_nonzero",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": false,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "declared-current-drift-zero-not-proved"
+      ]
+    },
+    {
+      "id": "negative.release_identity_unbound",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": false,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "release-identity-not-bound"
+      ]
+    },
+    {
+      "id": "negative.public_signature_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": false,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "public-signature-not-bound"
+      ]
+    },
+    {
+      "id": "negative.signature_crypto_unverified",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": false,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "public-signature-crypto-not-verified"
+      ]
+    },
+    {
+      "id": "negative.revocation_snapshot_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": false,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "revocation-snapshot-not-bound"
+      ]
+    },
+    {
+      "id": "negative.revoked_key",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": false,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "revocation-status-not-current"
+      ]
+    },
+    {
+      "id": "negative.stale_revocation_snapshot",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": false,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "revocation-snapshot-stale-or-missing"
+      ]
+    },
+    {
+      "id": "negative.freshness_window_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": false,
+        "freshness_window_current": true,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "freshness-window-missing"
+      ]
+    },
+    {
+      "id": "negative.freshness_window_stale",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": false,
+        "no_private_material": true
+      },
+      "denial_reasons": [
+        "freshness-window-stale-or-missing"
+      ]
+    },
+    {
+      "id": "negative.private_material_used",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "identity_set_bound": true,
+        "drift_zero": true,
+        "release_identity_bound": true,
+        "public_signature_bound": true,
+        "public_signature_crypto_verified": true,
+        "revocation_snapshot_bound": true,
+        "revocation_status_not_revoked": true,
+        "revocation_snapshot_current": true,
+        "freshness_window_bound": true,
+        "freshness_window_current": true,
+        "no_private_material": false
+      },
+      "denial_reasons": [
+        "private-signing-material-used"
+      ]
+    }
+  ],
+  "summary": {
+    "cases": 12,
+    "negative_cases": 11,
+    "denied_negative_cases": 11,
+    "failed_cases": []
+  }
+}
