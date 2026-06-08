@@ -1,0 +1,39 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-000",
+    "title":  "plan Production Distro RC12 real-object controlled unblock",
+    "status":  "completed",
+    "wave":  "wave-0",
+    "read_first":  [
+                       ".workflow/state.json",
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md",
+                       "TASK.md"
+                   ],
+    "files":  [
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
+                      "role":  "RC12 workflow plan"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/workflow-session.json",
+                      "role":  "RC12 workflow session"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-plan.md",
+                      "role":  "planning summary"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-000-planning.json",
+                      "role":  "task evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "RC12 workflow is planned from RC11 final audit blockers.",
+                                         "RC12 scope is AIOS body only and excludes mirror frontend, nginx, remote signer infrastructure, object storage provisioning, signing ceremonies, remote dispatch, production ring mutation, and GA claims.",
+                                         "RC12 plan defines tasks for real object publication binding, drift-zero, object trust verification, quarantine fetch, AgentCore/SecurityExecution package, canary approval, activation, rollback, support/recovery, and final audit.",
+                                         "The active task pointer advances to RC12-001."
+                                     ]
+                    }
+}

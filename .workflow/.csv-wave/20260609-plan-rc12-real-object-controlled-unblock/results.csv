@@ -1,0 +1,5 @@
+id,title,description,exploration_focus,deps,context_from,wave,status,findings,error
+E1,Architecture Exploration,Map RC12 authority boundaries and trust gates from RC11 final audit,architecture,,,1,completed,"AIOS body owns local verification, quarantine, AgentCore, SecurityExecution, audit, rollback and support evidence; mirror/signer/frontend/object storage UI remain non-authoritative.",
+E2,Implementation Exploration,Find RC11/RC10 planning and task artifact patterns,implementation,,,1,completed,"Follow RC10/RC11 plan/session/task/evidence layout and script-per-task artifacts; ignored .workflow/artifacts results require forced add when committed.",
+E3,Risk Exploration,Identify RC12 unblock risks and fail-closed requirements,risk,,,1,completed,"Primary risks are authority broadening, treating reachability as trust, stale/broad approvals, target spoofing, and accidental side effects before all gates are proved.",
+P1,Plan Generation,Generate RC12 workflow plan and task specs,planning,E1;E2;E3,E1;E2;E3,2,completed,"Generated RC12 plan with 11 tasks across 6 waves; RC12-000 completed and next task is RC12-001.",

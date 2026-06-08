@@ -1,0 +1,33 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-030",
+    "title":  "enroll two canary targets and bind exact approval with audit sink nonce and expiry",
+    "status":  "pending",
+    "wave":  "wave-3",
+    "read_first":  [
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+                       ".workflow/artifacts/rc12-agentcore-security-execution-package/result.json",
+                       ".workflow/artifacts/rc11-two-target-canary-approval/result.json"
+                   ],
+    "files":  [
+                  {
+                      "path":  "scripts/project-rc12-canary-target-approval-binding.ps1",
+                      "role":  "canary target and approval binder"
+                  },
+                  {
+                      "path":  ".workflow/artifacts/rc12-canary-target-approval-binding/result.json",
+                      "role":  "task result"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-030-canary-target-approval-binding.json",
+                      "role":  "task evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "At least two canary target identities are required before activation authority.",
+                                         "Exact approval binds actor, release, object digest, target set, AgentCore PlanSpec, SecurityExecution envelope, rollback baseline, support/recovery, audit sink, nonce, and expiry.",
+                                         "Broad, stale, missing, mismatched, or replayed approval denies activation and rollback authority."
+                                     ]
+                    }
+}

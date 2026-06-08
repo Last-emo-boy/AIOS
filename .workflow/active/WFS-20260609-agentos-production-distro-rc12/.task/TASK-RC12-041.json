@@ -1,0 +1,34 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-041",
+    "title":  "execute or deny separately approved rollback drill with support recovery evidence",
+    "status":  "pending",
+    "wave":  "wave-4",
+    "read_first":  [
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+                       ".workflow/artifacts/rc12-controlled-canary-activation/result.json",
+                       ".workflow/artifacts/rc12-canary-target-approval-binding/result.json",
+                       ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json"
+                   ],
+    "files":  [
+                  {
+                      "path":  "scripts/project-rc12-controlled-rollback-drill.ps1",
+                      "role":  "controlled rollback drill runner"
+                  },
+                  {
+                      "path":  ".workflow/artifacts/rc12-controlled-rollback-drill/result.json",
+                      "role":  "task result"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-041-controlled-rollback-drill.json",
+                      "role":  "task evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "Rollback execution requires controlled activation evidence, separate exact rollback approval, AgentCore rollback PlanSpec, SecurityExecution rollback allow, audit journal, rollback baseline, support/recovery binding, and post-rollback observations.",
+                                         "If any rollback gate is missing, rollback/support/recovery execution is denied with exact blockers.",
+                                         "Support bundle remains redacted/local-only unless upload is explicitly authorized by policy and audit evidence."
+                                     ]
+                    }
+}

@@ -1,0 +1,33 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-021",
+    "title":  "bind verified quarantine preflight to executable AgentCore and SecurityExecution package",
+    "status":  "pending",
+    "wave":  "wave-2",
+    "read_first":  [
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+                       ".workflow/artifacts/rc12-quarantine-fetch-verification/result.json",
+                       ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json"
+                   ],
+    "files":  [
+                  {
+                      "path":  "scripts/project-rc12-agentcore-security-execution-package.ps1",
+                      "role":  "execution package binder"
+                  },
+                  {
+                      "path":  ".workflow/artifacts/rc12-agentcore-security-execution-package/result.json",
+                      "role":  "task result"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-021-agentcore-security-execution-package.json",
+                      "role":  "task evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "Verified quarantine/preflight evidence is hash-bound into an AgentCore executable PlanSpec candidate.",
+                                         "SecurityExecution effect envelope records an allow decision only when exact policy, object trust, quarantine, rollback, support/recovery, audit, and approval gates are present.",
+                                         "No install, activation, rollback, support upload, remote dispatch, or production ring mutation is performed by package binding alone."
+                                     ]
+                    }
+}

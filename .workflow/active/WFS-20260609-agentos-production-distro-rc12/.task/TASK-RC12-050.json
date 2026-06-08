@@ -1,0 +1,40 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-050",
+    "title":  "run Production Distro RC12 final closeout audit",
+    "status":  "pending",
+    "wave":  "wave-5",
+    "read_first":  [
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
+                       ".workflow/artifacts/rc12-external-object-publication-binding/result.json",
+                       ".workflow/artifacts/rc12-declared-current-drift-zero/result.json",
+                       ".workflow/artifacts/rc12-object-trust-verification/result.json",
+                       ".workflow/artifacts/rc12-quarantine-fetch-verification/result.json",
+                       ".workflow/artifacts/rc12-agentcore-security-execution-package/result.json",
+                       ".workflow/artifacts/rc12-canary-target-approval-binding/result.json",
+                       ".workflow/artifacts/rc12-controlled-canary-activation/result.json",
+                       ".workflow/artifacts/rc12-controlled-rollback-drill/result.json"
+                   ],
+    "files":  [
+                  {
+                      "path":  "scripts/run-rc12-final-closeout-audit.ps1",
+                      "role":  "RC12 final audit runner"
+                  },
+                  {
+                      "path":  ".workflow/artifacts/rc12-final-closeout-audit/result.json",
+                      "role":  "final audit result"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
+                      "role":  "final audit evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "Final audit verifies every RC12 planned task result.",
+                                         "Audit records whether RC12 moved beyond fail-closed denial into controlled unblock evidence.",
+                                         "Audit keeps production_ready_claim=false unless every GA and execution gate is explicitly proved.",
+                                         "Audit records next milestone direction."
+                                     ]
+                    }
+}

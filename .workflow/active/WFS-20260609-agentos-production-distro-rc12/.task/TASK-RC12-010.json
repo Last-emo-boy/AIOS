@@ -1,0 +1,34 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-010",
+    "title":  "bind or deny immutable external object publication evidence for current payload bytes",
+    "status":  "pending",
+    "wave":  "wave-1",
+    "read_first":  [
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+                       ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+                       ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
+                       "docs/release-artifacts.md"
+                   ],
+    "files":  [
+                  {
+                      "path":  "scripts/project-rc12-external-object-publication-binding.ps1",
+                      "role":  "object publication binding projector"
+                  },
+                  {
+                      "path":  ".workflow/artifacts/rc12-external-object-publication-binding/result.json",
+                      "role":  "task result"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-010-external-object-publication-binding.json",
+                      "role":  "task evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "Publication binding records current release id, object URI candidate, size, digest, manifest, checksum set, signature target, revocation, freshness, compatibility, rollback, and support references.",
+                                         "If object URI is absent, mutable, credential-bearing, non-HTTPS, size-mismatched, or digest-mismatched, publication binding is denied with exact blockers.",
+                                         "No payload upload, object storage provisioning, install, activation, rollback, support upload, remote dispatch, or production ring mutation is performed."
+                                     ]
+                    }
+}

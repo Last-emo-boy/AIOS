@@ -1,0 +1,56 @@
+{
+    "workflow_id":  "WFS-20260609-agentos-production-distro-rc12",
+    "name":  "Production Distro RC12",
+    "status":  "active",
+    "created_at":  "2026-06-09T03:45:00+08:00",
+    "updated_at":  "2026-06-09T03:45:00+08:00",
+    "source":  "RC11 final audit; maestro-managed RC12 planning",
+    "previous_workflow":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+    "goal":  "Plan and execute AIOS-body controlled unblock for real object publication binding, drift-zero reconciliation, quarantine fetch verification, exact approval with audit binding, AgentCore/SecurityExecution allow, controlled activation, rollback, and support/recovery evidence.",
+    "core_thesis":  "AIOS becomes distributable only when every release byte is immutable and locally verified, every declared/current identity matches, every fetched byte is quarantined before interpretation, and every activation or rollback effect is authorized through exact approval, AgentCore executable PlanSpec, SecurityExecutionEngine allow, audit, rollback, and support/recovery evidence.",
+    "non_goals":  [
+                      "Do not build mirror frontend, nginx, TLS, remote signer, object storage, or remote dispatch infrastructure in RC12 body tasks.",
+                      "Do not read, copy, print, hash, move, or reference private signing material.",
+                      "Do not claim GA production readiness.",
+                      "Do not treat mirror reachability, signer reachability, frontend output, shell output, TUI output, model replay, or object storage UI as authority.",
+                      "Do not install, activate, rollback, mutate boot metadata, mutate active slots, mutate active artifact sets, mutate production rings, upload support bundles, or dispatch remote fleet actions unless a later task proves every gate and records the effect explicitly."
+                  ],
+    "primary_acceptance":  [
+                               "RC12 plan is active and task-managed with RC12-001 as the next executable task.",
+                               "The plan covers real object publication binding, drift-zero reconciliation, object trust verification, quarantine fetch verification, AgentCore/SecurityExecution executable package, canary target and exact approval binding, controlled activation, rollback, support/recovery, and final audit.",
+                               "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx, signer infrastructure, object storage provisioning, remote dispatch, and production ring mutation out of scope.",
+                               "The plan keeps production_ready_claim=false until final audit proves every required gate."
+                           ],
+    "completed_tasks":  [
+                            {
+                                "task":  "RC12-000",
+                                "completed_at":  "2026-06-09T03:45:00+08:00",
+                                "evidence":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-000-planning.json",
+                                "commit":  null
+                            }
+                        ],
+    "next_task":  "RC12-001",
+    "plan":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
+    "docs":  [
+                 ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                 ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md",
+                 ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-plan.md"
+             ],
+    "artifacts":  [
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/plan.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/workflow-session.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-plan.md",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-000.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-000-planning.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-001.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-010.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-011.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-012.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-020.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-021.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-030.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-040.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-041.json",
+                      ".workflow/active/WFS-20260609-agentos-production-distro-rc12/.task/TASK-RC12-050.json"
+                  ]
+}

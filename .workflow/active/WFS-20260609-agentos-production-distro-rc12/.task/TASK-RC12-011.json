@@ -1,0 +1,33 @@
+{
+    "schema":  "agentos.task.v1",
+    "id":  "RC12-011",
+    "title":  "reconcile declared and current artifact identity to zero or emit repair blockers",
+    "status":  "pending",
+    "wave":  "wave-1",
+    "read_first":  [
+                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+                       ".workflow/artifacts/rc12-external-object-publication-binding/result.json",
+                       ".workflow/artifacts/rc11-declared-current-drift-zero/result.json"
+                   ],
+    "files":  [
+                  {
+                      "path":  "scripts/project-rc12-declared-current-drift-zero.ps1",
+                      "role":  "drift-zero reconciler"
+                  },
+                  {
+                      "path":  ".workflow/artifacts/rc12-declared-current-drift-zero/result.json",
+                      "role":  "task result"
+                  },
+                  {
+                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-011-declared-current-drift-zero.json",
+                      "role":  "task evidence"
+                  }
+              ],
+    "convergence":  {
+                        "criteria":  [
+                                         "Declared/current comparisons are explicit and hash-bound to RC11 and RC12 source artifacts.",
+                                         "Drift-zero is true only when release id, payload digest, descriptor digest, manifest, checksum set, signature target, revocation, freshness, compatibility, rollback, support, and publication binding all match.",
+                                         "If drift remains, object trust, quarantine fetch, install, activation, rollback, support upload, recovery, remote dispatch, and production mutation remain denied."
+                                     ]
+                    }
+}
