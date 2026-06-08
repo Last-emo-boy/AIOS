@@ -1,0 +1,370 @@
+{
+  "schema": "agentos.rc12-quarantine-fetch-verification-result.v1",
+  "generated_at": "2026-06-09T05:15:00+08:00",
+  "task": "RC12-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "fetch_surface": {
+    "state": "quarantine-fetch-denied-before-network",
+    "object_trust_allowed": false,
+    "external_https_object_uri_published": false,
+    "drift_zero": false,
+    "freshness_window_bound": false,
+    "revocation_bound": true,
+    "compatibility_bound": true,
+    "rollback_bound": true,
+    "support_bound": true,
+    "current_bytes_match": true,
+    "quarantine_fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "pre_interpretation_verification_performed": false,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "object-uri-not-https",
+      "object-uri-not-immutable",
+      "declared-current-drift-zero-not-proved",
+      "freshness-window-missing",
+      "nonzero-declared-current-drift-count",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "object-trust-not-allowed",
+      "installer-quarantine-fetch-not-run",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "external-descriptor-verification-denied",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run"
+    ]
+  },
+  "outputs": {
+    "quarantine_fetch_report": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-report.json",
+      "sha256": "4f9c7551fea19c3efd859a2a22cedb0c65bda607248f24d6017a7450242bf98e"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-fail-closed-matrix.json",
+      "sha256": "32393ab7bc939055aac09ee46d0341292e10f4f3cbd9c945f6abd03de66bf8a9"
+    },
+    "gate_report": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-gate-report.json",
+      "sha256": "87eb0fdeeda898691879a5ba6edaed469885114ffa685fd19dc60a3f3434a5da"
+    },
+    "agentcore_security_package_handoff": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/agentcore-security-package-handoff.json",
+      "sha256": "63e603c208e825d35ba8c44ca3b51505a0a78e267f7274a49b580bb235ed4803"
+    }
+  },
+  "source": {
+    "rc12_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+      "sha256": "3b5560e2f67231551d85117a8ae1841175872ccfe67015dd079baa31e2bd4f8d",
+      "size_bytes": 7642,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc12_object_trust_result": {
+      "path": ".workflow/artifacts/rc12-object-trust-verification/result.json",
+      "sha256": "b02098d277f4ec67b9dedd375cb46b87169a687e2f4437e92a44c60e45fe3267",
+      "size_bytes": 13133,
+      "present": true,
+      "schema": "agentos.rc12-object-trust-verification-result.v1",
+      "status": "passed"
+    },
+    "rc12_object_trust_report": {
+      "path": ".workflow/artifacts/rc12-object-trust-verification/object-trust-report.json",
+      "sha256": "fb39939c7e6b21b0822cfbf3bb9de296c7ee34019248e90e7a0bba6869acf88d",
+      "size_bytes": 5858,
+      "present": true,
+      "schema": "agentos.rc12-object-trust-verification-report.v1",
+      "status": "object-trust-denied"
+    },
+    "rc12_object_trust_denial": {
+      "path": ".workflow/artifacts/rc12-object-trust-verification/object-trust-denial.json",
+      "sha256": "831c1f7906e91d3214e5ce9dab1bfd1b00a856411ae65e9795ff8e945cdae647",
+      "size_bytes": 1717,
+      "present": true,
+      "schema": "agentos.rc12-object-trust-denial.v1",
+      "status": "object-trust-denied"
+    },
+    "rc12_object_trust_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc12-object-trust-verification/object-trust-fail-closed-matrix.json",
+      "sha256": "17f88981b21138d1ca1523b290aed05c6d84f21cddc8181c0b07e39855963cd9",
+      "size_bytes": 10786,
+      "present": true,
+      "schema": "agentos.rc12-object-trust-fail-closed-matrix.v1",
+      "status": "passed"
+    },
+    "rc12_publication_binding": {
+      "path": ".workflow/artifacts/rc12-external-object-publication-binding/publication-binding.json",
+      "sha256": "94fc3176cba8cc7f17eab35331e904ebc0b9ee93e3e1171e1262874450366d8d",
+      "size_bytes": 5356,
+      "present": true,
+      "schema": "agentos.rc12-external-object-publication-binding.v1",
+      "status": "external-object-publication-denied"
+    },
+    "rc11_quarantine_result": {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+      "sha256": "17da779b4aea1f8cf109ab3a734a2298037a3cd25532191c870c8f8fc36a8a03",
+      "size_bytes": 9932,
+      "present": true,
+      "schema": "agentos.rc11-installer-quarantine-verifier-result.v1",
+      "status": "passed"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "contract.quarantine_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 must consume the quarantine-before-interpretation gate order.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+        "sha256": "3b5560e2f67231551d85117a8ae1841175872ccfe67015dd079baa31e2bd4f8d",
+        "size_bytes": 7642,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "source.object_trust.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 requires completed RC12-012 object trust evidence.",
+      "evidence": {
+        "status": "passed",
+        "object_trust_allowed": false,
+        "state": "object-trust-denied"
+      }
+    },
+    {
+      "id": "source.object_trust.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 requires object trust fail-closed cases to be clean before installer authority.",
+      "evidence": {
+        "cases": 15,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "source.current_bytes_match_descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current payload bytes must still match the publication binding and descriptor before quarantine policy evaluation.",
+      "evidence": {
+        "expected_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "observed_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_size_bytes": 377,
+        "observed_size_bytes": 377
+      }
+    },
+    {
+      "id": "fetch.denied_before_network",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer quarantine fetch must deny before network unless object trust and all pre-fetch gates are proved.",
+      "evidence": {
+        "quarantine_fetch_allowed": false,
+        "object_trust_allowed": false,
+        "external_uri_published": false,
+        "drift_zero": false,
+        "freshness_window_bound": false,
+        "blockers": [
+          "external-https-object-uri-not-published",
+          "object-uri-not-https",
+          "object-uri-not-immutable",
+          "declared-current-drift-zero-not-proved",
+          "freshness-window-missing",
+          "nonzero-declared-current-drift-count",
+          "rc12-publication-binding-drift",
+          "rc11-declared-current-drift-carried-forward",
+          "external-object-publication-not-allowed",
+          "freshness-window-not-bound",
+          "object-trust-not-allowed",
+          "installer-quarantine-fetch-not-run",
+          "agentcore-planspec-not-bound",
+          "security-execution-effect-envelope-not-bound",
+          "two-target-canary-not-enrolled",
+          "exact-approval-not-bound",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "external-descriptor-verification-denied",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run"
+        ]
+      }
+    },
+    {
+      "id": "pre_interpretation.gates_declared",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Quarantine verifier must declare size, SHA-256, descriptor, manifest, checksum, signature, revocation, freshness, compatibility, rollback, and support gates.",
+      "evidence": {
+        "size_bytes": 377,
+        "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "descriptor_candidate_sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+        "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "checksums_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "public_signature_target_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "public_signature_receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+        "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+        "freshness_window": null,
+        "freshness_window_bound": false,
+        "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 quarantine negative cases must fail closed before network, interpretation, install, activation, rollback, support upload, remote dispatch, or production mutation.",
+      "evidence": {
+        "cases": 27,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 must not fetch, download, quarantine-write, interpret, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": null
+    },
+    {
+      "id": "handoff.downstream_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 handoff must keep AgentCore/SecurityExecution package and downstream effects blocked while quarantine fetch is denied.",
+      "evidence": {
+        "status": "blocked-before-agentcore-security-package",
+        "blockers": [
+          "external-https-object-uri-not-published",
+          "object-uri-not-https",
+          "object-uri-not-immutable",
+          "declared-current-drift-zero-not-proved",
+          "freshness-window-missing",
+          "nonzero-declared-current-drift-count",
+          "rc12-publication-binding-drift",
+          "rc11-declared-current-drift-carried-forward",
+          "external-object-publication-not-allowed",
+          "freshness-window-not-bound",
+          "object-trust-not-allowed",
+          "installer-quarantine-fetch-not-run",
+          "agentcore-planspec-not-bound",
+          "security-execution-effect-envelope-not-bound",
+          "two-target-canary-not-enrolled",
+          "exact-approval-not-bound",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "external-descriptor-verification-denied",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run"
+        ]
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-020 outputs must not contain PEM blocks, auth tokens, private key paths, signer internals, or secret identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "external-https-object-uri-not-published",
+    "object-uri-not-https",
+    "object-uri-not-immutable",
+    "declared-current-drift-zero-not-proved",
+    "freshness-window-missing",
+    "nonzero-declared-current-drift-count",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "object-trust-not-allowed",
+    "installer-quarantine-fetch-not-run",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "external-descriptor-verification-denied",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 10,
+    "failed_checks": 0,
+    "cases": 27,
+    "failed_cases": 0,
+    "fetch_denied_before_network": true,
+    "fetch_denied_as_expected": true,
+    "rc12_020_complete": true,
+    "next_task": "RC12-021"
+  }
+}

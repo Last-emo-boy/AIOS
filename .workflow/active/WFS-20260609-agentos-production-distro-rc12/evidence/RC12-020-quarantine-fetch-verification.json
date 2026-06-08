@@ -1,0 +1,123 @@
+{
+  "schema": "agentos.rc12-quarantine-fetch-verification-evidence.v1",
+  "generated_at": "2026-06-09T05:15:00+08:00",
+  "task": "RC12-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
+  "script": {
+    "path": "scripts/project-rc12-quarantine-fetch-verification.ps1",
+    "sha256": "308168c6d379d12017786d031cd1b78ea763fcb9a4d91a99d2ce03bc3ede5db5"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/result.json",
+    "status": "passed",
+    "sha256": "912c08e2d34dc84495b4078fa13328e9e5117747295552091ad33d59b077cc00"
+  },
+  "outputs": {
+    "quarantine_fetch_report": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-report.json",
+      "sha256": "4f9c7551fea19c3efd859a2a22cedb0c65bda607248f24d6017a7450242bf98e"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-fail-closed-matrix.json",
+      "sha256": "32393ab7bc939055aac09ee46d0341292e10f4f3cbd9c945f6abd03de66bf8a9"
+    },
+    "gate_report": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-gate-report.json",
+      "sha256": "87eb0fdeeda898691879a5ba6edaed469885114ffa685fd19dc60a3f3434a5da"
+    },
+    "agentcore_security_package_handoff": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/agentcore-security-package-handoff.json",
+      "sha256": "63e603c208e825d35ba8c44ca3b51505a0a78e267f7274a49b580bb235ed4803"
+    }
+  },
+  "fetch_surface": {
+    "state": "quarantine-fetch-denied-before-network",
+    "object_trust_allowed": false,
+    "external_https_object_uri_published": false,
+    "drift_zero": false,
+    "freshness_window_bound": false,
+    "revocation_bound": true,
+    "compatibility_bound": true,
+    "rollback_bound": true,
+    "support_bound": true,
+    "current_bytes_match": true,
+    "quarantine_fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "pre_interpretation_verification_performed": false,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "object-uri-not-https",
+      "object-uri-not-immutable",
+      "declared-current-drift-zero-not-proved",
+      "freshness-window-missing",
+      "nonzero-declared-current-drift-count",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "object-trust-not-allowed",
+      "installer-quarantine-fetch-not-run",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "external-descriptor-verification-denied",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc12_020_complete": true,
+    "next_task": "RC12-021",
+    "commit_required": true
+  }
+}
