@@ -1,0 +1,110 @@
+{
+  "schema": "agentos.rc13-local-trust-unblock-contract-evidence.v1",
+  "generated_at": "2026-06-09T07:25:00+08:00",
+  "task": "RC13-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc13",
+  "source": {
+    "rc13_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+      "sha256": "7f962245900a2d46fe6dd14c4d36849c305c8f43a1404307c6e04ad133372d0c",
+      "status": "active",
+      "current_task": "RC13-001"
+    },
+    "rc12_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
+      "sha256": "f7fbcdb58ef3a711e69459c2d292fb1bc0eb3997a736bffdf5b1fe2bb377219d",
+      "verdict": "PASS",
+      "production_ready_claim": false
+    },
+    "rc12_remaining_blockers": [
+      "external-https-object-uri-not-published",
+      "freshness-window-missing",
+      "declared-current-drift-zero-not-proved",
+      "nonzero-declared-current-drift-count",
+      "object-trust-not-allowed",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "installer-preflight-not-verified",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "two-target-canary-not-enrolled",
+      "exact-operator-approval-not-granted",
+      "audit-sink-not-bound",
+      "nonce-not-bound",
+      "approval-expiry-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-canary-activation-not-performed",
+      "rollback-exact-operator-approval-not-granted",
+      "agentcore-rollback-planspec-not-bound",
+      "security-execution-rollback-effect-envelope-not-bound",
+      "rollback-audit-journal-not-bound",
+      "post-rollback-observations-missing",
+      "remote-fleet-execution-not-enabled"
+    ]
+  },
+  "outputs": {
+    "contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+      "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd"
+    }
+  },
+  "contract_surface": {
+    "gate_order_frozen": true,
+    "declared_current_drift_zero_required": true,
+    "object_manifest_descriptor_consistency_required": true,
+    "freshness_and_revocation_required": true,
+    "public_signature_authority_without_private_material_required": true,
+    "quarantine_preflight_before_interpretation_required": true,
+    "agentcore_executable_planspec_required": true,
+    "security_execution_allow_required": true,
+    "two_target_canary_required": true,
+    "exact_approval_audit_sink_nonce_expiry_required": true,
+    "separate_rollback_approval_required": true,
+    "support_recovery_binding_required": true,
+    "external_transport_reachability_is_not_authority": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "remote_dispatch_infra_out_of_scope": true,
+    "private_signing_material_handling_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc13_001_complete": true,
+    "next_task": "RC13-010",
+    "commit_required": true
+  }
+}
