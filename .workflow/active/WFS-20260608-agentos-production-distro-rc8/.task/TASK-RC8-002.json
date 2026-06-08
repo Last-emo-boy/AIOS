@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-002",
+  "title": "define immutable payload object descriptor and byte boundary",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/real-installable-payload-controlled-execution-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/FINAL-AUDIT-20260608-production-distro-rc7.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/immutable-payload-object-descriptor-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-002.json",
+      "role": "task spec"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-002-immutable-payload-object-descriptor-boundary.json",
+      "role": "task evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/plan.json",
+      "role": "workflow status"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/workflow-session.json",
+      "role": "workflow status"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The descriptor contract defines required fields for real payload byte descriptors.",
+      "The contract forbids credential-bearing, mutable, non-HTTPS, authority-bearing, and private-material descriptor content.",
+      "The byte quarantine boundary requires local size and digest verification before any extraction, mount, install, activation, active slot mutation, or rollback work.",
+      "The task preserves production_ready_claim=false and moves the next task to RC8-003 public signature artifact ingestion."
+    ]
+  }
+}

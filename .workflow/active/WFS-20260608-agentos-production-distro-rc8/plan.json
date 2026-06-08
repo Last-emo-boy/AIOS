@@ -17,7 +17,7 @@
         },
         {
           "id": "RC8-002",
-          "status": "pending",
+          "status": "completed",
           "title": "define immutable payload object descriptor and byte boundary",
           "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/immutable-payload-object-descriptor-contract.md"
         },
@@ -114,7 +114,7 @@
       ]
     }
   ],
-  "current_task": "RC8-002",
+  "current_task": "RC8-003",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
   "acceptance_gates": {
     "hosted_endpoint_domain": "aios.w33d.xyz",
@@ -123,6 +123,8 @@
     "mirror_must_remain_metadata_only": true,
     "large_payload_bytes_must_use_immutable_object_descriptor": true,
     "object_descriptor_must_be_https_hash_bound_size_bound_and_credential_free": true,
+    "object_descriptor_must_bind_source_build_artifact": true,
+    "object_descriptor_must_not_contain_credentials_or_authority": true,
     "payload_bytes_must_be_downloaded_to_quarantine_before_digest_verification": true,
     "payload_signature_required_before_install": true,
     "public_signature_artifact_ingestion_only": true,
