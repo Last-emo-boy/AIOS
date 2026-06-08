@@ -1,0 +1,79 @@
+{
+  "schema": "agentos.rc9-external-object-installer-fetch-evidence.v1",
+  "generated_at": "2026-06-08T23:00:00+08:00",
+  "task": "RC9-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": "scripts/project-rc9-external-object-installer-fetch.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+    "status": "passed",
+    "sha256": "d179794c07e41181d4461fe35f808efde97b56b74304a778d3ec02f448e0e4f1"
+  },
+  "outputs": {
+    "fetch_report": {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/external-object-fetch-report.json",
+      "sha256": "405bcf1bb25405861e6031b12e8bdd01aea5c54b0e56db4c3927c73a47e0c12a"
+    },
+    "installer_fail_closed_evidence": {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/installer-fail-closed-evidence.json",
+      "sha256": "387ee1891043e0dcee1bb6a1e7bb7e0239658f1c96f7c4c1739954d9c9203f95"
+    },
+    "installer_gate_report": {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/installer-gate-report.json",
+      "sha256": "c43dafe8d94a7518421a549acd83b69d04e987fab3e0c2f4c89244d48ffc8f2f"
+    }
+  },
+  "fetch_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "fetch-denied-before-network",
+    "external_object_url_published": false,
+    "drift_reconciled_current_artifact": false,
+    "fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "cases": 9,
+    "failed_cases": 0,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-denied",
+      "installer-quarantine-fetch-not-run",
+      "exact-operator-approval-pending",
+      "controlled-execution-not-authorized"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "network_fetch_attempted": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_012_complete": true,
+    "wave_1_complete": true,
+    "next_task": "RC9-020",
+    "commit_required": true
+  }
+}

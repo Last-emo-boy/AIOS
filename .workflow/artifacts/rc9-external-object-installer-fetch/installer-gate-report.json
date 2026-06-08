@@ -1,0 +1,27 @@
+{
+    "schema":  "agentos.rc9-installer-gate-report.v1",
+    "generated_at":  "2026-06-08T23:00:00+08:00",
+    "task":  "RC9-012",
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "status":  "verification-blocked",
+    "production_ready_claim":  false,
+    "checks":  {
+                   "rc9_010_publication_passed":  true,
+                   "rc9_010_external_object_url_published":  false,
+                   "rc9_011_reconciliation_passed":  true,
+                   "rc9_011_reconciliation_state":  "drift-denied",
+                   "public_signature_crypto_verified":  true,
+                   "fetch_allowed":  false,
+                   "install_allowed":  false,
+                   "activation_allowed":  false,
+                   "rollback_execution_allowed":  false
+               },
+    "blockers":  [
+                     "external-https-object-uri-not-published",
+                     "declared-current-artifact-drift-denied",
+                     "installer-quarantine-fetch-not-run",
+                     "exact-operator-approval-pending",
+                     "controlled-execution-not-authorized"
+                 ],
+    "next_task":  "RC9-020"
+}

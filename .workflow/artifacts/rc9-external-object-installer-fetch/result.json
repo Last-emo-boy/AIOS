@@ -1,0 +1,218 @@
+{
+    "schema":  "agentos.rc9-external-object-installer-fetch-result.v1",
+    "generated_at":  "2026-06-08T23:00:00+08:00",
+    "task":  "RC9-012",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "fetch_surface":  {
+                          "state":  "fetch-denied-before-network",
+                          "external_object_url_published":  false,
+                          "drift_reconciled_current_artifact":  false,
+                          "fetch_allowed":  false,
+                          "network_fetch_attempted":  false,
+                          "remote_bytes_downloaded":  false,
+                          "quarantine_payload_written":  false,
+                          "payload_interpreted":  false,
+                          "install_allowed":  false,
+                          "activation_allowed":  false,
+                          "rollback_execution_allowed":  false,
+                          "blockers":  [
+                                           "external-https-object-uri-not-published",
+                                           "declared-current-artifact-drift-denied",
+                                           "installer-quarantine-fetch-not-run",
+                                           "exact-operator-approval-pending",
+                                           "controlled-execution-not-authorized"
+                                       ]
+                      },
+    "outputs":  {
+                    "fetch_report":  {
+                                         "path":  ".workflow/artifacts/rc9-external-object-installer-fetch/external-object-fetch-report.json",
+                                         "sha256":  "405bcf1bb25405861e6031b12e8bdd01aea5c54b0e56db4c3927c73a47e0c12a"
+                                     },
+                    "installer_fail_closed_evidence":  {
+                                                           "path":  ".workflow/artifacts/rc9-external-object-installer-fetch/installer-fail-closed-evidence.json",
+                                                           "sha256":  "387ee1891043e0dcee1bb6a1e7bb7e0239658f1c96f7c4c1739954d9c9203f95"
+                                                       },
+                    "installer_gate_report":  {
+                                                  "path":  ".workflow/artifacts/rc9-external-object-installer-fetch/installer-gate-report.json",
+                                                  "sha256":  "c43dafe8d94a7518421a549acd83b69d04e987fab3e0c2f4c89244d48ffc8f2f"
+                                              }
+                },
+    "source":  {
+                   "publication_result":  {
+                                              "path":  ".workflow/artifacts/rc9-external-object-publication/result.json",
+                                              "sha256":  "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b",
+                                              "size_bytes":  18860,
+                                              "present":  true,
+                                              "schema":  "agentos.rc9-external-object-publication-result.v1",
+                                              "status":  "passed"
+                                          },
+                   "publication_candidate":  {
+                                                 "path":  ".workflow/artifacts/rc9-external-object-publication/external-object-publication-candidate.json",
+                                                 "sha256":  "5ccd1b5e1cadb0a830d385216fc2f21ffee631344a1734ad9d818f92ecb47d2f",
+                                                 "size_bytes":  15397,
+                                                 "present":  true,
+                                                 "schema":  "agentos.rc9-external-object-publication-candidate.v1",
+                                                 "status":  "publication-denied"
+                                             },
+                   "publication_handoff":  {
+                                               "path":  ".workflow/artifacts/rc9-external-object-publication/installer-handoff.json",
+                                               "sha256":  "fa966778b8a8cb8a6fb536285022e5dc2ecd4d3ccca11571bd9ac725b34e3548",
+                                               "size_bytes":  3736,
+                                               "present":  true,
+                                               "schema":  "agentos.rc9-installer-handoff.v1",
+                                               "status":  "blocked-before-quarantine"
+                                           },
+                   "drift_result":  {
+                                        "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+                                        "sha256":  "6e51c6e4a27a2dfd94af5e7e80fbe4513ad4fdea3d332a7359870a0f88ece2b6",
+                                        "size_bytes":  22598,
+                                        "present":  true,
+                                        "schema":  "agentos.rc9-artifact-drift-reconciliation-result.v1",
+                                        "status":  "passed"
+                                    },
+                   "drift_reconciliation":  {
+                                                "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+                                                "sha256":  "2daa3da3a98adacac262b3ab5ea99b262a4843b63515a1ec61e05f12b27c9f82",
+                                                "size_bytes":  38726,
+                                                "present":  true,
+                                                "schema":  "agentos.rc9-artifact-drift-reconciliation.v1",
+                                                "status":  "drift-denied"
+                                            },
+                   "drift_handoff":  {
+                                         "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/installer-handoff.json",
+                                         "sha256":  "7dbdaa89a2cd39e4dbdeacdd484b16aba70ab92421bab0c4893dde862fd478e7",
+                                         "size_bytes":  2641,
+                                         "present":  true,
+                                         "schema":  "agentos.rc9-post-drift-installer-handoff.v1",
+                                         "status":  "blocked-by-drift"
+                                     },
+                   "descriptor":  {
+                                      "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+                                      "sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                      "size_bytes":  2130,
+                                      "present":  true,
+                                      "schema":  "agentos.payload-object-descriptor.v1",
+                                      "status":  null
+                                  },
+                   "signature_receipt":  {
+                                             "path":  ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+                                             "sha256":  "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+                                             "size_bytes":  1533,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-public-signature-ingestion-receipt.v1",
+                                             "status":  null
+                                         },
+                   "signature_summary":  {
+                                             "path":  ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+                                             "sha256":  "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+                                             "size_bytes":  1011,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-public-signature-artifact-summary.v1",
+                                             "status":  null
+                                         }
+               },
+    "checks":  [
+                   {
+                       "id":  "source.rc9_010.publication",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-010 publication evidence must pass before installer fetch evaluation.",
+                       "evidence":  {
+                                        "status":  "passed",
+                                        "state":  "publication-denied"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc9_011.drift",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-011 drift reconciliation evidence must pass before installer fetch evaluation.",
+                       "evidence":  {
+                                        "status":  "passed",
+                                        "state":  "drift-denied",
+                                        "drift_count":  13
+                                    }
+                   },
+                   {
+                       "id":  "fetch.denied_before_network",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Installer fetch must be denied before network when publication or drift gates fail.",
+                       "evidence":  {
+                                        "fetch_allowed":  false,
+                                        "network_fetch_attempted":  false,
+                                        "blockers":  [
+                                                         "external-https-object-uri-not-published",
+                                                         "declared-current-artifact-drift-denied",
+                                                         "installer-quarantine-fetch-not-run",
+                                                         "exact-operator-approval-pending",
+                                                         "controlled-execution-not-authorized"
+                                                     ]
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.fail_closed",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-012 installer fetch negative cases must fail closed.",
+                       "evidence":  {
+                                        "cases":  9,
+                                        "failed_cases":  0
+                                    }
+                   },
+                   {
+                       "id":  "side_effects.none",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-012 must not fetch, interpret payload bytes, install, activate, rollback, mutate rings, upload support, or dispatch.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-012 outputs must not contain secret paths, PEM blocks, auth tokens, or signer host internals.",
+                       "evidence":  null
+                   }
+               ],
+    "blockers":  [
+                     "external-https-object-uri-not-published",
+                     "declared-current-artifact-drift-denied",
+                     "installer-quarantine-fetch-not-run",
+                     "exact-operator-approval-pending",
+                     "controlled-execution-not-authorized"
+                 ],
+    "invariants":  {
+                       "local_projection_only":  true,
+                       "network_fetch_attempted":  false,
+                       "payload_bytes_uploaded":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "quarantine_payload_written":  false,
+                       "payload_interpreted":  false,
+                       "cryptographic_signing_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false,
+                       "production_ready_claim":  false
+                   },
+    "summary":  {
+                    "checks":  6,
+                    "failed_checks":  0,
+                    "cases":  9,
+                    "failed_cases":  0,
+                    "rc9_012_complete":  true,
+                    "wave_1_complete":  true,
+                    "next_task":  "RC9-020"
+                }
+}

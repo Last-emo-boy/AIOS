@@ -1,0 +1,38 @@
+{
+    "schema":  "agentos.rc9-external-object-fetch-report.v1",
+    "generated_at":  "2026-06-08T23:00:00+08:00",
+    "task":  "RC9-012",
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "status":  "fetch-denied-before-network",
+    "production_ready_claim":  false,
+    "expected_object":  {
+                            "object_id":  "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                            "descriptor_sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                            "size_bytes":  377,
+                            "sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                            "external_uri":  null,
+                            "external_uri_classification":  "missing"
+                        },
+    "preconditions":  {
+                          "external_object_url_published":  false,
+                          "drift_reconciled_current_artifact":  false,
+                          "public_signature_crypto_verified":  true,
+                          "quarantine_fetch_allowed":  false
+                      },
+    "fetch":  {
+                  "network_fetch_attempted":  false,
+                  "remote_bytes_downloaded":  false,
+                  "quarantine_payload_written":  false,
+                  "size_verified":  false,
+                  "digest_verified":  false,
+                  "signature_verified_after_fetch":  false,
+                  "payload_interpreted":  false
+              },
+    "blockers":  [
+                     "external-https-object-uri-not-published",
+                     "declared-current-artifact-drift-denied",
+                     "installer-quarantine-fetch-not-run",
+                     "exact-operator-approval-pending",
+                     "controlled-execution-not-authorized"
+                 ]
+}

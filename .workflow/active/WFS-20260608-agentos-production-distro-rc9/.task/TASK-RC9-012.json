@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-012",
+  "title": "run external object quarantine fetch and fail-closed installer evidence",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+    ".workflow/artifacts/rc9-external-object-publication/result.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/installer-handoff.json",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc9-external-object-installer-fetch.ps1",
+      "role": "installer fetch fail-closed projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/external-object-fetch-report.json",
+      "role": "fetch denial report"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/installer-fail-closed-evidence.json",
+      "role": "installer fail-closed evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/installer-gate-report.json",
+      "role": "installer gate report"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-012-external-object-installer-fetch.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC9-010 publication evidence and RC9-011 drift evidence before evaluating installer fetch.",
+      "The fetch report records fetch-denied-before-network when external object URI publication or drift reconciliation gates fail.",
+      "The installer fail-closed evidence covers negative cases without network fetch, quarantine writes, payload interpretation, install, activation, rollback, support upload, or remote dispatch.",
+      "The task preserves production_ready_claim=false and moves the next task to RC9-020 two-node canary enrollment."
+    ]
+  }
+}
