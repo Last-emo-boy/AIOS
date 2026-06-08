@@ -1,0 +1,155 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc10",
+  "milestone": "Production Distro RC10",
+  "status": "active",
+  "objective": "Move AIOS from RC9 fail-closed external object and controlled execution denial into controlled enablement: publish a real immutable external HTTPS object descriptor, reconcile declared/current drift to zero, verify installer quarantine fetch against the published object, enroll at least two canary targets, bind exact approval to AgentCore and SecurityExecutionEngine, then produce controlled activation and rollback evidence without claiming GA readiness.",
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "real object and controlled execution enablement contracts",
+      "tasks": [
+        {
+          "id": "RC10-001",
+          "status": "completed",
+          "title": "freeze real external object publication and controlled execution enablement contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md"
+        },
+        {
+          "id": "RC10-002",
+          "status": "pending",
+          "title": "define drift-zero external object descriptor publication contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md"
+        },
+        {
+          "id": "RC10-003",
+          "status": "pending",
+          "title": "define exact approval canary activation and rollback execution contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "external object publication and installer quarantine verification",
+      "tasks": [
+        {
+          "id": "RC10-010",
+          "status": "pending",
+          "title": "publish or reject immutable external object descriptor for current AIOS payload bytes",
+          "deliverable": ".workflow/artifacts/rc10-external-object-publication/result.json"
+        },
+        {
+          "id": "RC10-011",
+          "status": "pending",
+          "title": "reconcile declared and current artifact drift to zero before object trust",
+          "deliverable": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json"
+        },
+        {
+          "id": "RC10-012",
+          "status": "pending",
+          "title": "verify installer quarantine fetch against the published external object descriptor",
+          "deliverable": ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "two-node controlled canary enablement",
+      "tasks": [
+        {
+          "id": "RC10-020",
+          "status": "pending",
+          "title": "enroll two or more canary target nodes with compatibility rollback and support bindings",
+          "deliverable": ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json"
+        },
+        {
+          "id": "RC10-021",
+          "status": "pending",
+          "title": "bind exact operator approval to AgentCore PlanSpec and SecurityExecutionEngine effect envelope",
+          "deliverable": ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json"
+        },
+        {
+          "id": "RC10-022",
+          "status": "pending",
+          "title": "execute or deny controlled canary activation through AgentCore and SecurityExecutionEngine gates",
+          "deliverable": ".workflow/artifacts/rc10-controlled-canary-activation/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "controlled rollback and recovery evidence",
+      "tasks": [
+        {
+          "id": "RC10-030",
+          "status": "pending",
+          "title": "execute or deny controlled rollback drill after canary activation evidence",
+          "deliverable": ".workflow/artifacts/rc10-controlled-rollback-drill/result.json"
+        },
+        {
+          "id": "RC10-031",
+          "status": "pending",
+          "title": "bind support recovery and operator evidence to controlled activation and rollback outcomes",
+          "deliverable": ".workflow/artifacts/rc10-controlled-execution-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "RC10 closeout",
+      "tasks": [
+        {
+          "id": "RC10-040",
+          "status": "pending",
+          "title": "run Production Distro RC10 final audit and next milestone planning",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC10-002",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "signer_endpoint_domain": "sign.w33d.xyz",
+    "mirror_and_signer_must_remain_separate": true,
+    "mirror_must_remain_metadata_only": true,
+    "external_object_storage_must_be_immutable": true,
+    "external_object_uri_must_be_https_hash_bound_size_bound_and_credential_free": true,
+    "declared_current_artifact_drift_must_be_zero_before_trust": true,
+    "installer_must_fetch_to_quarantine_before_interpretation": true,
+    "quarantine_fetch_must_verify_size_sha256_manifest_checksum_signature_revocation_and_freshness": true,
+    "payload_signature_required_before_install": true,
+    "public_signature_artifact_ingestion_only": true,
+    "private_key_material_forbidden": true,
+    "revocation_snapshot_required_before_install": true,
+    "installer_compatibility_required_before_install": true,
+    "rollback_baseline_required_before_activation": true,
+    "controlled_execution_requires_exact_operator_approval": true,
+    "controlled_execution_requires_two_or_more_enrolled_targets": true,
+    "controlled_execution_requires_agentcore_planspec": true,
+    "controlled_execution_requires_security_execution_engine": true,
+    "controlled_activation_evidence_required_before_rollback_execution": true,
+    "rollback_execution_requires_separate_exact_approval": true,
+    "support_recovery_binding_required_before_activation_or_rollback": true,
+    "remote_service_must_not_activate_without_gates": true,
+    "remote_service_must_not_execute_rollback_without_gates": true,
+    "remote_service_must_not_mutate_active_slot_without_gates": true,
+    "remote_service_must_not_mutate_production_ring_without_gates": true,
+    "tui_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "production_ready_claim": false
+  },
+  "confidence": {
+    "overall": 0.83,
+    "requirements_coverage": 0.9,
+    "task_quality": 0.82,
+    "dependency_correctness": 0.84,
+    "estimation_accuracy": 0.75,
+    "collision_safety": 0.86,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC10 tasks are derived directly from RC9 final audit blockers and preserve RC9 authority boundaries; implementation details remain pending for object publication and controlled execution enablement tasks."
+  }
+}
