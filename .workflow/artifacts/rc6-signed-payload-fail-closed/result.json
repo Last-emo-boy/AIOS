@@ -1,0 +1,415 @@
+{
+  "schema": "agentos.rc6-signed-payload-fail-closed-result.v1",
+  "generated_at": "2026-06-08T12:07:59.3697188+08:00",
+  "task": "RC6-012",
+  "status": "passed",
+  "production_ready_claim": false,
+  "source": {
+    "hosted_payload_metadata_result": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+      "sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec"
+    },
+    "hosted_payload_index": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-payload-index.json",
+      "sha256": "85c9cb6b0bb49799fe30305270eb733d9688bb2e9e4cd3e639aa8c604a91ee2c"
+    },
+    "payload_manifest": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e"
+    },
+    "payload_checksums": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-checksums.json",
+      "sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71"
+    },
+    "payload_signatures": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json",
+      "sha256": "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6"
+    }
+  },
+  "cases": [
+    {
+      "id": "bad-payload-index-schema",
+      "status": "passed",
+      "expected_reasons": [
+        "bad-payload-index-schema"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "bad-payload-index-schema",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "production-ready-claim",
+      "status": "passed",
+      "expected_reasons": [
+        "production-ready-claim"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "production-ready-claim",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "manifest-hash-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "manifest-hash-mismatch"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "manifest-hash-mismatch",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "checksums-hash-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "checksums-hash-mismatch"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "checksums-hash-mismatch",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "signatures-hash-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "signatures-hash-mismatch"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "signatures-hash-mismatch",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "missing-signature-reference",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-signature-reference"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "placeholder-signature-authority",
+      "status": "passed",
+      "expected_reasons": [
+        "placeholder-signature-authority"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "placeholder-signature-authority",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "mirror-signing-authority",
+      "status": "passed",
+      "expected_reasons": [
+        "mirror-signing-authority"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "mirror-signing-authority",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "missing-revocation-snapshot",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-revocation-snapshot"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "revoked-signing-key",
+      "status": "passed",
+      "expected_reasons": [
+        "revoked-signing-key"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot",
+        "revoked-signing-key"
+      ]
+    },
+    {
+      "id": "stale-payload-metadata",
+      "status": "passed",
+      "expected_reasons": [
+        "stale-payload-metadata"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot",
+        "stale-payload-metadata"
+      ]
+    },
+    {
+      "id": "large-payload-url-before-policy",
+      "status": "passed",
+      "expected_reasons": [
+        "large-payload-url-before-storage-policy"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "large-payload-url-before-storage-policy",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "large-payload-storage-enabled",
+      "status": "passed",
+      "expected_reasons": [
+        "large-payload-storage-enabled"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "large-payload-storage-enabled",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "declared-drift-not-blocking",
+      "status": "passed",
+      "expected_reasons": [
+        "declared-hash-drift-not-blocking"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "declared-hash-drift-not-blocking",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "missing-rollback-baseline",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-rollback-baseline"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "missing-installer-compatibility-contract",
+      "status": "passed",
+      "expected_reasons": [
+        "missing-installer-compatibility-contract"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "payload-entry-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "payload-entry-authority-broadening"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "payload-entry-authority-broadening",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "manifest-install-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "manifest-install-authority-broadening"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "manifest-install-authority-broadening",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot"
+      ]
+    },
+    {
+      "id": "install-bootstrap-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "install-bootstrap-authority-broadening"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot",
+        "install-bootstrap-authority-broadening"
+      ]
+    },
+    {
+      "id": "preflight-ready-without-signature",
+      "status": "passed",
+      "expected_reasons": [
+        "preflight-ready-without-signature"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot",
+        "preflight-ready-without-signature"
+      ]
+    },
+    {
+      "id": "channel-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "channel-authority-broadening"
+      ],
+      "observed_status": "blocked",
+      "observed_reasons": [
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "missing-signature-reference",
+        "missing-revocation-snapshot",
+        "channel-authority-broadening"
+      ]
+    }
+  ],
+  "failed_cases": [],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_mutation_performed": false,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "hosted_payload_metadata.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6-011 hosted payload metadata must be passed before fail-closed fixtures.",
+      "evidence": {
+        "checks": 17,
+        "blockers": 0,
+        "rc6_011_complete": true,
+        "next_task": "RC6-012"
+      }
+    },
+    {
+      "id": "baseline.payload_index.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted payload index baseline schema must be exact.",
+      "evidence": "agentos.rc6-hosted-payload-index.v1"
+    },
+    {
+      "id": "baseline.payload.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Baseline hosted payload metadata must remain verification-blocked.",
+      "evidence": {
+        "payload": "verification-blocked",
+        "install": "verification-blocked"
+      }
+    },
+    {
+      "id": "fixtures.all_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All signed payload metadata negative fixtures must fail closed.",
+      "evidence": {
+        "passed": 21,
+        "failed": 0
+      }
+    },
+    {
+      "id": "fixtures.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fail-closed fixture results must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 5,
+    "blockers": 0,
+    "cases": 21,
+    "passed_cases": 21,
+    "failed_cases": 0,
+    "rc6_012_complete": true,
+    "next_task": "RC6-020"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "agentos.rc6-signed-payload-fail-closed-evidence.v1",
+  "generated_at": "2026-06-08T13:55:00+08:00",
+  "task": "RC6-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/verify-rc6-signed-payload-fail-closed-fixtures.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-signed-payload-fail-closed/result.json",
+    "status": "passed",
+    "checks": 5,
+    "blockers": 0,
+    "cases": 21,
+    "passed_cases": 21,
+    "failed_cases": 0
+  },
+  "covered_cases": [
+    "bad-payload-index-schema",
+    "production-ready-claim",
+    "manifest-hash-mismatch",
+    "checksums-hash-mismatch",
+    "signatures-hash-mismatch",
+    "missing-signature-reference",
+    "placeholder-signature-authority",
+    "mirror-signing-authority",
+    "missing-revocation-snapshot",
+    "revoked-signing-key",
+    "stale-payload-metadata",
+    "large-payload-url-before-policy",
+    "large-payload-storage-enabled",
+    "declared-drift-not-blocking",
+    "missing-rollback-baseline",
+    "missing-installer-compatibility-contract",
+    "payload-entry-authority-broadening",
+    "manifest-install-authority-broadening",
+    "install-bootstrap-authority-broadening",
+    "preflight-ready-without-signature",
+    "channel-authority-broadening"
+  ],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_mutation_performed": false,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_012_complete": true,
+    "next_task": "RC6-020",
+    "commit_required": true
+  }
+}

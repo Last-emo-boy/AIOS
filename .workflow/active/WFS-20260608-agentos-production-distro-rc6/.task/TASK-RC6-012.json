@@ -1,0 +1,35 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-012",
+  "title": "add signed payload metadata fail-closed fixtures",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-payload-index.json",
+    ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+    ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc6-signed-payload-fail-closed-fixtures.ps1",
+      "role": "local fail-closed fixture harness"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-signed-payload-fail-closed/result.json",
+      "role": "fixture result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-012-signed-payload-fail-closed.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Negative fixtures cover schema drift, production-ready claim, manifest/checksum/signature hash mismatch, missing signature, placeholder signature, mirror signing authority, revocation, staleness, large payload policy, rollback, compatibility, and authority broadening.",
+      "Every negative fixture is blocked.",
+      "Harness is local-only and does not mutate the hosted mirror.",
+      "No signing, install, activation, rollback, active slot, production ring, support upload, remote dispatch, or TUI authority is granted."
+    ]
+  }
+}
