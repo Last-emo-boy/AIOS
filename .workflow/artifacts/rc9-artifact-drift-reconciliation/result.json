@@ -1,0 +1,321 @@
+{
+    "schema":  "agentos.rc9-artifact-drift-reconciliation-result.v1",
+    "generated_at":  "2026-06-08T22:50:00+08:00",
+    "task":  "RC9-011",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "reconciliation_surface":  {
+                                   "state":  "drift-denied",
+                                   "drift_count":  13,
+                                   "external_object_url_published":  false,
+                                   "external_object_trust_allowed":  false,
+                                   "installer_quarantine_fetch_allowed":  false,
+                                   "install_allowed":  false,
+                                   "activation_allowed":  false,
+                                   "rollback_execution_allowed":  false,
+                                   "blockers":  [
+                                                    "declared-current-artifact-drift-denied",
+                                                    "external-https-object-uri-not-published",
+                                                    "installer-quarantine-fetch-not-run",
+                                                    "exact-operator-approval-pending",
+                                                    "controlled-execution-not-authorized"
+                                                ]
+                               },
+    "outputs":  {
+                    "reconciliation":  {
+                                           "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+                                           "sha256":  "2daa3da3a98adacac262b3ab5ea99b262a4843b63515a1ec61e05f12b27c9f82"
+                                       },
+                    "denial":  {
+                                   "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json",
+                                   "sha256":  "f8a3cfef240c8629a5828f226ed881321b1ee13f497ba31288899e6b55b000f2"
+                               },
+                    "installer_handoff":  {
+                                              "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/installer-handoff.json",
+                                              "sha256":  "7dbdaa89a2cd39e4dbdeacdd484b16aba70ab92421bab0c4893dde862fd478e7"
+                                          }
+                },
+    "source":  {
+                   "publication_result":  {
+                                              "path":  ".workflow/artifacts/rc9-external-object-publication/result.json",
+                                              "sha256":  "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b",
+                                              "size_bytes":  18860,
+                                              "present":  true,
+                                              "schema":  "agentos.rc9-external-object-publication-result.v1",
+                                              "status":  "passed"
+                                          },
+                   "publication_candidate":  {
+                                                 "path":  ".workflow/artifacts/rc9-external-object-publication/external-object-publication-candidate.json",
+                                                 "sha256":  "5ccd1b5e1cadb0a830d385216fc2f21ffee631344a1734ad9d818f92ecb47d2f",
+                                                 "size_bytes":  15397,
+                                                 "present":  true,
+                                                 "schema":  "agentos.rc9-external-object-publication-candidate.v1",
+                                                 "status":  "publication-denied"
+                                             },
+                   "publication_handoff":  {
+                                               "path":  ".workflow/artifacts/rc9-external-object-publication/installer-handoff.json",
+                                               "sha256":  "fa966778b8a8cb8a6fb536285022e5dc2ecd4d3ccca11571bd9ac725b34e3548",
+                                               "size_bytes":  3736,
+                                               "present":  true,
+                                               "schema":  "agentos.rc9-installer-handoff.v1",
+                                               "status":  "blocked-before-quarantine"
+                                           },
+                   "descriptor":  {
+                                      "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+                                      "sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                      "size_bytes":  2130,
+                                      "present":  true,
+                                      "schema":  "agentos.payload-object-descriptor.v1",
+                                      "status":  null
+                                  },
+                   "payload_manifest":  {
+                                            "path":  "image/out/agentos-initramfs.manifest.json",
+                                            "sha256":  "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+                                            "size_bytes":  7380,
+                                            "present":  true,
+                                            "schema":  null,
+                                            "status":  null
+                                        },
+                   "rc6_payload_manifest":  {
+                                                "path":  ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+                                                "sha256":  "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+                                                "size_bytes":  8204,
+                                                "present":  true,
+                                                "schema":  "agentos.rc6-installable-payload-manifest.v1",
+                                                "status":  "metadata-projected"
+                                            },
+                   "signature_receipt":  {
+                                             "path":  ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+                                             "sha256":  "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+                                             "size_bytes":  1533,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-public-signature-ingestion-receipt.v1",
+                                             "status":  null
+                                         },
+                   "signature_summary":  {
+                                             "path":  ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+                                             "sha256":  "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+                                             "size_bytes":  1011,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-public-signature-artifact-summary.v1",
+                                             "status":  null
+                                         },
+                   "rc7_signed_metadata":  {
+                                               "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+                                               "sha256":  "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+                                               "size_bytes":  2790,
+                                               "present":  true,
+                                               "schema":  "agentos.rc7-signed-metadata-projection.v1",
+                                               "status":  "signed-metadata-projected-verification-blocked"
+                                           },
+                   "rc7_revocation_snapshot":  {
+                                                   "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+                                                   "sha256":  "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+                                                   "size_bytes":  1451,
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc7-revocation-snapshot.v1",
+                                                   "status":  "revocation-current-projected"
+                                               },
+                   "rc7_compatibility":  {
+                                             "path":  ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+                                             "sha256":  "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+                                             "size_bytes":  1905,
+                                             "present":  true,
+                                             "schema":  "agentos.rc7-installer-compatibility.v1",
+                                             "status":  "compatibility-projected-verification-blocked"
+                                         },
+                   "rc7_rollback_baseline":  {
+                                                 "path":  ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+                                                 "sha256":  "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+                                                 "size_bytes":  2178,
+                                                 "present":  true,
+                                                 "schema":  "agentos.rc7-rollback-baseline.v1",
+                                                 "status":  "rollback-baseline-projected-execution-blocked"
+                                             },
+                   "support_recovery":  {
+                                            "path":  ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+                                            "sha256":  "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+                                            "size_bytes":  3659,
+                                            "present":  true,
+                                            "schema":  "agentos.rc5-hosted-support-index.v1",
+                                            "status":  "hosted-metadata-only"
+                                        },
+                   "hosted_payload_index":  {
+                                                "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+                                                "sha256":  "77408fab1641702a3a6baaddc1c82dc5e1ec3681dfcc1bc7cc0878c2705e9e6b",
+                                                "size_bytes":  3498,
+                                                "present":  true,
+                                                "schema":  "agentos.rc8-hosted-payload-index.v1",
+                                                "status":  "verification-blocked"
+                                            },
+                   "install_bootstrap":  {
+                                             "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+                                             "sha256":  "7442340caa50a714c838e819fb513ef42594ffdfe00754450521111fa58b3ca2",
+                                             "size_bytes":  2996,
+                                             "present":  true,
+                                             "schema":  "agentos.rc8-install-bootstrap.v1",
+                                             "status":  "verification-blocked"
+                                         },
+                   "hosted_channel_index":  {
+                                                "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+                                                "sha256":  "0c72d39c7f8369762d17d7e25f3c8b4f811a6d283fe71465cf31e9118326b60b",
+                                                "size_bytes":  3339,
+                                                "present":  true,
+                                                "schema":  "agentos.rc8-mirror-channel-index.v1",
+                                                "status":  "metadata-only"
+                                            },
+                   "source_payload_bytes":  {
+                                                "path":  "image/out/agentos-initramfs.cpio.gz",
+                                                "sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                                "size_bytes":  377,
+                                                "present":  true,
+                                                "schema":  null,
+                                                "status":  null
+                                            }
+               },
+    "checks":  [
+                   {
+                       "id":  "source.rc9_010.publication_result",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-010 publication result must pass before drift reconciliation.",
+                       "evidence":  {
+                                        "status":  "passed",
+                                        "state":  "publication-denied"
+                                    }
+                   },
+                   {
+                       "id":  "current.payload.bindings",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Current payload bytes and manifest must bind to the descriptor before comparing declared metadata.",
+                       "evidence":  {
+                                        "source_sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                        "descriptor_sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                        "source_size_bytes":  377,
+                                        "manifest_sha256":  "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8"
+                                    }
+                   },
+                   {
+                       "id":  "mirror.bindings.match_current_descriptor",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Mirror metadata must still bind to the current descriptor while reconciliation runs.",
+                       "evidence":  [
+                                        {
+                                            "id":  "mirror.payload_index.object_descriptor_sha256",
+                                            "status":  "matched",
+                                            "expected":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                            "actual":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                            "expected_source":  "descriptor file",
+                                            "actual_source":  "hosted payload index",
+                                            "denial_reason":  null
+                                        },
+                                        {
+                                            "id":  "mirror.payload_index.object_sha256",
+                                            "status":  "matched",
+                                            "expected":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                            "actual":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                                            "expected_source":  "descriptor.sha256",
+                                            "actual_source":  "hosted payload index",
+                                            "denial_reason":  null
+                                        },
+                                        {
+                                            "id":  "mirror.install_bootstrap.object_descriptor_sha256",
+                                            "status":  "matched",
+                                            "expected":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                            "actual":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                            "expected_source":  "descriptor file",
+                                            "actual_source":  "install bootstrap",
+                                            "denial_reason":  null
+                                        },
+                                        {
+                                            "id":  "mirror.channel.object_descriptor_sha256",
+                                            "status":  "matched",
+                                            "expected":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                            "actual":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                            "expected_source":  "descriptor file",
+                                            "actual_source":  "channel index",
+                                            "denial_reason":  null
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "declared.drift_detected_and_denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Declared/current drift must be surfaced as denial evidence, not silently repaired.",
+                       "evidence":  {
+                                        "state":  "drift-denied",
+                                        "drift_count":  13
+                                    }
+                   },
+                   {
+                       "id":  "freshness.current",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Freshness windows must be valid even when declared/current drift blocks trust.",
+                       "evidence":  {
+                                        "signed_metadata_fresh":  true,
+                                        "revocation_snapshot_fresh":  true,
+                                        "compatibility_fresh":  true,
+                                        "rollback_baseline_fresh":  true
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC9-011 outputs must not contain secret paths, PEM blocks, auth tokens, or signer host internals.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "outputs.side_effects_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Drift reconciliation must not authorize install, activation, rollback, support upload, or remote dispatch.",
+                       "evidence":  {
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false
+                                    }
+                   }
+               ],
+    "blockers":  [
+                     "declared-current-artifact-drift-denied",
+                     "external-https-object-uri-not-published",
+                     "installer-quarantine-fetch-not-run",
+                     "exact-operator-approval-pending",
+                     "controlled-execution-not-authorized"
+                 ],
+    "invariants":  {
+                       "mirror_metadata_only":  true,
+                       "mirror_metadata_mutated":  false,
+                       "declared_metadata_rewritten":  false,
+                       "payload_bytes_uploaded":  false,
+                       "payload_bytes_downloaded":  false,
+                       "cryptographic_signing_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false,
+                       "production_ready_claim":  false
+                   },
+    "summary":  {
+                    "checks":  7,
+                    "failed_checks":  0,
+                    "comparisons":  30,
+                    "drift_count":  13,
+                    "rc9_011_complete":  true,
+                    "next_task":  "RC9-012"
+                }
+}

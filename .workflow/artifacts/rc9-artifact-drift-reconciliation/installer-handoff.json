@@ -1,0 +1,41 @@
+{
+    "schema":  "agentos.rc9-post-drift-installer-handoff.v1",
+    "generated_at":  "2026-06-08T22:50:00+08:00",
+    "task":  "RC9-011",
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "status":  "blocked-by-drift",
+    "production_ready_claim":  false,
+    "publication_result":  {
+                               "path":  ".workflow/artifacts/rc9-external-object-publication/result.json",
+                               "sha256":  "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b",
+                               "state":  "publication-denied"
+                           },
+    "reconciliation":  {
+                           "state":  "drift-denied",
+                           "artifact_path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+                           "drift_denial_path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json"
+                       },
+    "expected_object":  {
+                            "object_id":  "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                            "size_bytes":  377,
+                            "sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+                            "descriptor_sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                            "public_signature_receipt_sha256":  "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+                            "revocation_snapshot_sha256":  "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+                            "installer_compatibility_sha256":  "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+                            "rollback_baseline_sha256":  "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e"
+                        },
+    "quarantine_policy":  {
+                              "quarantine_fetch_allowed":  false,
+                              "reason":  "blocked-by-publication-or-drift-denial",
+                              "interpret_before_size_digest_signature_verification":  false
+                          },
+    "blockers":  [
+                     "declared-current-artifact-drift-denied",
+                     "external-https-object-uri-not-published",
+                     "installer-quarantine-fetch-not-run",
+                     "exact-operator-approval-pending",
+                     "controlled-execution-not-authorized"
+                 ],
+    "next_task":  "RC9-012"
+}

@@ -1,0 +1,49 @@
+{
+    "schema":  "agentos.rc9-artifact-drift-denial.v1",
+    "generated_at":  "2026-06-08T22:50:00+08:00",
+    "task":  "RC9-011",
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "status":  "drift-denied",
+    "production_ready_claim":  false,
+    "denied":  true,
+    "denial_reasons":  [
+                           "declared-current-artifact-drift-denied",
+                           "external-https-object-uri-not-published",
+                           "installer-quarantine-fetch-not-run",
+                           "exact-operator-approval-pending",
+                           "controlled-execution-not-authorized"
+                       ],
+    "drift_count":  13,
+    "drift_ids":  [
+                      "declared.rc6_payload_manifest.release_id",
+                      "declared.rc7_signed_metadata.release_id",
+                      "declared.rc7_signature_claims.release_id",
+                      "declared.rc7_revocation.release_id",
+                      "declared.rc7_compatibility.release_id",
+                      "declared.rc7_rollback.release_id",
+                      "declared.rc7_compatibility.payload_manifest_sha256",
+                      "declared.rc7_compatibility.payload_checksums_sha256",
+                      "declared.rc7_signed_metadata.payload_manifest_sha256",
+                      "declared.rc7_signed_metadata.revocation_snapshot_sha256",
+                      "declared.rc6_payload_component.update_metadata",
+                      "declared.rc6_payload_component.release_channel_metadata",
+                      "declared.rc6_payload_component.qemu_runtime_smoke"
+                  ],
+    "drifted_rc6_components":  [
+                                   "update_metadata",
+                                   "release_channel_metadata",
+                                   "qemu_runtime_smoke"
+                               ],
+    "preserved_boundaries":  {
+                                 "mirror_metadata_only":  true,
+                                 "mirror_not_rewritten":  true,
+                                 "declared_metadata_not_silently_repaired":  true,
+                                 "external_object_trust_allowed":  false,
+                                 "installer_quarantine_fetch_allowed":  false,
+                                 "install_allowed":  false,
+                                 "activation_allowed":  false,
+                                 "rollback_execution_allowed":  false,
+                                 "support_upload_allowed":  false,
+                                 "remote_dispatch_allowed":  false
+                             }
+}

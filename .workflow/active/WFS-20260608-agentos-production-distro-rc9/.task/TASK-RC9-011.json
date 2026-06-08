@@ -1,0 +1,52 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-011",
+  "title": "reconcile declared and current artifact drift before external object trust",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+    ".workflow/artifacts/rc9-external-object-publication/result.json",
+    ".workflow/artifacts/rc9-external-object-publication/installer-handoff.json",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc9-artifact-drift-reconciliation.ps1",
+      "role": "drift reconciliation script"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+      "role": "declared/current comparison artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json",
+      "role": "drift denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/installer-handoff.json",
+      "role": "blocked installer handoff for RC9-012"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-011-artifact-drift-reconciliation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The reconciliation script compares current descriptor and mirror bindings against declared RC6/RC7 metadata before external object trust.",
+      "The result records drift-denied when declared release metadata is superseded or hash-drifted.",
+      "The denial evidence identifies exact drift ids and preserves metadata-only mirror semantics.",
+      "The installer handoff keeps external object trust, quarantine fetch, install, activation, rollback, support upload, and remote dispatch blocked.",
+      "The task preserves production_ready_claim=false and moves the next task to RC9-012 external object installer fetch."
+    ]
+  }
+}

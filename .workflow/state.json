@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc9",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC9-011",
+    "current_task":  "RC9-012",
     "lifecycle_position":  "rc9-active-external-object-storage-controlled-canary",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc9-011-artifact-drift-reconciliation",
+    "next_allowed_action":  "execute-rc9-012-external-object-installer-fetch",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T22:40:00+08:00",
+    "updated_at":  "2026-06-08T22:50:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is closed with PASS final audit: RC8 Wave 0 is complete; RC8-010 projected a real payload object descriptor candidate from current build bytes; RC8-011 ingested the existing public detached signature for that payload with crypto verification and redacted receipt; RC8-012 proved signed object descriptor fail-closed fixtures across descriptor, signature, receipt, revocation, freshness, redaction, and authority broadening cases; RC8-020 ran QEMU installer VM preflight and repo-local quarantine byte smoke; RC8-021 proved installer byte, signature, storage, compatibility, redaction, and side-effect authority negative fixtures fail closed; RC8-022 refreshed HTTPS mirror metadata and frontend consistency for the real RC8 payload while preserving metadata-only and install-blocked semantics; RC8-030 projected exact-approved canary activation smoke evidence under AgentCore and SecurityExecutionEngine and denied activation fail-closed; RC8-031 projected controlled rollback drill evidence through AgentCore rollback PlanSpec and SecurityExecutionEngine gates and denied rollback fail-closed; RC8-032 bound support/recovery evidence to the controlled execution smoke with a redacted local support bundle projection and recovery reference index while keeping support upload, recovery, activation, rollback, remote dispatch, and TUI authority disabled. RC8-040 final closeout audit passed with 19 checks and 0 blockers. The payload remains non-GA and install-blocked. Production Distro RC9 is active: RC9 Wave 0 is complete; RC9-001 froze the external object storage and controlled canary execution contract; RC9-002 froze external object descriptor publication and declared/current artifact drift reconciliation contract; RC9-003 froze exact approval, target enrollment, AgentCore PlanSpec, and SecurityExecutionEngine binding contract, preserving metadata-only mirror semantics and non-GA authority boundaries. RC9-010 projected an immutable external object publication candidate for the RC8 payload bytes and produced expected publication-denied evidence because no external HTTPS object URI is published and declared/current artifact drift remains unresolved. Next work is RC9-011 artifact drift reconciliation.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is closed with PASS final audit: RC8 Wave 0 is complete; RC8-010 projected a real payload object descriptor candidate from current build bytes; RC8-011 ingested the existing public detached signature for that payload with crypto verification and redacted receipt; RC8-012 proved signed object descriptor fail-closed fixtures across descriptor, signature, receipt, revocation, freshness, redaction, and authority broadening cases; RC8-020 ran QEMU installer VM preflight and repo-local quarantine byte smoke; RC8-021 proved installer byte, signature, storage, compatibility, redaction, and side-effect authority negative fixtures fail closed; RC8-022 refreshed HTTPS mirror metadata and frontend consistency for the real RC8 payload while preserving metadata-only and install-blocked semantics; RC8-030 projected exact-approved canary activation smoke evidence under AgentCore and SecurityExecutionEngine and denied activation fail-closed; RC8-031 projected controlled rollback drill evidence through AgentCore rollback PlanSpec and SecurityExecutionEngine gates and denied rollback fail-closed; RC8-032 bound support/recovery evidence to the controlled execution smoke with a redacted local support bundle projection and recovery reference index while keeping support upload, recovery, activation, rollback, remote dispatch, and TUI authority disabled. RC8-040 final closeout audit passed with 19 checks and 0 blockers. The payload remains non-GA and install-blocked. Production Distro RC9 is active: RC9 Wave 0 is complete; RC9-001 froze the external object storage and controlled canary execution contract; RC9-002 froze external object descriptor publication and declared/current artifact drift reconciliation contract; RC9-003 froze exact approval, target enrollment, AgentCore PlanSpec, and SecurityExecutionEngine binding contract, preserving metadata-only mirror semantics and non-GA authority boundaries. RC9-010 projected an immutable external object publication candidate for the RC8 payload bytes and produced expected publication-denied evidence because no external HTTPS object URI is published. RC9-011 reconciled declared/current artifact drift into drift-denied evidence with 30 comparisons and 13 drift ids, preserving metadata-only mirror semantics and blocking external object trust, quarantine fetch, install, activation, and rollback. Next work is RC9-012 external object quarantine fetch and fail-closed installer evidence.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -2043,6 +2043,34 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-010-external-object-publication.json"
+                      },
+                      {
+                          "type":  "rc9_script",
+                          "path":  "scripts/project-rc9-artifact-drift-reconciliation.ps1"
+                      },
+                      {
+                          "type":  "rc9_artifact",
+                          "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json"
+                      },
+                      {
+                          "type":  "rc9_artifact",
+                          "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json"
+                      },
+                      {
+                          "type":  "rc9_artifact",
+                          "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json"
+                      },
+                      {
+                          "type":  "rc9_artifact",
+                          "path":  ".workflow/artifacts/rc9-artifact-drift-reconciliation/installer-handoff.json"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc9/.task/TASK-RC9-011.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-011-artifact-drift-reconciliation.json"
                       }
                   ]
 }

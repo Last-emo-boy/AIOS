@@ -1,0 +1,73 @@
+{
+  "schema": "agentos.rc9-artifact-drift-reconciliation-evidence.v1",
+  "generated_at": "2026-06-08T22:50:00+08:00",
+  "task": "RC9-011",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": "scripts/project-rc9-artifact-drift-reconciliation.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+    "status": "passed",
+    "sha256": "6e51c6e4a27a2dfd94af5e7e80fbe4513ad4fdea3d332a7359870a0f88ece2b6"
+  },
+  "outputs": {
+    "reconciliation": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+      "sha256": "2daa3da3a98adacac262b3ab5ea99b262a4843b63515a1ec61e05f12b27c9f82"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json",
+      "sha256": "f8a3cfef240c8629a5828f226ed881321b1ee13f497ba31288899e6b55b000f2"
+    },
+    "installer_handoff": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/installer-handoff.json",
+      "sha256": "7dbdaa89a2cd39e4dbdeacdd484b16aba70ab92421bab0c4893dde862fd478e7"
+    }
+  },
+  "reconciliation_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "drift-denied",
+    "comparisons": 30,
+    "drift_count": 13,
+    "external_object_url_published": false,
+    "external_object_trust_allowed": false,
+    "installer_quarantine_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "declared-current-artifact-drift-denied",
+      "external-https-object-uri-not-published",
+      "installer-quarantine-fetch-not-run",
+      "exact-operator-approval-pending",
+      "controlled-execution-not-authorized"
+    ]
+  },
+  "invariants": {
+    "mirror_metadata_only": true,
+    "mirror_metadata_mutated": false,
+    "declared_metadata_rewritten": false,
+    "payload_bytes_uploaded": false,
+    "payload_bytes_downloaded": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_011_complete": true,
+    "next_task": "RC9-012",
+    "commit_required": true
+  }
+}
