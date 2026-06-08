@@ -1,0 +1,60 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-030",
+  "title": "execute or deny controlled rollback drill after canary activation evidence",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+    ".workflow/artifacts/rc10-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc10-controlled-canary-activation/controlled-activation-handoff.json",
+    ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json",
+    ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+    ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-controlled-rollback-drill.ps1",
+      "role": "controlled rollback drill gate evaluation and denial projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-planspec-requirement.json",
+      "role": "rollback PlanSpec requirement projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-drill-gate-report.json",
+      "role": "rollback drill gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "role": "rollback drill denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/controlled-rollback-handoff.json",
+      "role": "controlled rollback handoff for support/recovery binding"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-030-controlled-rollback-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC10-022 activation denial and handoff before evaluating rollback drill gates.",
+      "The rollback PlanSpec requirement is projected but non-executable because activation was not performed and rollback approval/security gates are absent.",
+      "The rollback gate report records rollback-denied with rollback_execution_allowed=false and rollback_execution_performed=false.",
+      "The rollback denial evidence covers publication, drift-zero, quarantine fetch, target enrollment, activation denial, rollback approval, AgentCore rollback PlanSpec, SecurityExecutionEngine rollback, remote dispatch, and rollback authorization blockers.",
+      "The controlled rollback handoff moves the workflow to RC10-031 while support upload and recovery execution remain disabled."
+    ]
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc10-controlled-rollback-drill.ps1 -GeneratedAt '2026-06-09T00:40:00+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}

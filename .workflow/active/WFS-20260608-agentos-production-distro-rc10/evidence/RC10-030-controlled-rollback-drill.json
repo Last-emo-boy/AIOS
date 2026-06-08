@@ -1,0 +1,102 @@
+{
+  "schema": "agentos.rc10-controlled-rollback-drill-evidence.v1",
+  "generated_at": "2026-06-09T00:40:00+08:00",
+  "task": "RC10-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "script": {
+    "path": "scripts/project-rc10-controlled-rollback-drill.ps1",
+    "sha256": "5aa76f1d1fbec6ce89e1ec6f42ecae4f04281a42734437c5253d868bfad6cfeb"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc10-controlled-rollback-drill/result.json",
+    "status": "passed",
+    "sha256": "97ba56e0f120f1d31b793ef53a02ebee310ad1ea442e082a0cf5ed52d96eb475"
+  },
+  "outputs": {
+    "rollback_planspec_requirement": {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-planspec-requirement.json",
+      "sha256": "474138a24f7c3708a35d2f393325ee7602c610736b418dda11aeca9b430d855f"
+    },
+    "rollback_drill_gate_report": {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-drill-gate-report.json",
+      "sha256": "695ad77f3efb59d8df9f604690c0c30843ef52ecbd8af1b86de455a3b6f72501"
+    },
+    "rollback_drill_denial_evidence": {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "sha256": "5c6673a31882fbf172c335730b85ed7f5d8bb0999c02a2e422c6452c424f27cd"
+    },
+    "controlled_rollback_handoff": {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/controlled-rollback-handoff.json",
+      "sha256": "71d9096ed0c64cfd4a5767d3ebfba1783dc00878f749c86b55d550f1ca449f3b"
+    }
+  },
+  "rollback_surface": {
+    "state": "rollback-denied",
+    "rollback_attempt_id": "rc10-controlled-rollback-drill-attempt",
+    "rollback_planspec_id": "rc10-controlled-rollback-drill-planspec-required",
+    "rollback_planspec_hash": "66591fe51cf437ea7c5460b3294c06de960b5756604191d0d341c9beb1744f94",
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "controlled_canary_activation_performed": false,
+    "exact_rollback_approval_granted": false,
+    "agentcore_rollback_planspec_bound": false,
+    "security_execution_rollback_approval_bound": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "installer-quarantine-fetch-not-verified",
+      "fewer-than-two-eligible-targets",
+      "exact-operator-approval-not-granted",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "publication-not-published-drift-zero",
+      "quarantine-fetch-not-allowed-by-handoff",
+      "controlled-execution-not-authorized",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "controlled-canary-activation-not-performed",
+      "rollback-exact-operator-approval-not-granted",
+      "agentcore-rollback-planspec-not-bound",
+      "security-execution-rollback-effect-envelope-not-bound",
+      "rollback-execution-not-authorized"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "rollback_attempt_recorded": true,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc10_030_complete": true,
+    "next_task": "RC10-031",
+    "commit_required": true
+  }
+}
