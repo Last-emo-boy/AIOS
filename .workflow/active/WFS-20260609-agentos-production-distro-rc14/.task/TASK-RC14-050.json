@@ -1,0 +1,34 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-050",
+  "title": "run Production Distro RC14 final closeout audit",
+  "status": "pending",
+  "wave": "wave-5",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc14-final-closeout-audit.ps1",
+      "role": "RC14 final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
+      "role": "final audit evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit verifies every RC14 planned task result.",
+      "Audit records whether RC14 moved beyond fail-closed denial into controlled local execution readiness.",
+      "Audit keeps production_ready_claim=false unless every GA and execution gate is explicitly proved.",
+      "Audit records next milestone direction."
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-021",
+  "title": "materialize executable AgentCore PlanSpec readiness candidate",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-agentcore-executable-planspec.ps1",
+      "role": "AgentCore executable PlanSpec readiness runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-021-agentcore-executable-planspec.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "PlanSpec candidate binds object trust, quarantine preflight, target set, approval, audit sink, nonce, expiry, rollback, and support references.",
+      "Executable readiness is true only when every required binding is present.",
+      "No controlled effect is prepared by PlanSpec creation alone."
+    ]
+  }
+}

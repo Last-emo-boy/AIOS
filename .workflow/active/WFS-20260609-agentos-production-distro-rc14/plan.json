@@ -1,0 +1,192 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc14",
+  "milestone": "Production Distro RC14",
+  "status": "active",
+  "objective": "Turn RC13 local trust denial evidence into satisfiable local execution readiness: repair declared/current drift-zero, bind freshness window and revocation snapshot authority, prove local object trust, run verified quarantine preflight, materialize executable AgentCore PlanSpec readiness, bind SecurityExecution allow envelope preconditions, enroll two local canary target identities, bind exact approval with audit sink nonce and expiry, then execute or deny controlled local activation and separately approved rollback without mirror, signer, frontend, remote dispatch, object storage provisioning, private signing material, or production ring infrastructure changes.",
+  "scope": {
+    "included": [
+      "AIOS-body local execution readiness planning",
+      "declared/current drift-zero repair into local reconciled identity set",
+      "freshness window and revocation snapshot binding for current payload",
+      "local object trust verification from descriptor manifest signature freshness and drift-zero",
+      "verified quarantine preflight before payload interpretation",
+      "AgentCore executable PlanSpec readiness candidate",
+      "SecurityExecution allow envelope preconditions",
+      "two local canary target identity enrollment",
+      "exact approval packet with audit sink nonce expiry and target set binding",
+      "controlled local activation execution or denial",
+      "separately approved rollback execution or denial",
+      "support/recovery evidence binding",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload storage service provisioning",
+      "remote fleet dispatch infrastructure",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC14 planning and execution readiness contract",
+      "tasks": [
+        {
+          "id": "RC14-000",
+          "status": "completed",
+          "title": "plan Production Distro RC14 local execution readiness",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-000-planning.json"
+        },
+        {
+          "id": "RC14-001",
+          "status": "pending",
+          "title": "freeze RC14 local execution readiness and authority contract",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "drift freshness and object trust",
+      "tasks": [
+        {
+          "id": "RC14-010",
+          "status": "pending",
+          "title": "repair declared/current drift-zero into a local reconciled identity set",
+          "deliverable": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/result.json"
+        },
+        {
+          "id": "RC14-011",
+          "status": "pending",
+          "title": "bind freshness window and revocation snapshot authority for current payload",
+          "deliverable": ".workflow/artifacts/rc14-freshness-window-revocation-binding/result.json"
+        },
+        {
+          "id": "RC14-012",
+          "status": "pending",
+          "title": "prove local object trust from descriptor manifest signature freshness and drift-zero",
+          "deliverable": ".workflow/artifacts/rc14-local-object-trust-verification/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "quarantine AgentCore and SecurityExecution readiness",
+      "tasks": [
+        {
+          "id": "RC14-020",
+          "status": "pending",
+          "title": "run verified quarantine preflight from trusted local object evidence",
+          "deliverable": ".workflow/artifacts/rc14-verified-quarantine-preflight/result.json"
+        },
+        {
+          "id": "RC14-021",
+          "status": "pending",
+          "title": "materialize executable AgentCore PlanSpec readiness candidate",
+          "deliverable": ".workflow/artifacts/rc14-agentcore-executable-planspec/result.json"
+        },
+        {
+          "id": "RC14-022",
+          "status": "pending",
+          "title": "bind SecurityExecution allow envelope preconditions without executing effects",
+          "deliverable": ".workflow/artifacts/rc14-security-execution-allow-envelope/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "target identities and exact approval",
+      "tasks": [
+        {
+          "id": "RC14-030",
+          "status": "pending",
+          "title": "enroll two local canary target identities for controlled execution",
+          "deliverable": ".workflow/artifacts/rc14-two-target-local-identity-enrollment/result.json"
+        },
+        {
+          "id": "RC14-031",
+          "status": "pending",
+          "title": "bind exact approval packet to audit sink nonce expiry and target set",
+          "deliverable": ".workflow/artifacts/rc14-exact-approval-execution-binding/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "controlled activation rollback and support",
+      "tasks": [
+        {
+          "id": "RC14-040",
+          "status": "pending",
+          "title": "execute or deny controlled local activation through AgentCore and SecurityExecution",
+          "deliverable": ".workflow/artifacts/rc14-controlled-local-activation/result.json"
+        },
+        {
+          "id": "RC14-041",
+          "status": "pending",
+          "title": "execute or deny separately approved rollback with support recovery evidence",
+          "deliverable": ".workflow/artifacts/rc14-controlled-rollback-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-5",
+      "name": "RC14 closeout",
+      "tasks": [
+        {
+          "id": "RC14-050",
+          "status": "pending",
+          "title": "run Production Distro RC14 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC14-001",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc13",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "external_object_reachability_is_not_trust": true,
+    "declared_current_artifact_drift_must_be_zero_before_trust": true,
+    "freshness_window_and_revocation_required_before_trust": true,
+    "object_trust_required_before_quarantine": true,
+    "installer_must_fetch_or_stage_to_quarantine_before_interpretation": true,
+    "agentcore_planspec_must_be_executable_before_effects": true,
+    "security_execution_allow_required_before_effects": true,
+    "controlled_execution_requires_two_or_more_enrolled_targets": true,
+    "controlled_execution_requires_exact_operator_approval_with_audit_sink_nonce_and_expiry": true,
+    "controlled_activation_evidence_required_before_rollback_execution": true,
+    "rollback_execution_requires_separate_exact_approval": true,
+    "support_recovery_binding_required_before_activation_or_rollback": true,
+    "production_ready_claim": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.87,
+    "requirements_coverage": 0.94,
+    "task_quality": 0.87,
+    "dependency_correctness": 0.88,
+    "estimation_accuracy": 0.79,
+    "collision_safety": 0.86,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC14 is derived directly from RC13 final audit blockers and next_milestone direction. It keeps the work AIOS-body-only and turns denial checkpoints into satisfiable local trust and controlled execution readiness gates before any production or remote authority."
+  }
+}

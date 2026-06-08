@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-041",
+  "title": "execute or deny separately approved rollback with support recovery evidence",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-controlled-rollback-support-recovery.ps1",
+      "role": "controlled rollback support recovery runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-controlled-rollback-support-recovery/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-041-controlled-rollback-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback requires controlled activation evidence plus separate exact rollback approval.",
+      "Rollback PlanSpec and SecurityExecution rollback envelope are bound before rollback authority.",
+      "Support/recovery evidence remains redacted and local unless upload/recovery authority is explicitly proved."
+    ]
+  }
+}

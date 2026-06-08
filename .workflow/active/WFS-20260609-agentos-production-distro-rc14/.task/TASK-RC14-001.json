@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-001",
+  "title": "freeze RC14 local execution readiness and authority contract",
+  "status": "pending",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/final-rc13-closeout-summary.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "role": "RC14 local execution readiness contract"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-001-local-execution-readiness-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract freezes gate order from drift-zero through rollback/support.",
+      "Contract preserves AIOS-body-only scope and authority boundaries.",
+      "Contract records exact conditions for moving from denial to readiness."
+    ]
+  }
+}

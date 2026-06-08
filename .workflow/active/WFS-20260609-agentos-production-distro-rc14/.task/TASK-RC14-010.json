@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-010",
+  "title": "repair declared/current drift-zero into a local reconciled identity set",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-declared-current-drift-zero-repair.ps1",
+      "role": "declared/current drift-zero repair runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-010-declared-current-drift-zero-repair.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Reconciled identity set records all declared/current comparisons.",
+      "Drift-zero is either proved with zero drift or denied with exact blockers.",
+      "No mirror, signer, object storage, install, activation, rollback, or production mutation occurs."
+    ]
+  }
+}

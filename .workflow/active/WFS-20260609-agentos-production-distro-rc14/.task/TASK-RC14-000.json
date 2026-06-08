@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-000",
+  "title": "plan Production Distro RC14 local execution readiness",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/final-rc13-closeout-summary.md",
+    ".workflow/state.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "role": "RC14 execution plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-plan.md",
+      "role": "planning summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-000-planning.json",
+      "role": "planning evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Plan derives RC14 tasks from RC13 final audit blockers and next milestone direction.",
+      "Plan preserves AIOS-body-only scope and excludes mirror frontend, nginx/TLS, remote signer, object storage provisioning, remote dispatch, private signing material, and production ring mutation.",
+      "Plan keeps production_ready_claim=false and sets RC14-001 as next executable task."
+    ]
+  },
+  "completed_at": "2026-06-09T11:35:00+08:00",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-000-planning.json",
+  "next_task": "RC14-001"
+}

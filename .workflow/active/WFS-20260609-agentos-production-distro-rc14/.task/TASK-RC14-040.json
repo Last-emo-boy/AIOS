@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-040",
+  "title": "execute or deny controlled local activation through AgentCore and SecurityExecution",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-controlled-local-activation.ps1",
+      "role": "controlled local activation runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-controlled-local-activation/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-040-controlled-local-activation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Controlled activation is allowed only after object trust, quarantine, AgentCore executable PlanSpec, SecurityExecution allow, target identities, exact approval, audit sink, nonce, and expiry are proved.",
+      "Activation evidence records whether an effect was prepared and executed.",
+      "Rollback, support upload, recovery, remote dispatch, and production mutation remain disabled unless separately authorized."
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-012",
+  "title": "prove local object trust from descriptor manifest signature freshness and drift-zero",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-local-object-trust-verification.ps1",
+      "role": "local object trust verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-local-object-trust-verification/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-012-local-object-trust-verification.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Object trust requires drift-zero, descriptor/manifest consistency, public signature, revocation, freshness, compatibility, rollback, and support references.",
+      "Endpoint reachability, frontend output, signer reachability, TUI output, shell output, and model replay are not trust.",
+      "Install, activation, rollback, support upload, and production mutation remain disabled unless all gates are proved."
+    ]
+  }
+}

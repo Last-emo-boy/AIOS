@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-011",
+  "title": "bind freshness window and revocation snapshot authority for current payload",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-freshness-window-revocation-binding.ps1",
+      "role": "freshness window revocation binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-011-freshness-window-revocation-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Freshness window and revocation snapshot are hash-bound to current payload identity.",
+      "Binding does not read or use private signing material.",
+      "Object trust remains denied unless drift-zero and freshness authority are both proved."
+    ]
+  }
+}

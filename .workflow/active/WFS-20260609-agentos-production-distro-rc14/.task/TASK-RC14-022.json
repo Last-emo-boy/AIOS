@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-022",
+  "title": "bind SecurityExecution allow envelope preconditions without executing effects",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-security-execution-allow-envelope.ps1",
+      "role": "SecurityExecution allow envelope runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-022-security-execution-allow-envelope.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "SecurityExecution allow envelope binds the AgentCore PlanSpec, approval packet, target identities, audit sink, policy version, rollback, and support evidence.",
+      "Effect preparation remains denied until allow preconditions are proved.",
+      "No install, activation, rollback, support upload, remote dispatch, or production mutation occurs in this precondition task."
+    ]
+  }
+}

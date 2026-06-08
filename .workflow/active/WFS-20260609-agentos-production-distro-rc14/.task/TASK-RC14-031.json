@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-031",
+  "title": "bind exact approval packet to audit sink nonce expiry and target set",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-exact-approval-execution-binding.ps1",
+      "role": "exact approval execution binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-exact-approval-execution-binding/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-031-exact-approval-execution-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Exact approval binds actor, release, object digest, target identities, PlanSpec, SecurityExecution envelope, audit sink, nonce, expiry, policy version, rollback, and support.",
+      "Approval is denied for missing, stale, broad, mismatched, replayed, or unsigned bindings.",
+      "Approval does not imply execution."
+    ]
+  }
+}

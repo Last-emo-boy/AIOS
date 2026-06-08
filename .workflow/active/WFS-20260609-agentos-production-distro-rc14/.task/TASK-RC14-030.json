@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC14-030",
+  "title": "enroll two local canary target identities for controlled execution",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc14-two-target-local-identity-enrollment.ps1",
+      "role": "two-target local identity enrollment runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc14-two-target-local-identity-enrollment/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-030-two-target-local-identity-enrollment.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "At least two distinct local target identities are bound to release, object digest, PlanSpec, SecurityExecution envelope, audit sink, and rollback baseline.",
+      "Duplicate, stale, incompatible, broad selector, replayed, or mismatched identities fail closed.",
+      "Enrollment does not imply activation or remote dispatch authority."
+    ]
+  }
+}
