@@ -1,0 +1,150 @@
+{
+  "schema": "agentos.rc5-mirror-frontend-result.v1",
+  "generated_at": "2026-06-08T11:06:42.4767926+08:00",
+  "checked_at": "2026-06-08T11:06:46.1431470+08:00",
+  "task": "RC5-013",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source_artifacts": {
+    "rc5_hosted_endpoint_verifier": {
+      "path": ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+      "sha256": "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62"
+    },
+    "rc5_hosted_metadata_fail_closed": {
+      "path": ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+      "sha256": "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1"
+    }
+  },
+  "frontend_outputs": {
+    "index_html_sha256": "dc20aea4b8d7b2ca9b006b5ed75dba97a46833c502ff3e100d44ac37db27fd5b",
+    "mirror_css_sha256": "ed608f619f9483fccfe13249207ce370181a1092501b73f4b51e2823f6eee7f5",
+    "mirror_js_sha256": "4126e3713a0d0c2a6c0926dd8d251a6613fdc2d1fe81a51a482bd40713ebfdb6"
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "no_external_dependencies": true,
+    "metadata_endpoints_preserved": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "nginx.reload",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nginx must reload successfully after frontend provisioning.",
+      "evidence": [
+        "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r",
+        "nginx: configuration file /etc/nginx/nginx.conf test is successful\r",
+        "active\r",
+        "assets/mirror.css 5993\r",
+        "assets/mirror.js 6544\r",
+        "channel/index.json 1016\r",
+        "health.json 585\r",
+        "index.html 4155\r",
+        "releases/README.txt 266\r",
+        ".well-known/aios/mirror.json 769\r",
+        "dc20aea4b8d7b2ca9b006b5ed75dba97a46833c502ff3e100d44ac37db27fd5b  /srv/aios-mirror/index.html\r",
+        "ed608f619f9483fccfe13249207ce370181a1092501b73f4b51e2823f6eee7f5  /srv/aios-mirror/assets/mirror.css\r",
+        "4126e3713a0d0c2a6c0926dd8d251a6613fdc2d1fe81a51a482bd40713ebfdb6  /srv/aios-mirror/assets/mirror.js"
+      ]
+    },
+    {
+      "id": "root.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Root path must serve the mirror frontend.",
+      "evidence": 200
+    },
+    {
+      "id": "index.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "index.html must be directly accessible.",
+      "evidence": 200
+    },
+    {
+      "id": "css.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "CSS asset must be accessible.",
+      "evidence": 200
+    },
+    {
+      "id": "js.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "JS asset must be accessible.",
+      "evidence": 200
+    },
+    {
+      "id": "metadata.still_available",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Existing metadata endpoints must remain available.",
+      "evidence": {
+        "health": 200,
+        "channel": 200
+      }
+    },
+    {
+      "id": "frontend.app_root",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend must include the AIOS mirror app shell.",
+      "evidence": null
+    },
+    {
+      "id": "frontend.data_driven",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend must read mirror metadata and render a visual trust path.",
+      "evidence": null
+    },
+    {
+      "id": "frontend.no_external_dependencies",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend must not depend on external network assets.",
+      "evidence": null
+    },
+    {
+      "id": "frontend.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend assets must not contain private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "post.root_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST to root frontend must be blocked.",
+      "evidence": 403
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 11,
+    "blockers": 0,
+    "rc5_013_complete": true,
+    "frontend_url": "http://aios.w33d.xyz/",
+    "tls_required_before_ga_claim": true,
+    "production_ready_claim": false
+  }
+}

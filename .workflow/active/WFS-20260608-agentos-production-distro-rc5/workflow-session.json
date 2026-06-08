@@ -3,7 +3,7 @@
   "name": "Production Distro RC5",
   "status": "active",
   "created_at": "2026-06-08T11:00:00+08:00",
-  "updated_at": "2026-06-08T11:50:00+08:00",
+  "updated_at": "2026-06-08T12:05:00+08:00",
   "source": "TASK.md; RC4 final audit; operator-hosted mirror request",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
   "goal": "Stand up a controlled hosted mirror service framework for aios.w33d.xyz, then prove hosted metadata verification and canary-readiness without weakening RC4 authority boundaries.",
@@ -58,6 +58,12 @@
       "completed_at": "2026-06-08T11:50:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-012-hosted-metadata-fail-closed-fixtures.json",
       "commit": null
+    },
+    {
+      "task": "RC5-013",
+      "completed_at": "2026-06-08T12:05:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-013-mirror-frontend.json",
+      "commit": null
     }
   ],
   "next_task": "RC5-020",
@@ -91,6 +97,10 @@
     "scripts/verify-rc5-hosted-metadata-fail-closed-fixtures.ps1",
     ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-012.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-012-hosted-metadata-fail-closed-fixtures.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-012-hosted-metadata-fail-closed-fixtures.json",
+    "scripts/provision-rc5-mirror-frontend.ps1",
+    ".workflow/artifacts/rc5-mirror-frontend/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-013.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-013-mirror-frontend.json"
   ]
 }

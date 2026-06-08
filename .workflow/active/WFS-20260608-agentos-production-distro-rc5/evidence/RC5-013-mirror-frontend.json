@@ -1,0 +1,66 @@
+{
+  "schema": "agentos.rc5-mirror-frontend-evidence.v1",
+  "generated_at": "2026-06-08T12:05:00+08:00",
+  "task": "RC5-013",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "provisioner": {
+    "path": "scripts/provision-rc5-mirror-frontend.ps1",
+    "sha256": "06c455c00b1cc349300848e89b96d6d8f546d387bf8b3e9a7fb0a501ea9a5748"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-mirror-frontend/result.json",
+    "sha256": "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+    "status": "passed",
+    "checks": 11,
+    "blockers": 0
+  },
+  "remote_frontend": {
+    "url": "http://aios.w33d.xyz/",
+    "host": "47.101.11.109",
+    "static_root": "/srv/aios-mirror",
+    "files": [
+      "/srv/aios-mirror/index.html",
+      "/srv/aios-mirror/assets/mirror.css",
+      "/srv/aios-mirror/assets/mirror.js"
+    ],
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "frontend_output_hashes": {
+    "index_html_sha256": "dc20aea4b8d7b2ca9b006b5ed75dba97a46833c502ff3e100d44ac37db27fd5b",
+    "mirror_css_sha256": "ed608f619f9483fccfe13249207ce370181a1092501b73f4b51e2823f6eee7f5",
+    "mirror_js_sha256": "4126e3713a0d0c2a6c0926dd8d251a6613fdc2d1fe81a51a482bd40713ebfdb6"
+  },
+  "verified_controls": {
+    "root_http_200": true,
+    "index_http_200": true,
+    "css_http_200": true,
+    "js_http_200": true,
+    "metadata_endpoints_preserved": true,
+    "no_external_dependencies": true,
+    "post_root_blocked": true,
+    "secret_markers_absent": true
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "metadata_only": true,
+    "large_artifact_storage_deferred": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc5_013_complete": true,
+    "next_task": "RC5-020",
+    "commit_required": true
+  }
+}
