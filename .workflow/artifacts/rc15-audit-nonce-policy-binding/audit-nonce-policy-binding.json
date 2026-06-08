@@ -1,0 +1,51 @@
+{
+  "schema": "agentos.rc15-audit-nonce-policy-binding.v1",
+  "generated_at": "2026-06-09T18:20:00+08:00",
+  "task": "RC15-010",
+  "status": "audit-nonce-policy-bound",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+  "audit_sink": {
+    "bound": true,
+    "descriptor_path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-sink-descriptor.json",
+    "descriptor_sha256": "87273edab2b62bf546a6dfb52ab938032f034ff2e56f1d96e974e68ee48dd5da",
+    "journal_path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-journal.jsonl",
+    "journal_sha256": "868197d98a8bd66d1367dde85df08688163bc5e01e86858372cece570ad59788"
+  },
+  "nonce": {
+    "bound": true,
+    "value": "rc15-nonce-2ca04a1b80d19d6131f88020378f4676",
+    "sha256": "4db9f2f01459dca37cf9f97da0f5957da1bf5c6fa06d9666851b688dfe3a1ae6",
+    "replay_detected": false
+  },
+  "expiry": {
+    "bound": true,
+    "generated_at": "2026-06-09T18:20:00+08:00",
+    "valid_until": "2026-06-09T22:20:00.0000000+08:00",
+    "hours": 4,
+    "current_at_generated_at": true
+  },
+  "policy": {
+    "bound": true,
+    "version": "rc15-controlled-local-execution-v1",
+    "scope": "controlled-local-execution"
+  },
+  "upstream": {
+    "rc14_local_trust_ready": true,
+    "rc14_verified_quarantine_ready": true,
+    "rc14_controlled_execution_ready": false,
+    "rc14_exact_approval_granted": false,
+    "rc14_activation_performed": false
+  },
+  "downstream": {
+    "target_identity_enrollment_ready": false,
+    "exact_approval_ready": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  }
+}

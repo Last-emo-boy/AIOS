@@ -1,0 +1,87 @@
+{
+  "schema": "agentos.rc15-audit-nonce-policy-binding-evidence.v1",
+  "generated_at": "2026-06-09T18:20:00+08:00",
+  "task": "RC15-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc15",
+  "script": {
+    "path": "scripts/project-rc15-audit-nonce-policy-binding.ps1",
+    "sha256": "513fdabb96e49cb6bb9a88efa2f121feca4cbf8ba6c4207aec33f3a461c90114"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json",
+    "status": "passed",
+    "sha256": "febfad1add0a6689d1de5869a8b6d1fefe7840dfe66c2771f99d6c47f18ecb05"
+  },
+  "outputs": {
+    "audit_journal": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-journal.jsonl",
+      "sha256": "868197d98a8bd66d1367dde85df08688163bc5e01e86858372cece570ad59788"
+    },
+    "audit_sink_descriptor": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-sink-descriptor.json",
+      "sha256": "87273edab2b62bf546a6dfb52ab938032f034ff2e56f1d96e974e68ee48dd5da"
+    },
+    "audit_nonce_policy_binding": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-nonce-policy-binding.json",
+      "sha256": "5ef72f72706d30b002379b606df0e0c78b1cc0a4d4dd5500d9c8662306493b01"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-nonce-policy-fail-closed-matrix.json",
+      "sha256": "2b6a6e114fe61b1c5169daf346c30ce81cbb0418c4f97e93298640426efea121"
+    },
+    "exact_approval_substrate_handoff": {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/exact-approval-substrate-handoff.json",
+      "sha256": "c9dcf951a87ba767bb698345f2c4fa7ec71f2750da95758349b1d396775e50ef"
+    }
+  },
+  "binding_surface": {
+    "state": "audit-nonce-policy-bound",
+    "audit_sink_bound": true,
+    "nonce_bound": true,
+    "expiry_bound": true,
+    "policy_version_bound": true,
+    "exact_approval_ready": false,
+    "target_identity_enrollment_ready": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "nonce_sha256": "4db9f2f01459dca37cf9f97da0f5957da1bf5c6fa06d9666851b688dfe3a1ae6",
+    "policy_version": "rc15-controlled-local-execution-v1",
+    "approval_valid_until": "2026-06-09T22:20:00.0000000+08:00"
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "audit_sink_repo_local": true,
+    "local_private_key_material_used": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc15_010_complete": true,
+    "next_task": "RC15-011",
+    "commit_required": true
+  }
+}
