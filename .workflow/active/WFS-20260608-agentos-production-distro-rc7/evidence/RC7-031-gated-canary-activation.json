@@ -1,0 +1,82 @@
+{
+  "schema": "agentos.rc7-gated-canary-activation-evidence.v1",
+  "generated_at": "2026-06-08T14:28:49+08:00",
+  "task": "RC7-031",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/project-rc7-gated-canary-activation.ps1",
+    "sha256": "bdf0d1344cdbf145381d39a92d338924afbf5dc2705c5b0d3c7034a1de3c225a"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-gated-canary-activation/result.json",
+    "sha256": "cae07ded936a118238a3598a12c58979d88b3c733a5d0b8ff18bbb889d4780ea",
+    "status": "passed",
+    "checks": 11,
+    "blockers": 0
+  },
+  "artifacts": {
+    "activation_gate_report": {
+      "path": ".workflow/artifacts/rc7-gated-canary-activation/activation-gate-report.json",
+      "sha256": "171cf7f4887bc45eb661b15ff878eb078941811ae076b5e5f86bc924506e0b9f",
+      "status": "activation-gates-evaluated-blocked"
+    },
+    "activation_denial_evidence": {
+      "path": ".workflow/artifacts/rc7-gated-canary-activation/activation-denial-evidence.json",
+      "sha256": "21cab3b32688106523939a397402fb0370baced9b2f978914e3fe011521b08d6",
+      "status": "activation-denied-by-gates"
+    }
+  },
+  "gates": {
+    "signed_metadata_published": true,
+    "revocation_snapshot_published": true,
+    "compatibility_published": true,
+    "rollback_baseline_published": true,
+    "tls_configured": true,
+    "storage_policy_defined": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "canary_target_set_enrolled": false,
+    "observed_canary_node_count": 1,
+    "required_canary_node_count": 2,
+    "exact_operator_approval_granted": false,
+    "agentcore_planspec_bound": false,
+    "security_execution_approval_bound": false,
+    "remote_fleet_execution_enabled": false,
+    "live_metadata_matches_approval_packet": true
+  },
+  "remaining_blockers_before_activation": [
+    "real-cryptographic-payload-signature-not-present",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound"
+  ],
+  "activation": {
+    "canary_activation_allowed": false,
+    "canary_activation_performed": false,
+    "activation_allowed": false,
+    "activation_performed": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_031_complete": true,
+    "next_task": "RC7-032",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,400 @@
+{
+    "schema":  "agentos.rc7-gated-canary-activation-result.v1",
+    "generated_at":  "2026-06-08T14:28:49.7458545+08:00",
+    "checked_at":  "2026-06-08T14:28:49.8402501+08:00",
+    "task":  "RC7-031",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "canary_activation_evidence_projected":  true,
+    "canary_activation_allowed":  false,
+    "canary_activation_performed":  false,
+    "activation_allowed":  false,
+    "activation_performed":  false,
+    "rollback_execution_allowed":  false,
+    "rollback_execution_performed":  false,
+    "artifacts":  {
+                      "activation_gate_report":  {
+                                                     "path":  ".workflow/artifacts/rc7-gated-canary-activation/activation-gate-report.json",
+                                                     "sha256":  "171cf7f4887bc45eb661b15ff878eb078941811ae076b5e5f86bc924506e0b9f",
+                                                     "schema":  "agentos.rc7-canary-activation-gate-report.v1",
+                                                     "status":  "activation-gates-evaluated-blocked"
+                                                 },
+                      "activation_denial_evidence":  {
+                                                         "path":  ".workflow/artifacts/rc7-gated-canary-activation/activation-denial-evidence.json",
+                                                         "sha256":  "21cab3b32688106523939a397402fb0370baced9b2f978914e3fe011521b08d6",
+                                                         "schema":  "agentos.rc7-canary-activation-denial-evidence.v1",
+                                                         "status":  "activation-denied-by-gates"
+                                                     }
+                  },
+    "source_artifacts":  {
+                             "rc7_multi_node_canary_approval":  {
+                                                                    "path":  ".workflow/artifacts/rc7-multi-node-canary-approval/result.json",
+                                                                    "sha256":  "b9e2dced845bdfb84e82214af0338af734c2b12e3c9220fca5a204f9f1fad509",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc7-multi-node-canary-approval-result.v1",
+                                                                    "status":  "passed"
+                                                                },
+                             "rc7_canary_target_set":  {
+                                                           "path":  ".workflow/artifacts/rc7-multi-node-canary-approval/canary-target-set.json",
+                                                           "sha256":  "51663fa2d37a3553bf66617dc3dc4cf25bcf4a4a4007ae350cd5379059475fc9",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc7-canary-target-set.v1",
+                                                           "status":  "projected-target-set-enrollment-blocked"
+                                                       },
+                             "rc7_exact_approval_packet":  {
+                                                               "path":  ".workflow/artifacts/rc7-multi-node-canary-approval/exact-approval-packet.json",
+                                                               "sha256":  "5bfe204865e20cd1571403cf32d81102b012f6467ff0d97b29edcbf90f2862e0",
+                                                               "present":  true,
+                                                               "schema":  "agentos.rc7-exact-canary-approval-packet.v1",
+                                                               "status":  "approval-required-execution-blocked"
+                                                           },
+                             "rc7_installer_signed_consumption":  {
+                                                                      "path":  ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+                                                                      "sha256":  "289940b5024bb9fb4cf3d33d2adf3b363c789921cee08711bad6868e7f746904",
+                                                                      "present":  true,
+                                                                      "schema":  "agentos.rc7-installer-signed-consumption-result.v1",
+                                                                      "status":  "passed"
+                                                                  },
+                             "rc7_signed_consumption_fail_closed":  {
+                                                                        "path":  ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+                                                                        "sha256":  "b80cd6135bdbf97ffe9ae9f901cb73e76a7e57271e4ed3b6f266215b1f70baae",
+                                                                        "present":  true,
+                                                                        "schema":  "agentos.rc7-signed-consumption-fail-closed-result.v1",
+                                                                        "status":  "passed"
+                                                                    },
+                             "rc7_install_rollback_baseline":  {
+                                                                   "path":  ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+                                                                   "sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                                                                   "present":  true,
+                                                                   "schema":  "agentos.rc7-install-rollback-baseline-result.v1",
+                                                                   "status":  "passed"
+                                                               },
+                             "rc7_tls_nginx_hardening":  {
+                                                             "path":  ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+                                                             "sha256":  "7b426b311f5fbee4ae6392d2ae4325b67034969b60c180e8dad1e0fbc4426fb0",
+                                                             "present":  true,
+                                                             "schema":  "agentos.rc7-tls-nginx-hardening-result.v1",
+                                                             "status":  "passed"
+                                                         },
+                             "rc7_large_payload_storage_policy":  {
+                                                                      "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-022-large-payload-storage-policy.json",
+                                                                      "sha256":  "8f5144fd14c0a3b0044ce6c5bfac99a56db93bc8ac23dcfc21cf0d498a891bd4",
+                                                                      "present":  true,
+                                                                      "schema":  "agentos.rc7-large-payload-storage-policy-evidence.v1",
+                                                                      "status":  "completed"
+                                                                  },
+                             "fleet_rollout_authority":  {
+                                                             "path":  ".workflow/artifacts/release/fleet-rollout-authority.json",
+                                                             "sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+                                                             "present":  true,
+                                                             "schema":  "agentos.fleet-rollout-authority.v1",
+                                                             "status":  "passed"
+                                                         }
+                         },
+    "source_bindings":  {
+                            "rc7_multi_node_canary_approval_sha256":  "b9e2dced845bdfb84e82214af0338af734c2b12e3c9220fca5a204f9f1fad509",
+                            "rc7_canary_target_set_sha256":  "51663fa2d37a3553bf66617dc3dc4cf25bcf4a4a4007ae350cd5379059475fc9",
+                            "rc7_exact_approval_packet_sha256":  "5bfe204865e20cd1571403cf32d81102b012f6467ff0d97b29edcbf90f2862e0",
+                            "rc7_installer_signed_consumption_sha256":  "289940b5024bb9fb4cf3d33d2adf3b363c789921cee08711bad6868e7f746904",
+                            "rc7_signed_consumption_fail_closed_sha256":  "b80cd6135bdbf97ffe9ae9f901cb73e76a7e57271e4ed3b6f266215b1f70baae",
+                            "rc7_install_rollback_baseline_sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                            "rc7_tls_nginx_hardening_sha256":  "7b426b311f5fbee4ae6392d2ae4325b67034969b60c180e8dad1e0fbc4426fb0",
+                            "rc7_large_payload_storage_policy_sha256":  "8f5144fd14c0a3b0044ce6c5bfac99a56db93bc8ac23dcfc21cf0d498a891bd4",
+                            "fleet_rollout_authority_sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc"
+                        },
+    "live_endpoint_bindings":  {
+                                   "channel":  {
+                                                   "path":  "/channel/index.json",
+                                                   "sha256":  "0369b9f61da83dd2ac8149681befce9b3b619ac0ec2de9359620796a404151e1"
+                                               },
+                                   "payload_index":  {
+                                                         "path":  "/payloads/index.json",
+                                                         "sha256":  "073dae091d356a4f2d2889275eb8b1d21d210c1ac72abac7a6c12fa40568867b"
+                                                     },
+                                   "install_bootstrap":  {
+                                                             "path":  "/install/bootstrap.json",
+                                                             "sha256":  "8296d6b2626d5bf8a391f0e0d20d62ecc6405043fe1bd6199d81059417a20fc6"
+                                                         },
+                                   "signatures":  {
+                                                      "path":  "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+                                                      "sha256":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01"
+                                                  },
+                                   "signed_metadata":  {
+                                                           "path":  "/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+                                                           "sha256":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337"
+                                                       },
+                                   "revocations":  {
+                                                       "path":  "/payloads/aios/production-distro-rc6-current-artifacts/revocations.json",
+                                                       "sha256":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e"
+                                                   },
+                                   "compatibility":  {
+                                                         "path":  "/install/compatibility.json",
+                                                         "sha256":  "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45"
+                                                     },
+                                   "rollback_baseline":  {
+                                                             "path":  "/install/rollback-baseline.json",
+                                                             "sha256":  "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b"
+                                                         }
+                               },
+    "target_set":  {
+                       "required_minimum_nodes":  2,
+                       "observed_canary_node_count":  1,
+                       "target_set_enrolled":  false
+                   },
+    "gates":  {
+                  "signed_metadata_published":  true,
+                  "revocation_snapshot_published":  true,
+                  "compatibility_published":  true,
+                  "rollback_baseline_published":  true,
+                  "tls_configured":  true,
+                  "storage_policy_defined":  true,
+                  "cryptographic_signature_present":  false,
+                  "signature_available":  false,
+                  "canary_target_set_enrolled":  false,
+                  "observed_canary_node_count":  1,
+                  "required_canary_node_count":  2,
+                  "exact_operator_approval_granted":  false,
+                  "agentcore_planspec_bound":  false,
+                  "security_execution_approval_bound":  false,
+                  "remote_fleet_execution_enabled":  false,
+                  "live_metadata_matches_approval_packet":  true
+              },
+    "remaining_blockers_before_activation":  [
+                                                 "real-cryptographic-payload-signature-not-present",
+                                                 "two-or-more-enrolled-canary-target-nodes-required",
+                                                 "remote-fleet-execution-not-enabled",
+                                                 "exact-operator-approval-not-granted",
+                                                 "AgentCore-PlanSpec-not-bound",
+                                                 "SecurityExecutionEngine-approval-not-bound"
+                                             ],
+    "checks":  [
+                   {
+                       "id":  "source.rc7_030.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC7-031 must consume passed RC7-030 approval packet evidence while target, approval, PlanSpec, and execution remain blocked.",
+                       "evidence":  {
+                                        "result":  {
+                                                       "checks":  12,
+                                                       "blockers":  0,
+                                                       "rc7_030_complete":  true,
+                                                       "canary_approval_packet_projected":  true,
+                                                       "canary_execution_allowed":  false,
+                                                       "canary_execution_performed":  false,
+                                                       "activation_performed":  false,
+                                                       "rollback_execution_performed":  false,
+                                                       "exact_operator_approval_required":  true,
+                                                       "exact_operator_approval_granted":  false,
+                                                       "required_canary_node_count":  2,
+                                                       "observed_canary_node_count":  1,
+                                                       "target_set_enrolled":  false,
+                                                       "remote_fleet_execution_enabled":  false,
+                                                       "production_ready_claim":  false,
+                                                       "next_task":  "RC7-031"
+                                                   },
+                                        "target_set":  "projected-target-set-enrollment-blocked",
+                                        "approval_packet":  "approval-required-execution-blocked"
+                                    }
+                   },
+                   {
+                       "id":  "source.signed_consumption.ready_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Installer signed consumption must remain observable and verification-blocked.",
+                       "evidence":  {
+                                        "checks":  12,
+                                        "blockers":  0,
+                                        "installer_steps":  13,
+                                        "installer_blockers":  7,
+                                        "rc7_010_complete":  true,
+                                        "next_task":  "RC7-011"
+                                    }
+                   },
+                   {
+                       "id":  "source.fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Signed consumption fail-closed fixtures must pass before gated activation evidence.",
+                       "evidence":  {
+                                        "checks":  5,
+                                        "blockers":  0,
+                                        "cases":  21,
+                                        "passed_cases":  21,
+                                        "failed_cases":  0,
+                                        "rc7_011_complete":  true,
+                                        "next_task":  "RC7-012"
+                                    }
+                   },
+                   {
+                       "id":  "source.rollback_baseline.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Compatibility and rollback baseline metadata must be published while activation and rollback remain blocked.",
+                       "evidence":  {
+                                        "release_id":  "production-distro-rc6-current-artifacts",
+                                        "status":  "verification-blocked",
+                                        "compatibility_published":  true,
+                                        "rollback_baseline_published":  true,
+                                        "public_signature_projection_available":  true,
+                                        "cryptographic_signature_present":  false,
+                                        "signature_available":  false,
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false
+                                    }
+                   },
+                   {
+                       "id":  "source.tls_storage.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "TLS and storage policy must be ready before canary activation gate evaluation.",
+                       "evidence":  {
+                                        "tls":  {
+                                                    "checks":  12,
+                                                    "blockers":  0,
+                                                    "rc7_021_complete":  true,
+                                                    "https_url":  "https://aios.w33d.xyz/",
+                                                    "next_task":  "RC7-022"
+                                                },
+                                        "storage":  {
+                                                        "mirror_host":  "47.101.11.109",
+                                                        "mirror_domain":  "aios.w33d.xyz",
+                                                        "mirror_storage_mode":  "metadata-only",
+                                                        "large_payloads_on_mirror_allowed":  false,
+                                                        "external_object_storage_required":  true,
+                                                        "object_storage_trust":  "transport-only",
+                                                        "persistent_metadata_credentials_allowed":  false,
+                                                        "persistent_presigned_urls_allowed":  false,
+                                                        "https_required_for_object_uri":  true,
+                                                        "immutable_object_required":  true,
+                                                        "size_and_digest_required":  true,
+                                                        "installer_quarantine_required":  true,
+                                                        "local_byte_digest_verification_required":  true
+                                                    }
+                                    }
+                   },
+                   {
+                       "id":  "fleet.authority.ready_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fleet authority must remain AgentCore/SecurityExecution-owned, with canary not enrolled and remote execution disabled.",
+                       "evidence":  {
+                                        "observed":  1,
+                                        "required":  2,
+                                        "canary_blocker":  "remote-fleet-execution-not-enabled"
+                                    }
+                   },
+                   {
+                       "id":  "live.https.metadata.matches_approval",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "HTTPS live metadata must remain current, non-GA, install/activation blocked, and hash-match the RC7-030 approval packet.",
+                       "evidence":  {
+                                        "live_ready":  true,
+                                        "matches_approval":  true,
+                                        "release_id":  "production-distro-rc6-current-artifacts",
+                                        "status":  "verification-blocked"
+                                    }
+                   },
+                   {
+                       "id":  "activation.gates.fail_closed",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Canary activation must remain denied until all signature, target, approval, PlanSpec, SecurityExecution, and remote fleet gates pass.",
+                       "evidence":  {
+                                        "signed_metadata_published":  true,
+                                        "revocation_snapshot_published":  true,
+                                        "compatibility_published":  true,
+                                        "rollback_baseline_published":  true,
+                                        "tls_configured":  true,
+                                        "storage_policy_defined":  true,
+                                        "cryptographic_signature_present":  false,
+                                        "signature_available":  false,
+                                        "canary_target_set_enrolled":  false,
+                                        "observed_canary_node_count":  1,
+                                        "required_canary_node_count":  2,
+                                        "exact_operator_approval_granted":  false,
+                                        "agentcore_planspec_bound":  false,
+                                        "security_execution_approval_bound":  false,
+                                        "remote_fleet_execution_enabled":  false,
+                                        "live_metadata_matches_approval_packet":  true
+                                    }
+                   },
+                   {
+                       "id":  "activation.gate_report.projected",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Activation gate report must be projected without performing activation.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc7-gated-canary-activation/activation-gate-report.json",
+                                        "sha256":  "171cf7f4887bc45eb661b15ff878eb078941811ae076b5e5f86bc924506e0b9f"
+                                    }
+                   },
+                   {
+                       "id":  "activation.denial_evidence.projected",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Activation denial evidence must cover each missing gate as fail-closed.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc7-gated-canary-activation/activation-denial-evidence.json",
+                                        "sha256":  "21cab3b32688106523939a397402fb0370baced9b2f978914e3fe011521b08d6",
+                                        "cases":  6
+                                    }
+                   },
+                   {
+                       "id":  "activation.no_authority_broadened",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC7-031 must not sign, upload payloads, install, activate, rollback, mutate slots/rings, upload support, dispatch remotely, or grant TUI authority.",
+                       "evidence":  {
+                                        "local_private_key_material_used":  false,
+                                        "private_key_material_read_or_printed":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "payload_upload_performed":  false,
+                                        "install_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_slot_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "support_upload_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "tui_authority":  false
+                                    }
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false
+                   },
+    "summary":  {
+                    "checks":  11,
+                    "blockers":  0,
+                    "rc7_031_complete":  true,
+                    "canary_activation_evidence_projected":  true,
+                    "canary_activation_allowed":  false,
+                    "canary_activation_performed":  false,
+                    "activation_performed":  false,
+                    "rollback_execution_performed":  false,
+                    "exact_operator_approval_required":  true,
+                    "exact_operator_approval_granted":  false,
+                    "required_canary_node_count":  2,
+                    "observed_canary_node_count":  1,
+                    "target_set_enrolled":  false,
+                    "remote_fleet_execution_enabled":  false,
+                    "production_ready_claim":  false,
+                    "next_task":  "RC7-032"
+                }
+}

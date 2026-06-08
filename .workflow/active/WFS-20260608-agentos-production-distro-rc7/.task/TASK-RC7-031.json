@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-031",
+  "title": "produce gated canary activation evidence after signed consumption gates pass",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc7-multi-node-canary-approval/result.json",
+    ".workflow/artifacts/rc7-multi-node-canary-approval/canary-target-set.json",
+    ".workflow/artifacts/rc7-multi-node-canary-approval/exact-approval-packet.json",
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc7-gated-canary-activation.ps1",
+      "role": "gated canary activation evidence script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-gated-canary-activation/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-gated-canary-activation/activation-gate-report.json",
+      "role": "activation gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-gated-canary-activation/activation-denial-evidence.json",
+      "role": "activation denial evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-031-gated-canary-activation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The result consumes RC7-030 exact approval packet evidence and verifies live HTTPS metadata still matches the approval packet hashes.",
+      "The activation gate report shows signed metadata, revocation, compatibility, rollback baseline, TLS, and storage policy are published.",
+      "The activation gate report denies activation until real cryptographic signature, two or more enrolled canary targets, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, and remote fleet execution are present.",
+      "The denial evidence covers missing signature, target enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, and remote fleet execution as fail-closed cases.",
+      "The task performs no signing, payload upload, install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, or TUI authority broadening.",
+      "The next task is RC7-032 gated rollback drill evidence."
+    ]
+  }
+}
