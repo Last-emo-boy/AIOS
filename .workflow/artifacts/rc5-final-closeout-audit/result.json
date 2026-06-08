@@ -1,0 +1,429 @@
+﻿{
+    "schema":  "agentos.rc5-final-closeout-audit-result.v1",
+    "generated_at":  "2026-06-08T11:38:11.3729963+08:00",
+    "checked_at":  "2026-06-08T11:38:12.2513515+08:00",
+    "task":  "RC5-030",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "rc5_030_complete":  true,
+    "final_audit_written":  true,
+    "closeout_summary_written":  true,
+    "state_update_performed_by_writer":  false,
+    "local_private_key_material_used":  false,
+    "cryptographic_signing_performed":  false,
+    "activation_performed":  false,
+    "rollback_execution_performed":  false,
+    "active_registry_mutated":  false,
+    "active_slot_mutated":  false,
+    "active_artifact_set_mutated":  false,
+    "production_ring_mutated":  false,
+    "support_upload_endpoint_created":  false,
+    "remote_dispatch_enabled":  false,
+    "model_replay_authority":  false,
+    "normal_shell_authority":  false,
+    "tui_authority":  false,
+    "source_artifacts":  {
+                             "rc5_plan":  {
+                                              "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+                                              "sha256":  "d09b5e7b6c5438770da1e54853329c6f491d5eab1d99263ddc1b8f873dfc982c",
+                                              "present":  true,
+                                              "schema":  "agentos.workflow-plan.v1",
+                                              "status":  "active"
+                                          },
+                             "workflow_session":  {
+                                                      "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json",
+                                                      "sha256":  "a253ebdbe4ea9bcd636692db18ee21accedd0214834737500a6444f8b7951728",
+                                                      "present":  true,
+                                                      "schema":  null,
+                                                      "status":  "active"
+                                                  },
+                             "rc4_final_audit":  {
+                                                     "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+                                                     "sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+                                                     "present":  true,
+                                                     "schema":  "agentos.production-distro-rc4-final-audit.v1",
+                                                     "status":  null
+                                                 },
+                             "hosted_service":  {
+                                                    "path":  ".workflow/artifacts/rc5-hosted-mirror-service/result.json",
+                                                    "sha256":  "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc5-hosted-mirror-service-result.v1",
+                                                    "status":  "passed"
+                                                },
+                             "endpoint_verifier":  {
+                                                       "path":  ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+                                                       "sha256":  "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc5-hosted-endpoint-verifier-result.v1",
+                                                       "status":  "passed"
+                                                   },
+                             "hosted_metadata_fail_closed":  {
+                                                                 "path":  ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+                                                                 "sha256":  "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc5-hosted-metadata-fail-closed-result.v1",
+                                                                 "status":  "passed"
+                                                             },
+                             "mirror_frontend":  {
+                                                     "path":  ".workflow/artifacts/rc5-mirror-frontend/result.json",
+                                                     "sha256":  "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc5-mirror-frontend-result.v1",
+                                                     "status":  "passed"
+                                                 },
+                             "user_release":  {
+                                                  "path":  ".workflow/artifacts/rc5-user-release-channel/result.json",
+                                                  "sha256":  "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc5-user-release-channel-result.v1",
+                                                  "status":  "passed"
+                                              },
+                             "bootstrap_manifest":  {
+                                                        "path":  ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+                                                        "sha256":  "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc5-user-bootstrap-manifest.v1",
+                                                        "status":  "metadata-only-preview"
+                                                    },
+                             "user_release_channel":  {
+                                                          "path":  ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+                                                          "sha256":  "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc5-user-release-channel.v1",
+                                                          "status":  "inspectable-metadata-only"
+                                                      },
+                             "canary_proof":  {
+                                                  "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+                                                  "sha256":  "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc5-multi-node-canary-proof-result.v1",
+                                                  "status":  "passed"
+                                              },
+                             "canary_projection":  {
+                                                       "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+                                                       "sha256":  "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc5-controlled-multi-node-canary-plan-projection.v1",
+                                                       "status":  "preconditions-proven-execution-blocked"
+                                                   },
+                             "rollback_readiness":  {
+                                                        "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+                                                        "sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc5-canary-rollback-readiness-projection.v1",
+                                                        "status":  "rollback-baseline-bound-execution-not-run"
+                                                    },
+                             "support_recovery":  {
+                                                      "path":  ".workflow/artifacts/rc5-hosted-support-recovery/result.json",
+                                                      "sha256":  "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+                                                      "present":  true,
+                                                      "schema":  "agentos.rc5-hosted-support-recovery-result.v1",
+                                                      "status":  "passed"
+                                                  },
+                             "support_index":  {
+                                                   "path":  ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+                                                   "sha256":  "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc5-hosted-support-index.v1",
+                                                   "status":  "hosted-metadata-only"
+                                               },
+                             "recovery_operations":  {
+                                                         "path":  ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+                                                         "sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc5-hosted-recovery-operations.v1",
+                                                         "status":  "projection-only"
+                                                     },
+                             "hosted_channel_after_support":  {
+                                                                  "path":  ".workflow/artifacts/rc5-hosted-support-recovery/hosted-channel-index-after-support-recovery.json",
+                                                                  "sha256":  "aab977791cde3a9ba2b99d931e3ee80c188ba6569fab64c64d9bfe8e2c27e611",
+                                                                  "present":  true,
+                                                                  "schema":  "agentos.rc5-hosted-channel-index.v1",
+                                                                  "status":  "metadata-only"
+                                                              }
+                         },
+    "outputs":  {
+                    "final_audit":  {
+                                        "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+                                        "sha256":  "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+                                        "present":  true
+                                    },
+                    "closeout_summary":  {
+                                             "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md",
+                                             "sha256":  "acd919a0b59547a951c6aeef4ce7df6065e6587e70e7d4b6ca542d884bbc3055",
+                                             "present":  true
+                                         }
+                },
+    "checks":  [
+                   {
+                       "id":  "plan.closeout_position",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 plan must point at RC5-030, with all pre-closeout tasks completed and RC5-030 pending.",
+                       "evidence":  {
+                                        "current_task":  "RC5-030",
+                                        "completed_before_closeout":  10,
+                                        "required":  10,
+                                        "RC5_030":  "pending"
+                                    }
+                   },
+                   {
+                       "id":  "rc4.final_audit.boundary_ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 must inherit a passed RC4 final audit boundary.",
+                       "evidence":  {
+                                        "verdict":  "PASS",
+                                        "decision":  "rc4-closeout-pass-next-milestone-planning"
+                                    }
+                   },
+                   {
+                       "id":  "hosted_service.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 hosted mirror service must be metadata-only, blocker-free, and authority-free.",
+                       "evidence":  {
+                                        "checks":  10,
+                                        "blockers":  0,
+                                        "rc5_010_complete":  true,
+                                        "endpoints_verified":  [
+                                                                   "http://aios.w33d.xyz/health.json",
+                                                                   "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+                                                                   "http://aios.w33d.xyz/channel/index.json",
+                                                                   "http://aios.w33d.xyz/releases/README.txt"
+                                                               ],
+                                        "tls_required_before_ga_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "endpoint_verifier.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 hosted endpoint verifier must pass and keep TLS as a GA gate.",
+                       "evidence":  {
+                                        "checks":  17,
+                                        "blockers":  0,
+                                        "rc5_011_complete":  true,
+                                        "tls_required_before_ga_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "metadata_fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 hosted metadata fail-closed fixtures must pass all negative cases.",
+                       "evidence":  {
+                                        "negative_cases":  14,
+                                        "negative_passed":  14,
+                                        "blockers":  0,
+                                        "rc5_012_complete":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "mirror_frontend.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "AIOS mirror frontend must remain static, dependency-free, and non-authoritative.",
+                       "evidence":  {
+                                        "checks":  11,
+                                        "blockers":  0,
+                                        "rc5_013_complete":  true,
+                                        "frontend_url":  "http://aios.w33d.xyz/",
+                                        "tls_required_before_ga_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "user_release.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "User release channel must publish bootstrap metadata while blocking install/update.",
+                       "evidence":  {
+                                        "checks":  10,
+                                        "blockers":  0,
+                                        "rc5_020_complete":  true,
+                                        "published_endpoints":  [
+                                                                    "http://aios.w33d.xyz/bootstrap/manifest.json",
+                                                                    "http://aios.w33d.xyz/channel/user-release.json",
+                                                                    "http://aios.w33d.xyz/channel/index.json"
+                                                                ],
+                                        "tls_required_before_ga_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "canary_proof.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Multi-node canary proof must be rollback-ready while canary execution remains blocked by design.",
+                       "evidence":  {
+                                        "checks":  19,
+                                        "blockers":  0,
+                                        "rc5_021_complete":  true,
+                                        "canary_preconditions_proven":  true,
+                                        "rollback_readiness_proven":  true,
+                                        "canary_execution_allowed":  false,
+                                        "canary_execution_performed":  false,
+                                        "projected_ring":  "canary",
+                                        "minimum_canary_node_count_required":  2,
+                                        "observed_canary_node_count":  1,
+                                        "remote_rings_blocked":  true,
+                                        "exact_operator_approval_required":  true,
+                                        "exact_operator_approval_granted":  false,
+                                        "production_ready_claim":  false,
+                                        "remote_mutation_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_slot_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "tui_authority":  false
+                                    }
+                   },
+                   {
+                       "id":  "support_recovery.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Hosted support/recovery metadata must be published, upload-disabled, recovery-disabled, rollback-disabled, and non-authoritative.",
+                       "evidence":  {
+                                        "checks":  19,
+                                        "blockers":  0,
+                                        "rc5_022_complete":  true,
+                                        "support_recovery_metadata_published":  true,
+                                        "support_upload_allowed":  false,
+                                        "recovery_execution_allowed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "activation_performed":  false,
+                                        "production_ready_claim":  false,
+                                        "remote_static_metadata_published":  true,
+                                        "support_upload_endpoint_created":  false,
+                                        "active_slot_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "tui_authority":  false,
+                                        "published_endpoints":  [
+                                                                    "http://aios.w33d.xyz/support/index.json",
+                                                                    "http://aios.w33d.xyz/support/recovery.json",
+                                                                    "http://aios.w33d.xyz/support/README.txt",
+                                                                    "http://aios.w33d.xyz/channel/index.json"
+                                                                ]
+                                    }
+                   },
+                   {
+                       "id":  "live_endpoint.reachable",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 final audit must be able to read all public hosted metadata endpoints through curl --resolve.",
+                       "evidence":  {
+                                        "urls":  [
+                                                     "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+                                                     "http://aios.w33d.xyz/support/recovery.json",
+                                                     "http://aios.w33d.xyz/support/index.json",
+                                                     "http://aios.w33d.xyz/channel/user-release.json",
+                                                     "http://aios.w33d.xyz/health.json",
+                                                     "http://aios.w33d.xyz/bootstrap/manifest.json",
+                                                     "http://aios.w33d.xyz/channel/index.json",
+                                                     "http://aios.w33d.xyz/"
+                                                 ],
+                                        "validation_used_local_dns":  false,
+                                        "resolve_override":  "aios.w33d.xyz:80:47.101.11.109"
+                                    }
+                   },
+                   {
+                       "id":  "live_endpoint.non_authoritative",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Live channel, support, and descriptor metadata must remain non-GA and non-authoritative.",
+                       "evidence":  {
+                                        "channel_schema":  "agentos.rc5-hosted-channel-index.v1",
+                                        "support_schema":  "agentos.rc5-hosted-support-index.v1",
+                                        "descriptor_support_allowed":  true
+                                    }
+                   },
+                   {
+                       "id":  "rc5.no_authority_broadened",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 closeout must not sign, activate, execute rollback, mutate active state, mutate production ring, dispatch remotely, or grant TUI/model/shell authority.",
+                       "evidence":  {
+                                        "local_private_key_material_used":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_registry_mutated":  false,
+                                        "active_slot_mutated":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "model_replay_authority":  false,
+                                        "normal_shell_authority":  false,
+                                        "tui_authority":  false,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "final_audit.written",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC5 audit artifact must be written.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+                                        "sha256":  "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18"
+                                    }
+                   },
+                   {
+                       "id":  "closeout_summary.written",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC5 closeout summary must be written.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md",
+                                        "sha256":  "acd919a0b59547a951c6aeef4ce7df6065e6587e70e7d4b6ca542d884bbc3055"
+                                    }
+                   },
+                   {
+                       "id":  "closeout_outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC5 closeout outputs must be secret-safe.",
+                       "evidence":  {
+                                        "final_audit":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+                                        "closeout_summary":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md"
+                                    }
+                   },
+                   {
+                       "id":  "closeout_outputs.host_path_free",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC5 closeout outputs must not contain host-local absolute paths.",
+                       "evidence":  {
+                                        "final_audit":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+                                        "closeout_summary":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md"
+                                    }
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "summary":  {
+                    "checks":  16,
+                    "blockers":  0,
+                    "rc5_030_complete":  true,
+                    "final_audit_written":  true,
+                    "closeout_summary_written":  true,
+                    "hosted_service_ready":  true,
+                    "endpoint_verifier_ready":  true,
+                    "metadata_fail_closed_ready":  true,
+                    "mirror_frontend_ready":  true,
+                    "user_release_ready":  true,
+                    "canary_proof_ready":  true,
+                    "support_recovery_ready":  true,
+                    "live_endpoint_ready":  true,
+                    "production_ready_claim":  false,
+                    "next_milestone":  "Production Distro RC6"
+                }
+}

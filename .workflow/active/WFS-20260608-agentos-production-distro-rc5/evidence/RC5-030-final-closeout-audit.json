@@ -1,0 +1,56 @@
+{
+  "schema": "agentos.rc5-final-closeout-task-evidence.v1",
+  "generated_at": "2026-06-08T12:45:00+08:00",
+  "task": "RC5-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "runner": {
+    "path": "scripts/run-rc5-final-closeout-audit.ps1",
+    "sha256": "bda720ce3728aab7fa1718167a70371d9aeab83d04789f0d3d7f2e12cf87e014"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-final-closeout-audit/result.json",
+    "sha256": "a18b0ddb71dde2c4746f9c6e2b6db763f83e373b417015808354592f0f47f4ac",
+    "status": "passed",
+    "checks": 16,
+    "blockers": 0
+  },
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+      "sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+      "verdict": "PASS"
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md",
+      "sha256": "acd919a0b59547a951c6aeef4ce7df6065e6587e70e7d4b6ca542d884bbc3055"
+    }
+  },
+  "verified_controls": {
+    "hosted_service_ready": true,
+    "endpoint_verifier_ready": true,
+    "metadata_fail_closed_ready": true,
+    "mirror_frontend_ready": true,
+    "user_release_ready": true,
+    "canary_proof_ready": true,
+    "support_recovery_ready": true,
+    "live_endpoint_ready": true,
+    "production_ready_claim": false
+  },
+  "remaining_ga_blockers": [
+    "TLS endpoint evidence and HTTPS-only GA gate",
+    "large release payload storage/object storage policy",
+    "signed payload bundle publication and hosted signed-channel consumption",
+    "actual exact-approved multi-node canary execution",
+    "rollback execution drill under SecurityExecutionEngine",
+    "production monitoring, cache policy, and long-duration service soak",
+    "installer/bootstrap client consuming hosted metadata end-to-end"
+  ],
+  "completion": {
+    "rc5_030_complete": true,
+    "workflow_complete": true,
+    "next_milestone": "Production Distro RC6",
+    "commit_required": true
+  }
+}

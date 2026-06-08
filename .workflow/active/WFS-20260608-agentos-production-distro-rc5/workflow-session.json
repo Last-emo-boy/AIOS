@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260608-agentos-production-distro-rc5",
   "name": "Production Distro RC5",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-08T11:00:00+08:00",
-  "updated_at": "2026-06-08T12:35:00+08:00",
+  "updated_at": "2026-06-08T12:45:00+08:00",
   "source": "TASK.md; RC4 final audit; operator-hosted mirror request",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
   "goal": "Stand up a controlled hosted mirror service framework for aios.w33d.xyz, then prove hosted metadata verification and canary-readiness without weakening RC4 authority boundaries.",
@@ -82,15 +82,22 @@
       "completed_at": "2026-06-08T12:35:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-022-hosted-support-recovery.json",
       "commit": null
+    },
+    {
+      "task": "RC5-030",
+      "completed_at": "2026-06-08T12:45:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-030-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC5-030",
+  "next_task": "RC6-PLANNING",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/hosted-mirror-service-threat-model.md"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/hosted-mirror-service-threat-model.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
@@ -139,6 +146,12 @@
     ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
     ".workflow/artifacts/rc5-hosted-support-recovery/hosted-channel-index-after-support-recovery.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-022.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-022-hosted-support-recovery.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-022-hosted-support-recovery.json",
+    "scripts/run-rc5-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc5-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-030.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-030-final-closeout-audit.json"
   ]
 }

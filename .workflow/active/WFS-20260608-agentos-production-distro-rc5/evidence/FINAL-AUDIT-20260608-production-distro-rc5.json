@@ -1,0 +1,261 @@
+﻿{
+    "schema":  "agentos.production-distro-rc5-final-audit.v1",
+    "generated_at":  "2026-06-08T11:38:11.3729963+08:00",
+    "workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+    "milestone":  "Production Distro RC5",
+    "verdict":  "PASS",
+    "decision":  "rc5-closeout-pass-next-milestone-planning",
+    "production_ready_claim":  false,
+    "hosted_domain":  "aios.w33d.xyz",
+    "objective":  "controlled hosted mirror service, distributable metadata channel, canary proof, and hosted support/recovery metadata without GA claim",
+    "tasks":  [
+                  {
+                      "id":  "RC5-001",
+                      "status":  "completed",
+                      "result":  "controlled hosted mirror service contract"
+                  },
+                  {
+                      "id":  "RC5-002",
+                      "status":  "completed",
+                      "result":  "user install/update channel boundary"
+                  },
+                  {
+                      "id":  "RC5-003",
+                      "status":  "completed",
+                      "result":  "hosted mirror service threat model"
+                  },
+                  {
+                      "id":  "RC5-010",
+                      "status":  "completed",
+                      "result":  "remote nginx metadata-only mirror framework"
+                  },
+                  {
+                      "id":  "RC5-011",
+                      "status":  "completed",
+                      "result":  "hosted endpoint verifier"
+                  },
+                  {
+                      "id":  "RC5-012",
+                      "status":  "completed",
+                      "result":  "hosted metadata fail-closed fixtures"
+                  },
+                  {
+                      "id":  "RC5-013",
+                      "status":  "completed",
+                      "result":  "AIOS mirror frontend"
+                  },
+                  {
+                      "id":  "RC5-020",
+                      "status":  "completed",
+                      "result":  "user release channel and bootstrap manifest"
+                  },
+                  {
+                      "id":  "RC5-021",
+                      "status":  "completed",
+                      "result":  "multi-node canary preconditions and rollback readiness proof"
+                  },
+                  {
+                      "id":  "RC5-022",
+                      "status":  "completed",
+                      "result":  "hosted support/recovery metadata"
+                  }
+              ],
+    "acceptance_coverage":  [
+                                {
+                                    "requirement":  "hosted mirror service exists on aios.w33d.xyz and is metadata-only",
+                                    "status":  "proved",
+                                    "evidence":  ".workflow/artifacts/rc5-hosted-mirror-service/result.json"
+                                },
+                                {
+                                    "requirement":  "hosted endpoint verifier and fail-closed fixtures reject malformed, stale, oversized, or authority-broadening metadata",
+                                    "status":  "proved",
+                                    "evidence":  [
+                                                     ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+                                                     ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json"
+                                                 ]
+                                },
+                                {
+                                    "requirement":  "mirror frontend exposes inspectable metadata without dependencies or authority",
+                                    "status":  "proved",
+                                    "evidence":  ".workflow/artifacts/rc5-mirror-frontend/result.json"
+                                },
+                                {
+                                    "requirement":  "user-facing channel publishes bootstrap metadata while install/update remain blocked",
+                                    "status":  "proved",
+                                    "evidence":  ".workflow/artifacts/rc5-user-release-channel/result.json"
+                                },
+                                {
+                                    "requirement":  "canary proof is exact-approval gated, rollback-ready, and execution-blocked",
+                                    "status":  "proved",
+                                    "evidence":  ".workflow/artifacts/rc5-multi-node-canary-proof/result.json"
+                                },
+                                {
+                                    "requirement":  "hosted support/recovery metadata is static, redacted, hash-bound, and non-authoritative",
+                                    "status":  "proved",
+                                    "evidence":  ".workflow/artifacts/rc5-hosted-support-recovery/result.json"
+                                }
+                            ],
+    "invariants_verified":  {
+                                "metadata_only":  true,
+                                "mirror_is_root_of_trust":  false,
+                                "production_ready_claim":  false,
+                                "local_private_key_material_used":  false,
+                                "cryptographic_signing_performed_by_rc5":  false,
+                                "activation_performed":  false,
+                                "rollback_execution_performed":  false,
+                                "active_registry_mutated":  false,
+                                "active_slot_mutated":  false,
+                                "active_artifact_set_mutated":  false,
+                                "production_ring_mutated":  false,
+                                "support_upload_endpoint_created":  false,
+                                "remote_dispatch_enabled":  false,
+                                "model_replay_authority":  false,
+                                "normal_shell_authority":  false,
+                                "tui_authority":  false
+                            },
+    "live_endpoints":  [
+                           "http://aios.w33d.xyz/",
+                           "http://aios.w33d.xyz/health.json",
+                           "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+                           "http://aios.w33d.xyz/channel/index.json",
+                           "http://aios.w33d.xyz/bootstrap/manifest.json",
+                           "http://aios.w33d.xyz/channel/user-release.json",
+                           "http://aios.w33d.xyz/support/index.json",
+                           "http://aios.w33d.xyz/support/recovery.json"
+                       ],
+    "source_artifacts":  {
+                             "rc5_plan":  {
+                                              "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+                                              "sha256":  "d09b5e7b6c5438770da1e54853329c6f491d5eab1d99263ddc1b8f873dfc982c",
+                                              "present":  true,
+                                              "schema":  "agentos.workflow-plan.v1",
+                                              "status":  "active"
+                                          },
+                             "workflow_session":  {
+                                                      "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json",
+                                                      "sha256":  "a253ebdbe4ea9bcd636692db18ee21accedd0214834737500a6444f8b7951728",
+                                                      "present":  true,
+                                                      "schema":  null,
+                                                      "status":  "active"
+                                                  },
+                             "rc4_final_audit":  {
+                                                     "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+                                                     "sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+                                                     "present":  true,
+                                                     "schema":  "agentos.production-distro-rc4-final-audit.v1",
+                                                     "status":  null
+                                                 },
+                             "hosted_service":  {
+                                                    "path":  ".workflow/artifacts/rc5-hosted-mirror-service/result.json",
+                                                    "sha256":  "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc5-hosted-mirror-service-result.v1",
+                                                    "status":  "passed"
+                                                },
+                             "endpoint_verifier":  {
+                                                       "path":  ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+                                                       "sha256":  "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc5-hosted-endpoint-verifier-result.v1",
+                                                       "status":  "passed"
+                                                   },
+                             "hosted_metadata_fail_closed":  {
+                                                                 "path":  ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+                                                                 "sha256":  "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc5-hosted-metadata-fail-closed-result.v1",
+                                                                 "status":  "passed"
+                                                             },
+                             "mirror_frontend":  {
+                                                     "path":  ".workflow/artifacts/rc5-mirror-frontend/result.json",
+                                                     "sha256":  "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc5-mirror-frontend-result.v1",
+                                                     "status":  "passed"
+                                                 },
+                             "user_release":  {
+                                                  "path":  ".workflow/artifacts/rc5-user-release-channel/result.json",
+                                                  "sha256":  "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc5-user-release-channel-result.v1",
+                                                  "status":  "passed"
+                                              },
+                             "bootstrap_manifest":  {
+                                                        "path":  ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+                                                        "sha256":  "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc5-user-bootstrap-manifest.v1",
+                                                        "status":  "metadata-only-preview"
+                                                    },
+                             "user_release_channel":  {
+                                                          "path":  ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+                                                          "sha256":  "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc5-user-release-channel.v1",
+                                                          "status":  "inspectable-metadata-only"
+                                                      },
+                             "canary_proof":  {
+                                                  "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+                                                  "sha256":  "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc5-multi-node-canary-proof-result.v1",
+                                                  "status":  "passed"
+                                              },
+                             "canary_projection":  {
+                                                       "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+                                                       "sha256":  "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc5-controlled-multi-node-canary-plan-projection.v1",
+                                                       "status":  "preconditions-proven-execution-blocked"
+                                                   },
+                             "rollback_readiness":  {
+                                                        "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+                                                        "sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc5-canary-rollback-readiness-projection.v1",
+                                                        "status":  "rollback-baseline-bound-execution-not-run"
+                                                    },
+                             "support_recovery":  {
+                                                      "path":  ".workflow/artifacts/rc5-hosted-support-recovery/result.json",
+                                                      "sha256":  "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+                                                      "present":  true,
+                                                      "schema":  "agentos.rc5-hosted-support-recovery-result.v1",
+                                                      "status":  "passed"
+                                                  },
+                             "support_index":  {
+                                                   "path":  ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+                                                   "sha256":  "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc5-hosted-support-index.v1",
+                                                   "status":  "hosted-metadata-only"
+                                               },
+                             "recovery_operations":  {
+                                                         "path":  ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+                                                         "sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc5-hosted-recovery-operations.v1",
+                                                         "status":  "projection-only"
+                                                     },
+                             "hosted_channel_after_support":  {
+                                                                  "path":  ".workflow/artifacts/rc5-hosted-support-recovery/hosted-channel-index-after-support-recovery.json",
+                                                                  "sha256":  "aab977791cde3a9ba2b99d931e3ee80c188ba6569fab64c64d9bfe8e2c27e611",
+                                                                  "present":  true,
+                                                                  "schema":  "agentos.rc5-hosted-channel-index.v1",
+                                                                  "status":  "metadata-only"
+                                                              }
+                         },
+    "remaining_ga_blockers":  [
+                                  "TLS endpoint evidence and HTTPS-only GA gate",
+                                  "large release payload storage/object storage policy",
+                                  "signed payload bundle publication and hosted signed-channel consumption",
+                                  "actual exact-approved multi-node canary execution",
+                                  "rollback execution drill under SecurityExecutionEngine",
+                                  "production monitoring, cache policy, and long-duration service soak",
+                                  "installer/bootstrap client consuming hosted metadata end-to-end"
+                              ],
+    "next_milestone":  {
+                           "id":  "Production Distro RC6",
+                           "title":  "installable payload channel and controlled canary execution",
+                           "reason":  "RC5 proves the hosted mirror service framework, user-visible metadata, canary preconditions, and support/recovery metadata. The next gap is publishable signed payloads, TLS, installer consumption, and a real exact-approved multi-node canary/rollback execution path."
+                       }
+}

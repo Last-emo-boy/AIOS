@@ -4,15 +4,15 @@
     "current_workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
     "current_phase":  "production-distro-rc5",
     "status":  "active",
-    "phase_status":  "active",
-    "current_task":  "RC5-030",
-    "lifecycle_position":  "rc5-contracts-started",
+    "phase_status":  "completed",
+    "current_task":  "RC6-PLANNING",
+    "lifecycle_position":  "rc5-closed",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc5-030-final-audit",
+    "next_allowed_action":  "plan-rc6-installable-payload-channel",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T12:35:00+08:00",
+    "updated_at":  "2026-06-08T12:45:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC4 is closed with hosted release transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, hosted/fleet promotion gate integration, and final closeout audit. Production Distro RC5 is active: RC5-001 defines the controlled hosted mirror service and distributable channel contract for aios.w33d.xyz on the operator-provided host 47.101.11.109, RC5-002 defines the user-facing install/update channel boundary, RC5-003 defines hosted mirror service threat model and non-GA gates, RC5-010 provisions the remote metadata-only nginx mirror framework, RC5-011 verifies hosted endpoints, RC5-012 proves hosted metadata fail-closed fixtures, RC5-013 adds the AIOS mirror frontend, RC5-020 publishes user bootstrap/release-channel metadata, RC5-021 proves controlled multi-node canary preconditions plus rollback readiness while keeping canary execution blocked by design, and RC5-022 publishes static hosted support/recovery metadata without upload, activation, rollback, production ring, remote dispatch, or TUI authority. RC5 remains non-GA: no signing service, no activation, no rollback execution, no active registry/slot mutation, no production ring mutation, no large artifact storage, no TLS GA claim, and no TUI authority. Next allowed action is RC5-030 final audit.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC4 is closed with hosted release transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, hosted/fleet promotion gate integration, and final closeout audit. Production Distro RC5 is closed: RC5-001 defines the controlled hosted mirror service and distributable channel contract for aios.w33d.xyz on the operator-provided host 47.101.11.109, RC5-002 defines the user-facing install/update channel boundary, RC5-003 defines hosted mirror service threat model and non-GA gates, RC5-010 provisions the remote metadata-only nginx mirror framework, RC5-011 verifies hosted endpoints, RC5-012 proves hosted metadata fail-closed fixtures, RC5-013 adds the AIOS mirror frontend, RC5-020 publishes user bootstrap/release-channel metadata, RC5-021 proves controlled multi-node canary preconditions plus rollback readiness while keeping canary execution blocked by design, RC5-022 publishes static hosted support/recovery metadata without upload/activation/rollback/production ring/remote dispatch/TUI authority, and RC5-030 final audit passes with 16 checks and 0 blockers. RC5 remains non-GA: no signing service, no activation, no rollback execution, no active registry/slot mutation, no production ring mutation, no large artifact storage, no TLS GA claim, and no TUI authority. Next allowed action is RC6 planning for installable signed payload channel, TLS, bootstrap/installer consumption, storage policy, and real canary/rollback execution evidence.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1095,6 +1095,30 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-022-hosted-support-recovery.json"
+                      },
+                      {
+                          "type":  "rc5_script",
+                          "path":  "scripts/run-rc5-final-closeout-audit.ps1"
+                      },
+                      {
+                          "type":  "rc5_artifact",
+                          "path":  ".workflow/artifacts/rc5-final-closeout-audit/result.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json"
+                      },
+                      {
+                          "type":  "rc5_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/final-rc5-closeout-summary.md"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-030.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-030-final-closeout-audit.json"
                       }
                   ]
 }
