@@ -1,0 +1,102 @@
+{
+  "schema": "agentos.rc11-external-object-descriptor-verification-evidence.v1",
+  "generated_at": "2026-06-09T02:00:00+08:00",
+  "task": "RC11-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "script": {
+    "path": "scripts/project-rc11-external-object-descriptor-verification.ps1",
+    "sha256": "b15af2b7e496223e23e5ce4cce3cd36a18247e6a1769fdc8b42ef235a0ebdd30"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
+    "status": "passed",
+    "sha256": "c5835489699b70bc0519a359d3a4875f4fb3192de28acae80a6f808f4e516ad8"
+  },
+  "outputs": {
+    "report": {
+      "path": ".workflow/artifacts/rc11-external-object-descriptor-verification/descriptor-verification-report.json",
+      "sha256": "74813457b8b6d8beb9be385126c73e7c061b77d0c06035fe1e93e99a314deedc"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc11-external-object-descriptor-verification/descriptor-verification-denial.json",
+      "sha256": "81e7db3fb7bc7830b78f265a81009bbddeafc2e8bf5395d255ff99556501cda4"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc11-external-object-descriptor-verification/descriptor-fail-closed-matrix.json",
+      "sha256": "d9a4d87688b70165009aafac9870e9c30efc6dd719890215a45f767e1c2d4001"
+    }
+  },
+  "verification_surface": {
+    "state": "external-descriptor-verification-denied",
+    "descriptor_matches_current_bytes": true,
+    "current_uri": null,
+    "external_https_object_uri_published": false,
+    "drift_zero": false,
+    "drift_count": 13,
+    "descriptor_verified": false,
+    "fail_closed_cases": 12,
+    "failed_fail_closed_cases": 0,
+    "endpoint_reachability_is_trust": false,
+    "network_probe_performed": false,
+    "object_trust_allowed": false,
+    "installer_quarantine_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "freshness-window-missing",
+      "declared-current-drift-zero-not-proved",
+      "source-publication-evidence-missing",
+      "nonzero-declared-current-drift-count",
+      "rc10-declared-current-drift-carried-forward",
+      "installer-quarantine-fetch-not-run",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "network_probe_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "descriptor_published": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc11_012_complete": true,
+    "next_task": "RC11-020",
+    "commit_required": true
+  }
+}

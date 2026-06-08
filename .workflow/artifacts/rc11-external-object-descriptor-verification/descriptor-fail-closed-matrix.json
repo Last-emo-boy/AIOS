@@ -1,0 +1,195 @@
+{
+  "schema": "agentos.rc11-external-descriptor-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T02:00:00+08:00",
+  "task": "RC11-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "passed",
+  "cases": [
+    {
+      "id": "current.missing_external_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": null,
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "external-https-object-uri-not-published",
+        "freshness-window-missing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.non_https_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "http://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-not-https",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.local_file_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "file:///tmp/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-not-https",
+        "object-uri-local",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.credential_userinfo_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://user:pass@objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-credential-bearing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.credential_query_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz?token=redacted",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-credential-bearing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.mutable_descriptor",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "descriptor-not-immutable",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.stale_descriptor",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "descriptor-stale",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.size_mismatch",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": false,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-size-mismatch",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.digest_mismatch",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": false,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-digest-mismatch",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.authority_bearing_descriptor",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "descriptor-authority-bearing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.endpoint_reachability_only",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": true,
+      "denial_reasons": [
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing",
+        "endpoint-reachability-is-not-trust"
+      ]
+    },
+    {
+      "id": "negative.valid_https_but_drift_nonzero",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    }
+  ],
+  "summary": {
+    "cases": 12,
+    "denied": 12,
+    "failed_cases": []
+  }
+}

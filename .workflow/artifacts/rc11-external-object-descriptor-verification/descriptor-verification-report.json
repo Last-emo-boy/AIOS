@@ -1,0 +1,295 @@
+{
+  "schema": "agentos.rc11-external-object-descriptor-verification-report.v1",
+  "generated_at": "2026-06-09T02:00:00+08:00",
+  "task": "RC11-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "external-descriptor-verification-denied",
+  "production_ready_claim": false,
+  "current_candidate": {
+    "id": "current_candidate",
+    "status": "denied",
+    "denied": true,
+    "uri": null,
+    "size_match": true,
+    "digest_match": true,
+    "drift_zero": false,
+    "endpoint_reachable_claimed": false,
+    "denial_reasons": [
+      "external-https-object-uri-not-published",
+      "freshness-window-missing",
+      "declared-current-drift-zero-not-proved",
+      "source-publication-evidence-missing"
+    ]
+  },
+  "current_bytes": {
+    "path": "image/out/agentos-initramfs.cpio.gz",
+    "size_bytes": 377,
+    "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "descriptor_size_match": true,
+    "descriptor_digest_match": true
+  },
+  "drift_gate": {
+    "drift_zero": false,
+    "drift_count": 13,
+    "external_object_descriptor_verification_allowed": false
+  },
+  "publication_gate": {
+    "external_object_uri_published": false,
+    "rc11_external_uri_published": false,
+    "rc10_external_uri_published": false,
+    "endpoint_reachability_is_trust": false,
+    "network_probe_performed": false
+  },
+  "fail_closed_cases": [
+    {
+      "id": "current.missing_external_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": null,
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "external-https-object-uri-not-published",
+        "freshness-window-missing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.non_https_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "http://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-not-https",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.local_file_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "file:///tmp/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-not-https",
+        "object-uri-local",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.credential_userinfo_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://user:pass@objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-credential-bearing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.credential_query_uri",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz?token=redacted",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-uri-credential-bearing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.mutable_descriptor",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "descriptor-not-immutable",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.stale_descriptor",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "descriptor-stale",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.size_mismatch",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": false,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-size-mismatch",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.digest_mismatch",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": false,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "object-digest-mismatch",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.authority_bearing_descriptor",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "descriptor-authority-bearing",
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    },
+    {
+      "id": "negative.endpoint_reachability_only",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": true,
+      "denial_reasons": [
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing",
+        "endpoint-reachability-is-not-trust"
+      ]
+    },
+    {
+      "id": "negative.valid_https_but_drift_nonzero",
+      "status": "denied",
+      "denied": true,
+      "uri": "https://objects.example.invalid/aios.cpio.gz",
+      "size_match": true,
+      "digest_match": true,
+      "drift_zero": false,
+      "endpoint_reachable_claimed": false,
+      "denial_reasons": [
+        "declared-current-drift-zero-not-proved",
+        "source-publication-evidence-missing"
+      ]
+    }
+  ],
+  "source": {
+    "rc11_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+      "sha256": "73fe35ab92d0c90f590147d0bf5c52670174b7e3566bb56f2354026ac947df4e",
+      "size_bytes": 6429,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc11_byte_map_result": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+      "sha256": "b56a82a785bdac498d507e9e4597431cc5bd2969dd04c0bf4d8dc09e015f2348",
+      "size_bytes": 14315,
+      "present": true,
+      "schema": "agentos.rc11-release-object-byte-map-result.v1",
+      "status": "passed"
+    },
+    "rc11_descriptor_candidate": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+      "sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+      "size_bytes": 2413,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "rc11_drift_result": {
+      "path": ".workflow/artifacts/rc11-declared-current-drift-zero/result.json",
+      "sha256": "1a57e4698f0caf3b9e82d33bf56b4b0eedb7e865ac0b1e9c0ca759bbc97ce403",
+      "size_bytes": 9754,
+      "present": true,
+      "schema": "agentos.rc11-declared-current-drift-zero-result.v1",
+      "status": "passed"
+    },
+    "rc11_drift_handoff": {
+      "path": ".workflow/artifacts/rc11-declared-current-drift-zero/external-descriptor-verification-handoff.json",
+      "sha256": "4e6f5f1743e83b8b734de7a6952a758d127034482867fe707871430f1533654c",
+      "size_bytes": 1873,
+      "present": true,
+      "schema": "agentos.rc11-external-descriptor-verification-handoff.v1",
+      "status": "blocked-by-declared-current-drift"
+    },
+    "rc10_publication_result": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+      "size_bytes": 11803,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "trust_decision": {
+    "descriptor_verified": false,
+    "object_trust_allowed": false,
+    "installer_quarantine_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  }
+}
