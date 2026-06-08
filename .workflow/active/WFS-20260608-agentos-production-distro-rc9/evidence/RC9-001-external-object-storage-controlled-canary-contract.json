@@ -1,0 +1,111 @@
+{
+  "schema": "agentos.rc9-external-object-storage-controlled-canary-contract-evidence.v1",
+  "generated_at": "2026-06-08T22:10:00+08:00",
+  "task": "RC9-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "source": {
+    "rc8_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+      "decision": "rc8-closeout-pass-next-milestone-planning",
+      "next_milestone": "Production Distro RC9",
+      "remaining_blockers_before_ga_or_execution": [
+        "external-https-object-uri-not-published",
+        "declared-current-artifact-drift-unresolved",
+        "canary-activation-evidence-not-executed",
+        "two-or-more-enrolled-canary-target-nodes-required",
+        "remote-fleet-execution-not-enabled",
+        "exact-operator-approval-not-granted",
+        "AgentCore-PlanSpec-not-bound",
+        "AgentCore-rollback-PlanSpec-not-bound",
+        "SecurityExecutionEngine-approval-not-bound",
+        "SecurityExecutionEngine-rollback-approval-not-bound",
+        "real-external-object-storage-not-integrated",
+        "controlled-canary-activation-not-executed",
+        "controlled-rollback-execution-not-executed"
+      ]
+    },
+    "rc8_closeout_summary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/final-rc8-closeout-summary.md",
+      "decision": "RC8 closes real payload descriptor and controlled execution smoke while staying non-GA"
+    }
+  },
+  "contract": {
+    "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+    "scope": "external immutable object storage, declared/current drift reconciliation, two-node canary enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, controlled activation, rollback drill, and support/recovery binding",
+    "external_object_storage_allowed_by_contract": true,
+    "mirror_large_payload_storage_allowed": false,
+    "credential_bearing_object_uri_allowed": false,
+    "declared_current_drift_must_be_reconciled": true,
+    "two_or_more_canary_targets_required": true,
+    "exact_operator_approval_required": true,
+    "agentcore_planspec_required": true,
+    "security_execution_approval_required": true,
+    "install_allowed_by_contract": false,
+    "activation_allowed_by_contract": false,
+    "rollback_execution_allowed_by_contract": false
+  },
+  "planned_artifacts": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md",
+    ".workflow/artifacts/rc9-external-object-publication/result.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+    ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+    ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc9-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc9-controlled-execution-support-recovery/result.json"
+  ],
+  "fail_closed_cases": [
+    "missing-external-https-object-uri",
+    "non-https-mutable-credential-or-authority-bearing-object-uri",
+    "object-size-or-digest-mismatch",
+    "manifest-or-checksum-set-mismatch",
+    "signature-binding-mismatch",
+    "missing-stale-or-revoked-revocation-snapshot",
+    "missing-or-mismatched-compatibility",
+    "missing-or-mismatched-rollback-baseline",
+    "unresolved-declared-current-artifact-drift",
+    "missing-quarantine-fetch-evidence",
+    "insufficient-canary-target-count",
+    "missing-or-broad-exact-operator-approval",
+    "missing-agentcore-planspec",
+    "missing-security-execution-engine-approval",
+    "missing-rollback-approval",
+    "missing-support-recovery-binding",
+    "authority-broadening"
+  ],
+  "invariants": {
+    "mirror_is_root_of_trust": false,
+    "signer_is_mirror": false,
+    "mirror_metadata_only": true,
+    "mirror_large_payload_storage_used": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc9_001_complete": true,
+    "next_task": "RC9-002",
+    "commit_required": true
+  }
+}

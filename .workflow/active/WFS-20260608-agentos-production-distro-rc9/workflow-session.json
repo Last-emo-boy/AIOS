@@ -1,0 +1,48 @@
+{
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc9",
+  "name": "Production Distro RC9",
+  "status": "active",
+  "created_at": "2026-06-08T22:10:00+08:00",
+  "updated_at": "2026-06-08T22:10:00+08:00",
+  "source": "RC8 final audit; TASK.md; maestro-managed continuation",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "goal": "Publish or strictly deny an immutable external object storage reference for real AIOS payload bytes, reconcile declared/current artifact drift, and move controlled canary activation plus rollback drill work through exact approval, AgentCore PlanSpec, and SecurityExecutionEngine gates.",
+  "core_thesis": "AIOS becomes Ubuntu-like only when users can fetch small signed metadata from the mirror, download real payload bytes from immutable external object storage into quarantine, verify every byte and public signature locally, and execute activation or rollback only through exact approval and auditable side-effect gates.",
+  "non_goals": [
+    "Do not claim GA production readiness.",
+    "Do not read, copy, print, hash, move, or reference private signing material.",
+    "Do not turn the mirror host into large object storage or a signing authority.",
+    "Do not embed credential-bearing, mutable, or short-lived signed URLs in persistent mirror metadata.",
+    "Do not install, activate, rollback, mutate boot metadata, mutate active slots, mutate production rings, upload support bundles, or enable remote fleet dispatch from contract work.",
+    "Do not treat object storage reachability, frontend display, signer reachability, shell output, model replay, or TUI output as authority."
+  ],
+  "primary_acceptance": [
+    "RC9 defines the external object storage boundary for real payload bytes while preserving metadata-only mirror semantics.",
+    "RC9 defines declared/current artifact drift reconciliation before external object trust or install authorization.",
+    "RC9 defines two-node canary enrollment, exact operator approval, AgentCore PlanSpec binding, and SecurityExecutionEngine approval binding before any activation side effect.",
+    "RC9 defines rollback drill execution or denial after controlled canary evidence.",
+    "RC9 keeps production_ready_claim=false until final audit proves every GA gate."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC9-001",
+      "completed_at": "2026-06-08T22:10:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-001-external-object-storage-controlled-canary-contract.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC9-002",
+  "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/final-rc8-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/workflow-session.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/.task/TASK-RC9-001.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-001-external-object-storage-controlled-canary-contract.json"
+  ]
+}

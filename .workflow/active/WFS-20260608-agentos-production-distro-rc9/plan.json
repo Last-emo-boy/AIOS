@@ -1,0 +1,140 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc9",
+  "milestone": "Production Distro RC9",
+  "status": "active",
+  "objective": "Move AIOS from RC8 real payload descriptor and controlled execution denial into external immutable object storage, drift reconciliation, two-node canary enrollment, exact approval binding, AgentCore PlanSpec binding, SecurityExecutionEngine approval binding, controlled canary activation, and rollback drill evidence without claiming GA readiness.",
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "external object and controlled execution contracts",
+      "tasks": [
+        {
+          "id": "RC9-001",
+          "status": "completed",
+          "title": "freeze external object storage and controlled canary execution contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md"
+        },
+        {
+          "id": "RC9-002",
+          "status": "pending",
+          "title": "define external object descriptor publication and artifact drift reconciliation contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md"
+        },
+        {
+          "id": "RC9-003",
+          "status": "pending",
+          "title": "define exact approval target enrollment AgentCore and SecurityExecution binding contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "external object publication and installer fetch",
+      "tasks": [
+        {
+          "id": "RC9-010",
+          "status": "pending",
+          "title": "project immutable external object publication candidate for the RC8 payload bytes",
+          "deliverable": ".workflow/artifacts/rc9-external-object-publication/result.json"
+        },
+        {
+          "id": "RC9-011",
+          "status": "pending",
+          "title": "reconcile declared and current artifact drift before external object trust",
+          "deliverable": ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json"
+        },
+        {
+          "id": "RC9-012",
+          "status": "pending",
+          "title": "run external object quarantine fetch and fail-closed installer evidence",
+          "deliverable": ".workflow/artifacts/rc9-external-object-installer-fetch/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "controlled canary activation",
+      "tasks": [
+        {
+          "id": "RC9-020",
+          "status": "pending",
+          "title": "enroll or deny two-node canary target set with compatibility and rollback bindings",
+          "deliverable": ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json"
+        },
+        {
+          "id": "RC9-021",
+          "status": "pending",
+          "title": "bind exact operator approval to AgentCore PlanSpec and SecurityExecutionEngine approval",
+          "deliverable": ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json"
+        },
+        {
+          "id": "RC9-022",
+          "status": "pending",
+          "title": "execute or deny controlled canary activation through AgentCore and SecurityExecutionEngine gates",
+          "deliverable": ".workflow/artifacts/rc9-controlled-canary-activation/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "controlled rollback and recovery",
+      "tasks": [
+        {
+          "id": "RC9-030",
+          "status": "pending",
+          "title": "execute or deny rollback drill after controlled canary activation evidence",
+          "deliverable": ".workflow/artifacts/rc9-controlled-rollback-drill/result.json"
+        },
+        {
+          "id": "RC9-031",
+          "status": "pending",
+          "title": "bind support and recovery evidence to controlled canary and rollback outcomes",
+          "deliverable": ".workflow/artifacts/rc9-controlled-execution-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "RC9 closeout",
+      "tasks": [
+        {
+          "id": "RC9-040",
+          "status": "pending",
+          "title": "run Production Distro RC9 final audit and next milestone planning",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC9-002",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "signer_endpoint_domain": "sign.w33d.xyz",
+    "mirror_and_signer_must_remain_separate": true,
+    "mirror_must_remain_metadata_only": true,
+    "external_object_storage_must_be_immutable": true,
+    "external_object_uri_must_be_https_hash_bound_size_bound_and_credential_free": true,
+    "declared_current_artifact_drift_must_be_reconciled": true,
+    "payload_bytes_must_be_downloaded_to_quarantine_before_digest_verification": true,
+    "payload_signature_required_before_install": true,
+    "public_signature_artifact_ingestion_only": true,
+    "private_key_material_forbidden": true,
+    "revocation_snapshot_required_before_install": true,
+    "installer_compatibility_required_before_install": true,
+    "rollback_baseline_required_before_activation": true,
+    "controlled_execution_requires_exact_operator_approval": true,
+    "controlled_execution_requires_two_or_more_enrolled_targets": true,
+    "controlled_execution_requires_agentcore_planspec": true,
+    "controlled_execution_requires_security_execution_engine": true,
+    "rollback_execution_evidence_required_before_ga": true,
+    "remote_service_must_not_activate_without_gates": true,
+    "remote_service_must_not_execute_rollback_without_gates": true,
+    "remote_service_must_not_mutate_active_slot_without_gates": true,
+    "remote_service_must_not_mutate_production_ring_without_gates": true,
+    "tui_authority": false,
+    "production_ready_claim": false
+  }
+}

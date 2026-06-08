@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-001",
+  "title": "freeze external object storage and controlled canary execution contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/final-rc8-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/real-installable-payload-controlled-execution-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-001-external-object-storage-controlled-canary-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC9 workflow is active and follows RC8 final audit next-milestone direction.",
+      "The contract defines external object storage boundaries, declared/current drift reconciliation, canary target enrollment, exact approval, AgentCore PlanSpec binding, SecurityExecutionEngine binding, controlled activation, controlled rollback, and fail-closed cases.",
+      "The contract preserves non-GA status and forbids private key use, mirror large-payload storage, mirror signing, install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, and TUI authority from contract work.",
+      "The next task is RC9-002 external object descriptor publication and artifact drift reconciliation contract."
+    ]
+  }
+}
