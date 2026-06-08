@@ -1,0 +1,47 @@
+{
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc7",
+  "name": "Production Distro RC7",
+  "status": "active",
+  "created_at": "2026-06-08T15:05:00+08:00",
+  "updated_at": "2026-06-08T15:05:00+08:00",
+  "source": "RC6 final audit; TASK.md; maestro-managed continuation",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "goal": "Convert the RC6 metadata-only, verification-blocked payload channel into signed payload consumption and controlled execution evidence while keeping the mirror, signer, installer, AgentCore, SecurityExecutionEngine, fleet, and TUI authority boundaries explicit.",
+  "core_thesis": "AIOS becomes Ubuntu-like only when users can fetch public metadata from the mirror, verify signed and revocation-bound payload metadata locally, and move into canary or rollback execution only through exact approvals, AgentCore PlanSpec, and SecurityExecutionEngine.",
+  "non_goals": [
+    "Do not claim GA production readiness.",
+    "Do not read, copy, print, hash, or move private signing material.",
+    "Do not let the mirror host sign payloads or become the root of trust.",
+    "Do not install, activate, rollback, mutate active slots, mutate production rings, upload support bundles, or enable remote fleet dispatch from contract work.",
+    "Do not treat signature reachability as sufficient without revocation, freshness, installer compatibility, rollback baseline, TLS, and controlled execution evidence."
+  ],
+  "primary_acceptance": [
+    "The signed payload consumption contract defines trust inputs, endpoint extensions, signer boundary, installer states, fail-closed cases, and authority boundaries.",
+    "Signed metadata and revocation snapshot publication are planned as public artifacts only; private key operations remain outside the repo and mirror.",
+    "Installer consumption remains blocked until signature, revocation, compatibility, rollback baseline, freshness, and hash bindings all verify.",
+    "Controlled execution remains exact-approval gated through AgentCore PlanSpec and SecurityExecutionEngine, with no direct authority granted to mirror, frontend, signer, TUI, shell, or model replay.",
+    "RC7 keeps production_ready_claim=false until final audit proves all GA gates."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC7-001",
+      "completed_at": "2026-06-08T15:05:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-001-signed-payload-consumption-controlled-execution-contract.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC7-002",
+  "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/final-rc6-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/workflow-session.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-001.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-001-signed-payload-consumption-controlled-execution-contract.json"
+  ]
+}

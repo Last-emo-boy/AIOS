@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-001",
+  "title": "freeze signed payload consumption and controlled execution contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/final-rc6-closeout-summary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-001-signed-payload-consumption-controlled-execution-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC7 workflow is active and follows RC6 final audit next-milestone direction.",
+      "Signed payload consumption states, external signer boundary, installer boundary, controlled execution boundary, and fail-closed cases are defined.",
+      "The contract preserves non-GA status and forbids local private key access, mirror signing, install, activation, rollback, production ring mutation, support upload, remote dispatch, and TUI authority.",
+      "The next task is RC7-002 signed metadata and revocation snapshot projection."
+    ]
+  }
+}
