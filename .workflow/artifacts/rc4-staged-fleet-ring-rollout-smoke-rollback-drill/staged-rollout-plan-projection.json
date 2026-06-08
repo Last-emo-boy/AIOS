@@ -1,0 +1,113 @@
+{
+  "schema": "agentos.rc4-staged-fleet-ring-rollout-plan-projection.v1",
+  "generated_at": "2026-06-08T10:10:00+08:00",
+  "status": "approval-required-not-executable",
+  "production_ready_claim": false,
+  "projection_only": true,
+  "executable": false,
+  "ring": "local",
+  "staged_order": [
+    "local",
+    "canary",
+    "staging",
+    "production"
+  ],
+  "authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+  "exact_operator_approval_required": true,
+  "exact_operator_approval_granted": false,
+  "exact_operator_approval_hash": null,
+  "approval_binding": {
+    "status": "required-not-granted-by-audit",
+    "exact_operator_approval_required": true,
+    "approval_hash_present": false,
+    "approval_hash_pending": true,
+    "bound_fields": [
+      "release",
+      "ring",
+      "target_set_hash",
+      "rollout_policy_version",
+      "rollback_baseline_hash",
+      "revocation_snapshot_hash",
+      "operator",
+      "expiry",
+      "policy_version"
+    ]
+  },
+  "target_set": {
+    "ring": "local",
+    "target_selector": "local-proof-ready",
+    "node_count": 1,
+    "authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "rollout_policy": {
+    "id": "rc4-fleet-ring-rollout-preconditions",
+    "version": "rc4-rollout-policy-v1",
+    "staged_order": [
+      "local",
+      "canary",
+      "staging",
+      "production"
+    ],
+    "required_hold_gates": [
+      "local-proof",
+      "canary-hold",
+      "staging-hold",
+      "production-approval"
+    ],
+    "exact_operator_approval_required": true,
+    "rollback_baseline_required": true,
+    "revocation_snapshot_required": true,
+    "support_redaction_required": true,
+    "remote_dispatch_allowed": false,
+    "tui_authority": false
+  },
+  "bindings": {
+    "rc3_final_audit_sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "hosted_consumer_mirror_smoke_sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642",
+    "fleet_rollout_preconditions_sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75",
+    "hosted_transport_fail_closed_sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+    "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+    "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+    "rollout_policy_version": "rc4-rollout-policy-v1",
+    "rollout_policy_sha256": "3bf0bc89df23b70871d2fdefccbf94244206aa1f9d0a93b9ca9401a21739b3e3",
+    "rollback_baseline_sha256": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+    "rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+    "support_recovery_sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+    "revocation_snapshot_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+    "exact_operator_approval_hash": null
+  },
+  "gates": {
+    "hosted_consumer_mirror_smoke_passed": true,
+    "fleet_preconditions_ready": true,
+    "hosted_transport_fail_closed_ready": true,
+    "fleet_authority_ready": true,
+    "ring_order_ready": true,
+    "local_ring_smoke_ready": true,
+    "rollback_baseline_ready": true,
+    "support_recovery_ready": true,
+    "approval_gate_status": "blocked-pending-exact-operator-approval",
+    "execution_gate_status": "blocked-by-design"
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "network_transfer_performed": false,
+    "remote_upload_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "boot_metadata_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  }
+}

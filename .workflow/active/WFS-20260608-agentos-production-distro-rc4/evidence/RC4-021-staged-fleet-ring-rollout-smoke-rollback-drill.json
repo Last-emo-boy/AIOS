@@ -1,0 +1,63 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-021",
+  "status": "completed",
+  "recorded_at": "2026-06-08T10:10:00+08:00",
+  "summary": "Implemented and ran the staged fleet-ring rollout smoke and rollback drill projection. The smoke generated a local-only staged rollout plan projection and rollback drill projection, verified RC4-020 hosted consumer/mirror smoke, RC4-012 rollout preconditions, RC4-013 fail-closed fixtures, fleet rollout authority, local ring readiness, exact approval gating, RC2 rollback baseline, and RC3 support/recovery redaction without executing rollout or rollback.",
+  "deliverables": {
+    "script": "scripts/run-rc4-staged-fleet-ring-rollout-smoke-rollback-drill.ps1",
+    "result": ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/result.json",
+    "staged_rollout_plan_projection": ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/staged-rollout-plan-projection.json",
+    "rollback_drill_projection": ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/rollback-drill-projection.json",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-021-staged-fleet-ring-rollout-smoke-rollback-drill.json"
+  },
+  "hashes": {
+    "script_sha256": "e45c7515d9576f47f7e4733674261c9b7d5264de6da66f6e425a524992e4022a",
+    "result_sha256": "e29e77d6943ef1c5f46da7dceb480c299a308eab710613de856bad9a4b5b8f1a",
+    "staged_rollout_plan_projection_sha256": "a2961838635d1f469a090b9fd6ca8bfcf5262b4001e67f784ac31e4e31c78265",
+    "rollback_drill_projection_sha256": "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-staged-fleet-ring-rollout-smoke-rollback-drill.v1",
+    "result_status": "passed",
+    "checks": 12,
+    "blockers": 0,
+    "rc4_021_complete": true,
+    "staged_fleet_ring_rollout_smoke_ready": true,
+    "rollback_drill_projection_ready": true,
+    "hosted_consumer_mirror_smoke_verified": true,
+    "fleet_rollout_preconditions_verified": true,
+    "hosted_transport_fail_closed_verified": true,
+    "fleet_rollout_authority_verified": true,
+    "local_ring_smoke_ready": true,
+    "remote_rings_blocked": true,
+    "staged_rollout_projection_hash_bound": true,
+    "rollback_baseline_bound": true,
+    "previous_restored_hashes_match": true,
+    "support_recovery_redacted": true,
+    "rollout_plan_projection_created": true,
+    "rollout_plan_created": false,
+    "rollout_plan_executable": false,
+    "rollout_plan_executed": false,
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "verification": {
+    "command": ".\\scripts\\run-rc4-staged-fleet-ring-rollout-smoke-rollback-drill.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "hash_binding": "staged and rollback projection bindings match actual file sha256",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": "RC4-022"
+  }
+}

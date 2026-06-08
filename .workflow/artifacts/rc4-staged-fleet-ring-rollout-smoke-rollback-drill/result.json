@@ -1,0 +1,440 @@
+{
+  "schema": "agentos.rc4-staged-fleet-ring-rollout-smoke-rollback-drill.v1",
+  "generated_at": "2026-06-08T10:10:00+08:00",
+  "checked_at": "2026-06-08T09:41:07.0738083+08:00",
+  "task": "RC4-021",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc4_021_complete": true,
+  "staged_fleet_ring_rollout_smoke_ready": true,
+  "rollback_drill_projection_ready": true,
+  "rollout_plan_projection_created": true,
+  "rollout_plan_created": false,
+  "rollout_plan_executable": false,
+  "rollout_plan_executed": false,
+  "exact_operator_approval_required": true,
+  "exact_operator_approval_granted": false,
+  "exact_operator_approval_hash": null,
+  "local_private_key_material_used": false,
+  "cryptographic_signing_performed": false,
+  "cryptographic_verification_performed": false,
+  "network_transfer_performed": false,
+  "remote_upload_performed": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_registry_mutated": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "boot_metadata_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": false,
+  "model_replay_authority": false,
+  "normal_shell_authority": false,
+  "tui_authority": false,
+  "verified": {
+    "hosted_consumer_mirror_smoke": true,
+    "fleet_rollout_preconditions": true,
+    "hosted_transport_fail_closed": true,
+    "fleet_rollout_authority": true,
+    "fleet_ring_order": true,
+    "local_ring_smoke": true,
+    "remote_rings_blocked": true,
+    "staged_rollout_projection": true,
+    "exact_operator_approval_required_not_granted": true,
+    "rollback_baseline": true,
+    "rollback_drill_projection": true,
+    "support_recovery": true
+  },
+  "bindings": {
+    "staged_rollout_plan_projection_sha256": "a2961838635d1f469a090b9fd6ca8bfcf5262b4001e67f784ac31e4e31c78265",
+    "rollback_drill_projection_sha256": "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+    "hosted_consumer_mirror_smoke_sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642",
+    "fleet_rollout_preconditions_sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75",
+    "hosted_transport_fail_closed_sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98",
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+    "rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+    "rollback_baseline_sha256": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+    "previous_active_artifact_set_sha256": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+    "restored_active_artifact_set_sha256": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+    "support_recovery_sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+    "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+    "rollout_policy_sha256": "3bf0bc89df23b70871d2fdefccbf94244206aa1f9d0a93b9ca9401a21739b3e3",
+    "rollout_policy_version": "rc4-rollout-policy-v1",
+    "revocation_snapshot_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+    "exact_operator_approval_hash": null
+  },
+  "artifacts": {
+    "staged_rollout_plan_projection": {
+      "path": ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/staged-rollout-plan-projection.json",
+      "sha256": "a2961838635d1f469a090b9fd6ca8bfcf5262b4001e67f784ac31e4e31c78265",
+      "present": true,
+      "schema": "agentos.rc4-staged-fleet-ring-rollout-plan-projection.v1",
+      "status": "approval-required-not-executable"
+    },
+    "rollback_drill_projection": {
+      "path": ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/rollback-drill-projection.json",
+      "sha256": "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+      "present": true,
+      "schema": "agentos.rc4-staged-fleet-rollback-drill-projection.v1",
+      "status": "projected-passed"
+    }
+  },
+  "source_artifacts": {
+    "rc4_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+      "sha256": "7c1f5acc7cfc5464eb9e5cdc90c76d2f949067756bec4fb3913e6db7e3d2976f",
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "hosted_consumer_mirror_smoke": {
+      "path": ".workflow/artifacts/rc4-signed-hosted-channel-consumer-mirror-smoke/result.json",
+      "sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642",
+      "present": true,
+      "schema": "agentos.rc4-signed-hosted-channel-consumer-mirror-smoke.v1",
+      "status": "passed"
+    },
+    "fleet_rollout_preconditions": {
+      "path": ".workflow/artifacts/rc4-fleet-ring-rollout-preconditions/result.json",
+      "sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75",
+      "present": true,
+      "schema": "agentos.rc4-fleet-ring-rollout-preconditions.v1",
+      "status": "ready-for-fleet-ring-rollout-plan"
+    },
+    "hosted_transport_fail_closed": {
+      "path": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/result.json",
+      "sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98",
+      "present": true,
+      "schema": "agentos.rc4-hosted-transport-fail-closed-fixtures.v1",
+      "status": "passed"
+    },
+    "hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+      "present": true,
+      "schema": "agentos.rc4-hosted-release-transport-manifest.v1",
+      "status": "published-locally"
+    },
+    "mirror_lockfile": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json",
+      "sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-lockfile.v1",
+      "status": "locked-locally"
+    },
+    "mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-publication.v1",
+      "status": "published-locally"
+    },
+    "fleet_rollout_authority": {
+      "path": ".workflow/artifacts/release/fleet-rollout-authority.json",
+      "sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+      "present": true,
+      "schema": "agentos.fleet-rollout-authority.v1",
+      "status": "passed"
+    },
+    "rollback_drill": {
+      "path": ".workflow/artifacts/rc2-block-rollback-drill/result.json",
+      "sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+      "present": true,
+      "schema": "agentos.rc2-block-rollback-drill-result.v1",
+      "status": "passed"
+    },
+    "support_recovery": {
+      "path": ".workflow/artifacts/rc3-published-release-support-recovery/result.json",
+      "sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+      "present": true,
+      "schema": "agentos.rc3-published-release-support-recovery.v1",
+      "status": "passed"
+    }
+  },
+  "checks": [
+    {
+      "id": "rc4.plan.current_task",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 plan must point at RC4-021 before this smoke, or remain on a later task after RC4-021 is completed.",
+      "evidence": {
+        "current_task": "RC4-022",
+        "RC4_020": "completed",
+        "RC4_021": "completed",
+        "RC4_022": "next"
+      }
+    },
+    {
+      "id": "rc4.hosted_consumer_mirror_smoke.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4-020 hosted consumer and mirror smoke must be passed and mutation-free.",
+      "evidence": {
+        "checks": 11,
+        "blockers": 0,
+        "rc4_020_complete": true,
+        "hosted_channel_consumer_ready": true,
+        "mirror_smoke_ready": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "rc4.fleet_preconditions.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 fleet rollout preconditions must be ready and hash-bound to current hosted, mirror, rollback, support, and fleet authority inputs.",
+      "evidence": {
+        "rc3_final_audit_sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+        "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+        "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+        "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+        "production_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+        "signing_publication_gate_sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+        "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+        "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+        "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+        "fleet_ring_id": "local",
+        "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+        "rollout_policy_version": "rc4-rollout-policy-v1",
+        "rollout_policy_sha256": "3bf0bc89df23b70871d2fdefccbf94244206aa1f9d0a93b9ca9401a21739b3e3",
+        "rollback_baseline_sha256": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+        "rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+        "support_recovery_sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+        "revocation_snapshot_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+        "exact_operator_approval_hash": null,
+        "exact_operator_approval_required": true
+      }
+    },
+    {
+      "id": "rc4.hosted_transport_fail_closed.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 hosted transport fail-closed fixtures must pass all negative cases before staged rollout smoke.",
+      "evidence": {
+        "cases": 13,
+        "passed_cases": 13,
+        "failed_cases": 0,
+        "child_audit_exit_zero_cases": 13,
+        "blockers": 0,
+        "expected_fail_closed_cases": [
+          "hosted-manifest-hash-drift",
+          "missing-rc3-final-audit-binding",
+          "stale-mirror-snapshot",
+          "unsigned-mirror-metadata",
+          "revoked-mirror-artifact",
+          "registry-lockfile-mismatch",
+          "fleet-target-set-drift",
+          "ring-skip-attempt",
+          "missing-rollback-baseline",
+          "tui-rollout-authority-attempt",
+          "model-replay-rollout-authority-attempt",
+          "remote-dispatch-mutation-attempt",
+          "unredacted-support-bundle"
+        ],
+        "rc4_013_complete": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "fleet_authority.execution_boundary",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fleet rollout authority must remain AgentCore/SecurityExecution-only, with no TUI, shell, or remote bypass authority.",
+      "evidence": {
+        "execution_authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+        "plan_authority": "AgentCore",
+        "side_effect_authority": "SecurityExecutionEngine",
+        "recovery_authority": "RunStore + AuditJournal + release rollback evidence",
+        "tui_authority": false,
+        "projection_controller_only": true,
+        "rollout_execution_in_tui": false,
+        "rollout_mutation_in_tui": false,
+        "remote_command_dispatch_in_tui": false,
+        "rollback_execution_in_tui": false,
+        "promotion_authority_in_tui": false,
+        "signing_authority_in_tui": false,
+        "remote_operator_bypass_allowed": false,
+        "normal_shell_rollout_allowed": false
+      }
+    },
+    {
+      "id": "fleet_rings.local_smoke_remote_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local ring must be smoke-ready while canary, staging, and production remain blocked from remote mutation.",
+      "evidence": {
+        "order": [
+          "local",
+          "canary",
+          "staging",
+          "production"
+        ],
+        "local_status": "local-proof-ready",
+        "canary_blocker": "remote-fleet-execution-not-enabled",
+        "staging_blocker": "remote-fleet-execution-not-enabled",
+        "production_blocker": "remote-fleet-execution-not-enabled"
+      }
+    },
+    {
+      "id": "staged_rollout.projection_hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Staged rollout projection must bind hosted smoke, preconditions, fail-closed fixtures, target set, rollout policy, rollback baseline, and revocation snapshot.",
+      "evidence": {
+        "rc3_final_audit_sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+        "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+        "hosted_consumer_mirror_smoke_sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642",
+        "fleet_rollout_preconditions_sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75",
+        "hosted_transport_fail_closed_sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98",
+        "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+        "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+        "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+        "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+        "rollout_policy_version": "rc4-rollout-policy-v1",
+        "rollout_policy_sha256": "3bf0bc89df23b70871d2fdefccbf94244206aa1f9d0a93b9ca9401a21739b3e3",
+        "rollback_baseline_sha256": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+        "rollback_drill_sha256": "a7725b910c17bfe98c211e15fb24fe29405211f3b8566871a1edf5143a4398fd",
+        "support_recovery_sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+        "revocation_snapshot_sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+        "exact_operator_approval_hash": null
+      }
+    },
+    {
+      "id": "staged_rollout.approval_required_not_granted",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Staged rollout projection must require exact operator approval, leave approval hash absent, and remain non-executable.",
+      "evidence": {
+        "executable": false,
+        "exact_operator_approval_required": true,
+        "exact_operator_approval_granted": false,
+        "exact_operator_approval_hash": null,
+        "approval_gate_status": "blocked-pending-exact-operator-approval"
+      }
+    },
+    {
+      "id": "rollback_drill.baseline_previous_restored",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback source drill must pass, bind a rollback baseline, and keep previous/restored active artifact hashes equal without activation.",
+      "evidence": {
+        "status": "passed",
+        "rollback_verified": true,
+        "previous": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "restored": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "baseline": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+        "active_slot_mutated": false,
+        "activation_attempted": false
+      }
+    },
+    {
+      "id": "rollback_drill.projection_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 rollback drill projection must reuse the bound rollback baseline and remain execution-free.",
+      "evidence": {
+        "rollback_projection_sha256": "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+        "previous": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "restored": "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+        "baseline": "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+        "rollback_execution_performed": false
+      }
+    },
+    {
+      "id": "support_recovery.redacted_local_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support/recovery evidence must remain passed, redacted, local-only, and non-authoritative.",
+      "evidence": {
+        "checks": 15,
+        "blockers": 0,
+        "rc3_022_complete": true,
+        "support_bundle_redacted": true,
+        "recovery_projection_emitted": true,
+        "support_index_written": true,
+        "failure_scenarios": 10,
+        "remote_upload_performed": false,
+        "remote_bytes_sent": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "staged_rollout.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 staged rollout smoke must not sign, upload, activate, execute rollback, mutate registry/slot/ring state, dispatch remotely, or grant TUI/model/shell authority.",
+      "evidence": {
+        "local_private_key_material_used": false,
+        "cryptographic_signing_performed": false,
+        "network_transfer_performed": false,
+        "remote_upload_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "model_replay_authority": false,
+        "normal_shell_authority": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "blockers": [],
+  "handoff": {
+    "next_task": "RC4-022",
+    "rc4_022_consumes": [
+      "staged_fleet_ring_rollout_smoke_rollback_drill",
+      "staged_rollout_plan_projection",
+      "rollback_drill_projection",
+      "hosted_consumer_mirror_smoke",
+      "fleet_rollout_preconditions"
+    ]
+  },
+  "summary": {
+    "checks": 12,
+    "blockers": 0,
+    "rc4_021_complete": true,
+    "staged_fleet_ring_rollout_smoke_ready": true,
+    "rollback_drill_projection_ready": true,
+    "projected_ring": "local",
+    "remote_rings_blocked": true,
+    "rollout_plan_projection_created": true,
+    "rollout_plan_executable": false,
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "production_ready_claim": false,
+    "network_transfer_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  }
+}

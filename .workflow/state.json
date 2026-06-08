@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc4",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC4-021",
+    "current_task":  "RC4-022",
     "lifecycle_position":  "active-rc4-planning",
     "blockers":  [],
-    "next_allowed_action":  "implement-rc4-staged-fleet-ring-rollout-smoke-and-rollback-drill",
+    "next_allowed_action":  "implement-rc4-ga-hardening-support-and-recovery-projection",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T09:00:54+08:00",
+    "updated_at":  "2026-06-08T10:10:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC3 is closed with external production signatures verified, immutable local release channel publication, signed channel consumption, support/recovery projection, and signing/publication gate integration. Current active milestone is Production Distro RC4: hosted release transport, fleet rings, remote registry mirroring, staged rollout authority, and GA hardening while preserving RC2/RC3 signing, rollback, support, and TUI authority boundaries. RC4 Wave 0 and Wave 1 are complete, and RC4-020 signed hosted-channel consumer and mirror smoke is complete; the current task is RC4-021 staged fleet-ring rollout smoke and rollback drill. RC4 is not a GA production-ready claim until its gates close.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC3 is closed with external production signatures verified, immutable local release channel publication, signed channel consumption, support/recovery projection, and signing/publication gate integration. Current active milestone is Production Distro RC4: hosted release transport, fleet rings, remote registry mirroring, staged rollout authority, and GA hardening while preserving RC2/RC3 signing, rollback, support, and TUI authority boundaries. RC4 Wave 0 and Wave 1 are complete, and RC4-020 signed hosted-channel consumer and mirror smoke plus RC4-021 staged fleet-ring rollout smoke and rollback drill are complete; the current task is RC4-022 GA-hardening support and recovery projection. RC4 is not a GA production-ready claim until its gates close.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -827,6 +827,26 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-020-signed-hosted-channel-consumer-mirror-smoke.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/run-rc4-staged-fleet-ring-rollout-smoke-rollback-drill.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/result.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/staged-rollout-plan-projection.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/rollback-drill-projection.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-021-staged-fleet-ring-rollout-smoke-rollback-drill.json"
                       }
                   ]
 }
