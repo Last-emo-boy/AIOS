@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC14-020",
   "title": "run verified quarantine preflight from trusted local object evidence",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-2",
   "read_first": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
@@ -29,5 +29,8 @@
       "Payload bytes are quarantined before interpretation and hash-bound to object trust evidence.",
       "Network fetch, payload interpretation, install, activation, rollback, and production mutation remain fail-closed when gates are missing."
     ]
-  }
+  },
+  "completed_at": "2026-06-09T13:45:00+08:00",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-020-verified-quarantine-preflight.json",
+  "next_task": "RC14-021"
 }

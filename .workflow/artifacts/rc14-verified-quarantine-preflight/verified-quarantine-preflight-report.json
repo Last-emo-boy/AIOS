@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.rc14-verified-quarantine-preflight-report.v1",
+  "generated_at": "2026-06-09T13:45:00+08:00",
+  "task": "RC14-020",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "verified-quarantine-preflight-complete",
+  "production_ready_claim": false,
+  "object_trust": {
+    "local_object_trust_allowed": true,
+    "quarantine_preflight_allowed": true,
+    "handoff_ready": true,
+    "fail_closed_matrix_passed": true
+  },
+  "quarantine_policy": {
+    "network_fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": true,
+    "bytes_written_only_to_quarantine": true,
+    "payload_interpretation_allowed": false,
+    "payload_interpreted": false
+  },
+  "observed_pre_interpretation_verification": {
+    "payload_size_verified": true,
+    "payload_sha256_verified": true,
+    "descriptor_verified": true,
+    "manifest_verified": true,
+    "checksum_set_verified": true,
+    "public_signature_verified": true,
+    "revocation_verified": true,
+    "freshness_verified": true,
+    "compatibility_verified": true,
+    "rollback_baseline_verified": true,
+    "support_recovery_verified": true
+  },
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ]
+}

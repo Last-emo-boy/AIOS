@@ -1,0 +1,34 @@
+{
+  "schema": "agentos.rc14-agentcore-executable-planspec-handoff.v1",
+  "generated_at": "2026-06-09T13:45:00+08:00",
+  "task": "RC14-020",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc14-021-agentcore-executable-planspec",
+  "production_ready_claim": false,
+  "expected_next_task": "RC14-021",
+  "quarantine": {
+    "manifest_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-manifest.json",
+    "manifest_sha256": "7170e360b6001ab98da0884aa1a5ef3e24370bbc8ac22e2466dd941ece994f29",
+    "preflight_report_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-report.json",
+    "preflight_report_sha256": "ffe860670b04a400a1fa52604b1ab77451b9ba44f1ea76d3d02f14476370ad00",
+    "verified_quarantine_preflight": true,
+    "quarantine_payload_written": true,
+    "quarantine_payload_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+    "quarantine_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "quarantine_payload_size_bytes": 377,
+    "payload_interpreted": false
+  },
+  "agentcore": {
+    "planspec_readiness_allowed": true,
+    "planspec_executable": false,
+    "effect_execution_allowed": false
+  },
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ]
+}

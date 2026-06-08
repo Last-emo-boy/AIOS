@@ -1,0 +1,405 @@
+{
+  "schema": "agentos.rc14-verified-quarantine-preflight-result.v1",
+  "generated_at": "2026-06-09T13:45:00+08:00",
+  "task": "RC14-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "preflight_surface": {
+    "state": "verified-quarantine-preflight-complete",
+    "local_object_trust_allowed": true,
+    "quarantine_preflight_allowed": true,
+    "verified_quarantine_preflight": true,
+    "network_fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": true,
+    "quarantine_payload_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+    "quarantine_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "quarantine_payload_size_bytes": 377,
+    "pre_interpretation_verification_performed": true,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "agentcore_planspec_readiness_allowed": true,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "blockers": [
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "outputs": {
+    "quarantine_payload": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377
+    },
+    "verified_quarantine_manifest": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-manifest.json",
+      "sha256": "7170e360b6001ab98da0884aa1a5ef3e24370bbc8ac22e2466dd941ece994f29"
+    },
+    "verified_quarantine_preflight_report": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-report.json",
+      "sha256": "ffe860670b04a400a1fa52604b1ab77451b9ba44f1ea76d3d02f14476370ad00"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-fail-closed-matrix.json",
+      "sha256": "569c3db4c0f1736c2d11a7cac7fdb13693ab954b0acc7001a5906b62c514b3dd"
+    },
+    "agentcore_executable_planspec_handoff": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/agentcore-executable-planspec-handoff.json",
+      "sha256": "44829cbdcd5a3c65e8bb78ceabc73d5d4e41448b9cc43b1791e4598d05e3de9d"
+    }
+  },
+  "source": {
+    "rc14_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "sha256": "d11eb3cc9512359b5ff9231771fd8a5695f80eb0ec94942feb1fe1ffd2250412",
+      "size_bytes": 8729,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc14_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+      "size_bytes": 8634,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "object_trust_result": {
+      "path": ".workflow/artifacts/rc14-local-object-trust-verification/result.json",
+      "sha256": "0216fe3e6d6fe0ae2831c42c658c8a647f592ed41003e5f3f11e7d8d7a3351d5",
+      "size_bytes": 16152,
+      "present": true,
+      "schema": "agentos.rc14-local-object-trust-verification-result.v1",
+      "status": "passed"
+    },
+    "object_trust_report": {
+      "path": ".workflow/artifacts/rc14-local-object-trust-verification/object-trust-report.json",
+      "sha256": "47a48023cda86535d1f851b08b6b83a53e366e7643fe10d1b3e001854ea3344f",
+      "size_bytes": 19495,
+      "present": true,
+      "schema": "agentos.rc14-local-object-trust-report.v1",
+      "status": "local-object-trust-verified"
+    },
+    "object_trust_decision": {
+      "path": ".workflow/artifacts/rc14-local-object-trust-verification/object-trust-decision.json",
+      "sha256": "a96026d8c9c4ad73b223f9ef7aabc92b533178a05c663eeceeaed88389e8825e",
+      "size_bytes": 1875,
+      "present": true,
+      "schema": "agentos.rc14-local-object-trust-decision.v1",
+      "status": "local-object-trust-verified"
+    },
+    "object_trust_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-local-object-trust-verification/object-trust-fail-closed-matrix.json",
+      "sha256": "9ef98d3dcd71be26f18446b69665931479c6d71d9dfa36a50289d1bcfa8e710f",
+      "size_bytes": 31346,
+      "present": true,
+      "schema": "agentos.rc14-local-object-trust-fail-closed-matrix.v1",
+      "status": "passed"
+    },
+    "verified_quarantine_preflight_handoff": {
+      "path": ".workflow/artifacts/rc14-local-object-trust-verification/verified-quarantine-preflight-handoff.json",
+      "sha256": "fd4a31ce8b58181011bc51ed2c54d1eec9502b085a31f2ca74459286d51be65c",
+      "size_bytes": 2297,
+      "present": true,
+      "schema": "agentos.rc14-verified-quarantine-preflight-handoff.v1",
+      "status": "ready-for-rc14-020-verified-quarantine-preflight"
+    },
+    "reconciled_identity_set": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/declared-current-reconciled-identity-set.json",
+      "sha256": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+      "size_bytes": 37104,
+      "present": true,
+      "schema": "agentos.rc14-declared-current-reconciled-identity-set.v1",
+      "status": "local-reconciled-identity-set-drift-zero"
+    },
+    "freshness_binding": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window-revocation-binding.json",
+      "sha256": "3e4824789beb960b2717b5168905ef5e4717f487bbc79e8ee8be4d2ae2a12738",
+      "size_bytes": 16828,
+      "present": true,
+      "schema": "agentos.rc14-freshness-window-revocation-binding.v1",
+      "status": "freshness-window-revocation-bound"
+    },
+    "source_payload": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "size_bytes": 2130,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "initramfs_manifest": {
+      "path": "image/out/agentos-initramfs.manifest.json",
+      "sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "size_bytes": 7380,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "payload_manifest": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "size_bytes": 8204,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "object_checksums": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+      "size_bytes": 554,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "freshness_window": {
+      "path": ".workflow/artifacts/rc14-freshness-window-revocation-binding/freshness-window.json",
+      "sha256": "ca6d4328157ea4dab275e64eb27ace7ba96060cba6b23474dd8493cdddf7170c",
+      "size_bytes": 2337,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "public_signature_artifact": {
+      "path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+      "sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+      "size_bytes": 1653,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "revocation_snapshot": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "size_bytes": 1451,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc14_020",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 must run after RC14-012 completed, either while current_task is RC14-020 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC14-021",
+        "rc14_012_status": "completed",
+        "rc14_020_status": "completed"
+      }
+    },
+    {
+      "id": "contract.verified_quarantine_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 must consume the quarantine-before-interpretation and AgentCore handoff contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+        "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+        "size_bytes": 8634,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "source.rc14_012.local_object_trust",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 requires completed RC14-012 local object trust and quarantine handoff evidence.",
+      "evidence": {
+        "result_status": "passed",
+        "local_object_trust_allowed": true,
+        "quarantine_preflight_allowed": true,
+        "handoff_status": "ready-for-rc14-020-verified-quarantine-preflight"
+      }
+    },
+    {
+      "id": "source.payload.identity_match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source payload bytes must match the trusted release identity before quarantine write.",
+      "evidence": {
+        "expected_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "observed_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_size_bytes": 377,
+        "observed_size_bytes": 377
+      }
+    },
+    {
+      "id": "quarantine.payload_written_repo_local",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Trusted payload bytes must be written only to the repo-local quarantine artifact area before interpretation.",
+      "evidence": {
+        "quarantine_payload": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+        "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "size_bytes": 377
+      }
+    },
+    {
+      "id": "pre_interpretation.verification_complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Quarantine preflight must verify size, digest, descriptor, manifest, checksum set, signature, revocation, freshness, compatibility, rollback, and support before interpretation.",
+      "evidence": {
+        "payload_size_verified": true,
+        "payload_sha256_verified": true,
+        "descriptor_verified": true,
+        "manifest_verified": true,
+        "checksum_set_verified": true,
+        "public_signature_verified": true,
+        "revocation_verified": true,
+        "freshness_verified": true,
+        "compatibility_verified": true,
+        "rollback_baseline_verified": true,
+        "support_recovery_verified": true
+      }
+    },
+    {
+      "id": "payload.interpretation_still_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 verifies quarantine but still must not interpret or install payload bytes.",
+      "evidence": {
+        "payload_interpreted": false,
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 negative cases must fail closed before interpretation, install, activation, rollback, support upload, remote dispatch, or production mutation.",
+      "evidence": {
+        "cases": 20,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 must not fetch from network, interpret payloads, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": null
+    },
+    {
+      "id": "handoff.agentcore_ready_not_executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 may hand off to AgentCore readiness but must not make PlanSpec executable or execute effects.",
+      "evidence": {
+        "planspec_readiness_allowed": true,
+        "planspec_executable": false,
+        "effect_execution_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-020 outputs must not contain key blocks, tokens, private authority paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "signer_service_called": false,
+    "endpoint_reachability_trusted": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": true,
+    "quarantine_write_repo_local_only": true,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 11,
+    "failed_checks": 0,
+    "cases": 20,
+    "failed_cases": 0,
+    "verified_quarantine_preflight": true,
+    "quarantine_payload_written": true,
+    "pre_interpretation_verification_performed": true,
+    "payload_interpreted": false,
+    "rc14_020_complete": true,
+    "next_task": "RC14-021"
+  }
+}

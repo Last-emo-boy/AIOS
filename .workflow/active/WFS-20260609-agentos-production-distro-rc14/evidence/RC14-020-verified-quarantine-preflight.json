@@ -1,0 +1,108 @@
+{
+  "schema": "agentos.rc14-verified-quarantine-preflight-evidence.v1",
+  "generated_at": "2026-06-09T13:45:00+08:00",
+  "task": "RC14-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "script": {
+    "path": "scripts/project-rc14-verified-quarantine-preflight.ps1",
+    "sha256": "82abdba9c3a3a66de84c2f2adc090db72150177792c0ac740051b3333ed2676d"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/result.json",
+    "status": "passed",
+    "sha256": "9d0fc7bc3062019ddbaa0b1511e53b0c1544d2cf0ef9122625ec129713feafab"
+  },
+  "outputs": {
+    "quarantine_payload": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377
+    },
+    "verified_quarantine_manifest": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-manifest.json",
+      "sha256": "7170e360b6001ab98da0884aa1a5ef3e24370bbc8ac22e2466dd941ece994f29"
+    },
+    "verified_quarantine_preflight_report": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-report.json",
+      "sha256": "ffe860670b04a400a1fa52604b1ab77451b9ba44f1ea76d3d02f14476370ad00"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-fail-closed-matrix.json",
+      "sha256": "569c3db4c0f1736c2d11a7cac7fdb13693ab954b0acc7001a5906b62c514b3dd"
+    },
+    "agentcore_executable_planspec_handoff": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/agentcore-executable-planspec-handoff.json",
+      "sha256": "44829cbdcd5a3c65e8bb78ceabc73d5d4e41448b9cc43b1791e4598d05e3de9d"
+    }
+  },
+  "preflight_surface": {
+    "state": "verified-quarantine-preflight-complete",
+    "local_object_trust_allowed": true,
+    "quarantine_preflight_allowed": true,
+    "verified_quarantine_preflight": true,
+    "network_fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": true,
+    "quarantine_payload_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+    "quarantine_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "quarantine_payload_size_bytes": 377,
+    "pre_interpretation_verification_performed": true,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "agentcore_planspec_readiness_allowed": true,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "blockers": [
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "signer_service_called": false,
+    "endpoint_reachability_trusted": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": true,
+    "quarantine_write_repo_local_only": true,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc14_020_complete": true,
+    "next_task": "RC14-021",
+    "commit_required": true
+  }
+}
