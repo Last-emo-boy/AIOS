@@ -1,0 +1,121 @@
+{
+  "schema": "agentos.rc14-declared-current-drift-zero-repair-evidence.v1",
+  "generated_at": "2026-06-09T12:15:00+08:00",
+  "task": "RC14-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "script": {
+    "path": "scripts/project-rc14-declared-current-drift-zero-repair.ps1",
+    "sha256": "8c7224b391af8b58131efceeb3d081b8b2f25b33d3ff62bccf74e6182ae7e1a9"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/result.json",
+    "status": "passed",
+    "sha256": "f6de248ca442a2cc0edf76f76dad3ddb9420e1b3bdbe9f94cd0f4664b2870e72"
+  },
+  "outputs": {
+    "identity_set": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/declared-current-reconciled-identity-set.json",
+      "sha256": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e"
+    },
+    "repair_report": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/declared-current-drift-zero-repair-report.json",
+      "sha256": "64ca421619a500510420d004be265182ef20348158bcd734c8dd69e15a856157"
+    },
+    "downstream_denial": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/drift-zero-repair-downstream-denial.json",
+      "sha256": "2752a7f54f7d9aa6d8944ca5d87097a2650a0d0c6327983ebb74271da53fde47"
+    },
+    "freshness_window_revocation_binding_handoff": {
+      "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/freshness-window-revocation-binding-handoff.json",
+      "sha256": "d04bb2be65725148cf76f4b3180d5aea06232cbf8e265c7d86f4ac11a1da554d"
+    }
+  },
+  "reconciliation_surface": {
+    "state": "local-reconciled-identity-set-drift-zero",
+    "local_reconciled_identity_set_drift_zero": true,
+    "declared_current_drift_zero": true,
+    "drift_count": 0,
+    "comparisons": 58,
+    "matched": 58,
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "current_payload_size_bytes": 377,
+    "local_descriptor_manifest_consistent": true,
+    "object_manifest_descriptor_comparison_drifts": 0,
+    "legacy_declared_current_drift_zero": false,
+    "legacy_declared_current_drift_count": 19,
+    "rc13_public_signature_bound": true,
+    "rc13_public_signature_crypto_verified": true,
+    "rc13_revocation_authority_bound": true,
+    "rc13_freshness_window_bound": false,
+    "freshness_revocation_authority_bound": false,
+    "local_object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "rc14-freshness-window-revocation-binding-not-run",
+      "local-object-trust-not-verified",
+      "verified-quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ],
+    "repair_blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "local_reconciled_identity_set_written": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "signer_service_called": false,
+    "payload_upload_performed": false,
+    "object_storage_provisioned": false,
+    "network_probe_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "declared_metadata_rewritten": false,
+    "legacy_declared_metadata_rewritten": false,
+    "object_trust_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc14_010_complete": true,
+    "next_task": "RC14-011",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "schema": "agentos.rc14-declared-current-drift-zero-repair-report.v1",
+  "generated_at": "2026-06-09T12:15:00+08:00",
+  "task": "RC14-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "passed",
+  "production_ready_claim": false,
+  "repair": {
+    "strategy": "project-local-reconciled-identity-set-from-rc13-zero-drift-object-binding",
+    "local_reconciled_identity_set_written": true,
+    "declared_metadata_rewritten": false,
+    "legacy_declared_metadata_rewritten": false,
+    "local_reconciled_identity_set_drift_zero": true,
+    "drift_count": 0,
+    "comparisons": 58,
+    "matched": 58,
+    "legacy_supersession": {
+      "rc13_legacy_declared_current_drift_zero": false,
+      "rc13_legacy_drift_count": 19,
+      "rc13_legacy_drift_ids": [
+        "nonzero-declared-current-drift-count",
+        "rc13-local-trust-gate-drift",
+        "rc12-declared-current-drift-carried-forward",
+        "rc12-publication-binding-drift",
+        "rc11-declared-current-drift-carried-forward",
+        "external-https-object-uri-not-published",
+        "freshness-window-missing",
+        "declared-current-drift-zero-not-proved",
+        "external-object-publication-not-allowed",
+        "freshness-window-not-bound",
+        "rc12-drift-zero-not-proved",
+        "rc12-object-trust-not-allowed",
+        "rc12-controlled-unblock-not-achieved",
+        "object-manifest-descriptor-binding-not-allowed",
+        "freshness-revocation-authority-not-bound",
+        "quarantine-preflight-not-run",
+        "agentcore-planspec-not-executable",
+        "security-execution-allow-not-bound",
+        "two-target-canary-not-enrolled",
+        "exact-approval-not-bound",
+        "controlled-activation-not-authorized",
+        "controlled-rollback-not-authorized"
+      ],
+      "legacy_declared_metadata_rewritten": false,
+      "legacy_drift_carried_as_trace_only": true,
+      "rc14_local_reconciled_identity_set_replaces_legacy_drift_for_next_gate": true
+    }
+  },
+  "blockers": [
+    "rc14-freshness-window-revocation-binding-not-run",
+    "local-object-trust-not-verified",
+    "verified-quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "checks": [
+    {
+      "id": "plan.current_task.rc14_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 must run while the RC14 plan points at RC14-010, or while rerunning after RC14-010 completed and the pointer advanced to RC14-011.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC14-011",
+        "rc14_010_status": "completed"
+      }
+    },
+    {
+      "id": "contract.local_reconciled_identity_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 must consume the RC14 local execution readiness contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+        "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+        "size_bytes": 8634,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "source.rc13_final_audit.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 must inherit a PASS, non-GA RC13 final audit with local descriptor/manifest consistency.",
+      "evidence": {
+        "verdict": "PASS",
+        "production_ready_claim": false,
+        "local_descriptor_manifest_consistent": true
+      }
+    },
+    {
+      "id": "source.rc13_object_binding.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 must base the repaired identity set on RC13-011 local descriptor/manifest consistency with zero comparison drift.",
+      "evidence": {
+        "status": "passed",
+        "comparisons": 36,
+        "comparison_drifts": 0
+      }
+    },
+    {
+      "id": "repair.local_identity_set_zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 must produce a local reconciled identity set with zero drift across current payload, descriptor, manifest, checksums, compatibility, rollback, support/recovery, public signature, and revocation references.",
+      "evidence": {
+        "comparisons": 58,
+        "drifts": [],
+        "legacy_drift_count": 19,
+        "legacy_declared_drift_zero": false
+      }
+    },
+    {
+      "id": "repair.legacy_drift_preserved_not_authoritative",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 must preserve RC13 legacy declared/current drift as trace evidence while replacing it with the local reconciled identity set for RC14 gates.",
+      "evidence": {
+        "legacy_drift_count": 19,
+        "legacy_declared_drift_zero": false
+      }
+    },
+    {
+      "id": "repair.downstream_authority_still_gated",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-010 may prove local drift-zero, but object trust must remain gated until RC14 freshness/revocation binding and object-trust verification run.",
+      "evidence": {
+        "local_reconciled_identity_set_drift_zero": true,
+        "rc13_freshness_window_bound": false
+      }
+    }
+  ],
+  "source": {
+    "rc14_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "sha256": "944b826dc4b38f970928895cb31865a0f0c1ba1ce5b67f117a0fa9d39fc44860",
+      "size_bytes": 8723,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc14_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+      "size_bytes": 8634,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc13_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json",
+      "sha256": "000381d447bfe679d4ca8f85f01caf1371ef8ca7a4f7aa65cd8be21148f90667",
+      "size_bytes": 26982,
+      "present": true,
+      "schema": "agentos.production-distro-rc13-final-audit.v1",
+      "status": null
+    },
+    "rc13_drift_result": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+      "sha256": "c9fb476d7eb3cd61fb335bd32f1eff7f868d9edbd4095951f27532c943ab1d25",
+      "size_bytes": 13439,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-result.v1",
+      "status": "passed"
+    },
+    "rc13_drift_reconciliation": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/declared-current-drift-zero-reconciliation.json",
+      "sha256": "9b28cf83f8d3c6ed0be5ae25f70a8065516646c7cb8fc20313e24f843ae720b9",
+      "size_bytes": 48701,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-reconciliation.v1",
+      "status": "declared-current-drift-denied"
+    },
+    "rc13_object_manifest_descriptor_result": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+      "sha256": "47794372cb1fd3a66fea12b47d34f91abf23fc0543c063d00ec377516b22fe79",
+      "size_bytes": 16931,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding-result.v1",
+      "status": "passed"
+    },
+    "rc13_object_manifest_descriptor_binding": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+      "sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8",
+      "size_bytes": 27125,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding.v1",
+      "status": "local-descriptor-manifest-consistent-authority-denied"
+    },
+    "rc13_freshness_revocation_result": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+      "sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db",
+      "size_bytes": 16454,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-result.v1",
+      "status": "passed"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  }
+}

@@ -1,0 +1,781 @@
+{
+  "schema": "agentos.rc14-declared-current-reconciled-identity-set.v1",
+  "generated_at": "2026-06-09T12:15:00+08:00",
+  "task": "RC14-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "local-reconciled-identity-set-drift-zero",
+  "production_ready_claim": false,
+  "authority_scope": "local-aios-evidence-only",
+  "release_identity": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_path": "image/out/agentos-initramfs.cpio.gz",
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_size_bytes": 377,
+    "content_type": "application/gzip",
+    "compression": "gzip",
+    "immutable": true
+  },
+  "descriptor_identity": {
+    "descriptor_path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    "descriptor_file_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "descriptor_canonical_sha256": "c9a36aab6d80c7b8a698f2b55cccf60b850f753f30cb7a4bd62350130047d36d",
+    "descriptor_candidate_path": ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+    "descriptor_candidate_file_sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+    "descriptor_candidate_canonical_sha256": "d863d4863c831ff41c769ebd1faebf52f282a39d513d42bc9e436027b1d46530",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "object_kind": "update-bundle",
+    "size_bytes": 377,
+    "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "range_request_supported": false
+  },
+  "manifest_identity": {
+    "initramfs_manifest_path": "image/out/agentos-initramfs.manifest.json",
+    "initramfs_manifest_file_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+    "initramfs_manifest_canonical_sha256": "491cc0354a8a774d25a5868f16ac105bb3a22a77acfb17eccc3e47bfbb34788f",
+    "descriptor_manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+    "payload_manifest_path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+    "payload_manifest_file_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+    "payload_manifest_canonical_sha256": "c0b20b01cb8cb7e4eb88830b7c95b116e0c8d0674d381d76e9a478b0763efdb5",
+    "descriptor_checksums_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+    "object_checksums_path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+    "object_checksums_file_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+    "object_checksums_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "hash_matches_manifest": true
+  },
+  "compatibility_identity": {
+    "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+    "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "descriptor_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "status": "compatibility-projected-verification-blocked",
+    "production_ready_claim": false
+  },
+  "rollback_identity": {
+    "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+    "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "descriptor_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "status": "rollback-baseline-projected-execution-blocked",
+    "rollback_execution_allowed": false,
+    "production_ready_claim": false
+  },
+  "support_recovery_identity": {
+    "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+    "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "descriptor_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "status": "hosted-metadata-only",
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "production_ready_claim": false
+  },
+  "public_signature_inputs": {
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "revocation_authority_bound": true,
+    "revocation_snapshot_fresh": true,
+    "freshness_window_bound": false,
+    "freshness_window_current": false,
+    "freshness_binding_expected_next_task": "RC14-011"
+  },
+  "reconciliation": {
+    "local_reconciled_identity_set_drift_zero": true,
+    "declared_current_drift_zero": true,
+    "drift_count": 0,
+    "comparisons": 58,
+    "matched": 58,
+    "drifts": [],
+    "comparisons_detail": [
+      {
+        "id": "release_id.final_audit_vs_object_binding",
+        "status": "matched",
+        "expected": "production-distro-rc8-current-artifacts",
+        "actual": "production-distro-rc8-current-artifacts",
+        "expected_source": "RC13 final audit release id",
+        "actual_source": "RC13 object binding release id",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.sha256.final_audit_vs_object_binding",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "RC13 final audit current payload sha256",
+        "actual_source": "RC13 object binding current payload sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.sha256.object_binding_vs_file",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "RC13 object binding current payload sha256",
+        "actual_source": "current payload file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.size.final_audit_vs_object_binding",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "RC13 final audit current payload size_bytes",
+        "actual_source": "RC13 object binding current payload size_bytes",
+        "denial_reason": null
+      },
+      {
+        "id": "payload.size.object_binding_vs_file",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "RC13 object binding current payload size_bytes",
+        "actual_source": "current payload file size_bytes",
+        "denial_reason": null
+      },
+      {
+        "id": "descriptor.file_sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "expected_source": "RC13 object binding result descriptor file sha256",
+        "actual_source": "RC13 object binding descriptor file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "descriptor.canonical_sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "c9a36aab6d80c7b8a698f2b55cccf60b850f753f30cb7a4bd62350130047d36d",
+        "actual": "c9a36aab6d80c7b8a698f2b55cccf60b850f753f30cb7a4bd62350130047d36d",
+        "expected_source": "RC13 object binding result descriptor canonical sha256",
+        "actual_source": "RC13 object binding descriptor canonical sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "descriptor_candidate.file_sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+        "actual": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+        "expected_source": "RC13 object binding result descriptor candidate sha256",
+        "actual_source": "RC13 object binding descriptor candidate file sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "manifest.sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "actual": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "expected_source": "RC13 object binding result initramfs manifest sha256",
+        "actual_source": "RC13 object binding manifest sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "payload_manifest.sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "actual": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "expected_source": "RC13 object binding result payload manifest sha256",
+        "actual_source": "RC13 object binding payload manifest sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "object_checksums.sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "actual": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "expected_source": "RC13 object binding result object checksums sha256",
+        "actual_source": "RC13 object binding object checksums sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "compatibility.sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "actual": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "expected_source": "RC13 object binding result compatibility sha256",
+        "actual_source": "RC13 object binding compatibility sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "rollback.sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "actual": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "expected_source": "RC13 object binding result rollback baseline sha256",
+        "actual_source": "RC13 object binding rollback baseline sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "support.sha256.result_vs_binding",
+        "status": "matched",
+        "expected": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "actual": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "expected_source": "RC13 object binding result support recovery sha256",
+        "actual_source": "RC13 object binding support recovery sha256",
+        "denial_reason": null
+      },
+      {
+        "id": "descriptor_manifest.local_consistency.final_vs_result",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC13 final audit local descriptor/manifest consistency",
+        "actual_source": "RC13 object binding result local descriptor/manifest consistency",
+        "denial_reason": null
+      },
+      {
+        "id": "descriptor_manifest.comparison_drifts.result_vs_binding",
+        "status": "matched",
+        "expected": "0",
+        "actual": "0",
+        "expected_source": "RC13 object binding result comparison drifts",
+        "actual_source": "RC13 object binding comparison drifts",
+        "denial_reason": null
+      },
+      {
+        "id": "legacy_drift.count.final_audit_vs_rc13_drift",
+        "status": "matched",
+        "expected": "19",
+        "actual": "19",
+        "expected_source": "RC13 final audit legacy drift count",
+        "actual_source": "RC13 drift result drift count",
+        "denial_reason": null
+      },
+      {
+        "id": "legacy_drift.state.final_audit_vs_rc13_drift",
+        "status": "matched",
+        "expected": "declared-current-drift-denied",
+        "actual": "declared-current-drift-denied",
+        "expected_source": "RC13 final audit legacy drift state",
+        "actual_source": "RC13 drift result state",
+        "denial_reason": null
+      },
+      {
+        "id": "public_signature.bound.final_audit_vs_freshness_result",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC13 final audit public signature bound",
+        "actual_source": "RC13 freshness result public signature bound",
+        "denial_reason": null
+      },
+      {
+        "id": "public_signature.crypto_verified.final_audit_vs_freshness_result",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC13 final audit public signature crypto verified",
+        "actual_source": "RC13 freshness result public signature crypto verified",
+        "denial_reason": null
+      },
+      {
+        "id": "revocation.bound.final_audit_vs_freshness_result",
+        "status": "matched",
+        "expected": "True",
+        "actual": "True",
+        "expected_source": "RC13 final audit revocation authority bound",
+        "actual_source": "RC13 freshness result revocation authority bound",
+        "denial_reason": null
+      },
+      {
+        "id": "freshness.window_bound.final_audit_vs_freshness_result",
+        "status": "matched",
+        "expected": "False",
+        "actual": "False",
+        "expected_source": "RC13 final audit freshness window bound",
+        "actual_source": "RC13 freshness result freshness window bound",
+        "denial_reason": null
+      },
+      {
+        "id": "rc13.object_binding.release_id.drift_vs_descriptor",
+        "status": "matched",
+        "expected": "production-distro-rc8-current-artifacts",
+        "actual": "production-distro-rc8-current-artifacts",
+        "expected_source": "RC13 drift result release_id",
+        "actual_source": "RC8 descriptor release_id",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.release_id.descriptor_vs_checksums",
+        "status": "matched",
+        "expected": "production-distro-rc8-current-artifacts",
+        "actual": "production-distro-rc8-current-artifacts",
+        "expected_source": "RC8 descriptor release_id",
+        "actual_source": "RC8 object checksums release_id",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.release_id.descriptor_vs_candidate",
+        "status": "matched",
+        "expected": "production-distro-rc8-current-artifacts",
+        "actual": "production-distro-rc8-current-artifacts",
+        "expected_source": "RC8 descriptor release_id",
+        "actual_source": "RC11 descriptor candidate release_id",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.object_id.current_vs_descriptor",
+        "status": "matched",
+        "expected": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload object id",
+        "actual_source": "RC8 descriptor object_id",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.object_id.descriptor_vs_checksums",
+        "status": "matched",
+        "expected": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "RC8 descriptor object_id",
+        "actual_source": "RC8 object checksums object_id",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.object_id.descriptor_vs_candidate",
+        "status": "matched",
+        "expected": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "RC8 descriptor object_id",
+        "actual_source": "RC11 descriptor candidate object_id",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.object_kind.descriptor_vs_candidate",
+        "status": "matched",
+        "expected": "update-bundle",
+        "actual": "update-bundle",
+        "expected_source": "RC8 descriptor kind",
+        "actual_source": "RC11 descriptor candidate object_kind",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.sha256.current_vs_descriptor",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload sha256",
+        "actual_source": "RC8 descriptor sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.sha256.current_vs_candidate",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload sha256",
+        "actual_source": "RC11 descriptor candidate sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.sha256.current_vs_initramfs_manifest",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload sha256",
+        "actual_source": "initramfs manifest artifact_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.sha256.current_vs_object_checksums",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload sha256",
+        "actual_source": "RC8 object checksums sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.sha256.current_vs_checksums_manifest_declared",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload sha256",
+        "actual_source": "RC8 object checksums manifest_declared_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.sha256.current_vs_publication_binding",
+        "status": "matched",
+        "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_source": "current payload sha256",
+        "actual_source": "RC12 publication binding current_release_bytes.sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.size.current_vs_descriptor",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "current payload size_bytes",
+        "actual_source": "RC8 descriptor size_bytes",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.size.current_vs_candidate",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "current payload size_bytes",
+        "actual_source": "RC11 descriptor candidate size_bytes",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.size.current_vs_object_checksums",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "current payload size_bytes",
+        "actual_source": "RC8 object checksums size_bytes",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.payload.size.current_vs_publication_binding",
+        "status": "matched",
+        "expected": "377",
+        "actual": "377",
+        "expected_source": "current payload size_bytes",
+        "actual_source": "RC12 publication binding current_release_bytes.size_bytes",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.descriptor.sha256.file_vs_report",
+        "status": "matched",
+        "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "expected_source": "RC8 descriptor file sha256",
+        "actual_source": "RC8 descriptor report descriptor_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.descriptor.sha256.file_vs_public_signature_target",
+        "status": "matched",
+        "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "expected_source": "RC8 descriptor file sha256",
+        "actual_source": "RC11 descriptor candidate public_signature_target_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.descriptor_candidate.sha256.file_vs_publication_binding",
+        "status": "matched",
+        "expected": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+        "actual": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+        "expected_source": "RC11 descriptor candidate file sha256",
+        "actual_source": "RC12 publication binding descriptor candidate sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.object_checksums.sha256.file_vs_byte_map",
+        "status": "matched",
+        "expected": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "actual": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "expected_source": "RC8 object checksums file sha256",
+        "actual_source": "RC11 byte map object_checksums_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.manifest.sha256.file_vs_descriptor",
+        "status": "matched",
+        "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "actual": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "expected_source": "initramfs manifest file sha256",
+        "actual_source": "RC8 descriptor manifest_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.manifest.sha256.file_vs_candidate",
+        "status": "matched",
+        "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "actual": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "expected_source": "initramfs manifest file sha256",
+        "actual_source": "RC11 descriptor candidate manifest_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.manifest.sha256.file_vs_publication_binding",
+        "status": "matched",
+        "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "actual": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "expected_source": "initramfs manifest file sha256",
+        "actual_source": "RC12 publication binding manifest_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.checksums.sha256.payload_manifest_vs_descriptor",
+        "status": "matched",
+        "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "actual": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "expected_source": "RC6 payload manifest file sha256",
+        "actual_source": "RC8 descriptor checksums_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.checksums.sha256.payload_manifest_vs_candidate",
+        "status": "matched",
+        "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "actual": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "expected_source": "RC6 payload manifest file sha256",
+        "actual_source": "RC11 descriptor candidate checksums_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.checksums.sha256.payload_manifest_vs_publication_binding",
+        "status": "matched",
+        "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "actual": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "expected_source": "RC6 payload manifest file sha256",
+        "actual_source": "RC12 publication binding checksums_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.compatibility.sha256.file_vs_descriptor",
+        "status": "matched",
+        "expected": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "actual": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "expected_source": "compatibility file sha256",
+        "actual_source": "RC8 descriptor installer_compatibility_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.compatibility.sha256.file_vs_candidate",
+        "status": "matched",
+        "expected": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "actual": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "expected_source": "compatibility file sha256",
+        "actual_source": "RC11 descriptor candidate installer_compatibility_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.compatibility.sha256.file_vs_publication_binding",
+        "status": "matched",
+        "expected": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "actual": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "expected_source": "compatibility file sha256",
+        "actual_source": "RC12 publication binding compatibility_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.rollback.sha256.file_vs_descriptor",
+        "status": "matched",
+        "expected": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "actual": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "expected_source": "rollback baseline file sha256",
+        "actual_source": "RC8 descriptor rollback_baseline_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.rollback.sha256.file_vs_candidate",
+        "status": "matched",
+        "expected": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "actual": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "expected_source": "rollback baseline file sha256",
+        "actual_source": "RC11 descriptor candidate rollback_baseline_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.rollback.sha256.file_vs_publication_binding",
+        "status": "matched",
+        "expected": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "actual": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "expected_source": "rollback baseline file sha256",
+        "actual_source": "RC12 publication binding rollback_baseline_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.support.sha256.file_vs_descriptor",
+        "status": "matched",
+        "expected": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "actual": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "expected_source": "support index file sha256",
+        "actual_source": "RC8 descriptor support_recovery_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.support.sha256.file_vs_candidate",
+        "status": "matched",
+        "expected": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "actual": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "expected_source": "support index file sha256",
+        "actual_source": "RC11 descriptor candidate support_recovery_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      },
+      {
+        "id": "rc13.object_binding.support.sha256.file_vs_publication_binding",
+        "status": "matched",
+        "expected": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "actual": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "expected_source": "support index file sha256",
+        "actual_source": "RC12 publication binding support_recovery_sha256",
+        "denial_reason": null,
+        "source_task": "RC13-011"
+      }
+    ],
+    "legacy_supersession": {
+      "rc13_legacy_declared_current_drift_zero": false,
+      "rc13_legacy_drift_count": 19,
+      "rc13_legacy_drift_ids": [
+        "nonzero-declared-current-drift-count",
+        "rc13-local-trust-gate-drift",
+        "rc12-declared-current-drift-carried-forward",
+        "rc12-publication-binding-drift",
+        "rc11-declared-current-drift-carried-forward",
+        "external-https-object-uri-not-published",
+        "freshness-window-missing",
+        "declared-current-drift-zero-not-proved",
+        "external-object-publication-not-allowed",
+        "freshness-window-not-bound",
+        "rc12-drift-zero-not-proved",
+        "rc12-object-trust-not-allowed",
+        "rc12-controlled-unblock-not-achieved",
+        "object-manifest-descriptor-binding-not-allowed",
+        "freshness-revocation-authority-not-bound",
+        "quarantine-preflight-not-run",
+        "agentcore-planspec-not-executable",
+        "security-execution-allow-not-bound",
+        "two-target-canary-not-enrolled",
+        "exact-approval-not-bound",
+        "controlled-activation-not-authorized",
+        "controlled-rollback-not-authorized"
+      ],
+      "legacy_declared_metadata_rewritten": false,
+      "legacy_drift_carried_as_trace_only": true,
+      "rc14_local_reconciled_identity_set_replaces_legacy_drift_for_next_gate": true
+    }
+  },
+  "trust_decision": {
+    "local_reconciled_identity_set_bound": true,
+    "declared_current_drift_zero": true,
+    "object_manifest_descriptor_consistent": true,
+    "freshness_revocation_authority_bound": false,
+    "local_object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "rc14-freshness-window-revocation-binding-not-run",
+      "local-object-trust-not-verified",
+      "verified-quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "source": {
+    "rc14_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "sha256": "944b826dc4b38f970928895cb31865a0f0c1ba1ce5b67f117a0fa9d39fc44860",
+      "size_bytes": 8723,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc14_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+      "size_bytes": 8634,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc13_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json",
+      "sha256": "000381d447bfe679d4ca8f85f01caf1371ef8ca7a4f7aa65cd8be21148f90667",
+      "size_bytes": 26982,
+      "present": true,
+      "schema": "agentos.production-distro-rc13-final-audit.v1",
+      "status": null
+    },
+    "rc13_drift_result": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+      "sha256": "c9fb476d7eb3cd61fb335bd32f1eff7f868d9edbd4095951f27532c943ab1d25",
+      "size_bytes": 13439,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-result.v1",
+      "status": "passed"
+    },
+    "rc13_drift_reconciliation": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/declared-current-drift-zero-reconciliation.json",
+      "sha256": "9b28cf83f8d3c6ed0be5ae25f70a8065516646c7cb8fc20313e24f843ae720b9",
+      "size_bytes": 48701,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-reconciliation.v1",
+      "status": "declared-current-drift-denied"
+    },
+    "rc13_object_manifest_descriptor_result": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+      "sha256": "47794372cb1fd3a66fea12b47d34f91abf23fc0543c063d00ec377516b22fe79",
+      "size_bytes": 16931,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding-result.v1",
+      "status": "passed"
+    },
+    "rc13_object_manifest_descriptor_binding": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+      "sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8",
+      "size_bytes": 27125,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding.v1",
+      "status": "local-descriptor-manifest-consistent-authority-denied"
+    },
+    "rc13_freshness_revocation_result": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+      "sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db",
+      "size_bytes": 16454,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-result.v1",
+      "status": "passed"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  }
+}

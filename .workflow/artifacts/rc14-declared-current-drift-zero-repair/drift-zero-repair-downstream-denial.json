@@ -1,0 +1,41 @@
+{
+  "schema": "agentos.rc14-drift-zero-repair-downstream-denial.v1",
+  "generated_at": "2026-06-09T12:15:00+08:00",
+  "task": "RC14-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "downstream-authority-denied-after-drift-zero-repair",
+  "production_ready_claim": false,
+  "drift_zero_denied": false,
+  "downstream_denied": true,
+  "denial_reasons": [
+    "rc14-freshness-window-revocation-binding-not-run",
+    "local-object-trust-not-verified",
+    "verified-quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "side_effects": {
+    "local_reconciled_identity_set_written": true,
+    "declared_metadata_rewritten": false,
+    "legacy_declared_metadata_rewritten": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "network_probe_performed": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false
+  }
+}

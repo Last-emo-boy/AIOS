@@ -1,0 +1,65 @@
+{
+  "schema": "agentos.rc14-freshness-window-revocation-binding-handoff.v1",
+  "generated_at": "2026-06-09T12:15:00+08:00",
+  "task": "RC14-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc14-011-freshness-window-revocation-binding",
+  "production_ready_claim": false,
+  "expected_next_task": "RC14-011",
+  "identity_set": {
+    "path": ".workflow/artifacts/rc14-declared-current-drift-zero-repair/declared-current-reconciled-identity-set.json",
+    "sha256": "0684403b8873cff1017e51e3068d6b30fcd67b4ba2ee7500957611e1b94d979e",
+    "local_reconciled_identity_set_drift_zero": true,
+    "declared_current_drift_zero": true,
+    "drift_count": 0
+  },
+  "release_identity": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_path": "image/out/agentos-initramfs.cpio.gz",
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_size_bytes": 377,
+    "content_type": "application/gzip",
+    "compression": "gzip",
+    "immutable": true
+  },
+  "public_signature_and_revocation_inputs": {
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "revocation_authority_bound": true,
+    "revocation_snapshot_fresh": true,
+    "freshness_window_bound": false,
+    "freshness_window_current": false,
+    "freshness_binding_expected_next_task": "RC14-011"
+  },
+  "freshness_requirement": {
+    "freshness_window_required": true,
+    "freshness_window_bound": false,
+    "freshness_window_current": false,
+    "expected_next_task": "RC14-011"
+  },
+  "blocked_authority": {
+    "freshness_revocation_authority_bound": false,
+    "local_object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "blockers": [
+    "rc14-freshness-window-revocation-binding-not-run",
+    "local-object-trust-not-verified",
+    "verified-quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ]
+}
