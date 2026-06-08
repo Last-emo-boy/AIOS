@@ -1,0 +1,210 @@
+{
+  "schema": "agentos.rc10-artifact-drift-zero-reconciliation-result.v1",
+  "generated_at": "2026-06-08T23:59:58+08:00",
+  "task": "RC10-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "reconciliation_surface": {
+    "state": "drift-zero-denied",
+    "drift_zero": false,
+    "drift_count": 13,
+    "comparisons": 30,
+    "matched": 17,
+    "publication_state": "publication-blocked-drift-nonzero",
+    "external_object_trust_allowed": false,
+    "installer_quarantine_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "nonzero-declared-current-drift-count",
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri"
+    ],
+    "downstream_execution_blockers": [
+      "installer-quarantine-fetch-not-run",
+      "two-node-canary-target-set-not-enrolled",
+      "exact-operator-approval-pending",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized"
+    ]
+  },
+  "outputs": {
+    "reconciliation": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+      "sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/drift-zero-denial.json",
+      "sha256": "695c26a1feacde59e53027344a3df34fbd4431794c2bab50bfd23c1a9d994551"
+    },
+    "installer_handoff": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/installer-handoff.json",
+      "sha256": "cd2054740923d760abd251f13a7eb81e6cfcb277860aacfb57febf8bd3c01bab"
+    }
+  },
+  "source": {
+    "drift_zero_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+      "sha256": "fe2c9b6069db0e9fa55ddfd119808f9bfdfa3e23fff0492761451564478182e8",
+      "size_bytes": 10086,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "publication_result": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+      "size_bytes": 11803,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "publication_report": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+      "sha256": "ca097beaeec8cc1fc90d5b549693fe4f9ce114b6b50a655cb2f8b418f56fb060",
+      "size_bytes": 8848,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-report.v1",
+      "status": "publication-blocked-drift-nonzero"
+    },
+    "descriptor_candidate": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
+      "sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+      "size_bytes": 2503,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "publication_handoff": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
+      "sha256": "59d8233f7a1c4054b6c93a2428f3a2028ff18082472ad8717ed32cebc37d4fac",
+      "size_bytes": 2984,
+      "present": true,
+      "schema": "agentos.rc10-installer-handoff.v1",
+      "status": "blocked-before-quarantine"
+    },
+    "rc9_drift_reconciliation": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+      "sha256": "2daa3da3a98adacac262b3ab5ea99b262a4843b63515a1ec61e05f12b27c9f82",
+      "size_bytes": 38726,
+      "present": true,
+      "schema": "agentos.rc9-artifact-drift-reconciliation.v1",
+      "status": "drift-denied"
+    }
+  },
+  "invariants": {
+    "mirror_metadata_only": true,
+    "mirror_large_payload_storage_used": false,
+    "signer_separate_from_mirror": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "drift_repair_performed": false,
+    "declared_metadata_rewritten": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "checks": [
+    {
+      "id": "source.publication_result.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-011 requires RC10-010 publication evidence.",
+      "evidence": {
+        "result_status": "passed",
+        "publication_state": "publication-blocked-drift-nonzero"
+      }
+    },
+    {
+      "id": "source.drift_artifact.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-011 requires prior declared/current drift comparisons.",
+      "evidence": {
+        "comparisons": 30,
+        "matched": 17,
+        "drift_count": 13
+      }
+    },
+    {
+      "id": "reconciliation.zero_required",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nonzero drift count must deny drift-zero reconciliation.",
+      "evidence": {
+        "drift_count": 13,
+        "publication_state": "publication-blocked-drift-nonzero",
+        "drift_zero": false
+      }
+    },
+    {
+      "id": "reconciliation.publication_dependency",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Drift-zero trust must depend on published-drift-zero publication evidence.",
+      "evidence": {
+        "publication_allowed": false,
+        "published_drift_zero": false,
+        "uri_classification": "missing"
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-011 outputs must not contain private key paths, PEM blocks, auth tokens, or signer internals.",
+      "evidence": null
+    },
+    {
+      "id": "outputs.side_effects_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-011 must not repair drift, fetch, install, activate, rollback, or interpret payload bytes.",
+      "evidence": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false
+      }
+    }
+  ],
+  "blockers": [
+    "nonzero-declared-current-drift-count",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "installer-quarantine-fetch-not-run",
+    "two-node-canary-target-set-not-enrolled",
+    "exact-operator-approval-pending",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "summary": {
+    "checks": 6,
+    "failed_checks": 0,
+    "drift_count": 13,
+    "drift_zero_denied_as_expected": true,
+    "rc10_011_complete": true,
+    "next_task": "RC10-012"
+  }
+}

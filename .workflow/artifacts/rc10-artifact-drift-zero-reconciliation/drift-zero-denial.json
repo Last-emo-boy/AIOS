@@ -1,0 +1,52 @@
+{
+  "schema": "agentos.rc10-drift-zero-denial.v1",
+  "generated_at": "2026-06-08T23:59:58+08:00",
+  "task": "RC10-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "drift-zero-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "denial_reasons": [
+    "nonzero-declared-current-drift-count",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri"
+  ],
+  "drift_count": 13,
+  "drift_ids": [
+    "declared.rc6_payload_manifest.release_id",
+    "declared.rc7_signed_metadata.release_id",
+    "declared.rc7_signature_claims.release_id",
+    "declared.rc7_revocation.release_id",
+    "declared.rc7_compatibility.release_id",
+    "declared.rc7_rollback.release_id",
+    "declared.rc7_compatibility.payload_manifest_sha256",
+    "declared.rc7_compatibility.payload_checksums_sha256",
+    "declared.rc7_signed_metadata.payload_manifest_sha256",
+    "declared.rc7_signed_metadata.revocation_snapshot_sha256",
+    "declared.rc6_payload_component.update_metadata",
+    "declared.rc6_payload_component.release_channel_metadata",
+    "declared.rc6_payload_component.qemu_runtime_smoke"
+  ],
+  "downstream_gates_blocked": [
+    "installer-quarantine-fetch-not-run",
+    "two-node-canary-target-set-not-enrolled",
+    "exact-operator-approval-pending",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "side_effects": {
+    "drift_repair_performed": false,
+    "declared_metadata_rewritten": false,
+    "descriptor_published": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false
+  }
+}

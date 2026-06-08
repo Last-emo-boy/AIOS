@@ -3,7 +3,7 @@
   "name": "Production Distro RC10",
   "status": "active",
   "created_at": "2026-06-08T23:59:30+08:00",
-  "updated_at": "2026-06-08T23:59:55+08:00",
+  "updated_at": "2026-06-08T23:59:58+08:00",
   "source": "RC9 final audit; TASK.md; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
   "goal": "Publish a real immutable external HTTPS object descriptor for AIOS payload bytes, reconcile drift to zero, verify installer quarantine fetch, enroll at least two canary targets, bind exact approval to AgentCore and SecurityExecutionEngine, and produce controlled canary activation plus rollback evidence.",
@@ -50,9 +50,15 @@
       "completed_at": "2026-06-08T23:59:55+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-010-external-object-publication.json",
       "commit": null
+    },
+    {
+      "task": "RC10-011",
+      "completed_at": "2026-06-08T23:59:58+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-011-artifact-drift-zero-reconciliation.json",
+      "commit": null
     }
   ],
-  "next_task": "RC10-011",
+  "next_task": "RC10-012",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json",
@@ -65,7 +71,12 @@
     ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
     ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
     ".workflow/artifacts/rc10-external-object-publication/publication-denial.json",
-    ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json"
+    ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
+    "scripts/project-rc10-artifact-drift-zero-reconciliation.ps1",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/drift-zero-denial.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/installer-handoff.json"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
@@ -86,6 +97,13 @@
     ".workflow/artifacts/rc10-external-object-publication/publication-denial.json",
     ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/.task/TASK-RC10-010.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-010-external-object-publication.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-010-external-object-publication.json",
+    "scripts/project-rc10-artifact-drift-zero-reconciliation.ps1",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/drift-zero-denial.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/installer-handoff.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/.task/TASK-RC10-011.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-011-artifact-drift-zero-reconciliation.json"
   ]
 }

@@ -1,0 +1,52 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-011",
+  "title": "reconcile declared and current artifact drift to zero before object trust",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc10-external-object-publication/result.json",
+    ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-artifact-drift-zero-reconciliation.ps1",
+      "role": "projection and verification script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+      "role": "reconciliation report"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/drift-zero-denial.json",
+      "role": "denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/installer-handoff.json",
+      "role": "installer handoff"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-011-artifact-drift-zero-reconciliation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The script consumes RC10-010 publication evidence and prior declared/current drift comparisons.",
+      "The script allows object trust only when publication is published-drift-zero and drift count is zero.",
+      "The script produces drift-zero denial evidence when drift count is nonzero or publication is not published-drift-zero.",
+      "The task preserves production_ready_claim=false and keeps install, activation, rollback, support upload, production ring mutation, and remote dispatch disabled."
+    ]
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc10-artifact-drift-zero-reconciliation.ps1 -GeneratedAt '2026-06-08T23:59:58+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}
