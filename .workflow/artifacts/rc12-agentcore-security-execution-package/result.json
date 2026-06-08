@@ -1,0 +1,431 @@
+{
+  "schema": "agentos.rc12-agentcore-security-execution-package-result.v1",
+  "generated_at": "2026-06-09T05:35:00+08:00",
+  "task": "RC12-021",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "package_surface": {
+    "state": "agentcore-security-execution-package-denied",
+    "quarantine_evidence_bound": true,
+    "installer_preflight_verified": false,
+    "agentcore_planspec_candidate_projected": true,
+    "agentcore_planspec_hash": "21220a3c4cb67f70ac4089b9c9a42d4805476001b9fcc7369fca634d0dcf7a54",
+    "agentcore_planspec_executable": false,
+    "security_execution_required": true,
+    "security_execution_decision_bound": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "object-uri-not-https",
+      "object-uri-not-immutable",
+      "declared-current-drift-zero-not-proved",
+      "freshness-window-missing",
+      "nonzero-declared-current-drift-count",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "object-trust-not-allowed",
+      "installer-quarantine-fetch-not-run",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "external-descriptor-verification-denied",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized",
+      "quarantine-fetch-not-allowed",
+      "audit-sink-not-bound",
+      "nonce-not-bound",
+      "approval-expiry-not-bound",
+      "policy-version-not-bound",
+      "rollback-baseline-not-approved-for-execution",
+      "support-recovery-not-approved-for-execution"
+    ]
+  },
+  "outputs": {
+    "agentcore_planspec_package": {
+      "path": ".workflow/artifacts/rc12-agentcore-security-execution-package/agentcore-planspec-package.json",
+      "sha256": "d7b8db2ef7b8e03395f6928b81e8dec0644865e66dc429f42787ac56be291eb5",
+      "planspec_core_hash": "21220a3c4cb67f70ac4089b9c9a42d4805476001b9fcc7369fca634d0dcf7a54"
+    },
+    "security_execution_effect_envelope": {
+      "path": ".workflow/artifacts/rc12-agentcore-security-execution-package/security-execution-effect-envelope.json",
+      "sha256": "817d3c7099b5af81984a6c596870506cb054190e25a7259bd85e6b1b1e744548",
+      "decision_core_hash": "8cdd874eefcb074f93ac65d48ffb8ff38ef498cb076f73615e46e263b3e41072"
+    },
+    "execution_package_denial": {
+      "path": ".workflow/artifacts/rc12-agentcore-security-execution-package/execution-package-denial.json",
+      "sha256": "11370f6b506fcbd9363205c5c3b60807d00ecaa8c16010cee30cc2190eb982e9"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc12-agentcore-security-execution-package/execution-package-fail-closed-matrix.json",
+      "sha256": "99db830dbffbbc62bc9085a3f4af2beb763d28c1db4398a4d5b9f7e8277f526f"
+    }
+  },
+  "source": {
+    "rc12_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+      "sha256": "3b5560e2f67231551d85117a8ae1841175872ccfe67015dd079baa31e2bd4f8d",
+      "size_bytes": 7642,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc12_quarantine_result": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/result.json",
+      "sha256": "912c08e2d34dc84495b4078fa13328e9e5117747295552091ad33d59b077cc00",
+      "size_bytes": 15546,
+      "present": true,
+      "schema": "agentos.rc12-quarantine-fetch-verification-result.v1",
+      "status": "passed"
+    },
+    "quarantine_fetch_report": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-report.json",
+      "sha256": "4f9c7551fea19c3efd859a2a22cedb0c65bda607248f24d6017a7450242bf98e",
+      "size_bytes": 3567,
+      "present": true,
+      "schema": "agentos.rc12-quarantine-fetch-report.v1",
+      "status": "quarantine-fetch-denied-before-network"
+    },
+    "quarantine_gate_report": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-gate-report.json",
+      "sha256": "87eb0fdeeda898691879a5ba6edaed469885114ffa685fd19dc60a3f3434a5da",
+      "size_bytes": 2303,
+      "present": true,
+      "schema": "agentos.rc12-quarantine-fetch-gate-report.v1",
+      "status": "installer-quarantine-fetch-blocked"
+    },
+    "quarantine_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/quarantine-fetch-fail-closed-matrix.json",
+      "sha256": "32393ab7bc939055aac09ee46d0341292e10f4f3cbd9c945f6abd03de66bf8a9",
+      "size_bytes": 62247,
+      "present": true,
+      "schema": "agentos.rc12-quarantine-fetch-fail-closed-matrix.v1",
+      "status": "passed"
+    },
+    "quarantine_package_handoff": {
+      "path": ".workflow/artifacts/rc12-quarantine-fetch-verification/agentcore-security-package-handoff.json",
+      "sha256": "63e603c208e825d35ba8c44ca3b51505a0a78e267f7274a49b580bb235ed4803",
+      "size_bytes": 2046,
+      "present": true,
+      "schema": "agentos.rc12-agentcore-security-execution-package-handoff.v1",
+      "status": "blocked-before-agentcore-security-package"
+    },
+    "rc11_agentcore_security_handoff": {
+      "path": ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+      "sha256": "b92cfb75f23f3f5123328925a739582874df5cafe8a9ba70a7b9541a133eea58",
+      "size_bytes": 12421,
+      "present": true,
+      "schema": "agentos.rc11-installer-agentcore-security-handoff-result.v1",
+      "status": "passed"
+    },
+    "agent_core": {
+      "path": "crates/agent_core/src/lib.rs",
+      "sha256": "a201a54178f08c2af286cf6ea3b8ce8f7dd72ee2c20d4ccf3de55209b51f1d55",
+      "size_bytes": 842529,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "security_policy": {
+      "path": "crates/security_execution/src/policy.rs",
+      "sha256": "033f317679eec2a3adb68c9323bf1119c5717ce4b90dad8500f152c38b969ce9",
+      "size_bytes": 17597,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "security_tools": {
+      "path": "crates/security_execution/src/tools.rs",
+      "sha256": "0580af910ac39717d2d26a802019d44798f9ea18c2a0676398a3a46ab4061893",
+      "size_bytes": 53671,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "source.rc12_020.quarantine_complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-021 must consume completed RC12-020 quarantine fetch evidence.",
+      "evidence": {
+        "status": "passed",
+        "rc12_020_complete": true,
+        "fetch_state": "quarantine-fetch-denied-before-network",
+        "cases": 27,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "runtime.agentcore_security_surfaces_observed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-021 must bind to observed AgentCore PlanSpec/run-loop and SecurityExecution policy/tool surfaces.",
+      "evidence": {
+        "agent_core": {
+          "planspec_type": true,
+          "run_loop": true,
+          "awaiting_approval_state": true,
+          "effect_envelope_import": true
+        },
+        "security_policy": {
+          "policy_evaluator": true,
+          "high_risk_requires_exact_approval": true,
+          "deny_decision_kind": true
+        },
+        "security_tools": {
+          "content_fetch_tool": true,
+          "pkg_isolate_install_tool": true,
+          "pkg_host_install_tool": true,
+          "rollback_trigger_tool": true,
+          "privileged_human_approval_risk": true
+        }
+      }
+    },
+    {
+      "id": "agentcore.planspec_candidate_hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12 quarantine evidence must be hash-bound into an AgentCore PlanSpec package candidate.",
+      "evidence": {
+        "planspec_id": "rc12-agentcore-security-execution-package",
+        "planspec_hash": "21220a3c4cb67f70ac4089b9c9a42d4805476001b9fcc7369fca634d0dcf7a54",
+        "rc12_020_result_sha256": "912c08e2d34dc84495b4078fa13328e9e5117747295552091ad33d59b077cc00"
+      }
+    },
+    {
+      "id": "agentcore.executable_denied_until_preflight_verified",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "AgentCore PlanSpec must remain non-executable until object trust, quarantine, and pre-interpretation verification are proved.",
+      "evidence": {
+        "planspec_executable": false,
+        "installer_preflight_verified": false,
+        "blockers": [
+          "external-https-object-uri-not-published",
+          "object-uri-not-https",
+          "object-uri-not-immutable",
+          "declared-current-drift-zero-not-proved",
+          "freshness-window-missing",
+          "nonzero-declared-current-drift-count",
+          "rc12-publication-binding-drift",
+          "rc11-declared-current-drift-carried-forward",
+          "external-object-publication-not-allowed",
+          "freshness-window-not-bound",
+          "object-trust-not-allowed",
+          "installer-quarantine-fetch-not-run",
+          "agentcore-planspec-not-bound",
+          "security-execution-effect-envelope-not-bound",
+          "two-target-canary-not-enrolled",
+          "exact-approval-not-bound",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "external-descriptor-verification-denied",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run",
+          "installer-preflight-not-verified",
+          "two-target-canary-approval-not-bound",
+          "agentcore-planspec-not-executable",
+          "security-execution-effect-envelope-denied",
+          "controlled-install-activation-rollback-not-authorized",
+          "quarantine-fetch-not-allowed",
+          "audit-sink-not-bound",
+          "nonce-not-bound",
+          "approval-expiry-not-bound",
+          "policy-version-not-bound",
+          "rollback-baseline-not-approved-for-execution",
+          "support-recovery-not-approved-for-execution"
+        ]
+      }
+    },
+    {
+      "id": "security_execution.allow_requires_exact_gates",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution allow must be denied unless policy, object trust, quarantine, rollback, support/recovery, audit, approval, nonce, expiry, and target gates are present.",
+      "evidence": {
+        "decision_id": "rc12-security-execution-denied",
+        "allowed_effects": 0,
+        "denied_effects": [
+          "install",
+          "activation",
+          "rollback",
+          "support-upload",
+          "recovery",
+          "remote-dispatch",
+          "production-ring-mutation"
+        ]
+      }
+    },
+    {
+      "id": "package.fail_closed_cases",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-021 package negative cases must fail closed before install, activation, rollback, support upload, remote dispatch, or production mutation.",
+      "evidence": {
+        "cases": 17,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-021 must not execute PlanSpec, prepare effects, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": {
+        "planspec_executed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "authority.no_infra_or_secret_scope",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-021 must not grant mirror, signer, nginx, frontend, TUI, shell, model, remote dispatch, or production ring authority.",
+      "evidence": {
+        "mirror_authority": false,
+        "signer_authority": false,
+        "nginx_or_tls_authority": false,
+        "frontend_authority": false,
+        "tui_authority": false,
+        "normal_shell_authority": false,
+        "model_replay_authority": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC12-021 outputs must not contain PEM blocks, auth tokens, private key paths, signer internals, or secret identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "external-https-object-uri-not-published",
+    "object-uri-not-https",
+    "object-uri-not-immutable",
+    "declared-current-drift-zero-not-proved",
+    "freshness-window-missing",
+    "nonzero-declared-current-drift-count",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "object-trust-not-allowed",
+    "installer-quarantine-fetch-not-run",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "external-descriptor-verification-denied",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "installer-preflight-not-verified",
+    "two-target-canary-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-effect-envelope-denied",
+    "controlled-install-activation-rollback-not-authorized",
+    "quarantine-fetch-not-allowed",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "rollback-baseline-not-approved-for-execution",
+    "support-recovery-not-approved-for-execution"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "installer_preflight_evidence_fabricated": false,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "executable_planspec_created": false,
+    "security_execution_effect_allowed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "cases": 17,
+    "failed_cases": 0,
+    "rc12_021_complete": true,
+    "package_state": "denied",
+    "quarantine_evidence_bound": true,
+    "installer_preflight_verified": false,
+    "agentcore_planspec_candidate_projected": true,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "next_task": "RC12-030"
+  }
+}
