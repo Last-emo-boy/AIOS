@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260609-agentos-production-distro-rc14",
   "name": "Production Distro RC14",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-09T11:35:00+08:00",
-  "updated_at": "2026-06-09T16:40:00+08:00",
+  "updated_at": "2026-06-09T17:05:00+08:00",
   "source": "RC13 final audit; maestro-managed RC14 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc13",
   "goal": "Plan and execute AIOS-body local execution readiness for drift-zero, freshness, object trust, verified quarantine, executable AgentCore PlanSpec, SecurityExecution allow envelope, exact approval, controlled activation, rollback, and support/recovery evidence.",
@@ -16,7 +16,7 @@
     "Do not install, activate, rollback, mutate boot metadata, mutate active slots, mutate active artifact sets, mutate production rings, upload support bundles, or dispatch remote fleet actions unless a later task proves every gate and records the effect explicitly."
   ],
   "primary_acceptance": [
-    "RC14-041 controlled rollback support/recovery is complete; RC14-050 final closeout audit is the next executable task.",
+    "RC14-050 final closeout audit is complete; RC14 closes as a non-GA AIOS-body milestone with local trust and quarantine readiness proved while controlled execution remains denied.",
     "The plan covers drift-zero repair, freshness window, local object trust, verified quarantine preflight, AgentCore executable PlanSpec, SecurityExecution allow envelope, canary identity enrollment, exact approval, controlled activation, rollback, support/recovery, and final audit.",
     "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx/TLS, signer infrastructure, object storage provisioning, remote dispatch, private signing material, and production ring mutation out of scope.",
     "The plan keeps production_ready_claim=false until final audit proves every required gate."
@@ -93,15 +93,23 @@
       "completed_at": "2026-06-09T16:40:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-041-controlled-rollback-support-recovery.json",
       "commit": null
+    },
+    {
+      "task": "RC14-050",
+      "completed_at": "2026-06-09T17:05:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-050-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC14-050",
+  "next_task": "RC15-planning",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/FINAL-AUDIT-20260609-production-distro-rc13.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/final-rc13-closeout-summary.md",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-plan.md",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/final-rc14-closeout-summary.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
@@ -196,6 +204,11 @@
     ".workflow/artifacts/rc14-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
     ".workflow/artifacts/rc14-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
     ".workflow/artifacts/rc14-controlled-rollback-support-recovery/recovery-reference-index.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-041-controlled-rollback-support-recovery.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-041-controlled-rollback-support-recovery.json",
+    "scripts/run-rc14-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc14-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/final-rc14-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/RC14-050-final-closeout-audit.json"
   ]
 }

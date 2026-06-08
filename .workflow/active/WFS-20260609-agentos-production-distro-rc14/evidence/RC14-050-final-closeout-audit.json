@@ -1,0 +1,91 @@
+{
+  "schema": "agentos.rc14-final-closeout-audit-evidence.v1",
+  "generated_at": "2026-06-09T17:05:00+08:00",
+  "task": "RC14-050",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "script": {
+    "path": "scripts/run-rc14-final-closeout-audit.ps1",
+    "sha256": "8f1b64171e0b8ca33ceb803991420add46625826da856f1db087e1b54a6fcc40"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc14-final-closeout-audit/result.json",
+    "status": "passed",
+    "sha256": "1779fd38af421145f00254dda6472913f8720eab51c6961c4b11e87807d46bb8"
+  },
+  "final_audit": {
+    "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
+    "sha256": "dd0ecfd87768b365496e5876ebafb6ab3dbf94badf6fad30e0c933a7e43deca3",
+    "present": true
+  },
+  "closeout_summary": {
+    "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/final-rc14-closeout-summary.md",
+    "sha256": "f7d78f49c432b5ccdfef3484cd65af35fbca07964e60638e75712d17372652ea",
+    "present": true
+  },
+  "audit_surface": {
+    "checks": 16,
+    "failed_checks": 0,
+    "rc14_050_complete": true,
+    "verdict": "PASS",
+    "moved_beyond_rc13_fail_closed": true,
+    "local_trust_ready": true,
+    "verified_quarantine_ready": true,
+    "controlled_execution_ready": false,
+    "drift_count": 0,
+    "declared_current_drift_zero": true,
+    "freshness_window_current": true,
+    "local_object_trust_allowed": true,
+    "verified_quarantine_preflight": true,
+    "quarantine_payload_written": true,
+    "payload_interpreted": false,
+    "agentcore_planspec_candidate_materialized": true,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "enrolled_target_identity_count": 0,
+    "approval_granted": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ready_claim": false,
+    "next_task": "RC15-planning"
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_is_trust": false,
+    "external_payload_bytes_uploaded": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written_repo_local_only": true,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc14_050_complete": true,
+    "next_task": "RC15-planning",
+    "commit_required": true
+  }
+}
