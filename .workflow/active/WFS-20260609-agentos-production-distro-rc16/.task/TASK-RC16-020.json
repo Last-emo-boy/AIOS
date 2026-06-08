@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC16-020",
   "title": "bind user installer and updater preflight package from repo-local release evidence",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-2",
   "read_first": [
     ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
@@ -25,6 +25,10 @@
       "role": "preflight package"
     },
     {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/candidate-promotion-preflight.json",
+      "role": "candidate promotion verifier output bound by preflight"
+    },
+    {
       "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-020-installer-updater-preflight-package.json",
       "role": "task evidence"
     }
@@ -35,5 +39,8 @@
       "Preflight may report install/update-ready or exact denial, but it must not install, activate, rollback, upload, recover, dispatch, or mutate production state.",
       "Preflight treats mirror/frontend/signer reachability as non-authoritative."
     ]
-  }
+  },
+  "completed_at": "2026-06-09T23:15:00+08:00",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-020-installer-updater-preflight-package.json",
+  "next_task": "RC16-021"
 }

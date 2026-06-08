@@ -1,0 +1,454 @@
+{
+  "schema": "agentos.rc16-installer-updater-preflight-package-result.v1",
+  "generated_at": "2026-06-09T23:15:00+08:00",
+  "task": "RC16-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "preflight_id": "sha256:2bd08fb7d7eda7c320b52ff9a0b3d8429f68456204019910d2515f003c340dd8",
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "preflight_surface": {
+    "state": "installer-updater-preflight-bound-effects-denied",
+    "package_sha256": "2e397bf85154224fb7e816c3282b0530b0802795296614d3ce9b08f70fd1bfab",
+    "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+    "installable_media_manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+    "package_descriptor_result_sha256": "6a998625300e79f122d57fc22f7a55ae027f70110e6c668c8fa9d7cc736de2cc",
+    "release_reproducibility_sha256": "e4f067824bb8fef19d991b78c3651eff946322142b545b18e0dbcda3678077da",
+    "candidate_promotion_sha256": "a9ffe96a8ca21a790ff06cc4a2b5656fc3dc95c72c359e5a46a539f3908aed2d",
+    "evidence_bound": true,
+    "install_preflight_ready": true,
+    "update_preflight_ready": true,
+    "install_effect_preparation_allowed": false,
+    "update_effect_preparation_allowed": false,
+    "install_allowed": false,
+    "update_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "rc16-install-update-planspec-not-bound",
+      "rc16-security-execution-install-update-allow-not-bound",
+      "rc16-rollback-support-package-not-bound",
+      "rc16-local-release-channel-consumer-smoke-not-run"
+    ]
+  },
+  "outputs": {
+    "installer_updater_preflight_package": {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/installer-updater-preflight-package.json",
+      "sha256": "2e397bf85154224fb7e816c3282b0530b0802795296614d3ce9b08f70fd1bfab",
+      "preflight_id": "sha256:2bd08fb7d7eda7c320b52ff9a0b3d8429f68456204019910d2515f003c340dd8"
+    },
+    "candidate_promotion_preflight": {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/candidate-promotion-preflight.json",
+      "sha256": "a9ffe96a8ca21a790ff06cc4a2b5656fc3dc95c72c359e5a46a539f3908aed2d"
+    }
+  },
+  "source": {
+    "rc16_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+      "sha256": "013ffbb11abfa8e42d17277f667bbca9ac34038b151a3831ea3d359b7601cbaa",
+      "size_bytes": 7460,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc16_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+      "sha256": "c018c551c44c3f7ba834e6281e85073a887f4e3f595de3e44b08b07004e6eb34",
+      "size_bytes": 7043,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc16_release_package_result": {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+      "sha256": "53a01b6836f62dac4a9ba4c69c9f87ca319ea524ee06695f8e92aae2d2d90188",
+      "size_bytes": 26797,
+      "present": true,
+      "schema": "agentos.rc16-release-package-artifact-set-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_release_package_artifact_set": {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/release-package-artifact-set.json",
+      "sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+      "size_bytes": 35232,
+      "present": true,
+      "schema": "agentos.rc16-release-package-artifact-set.v1",
+      "status": "repo-local-distributable-release-package-artifact-set-projected",
+      "production_ready_claim": false
+    },
+    "rc16_installable_media_result": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef",
+      "size_bytes": 21051,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_installable_media_manifest": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+      "size_bytes": 22474,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest.v1",
+      "status": "installable-media-manifest-projected-install-update-gated",
+      "production_ready_claim": false
+    },
+    "rc16_package_descriptor_result": {
+      "path": ".workflow/artifacts/rc16-package-descriptor-fail-closed/result.json",
+      "sha256": "6a998625300e79f122d57fc22f7a55ae027f70110e6c668c8fa9d7cc736de2cc",
+      "size_bytes": 10662,
+      "present": true,
+      "schema": "agentos.rc16-package-descriptor-fail-closed-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_package_descriptor_matrix": {
+      "path": ".workflow/artifacts/rc16-package-descriptor-fail-closed/package-descriptor-fail-closed-matrix.json",
+      "sha256": "a73c653e165954cf66541013b754ab80a32693d19691f75111855da28a072292",
+      "size_bytes": 36950,
+      "present": true,
+      "schema": "agentos.rc16-package-descriptor-fail-closed-matrix.v1",
+      "status": "passed",
+      "production_ready_claim": null
+    },
+    "release_reproducibility_result": {
+      "path": ".workflow/artifacts/release-reproducibility-fast/result.json",
+      "sha256": "e4f067824bb8fef19d991b78c3651eff946322142b545b18e0dbcda3678077da",
+      "size_bytes": 322033,
+      "present": true,
+      "schema": "agentos.release-reproducibility.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "candidate_promotion_preflight": {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/candidate-promotion-preflight.json",
+      "sha256": "a9ffe96a8ca21a790ff06cc4a2b5656fc3dc95c72c359e5a46a539f3908aed2d",
+      "size_bytes": 2963583,
+      "present": true,
+      "schema": "agentos.candidate-promotion-manifest.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "release_provenance": {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "size_bytes": 824088,
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "update_metadata": {
+      "path": ".workflow/artifacts/release/update-metadata.json",
+      "sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+      "size_bytes": 4062,
+      "present": true,
+      "schema": "agentos.candidate-update-metadata.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "compatibility-projected-verification-blocked",
+      "production_ready_claim": false
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked",
+      "production_ready_claim": false
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only",
+      "production_ready_claim": false
+    },
+    "rc15_final_audit": {
+      "path": ".workflow/artifacts/rc15-final-closeout-audit/result.json",
+      "sha256": "49ae3d0288b2b6dc58786179b0e772aa3822763b22a93b8ff0ac7a2bacaa4fd4",
+      "size_bytes": 15729,
+      "present": true,
+      "schema": "agentos.rc15-final-closeout-audit-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc15_agentcore_planspec": {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/agentcore-planspec.json",
+      "sha256": "a43f5cb909c2dbfb2c374485402f05ace5b51d38cc49744f0fa26abbb28f1ab7",
+      "size_bytes": 5076,
+      "present": true,
+      "schema": "agentos.rc15-agentcore-planspec.v1",
+      "status": "agentcore-planspec-executable",
+      "production_ready_claim": false
+    },
+    "rc15_security_execution_decision": {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-allow-decision.json",
+      "sha256": "15b631b5ef370365b93b4963bbefff7912d23e5d69ee3a601be0308a17596618",
+      "size_bytes": 2499,
+      "present": true,
+      "schema": "agentos.rc15-security-execution-allow-decision.v1",
+      "status": "security-execution-allow-bound",
+      "production_ready_claim": false
+    },
+    "reproducibility_verifier": {
+      "path": "scripts/verify-release-reproducibility.ps1",
+      "sha256": "f7a9067b0cb3b095c3736fb48b387ff2a3bff9da76cdd62943c185d339514431",
+      "size_bytes": 59126,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "candidate_promotion_verifier": {
+      "path": "scripts/verify-candidate-promotion.ps1",
+      "sha256": "6b97f878217efa47af9dbdc95f4ee38ca966d9d33c1945744abcc654c163654b",
+      "size_bytes": 148589,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc16_020",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 must run after RC16-012 completes and while the plan pointer is at RC16-020, or during a completed rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC16-021",
+        "rc16_012_status": "completed",
+        "rc16_020_status": "completed"
+      }
+    },
+    {
+      "id": "contract.preflight_only.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 must consume the RC16 installer/update preflight contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+        "sha256": "c018c551c44c3f7ba834e6281e85073a887f4e3f595de3e44b08b07004e6eb34",
+        "size_bytes": 7043,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.rc16_010_011_012.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 requires completed release package, installable media, and descriptor fail-closed evidence.",
+      "evidence": {
+        "rc16_010": {
+          "checks": 12,
+          "failed_checks": 0,
+          "artifact_classes": 7,
+          "rc16_010_complete": true,
+          "next_task": "RC16-011"
+        },
+        "rc16_011": {
+          "checks": 13,
+          "failed_checks": 0,
+          "rootfs_runtime_artifacts": 15,
+          "boot_markers": 5,
+          "rc16_011_complete": true,
+          "next_task": "RC16-012"
+        },
+        "rc16_012": {
+          "checks": 7,
+          "failed_checks": 0,
+          "cases": 33,
+          "passed_cases": 33,
+          "failed_cases": 0,
+          "rc16_012_complete": true,
+          "next_task": "RC16-020"
+        }
+      }
+    },
+    {
+      "id": "source.reproducibility.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 must bind release reproducibility evidence without claiming production readiness.",
+      "evidence": {
+        "status": "passed",
+        "divergent": 0,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "source.candidate_promotion.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 must bind candidate promotion verifier output before preflight can be considered bound.",
+      "evidence": {
+        "status": "passed",
+        "blockers": 0,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "identity.package_media_descriptor.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Package descriptor, installable media, and release package identities must match exactly.",
+      "evidence": {
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_package_id": "production-distro-rc16-repo-local-distributable-package",
+        "release_id": "production-distro-rc8-current-artifacts",
+        "media_release_id": "production-distro-rc8-current-artifacts"
+      }
+    },
+    {
+      "id": "release.bytes.update_metadata.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Preflight must bind payload bytes, initramfs manifest, provenance, and inactive-slot update metadata.",
+      "evidence": {
+        "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "provenance_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "update_stage_target": "inactive-slot",
+        "rollback_required": true
+      }
+    },
+    {
+      "id": "compatibility.rollback.support.rc15.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Preflight must bind compatibility, rollback/support, and RC15 controlled local execution evidence.",
+      "evidence": {
+        "target_arch": [
+          "x86_64"
+        ],
+        "kernel_family": "linux-lts",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_index_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "rc15_ready": true
+      }
+    },
+    {
+      "id": "fixtures.preflight_denials.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer/updater preflight negative cases must deny without trusting transport/display surfaces or broadening authority.",
+      "evidence": {
+        "cases": 22,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "authority.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 must not prepare or execute install/update effects, fetch/upload payloads, sign, dispatch, rollback, upload support, recover, or mutate production state.",
+      "evidence": {
+        "endpoint_probe_performed": false,
+        "frontend_output_trusted": false,
+        "signer_reachability_trusted": false,
+        "shell_output_trusted": false,
+        "model_replay_trusted": false,
+        "object_storage_ui_trusted": false,
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "cryptographic_signing_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-020 package output must not contain key blocks, private key paths, auth tokens, or public identity strings.",
+      "evidence": null
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "frontend_output_trusted": false,
+    "signer_reachability_trusted": false,
+    "shell_output_trusted": false,
+    "model_replay_trusted": false,
+    "object_storage_ui_trusted": false,
+    "payload_upload_performed": false,
+    "payload_published": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_effect_prepared": false,
+    "update_effect_prepared": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "blockers": [
+    "rc16-install-update-planspec-not-bound",
+    "rc16-security-execution-install-update-allow-not-bound",
+    "rc16-rollback-support-package-not-bound",
+    "rc16-local-release-channel-consumer-smoke-not-run"
+  ],
+  "summary": {
+    "checks": 11,
+    "failed_checks": 0,
+    "cases": 22,
+    "failed_cases": 0,
+    "preflight_evidence_bound": true,
+    "install_effect_preparation_allowed": false,
+    "update_effect_preparation_allowed": false,
+    "rc16_020_complete": true,
+    "next_task": "RC16-021"
+  }
+}

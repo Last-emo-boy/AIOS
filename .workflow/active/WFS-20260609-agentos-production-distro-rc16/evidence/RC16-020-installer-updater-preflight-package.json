@@ -1,0 +1,95 @@
+{
+  "schema": "agentos.rc16-installer-updater-preflight-package-evidence.v1",
+  "generated_at": "2026-06-09T23:15:00+08:00",
+  "task": "RC16-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
+  "script": {
+    "path": "scripts/project-rc16-installer-updater-preflight-package.ps1",
+    "sha256": "63982f8732f179c342ff1d58dfc0d56a111d133ff27e5e0212a3e8b38528cccf"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+    "status": "passed",
+    "sha256": "c7e4b7f79fee84812ae36308dbafad302bfa4477830d05419094c3e18358fa13"
+  },
+  "outputs": {
+    "installer_updater_preflight_package": {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/installer-updater-preflight-package.json",
+      "sha256": "2e397bf85154224fb7e816c3282b0530b0802795296614d3ce9b08f70fd1bfab",
+      "preflight_id": "sha256:2bd08fb7d7eda7c320b52ff9a0b3d8429f68456204019910d2515f003c340dd8"
+    },
+    "candidate_promotion_preflight": {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/candidate-promotion-preflight.json",
+      "sha256": "a9ffe96a8ca21a790ff06cc4a2b5656fc3dc95c72c359e5a46a539f3908aed2d"
+    }
+  },
+  "preflight_surface": {
+    "state": "installer-updater-preflight-bound-effects-denied",
+    "package_sha256": "2e397bf85154224fb7e816c3282b0530b0802795296614d3ce9b08f70fd1bfab",
+    "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+    "installable_media_manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+    "package_descriptor_result_sha256": "6a998625300e79f122d57fc22f7a55ae027f70110e6c668c8fa9d7cc736de2cc",
+    "release_reproducibility_sha256": "e4f067824bb8fef19d991b78c3651eff946322142b545b18e0dbcda3678077da",
+    "candidate_promotion_sha256": "a9ffe96a8ca21a790ff06cc4a2b5656fc3dc95c72c359e5a46a539f3908aed2d",
+    "evidence_bound": true,
+    "install_preflight_ready": true,
+    "update_preflight_ready": true,
+    "install_effect_preparation_allowed": false,
+    "update_effect_preparation_allowed": false,
+    "install_allowed": false,
+    "update_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "rc16-install-update-planspec-not-bound",
+      "rc16-security-execution-install-update-allow-not-bound",
+      "rc16-rollback-support-package-not-bound",
+      "rc16-local-release-channel-consumer-smoke-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "frontend_output_trusted": false,
+    "signer_reachability_trusted": false,
+    "shell_output_trusted": false,
+    "model_replay_trusted": false,
+    "object_storage_ui_trusted": false,
+    "payload_upload_performed": false,
+    "payload_published": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_effect_prepared": false,
+    "update_effect_prepared": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "completion": {
+    "rc16_020_complete": true,
+    "next_task": "RC16-021",
+    "commit_required": true
+  }
+}
