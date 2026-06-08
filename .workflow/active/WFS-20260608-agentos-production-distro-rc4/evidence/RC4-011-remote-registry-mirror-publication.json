@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-011",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:30:00+08:00",
+  "summary": "Implemented remote registry mirror publication replay as a local-only, hash-bound replay over the RC4 hosted transport manifest and local mirror fixture. The replay writes a mirror lockfile and mirror publication artifact, verifies 8 mirror entries against current file hashes, and performs no network transfer, remote upload, signing, activation, rollback, active registry mutation, active slot mutation, production ring mutation, or TUI-authority broadening.",
+  "deliverables": {
+    "script": "scripts/replay-rc4-remote-registry-mirror-publication.ps1",
+    "script_sha256": "f8514eb39309ce4d954c966c3a9e67ac69361fbfbc3810bd0a853ee9936698a3",
+    "result": ".workflow/artifacts/rc4-remote-registry-mirror-publication/result.json",
+    "result_sha256": "19127e7792e6cdce709884f5f443d7fdaf13071ee79a8fc848e7614ef9a1a097",
+    "mirror_lockfile": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json",
+    "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+    "mirror_publication": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-011-remote-registry-mirror-publication.json"
+  },
+  "verification": {
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/replay-rc4-remote-registry-mirror-publication.ps1 -FailOnBlocked",
+    "status": "passed",
+    "checks": 12,
+    "blockers": 0,
+    "rc4_011_complete": true,
+    "mirror_entries": 8,
+    "entry_hash_mismatches": 0,
+    "mirror_lockfile_written": true,
+    "mirror_publication_written": true,
+    "production_ready_claim": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "cryptographic_verification_performed": false,
+    "network_transfer_performed": false,
+    "remote_upload_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "handoff": {
+    "next_task": "RC4-012",
+    "required_next": "Implement fleet-ring rollout plan precondition audit using hosted transport, mirror lockfile, and mirror publication evidence."
+  }
+}

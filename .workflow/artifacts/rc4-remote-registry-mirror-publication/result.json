@@ -1,0 +1,239 @@
+{
+  "schema": "agentos.rc4-remote-registry-mirror-publication-result.v1",
+  "generated_at": "2026-06-08T09:30:00+08:00",
+  "checked_at": "2026-06-08T09:15:01.6590887+08:00",
+  "task": "RC4-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc4_011_complete": true,
+  "mirror_lockfile_written": true,
+  "mirror_publication_written": true,
+  "local_private_key_material_used": false,
+  "cryptographic_signing_performed": false,
+  "cryptographic_verification_performed": false,
+  "network_transfer_performed": false,
+  "remote_upload_performed": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_registry_mutated": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": false,
+  "tui_authority": false,
+  "source_artifacts": {
+    "plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+      "sha256": "41193dfc5702bfe8fe7e3375ddb2adbe8a3e307be1d1071d155dcbf49366e0e7",
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "hosted_transport_result": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/result.json",
+      "sha256": "6cf6be3136291d730cad1fd5afefa005772f253ad23d34b756a3aabcdbad0064",
+      "schema": "agentos.rc4-hosted-release-transport-result.v1",
+      "status": "passed"
+    },
+    "hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+      "schema": "agentos.rc4-hosted-release-transport-manifest.v1",
+      "status": "published-locally"
+    },
+    "local_mirror_fixture": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/local-mirror-fixture.json",
+      "sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+      "schema": "agentos.rc4-local-mirror-fixture.v1",
+      "status": "fixture-ready"
+    },
+    "threat_model": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-004-hosted-transport-fleet-threat-model.json",
+      "sha256": "346cf7aa244986910f3fbbf79e043d7894e694412541072c9143034db4d680f0",
+      "schema": "agentos.production-distro-rc4-task-evidence.v1",
+      "status": "completed"
+    }
+  },
+  "outputs": {
+    "mirror_lockfile": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json",
+      "sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+      "present": true
+    },
+    "mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+      "present": true
+    }
+  },
+  "checks": [
+    {
+      "id": "rc4.plan.current_task",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 plan must point at RC4-011 before mirror publication replay.",
+      "evidence": "RC4-011"
+    },
+    {
+      "id": "hosted_transport.result_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4-010 hosted transport result must be passed.",
+      "evidence": {
+        "checks": 15,
+        "blockers": 0,
+        "rc4_010_complete": true,
+        "hosted_transport_manifest_written": true,
+        "local_mirror_fixture_written": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "hosted_transport.manifest_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport manifest must be local, hash-bound, and non-GA.",
+      "evidence": {
+        "id": "production-candidate-rc4-hosted-transport",
+        "source_channel": "production-candidate-rc3",
+        "hosted_network_required_for_ga": true,
+        "network_transfer_performed": false,
+        "local_fixture_only": true,
+        "immutable": true,
+        "append_only": true,
+        "content_addressed": true,
+        "in_place_head_mutation_allowed": false,
+        "update_authority": "AgentCore PlanSpec + SecurityExecutionEngine",
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "local_mirror.fixture_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local mirror fixture must bind the current hosted manifest file hash and remain local-only.",
+      "evidence": {
+        "id": "local-rc4-hosted-transport-mirror",
+        "authoritative_remote": false,
+        "local_fixture_only": true,
+        "network_transfer_performed": false,
+        "active_registry_mutated": false,
+        "snapshot_freshness_window": "P7D",
+        "snapshot_state": "fresh-fixture"
+      }
+    },
+    {
+      "id": "local_mirror.required_entries_present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local mirror fixture must carry every required RC3 evidence entry.",
+      "evidence": {
+        "missing": [],
+        "present": [
+          "rc3_final_audit",
+          "production_verification",
+          "publication_manifest",
+          "channel_index",
+          "consumer_smoke",
+          "support_recovery",
+          "signing_publication_gate",
+          "revocation_log"
+        ]
+      }
+    },
+    {
+      "id": "local_mirror.entry_hashes_current",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Every local mirror fixture entry hash must match the current file.",
+      "evidence": []
+    },
+    {
+      "id": "threat_model.mirror_cases_defined",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 threat model must define mirror staleness and unsigned/revoked metadata coverage.",
+      "evidence": {
+        "hosted_manifest_drift_covered": true,
+        "mirror_staleness_covered": true,
+        "unsigned_revoked_metadata_covered": true,
+        "fleet_target_substitution_covered": true,
+        "ring_skip_covered": true,
+        "rollback_baseline_loss_covered": true,
+        "remote_control_plane_authority_creep_covered": true,
+        "tui_model_authority_creep_covered": true,
+        "support_secret_leakage_covered": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "mirror_publication.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror publication replay must not transfer network bytes, sign, activate, rollback, mutate registry, mutate ring state, or grant TUI authority.",
+      "evidence": {
+        "network_transfer_performed": false,
+        "remote_upload_performed": false,
+        "cryptographic_signing_performed": false,
+        "cryptographic_verification_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "mirror_lockfile.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror lockfile must be written.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json",
+        "sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef"
+      }
+    },
+    {
+      "id": "mirror_publication.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror publication replay artifact must be written.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+        "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+      }
+    },
+    {
+      "id": "mirror_outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror outputs must not contain private keys, signer tokens, or private authority paths.",
+      "evidence": null
+    },
+    {
+      "id": "mirror_outputs.host_path_free",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror outputs must not contain host-local absolute paths.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 12,
+    "blockers": 0,
+    "rc4_011_complete": true,
+    "mirror_entries": 8,
+    "entry_hash_mismatches": 0,
+    "mirror_lockfile_written": true,
+    "mirror_publication_written": true,
+    "production_ready_claim": false,
+    "network_transfer_performed": false,
+    "active_registry_mutated": false,
+    "production_ring_mutated": false
+  }
+}
