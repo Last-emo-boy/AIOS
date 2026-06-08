@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260608-agentos-production-distro-rc10",
   "milestone": "Production Distro RC10",
-  "status": "active",
+  "status": "completed",
   "objective": "Move AIOS from RC9 fail-closed external object and controlled execution denial into controlled enablement: publish a real immutable external HTTPS object descriptor, reconcile declared/current drift to zero, verify installer quarantine fetch against the published object, enroll at least two canary targets, bind exact approval to AgentCore and SecurityExecutionEngine, then produce controlled activation and rollback evidence without claiming GA readiness.",
   "waves": [
     {
@@ -101,14 +101,14 @@
       "tasks": [
         {
           "id": "RC10-040",
-          "status": "pending",
+          "status": "completed",
           "title": "run Production Distro RC10 final audit and next milestone planning",
           "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json"
         }
       ]
     }
   ],
-  "current_task": "RC10-040",
+  "current_task": null,
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
   "acceptance_gates": {
     "hosted_endpoint_domain": "aios.w33d.xyz",
