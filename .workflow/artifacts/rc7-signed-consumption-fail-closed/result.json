@@ -1,0 +1,861 @@
+﻿{
+    "schema":  "agentos.rc7-signed-consumption-fail-closed-result.v1",
+    "generated_at":  "2026-06-08T13:14:59.7967174+08:00",
+    "task":  "RC7-011",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "source":  {
+                   "rc7_consumption_result":  {
+                                                  "path":  ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+                                                  "sha256":  "289940b5024bb9fb4cf3d33d2adf3b363c789921cee08711bad6868e7f746904",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc7-installer-signed-consumption-result.v1",
+                                                  "status":  "passed"
+                                              },
+                   "rc7_consumption_report":  {
+                                                  "path":  ".workflow/artifacts/rc7-installer-signed-consumption/consumption-report.json",
+                                                  "sha256":  "0d34fd20f688e8af33837edb308fe22d431ab96ed714b8dde5b3eb5a7e5b4f22",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc7-installer-signed-consumption-report.v1",
+                                                  "status":  null
+                                              },
+                   "rc7_signed_metadata_revocation":  {
+                                                          "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+                                                          "sha256":  "8ccf04045c5e6aa63ccc934c46d72f03a17a8484657abd101c5a01a21b7e54a3",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc7-signed-metadata-revocation-result.v1",
+                                                          "status":  "passed"
+                                                      },
+                   "payload_index":  {
+                                         "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-payload-index-after-signed-metadata.json",
+                                         "sha256":  "78fe09b5d4e430dabd53a2ab9c7fffe564ce1392cc74dd521830e0e4b69db3d2",
+                                         "present":  true,
+                                         "schema":  "agentos.rc7-hosted-payload-index.v1",
+                                         "status":  "signed-metadata-projected"
+                                     },
+                   "install_bootstrap":  {
+                                             "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/install-bootstrap-after-signed-metadata.json",
+                                             "sha256":  "193da8244585956ce9803234abb70c310ace850a32840e72f5de25d01d767555",
+                                             "present":  true,
+                                             "schema":  "agentos.rc7-install-bootstrap.v1",
+                                             "status":  "signed-metadata-preflight-only"
+                                         },
+                   "payload_signatures":  {
+                                              "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/payload-signatures-after-rc7.json",
+                                              "sha256":  "3bfc67be87dd60e7fd6793a941bce24a713b4c9c555a0eec71c791163720188c",
+                                              "present":  true,
+                                              "schema":  "agentos.rc7-installable-payload-signatures.v1",
+                                              "status":  "signature-projection-published-verification-blocked"
+                                          },
+                   "signed_metadata":  {
+                                           "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+                                           "sha256":  "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+                                           "present":  true,
+                                           "schema":  "agentos.rc7-signed-metadata-projection.v1",
+                                           "status":  "signed-metadata-projected-verification-blocked"
+                                       },
+                   "revocation_snapshot":  {
+                                               "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+                                               "sha256":  "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+                                               "present":  true,
+                                               "schema":  "agentos.rc7-revocation-snapshot.v1",
+                                               "status":  "revocation-current-projected"
+                                           },
+                   "rc7_compatibility_rollback_contract":  {
+                                                               "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+                                                               "sha256":  "5cde221db01d9f501a2afb7a8aef93000c24c2f3f6cb031f80aaebe60c3db05d"
+                                                           }
+               },
+    "cases":  [
+                  {
+                      "id":  "base-current-consumption-remains-blocked",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "hosted-byte-hash-canonicalization",
+                                               "cryptographic-signature-not-present",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "missing-signed-metadata-reference",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "missing-signed-metadata-reference"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "missing-signed-metadata-reference",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "signed-metadata-hash-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "signed-metadata-hash-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "signed-metadata-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "signature-claims-revocation-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "signature-claims-revocation-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "signature-claims-revocation-mismatch",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "missing-revocation-snapshot",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "missing-revocation-snapshot"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "missing-revocation-snapshot",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "signature-claims-revocation-mismatch",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "revocation-snapshot-hash-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "revocation-snapshot-hash-mismatch",
+                                               "signature-claims-revocation-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "revocation-snapshot-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "signature-claims-revocation-mismatch",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "revoked-signing-key",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "revoked-signing-key"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "revoked-signing-key",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "stale-revocation-snapshot",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "stale-revocation-snapshot"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "stale-revocation-snapshot",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "cryptographic-signature-missing",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "cryptographic-signature-not-present"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "mirror-signing-authority",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "mirror-signing-authority"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "mirror-signing-authority",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "missing-installer-compatibility-contract",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "missing-installer-compatibility-contract"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "compatibility-schema-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "compatibility-schema-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "compatibility-schema-mismatch",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "compatibility-hash-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "compatibility-hash-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "compatibility-hash-mismatch",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "missing-rollback-baseline",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "missing-rollback-baseline"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "rollback-baseline-schema-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "rollback-baseline-schema-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "rollback-baseline-schema-mismatch",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "rollback-baseline-hash-mismatch",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "rollback-baseline-hash-mismatch"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "rollback-baseline-hash-mismatch",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "production-ready-claim",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "production-ready-claim"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "production-ready-claim",
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "payload-authority-broadening",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "payload-authority-broadening",
+                                               "authority-broadening"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-authority-broadening",
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present",
+                                               "authority-broadening"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "remote-dispatch-or-tui-authority",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "authority-broadening"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present",
+                                               "authority-broadening"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "storage-drift-not-resolved",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  },
+                  {
+                      "id":  "tls-and-exact-approval-missing",
+                      "status":  "passed",
+                      "expected_reasons":  [
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "missing_expected_reasons":  [
+
+                                                   ],
+                      "observed_state":  "verification-blocked",
+                      "observed_reasons":  [
+                                               "payload-manifest-hash-mismatch",
+                                               "payload-checksums-hash-mismatch",
+                                               "declared-current-hash-drift",
+                                               "large-payload-storage-policy-pending",
+                                               "cryptographic-signature-not-present",
+                                               "hosted-byte-hash-canonicalization",
+                                               "missing-installer-compatibility-contract",
+                                               "missing-rollback-baseline",
+                                               "tls-required-before-ga-claim",
+                                               "exact-approval-not-present"
+                                           ],
+                      "side_effects":  {
+                                           "install_performed":  false,
+                                           "activation_performed":  false,
+                                           "rollback_execution_performed":  false,
+                                           "active_slot_mutated":  false,
+                                           "production_ring_mutated":  false,
+                                           "support_upload_performed":  false,
+                                           "remote_dispatch_enabled":  false,
+                                           "tui_authority":  false
+                                       }
+                  }
+              ],
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "remote_publication_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false
+                   },
+    "checks":  [
+                   {
+                       "id":  "source.rc7_010.result",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC7-010 consumption report must pass and observe signed metadata plus revocation references.",
+                       "evidence":  {
+                                        "checks":  12,
+                                        "blockers":  0,
+                                        "installer_steps":  13,
+                                        "installer_blockers":  7,
+                                        "rc7_010_complete":  true,
+                                        "next_task":  "RC7-011"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc7_010.blocked_installer",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC7-010 installer state must remain verification-blocked with recorded blockers.",
+                       "evidence":  {
+                                        "state":  "verification-blocked",
+                                        "installer_blockers":  7
+                                    }
+                   },
+                   {
+                       "id":  "source.rc7_003.contract",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC7-003 contract must define compatibility, rollback baseline, and fail-closed cases.",
+                       "evidence":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md"
+                   },
+                   {
+                       "id":  "fixtures.all_cases_passed",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "All RC7 signed consumption negative fixtures must fail closed.",
+                       "evidence":  {
+                                        "cases":  21,
+                                        "failed_cases":  0
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.no_side_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must not perform install, activation, rollback, ring mutation, dispatch, or TUI authority.",
+                       "evidence":  null
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "summary":  {
+                    "checks":  5,
+                    "blockers":  0,
+                    "cases":  21,
+                    "passed_cases":  21,
+                    "failed_cases":  0,
+                    "rc7_011_complete":  true,
+                    "next_task":  "RC7-012"
+                }
+}

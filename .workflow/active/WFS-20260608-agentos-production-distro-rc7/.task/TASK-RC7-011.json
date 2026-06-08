@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-011",
+  "title": "add signed metadata revocation and rollback fail-closed fixtures",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-installer-signed-consumption/consumption-report.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc7-signed-consumption-fail-closed.ps1",
+      "role": "local negative fixture verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-011-signed-consumption-fail-closed.json",
+      "role": "task evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/workflow-session.json",
+      "role": "workflow session"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Signed metadata, revocation, signature claim, compatibility, rollback baseline, byte-hash canonicalization, storage, TLS, exact approval, and authority-broadening negative fixtures all fail closed.",
+      "Every fixture remains in verification-blocked state and records expected reasons.",
+      "The verifier performs no remote publication, signing, install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, private key access, or TUI authority expansion.",
+      "The next task is RC7-012 rollback baseline publication to install metadata projection."
+    ]
+  }
+}

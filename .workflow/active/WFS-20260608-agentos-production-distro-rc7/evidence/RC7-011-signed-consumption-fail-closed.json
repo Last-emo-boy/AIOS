@@ -1,0 +1,67 @@
+{
+  "schema": "agentos.rc7-signed-consumption-fail-closed-evidence.v1",
+  "generated_at": "2026-06-08T15:45:00+08:00",
+  "task": "RC7-011",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/verify-rc7-signed-consumption-fail-closed.ps1",
+    "sha256": "e486b3c96a3207cea9303ebb0e75481002c3b9fc1e1f4e1d21550707c4c158e2"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    "sha256": "b80cd6135bdbf97ffe9ae9f901cb73e76a7e57271e4ed3b6f266215b1f70baae",
+    "status": "passed",
+    "checks": 5,
+    "blockers": 0,
+    "cases": 21,
+    "passed_cases": 21,
+    "failed_cases": 0
+  },
+  "covered_fail_closed_reasons": [
+    "hosted-byte-hash-canonicalization",
+    "missing-signed-metadata-reference",
+    "signed-metadata-hash-mismatch",
+    "signature-claims-revocation-mismatch",
+    "missing-revocation-snapshot",
+    "revocation-snapshot-hash-mismatch",
+    "revoked-signing-key",
+    "stale-revocation-snapshot",
+    "cryptographic-signature-not-present",
+    "mirror-signing-authority",
+    "missing-installer-compatibility-contract",
+    "compatibility-schema-mismatch",
+    "compatibility-hash-mismatch",
+    "missing-rollback-baseline",
+    "rollback-baseline-schema-mismatch",
+    "rollback-baseline-hash-mismatch",
+    "production-ready-claim",
+    "payload-authority-broadening",
+    "authority-broadening",
+    "declared-current-hash-drift",
+    "large-payload-storage-policy-pending",
+    "tls-required-before-ga-claim",
+    "exact-approval-not-present"
+  ],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "remote_publication_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_011_complete": true,
+    "wave_1_in_progress": true,
+    "next_task": "RC7-012",
+    "commit_required": true
+  }
+}
