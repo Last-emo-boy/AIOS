@@ -1,0 +1,35 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-004",
+  "title": "publish RC6 mirror portal and bounded endpoint surface",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/provision-rc6-mirror-portal.ps1",
+      "role": "remote provisioning and validation script"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+      "role": "deployment and validation result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-004-mirror-portal.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Root path serves a static RC6 AIOS mirror portal.",
+      "Portal exposes payload, install bootstrap, channel, health, descriptor, and support metadata links.",
+      "Remote mirror publishes bounded /payloads and /install metadata without large payload storage.",
+      "Nginx blocks write methods and directory listing.",
+      "Result evidence passes with zero blockers and no signing, install, activation, rollback, upload, dispatch, production ring, or TUI authority."
+    ]
+  }
+}

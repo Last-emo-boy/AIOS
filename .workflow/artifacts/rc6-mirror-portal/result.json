@@ -1,0 +1,304 @@
+{
+  "schema": "agentos.rc6-mirror-portal-result.v1",
+  "generated_at": "2026-06-08T11:54:37.1464023+08:00",
+  "checked_at": "2026-06-08T11:54:45.6230754+08:00",
+  "task": "RC6-004",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/",
+    "http://aios.w33d.xyz/health.json",
+    "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+    "http://aios.w33d.xyz/channel/index.json",
+    "http://aios.w33d.xyz/payloads/index.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-metadata-preview/manifest.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-metadata-preview/checksums.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-metadata-preview/signatures.json",
+    "http://aios.w33d.xyz/install/bootstrap.json"
+  ],
+  "local_outputs": {
+    "index_html": ".workflow/artifacts/rc6-mirror-portal/index.html",
+    "mirror_css": ".workflow/artifacts/rc6-mirror-portal/mirror.css",
+    "mirror_js": ".workflow/artifacts/rc6-mirror-portal/mirror.js",
+    "health": ".workflow/artifacts/rc6-mirror-portal/health.json",
+    "descriptor": ".workflow/artifacts/rc6-mirror-portal/mirror-descriptor.json",
+    "channel": ".workflow/artifacts/rc6-mirror-portal/hosted-channel-index.json",
+    "payload_index": ".workflow/artifacts/rc6-mirror-portal/payloads-index.json",
+    "payload_manifest": ".workflow/artifacts/rc6-mirror-portal/payload-manifest.json",
+    "payload_checksums": ".workflow/artifacts/rc6-mirror-portal/payload-checksums.json",
+    "payload_signatures": ".workflow/artifacts/rc6-mirror-portal/payload-signatures.json",
+    "install_bootstrap": ".workflow/artifacts/rc6-mirror-portal/install-bootstrap.json",
+    "nginx": ".workflow/artifacts/rc6-mirror-portal/nginx-aios.w33d.xyz.conf"
+  },
+  "output_hashes": {
+    "index_html_sha256": "8f5eb9792fd7b1b815eeec23698ded4d3a26ed544925a399fe297cb4284fd904",
+    "mirror_css_sha256": "a973e291d7a22d8903c4ba8fd432a33e19936759aeeb4a37c68e45a0d8a12867",
+    "mirror_js_sha256": "d231de4e08fe2b126dab52d6799e1e7adae2e4d7b5423b2ea5e3754999610ff9",
+    "health_sha256": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+    "descriptor_sha256": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+    "channel_sha256": "7960ad71b8e54a632694ef7346929c87c264d7be30cb0b812d970f5d98e6197f",
+    "payload_index_sha256": "4f6bf178388df9f20e040eacab1899eb2a0faae93f81a3e4d7cf6734f4c57fb6",
+    "payload_manifest_sha256": "dfab2b52f34ef4a9c9fd2f0dd172517013cbabfd3d9c56cee6b057e931d317ec",
+    "payload_checksums_sha256": "7cac6a89682f27f0426b139524e5e4b50c05135a37fc6aeaa5afb4498feb75ab",
+    "payload_signatures_sha256": "e8c21e91fd41dc52341a7675a706ce31b38b6c3be8149acfd39638032ea61938",
+    "install_bootstrap_sha256": "4d61a2293476a403098b4701448e2f2edeec3319cd96e855271a7a3de83f6a1e"
+  },
+  "source_bindings": {
+    "rc5_final_audit_sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+    "rc5_support_recovery_result_sha256": "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+    "rc5_canary_proof_result_sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+    "rc6_payload_channel_contract_sha256": "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+    "rc6_bootstrap_installer_boundary_sha256": "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+    "rc6_tls_storage_signed_payload_threat_model_sha256": "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873"
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "no_external_dependencies": true,
+    "metadata_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "tls_required_before_ga_claim": true
+  },
+  "checks": [
+    {
+      "id": "local.outputs.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 mirror portal and metadata outputs must be generated locally before remote publication.",
+      "evidence": {
+        "files": [
+          "index_html",
+          "mirror_css",
+          "mirror_js",
+          "health",
+          "descriptor",
+          "channel",
+          "payload_index",
+          "payload_manifest",
+          "payload_checksums",
+          "payload_signatures",
+          "install_bootstrap",
+          "nginx"
+        ]
+      }
+    },
+    {
+      "id": "local.outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated portal and metadata must not contain private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "local.metadata_size_policy",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Generated metadata must fit RC6 metadata-only size ceilings.",
+      "evidence": {
+        "health": 755,
+        "descriptor": 1299,
+        "channel": 4493,
+        "payload_index": 2403,
+        "install_bootstrap": 2387
+      }
+    },
+    {
+      "id": "channel.before.available",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Existing channel index must be reachable before RC6 publication.",
+      "evidence": {
+        "status_code": 200
+      }
+    },
+    {
+      "id": "source.bindings.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 metadata must bind RC5 final evidence and RC6 boundary documents.",
+      "evidence": {
+        "rc5_final_audit_sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+        "rc5_support_recovery_result_sha256": "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+        "rc5_canary_proof_result_sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+        "rc6_payload_channel_contract_sha256": "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+        "rc6_bootstrap_installer_boundary_sha256": "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+        "rc6_tls_storage_signed_payload_threat_model_sha256": "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873"
+      }
+    },
+    {
+      "id": "payload.no_install_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload metadata must remain verification-blocked until signatures and storage policy exist.",
+      "evidence": {
+        "entry": "verification-blocked",
+        "signature_available": false
+      }
+    },
+    {
+      "id": "install.bootstrap.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install bootstrap must remain metadata-preflight-only.",
+      "evidence": {
+        "state": "verification-blocked",
+        "blockers": [
+          "tls-not-yet-ga-gated",
+          "large-payload-storage-deferred",
+          "payload-signature-not-published",
+          "revocation-snapshot-not-published",
+          "installer-compatibility-contract-pending",
+          "rollback-execution-drill-pending",
+          "exact-operator-approval-pending"
+        ]
+      }
+    },
+    {
+      "id": "nginx.reload",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nginx must validate and reload with RC6 portal locations.",
+      "evidence": [
+        "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r",
+        "nginx: configuration file /etc/nginx/nginx.conf test is successful\r",
+        "active\r",
+        "aios/production-distro-rc6-metadata-preview/checksums.json 1032\r",
+        "aios/production-distro-rc6-metadata-preview/manifest.json 2465\r",
+        "aios/production-distro-rc6-metadata-preview/signatures.json 758\r",
+        "bootstrap.json 2385\r",
+        "index.json 2401\r",
+        "index.json 3654\r",
+        "index.json 4491\r",
+        "manifest.json 1377\r",
+        "mirror.css 7013\r",
+        "mirror.js 9908\r",
+        "README.txt 298\r",
+        "recovery.json 6211\r",
+        "user-release.json 1756\r",
+        "8f5eb9792fd7b1b815eeec23698ded4d3a26ed544925a399fe297cb4284fd904  index.html\r",
+        "a973e291d7a22d8903c4ba8fd432a33e19936759aeeb4a37c68e45a0d8a12867  assets/mirror.css\r",
+        "d231de4e08fe2b126dab52d6799e1e7adae2e4d7b5423b2ea5e3754999610ff9  assets/mirror.js\r",
+        "e17794febb01792d4abf48d7285797c44c74e45fda1e7b59be2a62168148bccb  health.json\r",
+        "ce0f3246083cc0460ecd6f5006b8d43b558888881aec92c6c7092d229e1d2191  .well-known/aios/mirror.json\r",
+        "f7b8b0a7deadcd9456673e134ae45d28f8eb4268a374c3f4eccd5d58a7734bee  channel/index.json\r",
+        "bcc502eeea20d5ccb3329b048eb0f33b9ed3db67fe0a442cb33e522740594568  payloads/index.json\r",
+        "77fe86f883fe73a62d113df10fe84d198c64fa69313e9b1436ba6419508aa1b6  install/bootstrap.json\r",
+        "9c16d7fee60e7243bf81d41e2a318df176f906375e6d95b867d6aedcb9c302ca  payloads/aios/production-distro-rc6-metadata-preview/manifest.json\r",
+        "53b1b547253f269f6da3031549ae22aaafece217107ee1da8d4aed628ed83a46  payloads/aios/production-distro-rc6-metadata-preview/checksums.json\r",
+        "3df359166003b0b988c0c727bb931394f2f2b872658af4d748c7de276cd02e7c  payloads/aios/production-distro-rc6-metadata-preview/signatures.json"
+      ]
+    },
+    {
+      "id": "remote.http.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Portal assets and RC6 metadata endpoints must return HTTP 200 through resolve-pinned validation.",
+      "evidence": {
+        "root": 200,
+        "css": 200,
+        "js": 200,
+        "health": 200,
+        "descriptor": 200,
+        "channel": 200,
+        "payload_index": 200,
+        "install_bootstrap": 200
+      }
+    },
+    {
+      "id": "remote.semantics.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC6 metadata must remain non-GA, metadata-only, unsigned, and non-authoritative.",
+      "evidence": {
+        "payload_status": "verification-blocked",
+        "signature_available": false,
+        "install_state": "verification-blocked"
+      }
+    },
+    {
+      "id": "frontend.portal.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Root frontend must render the RC6 mirror portal app shell, endpoint grid, and trust path.",
+      "evidence": null
+    },
+    {
+      "id": "frontend.no_external_dependencies",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Frontend must not depend on external scripts, styles, images, or fonts.",
+      "evidence": null
+    },
+    {
+      "id": "remote.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote portal and metadata responses must not expose private key or token markers.",
+      "evidence": null
+    },
+    {
+      "id": "remote.directory_listing.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload directory listing must be blocked.",
+      "evidence": 404
+    },
+    {
+      "id": "remote.write_methods.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST must be blocked for root and payload metadata.",
+      "evidence": {
+        "root": 403,
+        "payload_index": 403
+      }
+    },
+    {
+      "id": "remote.hash_bindings.match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC6 metadata must carry the local projection hashes and endpoint bindings.",
+      "evidence": {
+        "manifest_expected": "9c16d7fee60e7243bf81d41e2a318df176f906375e6d95b867d6aedcb9c302ca",
+        "manifest_live": "9c16d7fee60e7243bf81d41e2a318df176f906375e6d95b867d6aedcb9c302ca",
+        "checksums_expected": "53b1b547253f269f6da3031549ae22aaafece217107ee1da8d4aed628ed83a46",
+        "checksums_live": "53b1b547253f269f6da3031549ae22aaafece217107ee1da8d4aed628ed83a46",
+        "signatures_expected": "3df359166003b0b988c0c727bb931394f2f2b872658af4d748c7de276cd02e7c",
+        "signatures_live": "3df359166003b0b988c0c727bb931394f2f2b872658af4d748c7de276cd02e7c",
+        "channel_payload_index_expected": "bcc502eeea20d5ccb3329b048eb0f33b9ed3db67fe0a442cb33e522740594568",
+        "channel_payload_index_live": "bcc502eeea20d5ccb3329b048eb0f33b9ed3db67fe0a442cb33e522740594568",
+        "channel_install_bootstrap_expected": "77fe86f883fe73a62d113df10fe84d198c64fa69313e9b1436ba6419508aa1b6",
+        "channel_install_bootstrap_live": "77fe86f883fe73a62d113df10fe84d198c64fa69313e9b1436ba6419508aa1b6"
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 16,
+    "blockers": 0,
+    "rc6_004_complete": true,
+    "frontend_url": "http://aios.w33d.xyz/",
+    "payload_index": "http://aios.w33d.xyz/payloads/index.json",
+    "install_bootstrap": "http://aios.w33d.xyz/install/bootstrap.json",
+    "production_ready_claim": false
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schema": "agentos.rc6-mirror-portal-evidence.v1",
+  "generated_at": "2026-06-08T13:25:00+08:00",
+  "task": "RC6-004",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/provision-rc6-mirror-portal.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+    "status": "passed",
+    "checks": 16,
+    "blockers": 0
+  },
+  "remote": {
+    "host": "47.101.11.109",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "nginx_site": "/etc/nginx/sites-available/aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/",
+    "http://aios.w33d.xyz/health.json",
+    "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+    "http://aios.w33d.xyz/channel/index.json",
+    "http://aios.w33d.xyz/payloads/index.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-metadata-preview/manifest.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-metadata-preview/checksums.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-metadata-preview/signatures.json",
+    "http://aios.w33d.xyz/install/bootstrap.json"
+  ],
+  "frontend": {
+    "root_path": "/",
+    "assets": [
+      "/assets/mirror.css",
+      "/assets/mirror.js"
+    ],
+    "external_dependencies": false,
+    "renders_payload_metadata": true,
+    "renders_install_bootstrap": true,
+    "renders_trust_path_canvas": true
+  },
+  "metadata_surface": {
+    "payload_index": "/payloads/index.json",
+    "install_bootstrap": "/install/bootstrap.json",
+    "release_id": "production-distro-rc6-metadata-preview",
+    "payload_status": "verification-blocked",
+    "storage_mode": "metadata-only",
+    "large_artifact_storage_deferred": true,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "no_external_dependencies": true,
+    "metadata_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "tls_required_before_ga_claim": true
+  },
+  "completion": {
+    "rc6_004_complete": true,
+    "next_task": "RC6-010",
+    "commit_required": true
+  }
+}
