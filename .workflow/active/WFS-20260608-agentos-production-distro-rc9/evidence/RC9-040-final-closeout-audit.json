@@ -1,0 +1,70 @@
+{
+  "schema": "agentos.rc9-final-closeout-audit-evidence.v1",
+  "generated_at": "2026-06-08T23:59:00+08:00",
+  "task": "RC9-040",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": {
+    "path": "scripts/run-rc9-final-closeout-audit.ps1",
+    "sha256": "e83d037316eb4a8715a4c700adbc79ac8a74f3f6bffc28116b5486b0509c5f32"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc9-final-closeout-audit/result.json",
+    "status": "passed",
+    "sha256": "a1561a76e92374823a1559aa5e033a52875ac639ce3c12de3f277beae0f92ed8"
+  },
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json",
+      "sha256": "535efb30b9c1c83663cc3aee5b9ea9ca443dc6bd6d3b5b4640b75e789302bcf1",
+      "verdict": "PASS"
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/final-rc9-closeout-summary.md",
+      "sha256": "f402b9c4d316bc0848c4ab5f52db979745b52ca81b5d7fdedcfa02bf6af028dd"
+    }
+  },
+  "audit_surface": {
+    "verdict": "PASS",
+    "checks": 16,
+    "blockers": 0,
+    "publication_state": "publication-denied",
+    "drift_state": "drift-denied",
+    "installer_fetch_state": "fetch-denied-before-network",
+    "target_set_state": "target-set-enrollment-denied",
+    "binding_state": "execution-binding-denied",
+    "activation_state": "activation-denied",
+    "rollback_state": "rollback-denied",
+    "support_recovery_bound": true,
+    "production_ready_claim": false,
+    "next_milestone": "Production Distro RC10"
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc9_040_complete": true,
+    "next_milestone": "Production Distro RC10",
+    "commit_required": true
+  }
+}

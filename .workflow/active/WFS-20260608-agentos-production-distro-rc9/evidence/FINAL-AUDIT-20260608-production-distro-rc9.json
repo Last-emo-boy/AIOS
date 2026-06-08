@@ -1,0 +1,459 @@
+{
+  "schema": "agentos.production-distro-rc9-final-audit.v1",
+  "generated_at": "2026-06-08T23:59:00+08:00",
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "milestone": "Production Distro RC9",
+  "verdict": "PASS",
+  "decision": "rc9-closeout-pass-next-milestone-planning",
+  "production_ready_claim": false,
+  "hosted_endpoint_domain": "aios.w33d.xyz",
+  "signer_endpoint_domain": "sign.w33d.xyz",
+  "objective": "external object publication denial, artifact drift denial, installer fetch denial, controlled canary denial, rollback denial, and support/recovery binding without GA claim",
+  "task_results": [
+    {
+      "id": "RC9-001",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-002",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-003",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-010",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-011",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-012",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-020",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-021",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-022",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-030",
+      "status": "completed"
+    },
+    {
+      "id": "RC9-031",
+      "status": "completed"
+    }
+  ],
+  "acceptance_coverage": [
+    {
+      "requirement": "external immutable object publication is denied until credential-free HTTPS object URI exists",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-external-object-publication/result.json",
+        ".workflow/artifacts/rc9-external-object-publication/external-object-publication-denial.json"
+      ]
+    },
+    {
+      "requirement": "declared/current artifact drift blocks external object trust",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+        ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json"
+      ]
+    },
+    {
+      "requirement": "installer fetch denies before network and quarantine writes",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+        ".workflow/artifacts/rc9-external-object-installer-fetch/installer-fail-closed-evidence.json"
+      ]
+    },
+    {
+      "requirement": "two-node canary target enrollment denies with insufficient targets",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
+        ".workflow/artifacts/rc9-two-node-canary-enrollment/target-enrollment-denial.json"
+      ]
+    },
+    {
+      "requirement": "exact approval, AgentCore PlanSpec, and SecurityExecutionEngine binding deny execution",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+        ".workflow/artifacts/rc9-exact-approval-execution-binding/security-execution-decision.json"
+      ]
+    },
+    {
+      "requirement": "controlled canary activation remains denied and side-effect free",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+        ".workflow/artifacts/rc9-controlled-canary-activation/activation-denial-evidence.json"
+      ]
+    },
+    {
+      "requirement": "controlled rollback drill remains rollback-ready but execution-denied",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-controlled-rollback-drill/result.json",
+        ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-drill-denial-evidence.json"
+      ]
+    },
+    {
+      "requirement": "support/recovery evidence is redacted, local-only, upload-disabled, recovery-disabled, and bound to controlled execution denial",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc9-controlled-execution-support-recovery/result.json",
+        ".workflow/artifacts/rc9-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+        ".workflow/artifacts/rc9-controlled-execution-support-recovery/recovery-reference-index.json"
+      ]
+    }
+  ],
+  "execution_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "publication_state": "publication-denied",
+    "external_object_url_published": false,
+    "drift_state": "drift-denied",
+    "drift_count": 13,
+    "installer_fetch_state": "fetch-denied-before-network",
+    "network_fetch_attempted": false,
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0,
+    "required_minimum_target_count": 2,
+    "exact_approval_granted": false,
+    "agentcore_planspec_bound": false,
+    "security_execution_approval_bound": false,
+    "activation_state": "activation-denied",
+    "activation_performed": false,
+    "rollback_state": "rollback-denied",
+    "rollback_readiness_ready": true,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "invariants_verified": {
+    "production_ready_claim": false,
+    "mirror_is_root_of_trust": false,
+    "signer_authority": false,
+    "payload_bytes_hosted_on_mirror": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "source_artifacts": {
+    "plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
+      "sha256": "92ba03a7db7954ce9aed7195d82456c2562f6fcb640f830d52ce1ed8842b80f7",
+      "size_bytes": 6253,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "completed"
+    },
+    "workflow_session": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/workflow-session.json",
+      "sha256": "cd11de2b657ecd6dc8f2618a130ff94320ca92af54575cc897d64a926fbfa56f",
+      "size_bytes": 16829,
+      "present": true,
+      "schema": null,
+      "status": "completed"
+    },
+    "rc8_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+      "sha256": "99f45f45df286bbb6fa42a438af66078535382c9e5e757a2cb27fa6ac6529b4a",
+      "size_bytes": 43585,
+      "present": true,
+      "schema": "agentos.production-distro-rc8-final-audit.v1",
+      "status": null
+    },
+    "external_object_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-storage-controlled-canary-contract.md",
+      "sha256": "b390596dfd5af95c5671e8c8e555cb19aad34703330a3fe741d4af2fb0b966e8",
+      "size_bytes": 8604,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "drift_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/external-object-descriptor-drift-reconciliation-contract.md",
+      "sha256": "c0a4b3d4a4d9de6a89791ea8ce7b9f1c006633e1467e60cff231c8f14c9665af",
+      "size_bytes": 9025,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "controlled_execution_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md",
+      "sha256": "feda521e522cbdce15135079a603800fd251a134c8864b1fbadaf946ff50f8d2",
+      "size_bytes": 8104,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "publication_result": {
+      "path": ".workflow/artifacts/rc9-external-object-publication/result.json",
+      "sha256": "aeb2219fe7677b20c799369914030ccd147d8daf78607fe5ce25ca3cdb94d69b",
+      "size_bytes": 18860,
+      "present": true,
+      "schema": "agentos.rc9-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "publication_candidate": {
+      "path": ".workflow/artifacts/rc9-external-object-publication/external-object-publication-candidate.json",
+      "sha256": "5ccd1b5e1cadb0a830d385216fc2f21ffee631344a1734ad9d818f92ecb47d2f",
+      "size_bytes": 15397,
+      "present": true,
+      "schema": "agentos.rc9-external-object-publication-candidate.v1",
+      "status": "publication-denied"
+    },
+    "publication_denial": {
+      "path": ".workflow/artifacts/rc9-external-object-publication/external-object-publication-denial.json",
+      "sha256": "db63d51c4cf7ffef429deeb0a098879d0392fffd5bff6bd725e8b627168c740c",
+      "size_bytes": 1934,
+      "present": true,
+      "schema": "agentos.rc9-external-object-publication-denial.v1",
+      "status": "publication-denied"
+    },
+    "drift_result": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+      "sha256": "6e51c6e4a27a2dfd94af5e7e80fbe4513ad4fdea3d332a7359870a0f88ece2b6",
+      "size_bytes": 22598,
+      "present": true,
+      "schema": "agentos.rc9-artifact-drift-reconciliation-result.v1",
+      "status": "passed"
+    },
+    "drift_reconciliation": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/artifact-drift-reconciliation.json",
+      "sha256": "2daa3da3a98adacac262b3ab5ea99b262a4843b63515a1ec61e05f12b27c9f82",
+      "size_bytes": 38726,
+      "present": true,
+      "schema": "agentos.rc9-artifact-drift-reconciliation.v1",
+      "status": "drift-denied"
+    },
+    "drift_denial": {
+      "path": ".workflow/artifacts/rc9-artifact-drift-reconciliation/drift-denial.json",
+      "sha256": "f8a3cfef240c8629a5828f226ed881321b1ee13f497ba31288899e6b55b000f2",
+      "size_bytes": 2692,
+      "present": true,
+      "schema": "agentos.rc9-artifact-drift-denial.v1",
+      "status": "drift-denied"
+    },
+    "installer_fetch_result": {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+      "sha256": "d179794c07e41181d4461fe35f808efde97b56b74304a778d3ec02f448e0e4f1",
+      "size_bytes": 14047,
+      "present": true,
+      "schema": "agentos.rc9-external-object-installer-fetch-result.v1",
+      "status": "passed"
+    },
+    "installer_fetch_report": {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/external-object-fetch-report.json",
+      "sha256": "405bcf1bb25405861e6031b12e8bdd01aea5c54b0e56db4c3927c73a47e0c12a",
+      "size_bytes": 1935,
+      "present": true,
+      "schema": "agentos.rc9-external-object-fetch-report.v1",
+      "status": "fetch-denied-before-network"
+    },
+    "installer_fail_closed": {
+      "path": ".workflow/artifacts/rc9-external-object-installer-fetch/installer-fail-closed-evidence.json",
+      "sha256": "387ee1891043e0dcee1bb6a1e7bb7e0239658f1c96f7c4c1739954d9c9203f95",
+      "size_bytes": 19772,
+      "present": true,
+      "schema": "agentos.rc9-installer-fetch-fail-closed-evidence.v1",
+      "status": "passed"
+    },
+    "target_enrollment": {
+      "path": ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
+      "sha256": "fba42f260a31e031acb57cc7d39f43b8ba8b0316a0e1e9d3b319c705c9aa0a62",
+      "size_bytes": 11479,
+      "present": true,
+      "schema": "agentos.rc9-two-node-canary-enrollment-result.v1",
+      "status": "passed"
+    },
+    "canary_target_set": {
+      "path": ".workflow/artifacts/rc9-two-node-canary-enrollment/canary-target-set.json",
+      "sha256": "6f6aca703803f7677feac8394e5e79b9e029c0770df83d474b39c04e6c17c420",
+      "size_bytes": 5243,
+      "present": true,
+      "schema": "agentos.rc9-canary-target-set.v1",
+      "status": "target-set-enrollment-denied"
+    },
+    "target_enrollment_denial": {
+      "path": ".workflow/artifacts/rc9-two-node-canary-enrollment/target-enrollment-denial.json",
+      "sha256": "a9e276ba7d360431116bdae821167490aedc386981350d02f6b0c9bccf4c1825",
+      "size_bytes": 1697,
+      "present": true,
+      "schema": "agentos.rc9-target-enrollment-denial.v1",
+      "status": "target-set-enrollment-denied"
+    },
+    "execution_binding": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+      "sha256": "56fce75e99de12333a10f7abe40a5b1d27f6924bab1b7e64ec0a440267e580a3",
+      "size_bytes": 12627,
+      "present": true,
+      "schema": "agentos.rc9-exact-approval-execution-binding-result.v1",
+      "status": "passed"
+    },
+    "exact_approval_binding": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/exact-approval-binding.json",
+      "sha256": "00675e5f8d03be8d9691d95a8ec823ab72b5489846e652cc8ba031aa26b98a6a",
+      "size_bytes": 3015,
+      "present": true,
+      "schema": "agentos.rc9-exact-approval-binding.v1",
+      "status": "exact-approval-denied"
+    },
+    "agentcore_planspec_binding": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/agentcore-planspec-binding.json",
+      "sha256": "69a75cd4bd8cb79f77b897c3c29389105d98251c142e82394024293456a40807",
+      "size_bytes": 3086,
+      "present": true,
+      "schema": "agentos.rc9-agentcore-planspec-binding.v1",
+      "status": "planspec-binding-denied"
+    },
+    "security_execution_decision": {
+      "path": ".workflow/artifacts/rc9-exact-approval-execution-binding/security-execution-decision.json",
+      "sha256": "1b3c488f56df5b7d4de9d78837ac02bc30623ae07c7b453efc4ba2e9ffa350dc",
+      "size_bytes": 2315,
+      "present": true,
+      "schema": "agentos.rc9-security-execution-decision.v1",
+      "status": "security-execution-denied"
+    },
+    "activation": {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+      "sha256": "16d868ec4b617851dd4aefc0d846c3a2cf5ca8451a784dc17f716c983ff23eee",
+      "size_bytes": 17039,
+      "present": true,
+      "schema": "agentos.rc9-controlled-canary-activation-result.v1",
+      "status": "passed"
+    },
+    "activation_denial": {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "2271463d2f518a863a3e491dbe55bf36ccb20e61ea6ffabb5823d5cc9f64ed62",
+      "size_bytes": 6120,
+      "present": true,
+      "schema": "agentos.rc9-controlled-canary-activation-denial-evidence.v1",
+      "status": "activation-denied"
+    },
+    "activation_handoff": {
+      "path": ".workflow/artifacts/rc9-controlled-canary-activation/controlled-activation-handoff.json",
+      "sha256": "46ed3ff2c4b25a760dae494ee32a2feb97884bf0182e96721a4ff91befbf466e",
+      "size_bytes": 1442,
+      "present": true,
+      "schema": "agentos.rc9-controlled-activation-handoff.v1",
+      "status": "blocked-by-activation-denial"
+    },
+    "rollback": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/result.json",
+      "sha256": "02030401060d697cf96857d76ba0213a4b833c9027568a8c8fe8848ba48f878b",
+      "size_bytes": 17227,
+      "present": true,
+      "schema": "agentos.rc9-controlled-rollback-drill-result.v1",
+      "status": "passed"
+    },
+    "rollback_planspec": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-planspec-requirement.json",
+      "sha256": "8c97e05bde1a61c4ba9473795440090e873c3fc7db0fd0c2ec6e84e94fee6e4c",
+      "size_bytes": 6861,
+      "present": true,
+      "schema": "agentos.rc9-rollback-planspec-requirement.v1",
+      "status": "rollback-planspec-required-execution-blocked"
+    },
+    "rollback_denial": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "sha256": "60949c435b71194ed6ee00785edc61524b4248f78861e714001eebeb71f94a29",
+      "size_bytes": 7206,
+      "present": true,
+      "schema": "agentos.rc9-controlled-rollback-drill-denial-evidence.v1",
+      "status": "rollback-denied"
+    },
+    "rollback_handoff": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/controlled-rollback-handoff.json",
+      "sha256": "f312c8239ff43e2470f14e23f04dfb07fec3a9f7128449814d40b0f171c92ea3",
+      "size_bytes": 1460,
+      "present": true,
+      "schema": "agentos.rc9-controlled-rollback-handoff.v1",
+      "status": "blocked-by-rollback-denial"
+    },
+    "support_recovery": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/result.json",
+      "sha256": "d359543bea833b43f03db4f57476910c45f609ac2451a8df45f4121432d4f953",
+      "size_bytes": 16421,
+      "present": true,
+      "schema": "agentos.rc9-controlled-execution-support-recovery-result.v1",
+      "status": "passed"
+    },
+    "support_recovery_chain": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "cd313c8fbec1fcf01026677fbda1323153ae261c52b5ff85554d229a7ff79521",
+      "size_bytes": 5000,
+      "present": true,
+      "schema": "agentos.rc9-controlled-execution-support-recovery-chain.v1",
+      "status": "support-recovery-bound-controlled-execution-blocked"
+    },
+    "support_bundle": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "64b85505891694a44c15bfaaabf4477bbdd764c77f322f55ab4a114b3e53793c",
+      "size_bytes": 5923,
+      "present": true,
+      "schema": "agentos.rc9-controlled-execution-support-bundle-projection.v1",
+      "status": "redacted-local-support-projection"
+    },
+    "recovery_index": {
+      "path": ".workflow/artifacts/rc9-controlled-execution-support-recovery/recovery-reference-index.json",
+      "sha256": "a6bf88252a0d5ac26410ce0bdb92e1e7ca5e2fe3c5615bab6cc645853190256f",
+      "size_bytes": 4505,
+      "present": true,
+      "schema": "agentos.rc9-controlled-execution-recovery-reference-index.v1",
+      "status": "projection-only-recovery-execution-blocked"
+    }
+  },
+  "remaining_blockers_before_ga_or_execution": [
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-denied",
+    "installer-quarantine-fetch-not-run",
+    "target-set-not-enrolled",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-PlanSpec-not-bound",
+    "AgentCore-rollback-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "SecurityExecutionEngine-rollback-approval-not-bound",
+    "controlled-canary-activation-not-performed",
+    "rollback-exact-operator-approval-not-granted",
+    "rollback-execution-not-authorized",
+    "real-external-object-storage-not-integrated"
+  ],
+  "next_milestone": {
+    "id": "Production Distro RC10",
+    "title": "real external object publication and controlled execution enablement",
+    "reason": "RC9 closes the fail-closed external object, drift, installer fetch, canary, rollback, and support/recovery binding chain. RC10 should publish a real immutable external HTTPS object URI, reconcile drift to zero, verify quarantine fetch against the published object, enroll at least two canary targets, bind exact operator approval to AgentCore and SecurityExecutionEngine, and then execute controlled activation plus rollback evidence."
+  }
+}

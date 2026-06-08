@@ -1,0 +1,48 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC9-040",
+  "title": "run Production Distro RC9 final audit and next milestone planning",
+  "status": "completed",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/plan.json",
+    ".workflow/artifacts/rc9-external-object-publication/result.json",
+    ".workflow/artifacts/rc9-artifact-drift-reconciliation/result.json",
+    ".workflow/artifacts/rc9-external-object-installer-fetch/result.json",
+    ".workflow/artifacts/rc9-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc9-exact-approval-execution-binding/result.json",
+    ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc9-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc9-controlled-execution-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc9-final-closeout-audit.ps1",
+      "role": "RC9 final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc9-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/final-rc9-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/RC9-040-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "All RC9 pre-closeout tasks are completed.",
+      "RC9 external object publication, artifact drift reconciliation, installer fetch, canary target enrollment, exact approval execution binding, controlled activation, controlled rollback, and support/recovery binding evidence all pass with expected fail-closed surfaces.",
+      "Final audit records remaining GA/execution blockers and next milestone planning for RC10.",
+      "No signing, payload upload, payload download, install, activation, rollback, recovery execution, active slot, boot metadata, persistent state, production ring, support upload, remote dispatch, model, shell, mirror, signer, or TUI authority is granted."
+    ]
+  }
+}
