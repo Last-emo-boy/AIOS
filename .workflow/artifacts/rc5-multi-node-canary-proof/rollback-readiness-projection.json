@@ -1,0 +1,34 @@
+﻿{
+    "schema":  "agentos.rc5-canary-rollback-readiness-projection.v1",
+    "generated_at":  "2026-06-08T11:24:50.6432313+08:00",
+    "status":  "rollback-baseline-bound-execution-not-run",
+    "production_ready_claim":  false,
+    "projection_only":  true,
+    "rollback_readiness_ready":  true,
+    "rollback_execution_allowed_by_mirror":  false,
+    "rollback_execution_performed":  false,
+    "rollback_verified":  true,
+    "rollback_previous_equals_restored":  true,
+    "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+    "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+    "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+    "rc4_rollback_projection_sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+    "required_before_canary_execution":  [
+                                             "rollback-baseline-bound-to-canary-approval",
+                                             "SecurityExecutionEngine-rollback-plan-ready",
+                                             "support-recovery-redaction-evidence-present",
+                                             "mirror-not-allowed-to-execute-rollback"
+                                         ],
+    "blocked_execution_reason":  "RC5 proves rollback readiness from RC4 baseline evidence; rollback execution remains a future SecurityExecutionEngine PlanSpec, not a mirror or TUI action.",
+    "invariants":  {
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "persistent_state_mutated":  false,
+                       "activation_attempted":  false,
+                       "rollback_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false
+                   }
+}

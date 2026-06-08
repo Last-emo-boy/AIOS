@@ -1,0 +1,78 @@
+{
+  "schema": "agentos.rc5-multi-node-canary-proof-evidence.v1",
+  "generated_at": "2026-06-08T12:25:00+08:00",
+  "task": "RC5-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "publisher": {
+    "path": "scripts/project-rc5-multi-node-canary-proof.ps1",
+    "sha256": "4931b32527d6cd7404ac7b51cec8e6e8fde90f6be9856e067693084642765104"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+    "sha256": "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+    "status": "passed",
+    "checks": 19,
+    "blockers": 0
+  },
+  "local_outputs": {
+    "multi_node_canary_plan_projection": {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+      "sha256": "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc"
+    },
+    "rollback_readiness_projection": {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+      "sha256": "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f"
+    }
+  },
+  "verified_controls": {
+    "hosted_mirror_service_ready": true,
+    "hosted_endpoint_verifier_ready": true,
+    "hosted_metadata_fail_closed_ready": true,
+    "mirror_frontend_ready": true,
+    "user_release_channel_ready": true,
+    "live_endpoint_metadata_ready": true,
+    "rc4_staged_rollout_smoke_ready": true,
+    "fleet_authority_ready": true,
+    "rollback_readiness_ready": true,
+    "remote_rings_blocked": true,
+    "minimum_canary_node_count_required": 2,
+    "observed_canary_node_count": 1,
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "canary_execution_allowed": false,
+    "canary_execution_performed": false
+  },
+  "remaining_blockers_before_canary_execution": [
+    "two-or-more-enrolled-canary-target-nodes",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "release-payload-storage-deferred",
+    "payload-signature-bundle-deferred",
+    "rollback-execution-plan-not-executed",
+    "tls-required-before-ga-claim"
+  ],
+  "invariants": {
+    "metadata_only": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "network_upload_performed": false,
+    "remote_mutation_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc5_021_complete": true,
+    "next_task": "RC5-022",
+    "commit_required": true
+  }
+}

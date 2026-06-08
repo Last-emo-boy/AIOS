@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc5",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC5-021",
+    "current_task":  "RC5-022",
     "lifecycle_position":  "rc5-contracts-started",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc5-021-multi-node-canary-proof",
+    "next_allowed_action":  "execute-rc5-022-hosted-support-recovery",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T12:15:00+08:00",
+    "updated_at":  "2026-06-08T12:25:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC4 is closed with hosted release transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, hosted/fleet promotion gate integration, and final closeout audit. Production Distro RC5 is active: RC5-001 defines the controlled hosted mirror service and distributable channel contract for aios.w33d.xyz on the operator-provided host 47.101.11.109, RC5-002 defines the user-facing install/update channel boundary, RC5-003 defines hosted mirror service threat model and non-GA gates, RC5-010 provisions the remote metadata-only nginx mirror framework, RC5-011 verifies hosted endpoints, RC5-012 proves hosted metadata fail-closed fixtures, RC5-013 adds the AIOS mirror frontend, and RC5-020 publishes user bootstrap/release-channel metadata. RC5 remains non-GA: no signing service, no activation, no rollback execution, no active registry/slot mutation, no production ring mutation, no large artifact storage, no TLS GA claim, and no TUI authority. Next allowed action is RC5-021 multi-node canary proof.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC4 is closed with hosted release transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, hosted/fleet promotion gate integration, and final closeout audit. Production Distro RC5 is active: RC5-001 defines the controlled hosted mirror service and distributable channel contract for aios.w33d.xyz on the operator-provided host 47.101.11.109, RC5-002 defines the user-facing install/update channel boundary, RC5-003 defines hosted mirror service threat model and non-GA gates, RC5-010 provisions the remote metadata-only nginx mirror framework, RC5-011 verifies hosted endpoints, RC5-012 proves hosted metadata fail-closed fixtures, RC5-013 adds the AIOS mirror frontend, RC5-020 publishes user bootstrap/release-channel metadata, and RC5-021 proves controlled multi-node canary preconditions plus rollback readiness while keeping canary execution blocked by design. RC5 remains non-GA: no signing service, no activation, no rollback execution, no active registry/slot mutation, no production ring mutation, no large artifact storage, no TLS GA claim, and no TUI authority. Next allowed action is RC5-022 hosted support/recovery projection.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1043,6 +1043,30 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-020-user-release-channel.json"
+                      },
+                      {
+                          "type":  "rc5_script",
+                          "path":  "scripts/project-rc5-multi-node-canary-proof.ps1"
+                      },
+                      {
+                          "type":  "rc5_artifact",
+                          "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/result.json"
+                      },
+                      {
+                          "type":  "rc5_artifact",
+                          "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json"
+                      },
+                      {
+                          "type":  "rc5_artifact",
+                          "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-021.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-021-multi-node-canary-proof.json"
                       }
                   ]
 }

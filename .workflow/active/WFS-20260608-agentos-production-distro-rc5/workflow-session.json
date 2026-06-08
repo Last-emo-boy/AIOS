@@ -3,7 +3,7 @@
   "name": "Production Distro RC5",
   "status": "active",
   "created_at": "2026-06-08T11:00:00+08:00",
-  "updated_at": "2026-06-08T12:15:00+08:00",
+  "updated_at": "2026-06-08T12:25:00+08:00",
   "source": "TASK.md; RC4 final audit; operator-hosted mirror request",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
   "goal": "Stand up a controlled hosted mirror service framework for aios.w33d.xyz, then prove hosted metadata verification and canary-readiness without weakening RC4 authority boundaries.",
@@ -70,9 +70,15 @@
       "completed_at": "2026-06-08T12:15:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-020-user-release-channel.json",
       "commit": null
+    },
+    {
+      "task": "RC5-021",
+      "completed_at": "2026-06-08T12:25:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-021-multi-node-canary-proof.json",
+      "commit": null
     }
   ],
-  "next_task": "RC5-021",
+  "next_task": "RC5-022",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
@@ -114,6 +120,12 @@
     ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
     ".workflow/artifacts/rc5-user-release-channel/hosted-channel-index-after-user-release.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-020.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-020-user-release-channel.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-020-user-release-channel.json",
+    "scripts/project-rc5-multi-node-canary-proof.ps1",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-021.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-021-multi-node-canary-proof.json"
   ]
 }

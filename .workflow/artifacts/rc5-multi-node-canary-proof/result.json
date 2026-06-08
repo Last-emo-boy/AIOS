@@ -1,0 +1,685 @@
+﻿{
+    "schema":  "agentos.rc5-multi-node-canary-proof-result.v1",
+    "generated_at":  "2026-06-08T11:24:50.6432313+08:00",
+    "checked_at":  "2026-06-08T11:24:50.7030508+08:00",
+    "task":  "RC5-021",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "rc5_021_complete":  true,
+    "canary_preconditions_proven":  true,
+    "controlled_multi_node_canary_execution_allowed":  false,
+    "controlled_multi_node_canary_execution_performed":  false,
+    "rollback_readiness_proven":  true,
+    "rollback_execution_performed":  false,
+    "exact_operator_approval_required":  true,
+    "exact_operator_approval_granted":  false,
+    "exact_operator_approval_hash":  null,
+    "minimum_canary_node_count_required":  2,
+    "observed_canary_node_count":  1,
+    "remote":  {
+                   "host":  "47.101.11.109",
+                   "domain":  "aios.w33d.xyz",
+                   "validation_used_local_dns":  false,
+                   "validation_resolve_override":  "aios.w33d.xyz:80:47.101.11.109",
+                   "remote_mutation_performed":  false
+               },
+    "verified":  {
+                     "hosted_mirror_service":  true,
+                     "hosted_endpoint_verifier":  true,
+                     "hosted_metadata_fail_closed":  true,
+                     "mirror_frontend":  true,
+                     "user_release_channel":  true,
+                     "local_channel_artifacts_hash_bound":  true,
+                     "live_endpoint_metadata":  true,
+                     "rc4_staged_rollout_smoke":  true,
+                     "rc4_rollout_projection":  true,
+                     "fleet_rollout_authority":  true,
+                     "remote_rings_blocked":  true,
+                     "multi_node_enrollment_blocked_until_real_nodes_exist":  true,
+                     "canary_execution_blocked_by_design":  true,
+                     "rollback_readiness":  true,
+                     "rollback_readiness_projection":  true
+                 },
+    "bindings":  {
+                     "rc4_final_audit_sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+                     "rc5_hosted_service_result_sha256":  "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+                     "rc5_endpoint_verifier_result_sha256":  "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+                     "rc5_hosted_metadata_fail_closed_sha256":  "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+                     "rc5_frontend_result_sha256":  "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+                     "rc5_user_release_result_sha256":  "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+                     "bootstrap_manifest_sha256":  "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529",
+                     "user_release_channel_sha256":  "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554",
+                     "hosted_channel_index_sha256":  "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1",
+                     "rc4_staged_rollout_smoke_sha256":  "e29e77d6943ef1c5f46da7dceb480c299a308eab710613de856bad9a4b5b8f1a",
+                     "rc4_staged_rollout_projection_sha256":  "a2961838635d1f469a090b9fd6ca8bfcf5262b4001e67f784ac31e4e31c78265",
+                     "rc4_rollback_projection_sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                     "fleet_rollout_authority_sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+                     "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                     "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                     "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                     "exact_operator_approval_hash":  null
+                 },
+    "artifacts":  {
+                      "multi_node_canary_plan_projection":  {
+                                                                "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+                                                                "sha256":  "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc5-controlled-multi-node-canary-plan-projection.v1",
+                                                                "status":  "preconditions-proven-execution-blocked"
+                                                            },
+                      "rollback_readiness_projection":  {
+                                                            "path":  ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+                                                            "sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc5-canary-rollback-readiness-projection.v1",
+                                                            "status":  "rollback-baseline-bound-execution-not-run"
+                                                        }
+                  },
+    "source_artifacts":  {
+                             "rc5_plan":  {
+                                              "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+                                              "sha256":  "b1bbfaa5de7dd5710073987d4acef353e7d34b12648c0e76694f960a36af392b",
+                                              "present":  true,
+                                              "schema":  "agentos.workflow-plan.v1",
+                                              "status":  "active"
+                                          },
+                             "rc5_hosted_service":  {
+                                                        "path":  ".workflow/artifacts/rc5-hosted-mirror-service/result.json",
+                                                        "sha256":  "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc5-hosted-mirror-service-result.v1",
+                                                        "status":  "passed"
+                                                    },
+                             "rc5_endpoint_verifier":  {
+                                                           "path":  ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+                                                           "sha256":  "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc5-hosted-endpoint-verifier-result.v1",
+                                                           "status":  "passed"
+                                                       },
+                             "rc5_hosted_metadata_fail_closed":  {
+                                                                     "path":  ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+                                                                     "sha256":  "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+                                                                     "present":  true,
+                                                                     "schema":  "agentos.rc5-hosted-metadata-fail-closed-result.v1",
+                                                                     "status":  "passed"
+                                                                 },
+                             "rc5_frontend":  {
+                                                  "path":  ".workflow/artifacts/rc5-mirror-frontend/result.json",
+                                                  "sha256":  "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc5-mirror-frontend-result.v1",
+                                                  "status":  "passed"
+                                              },
+                             "rc5_user_release":  {
+                                                      "path":  ".workflow/artifacts/rc5-user-release-channel/result.json",
+                                                      "sha256":  "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+                                                      "present":  true,
+                                                      "schema":  "agentos.rc5-user-release-channel-result.v1",
+                                                      "status":  "passed"
+                                                  },
+                             "bootstrap_manifest":  {
+                                                        "path":  ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+                                                        "sha256":  "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529",
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc5-user-bootstrap-manifest.v1",
+                                                        "status":  "metadata-only-preview"
+                                                    },
+                             "user_release_channel":  {
+                                                          "path":  ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+                                                          "sha256":  "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc5-user-release-channel.v1",
+                                                          "status":  "inspectable-metadata-only"
+                                                      },
+                             "hosted_channel_index":  {
+                                                          "path":  ".workflow/artifacts/rc5-user-release-channel/hosted-channel-index-after-user-release.json",
+                                                          "sha256":  "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc5-hosted-channel-index.v1",
+                                                          "status":  "metadata-only"
+                                                      },
+                             "rc4_final_audit":  {
+                                                     "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+                                                     "sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+                                                     "present":  true,
+                                                     "schema":  "agentos.production-distro-rc4-final-audit.v1",
+                                                     "status":  null
+                                                 },
+                             "rc4_staged_rollout_smoke":  {
+                                                              "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/result.json",
+                                                              "sha256":  "e29e77d6943ef1c5f46da7dceb480c299a308eab710613de856bad9a4b5b8f1a",
+                                                              "present":  true,
+                                                              "schema":  "agentos.rc4-staged-fleet-ring-rollout-smoke-rollback-drill.v1",
+                                                              "status":  "passed"
+                                                          },
+                             "rc4_staged_rollout_projection":  {
+                                                                   "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/staged-rollout-plan-projection.json",
+                                                                   "sha256":  "a2961838635d1f469a090b9fd6ca8bfcf5262b4001e67f784ac31e4e31c78265",
+                                                                   "present":  true,
+                                                                   "schema":  "agentos.rc4-staged-fleet-ring-rollout-plan-projection.v1",
+                                                                   "status":  "approval-required-not-executable"
+                                                               },
+                             "rc4_rollback_projection":  {
+                                                             "path":  ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/rollback-drill-projection.json",
+                                                             "sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                                                             "present":  true,
+                                                             "schema":  "agentos.rc4-staged-fleet-rollback-drill-projection.v1",
+                                                             "status":  "projected-passed"
+                                                         },
+                             "fleet_rollout_authority":  {
+                                                             "path":  ".workflow/artifacts/release/fleet-rollout-authority.json",
+                                                             "sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+                                                             "present":  true,
+                                                             "schema":  "agentos.fleet-rollout-authority.v1",
+                                                             "status":  "passed"
+                                                         }
+                         },
+    "checks":  [
+                   {
+                       "id":  "rc5.plan.current_task",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 plan must be positioned at RC5-021 with RC5-020 completed and RC5-021 pending before this proof.",
+                       "evidence":  {
+                                        "current_task":  "RC5-021",
+                                        "RC5_020":  "completed",
+                                        "RC5_021":  "pending"
+                                    }
+                   },
+                   {
+                       "id":  "rc5.hosted_service.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Hosted mirror service framework must be passed, metadata-only, DNS-override-verified, and authority-free.",
+                       "evidence":  {
+                                        "status":  "passed",
+                                        "remote":  {
+                                                       "host":  "47.101.11.109",
+                                                       "user":  "root",
+                                                       "domain":  "aios.w33d.xyz",
+                                                       "static_root":  "/srv/aios-mirror",
+                                                       "nginx_site":  "/etc/nginx/sites-available/aios.w33d.xyz",
+                                                       "tls_verified":  false,
+                                                       "validation_used_local_dns":  false,
+                                                       "validation_resolve_override":  "aios.w33d.xyz:80:47.101.11.109"
+                                                   },
+                                        "invariants":  {
+                                                           "metadata_only":  true,
+                                                           "large_artifact_storage_deferred":  true,
+                                                           "local_private_key_material_used":  false,
+                                                           "cryptographic_signing_performed":  false,
+                                                           "activation_performed":  false,
+                                                           "rollback_execution_performed":  false,
+                                                           "active_slot_mutated":  false,
+                                                           "production_ring_mutated":  false,
+                                                           "remote_dispatch_enabled":  false,
+                                                           "tui_authority":  false
+                                                       },
+                                        "summary":  {
+                                                        "checks":  10,
+                                                        "blockers":  0,
+                                                        "rc5_010_complete":  true,
+                                                        "endpoints_verified":  [
+                                                                                   "http://aios.w33d.xyz/health.json",
+                                                                                   "http://aios.w33d.xyz/.well-known/aios/mirror.json",
+                                                                                   "http://aios.w33d.xyz/channel/index.json",
+                                                                                   "http://aios.w33d.xyz/releases/README.txt"
+                                                                               ],
+                                                        "tls_required_before_ga_claim":  true,
+                                                        "production_ready_claim":  false
+                                                    }
+                                    }
+                   },
+                   {
+                       "id":  "rc5.endpoint_verifier.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Hosted endpoint verifier must be passed, non-GA, blocker-free, and record TLS as a GA gate.",
+                       "evidence":  {
+                                        "checks":  17,
+                                        "blockers":  0,
+                                        "rc5_011_complete":  true,
+                                        "tls_required_before_ga_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "rc5.metadata_fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Hosted metadata fail-closed fixtures must reject all negative cases.",
+                       "evidence":  {
+                                        "negative_cases":  14,
+                                        "negative_passed":  14,
+                                        "blockers":  0,
+                                        "rc5_012_complete":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "rc5.frontend.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Mirror frontend must remain static, dependency-free, non-authoritative, and served.",
+                       "evidence":  {
+                                        "status":  "passed",
+                                        "invariants":  {
+                                                           "static_frontend_only":  true,
+                                                           "no_external_dependencies":  true,
+                                                           "metadata_endpoints_preserved":  true,
+                                                           "local_private_key_material_used":  false,
+                                                           "cryptographic_signing_performed":  false,
+                                                           "activation_performed":  false,
+                                                           "rollback_execution_performed":  false,
+                                                           "active_slot_mutated":  false,
+                                                           "production_ring_mutated":  false,
+                                                           "remote_dispatch_enabled":  false,
+                                                           "tui_authority":  false
+                                                       },
+                                        "summary":  {
+                                                        "checks":  11,
+                                                        "blockers":  0,
+                                                        "rc5_013_complete":  true,
+                                                        "frontend_url":  "http://aios.w33d.xyz/",
+                                                        "tls_required_before_ga_claim":  true,
+                                                        "production_ready_claim":  false
+                                                    }
+                                    }
+                   },
+                   {
+                       "id":  "rc5.user_release_channel.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "User release channel projection must be passed, metadata-only, and block install/update.",
+                       "evidence":  {
+                                        "status":  "passed",
+                                        "invariants":  {
+                                                           "metadata_only":  true,
+                                                           "large_artifact_storage_deferred":  true,
+                                                           "install_allowed":  false,
+                                                           "update_allowed":  false,
+                                                           "local_private_key_material_used":  false,
+                                                           "cryptographic_signing_performed":  false,
+                                                           "activation_performed":  false,
+                                                           "rollback_execution_performed":  false,
+                                                           "active_slot_mutated":  false,
+                                                           "production_ring_mutated":  false,
+                                                           "remote_dispatch_enabled":  false,
+                                                           "tui_authority":  false
+                                                       },
+                                        "summary":  {
+                                                        "checks":  10,
+                                                        "blockers":  0,
+                                                        "rc5_020_complete":  true,
+                                                        "published_endpoints":  [
+                                                                                    "http://aios.w33d.xyz/bootstrap/manifest.json",
+                                                                                    "http://aios.w33d.xyz/channel/user-release.json",
+                                                                                    "http://aios.w33d.xyz/channel/index.json"
+                                                                                ],
+                                                        "tls_required_before_ga_claim":  true,
+                                                        "production_ready_claim":  false
+                                                    }
+                                    }
+                   },
+                   {
+                       "id":  "rc5.local_channel_artifacts.hash_bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "User release result must remain hash-bound to bootstrap, user channel, and hosted channel local outputs.",
+                       "evidence":  {
+                                        "bootstrap_manifest":  {
+                                                                   "path":  ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+                                                                   "sha256":  "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529"
+                                                               },
+                                        "user_release_channel":  {
+                                                                     "path":  ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+                                                                     "sha256":  "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554"
+                                                                 },
+                                        "hosted_channel_index_after_user_release":  {
+                                                                                        "path":  ".workflow/artifacts/rc5-user-release-channel/hosted-channel-index-after-user-release.json",
+                                                                                        "sha256":  "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1"
+                                                                                    }
+                                    }
+                   },
+                   {
+                       "id":  "rc5.bootstrap.canary_and_rollback_gates",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Bootstrap manifest must require rollback baseline and exact operator approval before canary, while carrying no authority.",
+                       "evidence":  {
+                                        "trust_requirements":  [
+                                                                   "schema-verification",
+                                                                   "production-ready-false",
+                                                                   "signature-verification-before-payload-trust",
+                                                                   "hash-verification",
+                                                                   "freshness-verification",
+                                                                   "revocation-verification",
+                                                                   "rollback-baseline-before-activation",
+                                                                   "exact-operator-approval-before-canary"
+                                                               ],
+                                        "blockers":  [
+                                                         "release-payload-storage-deferred",
+                                                         "payload-signature-bundle-deferred",
+                                                         "tls-not-yet-ga-gated",
+                                                         "rollback-execution-drill-pending",
+                                                         "multi-node-canary-execution-pending"
+                                                     ],
+                                        "authority":  {
+                                                          "mirror_is_root_of_trust":  false,
+                                                          "signing_authority":  false,
+                                                          "activation_authority":  false,
+                                                          "rollback_execution_authority":  false,
+                                                          "production_ring_mutation_authority":  false,
+                                                          "tui_authority":  false
+                                                      }
+                                    }
+                   },
+                   {
+                       "id":  "rc5.user_channel.install_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "User channel must keep release payload unavailable and install/update blocked.",
+                       "evidence":  {
+                                        "bootstrap_metadata_available":  true,
+                                        "release_payload_available":  false,
+                                        "install_allowed":  false,
+                                        "update_allowed":  false,
+                                        "reason":  "RC5 publishes metadata and bootstrap checks only; payload, signatures, rollback execution, TLS GA gate, and canary evidence are pending."
+                                    }
+                   },
+                   {
+                       "id":  "rc5.hosted_channel.no_activation",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Hosted channel must stay metadata-only, hash-bound to RC4 final audit, and advertise no activation/signing/rollback authority.",
+                       "evidence":  {
+                                        "source_rc4_final_audit_sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+                                        "storage_mode":  "metadata-only",
+                                        "authority":  {
+                                                          "signing_authority":  false,
+                                                          "activation_authority":  false,
+                                                          "rollback_execution_authority":  false,
+                                                          "tui_authority":  false
+                                                      },
+                                        "entries":  [
+                                                        {
+                                                            "id":  "rc5-metadata-only-framework",
+                                                            "status":  "placeholder",
+                                                            "path":  "/releases/README.txt",
+                                                            "activation_allowed":  false,
+                                                            "large_payload_deferred":  true
+                                                        },
+                                                        {
+                                                            "id":  "rc5-user-bootstrap-manifest",
+                                                            "status":  "available",
+                                                            "path":  "/bootstrap/manifest.json",
+                                                            "activation_allowed":  false,
+                                                            "large_payload_deferred":  true
+                                                        },
+                                                        {
+                                                            "id":  "rc5-user-release-channel",
+                                                            "status":  "available",
+                                                            "path":  "/channel/user-release.json",
+                                                            "activation_allowed":  false,
+                                                            "large_payload_deferred":  true
+                                                        }
+                                                    ]
+                                    }
+                   },
+                   {
+                       "id":  "rc5.live_endpoint.metadata_readable",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Live hosted endpoints must return HTTP 200 through curl --resolve and remain non-GA/non-authoritative.",
+                       "evidence":  {
+                                        "channel_status":  200,
+                                        "bootstrap_status":  200,
+                                        "user_channel_status":  200,
+                                        "frontend_status":  200,
+                                        "validation_used_local_dns":  false,
+                                        "resolve_override":  "aios.w33d.xyz:80:47.101.11.109"
+                                    }
+                   },
+                   {
+                       "id":  "rc4.staged_rollout_smoke.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC4 staged rollout smoke must be passed, exact-approval-gated, non-executable, and mutation-free.",
+                       "evidence":  {
+                                        "checks":  12,
+                                        "blockers":  0,
+                                        "rc4_021_complete":  true,
+                                        "staged_fleet_ring_rollout_smoke_ready":  true,
+                                        "rollback_drill_projection_ready":  true,
+                                        "projected_ring":  "local",
+                                        "remote_rings_blocked":  true,
+                                        "rollout_plan_projection_created":  true,
+                                        "rollout_plan_executable":  false,
+                                        "exact_operator_approval_required":  true,
+                                        "exact_operator_approval_granted":  false,
+                                        "production_ready_claim":  false,
+                                        "network_transfer_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_registry_mutated":  false,
+                                        "active_slot_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "tui_authority":  false
+                                    }
+                   },
+                   {
+                       "id":  "rc4.rollout_projection.blocked_by_design",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC4 rollout projection must remain approval-required, non-executable, and blocked by design.",
+                       "evidence":  {
+                                        "status":  "approval-required-not-executable",
+                                        "executable":  false,
+                                        "gates":  {
+                                                      "hosted_consumer_mirror_smoke_passed":  true,
+                                                      "fleet_preconditions_ready":  true,
+                                                      "hosted_transport_fail_closed_ready":  true,
+                                                      "fleet_authority_ready":  true,
+                                                      "ring_order_ready":  true,
+                                                      "local_ring_smoke_ready":  true,
+                                                      "rollback_baseline_ready":  true,
+                                                      "support_recovery_ready":  true,
+                                                      "approval_gate_status":  "blocked-pending-exact-operator-approval",
+                                                      "execution_gate_status":  "blocked-by-design"
+                                                  }
+                                    }
+                   },
+                   {
+                       "id":  "fleet_authority.canary_remote_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fleet authority must remain AgentCore/SecurityExecution-only, with remote canary/staging/production execution blocked.",
+                       "evidence":  {
+                                        "ring_order":  [
+                                                           "local",
+                                                           "canary",
+                                                           "staging",
+                                                           "production"
+                                                       ],
+                                        "canary_node_count":  1,
+                                        "canary_blocker":  "remote-fleet-execution-not-enabled",
+                                        "staging_blocker":  "remote-fleet-execution-not-enabled",
+                                        "production_blocker":  "remote-fleet-execution-not-enabled",
+                                        "authority":  {
+                                                          "execution_authority":  "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+                                                          "plan_authority":  "AgentCore",
+                                                          "side_effect_authority":  "SecurityExecutionEngine",
+                                                          "recovery_authority":  "RunStore + AuditJournal + release rollback evidence",
+                                                          "tui_authority":  false,
+                                                          "projection_controller_only":  true,
+                                                          "rollout_execution_in_tui":  false,
+                                                          "rollout_mutation_in_tui":  false,
+                                                          "remote_command_dispatch_in_tui":  false,
+                                                          "rollback_execution_in_tui":  false,
+                                                          "promotion_authority_in_tui":  false,
+                                                          "signing_authority_in_tui":  false,
+                                                          "remote_operator_bypass_allowed":  false,
+                                                          "normal_shell_rollout_allowed":  false
+                                                      }
+                                    }
+                   },
+                   {
+                       "id":  "canary.multi_node_enrollment_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 proof must require at least two enrolled canary target nodes before execution and must not fake enrollment.",
+                       "evidence":  {
+                                        "minimum_required":  2,
+                                        "observed_canary_node_count":  1,
+                                        "multi_node_target_set_enrolled":  false
+                                    }
+                   },
+                   {
+                       "id":  "canary.execution_blocked_by_design",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Controlled canary execution must remain blocked until exact approval, multi-node enrollment, and remote fleet execution are enabled through the correct authority path.",
+                       "evidence":  {
+                                        "hosted_mirror_service_ready":  true,
+                                        "hosted_endpoint_verifier_ready":  true,
+                                        "hosted_metadata_fail_closed_ready":  true,
+                                        "mirror_frontend_ready":  true,
+                                        "user_release_channel_ready":  true,
+                                        "live_endpoint_metadata_ready":  true,
+                                        "rc4_staged_rollout_smoke_ready":  true,
+                                        "rc4_rollout_projection_ready":  true,
+                                        "fleet_authority_ready":  true,
+                                        "remote_rings_blocked":  true,
+                                        "rollback_readiness_ready":  true,
+                                        "exact_operator_approval_required":  true,
+                                        "exact_operator_approval_granted":  false,
+                                        "multi_node_target_set_enrolled":  false,
+                                        "execution_gate_status":  "blocked-by-design"
+                                    }
+                   },
+                   {
+                       "id":  "canary.projection_hash_bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Canary projection must bind RC5 hosted/user-channel evidence, RC4 rollout evidence, rollback readiness, and fleet authority.",
+                       "evidence":  {
+                                        "rc4_final_audit_sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+                                        "rc5_hosted_service_result_sha256":  "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+                                        "rc5_endpoint_verifier_result_sha256":  "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+                                        "rc5_hosted_metadata_fail_closed_sha256":  "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+                                        "rc5_frontend_result_sha256":  "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+                                        "rc5_user_release_result_sha256":  "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+                                        "bootstrap_manifest_sha256":  "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529",
+                                        "user_release_channel_sha256":  "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554",
+                                        "hosted_channel_index_sha256":  "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1",
+                                        "rc4_staged_rollout_smoke_sha256":  "e29e77d6943ef1c5f46da7dceb480c299a308eab710613de856bad9a4b5b8f1a",
+                                        "rc4_staged_rollout_projection_sha256":  "a2961838635d1f469a090b9fd6ca8bfcf5262b4001e67f784ac31e4e31c78265",
+                                        "rc4_rollback_projection_sha256":  "f04e323f7d741301cbcac273bdb9186b82832bd5640a0004a0156637de72926f",
+                                        "fleet_rollout_authority_sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+                                        "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                                        "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                                        "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                                        "exact_operator_approval_hash":  null
+                                    }
+                   },
+                   {
+                       "id":  "rollback.readiness_projection",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Rollback readiness projection must reuse the RC4 rollback baseline, keep previous/restored hashes equal, and execute no rollback.",
+                       "evidence":  {
+                                        "rollback_projection_sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                                        "rollback_ready":  true,
+                                        "previous":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                                        "restored":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                                        "baseline":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                                        "rollback_execution_performed":  false
+                                    }
+                   },
+                   {
+                       "id":  "canary.no_authority_broadened",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC5 canary proof must not sign, upload, activate, execute rollback, mutate registry/slot/ring state, dispatch remotely, or grant TUI/model/shell authority.",
+                       "evidence":  {
+                                        "local_private_key_material_used":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "network_upload_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_registry_mutated":  false,
+                                        "active_slot_mutated":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "model_replay_authority":  false,
+                                        "normal_shell_authority":  false,
+                                        "tui_authority":  false
+                                    }
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "remaining_blockers_before_canary_execution":  [
+                                                       "two-or-more-enrolled-canary-target-nodes",
+                                                       "remote-fleet-execution-not-enabled",
+                                                       "exact-operator-approval-not-granted",
+                                                       "release-payload-storage-deferred",
+                                                       "payload-signature-bundle-deferred",
+                                                       "rollback-execution-plan-not-executed",
+                                                       "tls-required-before-ga-claim"
+                                                   ],
+    "invariants":  {
+                       "metadata_only":  true,
+                       "local_private_key_material_used":  false,
+                       "cryptographic_signing_performed":  false,
+                       "network_upload_performed":  false,
+                       "remote_mutation_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_registry_mutated":  false,
+                       "active_slot_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false
+                   },
+    "handoff":  {
+                    "next_task":  "RC5-022",
+                    "rc5_022_consumes":  [
+                                             "multi_node_canary_plan_projection",
+                                             "rollback_readiness_projection",
+                                             "hosted_mirror_service",
+                                             "user_release_channel",
+                                             "hosted_metadata_fail_closed"
+                                         ]
+                },
+    "summary":  {
+                    "checks":  19,
+                    "blockers":  0,
+                    "rc5_021_complete":  true,
+                    "canary_preconditions_proven":  true,
+                    "rollback_readiness_proven":  true,
+                    "canary_execution_allowed":  false,
+                    "canary_execution_performed":  false,
+                    "projected_ring":  "canary",
+                    "minimum_canary_node_count_required":  2,
+                    "observed_canary_node_count":  1,
+                    "remote_rings_blocked":  true,
+                    "exact_operator_approval_required":  true,
+                    "exact_operator_approval_granted":  false,
+                    "production_ready_claim":  false,
+                    "remote_mutation_performed":  false,
+                    "activation_performed":  false,
+                    "rollback_execution_performed":  false,
+                    "active_slot_mutated":  false,
+                    "production_ring_mutated":  false,
+                    "remote_dispatch_enabled":  false,
+                    "tui_authority":  false
+                }
+}

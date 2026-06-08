@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-021",
+  "title": "prove controlled multi-node canary execution preconditions and rollback readiness",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-020-user-release-channel.json",
+    ".workflow/artifacts/rc5-user-release-channel/result.json",
+    ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/result.json",
+    ".workflow/artifacts/release/fleet-rollout-authority.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc5-multi-node-canary-proof.ps1",
+      "role": "canary proof projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+      "role": "proof result"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/multi-node-canary-plan-projection.json",
+      "role": "canary plan projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-multi-node-canary-proof/rollback-readiness-projection.json",
+      "role": "rollback readiness projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-021-multi-node-canary-proof.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Hosted mirror, endpoint verifier, fail-closed fixtures, frontend, and user release channel evidence are hash-bound.",
+      "RC4 staged rollout smoke, rollout projection, rollback projection, and fleet authority evidence are consumed without widening authority.",
+      "Canary execution remains blocked until at least two canary nodes are enrolled, exact operator approval is granted, and remote fleet execution is enabled through AgentCore plus SecurityExecutionEngine.",
+      "Rollback readiness is proven from the RC4 rollback baseline while rollback execution remains unperformed."
+    ]
+  }
+}
