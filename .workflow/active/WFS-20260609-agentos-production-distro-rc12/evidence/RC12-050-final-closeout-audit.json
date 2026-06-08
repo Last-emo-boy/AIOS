@@ -1,0 +1,32 @@
+{
+  "schema": "agentos.rc12-final-closeout-audit-evidence.v1",
+  "generated_at": "2026-06-09T06:50:00+08:00",
+  "task": "RC12-050",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
+  "script": {
+    "path": "scripts/run-rc12-final-closeout-audit.ps1",
+    "sha256": "49d33b48c2001b922d2920d372a0e0cde075d76ab00a542fc55bbe0fad2ded13"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc12-final-closeout-audit/result.json",
+    "status": "passed",
+    "sha256": "8ea48595addbdca380c4009a0631ba88f4753e7861130db4736c50929b870cb4"
+  },
+  "final_audit": {
+    "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
+    "sha256": "f7fbcdb58ef3a711e69459c2d292fb1bc0eb3997a736bffdf5b1fe2bb377219d",
+    "present": true
+  },
+  "closeout_summary": {
+    "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/final-rc12-closeout-summary.md",
+    "sha256": "ef0e84c40236efeb7c4434d2915302b7b90f2b8168e611f7c4805a52b6c4d90a",
+    "present": true
+  },
+  "completion": {
+    "rc12_050_complete": true,
+    "next_task": "RC13-planning",
+    "commit_required": true
+  }
+}

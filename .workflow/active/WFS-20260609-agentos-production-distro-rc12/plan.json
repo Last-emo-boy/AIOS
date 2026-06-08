@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260609-agentos-production-distro-rc12",
   "milestone": "Production Distro RC12",
-  "status": "active",
+  "status": "completed",
   "objective": "Move AIOS from RC11 non-GA fail-closed evidence toward a controlled unblock path: bind a real immutable credential-free HTTPS object URI if present, reconcile declared/current drift to zero or emit exact blockers, verify descriptor freshness and revocation, run quarantine fetch verification before interpretation, bind AgentCore executable PlanSpec and SecurityExecution allow package, enroll two canary targets with exact approval, then execute or deny controlled canary activation and a separately approved rollback drill without mirror, signer, frontend, remote service, or production ring infrastructure changes.",
   "scope": {
     "included": [
@@ -128,14 +128,14 @@
       "tasks": [
         {
           "id": "RC12-050",
-          "status": "pending",
+          "status": "completed",
           "title": "run Production Distro RC12 final closeout audit",
           "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json"
         }
       ]
     }
   ],
-  "current_task": "RC12-050",
+  "current_task": null,
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
   "acceptance_gates": {
     "hosted_endpoint_domain": "aios.w33d.xyz",
