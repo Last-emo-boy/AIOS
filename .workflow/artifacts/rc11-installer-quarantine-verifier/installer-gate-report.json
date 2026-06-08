@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.rc11-installer-quarantine-gate-report.v1",
+  "generated_at": "2026-06-09T02:15:00+08:00",
+  "task": "RC11-020",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "installer-quarantine-fetch-blocked",
+  "production_ready_claim": false,
+  "gates": {
+    "descriptor_verified": false,
+    "descriptor_matches_current_bytes": true,
+    "external_https_object_uri_published": false,
+    "drift_zero": false,
+    "object_trust_allowed": false,
+    "quarantine_fetch_allowed": false,
+    "size_required": true,
+    "sha256_required": true,
+    "manifest_required": true,
+    "checksum_set_required": true,
+    "public_signature_required": true,
+    "revocation_required": true,
+    "freshness_required": true,
+    "compatibility_required": true,
+    "rollback_baseline_required": true,
+    "support_recovery_required": true,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "blockers": [
+    "external-descriptor-verification-denied",
+    "external-https-object-uri-not-published",
+    "declared-current-drift-zero-not-proved",
+    "object-trust-not-allowed",
+    "freshness-window-missing",
+    "installer-quarantine-fetch-not-run",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound"
+  ],
+  "next_task": "RC11-021"
+}

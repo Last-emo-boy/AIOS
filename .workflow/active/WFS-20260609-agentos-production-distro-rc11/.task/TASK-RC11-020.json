@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC11-020",
   "title": "add installer quarantine fetch verifier and fail-closed matrix",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-2",
   "read_first": [
     ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
@@ -17,6 +17,22 @@
     {
       "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
       "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/quarantine-fetch-report.json",
+      "role": "quarantine fetch report"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/installer-fail-closed-matrix.json",
+      "role": "installer fail-closed matrix"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-installer-quarantine-verifier/installer-gate-report.json",
+      "role": "installer gate report"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-020-installer-quarantine-verifier.json",
+      "role": "task evidence"
     }
   ],
   "convergence": {

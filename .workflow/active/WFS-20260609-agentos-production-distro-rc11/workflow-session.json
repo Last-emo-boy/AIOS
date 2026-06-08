@@ -3,7 +3,7 @@
   "name": "Production Distro RC11",
   "status": "active",
   "created_at": "2026-06-09T01:10:00+08:00",
-  "updated_at": "2026-06-09T01:20:00+08:00",
+  "updated_at": "2026-06-09T02:15:00+08:00",
   "source": "RC10 final audit; maestro-managed RC11 planning",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
   "goal": "Plan and execute AIOS-body controlled unblock for real object verification, drift-zero reconciliation, installer quarantine fetch verification, exact approval binding, AgentCore/SecurityExecution controlled activation, rollback, and support/recovery evidence.",
@@ -16,7 +16,7 @@
     "Do not install, activate, rollback, mutate boot metadata, mutate active slots, mutate active artifact sets, mutate production rings, upload support bundles, or dispatch remote fleet actions unless a later task proves every gate and records the effect explicitly."
   ],
   "primary_acceptance": [
-    "RC11 plan is active and task-managed with RC11-020 as the next executable task.",
+    "RC11 plan is active and task-managed with RC11-021 as the next executable task.",
     "The plan covers real object trust handoff, drift-zero reconciliation, installer quarantine verification, AgentCore/SecurityExecution binding, two-target canary approval, controlled activation, rollback, support/recovery, and final audit.",
     "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx, signer infrastructure, remote dispatch, and production ring mutation out of scope.",
     "The plan keeps production_ready_claim=false until final audit proves every required gate."
@@ -51,9 +51,15 @@
       "completed_at": "2026-06-09T02:00:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-012-external-object-descriptor-verification.json",
       "commit": null
+    },
+    {
+      "task": "RC11-020",
+      "completed_at": "2026-06-09T02:15:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-020-installer-quarantine-verifier.json",
+      "commit": null
     }
   ],
-  "next_task": "RC11-020",
+  "next_task": "RC11-021",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
@@ -91,6 +97,12 @@
     ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-012-external-object-descriptor-verification.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-020.json",
+    "scripts/project-rc11-installer-quarantine-verifier.ps1",
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/quarantine-fetch-report.json",
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/installer-fail-closed-matrix.json",
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/installer-gate-report.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-020-installer-quarantine-verifier.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-021.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-030.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-031.json",
