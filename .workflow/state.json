@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc7",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC7-010",
-    "lifecycle_position":  "rc7-wave-0-contracts-completed",
+    "current_task":  "RC7-011",
+    "lifecycle_position":  "rc7-wave-1-installer-consumption-started",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc7-010-installer-signed-metadata-consumption-report",
+    "next_allowed_action":  "execute-rc7-011-signed-consumption-fail-closed-fixtures",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T15:25:00+08:00",
+    "updated_at":  "2026-06-08T15:35:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC6 is closed with installable signed payload channel contracts, bounded /payloads and /install metadata, current-artifacts payload projection, hosted payload metadata, signed payload fail-closed fixtures, bootstrap installer preflight, installer fail-closed fixtures, refreshed public mirror frontend, exact-approval-gated canary packet, rollback execution preconditions, and final closeout audit. RC6 verdict is PASS for metadata/readiness projection, not GA. Production Distro RC7 wave 0 is complete: RC7-001 freezes signed payload consumption and controlled execution boundaries, RC7-002 publishes signed metadata plus revocation snapshot projection, and RC7-003 defines installer compatibility plus rollback baseline publication contracts. Current payload remains verification-blocked and non-GA. Next work is RC7-010: installer signed metadata consumption report.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC6 is closed with installable signed payload channel contracts, bounded /payloads and /install metadata, current-artifacts payload projection, hosted payload metadata, signed payload fail-closed fixtures, bootstrap installer preflight, installer fail-closed fixtures, refreshed public mirror frontend, exact-approval-gated canary packet, rollback execution preconditions, and final closeout audit. RC6 verdict is PASS for metadata/readiness projection, not GA. Production Distro RC7 wave 0 is complete: RC7-001 freezes signed payload consumption and controlled execution boundaries, RC7-002 publishes signed metadata plus revocation snapshot projection, and RC7-003 defines installer compatibility plus rollback baseline publication contracts. RC7-010 now proves the installer can observe signed metadata and revocation references through the public mirror while remaining verification-blocked. Current blockers include hosted byte-hash canonicalization, missing real cryptographic signature, missing compatibility publication, missing rollback baseline publication, storage/drift, TLS, and exact approval. Next work is RC7-011: signed consumption fail-closed fixtures.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1423,6 +1423,26 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-003-installer-compatibility-rollback-baseline-contract.json"
+                      },
+                      {
+                          "type":  "rc7_script",
+                          "path":  "scripts/project-rc7-installer-signed-consumption.ps1"
+                      },
+                      {
+                          "type":  "rc7_artifact",
+                          "path":  ".workflow/artifacts/rc7-installer-signed-consumption/result.json"
+                      },
+                      {
+                          "type":  "rc7_artifact",
+                          "path":  ".workflow/artifacts/rc7-installer-signed-consumption/consumption-report.json"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-010.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-010-installer-signed-metadata-consumption.json"
                       }
                   ]
 }

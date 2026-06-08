@@ -1,0 +1,69 @@
+{
+  "schema": "agentos.rc7-installer-signed-metadata-consumption-evidence.v1",
+  "generated_at": "2026-06-08T15:35:00+08:00",
+  "task": "RC7-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/project-rc7-installer-signed-consumption.ps1",
+    "sha256": "9c6e2d98df5e84d0fd153004146f542a34423ffad0eba7996f32d7e76081a8db"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    "sha256": "289940b5024bb9fb4cf3d33d2adf3b363c789921cee08711bad6868e7f746904",
+    "status": "passed",
+    "checks": 12,
+    "task_blockers": 0
+  },
+  "report": {
+    "path": ".workflow/artifacts/rc7-installer-signed-consumption/consumption-report.json",
+    "sha256": "0d34fd20f688e8af33837edb308fe22d431ab96ed714b8dde5b3eb5a7e5b4f22",
+    "state": "verification-blocked",
+    "installer_steps": 13,
+    "installer_blockers": 7
+  },
+  "observed": {
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109",
+    "signed_metadata_reference_observed": true,
+    "revocation_snapshot_observed": true,
+    "signature_claims_bound": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "compatibility_contract_published": false,
+    "rollback_baseline_published": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "installer_blockers": [
+    "verify-hosted-byte-hash-canonicalization",
+    "verify-cryptographic-signature-value",
+    "verify-installer-compatibility-publication",
+    "verify-rollback-baseline-publication",
+    "verify-storage-policy-and-drift-reconciliation",
+    "verify-tls-ga-gate",
+    "verify-exact-operator-approval"
+  ],
+  "invariants": {
+    "metadata_preflight_only": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_010_complete": true,
+    "wave_1_in_progress": true,
+    "next_task": "RC7-011",
+    "commit_required": true
+  }
+}

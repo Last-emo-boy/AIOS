@@ -1,0 +1,386 @@
+﻿{
+    "schema":  "agentos.rc7-installer-signed-consumption-report.v1",
+    "generated_at":  "2026-06-08T13:11:39.9110473+08:00",
+    "production_ready_claim":  false,
+    "release_id":  "production-distro-rc6-current-artifacts",
+    "domain":  "aios.w33d.xyz",
+    "validation_used_local_dns":  false,
+    "validation_resolve_override":  "aios.w33d.xyz:80:47.101.11.109",
+    "state":  "verification-blocked",
+    "allowed_outputs":  [
+                            "consumption-report",
+                            "signed-metadata-observation",
+                            "revocation-observation",
+                            "remaining-blockers-list"
+                        ],
+    "source":  {
+                   "rc7_signed_metadata_revocation":  {
+                                                          "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+                                                          "sha256":  "8ccf04045c5e6aa63ccc934c46d72f03a17a8484657abd101c5a01a21b7e54a3",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc7-signed-metadata-revocation-result.v1",
+                                                          "status":  "passed"
+                                                      },
+                   "rc7_installer_compatibility_rollback_contract":  {
+                                                                         "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+                                                                         "sha256":  "5cde221db01d9f501a2afb7a8aef93000c24c2f3f6cb031f80aaebe60c3db05d",
+                                                                         "present":  true
+                                                                     },
+                   "rc6_bootstrap_preflight_result":  {
+                                                          "path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+                                                          "sha256":  "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc6-bootstrap-installer-preflight-result.v1",
+                                                          "status":  "passed"
+                                                      },
+                   "rc6_bootstrap_preflight_report":  {
+                                                          "path":  ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+                                                          "sha256":  "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc6-bootstrap-installer-preflight-report.v1",
+                                                          "status":  null
+                                                      },
+                   "rc6_installer_fail_closed":  {
+                                                     "path":  ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+                                                     "sha256":  "62f28b20f618f1ffabfabaef227367c4ec71b44f8f70b75b5b6392164e3766c9",
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc6-installer-fail-closed-result.v1",
+                                                     "status":  "passed"
+                                                 }
+               },
+    "observed":  {
+                     "signed_metadata_reference_observed":  true,
+                     "revocation_snapshot_observed":  true,
+                     "signature_claims_bound":  true,
+                     "public_signature_projection_available":  true,
+                     "cryptographic_signature_present":  false,
+                     "signature_available":  false,
+                     "compatibility_contract_published":  false,
+                     "rollback_baseline_published":  false,
+                     "install_allowed":  false,
+                     "activation_allowed":  false,
+                     "rollback_execution_allowed":  false
+                 },
+    "rc6_blocker_delta":  {
+                              "previous_preflight_blockers":  [
+                                                                  "verify-signature-or-signed-metadata-reference",
+                                                                  "verify-revocation-snapshot",
+                                                                  "verify-installer-compatibility-contract",
+                                                                  "verify-rollback-baseline-hash"
+                                                              ],
+                              "resolved_by_rc7_002_projection":  [
+                                                                     "verify-signature-or-signed-metadata-reference",
+                                                                     "verify-revocation-snapshot"
+                                                                 ],
+                              "still_blocked_after_rc7_010":  [
+                                                                  "verify-hosted-byte-hash-canonicalization",
+                                                                  "verify-cryptographic-signature-value",
+                                                                  "verify-installer-compatibility-publication",
+                                                                  "verify-rollback-baseline-publication",
+                                                                  "verify-storage-policy-and-drift-reconciliation",
+                                                                  "verify-tls-ga-gate",
+                                                                  "verify-exact-operator-approval"
+                                                              ]
+                          },
+    "fetched_endpoints":  [
+                              {
+                                  "path":  "/channel/index.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "e3badc9d5b1433eac25d2244824bfe81b075e4113a966496d5889696fd36b49d"
+                              },
+                              {
+                                  "path":  "/install/bootstrap.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "4987e21cf715cd0420199f473d180f4d2e3ddaa521f0039dfc8a1e93cb4a8011"
+                              },
+                              {
+                                  "path":  "/payloads/index.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "735e0ed64a55b2b4993ca98423b0643dd6c8bd137a1c6b23e70267456993b6f1"
+                              },
+                              {
+                                  "path":  "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "81fe6f7bfcb62c2d54880adf7be6838169f33245094ff5e73c7ab07d9d32ca6a"
+                              },
+                              {
+                                  "path":  "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "ccb76e70685eceeea856869e54ccaa8d550999305ec851e136026e110ae4c2a2"
+                              },
+                              {
+                                  "path":  "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01"
+                              },
+                              {
+                                  "path":  "/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337"
+                              },
+                              {
+                                  "path":  "/payloads/aios/production-distro-rc6-current-artifacts/revocations.json",
+                                  "status_code":  200,
+                                  "parsed_json":  true,
+                                  "body_sha256":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e"
+                              }
+                          ],
+    "optional_unpublished_endpoints":  [
+                                           {
+                                               "path":  "/install/compatibility.json",
+                                               "status_code":  404,
+                                               "parsed_json":  false,
+                                               "body_sha256":  "5d1d75b702f13e1bb14ff8d52cac1690acacec3a15821af7fe482a79afda5b99"
+                                           },
+                                           {
+                                               "path":  "/install/rollback-baseline.json",
+                                               "status_code":  404,
+                                               "parsed_json":  false,
+                                               "body_sha256":  "5d1d75b702f13e1bb14ff8d52cac1690acacec3a15821af7fe482a79afda5b99"
+                                           }
+                                       ],
+    "installer_steps":  [
+                            {
+                                "id":  "fetch-rc7-signed-consumption-metadata",
+                                "status":  "passed",
+                                "message":  "Fetched RC7 signed consumption metadata surface with local DNS bypassed.",
+                                "evidence":  [
+                                                 "/channel/index.json",
+                                                 "/install/bootstrap.json",
+                                                 "/payloads/index.json",
+                                                 "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+                                                 "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+                                                 "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+                                                 "/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+                                                 "/payloads/aios/production-distro-rc6-current-artifacts/revocations.json"
+                                             ]
+                            },
+                            {
+                                "id":  "verify-schema-and-production-ready-false",
+                                "status":  "passed",
+                                "message":  "Schemas are recognized and production_ready_claim remains false.",
+                                "evidence":  null
+                            },
+                            {
+                                "id":  "verify-hosted-publication-hash-bindings",
+                                "status":  "passed",
+                                "message":  "Hosted channel, install bootstrap, payload index, and signatures match RC7 publication hashes.",
+                                "evidence":  {
+                                                 "payload_index_sha256":  "2566f557ade61689a4c40c23236f3190f5ed3c996065f47fe6c268a11407c652",
+                                                 "install_bootstrap_sha256":  "13800c3d5a43598ef919c08e310720cf51f55213c010f33374427b220b93c8b0",
+                                                 "channel_index_schema":  "agentos.rc7-hosted-channel-index.v1",
+                                                 "signatures_sha256":  "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad"
+                                             }
+                            },
+                            {
+                                "id":  "verify-hosted-byte-hash-canonicalization",
+                                "status":  "blocked",
+                                "message":  "Downloaded endpoint byte hashes must match advertised publication hashes before install can advance.",
+                                "evidence":  {
+                                                 "payload_index_body_sha256":  "735e0ed64a55b2b4993ca98423b0643dd6c8bd137a1c6b23e70267456993b6f1",
+                                                 "expected_payload_index_sha256":  "2566f557ade61689a4c40c23236f3190f5ed3c996065f47fe6c268a11407c652",
+                                                 "install_bootstrap_body_sha256":  "4987e21cf715cd0420199f473d180f4d2e3ddaa521f0039dfc8a1e93cb4a8011",
+                                                 "expected_install_bootstrap_sha256":  "13800c3d5a43598ef919c08e310720cf51f55213c010f33374427b220b93c8b0",
+                                                 "channel_index_body_sha256":  "e3badc9d5b1433eac25d2244824bfe81b075e4113a966496d5889696fd36b49d",
+                                                 "expected_channel_index_sha256":  "7f6354dc2fb4f492f3732cc4f9c32b74e6047b861ba488725eb34ee4377b4086",
+                                                 "signatures_body_sha256":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01",
+                                                 "expected_signatures_sha256":  "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad",
+                                                 "signed_metadata_body_sha256":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337",
+                                                 "expected_signed_metadata_sha256":  "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4",
+                                                 "revocations_body_sha256":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e",
+                                                 "expected_revocations_sha256":  "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381"
+                                             }
+                            },
+                            {
+                                "id":  "verify-signed-metadata-reference",
+                                "status":  "passed",
+                                "message":  "Signed metadata projection is referenced by signatures metadata and payload index.",
+                                "evidence":  {
+                                                 "signed_metadata_path":  "/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+                                                 "signed_metadata_sha256":  "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4"
+                                             }
+                            },
+                            {
+                                "id":  "verify-revocation-snapshot-reference",
+                                "status":  "passed",
+                                "message":  "Revocation snapshot projection is referenced by signatures metadata and payload index.",
+                                "evidence":  {
+                                                 "revocation_snapshot_path":  "/payloads/aios/production-distro-rc6-current-artifacts/revocations.json",
+                                                 "revocation_snapshot_sha256":  "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381",
+                                                 "revocation_status":  "not-revoked"
+                                             }
+                            },
+                            {
+                                "id":  "verify-signature-claims-binding",
+                                "status":  "passed",
+                                "message":  "Signed metadata claims bind release id, payload manifest, and revocation snapshot.",
+                                "evidence":  {
+                                                 "release_id":  "production-distro-rc6-current-artifacts",
+                                                 "payload_manifest_content_sha256":  "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+                                                 "revocation_snapshot_sha256":  "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381"
+                                             }
+                            },
+                            {
+                                "id":  "verify-cryptographic-signature-value",
+                                "status":  "blocked",
+                                "message":  "A real cryptographic signature value must be present before install can advance.",
+                                "evidence":  {
+                                                 "cryptographic_signature_present":  false,
+                                                 "signature_available":  false
+                                             }
+                            },
+                            {
+                                "id":  "verify-installer-compatibility-publication",
+                                "status":  "blocked",
+                                "message":  "Installer compatibility metadata must be published and hash-bound from install bootstrap.",
+                                "evidence":  {
+                                                 "endpoint_status":  404,
+                                                 "schema":  null,
+                                                 "install_bootstrap_reference":  null
+                                             }
+                            },
+                            {
+                                "id":  "verify-rollback-baseline-publication",
+                                "status":  "blocked",
+                                "message":  "Rollback baseline metadata must be published and hash-bound from install bootstrap.",
+                                "evidence":  {
+                                                 "endpoint_status":  404,
+                                                 "schema":  null,
+                                                 "install_bootstrap_reference":  null
+                                             }
+                            },
+                            {
+                                "id":  "verify-storage-policy-and-drift-reconciliation",
+                                "status":  "blocked",
+                                "message":  "Large payload storage policy and declared/current hash drift must be resolved before install.",
+                                "evidence":  {
+                                                 "storage_mode":  "metadata-only",
+                                                 "large_payload_deferred":  true,
+                                                 "installable_media_declared_hash_drift_count":  3
+                                             }
+                            },
+                            {
+                                "id":  "verify-tls-ga-gate",
+                                "status":  "blocked",
+                                "message":  "TLS evidence is required before any GA or install-authorized claim.",
+                                "evidence":  {
+                                                 "validation_protocol":  "http",
+                                                 "tls_required_before_ga_claim":  true
+                                             }
+                            },
+                            {
+                                "id":  "verify-exact-operator-approval",
+                                "status":  "blocked",
+                                "message":  "Exact operator approval is not present in this metadata-only projection.",
+                                "evidence":  {
+                                                 "exact_approval_present":  false,
+                                                 "agentcore_planspec_issued":  false,
+                                                 "security_execution_engine_approved":  false
+                                             }
+                            }
+                        ],
+    "installer_blockers":  [
+                               {
+                                   "id":  "verify-hosted-byte-hash-canonicalization",
+                                   "status":  "blocked",
+                                   "message":  "Downloaded endpoint byte hashes must match advertised publication hashes before install can advance.",
+                                   "evidence":  {
+                                                    "payload_index_body_sha256":  "735e0ed64a55b2b4993ca98423b0643dd6c8bd137a1c6b23e70267456993b6f1",
+                                                    "expected_payload_index_sha256":  "2566f557ade61689a4c40c23236f3190f5ed3c996065f47fe6c268a11407c652",
+                                                    "install_bootstrap_body_sha256":  "4987e21cf715cd0420199f473d180f4d2e3ddaa521f0039dfc8a1e93cb4a8011",
+                                                    "expected_install_bootstrap_sha256":  "13800c3d5a43598ef919c08e310720cf51f55213c010f33374427b220b93c8b0",
+                                                    "channel_index_body_sha256":  "e3badc9d5b1433eac25d2244824bfe81b075e4113a966496d5889696fd36b49d",
+                                                    "expected_channel_index_sha256":  "7f6354dc2fb4f492f3732cc4f9c32b74e6047b861ba488725eb34ee4377b4086",
+                                                    "signatures_body_sha256":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01",
+                                                    "expected_signatures_sha256":  "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad",
+                                                    "signed_metadata_body_sha256":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337",
+                                                    "expected_signed_metadata_sha256":  "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4",
+                                                    "revocations_body_sha256":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e",
+                                                    "expected_revocations_sha256":  "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381"
+                                                }
+                               },
+                               {
+                                   "id":  "verify-cryptographic-signature-value",
+                                   "status":  "blocked",
+                                   "message":  "A real cryptographic signature value must be present before install can advance.",
+                                   "evidence":  {
+                                                    "cryptographic_signature_present":  false,
+                                                    "signature_available":  false
+                                                }
+                               },
+                               {
+                                   "id":  "verify-installer-compatibility-publication",
+                                   "status":  "blocked",
+                                   "message":  "Installer compatibility metadata must be published and hash-bound from install bootstrap.",
+                                   "evidence":  {
+                                                    "endpoint_status":  404,
+                                                    "schema":  null,
+                                                    "install_bootstrap_reference":  null
+                                                }
+                               },
+                               {
+                                   "id":  "verify-rollback-baseline-publication",
+                                   "status":  "blocked",
+                                   "message":  "Rollback baseline metadata must be published and hash-bound from install bootstrap.",
+                                   "evidence":  {
+                                                    "endpoint_status":  404,
+                                                    "schema":  null,
+                                                    "install_bootstrap_reference":  null
+                                                }
+                               },
+                               {
+                                   "id":  "verify-storage-policy-and-drift-reconciliation",
+                                   "status":  "blocked",
+                                   "message":  "Large payload storage policy and declared/current hash drift must be resolved before install.",
+                                   "evidence":  {
+                                                    "storage_mode":  "metadata-only",
+                                                    "large_payload_deferred":  true,
+                                                    "installable_media_declared_hash_drift_count":  3
+                                                }
+                               },
+                               {
+                                   "id":  "verify-tls-ga-gate",
+                                   "status":  "blocked",
+                                   "message":  "TLS evidence is required before any GA or install-authorized claim.",
+                                   "evidence":  {
+                                                    "validation_protocol":  "http",
+                                                    "tls_required_before_ga_claim":  true
+                                                }
+                               },
+                               {
+                                   "id":  "verify-exact-operator-approval",
+                                   "status":  "blocked",
+                                   "message":  "Exact operator approval is not present in this metadata-only projection.",
+                                   "evidence":  {
+                                                    "exact_approval_present":  false,
+                                                    "agentcore_planspec_issued":  false,
+                                                    "security_execution_engine_approved":  false
+                                                }
+                               }
+                           ],
+    "side_effects":  {
+                         "metadata_preflight_only":  true,
+                         "validation_used_local_dns":  false,
+                         "local_private_key_material_used":  false,
+                         "private_key_material_read_or_printed":  false,
+                         "cryptographic_signing_performed":  false,
+                         "install_allowed":  false,
+                         "install_performed":  false,
+                         "activation_allowed":  false,
+                         "activation_performed":  false,
+                         "rollback_execution_allowed":  false,
+                         "rollback_execution_performed":  false,
+                         "active_slot_mutated":  false,
+                         "production_ring_mutated":  false,
+                         "support_upload_performed":  false,
+                         "remote_dispatch_enabled":  false,
+                         "tui_authority":  false
+                     }
+}
