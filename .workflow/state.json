@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc8",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC8-003",
+    "current_task":  "RC8-010",
     "lifecycle_position":  "rc8-active-real-installable-payload-controlled-execution",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc8-003-public-signature-artifact-ingestion-boundary",
+    "next_allowed_action":  "execute-rc8-010-real-payload-object-descriptor-projection",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T17:55:00+08:00",
+    "updated_at":  "2026-06-08T18:15:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but real cryptographic signature, real payload bytes, installer VM smoke, exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is now active: RC8-001 freezes the real installable payload and controlled execution smoke contract; RC8-002 defines immutable payload object descriptor and byte quarantine boundaries. RC8 will next define public signature artifact ingestion, then move toward descriptor projection, installer VM preflight with quarantined byte verification, mirror metadata/frontend consistency, exact-approved canary activation smoke, and rollback drill execution or denial under AgentCore plus SecurityExecutionEngine. Current payload remains non-GA and install-blocked.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but real cryptographic signature, real payload bytes, installer VM smoke, exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is now active: RC8 Wave 0 is complete. RC8-001 freezes the real installable payload and controlled execution smoke contract; RC8-002 defines immutable payload object descriptor and byte quarantine boundaries; RC8-003 defines public signature artifact ingestion and receipt boundaries. Next work is RC8-010 real payload object descriptor projection, still non-GA and install-blocked.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1687,6 +1687,18 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-002-immutable-payload-object-descriptor-boundary.json"
+                      },
+                      {
+                          "type":  "rc8_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/public-signature-artifact-ingestion-contract.md"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-003.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-003-public-signature-artifact-ingestion-boundary.json"
                       }
                   ]
 }

@@ -23,7 +23,7 @@
         },
         {
           "id": "RC8-003",
-          "status": "pending",
+          "status": "completed",
           "title": "define public signature artifact ingestion and receipt boundary",
           "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/public-signature-artifact-ingestion-contract.md"
         }
@@ -114,7 +114,7 @@
       ]
     }
   ],
-  "current_task": "RC8-003",
+  "current_task": "RC8-010",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
   "acceptance_gates": {
     "hosted_endpoint_domain": "aios.w33d.xyz",
@@ -128,6 +128,8 @@
     "payload_bytes_must_be_downloaded_to_quarantine_before_digest_verification": true,
     "payload_signature_required_before_install": true,
     "public_signature_artifact_ingestion_only": true,
+    "public_signature_artifact_receipt_required": true,
+    "signature_artifact_must_bind_descriptor_object_canonical_payload_revocation_and_freshness": true,
     "private_key_material_forbidden": true,
     "revocation_snapshot_required_before_install": true,
     "installer_compatibility_required_before_install": true,
