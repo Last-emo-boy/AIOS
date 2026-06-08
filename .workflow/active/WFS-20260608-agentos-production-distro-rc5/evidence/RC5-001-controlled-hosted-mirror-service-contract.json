@@ -1,0 +1,76 @@
+{
+  "schema": "agentos.rc5-controlled-hosted-mirror-service-contract.v1",
+  "generated_at": "2026-06-08T11:00:00+08:00",
+  "task": "RC5-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "domain": "aios.w33d.xyz",
+  "server": {
+    "host": "47.101.11.109",
+    "role": "metadata-only hosted mirror service framework",
+    "large_artifact_storage_deferred": true
+  },
+  "source_bindings": {
+    "rc4_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+      "sha256": "87a8c69baed8be7e9143b59f5812c22a380d1be3b4d41dc6cfd6bb4b45bcd871"
+    },
+    "rc4_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+      "sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+      "verdict": "PASS",
+      "production_ready_claim": false
+    },
+    "rc4_hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335"
+    },
+    "rc4_mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+    }
+  },
+  "service_contract": {
+    "static_root": "/srv/aios-mirror",
+    "health_endpoint": "/health.json",
+    "well_known_endpoint": "/.well-known/aios/mirror.json",
+    "channel_index_endpoint": "/channel/index.json",
+    "release_metadata_prefix": "/releases/",
+    "storage_mode": "metadata-only",
+    "nginx_reverse_proxy_required": true,
+    "tls_required_before_ga_claim": true,
+    "directory_listing_allowed": false
+  },
+  "authority_boundaries": {
+    "remote_service_must_not_sign": true,
+    "remote_service_must_not_activate": true,
+    "remote_service_must_not_execute_rollback": true,
+    "remote_service_must_not_mutate_active_slot": true,
+    "remote_service_must_not_mutate_production_ring": true,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "local_private_key_material_allowed": false,
+    "operator_exact_approval_required_for_canary": true
+  },
+  "fail_closed_cases_required": [
+    "missing-health-json",
+    "malformed-health-json",
+    "missing-channel-index",
+    "missing-rc4-final-audit-binding",
+    "missing-hosted-transport-binding",
+    "stale-hosted-metadata",
+    "metadata-hash-drift",
+    "private-key-marker",
+    "signer-token-marker",
+    "host-local-absolute-path",
+    "large-artifact-reference-before-storage-upgrade",
+    "activation-authority-advertised",
+    "directory-listing-enabled"
+  ],
+  "completion": {
+    "rc5_001_complete": true,
+    "next_task": "RC5-002",
+    "commit_required": true
+  }
+}

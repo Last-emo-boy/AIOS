@@ -1,0 +1,111 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc5",
+  "milestone": "Production Distro RC5",
+  "status": "active",
+  "objective": "Turn RC4 local hosted transport and mirror evidence into a controlled hosted mirror service framework and canary-ready distributable channel without claiming GA production readiness.",
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "controlled hosted service contracts",
+      "tasks": [
+        {
+          "id": "RC5-001",
+          "status": "completed",
+          "title": "define controlled hosted mirror service and distributable channel contract",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md"
+        },
+        {
+          "id": "RC5-002",
+          "status": "pending",
+          "title": "define user-facing install and update channel boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md"
+        },
+        {
+          "id": "RC5-003",
+          "status": "pending",
+          "title": "define production mirror service threat model and non-GA hosting boundary",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/hosted-mirror-service-threat-model.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "hosted mirror service framework",
+      "tasks": [
+        {
+          "id": "RC5-010",
+          "status": "pending",
+          "title": "provision remote mirror service framework and nginx reverse proxy for aios.w33d.xyz",
+          "deliverable": ".workflow/artifacts/rc5-hosted-mirror-service/result.json"
+        },
+        {
+          "id": "RC5-011",
+          "status": "pending",
+          "title": "add hosted endpoint verifier for health and channel metadata",
+          "deliverable": ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json"
+        },
+        {
+          "id": "RC5-012",
+          "status": "pending",
+          "title": "add hosted metadata fail-closed fixtures for missing, stale, tampered, and oversized mirror state",
+          "deliverable": ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "distributable channel and canary proof",
+      "tasks": [
+        {
+          "id": "RC5-020",
+          "status": "pending",
+          "title": "project downloadable user release channel and bootstrap manifest",
+          "deliverable": ".workflow/artifacts/rc5-user-release-channel/result.json"
+        },
+        {
+          "id": "RC5-021",
+          "status": "pending",
+          "title": "prove controlled multi-node canary execution preconditions and rollback readiness",
+          "deliverable": ".workflow/artifacts/rc5-multi-node-canary-proof/result.json"
+        },
+        {
+          "id": "RC5-022",
+          "status": "pending",
+          "title": "project hosted service support and recovery operations",
+          "deliverable": ".workflow/artifacts/rc5-hosted-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "RC5 closeout",
+      "tasks": [
+        {
+          "id": "RC5-030",
+          "status": "pending",
+          "title": "run Production Distro RC5 final audit and next milestone planning",
+          "deliverable": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC5-002",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
+  "acceptance_gates": {
+    "hosted_endpoint_domain": "aios.w33d.xyz",
+    "hosted_service_framework_only": true,
+    "large_artifact_storage_deferred": true,
+    "hosted_metadata_must_be_hash_bound_to_rc4": true,
+    "nginx_reverse_proxy_required": true,
+    "tls_required_before_ga_claim": true,
+    "remote_service_must_not_sign": true,
+    "remote_service_must_not_activate": true,
+    "remote_service_must_not_mutate_active_slot": true,
+    "fleet_canary_requires_exact_operator_approval": true,
+    "rollback_execution_evidence_required_before_ga": true,
+    "tui_authority": false,
+    "local_private_key_material_forbidden": true,
+    "production_ready_claim": false
+  }
+}

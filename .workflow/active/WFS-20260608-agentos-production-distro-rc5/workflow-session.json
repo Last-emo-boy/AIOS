@@ -1,0 +1,46 @@
+{
+  "workflow_id": "WFS-20260608-agentos-production-distro-rc5",
+  "name": "Production Distro RC5",
+  "status": "active",
+  "created_at": "2026-06-08T11:00:00+08:00",
+  "updated_at": "2026-06-08T11:00:00+08:00",
+  "source": "TASK.md; RC4 final audit; operator-hosted mirror request",
+  "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
+  "goal": "Stand up a controlled hosted mirror service framework for aios.w33d.xyz, then prove hosted metadata verification and canary-readiness without weakening RC4 authority boundaries.",
+  "core_thesis": "AIOS becomes more distributable by exposing signed, hash-bound release metadata through a minimal hosted mirror while all signing, activation, rollout, and rollback authority remains outside the static mirror service.",
+  "non_goals": [
+    "Do not claim GA production readiness.",
+    "Do not store or read private production signing material on the mirror service.",
+    "Do not host large release payloads in RC5; only service framework, metadata, placeholders, and small indexes are in scope.",
+    "Do not let nginx, static files, shell, TUI, model replay, or remote service code activate a release or mutate active slots.",
+    "Do not treat DNS or HTTP reachability as release proof without hash binding, freshness, rollback, and fail-closed evidence."
+  ],
+  "primary_acceptance": [
+    "The hosted mirror service contract defines endpoint layout, storage boundaries, nginx boundary, metadata freshness, and fail-closed behavior for aios.w33d.xyz.",
+    "The remote service framework exposes health and channel metadata without private keys, activation authority, or large artifact storage.",
+    "Local verifier evidence proves hosted endpoint availability and rejects missing, stale, tampered, or oversized metadata.",
+    "Distributable channel projection explains how a user can fetch AIOS release metadata and bootstrap artifacts while preserving RC4 signing and promotion gates.",
+    "Multi-node canary proof remains exact-approval gated and rollback-ready; no production ring mutation is allowed by default."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC5-001",
+      "completed_at": "2026-06-08T11:00:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC5-002",
+  "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-001.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json"
+  ]
+}

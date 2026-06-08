@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-001",
+  "title": "define controlled hosted mirror service and distributable channel contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/hosted-release-transport-fleet-contract.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md",
+      "role": "contract"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json",
+      "role": "evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC5 plan status is active and RC5-001 is completed.",
+      "The contract names aios.w33d.xyz and the metadata-only storage boundary.",
+      "The evidence records production_ready_claim=false and remote_service_must_not_sign=true.",
+      "The next task is RC5-002."
+    ]
+  }
+}

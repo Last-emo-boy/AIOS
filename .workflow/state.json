@@ -1,18 +1,18 @@
 ﻿{
     "project":  "AIOS",
-    "workflow_name":  "agentos-production-distro-rc4",
-    "current_workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4",
-    "current_phase":  "production-distro-rc4",
+    "workflow_name":  "agentos-production-distro-rc5",
+    "current_workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+    "current_phase":  "production-distro-rc5",
     "status":  "active",
-    "phase_status":  "completed",
-    "current_task":  null,
-    "lifecycle_position":  "rc4-closeout-complete",
+    "phase_status":  "active",
+    "current_task":  "RC5-002",
+    "lifecycle_position":  "rc5-contracts-started",
     "blockers":  [],
-    "next_allowed_action":  "plan-production-distro-rc5-controlled-hosted-transport-service-and-multi-node-fleet-canary",
+    "next_allowed_action":  "execute-rc5-002-user-install-update-channel-boundary",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T10:40:00+08:00",
+    "updated_at":  "2026-06-08T11:00:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC3 is closed with external production signatures verified, immutable local release channel publication, signed channel consumption, support/recovery projection, and signing/publication gate integration. Production Distro RC4 is closed with hosted release transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, hosted/fleet promotion gate integration, and final closeout audit. RC4 remains non-GA: no activation, no rollback execution, no active registry/slot mutation, no production ring mutation, no remote dispatch, and no TUI authority. Next allowed action is Production Distro RC5 planning for controlled hosted transport service and multi-node fleet canary execution proof.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC4 is closed with hosted release transport, remote registry mirror replay, staged fleet rollout smoke, rollback projection, GA support/recovery projection, hosted/fleet promotion gate integration, and final closeout audit. Production Distro RC5 is active: RC5-001 defines the controlled hosted mirror service and distributable channel contract for aios.w33d.xyz on the operator-provided host 47.101.11.109. RC5 remains non-GA: no signing service, no activation, no rollback execution, no active registry/slot mutation, no production ring mutation, no large artifact storage, and no TUI authority. Next allowed action is RC5-002 user-facing install and update channel boundary.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -907,6 +907,26 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-030-final-closeout-audit.json"
+                      },
+                      {
+                          "type":  "workflow",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/workflow-session.json"
+                      },
+                      {
+                          "type":  "plan",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/plan.json"
+                      },
+                      {
+                          "type":  "rc5_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/.task/TASK-RC5-001.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-001-controlled-hosted-mirror-service-contract.json"
                       }
                   ]
 }
