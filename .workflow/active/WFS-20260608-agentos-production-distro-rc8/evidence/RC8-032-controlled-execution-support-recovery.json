@@ -1,0 +1,73 @@
+{
+  "schema": "agentos.rc8-controlled-execution-support-recovery-evidence.v1",
+  "generated_at": "2026-06-08T17:20:00+08:00",
+  "task": "RC8-032",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": {
+    "path": "scripts/project-rc8-controlled-execution-support-recovery.ps1",
+    "sha256": "0e57967ecf40ac4f764ea478251e3150f8bfeae43120ecd4a0b03f6f5a7f00e8"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/result.json",
+    "status": "passed",
+    "sha256": "788075a36406e2e4d04249e51aa1dd185487f979c15e39d549c171297c3a2965"
+  },
+  "local_outputs": {
+    "support_recovery_evidence_chain": {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "e3597e7137b2bda60d3724559930a5c05687941af3cde50aef575f8b40797a25",
+      "status": "support-recovery-bound-controlled-execution-blocked"
+    },
+    "controlled_execution_support_bundle": {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "ed8f363d0c8ad1889dc9ba2cb4eaaf2477c0e014dcd6c1174ccf27ccaf80cdde",
+      "status": "redacted-local-support-projection"
+    },
+    "recovery_reference_index": {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/recovery-reference-index.json",
+      "sha256": "fdb5da01e2d9d39e5a2c902fb890545a39f0b5c3f2682003cb5f2387a5889c5a",
+      "status": "projection-only-recovery-execution-blocked"
+    }
+  },
+  "controlled_execution_surface": {
+    "controlled_execution_support_recovery_bound": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "activation_allowed": false,
+    "activation_performed": false,
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc8_032_complete": true,
+    "next_task": "RC8-040",
+    "commit_required": true
+  }
+}

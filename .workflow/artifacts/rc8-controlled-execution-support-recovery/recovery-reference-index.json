@@ -1,0 +1,99 @@
+{
+    "schema":  "agentos.rc8-controlled-execution-recovery-reference-index.v1",
+    "generated_at":  "2026-06-08T17:07:33.9976520+08:00",
+    "status":  "projection-only-recovery-execution-blocked",
+    "production_ready_claim":  false,
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "entries":  [
+                    {
+                        "id":  "activation-denial",
+                        "kind":  "local-artifact",
+                        "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+                        "sha256":  "fc5aa7d53880a9adb2f0ea0b91b0cab8748c0f4657d1e8e9b6e28d169657c87b",
+                        "executable":  false
+                    },
+                    {
+                        "id":  "rollback-denial",
+                        "kind":  "local-artifact",
+                        "path":  ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+                        "sha256":  "7502cd82b1e846de994cfb557318d113ae1df6d4e32679d7dc2e017c369437a5",
+                        "executable":  false
+                    },
+                    {
+                        "id":  "rollback-planspec-requirement",
+                        "kind":  "local-artifact",
+                        "path":  ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-planspec-requirement.json",
+                        "sha256":  "10e36e2affe561a0831890ec22a6d01ebbe6ddec48535bd16cf53de8290b4f76",
+                        "executable":  false
+                    },
+                    {
+                        "id":  "rollback-baseline",
+                        "kind":  "live-metadata",
+                        "path":  "/install/rollback-baseline.json",
+                        "sha256":  "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+                        "executable":  false
+                    },
+                    {
+                        "id":  "compatibility",
+                        "kind":  "live-metadata",
+                        "path":  "/install/compatibility.json",
+                        "sha256":  "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+                        "executable":  false
+                    },
+                    {
+                        "id":  "support-index",
+                        "kind":  "live-metadata",
+                        "path":  "/support/index.json",
+                        "sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                        "executable":  false
+                    },
+                    {
+                        "id":  "support-recovery",
+                        "kind":  "live-metadata",
+                        "path":  "/support/recovery.json",
+                        "sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45",
+                        "executable":  false
+                    }
+                ],
+    "recovery_authority":  {
+                               "plan_authority":  "AgentCore",
+                               "side_effect_authority":  "SecurityExecutionEngine",
+                               "mirror_authority":  false,
+                               "signer_authority":  false,
+                               "support_metadata_authority":  false,
+                               "tui_authority":  false,
+                               "shell_authority":  false,
+                               "model_replay_authority":  false
+                           },
+    "required_before_execution":  [
+                                      "exact operator approval",
+                                      "AgentCore PlanSpec",
+                                      "SecurityExecutionEngine approval",
+                                      "2+ enrolled canary nodes",
+                                      "remote fleet execution gate",
+                                      "external HTTPS object URI",
+                                      "declared/current artifact drift reconciliation"
+                                  ],
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "persistent_state_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false,
+                       "production_ready_claim":  false
+                   }
+}

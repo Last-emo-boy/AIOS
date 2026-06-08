@@ -1,0 +1,55 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-032",
+  "title": "bind support and recovery evidence to the RC8 controlled execution smoke",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-planspec-requirement.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+    ".workflow/artifacts/release/fleet-rollout-authority.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc8-controlled-execution-support-recovery.ps1",
+      "role": "RC8 controlled execution support/recovery evidence projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/support-recovery-evidence-chain.json",
+      "role": "support/recovery evidence chain"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/controlled-execution-support-bundle.json",
+      "role": "redacted local support bundle projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-controlled-execution-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-032-controlled-execution-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The support/recovery evidence chain binds RC8 activation denial, rollback denial, rollback PlanSpec requirement, mirror metadata, rollback baseline, compatibility metadata, and live support/recovery metadata.",
+      "The support bundle projection is redacted, local-only, hash-bound, and upload-disabled.",
+      "Recovery references remain projection-only and non-executable until exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, canary enrollment, remote fleet execution, external HTTPS object URI publication, and drift reconciliation are complete.",
+      "The task does not sign, upload payloads, install, activate, rollback, mutate boot metadata, mutate active slots, mutate persistent state, mutate production rings, upload support bundles, dispatch remotely, or grant TUI authority."
+    ]
+  }
+}

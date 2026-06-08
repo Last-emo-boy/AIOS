@@ -1,0 +1,144 @@
+{
+    "schema":  "agentos.rc8-controlled-execution-support-recovery-chain.v1",
+    "generated_at":  "2026-06-08T17:07:33.9976520+08:00",
+    "status":  "support-recovery-bound-controlled-execution-blocked",
+    "production_ready_claim":  false,
+    "projection_only":  true,
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "controlled_execution":  {
+                                 "activation_allowed":  false,
+                                 "activation_performed":  false,
+                                 "rollback_readiness_ready":  true,
+                                 "rollback_execution_allowed":  false,
+                                 "rollback_execution_performed":  false,
+                                 "support_upload_allowed":  false,
+                                 "support_upload_performed":  false,
+                                 "recovery_execution_allowed":  false,
+                                 "recovery_execution_performed":  false
+                             },
+    "support_surface":  {
+                            "live_schema":  "agentos.rc5-hosted-support-index.v1",
+                            "status":  "hosted-metadata-only",
+                            "redacted":  true,
+                            "support_upload_allowed":  false,
+                            "recovery_execution_allowed":  false,
+                            "rollback_execution_allowed":  false,
+                            "inherited_support_channel":  "production-candidate-rc5"
+                        },
+    "recovery_surface":  {
+                             "live_schema":  "agentos.rc5-hosted-recovery-operations.v1",
+                             "status":  "projection-only",
+                             "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                             "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                             "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                             "baseline_consistent":  true,
+                             "rollback_readiness_operation_executable_by_mirror":  false
+                         },
+    "source_bindings":  {
+                            "rc8_activation_result_sha256":  "1e5c00d55d51b5220b6871832abeba0859015e129cf2117e70a5422b941acef5",
+                            "rc8_activation_gate_report_sha256":  "d26204fee8f6cb9184520648843a7cfbd9ff40b82c8c0b90494ddc11caa61a7b",
+                            "rc8_activation_denial_evidence_sha256":  "fc5aa7d53880a9adb2f0ea0b91b0cab8748c0f4657d1e8e9b6e28d169657c87b",
+                            "rc8_exact_approval_packet_sha256":  "b7484e367f7466d541650cc58d32b4fb0471a25b0c3b0360cd1832e5e14943de",
+                            "rc8_canary_target_set_sha256":  "81453c21737d4e5184078231f97af6e99fb585cd878e36e304bbbfc40fa2941d",
+                            "rc8_rollback_result_sha256":  "4bc3c094829dbf3a126d83bb9acf75833f080d1d4f13eca9aa739778734421db",
+                            "rc8_rollback_planspec_requirement_sha256":  "10e36e2affe561a0831890ec22a6d01ebbe6ddec48535bd16cf53de8290b4f76",
+                            "rc8_rollback_gate_report_sha256":  "1fa80244e738915f126f12468e136012f071d3c67728a589b4bba0d972ee0758",
+                            "rc8_rollback_denial_evidence_sha256":  "7502cd82b1e846de994cfb557318d113ae1df6d4e32679d7dc2e017c369437a5",
+                            "rc8_mirror_consistency_refresh_sha256":  "3ac605eb63ec9e048ae001e63614c98868849f68b5cfe32f6540a46d3a1f33ed",
+                            "rc8_hosted_payload_index_sha256":  "77408fab1641702a3a6baaddc1c82dc5e1ec3681dfcc1bc7cc0878c2705e9e6b",
+                            "rc8_install_bootstrap_sha256":  "7442340caa50a714c838e819fb513ef42594ffdfe00754450521111fa58b3ca2",
+                            "rc8_hosted_channel_index_sha256":  "0c72d39c7f8369762d17d7e25f3c8b4f811a6d283fe71465cf31e9118326b60b",
+                            "rc8_mirror_status_sha256":  "4882269fed05866be2bab88cb46caa9ba967c79212d7890b949c4dc28d76a970",
+                            "rc7_rollback_baseline_sha256":  "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+                            "rc7_rollback_baseline_result_sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                            "fleet_rollout_authority_sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc"
+                        },
+    "live_endpoint_bindings":  {
+                                   "channel":  {
+                                                   "path":  "/channel/index.json",
+                                                   "sha256":  "df82b055cc6435ce6ebf2368f5a38d11d99c6782cfcb5d0abada87649612c6b1"
+                                               },
+                                   "payload_index":  {
+                                                         "path":  "/payloads/index.json",
+                                                         "sha256":  "5eadc517d1c14bea86bf3a0a826824f9cbb91e78fd86629860827f93720e8045"
+                                                     },
+                                   "install_bootstrap":  {
+                                                             "path":  "/install/bootstrap.json",
+                                                             "sha256":  "538707817439383fcf9cd8f1bdf99541cf346decb8c636f13fb06b3ae492b927"
+                                                         },
+                                   "mirror_status":  {
+                                                         "path":  "/.well-known/aios/rc8-mirror-status.json",
+                                                         "sha256":  "6324bc47c962dc1188570410088273946cf0571a0077a361758702f0194fd475"
+                                                     },
+                                   "support_index":  {
+                                                         "path":  "/support/index.json",
+                                                         "sha256":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+                                                     },
+                                   "support_recovery":  {
+                                                            "path":  "/support/recovery.json",
+                                                            "sha256":  "66b79ad4b3d73ec3dad15ceceb03a223a368d532b400736cece2528cd0e4ec45"
+                                                        },
+                                   "support_readme":  {
+                                                          "path":  "/support/README.txt",
+                                                          "sha256":  "1360533a3f452041925a2b0bfe06277fa66288a9ea65a947dda81118997e5c7f"
+                                                      },
+                                   "compatibility":  {
+                                                         "path":  "/install/compatibility.json",
+                                                         "sha256":  "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45"
+                                                     },
+                                   "rollback_baseline":  {
+                                                             "path":  "/install/rollback-baseline.json",
+                                                             "sha256":  "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b"
+                                                         },
+                                   "object_descriptor":  {
+                                                             "path":  "/payloads/aios/production-distro-rc8-current-artifacts/object-descriptor.json",
+                                                             "sha256":  "728be2edd273b6adc838d5174dc829aee5f5f6c1e8b1149393a1da63a81432d1"
+                                                         },
+                                   "signature_receipt":  {
+                                                             "path":  "/payloads/aios/production-distro-rc8-current-artifacts/signature-receipt.json",
+                                                             "sha256":  "ed82de367edec0c017f8a048e745282f1def3002391be87f76bbc3aa97303f46"
+                                                         },
+                                   "installer_preflight":  {
+                                                               "path":  "/payloads/aios/production-distro-rc8-current-artifacts/installer-vm-preflight.json",
+                                                               "sha256":  "8193a9fa539c9330aa864c8cdf59e1fdb7921dec81d1f2b6e484439534a1a279"
+                                                           },
+                                   "installer_fail_closed":  {
+                                                                 "path":  "/payloads/aios/production-distro-rc8-current-artifacts/installer-byte-fail-closed.json",
+                                                                 "sha256":  "61bd9c0e8d08189e014f2d71ff75d061cc13cbe4910c33bd7d4d7c0d117ba746"
+                                                             }
+                               },
+    "remaining_blockers_before_controlled_execution":  [
+                                                           "external-https-object-uri-not-published",
+                                                           "declared-current-artifact-drift-unresolved",
+                                                           "canary-activation-evidence-not-executed",
+                                                           "two-or-more-enrolled-canary-target-nodes-required",
+                                                           "remote-fleet-execution-not-enabled",
+                                                           "exact-operator-approval-not-granted",
+                                                           "AgentCore-PlanSpec-not-bound",
+                                                           "AgentCore-rollback-PlanSpec-not-bound",
+                                                           "SecurityExecutionEngine-approval-not-bound",
+                                                           "SecurityExecutionEngine-rollback-approval-not-bound"
+                                                       ],
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "persistent_state_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false,
+                       "production_ready_claim":  false
+                   }
+}
