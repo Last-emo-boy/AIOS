@@ -1,0 +1,131 @@
+{
+  "schema": "agentos.rc13-freshness-revocation-authority-evidence.v1",
+  "generated_at": "2026-06-09T08:25:00+08:00",
+  "task": "RC13-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc13",
+  "script": {
+    "path": "scripts/project-rc13-freshness-revocation-authority.ps1",
+    "sha256": "baeaf801a12ae27faefbf2fb0d4c435eed1c4575ee37a6ce4079c3de90c70933"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc13-freshness-revocation-authority/result.json",
+    "status": "passed",
+    "sha256": "25cf6308bdbf545ec4b902153c9207353de02202903071a648124d1d5c2405db"
+  },
+  "outputs": {
+    "binding": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-binding.json",
+      "sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-denial.json",
+      "sha256": "9b3e1938529ed644717038c028766a1831c505da78f8e726f80fd1993df9b266"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-fail-closed-matrix.json",
+      "sha256": "456d9a9cccbae5c016bff696eb8967dd173550f902f9aa9d00e816752fe5fb61"
+    },
+    "quarantine_preflight_handoff": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/quarantine-preflight-handoff.json",
+      "sha256": "8546a8d5321560cc7e500ee4c46b00578bf90cd2f295c32944a08536a4ff337a"
+    }
+  },
+  "authority_surface": {
+    "state": "freshness-revocation-authority-denied",
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "revocation_authority_bound": true,
+    "revocation_snapshot_fresh": true,
+    "freshness_window_bound": false,
+    "freshness_window_current": false,
+    "freshness_revocation_authority_bound": false,
+    "local_descriptor_manifest_consistent": true,
+    "object_manifest_descriptor_binding_allowed": false,
+    "declared_current_drift_zero": false,
+    "comparisons": 20,
+    "comparison_drifts": 0,
+    "fail_closed_cases": 14,
+    "failed_fail_closed_cases": 0,
+    "object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "network_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "freshness-window-missing",
+      "freshness-window-stale-or-missing",
+      "object-manifest-descriptor-binding-not-allowed",
+      "declared-current-drift-zero-not-proved",
+      "nonzero-declared-current-drift-count",
+      "rc13-local-trust-gate-drift",
+      "rc12-declared-current-drift-carried-forward",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-https-object-uri-not-published",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "rc12-drift-zero-not-proved",
+      "rc12-object-trust-not-allowed",
+      "rc12-controlled-unblock-not-achieved",
+      "freshness-revocation-authority-not-bound",
+      "quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "object-trust-not-allowed"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "signer_service_called": false,
+    "signature_value_exposed": false,
+    "raw_public_identity_exposed": false,
+    "payload_upload_performed": false,
+    "object_storage_provisioned": false,
+    "network_probe_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "object_trust_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc13_012_complete": true,
+    "next_task": "RC13-020",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,393 @@
+{
+  "schema": "agentos.rc13-freshness-revocation-authority-result.v1",
+  "generated_at": "2026-06-09T08:25:00+08:00",
+  "task": "RC13-012",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "authority_surface": {
+    "state": "freshness-revocation-authority-denied",
+    "public_signature_bound": true,
+    "public_signature_crypto_verified": true,
+    "revocation_authority_bound": true,
+    "revocation_snapshot_fresh": true,
+    "freshness_window_bound": false,
+    "freshness_window_current": false,
+    "freshness_revocation_authority_bound": false,
+    "local_descriptor_manifest_consistent": true,
+    "object_manifest_descriptor_binding_allowed": false,
+    "declared_current_drift_zero": false,
+    "comparisons": 20,
+    "comparison_drifts": 0,
+    "fail_closed_cases": 14,
+    "failed_fail_closed_cases": 0,
+    "object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "network_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "freshness-window-missing",
+      "freshness-window-stale-or-missing",
+      "object-manifest-descriptor-binding-not-allowed",
+      "declared-current-drift-zero-not-proved",
+      "nonzero-declared-current-drift-count",
+      "rc13-local-trust-gate-drift",
+      "rc12-declared-current-drift-carried-forward",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-https-object-uri-not-published",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "rc12-drift-zero-not-proved",
+      "rc12-object-trust-not-allowed",
+      "rc12-controlled-unblock-not-achieved",
+      "freshness-revocation-authority-not-bound",
+      "quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "object-trust-not-allowed"
+    ]
+  },
+  "outputs": {
+    "binding": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-binding.json",
+      "sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-denial.json",
+      "sha256": "9b3e1938529ed644717038c028766a1831c505da78f8e726f80fd1993df9b266"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-fail-closed-matrix.json",
+      "sha256": "456d9a9cccbae5c016bff696eb8967dd173550f902f9aa9d00e816752fe5fb61"
+    },
+    "quarantine_preflight_handoff": {
+      "path": ".workflow/artifacts/rc13-freshness-revocation-authority/quarantine-preflight-handoff.json",
+      "sha256": "8546a8d5321560cc7e500ee4c46b00578bf90cd2f295c32944a08536a4ff337a"
+    }
+  },
+  "source": {
+    "rc13_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+      "sha256": "b1e51ee20bd2fecf12c2264156d798c11511086451c456be6bcef7e44a51449e",
+      "size_bytes": 8632,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc13_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+      "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+      "size_bytes": 8971,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc13_object_manifest_descriptor_result": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+      "sha256": "47794372cb1fd3a66fea12b47d34f91abf23fc0543c063d00ec377516b22fe79",
+      "size_bytes": 16931,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding-result.v1",
+      "status": "passed"
+    },
+    "rc13_object_manifest_descriptor_binding": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+      "sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8",
+      "size_bytes": 27125,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding.v1",
+      "status": "local-descriptor-manifest-consistent-authority-denied"
+    },
+    "rc13_freshness_revocation_handoff": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/freshness-revocation-authority-handoff.json",
+      "sha256": "e40cf8b8cd0ed06cd11a972a53c9d8afa7aa8a7b4c525d17e421fe33fcc31b04",
+      "size_bytes": 2882,
+      "present": true,
+      "schema": "agentos.rc13-freshness-revocation-authority-handoff.v1",
+      "status": "ready-for-rc13-012-with-authority-denied-until-upstream-gates-pass"
+    },
+    "rc8_signature_ingestion_result": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "sha256": "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+      "size_bytes": 6262,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+      "status": "passed"
+    },
+    "rc8_signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "size_bytes": 1533,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null
+    },
+    "rc8_signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "size_bytes": 1011,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null
+    },
+    "public_signature_artifact": {
+      "path": "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+      "sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+      "present": true,
+      "schema": "agentos.production-detached-signature.v1",
+      "signature_value_sha256": "0c3daedb64364996d2317cded045d5d46f5cac3b20452bb420e10ba7c6e34f3d",
+      "raw_signature_value_redacted": true
+    },
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "size_bytes": 2130,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "signed_metadata": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+      "sha256": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+      "size_bytes": 2790,
+      "present": true,
+      "schema": "agentos.rc7-signed-metadata-projection.v1",
+      "status": "signed-metadata-projected-verification-blocked"
+    },
+    "revocation_snapshot": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "size_bytes": 1451,
+      "present": true,
+      "schema": "agentos.rc7-revocation-snapshot.v1",
+      "status": "revocation-current-projected"
+    },
+    "public_keyring": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-custody.json",
+      "sha256": "28d207b008b8bac21bd3c467b10e28c207f2f1c94db4c92a17beea25630931ab",
+      "present": true,
+      "schema": "agentos.production-key-custody.v1",
+      "key_id": "agentos-production-root-v1",
+      "public_key_present": true,
+      "raw_public_identity_redacted": true
+    },
+    "revocation_log": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json",
+      "sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+      "present": true,
+      "schema": "agentos.production-key-revocation-log.v1",
+      "authority_refs_redacted": true
+    }
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "signer_service_called": false,
+    "signature_value_exposed": false,
+    "raw_public_identity_exposed": false,
+    "payload_upload_performed": false,
+    "object_storage_provisioned": false,
+    "network_probe_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "object_trust_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc13_012",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-012 must run after RC13-011 completed, either while current_task is RC13-012 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC13-012",
+        "rc13_011_status": "completed",
+        "rc13_012_status": "pending"
+      }
+    },
+    {
+      "id": "contract.freshness_revocation_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-012 must consume the RC13 public signature, freshness, revocation, and private-material boundary.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+        "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+        "size_bytes": 8971,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "source.object_manifest_descriptor.completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-012 requires completed RC13-011 descriptor/manifest consistency evidence.",
+      "evidence": {
+        "status": "passed",
+        "local_descriptor_manifest_consistent": true,
+        "binding_allowed": false
+      }
+    },
+    {
+      "id": "signature.public_crypto_verified",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Public signature target, receipt, summary, artifact, keyring, and canonical payload must be hash-bound and crypto verified without private material.",
+      "evidence": {
+        "crypto_verified": true,
+        "comparisons": 20,
+        "comparison_drifts": 0
+      }
+    },
+    {
+      "id": "revocation.snapshot_current",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Revocation snapshot and packaged revocation log must be bound, not revoked, and fresh at generated_at.",
+      "evidence": {
+        "revocation_status_not_revoked": true,
+        "valid_until": "2026-06-15T12:57:26.9439674+08:00",
+        "generated_at": "2026-06-09T08:25:00+08:00",
+        "revocation_snapshot_fresh": true
+      }
+    },
+    {
+      "id": "freshness.required_before_trust",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing or stale freshness window, or upstream binding denial, must deny freshness/revocation authority and object trust.",
+      "evidence": {
+        "freshness_window_bound": false,
+        "fresh_until": null,
+        "freshness_window_current": false,
+        "upstream_binding_allowed": false,
+        "authority_bound": false
+      }
+    },
+    {
+      "id": "fail_closed_matrix.all_negative_cases_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Freshness, revocation, public signature, private material, and upstream trust negative cases must fail closed.",
+      "evidence": {
+        "cases": 14,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-012 outputs must not contain PEM text, raw signature values, raw public identity, tokens, signer internals, or private authority paths.",
+      "evidence": null
+    },
+    {
+      "id": "outputs.side_effects_absent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-012 must not sign, call signer services, expose signature/key identity, trust objects, fetch/quarantine/interpret payloads, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": {
+        "private_key_material_read_or_printed": false,
+        "local_private_key_material_used": false,
+        "cryptographic_signing_performed": false,
+        "signer_service_called": false,
+        "signature_value_exposed": false,
+        "public_identity_exposed": false,
+        "object_trust_allowed": false,
+        "network_probe_performed": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false
+      }
+    }
+  ],
+  "blockers": [
+    "freshness-window-missing",
+    "freshness-window-stale-or-missing",
+    "object-manifest-descriptor-binding-not-allowed",
+    "declared-current-drift-zero-not-proved",
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed"
+  ],
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "comparisons": 20,
+    "comparison_drifts": 0,
+    "fail_closed_cases": 14,
+    "failed_fail_closed_cases": 0,
+    "public_signature_bound": true,
+    "revocation_authority_bound": true,
+    "freshness_window_bound": false,
+    "authority_denied_as_expected": true,
+    "rc13_012_complete": true,
+    "next_task": "RC13-020"
+  }
+}

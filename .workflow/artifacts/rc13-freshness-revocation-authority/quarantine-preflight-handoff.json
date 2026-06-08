@@ -1,0 +1,49 @@
+{
+  "schema": "agentos.rc13-quarantine-preflight-handoff.v1",
+  "generated_at": "2026-06-09T08:25:00+08:00",
+  "task": "RC13-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "blocked-by-freshness-revocation-authority",
+  "production_ready_claim": false,
+  "expected_next_task": "RC13-020",
+  "authority": {
+    "path": ".workflow/artifacts/rc13-freshness-revocation-authority/freshness-revocation-authority-binding.json",
+    "sha256": "fdcdbc2ba0b408ff6c93100ca6a30a614951226a598eed6771f02729c889c5f8",
+    "public_signature_bound": true,
+    "revocation_authority_bound": true,
+    "freshness_revocation_authority_bound": false,
+    "object_trust_allowed": false
+  },
+  "quarantine_preflight": {
+    "allowed": false,
+    "network_fetch_allowed": false,
+    "payload_interpretation_allowed": false,
+    "quarantine_write_allowed": false
+  },
+  "blockers": [
+    "freshness-window-missing",
+    "freshness-window-stale-or-missing",
+    "object-manifest-descriptor-binding-not-allowed",
+    "declared-current-drift-zero-not-proved",
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed"
+  ]
+}
