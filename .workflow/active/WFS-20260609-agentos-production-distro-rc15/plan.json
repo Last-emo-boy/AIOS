@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260609-agentos-production-distro-rc15",
   "milestone": "Production Distro RC15",
-  "status": "planned",
+  "status": "active",
   "objective": "Turn RC14 local trust and verified quarantine readiness into controlled local execution readiness by binding two real local canary target identities, a local audit sink, nonce, expiry, policy version, exact approval, executable AgentCore PlanSpec, and SecurityExecution allow decisions before controlled local activation and separately approved rollback are executed or denied.",
   "scope": {
     "included": [
@@ -43,7 +43,7 @@
         },
         {
           "id": "RC15-001",
-          "status": "pending",
+          "status": "completed",
           "title": "freeze RC15 controlled local execution readiness and authority contract",
           "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md"
         }
@@ -122,7 +122,7 @@
       ]
     }
   ],
-  "current_task": "RC15-001",
+  "current_task": "RC15-010",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
   "acceptance_gates": {
     "aios_body_only": true,
