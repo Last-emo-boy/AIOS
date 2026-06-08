@@ -1,0 +1,656 @@
+{
+    "schema":  "agentos.rc11-final-closeout-audit-result.v1",
+    "generated_at":  "2026-06-09T03:30:00+08:00",
+    "task":  "RC11-050",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "rc11_050_complete":  true,
+    "final_audit_written":  true,
+    "closeout_summary_written":  true,
+    "state_update_performed_by_writer":  false,
+    "install_performed":  false,
+    "activation_performed":  false,
+    "rollback_execution_performed":  false,
+    "support_upload_performed":  false,
+    "recovery_execution_performed":  false,
+    "remote_dispatch_enabled":  false,
+    "mirror_frontend_changed":  false,
+    "nginx_or_tls_changed":  false,
+    "signer_infra_changed":  false,
+    "outputs":  {
+                    "final_audit":  {
+                                        "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                                        "sha256":  "b0ad13de3bc7f83d1cc7a7be21d399e7ab623bfd96fb3317455c24ae87ea9470",
+                                        "present":  true
+                                    },
+                    "closeout_summary":  {
+                                             "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md",
+                                             "sha256":  "6b0b131ef8b46992cfa6f29694ad6c10474e5d9ca621b8099ece249800d49689",
+                                             "present":  true
+                                         }
+                },
+    "source_artifacts":  {
+                             "plan":  {
+                                          "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+                                          "sha256":  "0edac2f3699f37170148d0a9b2e85fb24a5439353cfc7cddbc5147ed74aeb7c7",
+                                          "size_bytes":  7568,
+                                          "present":  true,
+                                          "schema":  "agentos.workflow-plan.v1",
+                                          "status":  "completed"
+                                      },
+                             "workflow_session":  {
+                                                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/workflow-session.json",
+                                                      "sha256":  "f65fc64cd19fe4582ff5a5af17272d8d719ddda3977988de43f815688091d747",
+                                                      "size_bytes":  12878,
+                                                      "present":  true,
+                                                      "schema":  null,
+                                                      "status":  "completed"
+                                                  },
+                             "rc10_final_audit":  {
+                                                      "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
+                                                      "sha256":  "f63e0b9fae9d104f6849a2b64c0033916258261f1a200693a6a3eb73ef9b4450",
+                                                      "size_bytes":  23443,
+                                                      "present":  true,
+                                                      "schema":  "agentos.production-distro-rc10-final-audit.v1",
+                                                      "status":  null
+                                                  },
+                             "rc11_plan_doc":  {
+                                                   "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md",
+                                                   "sha256":  "d4d69c4ce8fb182f0fbe501418f788a7ef4115ca57714c294b5d4645675bbfb7",
+                                                   "size_bytes":  1928,
+                                                   "present":  true,
+                                                   "schema":  null,
+                                                   "status":  null
+                                               },
+                             "rc11_trust_contract":  {
+                                                         "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+                                                         "sha256":  "73fe35ab92d0c90f590147d0bf5c52670174b7e3566bb56f2354026ac947df4e",
+                                                         "size_bytes":  6429,
+                                                         "present":  true,
+                                                         "schema":  null,
+                                                         "status":  null
+                                                     },
+                             "planning_evidence":  {
+                                                       "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-000-planning.json",
+                                                       "sha256":  "8dc7ab31e9936e6c8a728989165b8ef8c3d4a5590a2f99e4adeb0841f6ca52b3",
+                                                       "size_bytes":  3093,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-planning-evidence.v1",
+                                                       "status":  "completed"
+                                                   },
+                             "contract_evidence":  {
+                                                       "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-001-real-object-trust-handoff-contract.json",
+                                                       "sha256":  "dfcd54ee771e65b14c9045c503b5292fc3f6d1732c89dec52ee4da6f4f03ee3e",
+                                                       "size_bytes":  3536,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-real-object-trust-handoff-contract-evidence.v1",
+                                                       "status":  "completed"
+                                                   },
+                             "byte_map_result":  {
+                                                     "path":  ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+                                                     "sha256":  "b56a82a785bdac498d507e9e4597431cc5bd2969dd04c0bf4d8dc09e015f2348",
+                                                     "size_bytes":  14315,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc11-release-object-byte-map-result.v1",
+                                                     "status":  "passed"
+                                                 },
+                             "byte_map":  {
+                                              "path":  ".workflow/artifacts/rc11-release-object-byte-map/release-object-byte-map.json",
+                                              "sha256":  "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+                                              "size_bytes":  3560,
+                                              "present":  true,
+                                              "schema":  "agentos.rc11-release-object-byte-map.v1",
+                                              "status":  "current-byte-map-candidate-verification-blocked"
+                                          },
+                             "descriptor_candidate":  {
+                                                          "path":  ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+                                                          "sha256":  "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+                                                          "size_bytes":  2413,
+                                                          "present":  true,
+                                                          "schema":  "agentos.payload-object-descriptor.v1",
+                                                          "status":  null
+                                                      },
+                             "descriptor_candidate_report":  {
+                                                                 "path":  ".workflow/artifacts/rc11-release-object-byte-map/descriptor-candidate-report.json",
+                                                                 "sha256":  "4db5bcdf21dcc534e14932815defe10c482e929ce1134b6c3b774f53020ba7ef",
+                                                                 "size_bytes":  6316,
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc11-release-object-descriptor-candidate-report.v1",
+                                                                 "status":  "current-byte-map-candidate-verification-blocked"
+                                                             },
+                             "drift_result":  {
+                                                  "path":  ".workflow/artifacts/rc11-declared-current-drift-zero/result.json",
+                                                  "sha256":  "1a57e4698f0caf3b9e82d33bf56b4b0eedb7e865ac0b1e9c0ca759bbc97ce403",
+                                                  "size_bytes":  9754,
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc11-declared-current-drift-zero-result.v1",
+                                                  "status":  "passed"
+                                              },
+                             "drift_reconciliation":  {
+                                                          "path":  ".workflow/artifacts/rc11-declared-current-drift-zero/declared-current-drift-zero-reconciliation.json",
+                                                          "sha256":  "fa1bdc01245b52b936360086675eda00cf3e62cc2b01793b2c9d4c6f60dafce7",
+                                                          "size_bytes":  29060,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc11-declared-current-drift-zero-reconciliation.v1",
+                                                          "status":  "declared-current-drift-denied"
+                                                      },
+                             "drift_denial":  {
+                                                  "path":  ".workflow/artifacts/rc11-declared-current-drift-zero/drift-zero-denial.json",
+                                                  "sha256":  "e034bc570b56ab7e60d89737bad3572d53684fa435a6ba438929338639336bc1",
+                                                  "size_bytes":  2281,
+                                                  "present":  true,
+                                                  "schema":  "agentos.rc11-drift-zero-denial.v1",
+                                                  "status":  "declared-current-drift-denied"
+                                              },
+                             "drift_handoff":  {
+                                                   "path":  ".workflow/artifacts/rc11-declared-current-drift-zero/external-descriptor-verification-handoff.json",
+                                                   "sha256":  "4e6f5f1743e83b8b734de7a6952a758d127034482867fe707871430f1533654c",
+                                                   "size_bytes":  1873,
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc11-external-descriptor-verification-handoff.v1",
+                                                   "status":  "blocked-by-declared-current-drift"
+                                               },
+                             "descriptor_verification_result":  {
+                                                                    "path":  ".workflow/artifacts/rc11-external-object-descriptor-verification/result.json",
+                                                                    "sha256":  "c5835489699b70bc0519a359d3a4875f4fb3192de28acae80a6f808f4e516ad8",
+                                                                    "size_bytes":  10048,
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc11-external-object-descriptor-verification-result.v1",
+                                                                    "status":  "passed"
+                                                                },
+                             "descriptor_verification_report":  {
+                                                                    "path":  ".workflow/artifacts/rc11-external-object-descriptor-verification/descriptor-verification-report.json",
+                                                                    "sha256":  "74813457b8b6d8beb9be385126c73e7c061b77d0c06035fe1e93e99a314deedc",
+                                                                    "size_bytes":  9958,
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc11-external-object-descriptor-verification-report.v1",
+                                                                    "status":  "external-descriptor-verification-denied"
+                                                                },
+                             "descriptor_verification_denial":  {
+                                                                    "path":  ".workflow/artifacts/rc11-external-object-descriptor-verification/descriptor-verification-denial.json",
+                                                                    "sha256":  "81e7db3fb7bc7830b78f265a81009bbddeafc2e8bf5395d255ff99556501cda4",
+                                                                    "size_bytes":  1062,
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc11-external-object-descriptor-verification-denial.v1",
+                                                                    "status":  "external-descriptor-verification-denied"
+                                                                },
+                             "descriptor_fail_closed":  {
+                                                            "path":  ".workflow/artifacts/rc11-external-object-descriptor-verification/descriptor-fail-closed-matrix.json",
+                                                            "sha256":  "d9a4d87688b70165009aafac9870e9c30efc6dd719890215a45f767e1c2d4001",
+                                                            "size_bytes":  5999,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc11-external-descriptor-fail-closed-matrix.v1",
+                                                            "status":  "passed"
+                                                        },
+                             "quarantine_result":  {
+                                                       "path":  ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json",
+                                                       "sha256":  "17da779b4aea1f8cf109ab3a734a2298037a3cd25532191c870c8f8fc36a8a03",
+                                                       "size_bytes":  9932,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-installer-quarantine-verifier-result.v1",
+                                                       "status":  "passed"
+                                                   },
+                             "quarantine_fetch_report":  {
+                                                             "path":  ".workflow/artifacts/rc11-installer-quarantine-verifier/quarantine-fetch-report.json",
+                                                             "sha256":  "6b96cb46070830e78d7c510926b7d3ff8d088249d40cb788c3afc90d5790ff60",
+                                                             "size_bytes":  2788,
+                                                             "present":  true,
+                                                             "schema":  "agentos.rc11-installer-quarantine-fetch-report.v1",
+                                                             "status":  "quarantine-fetch-denied-before-network"
+                                                         },
+                             "installer_fail_closed":  {
+                                                           "path":  ".workflow/artifacts/rc11-installer-quarantine-verifier/installer-fail-closed-matrix.json",
+                                                           "sha256":  "8b4770d8a878546d7a934a42bedd2f1e45edb4b82de87185059fd53055002ec0",
+                                                           "size_bytes":  36323,
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc11-installer-quarantine-fail-closed-matrix.v1",
+                                                           "status":  "passed"
+                                                       },
+                             "installer_gate_report":  {
+                                                           "path":  ".workflow/artifacts/rc11-installer-quarantine-verifier/installer-gate-report.json",
+                                                           "sha256":  "b66ebe3332a661990e076d277fd9f9fdddf2b8c2ab984f7e6966be5532672850",
+                                                           "size_bytes":  1505,
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc11-installer-quarantine-gate-report.v1",
+                                                           "status":  "installer-quarantine-fetch-blocked"
+                                                       },
+                             "handoff_result":  {
+                                                    "path":  ".workflow/artifacts/rc11-installer-agentcore-security-handoff/result.json",
+                                                    "sha256":  "b92cfb75f23f3f5123328925a739582874df5cafe8a9ba70a7b9541a133eea58",
+                                                    "size_bytes":  12421,
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc11-installer-agentcore-security-handoff-result.v1",
+                                                    "status":  "passed"
+                                                },
+                             "agentcore_handoff":  {
+                                                       "path":  ".workflow/artifacts/rc11-installer-agentcore-security-handoff/agentcore-planspec-handoff.json",
+                                                       "sha256":  "aed9ca7c1f4c0841c5e7c649c36a3dec25eaeffd4383995d774a71888571c1f6",
+                                                       "size_bytes":  7508,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-agentcore-installer-planspec-handoff.v1",
+                                                       "status":  "planspec-candidate-projected-denied"
+                                                   },
+                             "security_envelope":  {
+                                                       "path":  ".workflow/artifacts/rc11-installer-agentcore-security-handoff/security-execution-effect-envelope.json",
+                                                       "sha256":  "b73c836e131fab43a0d1c57852e1428f565cdf7a39486a0e3746a36f6d5e193c",
+                                                       "size_bytes":  3082,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-security-execution-installer-effect-envelope.v1",
+                                                       "status":  "security-execution-denied"
+                                                   },
+                             "handoff_denial":  {
+                                                    "path":  ".workflow/artifacts/rc11-installer-agentcore-security-handoff/handoff-denial.json",
+                                                    "sha256":  "cb02bbcc5108580c405aa358c1c14142054c29b214bbbcc06178f6bdd2508459",
+                                                    "size_bytes":  20365,
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc11-installer-agentcore-security-handoff-denial.v1",
+                                                    "status":  "installer-agentcore-security-handoff-denied"
+                                                },
+                             "approval_result":  {
+                                                     "path":  ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
+                                                     "sha256":  "f5fd1d7e687ce330b0e83d05ece4466c6ceb74f9585744c4197b7322a1242bf9",
+                                                     "size_bytes":  13856,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc11-two-target-canary-approval-result.v1",
+                                                     "status":  "passed"
+                                                 },
+                             "canary_target_set":  {
+                                                       "path":  ".workflow/artifacts/rc11-two-target-canary-approval/canary-target-set.json",
+                                                       "sha256":  "e9030c6e3ac491005d5a7edb79b3b8e4b7bee35c944d426f06bb59330ff8cc78",
+                                                       "size_bytes":  3881,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-two-target-canary-target-set.v1",
+                                                       "status":  "target-set-denied"
+                                                   },
+                             "exact_approval_package":  {
+                                                            "path":  ".workflow/artifacts/rc11-two-target-canary-approval/exact-approval-package.json",
+                                                            "sha256":  "057afe23f88d6e87715d6f4cf457275a6738572c149d08b7bdc4436e8499c148",
+                                                            "size_bytes":  3578,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc11-exact-approval-package.v1",
+                                                            "status":  "exact-approval-denied"
+                                                        },
+                             "approval_fail_closed":  {
+                                                          "path":  ".workflow/artifacts/rc11-two-target-canary-approval/approval-fail-closed-matrix.json",
+                                                          "sha256":  "a5be9521cd0e97c5831beedfd4467b035d83e5d1f8910cf7a853478f731431f7",
+                                                          "size_bytes":  8840,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc11-two-target-approval-fail-closed-matrix.v1",
+                                                          "status":  "passed"
+                                                      },
+                             "activation_approval_handoff":  {
+                                                                 "path":  ".workflow/artifacts/rc11-two-target-canary-approval/controlled-activation-approval-handoff.json",
+                                                                 "sha256":  "349c2f742134279f4c6ba099c38b761a0b11624c4128ddd0c8f07fde5a70c122",
+                                                                 "size_bytes":  2096,
+                                                                 "present":  true,
+                                                                 "schema":  "agentos.rc11-controlled-activation-approval-handoff.v1",
+                                                                 "status":  "blocked-by-target-and-approval-denial"
+                                                             },
+                             "activation_result":  {
+                                                       "path":  ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
+                                                       "sha256":  "16f764831fc3acd7631f899144b6519927aeaa3b5f6b13f7982c2b3cc0d0f92b",
+                                                       "size_bytes":  17681,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-controlled-canary-activation-result.v1",
+                                                       "status":  "passed"
+                                                   },
+                             "activation_gate":  {
+                                                     "path":  ".workflow/artifacts/rc11-controlled-canary-activation/activation-gate-report.json",
+                                                     "sha256":  "7f0f7bd7bda8b7e1506073801980bd629e26b14f76fa1a884a3deb73d1cc58be",
+                                                     "size_bytes":  5150,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc11-controlled-canary-activation-gate-report.v1",
+                                                     "status":  "activation-gates-evaluated-denied"
+                                                 },
+                             "activation_denial":  {
+                                                       "path":  ".workflow/artifacts/rc11-controlled-canary-activation/activation-denial-evidence.json",
+                                                       "sha256":  "a6c05904db42777111ae9f60a57bbdcc3153b9f2ae86604dd1909e47ad0184f1",
+                                                       "size_bytes":  11956,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-controlled-canary-activation-denial-evidence.v1",
+                                                       "status":  "activation-denied"
+                                                   },
+                             "activation_handoff":  {
+                                                        "path":  ".workflow/artifacts/rc11-controlled-canary-activation/controlled-activation-handoff.json",
+                                                        "sha256":  "f10822bea6143f52596f960c1bad1841e4569e0c99e047f7474fd5620cda956f",
+                                                        "size_bytes":  2308,
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc11-controlled-activation-handoff.v1",
+                                                        "status":  "blocked-by-activation-denial"
+                                                    },
+                             "rollback_result":  {
+                                                     "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json",
+                                                     "sha256":  "8828f12103bfaffa4f54c5c0bcec55eaf29a87095d917bda1bae601b9a8ffd5e",
+                                                     "size_bytes":  18637,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc11-controlled-rollback-support-recovery-result.v1",
+                                                     "status":  "passed"
+                                                 },
+                             "rollback_planspec":  {
+                                                       "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-planspec-requirement.json",
+                                                       "sha256":  "6874bed4bf0a2cdbf49c0385bc0590d908544815ad71af0729b09a7080c38915",
+                                                       "size_bytes":  6695,
+                                                       "present":  true,
+                                                       "schema":  "agentos.rc11-rollback-support-planspec-requirement.v1",
+                                                       "status":  "rollback-support-planspec-required-execution-blocked"
+                                                   },
+                             "rollback_gate":  {
+                                                   "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-gate-report.json",
+                                                   "sha256":  "aab90792a481ec65cdde1a8a02c2772147b06a64a385a255b9c5edf1d88eb03e",
+                                                   "size_bytes":  6497,
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc11-controlled-rollback-support-gate-report.v1",
+                                                   "status":  "rollback-support-gates-evaluated-denied"
+                                               },
+                             "rollback_denial":  {
+                                                     "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-denial-evidence.json",
+                                                     "sha256":  "52e7ba0266253fba74bbac528c46dfefceb447c241598005516f5936bdd33162",
+                                                     "size_bytes":  14005,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc11-controlled-rollback-support-denial-evidence.v1",
+                                                     "status":  "rollback-support-denied"
+                                                 },
+                             "support_recovery_chain":  {
+                                                            "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
+                                                            "sha256":  "b2b17f6422357a29b2263b06a26b2151b2ddbacfafceb6e3e3c80c7a12ca536a",
+                                                            "size_bytes":  5612,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc11-controlled-rollback-support-recovery-chain.v1",
+                                                            "status":  "support-recovery-bound-rollback-execution-blocked"
+                                                        },
+                             "support_bundle":  {
+                                                    "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
+                                                    "sha256":  "0db84376b10385840fad36681377a80118ac1553ee8b0e1bc0f39e926692352a",
+                                                    "size_bytes":  5459,
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc11-controlled-rollback-support-bundle-projection.v1",
+                                                    "status":  "redacted-local-support-projection"
+                                                },
+                             "recovery_index":  {
+                                                    "path":  ".workflow/artifacts/rc11-controlled-rollback-support-recovery/recovery-reference-index.json",
+                                                    "sha256":  "f4dc0aa13f3af072c1e0c5e8d4d234a0fa837517d812e3239d7eed462d257a4f",
+                                                    "size_bytes":  3408,
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc11-controlled-rollback-recovery-reference-index.v1",
+                                                    "status":  "projection-only-recovery-execution-blocked"
+                                                }
+                         },
+    "remaining_blockers_before_ga_or_execution":  [
+                                                      "external-https-object-uri-not-published",
+                                                      "declared-current-drift-zero-not-proved",
+                                                      "object-trust-not-allowed",
+                                                      "freshness-window-missing",
+                                                      "installer-quarantine-fetch-not-run",
+                                                      "payload-not-quarantined",
+                                                      "pre-interpretation-verification-not-run",
+                                                      "two-target-canary-not-enrolled",
+                                                      "target-node-ids-missing",
+                                                      "exact-operator-approval-not-granted",
+                                                      "approval-audit-sink-not-bound",
+                                                      "approval-expiry-not-bound",
+                                                      "approval-nonce-not-bound",
+                                                      "agentcore-planspec-not-executable",
+                                                      "security-execution-effect-envelope-denied",
+                                                      "controlled-activation-not-authorized",
+                                                      "controlled-canary-activation-not-performed",
+                                                      "rollback-exact-operator-approval-not-granted",
+                                                      "agentcore-rollback-planspec-not-bound",
+                                                      "security-execution-rollback-effect-envelope-not-bound",
+                                                      "rollback-audit-journal-not-bound",
+                                                      "post-rollback-observations-missing",
+                                                      "remote-fleet-execution-not-enabled"
+                                                  ],
+    "checks":  [
+                   {
+                       "id":  "rc11.plan.precloseout_complete",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "All RC11 pre-closeout tasks must be completed and RC11-050 must be pending before first audit or completed on rerun.",
+                       "evidence":  {
+                                        "completed":  10,
+                                        "expected":  10,
+                                        "current_task":  null,
+                                        "rc11_050_status":  "completed",
+                                        "plan_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.docs.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 plan and real-object trust handoff contract must exist.",
+                       "evidence":  {
+                                        "plan_doc":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md",
+                                        "trust_contract":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md"
+                                    }
+                   },
+                   {
+                       "id":  "rc10.previous_milestone.closed",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 final audit must inherit a PASS RC10 final audit without GA claim.",
+                       "evidence":  {
+                                        "verdict":  "PASS",
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "rc11.byte_map.candidate_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 release object byte map must pass while external HTTPS object URI, install, activation, and rollback remain blocked.",
+                       "evidence":  {
+                                        "checks":  9,
+                                        "failed_checks":  0,
+                                        "rc11_010_complete":  true,
+                                        "next_task":  "RC11-011"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.declared_current_drift.denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 declared/current drift reconciliation must deny object trust while carried-forward drift remains.",
+                       "evidence":  {
+                                        "checks":  7,
+                                        "failed_checks":  0,
+                                        "drift_count":  13,
+                                        "drift_zero_denied_as_expected":  true,
+                                        "rc11_011_complete":  true,
+                                        "next_task":  "RC11-012"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.external_descriptor.verification_denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 external object descriptor verification must match current bytes but deny trust because URI, drift-zero, and freshness gates are missing.",
+                       "evidence":  {
+                                        "checks":  8,
+                                        "failed_checks":  0,
+                                        "descriptor_verified":  false,
+                                        "verification_denied_as_expected":  true,
+                                        "fail_closed_cases":  12,
+                                        "failed_fail_closed_cases":  0,
+                                        "rc11_012_complete":  true,
+                                        "next_task":  "RC11-020"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.quarantine_fetch.denied_before_network",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 installer quarantine fetch must deny before network and avoid quarantine writes or payload interpretation.",
+                       "evidence":  {
+                                        "checks":  7,
+                                        "failed_checks":  0,
+                                        "cases":  20,
+                                        "failed_cases":  0,
+                                        "fetch_denied_as_expected":  true,
+                                        "rc11_020_complete":  true,
+                                        "next_task":  "RC11-021"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.installer_agentcore_security.denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 installer preflight must be hash-bound into AgentCore/SecurityExecution handoff while executable authority remains denied.",
+                       "evidence":  {
+                                        "checks":  8,
+                                        "failed_checks":  0,
+                                        "cases":  12,
+                                        "failed_cases":  0,
+                                        "rc11_021_complete":  true,
+                                        "handoff_state":  "installer-agentcore-security-handoff-denied",
+                                        "installer_preflight_bound":  true,
+                                        "agentcore_planspec_candidate_projected":  true,
+                                        "security_execution_allowed":  false,
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "next_task":  "RC11-030"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.two_target_approval.denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 canary approval must deny with one observed candidate, zero enrolled targets, and no exact approval grant.",
+                       "evidence":  {
+                                        "checks":  9,
+                                        "failed_checks":  0,
+                                        "cases":  15,
+                                        "failed_cases":  0,
+                                        "rc11_030_complete":  true,
+                                        "target_set_enrolled":  false,
+                                        "exact_approval_bound":  false,
+                                        "approval_granted":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "next_task":  "RC11-031"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.activation.denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 controlled canary activation must remain denied and side-effect free.",
+                       "evidence":  {
+                                        "checks":  9,
+                                        "failed_checks":  0,
+                                        "cases":  10,
+                                        "failed_cases":  0,
+                                        "rc11_031_complete":  true,
+                                        "activation_state":  "activation-denied",
+                                        "activation_allowed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_allowed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "production_ready_claim":  false,
+                                        "next_task":  "RC11-040"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.rollback_support_recovery.denied",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 rollback, support upload, and recovery execution must remain denied while local redacted support evidence is bound.",
+                       "evidence":  {
+                                        "checks":  10,
+                                        "failed_checks":  0,
+                                        "cases":  11,
+                                        "failed_cases":  0,
+                                        "rc11_040_complete":  true,
+                                        "rollback_state":  "rollback-denied",
+                                        "rollback_readiness_ready":  true,
+                                        "rollback_execution_allowed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "canary_activation_performed":  false,
+                                        "support_upload_allowed":  false,
+                                        "support_upload_performed":  false,
+                                        "recovery_execution_allowed":  false,
+                                        "recovery_execution_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "production_ready_claim":  false,
+                                        "next_task":  "RC11-050"
+                                    }
+                   },
+                   {
+                       "id":  "rc11.no_invariant_authority_broadened",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC11 task invariants must not broaden signing, mirror, frontend, install, activation, rollback, support, recovery, remote dispatch, or production authority.",
+                       "evidence":  {
+                                        "violations":  [
+
+                                                       ]
+                                    }
+                   },
+                   {
+                       "id":  "final_audit.written",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC11 audit artifact must be written.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                                        "sha256":  "b0ad13de3bc7f83d1cc7a7be21d399e7ab623bfd96fb3317455c24ae87ea9470"
+                                    }
+                   },
+                   {
+                       "id":  "closeout_summary.written",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC11 closeout summary must be written.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md",
+                                        "sha256":  "6b0b131ef8b46992cfa6f29694ad6c10474e5d9ca621b8099ece249800d49689"
+                                    }
+                   },
+                   {
+                       "id":  "closeout_outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC11 closeout outputs must not contain private key or token markers.",
+                       "evidence":  {
+                                        "final_audit":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                                        "closeout_summary":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md"
+                                    }
+                   },
+                   {
+                       "id":  "closeout_outputs.host_path_free",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Final RC11 closeout outputs must not contain host-local absolute paths.",
+                       "evidence":  {
+                                        "final_audit":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                                        "closeout_summary":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md"
+                                    }
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "summary":  {
+                    "checks":  16,
+                    "blockers":  0,
+                    "rc11_050_complete":  true,
+                    "final_audit_written":  true,
+                    "closeout_summary_written":  true,
+                    "byte_map_state":  "current-byte-map-candidate-verification-blocked",
+                    "drift_state":  "declared-current-drift-denied",
+                    "drift_count":  13,
+                    "descriptor_verification_state":  "external-descriptor-verification-denied",
+                    "quarantine_fetch_state":  "quarantine-fetch-denied-before-network",
+                    "handoff_state":  "installer-agentcore-security-handoff-denied",
+                    "approval_state":  "target-and-approval-denied",
+                    "activation_state":  "activation-denied",
+                    "rollback_state":  "rollback-denied",
+                    "support_recovery_binding_present":  true,
+                    "production_ready_claim":  false,
+                    "next_milestone":  "Production Distro RC12"
+                }
+}

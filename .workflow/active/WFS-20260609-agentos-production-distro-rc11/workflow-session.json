@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260609-agentos-production-distro-rc11",
   "name": "Production Distro RC11",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-09T01:10:00+08:00",
-  "updated_at": "2026-06-09T03:15:00+08:00",
+  "updated_at": "2026-06-09T03:30:00+08:00",
   "source": "RC10 final audit; maestro-managed RC11 planning",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
   "goal": "Plan and execute AIOS-body controlled unblock for real object verification, drift-zero reconciliation, installer quarantine fetch verification, exact approval binding, AgentCore/SecurityExecution controlled activation, rollback, and support/recovery evidence.",
@@ -81,14 +81,22 @@
       "completed_at": "2026-06-09T03:15:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-040-controlled-rollback-support-recovery.json",
       "commit": null
+    },
+    {
+      "task": "RC11-050",
+      "completed_at": "2026-06-09T03:30:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-050-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC11-050",
+  "next_task": "RC12-planning",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/final-rc10-closeout-summary.md",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/rc11-real-object-controlled-execution-unblock-plan.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
@@ -159,6 +167,11 @@
     ".workflow/artifacts/rc11-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
     ".workflow/artifacts/rc11-controlled-rollback-support-recovery/recovery-reference-index.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-040-controlled-rollback-support-recovery.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-050.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-050.json",
+    "scripts/run-rc11-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc11-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-050-final-closeout-audit.json"
   ]
 }

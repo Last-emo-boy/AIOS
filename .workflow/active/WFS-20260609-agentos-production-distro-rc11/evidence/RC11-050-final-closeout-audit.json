@@ -1,0 +1,84 @@
+{
+    "schema":  "agentos.rc11-final-closeout-audit-evidence.v1",
+    "generated_at":  "2026-06-09T03:30:00+08:00",
+    "task":  "RC11-050",
+    "status":  "completed",
+    "production_ready_claim":  false,
+    "workflow":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+    "script":  {
+                   "path":  "scripts/run-rc11-final-closeout-audit.ps1",
+                   "sha256":  "7f03c8c81fffaf1a3b917712b1fdc9ef865bac89eac7c9156ff1b419ce4f4f9b"
+               },
+    "result":  {
+                   "path":  ".workflow/artifacts/rc11-final-closeout-audit/result.json",
+                   "status":  "passed",
+                   "sha256":  "aa1d6962aded6beb5aae1122f4215d0d068211fb6a92ee6ccd67c7a286ca7df0"
+               },
+    "outputs":  {
+                    "final_audit":  {
+                                        "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/FINAL-AUDIT-20260609-production-distro-rc11.json",
+                                        "sha256":  "b0ad13de3bc7f83d1cc7a7be21d399e7ab623bfd96fb3317455c24ae87ea9470",
+                                        "verdict":  "PASS"
+                                    },
+                    "closeout_summary":  {
+                                             "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/final-rc11-closeout-summary.md",
+                                             "sha256":  "6b0b131ef8b46992cfa6f29694ad6c10474e5d9ca621b8099ece249800d49689"
+                                         }
+                },
+    "audit_surface":  {
+                          "checks":  16,
+                          "blockers":  0,
+                          "rc11_050_complete":  true,
+                          "final_audit_written":  true,
+                          "closeout_summary_written":  true,
+                          "byte_map_state":  "current-byte-map-candidate-verification-blocked",
+                          "drift_state":  "declared-current-drift-denied",
+                          "drift_count":  13,
+                          "descriptor_verification_state":  "external-descriptor-verification-denied",
+                          "quarantine_fetch_state":  "quarantine-fetch-denied-before-network",
+                          "handoff_state":  "installer-agentcore-security-handoff-denied",
+                          "approval_state":  "target-and-approval-denied",
+                          "activation_state":  "activation-denied",
+                          "rollback_state":  "rollback-denied",
+                          "support_recovery_binding_present":  true,
+                          "production_ready_claim":  false,
+                          "next_milestone":  "Production Distro RC12"
+                      },
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "mirror_frontend_changed":  false,
+                       "nginx_or_tls_changed":  false,
+                       "signer_infra_changed":  false,
+                       "private_key_material_used":  false,
+                       "cryptographic_signing_performed":  false,
+                       "mirror_is_root_of_trust":  false,
+                       "frontend_authority":  false,
+                       "mirror_authority":  false,
+                       "signer_reachability_authority":  false,
+                       "endpoint_reachability_is_trust":  false,
+                       "external_payload_bytes_uploaded":  false,
+                       "network_probe_performed":  false,
+                       "network_fetch_attempted":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "quarantine_payload_written":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false
+                   },
+    "completion":  {
+                       "rc11_050_complete":  true,
+                       "next_milestone":  "Production Distro RC12",
+                       "commit_required":  true
+                   }
+}
