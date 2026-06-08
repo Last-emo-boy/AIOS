@@ -1,0 +1,23 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-003",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:12:00+08:00",
+  "summary": "Defined RC4 GA-hardening acceptance gates and non-GA boundary. RC4 may pass hosted transport and fleet proof, but production_ready_claim remains false until later GA gates close.",
+  "deliverables": {
+    "contract": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/docs/ga-hardening-acceptance-gates.md",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-003-ga-hardening-acceptance-gates.json"
+  },
+  "acceptance_coverage": {
+    "hosted_transport_gate_defined": true,
+    "mirror_replay_gate_defined": true,
+    "fleet_rollout_gate_defined": true,
+    "support_recovery_gate_defined": true,
+    "promotion_gate_defined": true,
+    "production_ready_claim": false,
+    "ga_scope_deferred": true
+  },
+  "handoff": {
+    "next_task": "RC4-004"
+  }
+}
