@@ -1,0 +1,90 @@
+{
+    "schema":  "agentos.rc8-canary-activation-denial-evidence.v1",
+    "generated_at":  "2026-06-08T16:51:20.9268528+08:00",
+    "status":  "activation-denied-by-gates",
+    "production_ready_claim":  false,
+    "projection_only":  true,
+    "canary_activation_allowed":  false,
+    "canary_activation_performed":  false,
+    "activation_allowed":  false,
+    "activation_performed":  false,
+    "denial_cases":  [
+                         {
+                             "id":  "external-https-object-uri-not-published",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "payload descriptor still uses non-external object identity"
+                         },
+                         {
+                             "id":  "declared-current-artifact-drift-unresolved",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "declared/current drift remains an explicit payload blocker"
+                         },
+                         {
+                             "id":  "canary-target-set-not-enrolled",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "observed canary node count is below required minimum"
+                         },
+                         {
+                             "id":  "remote-fleet-execution-disabled",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "fleet dispatch remains disabled outside TUI projection"
+                         },
+                         {
+                             "id":  "exact-operator-approval-not-granted",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "approval packet is projection-only and approval_granted is false"
+                         },
+                         {
+                             "id":  "agentcore-planspec-not-bound",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "AgentCore PlanSpec binding is absent"
+                         },
+                         {
+                             "id":  "security-execution-approval-not-bound",
+                             "status":  "passed",
+                             "activation_allowed":  false,
+                             "reason":  "SecurityExecutionEngine approval is absent"
+                         }
+                     ],
+    "remaining_blockers_before_activation":  [
+                                                 "external-https-object-uri-not-published",
+                                                 "declared-current-artifact-drift-unresolved",
+                                                 "two-or-more-enrolled-canary-target-nodes-required",
+                                                 "remote-fleet-execution-not-enabled",
+                                                 "exact-operator-approval-not-granted",
+                                                 "AgentCore-PlanSpec-not-bound",
+                                                 "SecurityExecutionEngine-approval-not-bound"
+                                             ],
+    "authority":  {
+                      "plan_authority":  "AgentCore",
+                      "side_effect_authority":  "SecurityExecutionEngine",
+                      "mirror_authority":  false,
+                      "signer_authority":  false,
+                      "tui_authority":  false,
+                      "shell_authority":  false,
+                      "model_replay_authority":  false
+                  },
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false
+                   }
+}

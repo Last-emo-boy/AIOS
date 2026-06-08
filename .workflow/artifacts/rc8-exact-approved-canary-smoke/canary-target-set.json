@@ -1,0 +1,44 @@
+{
+    "schema":  "agentos.rc8-canary-target-set.v1",
+    "generated_at":  "2026-06-08T16:51:20.9268528+08:00",
+    "status":  "projected-target-set-enrollment-blocked",
+    "release_id":  "production-distro-rc8-current-artifacts",
+    "object_id":  "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "object_sha256":  "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "ring":  "canary",
+    "required_minimum_nodes":  2,
+    "observed_canary_node_count":  1,
+    "enrolled_target_count":  0,
+    "target_set_enrolled":  false,
+    "target_selection_policy":  "two-or-more-enrolled-canary-nodes-required-before-activation",
+    "projected_targets":  [
+                              {
+                                  "slot":  "canary-a",
+                                  "required":  true,
+                                  "enrollment_status":  "missing",
+                                  "node_id":  null,
+                                  "target_profile_hash":  null
+                              },
+                              {
+                                  "slot":  "canary-b",
+                                  "required":  true,
+                                  "enrollment_status":  "missing",
+                                  "node_id":  null,
+                                  "target_profile_hash":  null
+                              }
+                          ],
+    "authority":  {
+                      "plan_authority":  "AgentCore",
+                      "side_effect_authority":  "SecurityExecutionEngine",
+                      "mirror_authority":  false,
+                      "signer_authority":  false,
+                      "tui_authority":  false,
+                      "shell_authority":  false,
+                      "model_replay_authority":  false
+                  },
+    "blockers":  [
+                     "two-or-more-enrolled-canary-target-nodes-required",
+                     "remote-fleet-execution-not-enabled",
+                     "exact-operator-approval-not-granted"
+                 ]
+}

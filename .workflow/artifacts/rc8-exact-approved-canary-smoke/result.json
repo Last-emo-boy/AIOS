@@ -1,0 +1,509 @@
+{
+    "schema":  "agentos.rc8-exact-approved-canary-smoke-result.v1",
+    "generated_at":  "2026-06-08T16:51:20.9268528+08:00",
+    "checked_at":  "2026-06-08T16:51:21.0548941+08:00",
+    "task":  "RC8-030",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "canary_activation_smoke_packet_projected":  true,
+    "canary_activation_allowed":  false,
+    "canary_activation_performed":  false,
+    "activation_allowed":  false,
+    "activation_performed":  false,
+    "rollback_execution_allowed":  false,
+    "rollback_execution_performed":  false,
+    "artifacts":  {
+                      "canary_target_set":  {
+                                                "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+                                                "sha256":  "81453c21737d4e5184078231f97af6e99fb585cd878e36e304bbbfc40fa2941d",
+                                                "schema":  "agentos.rc8-canary-target-set.v1",
+                                                "status":  "projected-target-set-enrollment-blocked"
+                                            },
+                      "exact_approval_packet":  {
+                                                    "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/exact-approval-packet.json",
+                                                    "sha256":  "b7484e367f7466d541650cc58d32b4fb0471a25b0c3b0360cd1832e5e14943de",
+                                                    "schema":  "agentos.rc8-exact-canary-approval-packet.v1",
+                                                    "status":  "approval-required-execution-blocked",
+                                                    "approval_binding_sha256":  "a8ba81a38883ee8013db685e1e25c23511a2df7edfc5349d91c858b8624d242d"
+                                                },
+                      "activation_smoke_gate_report":  {
+                                                           "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
+                                                           "sha256":  "d26204fee8f6cb9184520648843a7cfbd9ff40b82c8c0b90494ddc11caa61a7b",
+                                                           "schema":  "agentos.rc8-canary-activation-smoke-gate-report.v1",
+                                                           "status":  "activation-smoke-gates-evaluated-blocked"
+                                                       },
+                      "activation_denial_evidence":  {
+                                                         "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+                                                         "sha256":  "fc5aa7d53880a9adb2f0ea0b91b0cab8748c0f4657d1e8e9b6e28d169657c87b",
+                                                         "schema":  "agentos.rc8-canary-activation-denial-evidence.v1",
+                                                         "status":  "activation-denied-by-gates"
+                                                     }
+                  },
+    "source_artifacts":  {
+                             "rc8_descriptor_result":  {
+                                                           "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+                                                           "sha256":  "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc8-real-payload-object-descriptor-result.v1",
+                                                           "status":  "passed"
+                                                       },
+                             "rc8_descriptor":  {
+                                                    "path":  ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+                                                    "sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                                                    "present":  true,
+                                                    "schema":  "agentos.payload-object-descriptor.v1",
+                                                    "status":  null
+                                                },
+                             "rc8_signature_ingestion_result":  {
+                                                                    "path":  ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+                                                                    "sha256":  "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc8-public-signature-ingestion-result.v1",
+                                                                    "status":  "passed"
+                                                                },
+                             "rc8_signature_receipt":  {
+                                                           "path":  ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+                                                           "sha256":  "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc8-public-signature-ingestion-receipt.v1",
+                                                           "status":  null
+                                                       },
+                             "rc8_signature_summary":  {
+                                                           "path":  ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+                                                           "sha256":  "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc8-public-signature-artifact-summary.v1",
+                                                           "status":  null
+                                                       },
+                             "rc8_signed_descriptor_fail_closed":  {
+                                                                       "path":  ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+                                                                       "sha256":  "67acffa942e5dda3c2a37f70ca03349bc15a7dc452ad5715fd7f77934efbff52",
+                                                                       "present":  true,
+                                                                       "schema":  "agentos.rc8-signed-object-descriptor-fail-closed-result.v1",
+                                                                       "status":  "passed"
+                                                                   },
+                             "rc8_installer_vm_preflight":  {
+                                                                "path":  ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+                                                                "sha256":  "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b",
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc8-installer-vm-preflight-result.v1",
+                                                                "status":  "passed"
+                                                            },
+                             "rc8_installer_byte_fail_closed":  {
+                                                                    "path":  ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+                                                                    "sha256":  "9391926d751bc42786cee0fcc66e5f65eb9df2a1cb627507954c24ca5abb55be",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc8-installer-byte-fail-closed-result.v1",
+                                                                    "status":  "passed"
+                                                                },
+                             "rc8_mirror_consistency_refresh":  {
+                                                                    "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+                                                                    "sha256":  "3ac605eb63ec9e048ae001e63614c98868849f68b5cfe32f6540a46d3a1f33ed",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc8-mirror-consistency-refresh-result.v1",
+                                                                    "status":  "passed"
+                                                                },
+                             "rc8_hosted_payload_index":  {
+                                                              "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+                                                              "sha256":  "77408fab1641702a3a6baaddc1c82dc5e1ec3681dfcc1bc7cc0878c2705e9e6b",
+                                                              "present":  true,
+                                                              "schema":  "agentos.rc8-hosted-payload-index.v1",
+                                                              "status":  "verification-blocked"
+                                                          },
+                             "rc8_install_bootstrap":  {
+                                                           "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+                                                           "sha256":  "7442340caa50a714c838e819fb513ef42594ffdfe00754450521111fa58b3ca2",
+                                                           "present":  true,
+                                                           "schema":  "agentos.rc8-install-bootstrap.v1",
+                                                           "status":  "verification-blocked"
+                                                       },
+                             "rc8_hosted_channel_index":  {
+                                                              "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+                                                              "sha256":  "0c72d39c7f8369762d17d7e25f3c8b4f811a6d283fe71465cf31e9118326b60b",
+                                                              "present":  true,
+                                                              "schema":  "agentos.rc8-mirror-channel-index.v1",
+                                                              "status":  "metadata-only"
+                                                          },
+                             "fleet_rollout_authority":  {
+                                                             "path":  ".workflow/artifacts/release/fleet-rollout-authority.json",
+                                                             "sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+                                                             "present":  true,
+                                                             "schema":  "agentos.fleet-rollout-authority.v1",
+                                                             "status":  "passed"
+                                                         }
+                         },
+    "source_bindings":  {
+                            "rc8_descriptor_result_sha256":  "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+                            "rc8_descriptor_sha256":  "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+                            "rc8_signature_ingestion_result_sha256":  "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+                            "rc8_signature_receipt_sha256":  "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+                            "rc8_signature_summary_sha256":  "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+                            "rc8_signed_descriptor_fail_closed_sha256":  "67acffa942e5dda3c2a37f70ca03349bc15a7dc452ad5715fd7f77934efbff52",
+                            "rc8_installer_vm_preflight_sha256":  "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b",
+                            "rc8_installer_byte_fail_closed_sha256":  "9391926d751bc42786cee0fcc66e5f65eb9df2a1cb627507954c24ca5abb55be",
+                            "rc8_mirror_consistency_refresh_sha256":  "3ac605eb63ec9e048ae001e63614c98868849f68b5cfe32f6540a46d3a1f33ed",
+                            "rc8_hosted_payload_index_sha256":  "77408fab1641702a3a6baaddc1c82dc5e1ec3681dfcc1bc7cc0878c2705e9e6b",
+                            "rc8_install_bootstrap_sha256":  "7442340caa50a714c838e819fb513ef42594ffdfe00754450521111fa58b3ca2",
+                            "rc8_hosted_channel_index_sha256":  "0c72d39c7f8369762d17d7e25f3c8b4f811a6d283fe71465cf31e9118326b60b",
+                            "fleet_rollout_authority_sha256":  "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc"
+                        },
+    "live_endpoint_bindings":  {
+                                   "channel":  {
+                                                   "path":  "/channel/index.json",
+                                                   "sha256":  "df82b055cc6435ce6ebf2368f5a38d11d99c6782cfcb5d0abada87649612c6b1"
+                                               },
+                                   "payload_index":  {
+                                                         "path":  "/payloads/index.json",
+                                                         "sha256":  "5eadc517d1c14bea86bf3a0a826824f9cbb91e78fd86629860827f93720e8045"
+                                                     },
+                                   "install_bootstrap":  {
+                                                             "path":  "/install/bootstrap.json",
+                                                             "sha256":  "538707817439383fcf9cd8f1bdf99541cf346decb8c636f13fb06b3ae492b927"
+                                                         },
+                                   "mirror_status":  {
+                                                         "path":  "/.well-known/aios/rc8-mirror-status.json",
+                                                         "sha256":  "6324bc47c962dc1188570410088273946cf0571a0077a361758702f0194fd475"
+                                                     },
+                                   "object_descriptor":  {
+                                                             "path":  "/payloads/aios/production-distro-rc8-current-artifacts/object-descriptor.json",
+                                                             "sha256":  "728be2edd273b6adc838d5174dc829aee5f5f6c1e8b1149393a1da63a81432d1"
+                                                         },
+                                   "signature_receipt":  {
+                                                             "path":  "/payloads/aios/production-distro-rc8-current-artifacts/signature-receipt.json",
+                                                             "sha256":  "ed82de367edec0c017f8a048e745282f1def3002391be87f76bbc3aa97303f46"
+                                                         },
+                                   "installer_preflight":  {
+                                                               "path":  "/payloads/aios/production-distro-rc8-current-artifacts/installer-vm-preflight.json",
+                                                               "sha256":  "8193a9fa539c9330aa864c8cdf59e1fdb7921dec81d1f2b6e484439534a1a279"
+                                                           },
+                                   "installer_fail_closed":  {
+                                                                 "path":  "/payloads/aios/production-distro-rc8-current-artifacts/installer-byte-fail-closed.json",
+                                                                 "sha256":  "61bd9c0e8d08189e014f2d71ff75d061cc13cbe4910c33bd7d4d7c0d117ba746"
+                                                             }
+                               },
+    "target_set":  {
+                       "required_minimum_nodes":  2,
+                       "observed_canary_node_count":  1,
+                       "target_set_enrolled":  false
+                   },
+    "approval":  {
+                     "exact_operator_approval_required":  true,
+                     "exact_operator_approval_granted":  false,
+                     "approval_binding_sha256":  "a8ba81a38883ee8013db685e1e25c23511a2df7edfc5349d91c858b8624d242d"
+                 },
+    "payload_surface":  {
+                            "release_id":  "production-distro-rc8-current-artifacts",
+                            "status":  "verification-blocked",
+                            "object_uri_external_https":  false,
+                            "public_signature_ingested":  true,
+                            "signature_crypto_verified":  true,
+                            "installer_vm_smoke_completed":  true,
+                            "installer_fail_closed_cases":  28,
+                            "external_https_object_uri_published":  false,
+                            "declared_current_artifact_drift_reconciled":  false,
+                            "install_allowed":  false,
+                            "activation_allowed":  false,
+                            "rollback_execution_allowed":  false
+                        },
+    "gates":  {
+                  "descriptor_projected":  true,
+                  "public_signature_ingested":  true,
+                  "signature_crypto_verified":  true,
+                  "signed_descriptor_fail_closed":  true,
+                  "installer_vm_smoke_completed":  true,
+                  "installer_byte_fail_closed":  true,
+                  "mirror_metadata_current":  true,
+                  "external_https_object_uri_published":  false,
+                  "declared_current_artifact_drift_reconciled":  false,
+                  "canary_target_set_enrolled":  false,
+                  "observed_canary_node_count":  1,
+                  "required_canary_node_count":  2,
+                  "exact_operator_approval_granted":  false,
+                  "agentcore_planspec_bound":  false,
+                  "security_execution_approval_bound":  false,
+                  "remote_fleet_execution_enabled":  false,
+                  "execution_gate_status":  "blocked-by-design"
+              },
+    "remaining_blockers_before_activation":  [
+                                                 "external-https-object-uri-not-published",
+                                                 "declared-current-artifact-drift-unresolved",
+                                                 "two-or-more-enrolled-canary-target-nodes-required",
+                                                 "remote-fleet-execution-not-enabled",
+                                                 "exact-operator-approval-not-granted",
+                                                 "AgentCore-PlanSpec-not-bound",
+                                                 "SecurityExecutionEngine-approval-not-bound"
+                                             ],
+    "checks":  [
+                   {
+                       "id":  "source.rc8_010.descriptor.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-010 descriptor must be projected, non-GA, and install/activation/rollback blocked.",
+                       "evidence":  {
+                                        "checks":  9,
+                                        "blockers":  0,
+                                        "payload_blockers":  4,
+                                        "rc8_010_complete":  true,
+                                        "next_task":  "RC8-011"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc8_011.signature.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-011 public signature ingestion must be passed and crypto verified without private material indicators.",
+                       "evidence":  {
+                                        "signature_artifact_ingested":  true,
+                                        "crypto_verified":  true,
+                                        "descriptor_hash_bound":  true,
+                                        "canonical_payload_hash_bound":  true,
+                                        "revocation_current":  true,
+                                        "public_signature_artifact_path":  "image/out/agentos-initramfs.cpio.gz.prod.sig.json",
+                                        "public_signature_artifact_sha256":  "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false,
+                                        "payload_blockers":  [
+                                                                 "external-https-object-uri-not-published",
+                                                                 "installer-vm-smoke-not-run",
+                                                                 "declared-current-artifact-drift-unresolved"
+                                                             ]
+                                    }
+                   },
+                   {
+                       "id":  "source.rc8_012.fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-012 signed object descriptor fail-closed fixtures must pass all negative cases.",
+                       "evidence":  {
+                                        "checks":  5,
+                                        "blockers":  0,
+                                        "cases":  34,
+                                        "passed_cases":  34,
+                                        "failed_cases":  0,
+                                        "rc8_012_complete":  true,
+                                        "next_task":  "RC8-020"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc8_020.preflight.ready_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-020 installer VM preflight and quarantine smoke must pass while external object fetch remains blocked.",
+                       "evidence":  {
+                                        "checks":  10,
+                                        "task_blockers":  0,
+                                        "preflight_steps":  7,
+                                        "preflight_blockers":  1,
+                                        "preflight_state":  "verification-blocked",
+                                        "rc8_020_complete":  true,
+                                        "next_task":  "RC8-021"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc8_021.installer_fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-021 installer byte/signature/storage/compatibility fail-closed fixtures must pass without side effects.",
+                       "evidence":  {
+                                        "checks":  6,
+                                        "blockers":  0,
+                                        "cases":  28,
+                                        "passed_cases":  28,
+                                        "failed_cases":  0,
+                                        "rc8_021_complete":  true,
+                                        "next_task":  "RC8-022"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc8_022.mirror.ready_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-022 mirror refresh must expose RC8 metadata while preserving metadata-only and install/activation/rollback blocked semantics.",
+                       "evidence":  {
+                                        "release_id":  "production-distro-rc8-current-artifacts",
+                                        "base_path":  "/payloads/aios/production-distro-rc8-current-artifacts",
+                                        "status":  "verification-blocked",
+                                        "storage_mode":  "metadata-only",
+                                        "payload_bytes_hosted_on_mirror":  false,
+                                        "external_https_object_uri_published":  false,
+                                        "public_signature_ingested":  true,
+                                        "signature_crypto_verified":  true,
+                                        "installer_vm_smoke_completed":  true,
+                                        "fail_closed_cases":  28,
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false,
+                                        "blockers":  [
+                                                         "external-https-object-uri-not-published",
+                                                         "declared-current-artifact-drift-unresolved"
+                                                     ]
+                                    }
+                   },
+                   {
+                       "id":  "fleet.authority.ready_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fleet authority must remain AgentCore/SecurityExecution-owned, with canary under-enrolled and remote execution disabled.",
+                       "evidence":  {
+                                        "observed":  1,
+                                        "required":  2,
+                                        "canary_status":  "local-enrollment-proof-defined",
+                                        "canary_blocker":  "remote-fleet-execution-not-enabled"
+                                    }
+                   },
+                   {
+                       "id":  "live.https.metadata.current",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Resolve-pinned HTTPS mirror metadata must remain RC8 current, non-GA, verification-blocked, and activation-blocked.",
+                       "evidence":  {
+                                        "root":  200,
+                                        "channel":  200,
+                                        "payload_index":  200,
+                                        "install_bootstrap":  200,
+                                        "release_id":  "production-distro-rc8-current-artifacts",
+                                        "status":  "verification-blocked"
+                                    }
+                   },
+                   {
+                       "id":  "canary.target_set.projected_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Canary target set projection must require two nodes and refuse to fake enrollment.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+                                        "sha256":  "81453c21737d4e5184078231f97af6e99fb585cd878e36e304bbbfc40fa2941d",
+                                        "observed":  1,
+                                        "required":  2
+                                    }
+                   },
+                   {
+                       "id":  "approval.packet.projected_blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Exact approval packet must be generated, hash-bound, and non-executable until approval and execution gates pass.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/exact-approval-packet.json",
+                                        "sha256":  "b7484e367f7466d541650cc58d32b4fb0471a25b0c3b0360cd1832e5e14943de",
+                                        "approval_binding_sha256":  "a8ba81a38883ee8013db685e1e25c23511a2df7edfc5349d91c858b8624d242d"
+                                    }
+                   },
+                   {
+                       "id":  "activation.gates.fail_closed",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Canary activation smoke must remain denied until object URI, drift, target, approval, PlanSpec, SecurityExecution, and remote fleet gates pass.",
+                       "evidence":  {
+                                        "descriptor_projected":  true,
+                                        "public_signature_ingested":  true,
+                                        "signature_crypto_verified":  true,
+                                        "signed_descriptor_fail_closed":  true,
+                                        "installer_vm_smoke_completed":  true,
+                                        "installer_byte_fail_closed":  true,
+                                        "mirror_metadata_current":  true,
+                                        "external_https_object_uri_published":  false,
+                                        "declared_current_artifact_drift_reconciled":  false,
+                                        "canary_target_set_enrolled":  false,
+                                        "observed_canary_node_count":  1,
+                                        "required_canary_node_count":  2,
+                                        "exact_operator_approval_granted":  false,
+                                        "agentcore_planspec_bound":  false,
+                                        "security_execution_approval_bound":  false,
+                                        "remote_fleet_execution_enabled":  false,
+                                        "execution_gate_status":  "blocked-by-design"
+                                    }
+                   },
+                   {
+                       "id":  "activation.gate_report.projected",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Activation smoke gate report must be projected without performing activation.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
+                                        "sha256":  "d26204fee8f6cb9184520648843a7cfbd9ff40b82c8c0b90494ddc11caa61a7b"
+                                    }
+                   },
+                   {
+                       "id":  "activation.denial_evidence.projected",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Activation denial evidence must cover each missing gate as fail-closed.",
+                       "evidence":  {
+                                        "path":  ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+                                        "sha256":  "fc5aa7d53880a9adb2f0ea0b91b0cab8748c0f4657d1e8e9b6e28d169657c87b",
+                                        "cases":  7
+                                    }
+                   },
+                   {
+                       "id":  "authority.not_broadened",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-030 must not sign, upload payloads, install, activate, rollback, mutate slots/rings, upload support, dispatch remotely, or grant TUI authority.",
+                       "evidence":  {
+                                        "local_private_key_material_used":  false,
+                                        "private_key_material_read_or_printed":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "payload_upload_performed":  false,
+                                        "remote_payload_bytes_downloaded":  false,
+                                        "install_performed":  false,
+                                        "activation_performed":  false,
+                                        "rollback_execution_performed":  false,
+                                        "active_slot_mutated":  false,
+                                        "boot_metadata_mutated":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "support_upload_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "tui_authority":  false
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC8-030 projected artifacts must not contain secret material paths, PEM private blocks, or token markers.",
+                       "evidence":  null
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "invariants":  {
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "remote_payload_bytes_downloaded":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false
+                   },
+    "summary":  {
+                    "checks":  15,
+                    "blockers":  0,
+                    "rc8_030_complete":  true,
+                    "canary_activation_smoke_packet_projected":  true,
+                    "canary_activation_allowed":  false,
+                    "canary_activation_performed":  false,
+                    "activation_performed":  false,
+                    "rollback_execution_performed":  false,
+                    "exact_operator_approval_required":  true,
+                    "exact_operator_approval_granted":  false,
+                    "required_canary_node_count":  2,
+                    "observed_canary_node_count":  1,
+                    "target_set_enrolled":  false,
+                    "agentcore_planspec_bound":  false,
+                    "security_execution_approval_bound":  false,
+                    "remote_fleet_execution_enabled":  false,
+                    "production_ready_claim":  false,
+                    "next_task":  "RC8-031"
+                }
+}

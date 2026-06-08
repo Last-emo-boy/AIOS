@@ -1,0 +1,57 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-030",
+  "title": "produce exact-approved canary activation smoke packet under AgentCore and SecurityExecutionEngine",
+  "status": "completed",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/real-installable-payload-controlled-execution-contract.md",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+    ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+    ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+    ".workflow/artifacts/release/fleet-rollout-authority.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc8-exact-approved-canary-smoke.ps1",
+      "role": "RC8 canary activation smoke packet projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+      "role": "canary target set projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/exact-approval-packet.json",
+      "role": "exact approval packet projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
+      "role": "AgentCore and SecurityExecutionEngine gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+      "role": "fail-closed activation denial evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-030-exact-approved-canary-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The canary smoke packet binds the RC8 descriptor, public signature receipt, installer VM preflight, installer fail-closed result, mirror refresh, and fleet rollout authority.",
+      "The exact approval packet requires release-operator approval, canary-ring-only scope, two or more enrolled canary nodes, AgentCore PlanSpec, and SecurityExecutionEngine approval.",
+      "Activation remains denied while external HTTPS object URI publication, declared/current artifact drift reconciliation, target enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, and remote fleet execution gates are missing.",
+      "The task does not sign, upload payloads, install, activate, rollback, mutate boot metadata, mutate active slots, mutate production rings, upload support bundles, dispatch remotely, or grant TUI authority."
+    ]
+  }
+}

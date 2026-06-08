@@ -1,0 +1,101 @@
+{
+  "schema": "agentos.rc8-exact-approved-canary-smoke-evidence.v1",
+  "generated_at": "2026-06-08T16:51:21.0548941+08:00",
+  "task": "RC8-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": {
+    "path": "scripts/project-rc8-exact-approved-canary-smoke.ps1",
+    "sha256": "498a6be82623ee799644c5d6c19ad925025e1a75d5cf907a5630374b1c3f80bc"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+    "status": "passed",
+    "sha256": "1e5c00d55d51b5220b6871832abeba0859015e129cf2117e70a5422b941acef5"
+  },
+  "local_outputs": {
+    "canary_target_set": {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+      "sha256": "81453c21737d4e5184078231f97af6e99fb585cd878e36e304bbbfc40fa2941d",
+      "status": "projected-target-set-enrollment-blocked"
+    },
+    "exact_approval_packet": {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/exact-approval-packet.json",
+      "sha256": "b7484e367f7466d541650cc58d32b4fb0471a25b0c3b0360cd1832e5e14943de",
+      "status": "approval-required-execution-blocked",
+      "approval_binding_sha256": "a8ba81a38883ee8013db685e1e25c23511a2df7edfc5349d91c858b8624d242d"
+    },
+    "activation_smoke_gate_report": {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-smoke-gate-report.json",
+      "sha256": "d26204fee8f6cb9184520648843a7cfbd9ff40b82c8c0b90494ddc11caa61a7b",
+      "status": "activation-smoke-gates-evaluated-blocked"
+    },
+    "activation_denial_evidence": {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/activation-denial-evidence.json",
+      "sha256": "fc5aa7d53880a9adb2f0ea0b91b0cab8748c0f4657d1e8e9b6e28d169657c87b",
+      "status": "activation-denied-by-gates"
+    }
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "status": "verification-blocked",
+    "object_uri_external_https": false,
+    "public_signature_ingested": true,
+    "signature_crypto_verified": true,
+    "installer_vm_smoke_completed": true,
+    "installer_fail_closed_cases": 28,
+    "external_https_object_uri_published": false,
+    "declared_current_artifact_drift_reconciled": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "activation_surface": {
+    "checks": 15,
+    "blockers": 0,
+    "canary_activation_smoke_packet_projected": true,
+    "canary_activation_allowed": false,
+    "canary_activation_performed": false,
+    "exact_operator_approval_required": true,
+    "exact_operator_approval_granted": false,
+    "required_canary_node_count": 2,
+    "observed_canary_node_count": 1,
+    "target_set_enrolled": false,
+    "agentcore_planspec_bound": false,
+    "security_execution_approval_bound": false,
+    "remote_fleet_execution_enabled": false,
+    "remaining_blockers_before_activation": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-unresolved",
+      "two-or-more-enrolled-canary-target-nodes-required",
+      "remote-fleet-execution-not-enabled",
+      "exact-operator-approval-not-granted",
+      "AgentCore-PlanSpec-not-bound",
+      "SecurityExecutionEngine-approval-not-bound"
+    ]
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc8_030_complete": true,
+    "next_task": "RC8-031",
+    "commit_required": true
+  }
+}
