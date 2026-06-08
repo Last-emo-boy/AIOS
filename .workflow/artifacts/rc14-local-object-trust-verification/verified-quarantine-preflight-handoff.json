@@ -1,0 +1,54 @@
+{
+  "schema": "agentos.rc14-verified-quarantine-preflight-handoff.v1",
+  "generated_at": "2026-06-09T13:15:00+08:00",
+  "task": "RC14-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc14-020-verified-quarantine-preflight",
+  "production_ready_claim": false,
+  "expected_next_task": "RC14-020",
+  "local_object_trust": {
+    "decision_path": ".workflow/artifacts/rc14-local-object-trust-verification/object-trust-decision.json",
+    "decision_sha256": "a96026d8c9c4ad73b223f9ef7aabc92b533178a05c663eeceeaed88389e8825e",
+    "report_path": ".workflow/artifacts/rc14-local-object-trust-verification/object-trust-report.json",
+    "report_sha256": "47a48023cda86535d1f851b08b6b83a53e366e7643fe10d1b3e001854ea3344f",
+    "local_object_trust_allowed": true,
+    "quarantine_preflight_allowed": true
+  },
+  "release_identity": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_path": "image/out/agentos-initramfs.cpio.gz",
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_size_bytes": 377,
+    "content_type": "application/gzip",
+    "compression": "gzip",
+    "immutable": true
+  },
+  "required_next_gate": {
+    "verified_quarantine_preflight": true,
+    "bytes_may_be_written_only_to_quarantine": true,
+    "payload_interpretation_allowed_before_preflight": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "blocked_authority": {
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "blockers": [
+    "verified-quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ]
+}
