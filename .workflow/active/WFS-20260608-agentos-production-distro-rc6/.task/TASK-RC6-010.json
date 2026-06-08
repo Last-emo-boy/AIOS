@@ -1,0 +1,35 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-010",
+  "title": "project installable payload manifest from current AIOS release artifacts",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+    ".workflow/artifacts/rc6-mirror-portal/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc6-installable-payload-manifest.ps1",
+      "role": "payload projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+      "role": "projection result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-010-installable-payload-manifest.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Current release provenance, release channel metadata, RC1 installable media, RC5 final audit, RC6 contracts, and RC6 mirror portal result are hash-bound.",
+      "Payload manifest, checksums, signature-required metadata, and payload index projection are generated.",
+      "Observed current artifact hashes are recorded, including declared-hash drift against older installable media metadata.",
+      "Large payload storage, signature availability, install, activation, rollback, support upload, remote dispatch, production ring, and TUI authority remain blocked."
+    ]
+  }
+}

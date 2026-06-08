@@ -1,0 +1,742 @@
+{
+  "schema": "agentos.rc6-installable-payload-manifest-result.v1",
+  "generated_at": "2026-06-08T11:59:38.8447054+08:00",
+  "task": "RC6-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc6-current-artifacts",
+  "outputs": {
+    "payload_manifest": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "content_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e"
+    },
+    "payload_checksums": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-checksums.json",
+      "sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71",
+      "content_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e"
+    },
+    "payload_signatures": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json",
+      "sha256": "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6",
+      "content_sha256": "1e0b8d281ab82d4a01026ed57a8f384d1a4ef6c9dd7967719150752286d2cf29"
+    },
+    "payload_index": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-index.json",
+      "sha256": "f9a126bbbe80841f6bd2ee9e9f97b9276d8a0b128cf4fc77b92280ff373181b1",
+      "content_sha256": "6f55a5efd90c3fc0cb9e5223c0bc659927e92d8ae84314a36873a7e453a5eae1"
+    }
+  },
+  "source_bindings": {
+    "provenance": {
+      "name": "release_provenance",
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": "promotable"
+    },
+    "release_channel_metadata": {
+      "name": "release_channel_metadata",
+      "path": ".workflow/artifacts/release/release-channel-metadata.json",
+      "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "present": true,
+      "schema": "agentos.release-channel-metadata.v1",
+      "status": "passed"
+    },
+    "installable_media_manifest": {
+      "name": "rc1_installable_media_manifest",
+      "path": ".workflow/artifacts/rc1-installable-media/installable-media-manifest.json",
+      "sha256": "ac252994252a72f6cbc13200b12431221c46584d2950fb80f1dcec7231585694",
+      "present": true,
+      "schema": "agentos.installable-media-manifest.v1",
+      "status": "passed"
+    },
+    "installable_media_result": {
+      "name": "rc1_installable_media_result",
+      "path": ".workflow/artifacts/rc1-installable-media/result.json",
+      "sha256": "ab1925cc37757af014bdc47deb08cae27561dfc0022ace5731d9070cf8abf5a2",
+      "present": true,
+      "schema": "agentos.installable-media-manifest-result.v1",
+      "status": "passed"
+    },
+    "rc5_final_audit": {
+      "name": "rc5_final_audit",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+      "sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+      "present": true,
+      "schema": "agentos.production-distro-rc5-final-audit.v1",
+      "status": "PASS"
+    },
+    "rc6_contract": {
+      "name": "rc6_payload_channel_contract",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+      "sha256": "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_boundary": {
+      "name": "rc6_bootstrap_installer_boundary",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+      "sha256": "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_threat_model": {
+      "name": "rc6_tls_storage_signed_payload_threat_model",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+      "sha256": "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_mirror_portal": {
+      "name": "rc6_mirror_portal_result",
+      "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+      "sha256": "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+      "present": true,
+      "schema": "agentos.rc6-mirror-portal-result.v1",
+      "status": "passed"
+    }
+  },
+  "component_count": 8,
+  "payload_surface": {
+    "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "storage_mode": "metadata-only",
+    "large_payload_deferred": true,
+    "signature_available": false,
+    "installable_media_declared_hash_drift_count": 3,
+    "install_allowed": false,
+    "activation_allowed": false
+  },
+  "invariants": {
+    "metadata_projection_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "source.provenance.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release provenance schema must be production candidate.",
+      "evidence": "agentos.production-candidate.provenance.v1"
+    },
+    {
+      "id": "source.provenance.promotable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release provenance must be promotable with zero blockers.",
+      "evidence": {
+        "status": "promotable",
+        "blockers": []
+      }
+    },
+    {
+      "id": "source.release_channel.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release channel metadata must be non-GA and schema-bound.",
+      "evidence": {
+        "schema": "agentos.release-channel-metadata.v1",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "source.media_manifest.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC1 installable media manifest must be passed.",
+      "evidence": {
+        "schema": "agentos.installable-media-manifest.v1",
+        "status": "passed"
+      }
+    },
+    {
+      "id": "source.media_result.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC1 installable media result must be passed.",
+      "evidence": "passed"
+    },
+    {
+      "id": "source.rc5_final_audit.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC5 final audit must pass before RC6 payload projection.",
+      "evidence": "PASS"
+    },
+    {
+      "id": "source.rc6_portal.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 mirror portal must be passed before payload manifest projection.",
+      "evidence": {
+        "checks": 16,
+        "blockers": 0,
+        "rc6_004_complete": true,
+        "frontend_url": "http://aios.w33d.xyz/",
+        "payload_index": "http://aios.w33d.xyz/payloads/index.json",
+        "install_bootstrap": "http://aios.w33d.xyz/install/bootstrap.json",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "source_binding.release_provenance.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "release_provenance",
+        "path": ".workflow/artifacts/release/provenance.json",
+        "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+        "present": true,
+        "schema": "agentos.production-candidate.provenance.v1",
+        "status": "promotable"
+      }
+    },
+    {
+      "id": "source_binding.release_channel_metadata.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "release_channel_metadata",
+        "path": ".workflow/artifacts/release/release-channel-metadata.json",
+        "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+        "present": true,
+        "schema": "agentos.release-channel-metadata.v1",
+        "status": "passed"
+      }
+    },
+    {
+      "id": "source_binding.rc1_installable_media_manifest.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc1_installable_media_manifest",
+        "path": ".workflow/artifacts/rc1-installable-media/installable-media-manifest.json",
+        "sha256": "ac252994252a72f6cbc13200b12431221c46584d2950fb80f1dcec7231585694",
+        "present": true,
+        "schema": "agentos.installable-media-manifest.v1",
+        "status": "passed"
+      }
+    },
+    {
+      "id": "source_binding.rc1_installable_media_result.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc1_installable_media_result",
+        "path": ".workflow/artifacts/rc1-installable-media/result.json",
+        "sha256": "ab1925cc37757af014bdc47deb08cae27561dfc0022ace5731d9070cf8abf5a2",
+        "present": true,
+        "schema": "agentos.installable-media-manifest-result.v1",
+        "status": "passed"
+      }
+    },
+    {
+      "id": "source_binding.rc5_final_audit.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc5_final_audit",
+        "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+        "sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+        "present": true,
+        "schema": "agentos.production-distro-rc5-final-audit.v1",
+        "status": "PASS"
+      }
+    },
+    {
+      "id": "source_binding.rc6_payload_channel_contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc6_payload_channel_contract",
+        "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+        "sha256": "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+        "present": true,
+        "schema": "",
+        "status": ""
+      }
+    },
+    {
+      "id": "source_binding.rc6_bootstrap_installer_boundary.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc6_bootstrap_installer_boundary",
+        "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+        "sha256": "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+        "present": true,
+        "schema": "",
+        "status": ""
+      }
+    },
+    {
+      "id": "source_binding.rc6_tls_storage_signed_payload_threat_model.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc6_tls_storage_signed_payload_threat_model",
+        "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+        "sha256": "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873",
+        "present": true,
+        "schema": "",
+        "status": ""
+      }
+    },
+    {
+      "id": "source_binding.rc6_mirror_portal_result.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Source binding must be present and hash-bound.",
+      "evidence": {
+        "name": "rc6_mirror_portal_result",
+        "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+        "sha256": "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+        "present": true,
+        "schema": "agentos.rc6-mirror-portal-result.v1",
+        "status": "passed"
+      }
+    },
+    {
+      "id": "component.alpha_rootfs_manifest.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "alpha_rootfs_manifest",
+        "path": "image/out/agentos-alpha-rootfs.manifest.json",
+        "declared_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "observed_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.alpha_rootfs_manifest.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "alpha_rootfs_manifest",
+        "path": "image/out/agentos-alpha-rootfs.manifest.json",
+        "declared_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "observed_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.alpha_rootfs_manifest.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "alpha_rootfs_manifest",
+        "path": "image/out/agentos-alpha-rootfs.manifest.json",
+        "declared_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "observed_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.rootfs_runtime_manifest.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "rootfs_runtime_manifest",
+        "path": "image/out/agentos-alpha-rootfs/usr/lib/agentos/release/rootfs-runtime-manifest.json",
+        "declared_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "observed_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.rootfs_runtime_manifest.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "rootfs_runtime_manifest",
+        "path": "image/out/agentos-alpha-rootfs/usr/lib/agentos/release/rootfs-runtime-manifest.json",
+        "declared_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "observed_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.rootfs_runtime_manifest.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "rootfs_runtime_manifest",
+        "path": "image/out/agentos-alpha-rootfs/usr/lib/agentos/release/rootfs-runtime-manifest.json",
+        "declared_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "observed_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.update_metadata.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "update_metadata",
+        "path": ".workflow/artifacts/release/update-metadata.json",
+        "declared_sha256": "67f04cca60933873df6c1316aa11374506a89ab4a05418010f2114412fc4e77c",
+        "observed_sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.update_metadata.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "update_metadata",
+        "path": ".workflow/artifacts/release/update-metadata.json",
+        "declared_sha256": "67f04cca60933873df6c1316aa11374506a89ab4a05418010f2114412fc4e77c",
+        "observed_sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.update_metadata.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "update_metadata",
+        "path": ".workflow/artifacts/release/update-metadata.json",
+        "declared_sha256": "67f04cca60933873df6c1316aa11374506a89ab4a05418010f2114412fc4e77c",
+        "observed_sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.release_channel_metadata.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "release_channel_metadata",
+        "path": ".workflow/artifacts/release/release-channel-metadata.json",
+        "declared_sha256": "bda248ae0170b098b2abe53093f70fd5decc0055f2bd78aedf499725627a9d5c",
+        "observed_sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.release_channel_metadata.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "release_channel_metadata",
+        "path": ".workflow/artifacts/release/release-channel-metadata.json",
+        "declared_sha256": "bda248ae0170b098b2abe53093f70fd5decc0055f2bd78aedf499725627a9d5c",
+        "observed_sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.release_channel_metadata.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "release_channel_metadata",
+        "path": ".workflow/artifacts/release/release-channel-metadata.json",
+        "declared_sha256": "bda248ae0170b098b2abe53093f70fd5decc0055f2bd78aedf499725627a9d5c",
+        "observed_sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.sbom.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "sbom",
+        "path": ".workflow/artifacts/release/sbom.json",
+        "declared_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+        "observed_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.sbom.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "sbom",
+        "path": ".workflow/artifacts/release/sbom.json",
+        "declared_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+        "observed_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.sbom.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "sbom",
+        "path": ".workflow/artifacts/release/sbom.json",
+        "declared_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+        "observed_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.dependency_inventory.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "dependency_inventory",
+        "path": ".workflow/artifacts/release/dependency-inventory.json",
+        "declared_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+        "observed_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.dependency_inventory.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "dependency_inventory",
+        "path": ".workflow/artifacts/release/dependency-inventory.json",
+        "declared_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+        "observed_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.dependency_inventory.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "dependency_inventory",
+        "path": ".workflow/artifacts/release/dependency-inventory.json",
+        "declared_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+        "observed_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.qemu_runtime_smoke.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "qemu_runtime_smoke",
+        "path": ".workflow/artifacts/release/qemu-runtime-smoke/boot-smoke-result.json",
+        "declared_sha256": "3ee8569622500e30cbe1cae6f07b1c4822e37e5fb01923243e469d1a24d51024",
+        "observed_sha256": "facc30a92caffb5d4607e6dc884c1a9eae54994f9cd1a5bd90b98f30487b4f4a",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.qemu_runtime_smoke.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "qemu_runtime_smoke",
+        "path": ".workflow/artifacts/release/qemu-runtime-smoke/boot-smoke-result.json",
+        "declared_sha256": "3ee8569622500e30cbe1cae6f07b1c4822e37e5fb01923243e469d1a24d51024",
+        "observed_sha256": "facc30a92caffb5d4607e6dc884c1a9eae54994f9cd1a5bd90b98f30487b4f4a",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.qemu_runtime_smoke.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "qemu_runtime_smoke",
+        "path": ".workflow/artifacts/release/qemu-runtime-smoke/boot-smoke-result.json",
+        "declared_sha256": "3ee8569622500e30cbe1cae6f07b1c4822e37e5fb01923243e469d1a24d51024",
+        "observed_sha256": "facc30a92caffb5d4607e6dc884c1a9eae54994f9cd1a5bd90b98f30487b4f4a",
+        "present": true,
+        "hash_matches_declared": false
+      }
+    },
+    {
+      "id": "component.production_incident_runbook_replay.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must resolve to a local source artifact.",
+      "evidence": {
+        "id": "production_incident_runbook_replay",
+        "path": ".workflow/artifacts/release/production-incident-runbook-replay.json",
+        "declared_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+        "observed_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.production_incident_runbook_replay.observed_hash",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must have an observed hash for the current artifact projection.",
+      "evidence": {
+        "id": "production_incident_runbook_replay",
+        "path": ".workflow/artifacts/release/production-incident-runbook-replay.json",
+        "declared_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+        "observed_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "component.production_incident_runbook_replay.declared_hash_recorded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload component must retain the installable media declared hash for drift evidence.",
+      "evidence": {
+        "id": "production_incident_runbook_replay",
+        "path": ".workflow/artifacts/release/production-incident-runbook-replay.json",
+        "declared_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+        "observed_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+        "present": true,
+        "hash_matches_declared": true
+      }
+    },
+    {
+      "id": "payload_manifest.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload manifest schema must be exact.",
+      "evidence": "agentos.rc6-installable-payload-manifest.v1"
+    },
+    {
+      "id": "payload_manifest.verification_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload manifest must remain verification-blocked and not installable.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "current_state": "verification-blocked",
+        "allowed_rc6_states": [
+          "metadata-unavailable",
+          "metadata-candidate",
+          "verification-blocked",
+          "install-preflight-ready"
+        ]
+      }
+    },
+    {
+      "id": "payload_manifest.storage_deferred",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Large payload storage must remain deferred.",
+      "evidence": {
+        "mirror_storage_mode": "metadata-only",
+        "large_payload_storage_enabled": false,
+        "large_payload_url": null,
+        "large_payload_sha256": null,
+        "large_payload_size_bytes": null,
+        "large_payload_deferred_until_policy_upgrade": true
+      }
+    },
+    {
+      "id": "payload_signatures.required",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signature metadata must require a future public signature and grant no mirror signing authority.",
+      "evidence": "signature-required-before-install"
+    },
+    {
+      "id": "payload_index.hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload index must bind manifest, checksums, and signatures hashes.",
+      "evidence": {
+        "id": "production-distro-rc6-current-artifacts",
+        "release_id": "production-distro-rc6-current-artifacts",
+        "status": "verification-blocked",
+        "manifest_path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+        "checksums_path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+        "signatures_path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+        "manifest_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+        "checksums_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+        "signatures_sha256": "1e0b8d281ab82d4a01026ed57a8f384d1a4ef6c9dd7967719150752286d2cf29",
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "large_payload_deferred": true
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 payload projection outputs must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 46,
+    "blockers": 0,
+    "drifted_components": 3,
+    "rc6_010_complete": true,
+    "next_task": "RC6-011"
+  }
+}

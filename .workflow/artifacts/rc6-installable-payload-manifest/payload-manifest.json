@@ -1,0 +1,200 @@
+{
+  "schema": "agentos.rc6-installable-payload-manifest.v1",
+  "generated_at": "2026-06-08T11:59:38.8447054+08:00",
+  "release_id": "production-distro-rc6-current-artifacts",
+  "status": "metadata-projected",
+  "payload_status": "verification-blocked",
+  "production_ready_claim": false,
+  "channel": "production-candidate-rc6",
+  "source_bindings": {
+    "provenance": {
+      "name": "release_provenance",
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": "promotable"
+    },
+    "release_channel_metadata": {
+      "name": "release_channel_metadata",
+      "path": ".workflow/artifacts/release/release-channel-metadata.json",
+      "sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "present": true,
+      "schema": "agentos.release-channel-metadata.v1",
+      "status": "passed"
+    },
+    "installable_media_manifest": {
+      "name": "rc1_installable_media_manifest",
+      "path": ".workflow/artifacts/rc1-installable-media/installable-media-manifest.json",
+      "sha256": "ac252994252a72f6cbc13200b12431221c46584d2950fb80f1dcec7231585694",
+      "present": true,
+      "schema": "agentos.installable-media-manifest.v1",
+      "status": "passed"
+    },
+    "installable_media_result": {
+      "name": "rc1_installable_media_result",
+      "path": ".workflow/artifacts/rc1-installable-media/result.json",
+      "sha256": "ab1925cc37757af014bdc47deb08cae27561dfc0022ace5731d9070cf8abf5a2",
+      "present": true,
+      "schema": "agentos.installable-media-manifest-result.v1",
+      "status": "passed"
+    },
+    "rc5_final_audit": {
+      "name": "rc5_final_audit",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+      "sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+      "present": true,
+      "schema": "agentos.production-distro-rc5-final-audit.v1",
+      "status": "PASS"
+    },
+    "rc6_contract": {
+      "name": "rc6_payload_channel_contract",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+      "sha256": "d99628c78e013a6df08ec84433cddbdfd5ee84a9047a963afe1b60b7d0b8154a",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_boundary": {
+      "name": "rc6_bootstrap_installer_boundary",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+      "sha256": "45b2eec6406212d9951ed4f516744f25dec171500175acc3557a59d9949e234f",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_threat_model": {
+      "name": "rc6_tls_storage_signed_payload_threat_model",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+      "sha256": "3deee6d56a9731e630e6cb49d4852cff8ae5d164356210a5ff45fcaae7832873",
+      "present": true,
+      "schema": "",
+      "status": ""
+    },
+    "rc6_mirror_portal": {
+      "name": "rc6_mirror_portal_result",
+      "path": ".workflow/artifacts/rc6-mirror-portal/result.json",
+      "sha256": "adbab84fd748737c3e48d562f5d515346fd3f70fa95404d440a682ba83409df1",
+      "present": true,
+      "schema": "agentos.rc6-mirror-portal-result.v1",
+      "status": "passed"
+    }
+  },
+  "media_id": "sha256:49a15a66f83e326c6fb0b3b6cc0ae822de880c1c20e93de9d934314d284e5456",
+  "payload_components": [
+    {
+      "id": "alpha_rootfs_manifest",
+      "path": "image/out/agentos-alpha-rootfs.manifest.json",
+      "declared_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+      "observed_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+      "present": true,
+      "hash_matches_declared": true
+    },
+    {
+      "id": "rootfs_runtime_manifest",
+      "path": "image/out/agentos-alpha-rootfs/usr/lib/agentos/release/rootfs-runtime-manifest.json",
+      "declared_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "observed_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "present": true,
+      "hash_matches_declared": true
+    },
+    {
+      "id": "update_metadata",
+      "path": ".workflow/artifacts/release/update-metadata.json",
+      "declared_sha256": "67f04cca60933873df6c1316aa11374506a89ab4a05418010f2114412fc4e77c",
+      "observed_sha256": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+      "present": true,
+      "hash_matches_declared": false
+    },
+    {
+      "id": "release_channel_metadata",
+      "path": ".workflow/artifacts/release/release-channel-metadata.json",
+      "declared_sha256": "bda248ae0170b098b2abe53093f70fd5decc0055f2bd78aedf499725627a9d5c",
+      "observed_sha256": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "present": true,
+      "hash_matches_declared": false
+    },
+    {
+      "id": "sbom",
+      "path": ".workflow/artifacts/release/sbom.json",
+      "declared_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+      "observed_sha256": "15e472cd03d5ef750fa2bd0ed7de55a1278280290d7f795d2739d2b2377bb1aa",
+      "present": true,
+      "hash_matches_declared": true
+    },
+    {
+      "id": "dependency_inventory",
+      "path": ".workflow/artifacts/release/dependency-inventory.json",
+      "declared_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+      "observed_sha256": "3df18b9d901272d36c642c812da89dff8417d57724fa5b7dbfdc250bdaf43c9f",
+      "present": true,
+      "hash_matches_declared": true
+    },
+    {
+      "id": "qemu_runtime_smoke",
+      "path": ".workflow/artifacts/release/qemu-runtime-smoke/boot-smoke-result.json",
+      "declared_sha256": "3ee8569622500e30cbe1cae6f07b1c4822e37e5fb01923243e469d1a24d51024",
+      "observed_sha256": "facc30a92caffb5d4607e6dc884c1a9eae54994f9cd1a5bd90b98f30487b4f4a",
+      "present": true,
+      "hash_matches_declared": false
+    },
+    {
+      "id": "production_incident_runbook_replay",
+      "path": ".workflow/artifacts/release/production-incident-runbook-replay.json",
+      "declared_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+      "observed_sha256": "e4239f288656e227993c25ce56522ee7539c1c46c0a309c45f36c65d557b8521",
+      "present": true,
+      "hash_matches_declared": true
+    }
+  ],
+  "storage_policy": {
+    "mirror_storage_mode": "metadata-only",
+    "large_payload_storage_enabled": false,
+    "large_payload_url": null,
+    "large_payload_sha256": null,
+    "large_payload_size_bytes": null,
+    "large_payload_deferred_until_policy_upgrade": true
+  },
+  "drift_policy": {
+    "current_artifact_projection": true,
+    "installable_media_declared_hash_drift_count": 3,
+    "drifted_components": [
+      "update_metadata",
+      "release_channel_metadata",
+      "qemu_runtime_smoke"
+    ],
+    "drift_blocks_install": true
+  },
+  "signature_policy": {
+    "signature_required_before_install": true,
+    "signature_available": false,
+    "signed_metadata_reference": null,
+    "revocation_snapshot_required": true,
+    "placeholder_is_authority": false
+  },
+  "install_policy": {
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "current_state": "verification-blocked",
+    "allowed_rc6_states": [
+      "metadata-unavailable",
+      "metadata-candidate",
+      "verification-blocked",
+      "install-preflight-ready"
+    ]
+  },
+  "forbidden_authority": [
+    "signing",
+    "install",
+    "activation",
+    "rollback-execution",
+    "active-slot-mutation",
+    "production-ring-mutation",
+    "support-upload",
+    "remote-dispatch",
+    "tui-authority",
+    "shell-authority",
+    "model-replay-authority"
+  ]
+}

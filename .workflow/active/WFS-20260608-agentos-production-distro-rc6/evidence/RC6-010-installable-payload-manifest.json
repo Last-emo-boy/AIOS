@@ -1,0 +1,56 @@
+{
+  "schema": "agentos.rc6-installable-payload-manifest-evidence.v1",
+  "generated_at": "2026-06-08T13:35:00+08:00",
+  "task": "RC6-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/project-rc6-installable-payload-manifest.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-installable-payload-manifest/result.json",
+    "status": "passed",
+    "checks": 46,
+    "blockers": 0
+  },
+  "outputs": {
+    "payload_manifest": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+    "payload_checksums": ".workflow/artifacts/rc6-installable-payload-manifest/payload-checksums.json",
+    "payload_signatures": ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json",
+    "payload_index": ".workflow/artifacts/rc6-installable-payload-manifest/payload-index.json"
+  },
+  "payload_surface": {
+    "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "storage_mode": "metadata-only",
+    "large_payload_deferred": true,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "installable_media_declared_hash_drift_count": 3,
+    "drifted_components": [
+      "update_metadata",
+      "release_channel_metadata",
+      "qemu_runtime_smoke"
+    ]
+  },
+  "invariants": {
+    "metadata_projection_only": true,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_010_complete": true,
+    "next_task": "RC6-011",
+    "commit_required": true
+  }
+}
