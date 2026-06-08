@@ -1,0 +1,89 @@
+﻿{
+    "schema":  "agentos.rc5-hosted-recovery-operations.v1",
+    "generated_at":  "2026-06-08T11:33:07.1156658+08:00",
+    "status":  "projection-only",
+    "production_ready_claim":  false,
+    "domain":  "aios.w33d.xyz",
+    "recovery_truth":  "local signed/hash-bound evidence chain; hosted mirror metadata is explanatory only",
+    "operations":  [
+                       {
+                           "id":  "mirror-health-triage",
+                           "status":  "available-as-metadata",
+                           "executable_by_mirror":  false,
+                           "expected_inputs":  [
+                                                   "/health.json",
+                                                   "/.well-known/aios/mirror.json",
+                                                   "/channel/index.json"
+                                               ],
+                           "fail_closed_if_missing":  true
+                       },
+                       {
+                           "id":  "metadata-drift-triage",
+                           "status":  "available-as-metadata",
+                           "executable_by_mirror":  false,
+                           "expected_inputs":  [
+                                                   "rc5-hosted-endpoint-verifier",
+                                                   "rc5-hosted-metadata-fail-closed",
+                                                   "rc5-user-release-channel"
+                                               ],
+                           "fail_closed_if_hash_mismatch":  true
+                       },
+                       {
+                           "id":  "canary-abort-preflight",
+                           "status":  "blocked-until-canary-execution-exists",
+                           "executable_by_mirror":  false,
+                           "exact_operator_approval_required":  true,
+                           "rollback_readiness_required":  true,
+                           "rollback_readiness_proven":  true
+                       },
+                       {
+                           "id":  "rollback-readiness-explain",
+                           "status":  "projection-only",
+                           "executable_by_mirror":  false,
+                           "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                           "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                           "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709"
+                       }
+                   ],
+    "blockers_before_mutating_recovery":  [
+                                              "AgentCore PlanSpec required",
+                                              "SecurityExecutionEngine required",
+                                              "exact operator approval required",
+                                              "mirror cannot execute recovery",
+                                              "TUI cannot execute recovery",
+                                              "model replay cannot be recovery truth"
+                                          ],
+    "source_bindings":  {
+                            "rc5_hosted_service_result_sha256":  "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3",
+                            "rc5_endpoint_verifier_result_sha256":  "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+                            "rc5_hosted_metadata_fail_closed_sha256":  "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+                            "rc5_user_release_result_sha256":  "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+                            "rc5_hosted_channel_index_before_support_sha256":  "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1",
+                            "rc5_canary_proof_result_sha256":  "87cb46dc3aa9a64cd43fe3cc76cab54f3200991d8459773df77d09b77dd0d5e7",
+                            "rc5_canary_projection_sha256":  "738ef67aad612ac9b5de3da6aebd5970177ba64941c1af5a9b3211b4c1a61abc",
+                            "rc5_rollback_readiness_projection_sha256":  "11df80bceb1c53b7d91816bc83402648fe4d8bb90afeded14f4606aff3440a6f",
+                            "rc4_support_recovery_result_sha256":  "381f4b2fd60955d89f0e866ec6f174bdfa64b2fd6ab0253bc54965852e6e6f14",
+                            "rc4_support_recovery_index_sha256":  "0fd3f8891b4aa525eaa2eadb0df2d321dde5d9c817b6682056e6d2571da7fabf",
+                            "rc4_recovery_projection_sha256":  "a47257f1ba8d06f6a811d0ada9020b86db99d180b673550690bc973f11d00465",
+                            "rollback_baseline_sha256":  "0521385def7528cd9b943058ab9b1022492f97be3448f17f5686ed2f8dc72169",
+                            "previous_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709",
+                            "restored_active_artifact_set_sha256":  "3204461919e41a9bd94de956fe7b4d0494a925158bfe725f8dce8336febfe709"
+                        },
+    "invariants":  {
+                       "metadata_only":  true,
+                       "support_upload_performed":  false,
+                       "remote_bytes_sent_by_support":  false,
+                       "local_private_key_material_used":  false,
+                       "cryptographic_signing_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_registry_mutated":  false,
+                       "active_slot_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "remote_dispatch_enabled":  false,
+                       "model_replay_authority":  false,
+                       "normal_shell_authority":  false,
+                       "tui_authority":  false
+                   }
+}

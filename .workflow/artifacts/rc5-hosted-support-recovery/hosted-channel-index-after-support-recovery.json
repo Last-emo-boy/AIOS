@@ -1,0 +1,63 @@
+﻿{
+    "schema":  "agentos.rc5-hosted-channel-index.v1",
+    "status":  "metadata-only",
+    "channel":  "production-candidate-rc5",
+    "domain":  "aios.w33d.xyz",
+    "generated_at":  "2026-06-08T11:33:07.1156658+08:00",
+    "production_ready_claim":  false,
+    "storage_mode":  "metadata-only",
+    "source_rc4_final_audit_sha256":  "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+    "hosted_transport_manifest_sha256":  "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "mirror_publication_sha256":  "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "freshness_window":  "P7D",
+    "entries":  [
+                    {
+                        "id":  "rc5-metadata-only-framework",
+                        "status":  "placeholder",
+                        "path":  "/releases/README.txt",
+                        "activation_allowed":  false,
+                        "large_payload_deferred":  true
+                    },
+                    {
+                        "id":  "rc5-user-bootstrap-manifest",
+                        "status":  "available",
+                        "path":  "/bootstrap/manifest.json",
+                        "activation_allowed":  false,
+                        "large_payload_deferred":  true
+                    },
+                    {
+                        "id":  "rc5-user-release-channel",
+                        "status":  "available",
+                        "path":  "/channel/user-release.json",
+                        "activation_allowed":  false,
+                        "large_payload_deferred":  true
+                    },
+                    {
+                        "id":  "rc5-hosted-support-recovery",
+                        "status":  "available",
+                        "path":  "/support/index.json",
+                        "kind":  "support-recovery-metadata",
+                        "activation_allowed":  false,
+                        "rollback_execution_allowed":  false,
+                        "support_upload_allowed":  false,
+                        "large_payload_deferred":  true,
+                        "sha256":  "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+                    }
+                ],
+    "support_recovery":  {
+                             "index_path":  "/support/index.json",
+                             "recovery_operations_path":  "/support/recovery.json",
+                             "support_index_sha256":  "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+                             "recovery_operations_sha256":  "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4",
+                             "support_upload_allowed":  false,
+                             "recovery_execution_allowed":  false
+                         },
+    "authority":  {
+                      "signing_authority":  false,
+                      "activation_authority":  false,
+                      "rollback_execution_authority":  false,
+                      "support_upload_authority":  false,
+                      "recovery_authority":  false,
+                      "tui_authority":  false
+                  }
+}

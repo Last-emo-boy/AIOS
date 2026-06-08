@@ -1,0 +1,73 @@
+{
+  "schema": "agentos.rc5-hosted-support-recovery-evidence.v1",
+  "generated_at": "2026-06-08T12:35:00+08:00",
+  "task": "RC5-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "publisher": {
+    "path": "scripts/project-rc5-hosted-support-recovery.ps1",
+    "sha256": "af0922c6a86195183e55785340c3cede6bea56b47ef169c1749f64e687609581"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-hosted-support-recovery/result.json",
+    "sha256": "04f22e11c04a6428b36138cf925cf56c1e90ed5cea21c2491e69787ee4d57081",
+    "status": "passed",
+    "checks": 19,
+    "blockers": 0
+  },
+  "local_outputs": {
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+    },
+    "recovery_operations": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+      "sha256": "321b9dd5a9955d1fe8ee494d1b6c79ad62c798841cd4d89ce400e617b7786db4"
+    },
+    "hosted_channel_index_after_support_recovery": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/hosted-channel-index-after-support-recovery.json",
+      "sha256": "aab977791cde3a9ba2b99d931e3ee80c188ba6569fab64c64d9bfe8e2c27e611"
+    }
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/support/index.json",
+    "http://aios.w33d.xyz/support/recovery.json",
+    "http://aios.w33d.xyz/support/README.txt",
+    "http://aios.w33d.xyz/channel/index.json"
+  ],
+  "verified_controls": {
+    "support_recovery_metadata_published": true,
+    "support_upload_allowed": false,
+    "support_upload_endpoint_created": false,
+    "recovery_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "activation_performed": false,
+    "production_ready_claim": false,
+    "remote_static_metadata_published": true,
+    "descriptor_support_path": true,
+    "published_secret_safe": true
+  },
+  "invariants": {
+    "metadata_only": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "support_upload_performed": false,
+    "remote_bytes_sent_by_support": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc5_022_complete": true,
+    "next_task": "RC5-030",
+    "commit_required": true
+  }
+}

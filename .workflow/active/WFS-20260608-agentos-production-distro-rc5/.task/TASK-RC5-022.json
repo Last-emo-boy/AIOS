@@ -1,0 +1,47 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-022",
+  "title": "project hosted service support and recovery operations",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-021-multi-node-canary-proof.json",
+    ".workflow/artifacts/rc5-multi-node-canary-proof/result.json",
+    ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/controlled-hosted-mirror-service-contract.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc5-hosted-support-recovery.ps1",
+      "role": "hosted support/recovery publisher"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/result.json",
+      "role": "publication and verification result"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "role": "hosted support index"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/recovery-operations.json",
+      "role": "hosted recovery operations metadata"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/hosted-channel-index-after-support-recovery.json",
+      "role": "hosted channel index after support/recovery entry"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-022-hosted-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The remote mirror serves /support/index.json, /support/recovery.json, and /support/README.txt.",
+      "The hosted channel index references /support/index.json without granting activation, rollback, support upload, recovery, remote dispatch, or TUI authority.",
+      "Support/recovery metadata is redacted, hash-bound to RC5 canary proof and RC4 support/recovery projection, and remains metadata-only.",
+      "The mirror descriptor lists /support/ as an allowed metadata path."
+    ]
+  }
+}
