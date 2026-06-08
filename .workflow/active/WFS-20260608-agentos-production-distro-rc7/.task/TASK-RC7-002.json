@@ -1,0 +1,49 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-002",
+  "title": "publish signed metadata and revocation snapshot projection for the current payload candidate",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/publish-rc7-signed-metadata-revocation.ps1",
+      "role": "projection and hosted publication script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+      "role": "signed metadata projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+      "role": "revocation snapshot projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/payload-signatures-after-rc7.json",
+      "role": "payload signatures projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-002-signed-metadata-revocation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC7 signed metadata and revocation projection is generated from RC6 hosted payload metadata and public production signing revocation metadata.",
+      "The hosted mirror publishes signatures.json, signed-metadata.json, revocations.json, payload index, install bootstrap, and channel index with matching local hash bindings.",
+      "The projection keeps cryptographic_signature_present=false, signature_available=false, install_allowed=false, activation_allowed=false, rollback_execution_allowed=false, production_ready_claim=false, and mirror signing authority false.",
+      "The publication verifies live endpoints with curl --resolve, confirms write methods and directory listing remain blocked, and scans outputs for private key paths, private PEM markers, tokens, and raw public fingerprint.",
+      "The next task is RC7-003 installer compatibility and rollback baseline publication contract."
+    ]
+  }
+}

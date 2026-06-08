@@ -1,0 +1,51 @@
+{
+  "schema": "agentos.rc7-hosted-payload-index.v1",
+  "generated_at": "2026-06-08T12:57:26.9419827+08:00",
+  "status": "signed-metadata-projected",
+  "production_ready_claim": false,
+  "domain": "aios.w33d.xyz",
+  "signer_endpoint_domain": "sign.w33d.xyz",
+  "channel": "production-candidate-rc7",
+  "storage_mode": "metadata-only",
+  "large_artifact_storage_deferred": true,
+  "tls_required_before_ga_claim": true,
+  "entries": [
+    {
+      "id": "production-distro-rc6-current-artifacts",
+      "release_id": "production-distro-rc6-current-artifacts",
+      "status": "verification-blocked",
+      "reason": "Public signature envelope and revocation snapshot projection are published, but install remains blocked until an external cryptographic signature, compatibility contract, rollback baseline, TLS evidence, storage policy, and drift reconciliation exist.",
+      "manifest_path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+      "checksums_path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+      "signatures_path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+      "signed_metadata_path": "/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+      "revocations_path": "/payloads/aios/production-distro-rc6-current-artifacts/revocations.json",
+      "manifest_sha256": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+      "manifest_file_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "checksums_sha256": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+      "checksums_file_sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71",
+      "signatures_sha256": "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad",
+      "signed_metadata_sha256": "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4",
+      "revocation_snapshot_sha256": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381",
+      "install_allowed": false,
+      "activation_allowed": false,
+      "rollback_execution_allowed": false,
+      "large_payload_deferred": true,
+      "public_signature_projection_available": true,
+      "cryptographic_signature_present": false,
+      "signature_available": false,
+      "revocation_snapshot_available": true,
+      "installable_media_declared_hash_drift_count": 3
+    }
+  ],
+  "authority": {
+    "mirror_is_root_of_trust": false,
+    "signing_authority": false,
+    "activation_authority": false,
+    "rollback_execution_authority": false,
+    "production_ring_mutation_authority": false,
+    "remote_dispatch_authority": false,
+    "support_upload_authority": false,
+    "tui_authority": false
+  }
+}

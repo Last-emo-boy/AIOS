@@ -1,0 +1,66 @@
+{
+  "schema": "agentos.rc7-signed-metadata-revocation-evidence.v1",
+  "generated_at": "2026-06-08T12:57:53+08:00",
+  "task": "RC7-002",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": "scripts/publish-rc7-signed-metadata-revocation.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    "status": "passed",
+    "checks": 20,
+    "blockers": 0
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/payloads/index.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/revocations.json",
+    "http://aios.w33d.xyz/install/bootstrap.json",
+    "http://aios.w33d.xyz/channel/index.json"
+  ],
+  "local_outputs": {
+    "signature_claims": ".workflow/artifacts/rc7-signed-metadata-revocation/signature-claims.json",
+    "signed_metadata": ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+    "revocation_snapshot": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+    "payload_signatures": ".workflow/artifacts/rc7-signed-metadata-revocation/payload-signatures-after-rc7.json",
+    "hosted_payload_index": ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-payload-index-after-signed-metadata.json",
+    "install_bootstrap": ".workflow/artifacts/rc7-signed-metadata-revocation/install-bootstrap-after-signed-metadata.json",
+    "hosted_channel_index": ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-channel-index-after-signed-metadata.json"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "public_signature_projection_available": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "revocation_snapshot_available": true,
+    "revocation_status": "not-revoked",
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "external_signer_called_for_signature": false,
+    "mirror_is_root_of_trust": false,
+    "signing_authority_on_mirror": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_002_complete": true,
+    "next_task": "RC7-003",
+    "commit_required": true
+  }
+}

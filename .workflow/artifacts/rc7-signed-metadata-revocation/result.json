@@ -1,0 +1,344 @@
+{
+  "schema": "agentos.rc7-signed-metadata-revocation-result.v1",
+  "generated_at": "2026-06-08T12:57:26.9419827+08:00",
+  "checked_at": "2026-06-08T12:57:32.0587059+08:00",
+  "task": "RC7-002",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "signer_domain": "sign.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source": {
+    "rc7_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+      "sha256": "07613f02e074b15e8a7135abdff11b0b56b800a72cefec88ec8fcdee135aad97"
+    },
+    "rc6_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
+      "sha256": "bf61926c2e60d9dd190202c42dc11bcbb636a66199f45b522e83a6f52c133286"
+    },
+    "hosted_payload_result": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+      "sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec"
+    },
+    "hosted_payload_index": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-payload-index.json",
+      "sha256": "85c9cb6b0bb49799fe30305270eb733d9688bb2e9e4cd3e639aa8c604a91ee2c"
+    },
+    "hosted_install_bootstrap": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/install-bootstrap.json",
+      "sha256": "f10f3681096cb85ef9c3fee1f027362aa8581e6d05cb773cae72a9398a206a0b"
+    },
+    "payload_manifest": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e"
+    },
+    "payload_checksums": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-checksums.json",
+      "sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71"
+    },
+    "previous_payload_signatures": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json",
+      "sha256": "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6"
+    },
+    "key_custody": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-custody.json",
+      "sha256": "28d207b008b8bac21bd3c467b10e28c207f2f1c94db4c92a17beea25630931ab",
+      "public_fingerprint_present": true
+    },
+    "revocation_log": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json",
+      "sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+    }
+  },
+  "local_outputs": {
+    "signature_claims": ".workflow/artifacts/rc7-signed-metadata-revocation/signature-claims.json",
+    "signed_metadata": ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+    "revocation_snapshot": ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+    "payload_signatures": ".workflow/artifacts/rc7-signed-metadata-revocation/payload-signatures-after-rc7.json",
+    "hosted_payload_index": ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-payload-index-after-signed-metadata.json",
+    "install_bootstrap": ".workflow/artifacts/rc7-signed-metadata-revocation/install-bootstrap-after-signed-metadata.json",
+    "hosted_channel_index": ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-channel-index-after-signed-metadata.json"
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/payloads/index.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json",
+    "http://aios.w33d.xyz/payloads/aios/production-distro-rc6-current-artifacts/revocations.json",
+    "http://aios.w33d.xyz/install/bootstrap.json",
+    "http://aios.w33d.xyz/channel/index.json"
+  ],
+  "output_hashes": {
+    "signature_claims_sha256": "70b68dbf548a49144d1dc869b0e81741cdab889c92c9eed5c66ee1354437f7af",
+    "signed_metadata_sha256": "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4",
+    "revocation_snapshot_sha256": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381",
+    "payload_signatures_sha256": "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad",
+    "hosted_payload_index_sha256": "2566f557ade61689a4c40c23236f3190f5ed3c996065f47fe6c268a11407c652",
+    "install_bootstrap_sha256": "13800c3d5a43598ef919c08e310720cf51f55213c010f33374427b220b93c8b0",
+    "hosted_channel_index_sha256": "7f6354dc2fb4f492f3732cc4f9c32b74e6047b861ba488725eb34ee4377b4086"
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "public_signature_projection_available": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "revocation_snapshot_available": true,
+    "revocation_status": "not-revoked",
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "external_signer_called_for_signature": false,
+    "mirror_is_root_of_trust": false,
+    "signing_authority_on_mirror": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "source.rc6_final_audit.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 final audit must pass while remaining non-GA.",
+      "evidence": {
+        "verdict": "PASS",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "source.hosted_payload.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 hosted payload metadata must be passed before RC7 signed metadata projection.",
+      "evidence": {
+        "checks": 17,
+        "blockers": 0,
+        "rc6_011_complete": true,
+        "next_task": "RC6-012"
+      }
+    },
+    {
+      "id": "source.payload.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload candidate must still be verification-blocked before RC7 projection.",
+      "evidence": {
+        "release_id": "production-distro-rc6-current-artifacts",
+        "base_path": "/payloads/aios/production-distro-rc6-current-artifacts",
+        "status": "verification-blocked",
+        "storage_mode": "metadata-only",
+        "large_payload_deferred": true,
+        "signature_available": false,
+        "installable_media_declared_hash_drift_count": 3,
+        "install_allowed": false,
+        "activation_allowed": false
+      }
+    },
+    {
+      "id": "source.rc7_contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC7 signed payload consumption contract must exist.",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md"
+    },
+    {
+      "id": "source.key_custody.public_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Public key custody must expose an active non-revoked production key.",
+      "evidence": {
+        "key_id": "agentos-production-root-v1",
+        "status": "active",
+        "revocation_status": "not-revoked"
+      }
+    },
+    {
+      "id": "source.revocation_log.current",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Public revocation log must mark the production key not revoked.",
+      "evidence": {
+        "key_id": "agentos-production-root-v1",
+        "revocation_status": "not-revoked"
+      }
+    },
+    {
+      "id": "projection.signed_metadata.hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signed metadata projection must bind signature claims and revocation snapshot.",
+      "evidence": {
+        "signature_claims_sha256": "70b68dbf548a49144d1dc869b0e81741cdab889c92c9eed5c66ee1354437f7af",
+        "revocation_snapshot_sha256": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381"
+      }
+    },
+    {
+      "id": "projection.signature.not_real",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC7-002 must not claim a real cryptographic signature.",
+      "evidence": {
+        "signed_metadata": "signed-metadata-projected-verification-blocked",
+        "signatures": "signature-projection-published-verification-blocked"
+      }
+    },
+    {
+      "id": "projection.revocation.available",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Revocation snapshot projection must be available and hash-bound.",
+      "evidence": {
+        "revocation_status": "not-revoked",
+        "sha256": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381"
+      }
+    },
+    {
+      "id": "projection.install.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer bootstrap and payload index must remain verification-blocked.",
+      "evidence": [
+        "cryptographic-signature-not-present",
+        "installer-compatibility-contract-pending",
+        "rollback-baseline-not-published-to-install-metadata",
+        "large-payload-storage-policy-and-object-storage-pending",
+        "installable-media-declared-hash-drift",
+        "tls-required-before-ga-claim",
+        "exact-operator-approval-not-granted"
+      ]
+    },
+    {
+      "id": "projection.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC7 projection must not grant signing, activation, rollback, remote dispatch, or TUI authority.",
+      "evidence": {
+        "signing_authority": false,
+        "activation_authority": false,
+        "rollback_execution_authority": false,
+        "support_upload_authority": false,
+        "recovery_authority": false,
+        "production_ring_mutation_authority": false,
+        "remote_dispatch_authority": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "projection.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC7 signed metadata and revocation outputs must not contain private key paths, PEM private blocks, tokens, or raw public fingerprint.",
+      "evidence": null
+    },
+    {
+      "id": "remote.nginx.active",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nginx must remain active after RC7 signed metadata projection publication.",
+      "evidence": [
+        "active\r",
+        "2566f557ade61689a4c40c23236f3190f5ed3c996065f47fe6c268a11407c652  payloads/index.json\r",
+        "13800c3d5a43598ef919c08e310720cf51f55213c010f33374427b220b93c8b0  install/bootstrap.json\r",
+        "7f6354dc2fb4f492f3732cc4f9c32b74e6047b861ba488725eb34ee4377b4086  channel/index.json\r",
+        "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad  payloads/aios/production-distro-rc6-current-artifacts/signatures.json\r",
+        "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4  payloads/aios/production-distro-rc6-current-artifacts/signed-metadata.json\r",
+        "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381  payloads/aios/production-distro-rc6-current-artifacts/revocations.json"
+      ]
+    },
+    {
+      "id": "remote.http.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC7 signed metadata, revocations, signatures, install bootstrap, and channel metadata must be reachable.",
+      "evidence": {
+        "payload_index": 200,
+        "signatures": 200,
+        "signed_metadata": 200,
+        "revocations": 200,
+        "install": 200,
+        "channel": 200
+      }
+    },
+    {
+      "id": "remote.semantics.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC7 metadata must publish projection evidence while keeping install blocked.",
+      "evidence": {
+        "release_id": "production-distro-rc6-current-artifacts",
+        "install_state": "verification-blocked",
+        "cryptographic_signature_present": false,
+        "revocation_status": "not-revoked"
+      }
+    },
+    {
+      "id": "remote.hash_bindings.match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC7 metadata must carry local signed metadata and revocation hashes.",
+      "evidence": {
+        "signed_metadata_sha256": "7b62529df040c9ae0d65fc91089c650b823eec0e19ab5411ce1c9c9db02c23e4",
+        "revocation_snapshot_sha256": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381",
+        "payload_signatures_sha256": "40a5143d69c51e9bf093c426553e99126828c2f6d8c56f98bd63063bd924ccad"
+      }
+    },
+    {
+      "id": "remote.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote RC7 metadata responses must not expose private key paths, PEM private blocks, tokens, or raw public fingerprint.",
+      "evidence": null
+    },
+    {
+      "id": "remote.directory_listing.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload release directory listing must remain blocked.",
+      "evidence": 404
+    },
+    {
+      "id": "remote.write_methods.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST to payload signature metadata must remain blocked.",
+      "evidence": 403
+    },
+    {
+      "id": "signer.endpoint.separate",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Signer endpoint must remain separate from mirror; RC7-002 does not require calling it for signing.",
+      "evidence": {
+        "signer_domain": "sign.w33d.xyz",
+        "mirror_domain": "aios.w33d.xyz",
+        "health_status": 301
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 20,
+    "blockers": 0,
+    "rc7_002_complete": true,
+    "next_task": "RC7-003"
+  }
+}

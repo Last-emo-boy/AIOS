@@ -3,7 +3,7 @@
   "name": "Production Distro RC7",
   "status": "active",
   "created_at": "2026-06-08T15:05:00+08:00",
-  "updated_at": "2026-06-08T15:05:00+08:00",
+  "updated_at": "2026-06-08T15:15:00+08:00",
   "source": "RC6 final audit; TASK.md; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
   "goal": "Convert the RC6 metadata-only, verification-blocked payload channel into signed payload consumption and controlled execution evidence while keeping the mirror, signer, installer, AgentCore, SecurityExecutionEngine, fleet, and TUI authority boundaries explicit.",
@@ -28,20 +28,38 @@
       "completed_at": "2026-06-08T15:05:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-001-signed-payload-consumption-controlled-execution-contract.json",
       "commit": null
+    },
+    {
+      "task": "RC7-002",
+      "completed_at": "2026-06-08T15:15:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-002-signed-metadata-revocation.json",
+      "commit": null
     }
   ],
-  "next_task": "RC7-002",
+  "next_task": "RC7-003",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/final-rc6-closeout-summary.md",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/workflow-session.json",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-001.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-001-signed-payload-consumption-controlled-execution-contract.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-001-signed-payload-consumption-controlled-execution-contract.json",
+    "scripts/publish-rc7-signed-metadata-revocation.ps1",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/signature-claims.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/signed-metadata.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/revocation-snapshot.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/payload-signatures-after-rc7.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-payload-index-after-signed-metadata.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/install-bootstrap-after-signed-metadata.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/hosted-channel-index-after-signed-metadata.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-002.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-002-signed-metadata-revocation.json"
   ]
 }
