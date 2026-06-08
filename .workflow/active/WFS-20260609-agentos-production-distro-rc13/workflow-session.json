@@ -3,7 +3,7 @@
   "name": "Production Distro RC13",
   "status": "active",
   "created_at": "2026-06-09T07:10:00+08:00",
-  "updated_at": "2026-06-09T07:45:00+08:00",
+  "updated_at": "2026-06-09T08:05:00+08:00",
   "source": "RC12 final audit; maestro-managed RC13 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc12",
   "goal": "Plan and execute AIOS-body local trust unblock for drift-zero artifact identity, immutable object descriptor binding, freshness and revocation authority, verified quarantine preflight, executable AgentCore PlanSpec readiness, SecurityExecution allow preconditions, exact approval, controlled activation, rollback, and support/recovery evidence.",
@@ -39,9 +39,15 @@
       "completed_at": "2026-06-09T07:45:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-010-declared-current-drift-zero.json",
       "commit": null
+    },
+    {
+      "task": "RC13-011",
+      "completed_at": "2026-06-09T08:05:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-011-object-manifest-descriptor-binding.json",
+      "commit": null
     }
   ],
-  "next_task": "RC13-011",
+  "next_task": "RC13-012",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/FINAL-AUDIT-20260609-production-distro-rc12.json",
@@ -74,6 +80,12 @@
     ".workflow/artifacts/rc13-declared-current-drift-zero/declared-current-drift-zero-reconciliation.json",
     ".workflow/artifacts/rc13-declared-current-drift-zero/drift-zero-denial.json",
     ".workflow/artifacts/rc13-declared-current-drift-zero/object-manifest-descriptor-binding-handoff.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-010-declared-current-drift-zero.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-010-declared-current-drift-zero.json",
+    "scripts/project-rc13-object-manifest-descriptor-binding.ps1",
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/result.json",
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-denial.json",
+    ".workflow/artifacts/rc13-object-manifest-descriptor-binding/freshness-revocation-authority-handoff.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc13/evidence/RC13-011-object-manifest-descriptor-binding.json"
   ]
 }

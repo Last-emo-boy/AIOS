@@ -1,0 +1,397 @@
+{
+  "schema": "agentos.rc13-object-manifest-descriptor-binding-result.v1",
+  "generated_at": "2026-06-09T08:05:00+08:00",
+  "task": "RC13-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "binding_surface": {
+    "state": "local-descriptor-manifest-consistent-authority-denied",
+    "local_descriptor_manifest_consistent": true,
+    "object_manifest_descriptor_binding_allowed": false,
+    "declared_current_drift_zero": false,
+    "current_payload_size_bytes": 377,
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "descriptor_file_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "descriptor_canonical_sha256": "c9a36aab6d80c7b8a698f2b55cccf60b850f753f30cb7a4bd62350130047d36d",
+    "descriptor_candidate_sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+    "descriptor_candidate_canonical_sha256": "d863d4863c831ff41c769ebd1faebf52f282a39d513d42bc9e436027b1d46530",
+    "initramfs_manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+    "payload_manifest_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+    "object_checksums_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+    "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "comparisons": 36,
+    "comparison_drifts": 0,
+    "object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "declared-current-drift-zero-not-proved",
+      "nonzero-declared-current-drift-count",
+      "rc13-local-trust-gate-drift",
+      "rc12-declared-current-drift-carried-forward",
+      "rc12-publication-binding-drift",
+      "rc11-declared-current-drift-carried-forward",
+      "external-https-object-uri-not-published",
+      "freshness-window-missing",
+      "external-object-publication-not-allowed",
+      "freshness-window-not-bound",
+      "rc12-drift-zero-not-proved",
+      "rc12-object-trust-not-allowed",
+      "rc12-controlled-unblock-not-achieved",
+      "object-manifest-descriptor-binding-not-allowed",
+      "freshness-revocation-authority-not-bound",
+      "quarantine-preflight-not-run",
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "object-trust-not-allowed"
+    ]
+  },
+  "outputs": {
+    "binding": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+      "sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8"
+    },
+    "denial": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-denial.json",
+      "sha256": "8bfdbc6c7dc4ced3cc76e56e2063de17f52ca7c9eec4e516362cfd7d2dcedf73"
+    },
+    "freshness_revocation_authority_handoff": {
+      "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/freshness-revocation-authority-handoff.json",
+      "sha256": "e40cf8b8cd0ed06cd11a972a53c9d8afa7aa8a7b4c525d17e421fe33fcc31b04"
+    }
+  },
+  "source": {
+    "rc13_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/plan.json",
+      "sha256": "b1e51ee20bd2fecf12c2264156d798c11511086451c456be6bcef7e44a51449e",
+      "size_bytes": 8632,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc13_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+      "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+      "size_bytes": 8971,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc13_drift_result": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/result.json",
+      "sha256": "c9fb476d7eb3cd61fb335bd32f1eff7f868d9edbd4095951f27532c943ab1d25",
+      "size_bytes": 13439,
+      "present": true,
+      "schema": "agentos.rc13-declared-current-drift-zero-result.v1",
+      "status": "passed"
+    },
+    "rc13_drift_handoff": {
+      "path": ".workflow/artifacts/rc13-declared-current-drift-zero/object-manifest-descriptor-binding-handoff.json",
+      "sha256": "f4b9e487761bf799761489210a641bb99152256151da2d3baee679efc8bdaa96",
+      "size_bytes": 2341,
+      "present": true,
+      "schema": "agentos.rc13-object-manifest-descriptor-binding-handoff.v1",
+      "status": "blocked-by-declared-current-drift"
+    },
+    "rc8_descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "size_bytes": 2130,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "rc8_object_checksums": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+      "size_bytes": 554,
+      "present": true,
+      "schema": "agentos.rc8-payload-object-checksums.v1",
+      "status": null
+    },
+    "rc8_descriptor_report": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/descriptor-report.json",
+      "sha256": "50c6345c08a3dd57496da89256a6489fb5366df860c01cd9c47bd61bc9e7bf83",
+      "size_bytes": 4841,
+      "present": true,
+      "schema": "agentos.rc8-real-payload-object-descriptor-report.v1",
+      "status": null
+    },
+    "rc11_descriptor_candidate": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+      "sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+      "size_bytes": 2413,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "rc11_byte_map": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/release-object-byte-map.json",
+      "sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+      "size_bytes": 3560,
+      "present": true,
+      "schema": "agentos.rc11-release-object-byte-map.v1",
+      "status": "current-byte-map-candidate-verification-blocked"
+    },
+    "rc12_publication_binding": {
+      "path": ".workflow/artifacts/rc12-external-object-publication-binding/publication-binding.json",
+      "sha256": "94fc3176cba8cc7f17eab35331e904ebc0b9ee93e3e1171e1262874450366d8d",
+      "size_bytes": 5356,
+      "present": true,
+      "schema": "agentos.rc12-external-object-publication-binding.v1",
+      "status": "external-object-publication-denied"
+    },
+    "initramfs_manifest": {
+      "path": "image/out/agentos-initramfs.manifest.json",
+      "sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "size_bytes": 7380,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "payload_manifest": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "size_bytes": 8204,
+      "present": true,
+      "schema": "agentos.rc6-installable-payload-manifest.v1",
+      "status": "metadata-projected"
+    },
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "compatibility-projected-verification-blocked"
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked"
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "object_storage_provisioned": false,
+    "network_probe_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "descriptor_rewritten": false,
+    "object_manifest_written_as_authority": false,
+    "object_trust_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc13_011",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-011 must run after RC13-010 completed, either while current_task is RC13-011 or while rerunning after RC13-011 completed and the pointer advanced to RC13-012.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC13-012",
+        "rc13_010_status": "completed",
+        "rc13_011_status": "completed"
+      }
+    },
+    {
+      "id": "contract.object_manifest_descriptor_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-011 must consume the RC13 object manifest descriptor gate contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc13/docs/rc13-local-trust-unblock-contract.md",
+        "sha256": "088206140a03c332c280b28aeae8b0aa9d1f3984bed906f138bccf3a2f9c4dfd",
+        "size_bytes": 8971,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "source.rc13_drift_result.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-011 must bind the RC13-010 declared/current drift result.",
+      "evidence": {
+        "status": "passed",
+        "drift_zero": false,
+        "drift_count": 19
+      }
+    },
+    {
+      "id": "source.handoff.current_payload_matches",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-011 must inherit current payload identity from RC13-010 handoff.",
+      "evidence": {
+        "handoff_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "observed_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "handoff_size_bytes": 377,
+        "observed_size_bytes": 377
+      }
+    },
+    {
+      "id": "binding.current_payload_size_digest_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current payload bytes must be size-bound and digest-bound across descriptor, initramfs manifest, and checksum set.",
+      "evidence": {
+        "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "size_bytes": 377
+      }
+    },
+    {
+      "id": "binding.descriptor_manifest_consistent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Descriptor, manifest, checksum set, compatibility, rollback, and support/recovery references must agree before local consistency can be recorded.",
+      "evidence": {
+        "comparisons": 36,
+        "drifts": [],
+        "descriptor_immutable": true,
+        "candidate_immutable": true,
+        "hash_matches_manifest": true
+      }
+    },
+    {
+      "id": "binding.upstream_drift_denies_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nonzero declared/current drift must deny authoritative object manifest descriptor binding and downstream object trust.",
+      "evidence": {
+        "drift_zero": false,
+        "drift_count": 19,
+        "local_descriptor_manifest_consistent": true,
+        "binding_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-011 outputs must not contain PEM blocks, auth tokens, signer internals, or key identity strings.",
+      "evidence": null
+    },
+    {
+      "id": "outputs.side_effects_absent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC13-011 must not rewrite authority metadata, upload/download/fetch/quarantine/interpret payloads, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": {
+        "object_manifest_written_as_authority": false,
+        "descriptor_rewritten": false,
+        "declared_metadata_rewritten": false,
+        "payload_bytes_uploaded": false,
+        "remote_payload_bytes_downloaded": false,
+        "network_probe_performed": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false
+      }
+    }
+  ],
+  "blockers": [
+    "declared-current-drift-zero-not-proved",
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "object-manifest-descriptor-binding-not-allowed",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed"
+  ],
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "comparisons": 36,
+    "comparison_drifts": 0,
+    "local_descriptor_manifest_consistent": true,
+    "authority_denied_as_expected": true,
+    "rc13_011_complete": true,
+    "next_task": "RC13-012"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "agentos.rc13-freshness-revocation-authority-handoff.v1",
+  "generated_at": "2026-06-09T08:05:00+08:00",
+  "task": "RC13-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc13-012-with-authority-denied-until-upstream-gates-pass",
+  "production_ready_claim": false,
+  "expected_next_task": "RC13-012",
+  "binding": {
+    "path": ".workflow/artifacts/rc13-object-manifest-descriptor-binding/object-manifest-descriptor-binding.json",
+    "sha256": "f7608663721df111bb16feacea6ebbd805a4098680e92e0bc34da5e0f4bd8fc8",
+    "local_descriptor_manifest_consistent": true,
+    "object_manifest_descriptor_binding_allowed": false,
+    "declared_current_drift_zero": false
+  },
+  "public_signature_target": {
+    "descriptor_path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    "descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "public_signature_target_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "public_signature_receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d"
+  },
+  "revocation_and_freshness_inputs": {
+    "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+    "fresh_until": null,
+    "freshness_window_bound": false
+  },
+  "blocked_authority": {
+    "freshness_revocation_authority_bound": false,
+    "object_trust_allowed": false,
+    "quarantine_preflight_allowed": false,
+    "agentcore_planspec_executable": false,
+    "security_execution_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "blockers": [
+    "declared-current-drift-zero-not-proved",
+    "nonzero-declared-current-drift-count",
+    "rc13-local-trust-gate-drift",
+    "rc12-declared-current-drift-carried-forward",
+    "rc12-publication-binding-drift",
+    "rc11-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "freshness-window-missing",
+    "external-object-publication-not-allowed",
+    "freshness-window-not-bound",
+    "rc12-drift-zero-not-proved",
+    "rc12-object-trust-not-allowed",
+    "rc12-controlled-unblock-not-achieved",
+    "object-manifest-descriptor-binding-not-allowed",
+    "freshness-revocation-authority-not-bound",
+    "quarantine-preflight-not-run",
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "object-trust-not-allowed"
+  ]
+}
