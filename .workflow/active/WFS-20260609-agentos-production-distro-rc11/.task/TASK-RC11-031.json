@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC11-031",
   "title": "execute or deny controlled canary activation through AgentCore and SecurityExecutionEngine",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-3",
   "read_first": [
     ".workflow/artifacts/rc11-two-target-canary-approval/result.json",
@@ -17,6 +17,22 @@
     {
       "path": ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
       "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/activation-gate-report.json",
+      "role": "activation gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/activation-denial-evidence.json",
+      "role": "activation denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/controlled-activation-handoff.json",
+      "role": "controlled activation handoff"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-031-controlled-canary-activation.json",
+      "role": "task evidence"
     }
   ],
   "convergence": {
