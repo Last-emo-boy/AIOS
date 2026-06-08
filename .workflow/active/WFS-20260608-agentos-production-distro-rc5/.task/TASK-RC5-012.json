@@ -1,0 +1,34 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-012",
+  "title": "add hosted metadata fail-closed fixtures for missing, stale, tampered, and oversized mirror state",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-011-hosted-endpoint-verifier.json",
+    ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/hosted-mirror-service-threat-model.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc5-hosted-metadata-fail-closed-fixtures.ps1",
+      "role": "negative fixture verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+      "role": "fail-closed evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-012-hosted-metadata-fail-closed-fixtures.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Baseline hosted health and channel metadata are accepted.",
+      "Malformed, bad schema, GA claim, authority, secret marker, missing hash, hash drift, stale metadata, oversized payload, and activation-entry negative cases are rejected.",
+      "All negative cases pass with zero blockers.",
+      "The next task is RC5-020."
+    ]
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "schema": "agentos.rc5-hosted-metadata-fail-closed-result.v1",
+  "generated_at": "2026-06-08T10:58:26.1956606+08:00",
+  "task": "RC5-012",
+  "status": "passed",
+  "production_ready_claim": false,
+  "target": {
+    "domain": "aios.w33d.xyz",
+    "remote_host": "47.101.11.109",
+    "validation_used_local_dns": false,
+    "resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source_artifacts": {
+    "rc4_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+      "sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413"
+    },
+    "rc4_hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335"
+    },
+    "rc4_mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+    },
+    "rc5_hosted_endpoint_verifier": {
+      "path": ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+      "sha256": "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62"
+    }
+  },
+  "baseline": {
+    "health": {
+      "kind": "health",
+      "status": "accepted",
+      "reasons": []
+    },
+    "channel": {
+      "kind": "channel",
+      "status": "accepted",
+      "reasons": []
+    }
+  },
+  "negative_cases": [
+    {
+      "id": "health.malformed-json",
+      "kind": "health",
+      "status": "passed",
+      "expected_reason": "malformed-json",
+      "validation": {
+        "kind": "health",
+        "status": "rejected",
+        "reasons": [
+          "malformed-json"
+        ]
+      }
+    },
+    {
+      "id": "health.bad-schema",
+      "kind": "health",
+      "status": "passed",
+      "expected_reason": "bad-schema",
+      "validation": {
+        "kind": "health",
+        "status": "rejected",
+        "reasons": [
+          "bad-schema"
+        ]
+      }
+    },
+    {
+      "id": "health.ga-claim",
+      "kind": "health",
+      "status": "passed",
+      "expected_reason": "ga-claim",
+      "validation": {
+        "kind": "health",
+        "status": "rejected",
+        "reasons": [
+          "ga-claim"
+        ]
+      }
+    },
+    {
+      "id": "health.signing-authority",
+      "kind": "health",
+      "status": "passed",
+      "expected_reason": "signing-authority",
+      "validation": {
+        "kind": "health",
+        "status": "rejected",
+        "reasons": [
+          "signing-authority"
+        ]
+      }
+    },
+    {
+      "id": "health.secret-marker",
+      "kind": "health",
+      "status": "passed",
+      "expected_reason": "secret-marker",
+      "validation": {
+        "kind": "health",
+        "status": "rejected",
+        "reasons": [
+          "secret-marker",
+          "malformed-json"
+        ]
+      }
+    },
+    {
+      "id": "channel.malformed-json",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "malformed-json",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "malformed-json"
+        ]
+      }
+    },
+    {
+      "id": "channel.missing-rc4-binding",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "rc4-final-audit-hash-mismatch",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "rc4-final-audit-hash-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "channel.hosted-hash-drift",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "hosted-transport-hash-mismatch",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "hosted-transport-hash-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "channel.stale",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "stale-metadata",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "stale-metadata"
+        ]
+      }
+    },
+    {
+      "id": "channel.activation-authority",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "activation-authority",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "activation-authority"
+        ]
+      }
+    },
+    {
+      "id": "channel.tui-authority",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "tui-authority",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "tui-authority"
+        ]
+      }
+    },
+    {
+      "id": "channel.large-payload-reference",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "large-payload-reference-before-storage-upgrade",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "large-payload-reference-before-storage-upgrade"
+        ]
+      }
+    },
+    {
+      "id": "channel.entry-activation",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "entry-activation-allowed",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "entry-activation-allowed"
+        ]
+      }
+    },
+    {
+      "id": "channel.secret-marker",
+      "kind": "channel",
+      "status": "passed",
+      "expected_reason": "secret-marker",
+      "validation": {
+        "kind": "channel",
+        "status": "rejected",
+        "reasons": [
+          "secret-marker",
+          "malformed-json"
+        ]
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "negative_cases": 14,
+    "negative_passed": 14,
+    "blockers": 0,
+    "rc5_012_complete": true,
+    "production_ready_claim": false
+  }
+}

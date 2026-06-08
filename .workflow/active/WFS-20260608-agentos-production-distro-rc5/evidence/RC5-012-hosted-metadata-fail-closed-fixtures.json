@@ -1,0 +1,51 @@
+{
+  "schema": "agentos.rc5-hosted-metadata-fail-closed-fixtures-evidence.v1",
+  "generated_at": "2026-06-08T11:50:00+08:00",
+  "task": "RC5-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "verifier": {
+    "path": "scripts/verify-rc5-hosted-metadata-fail-closed-fixtures.ps1",
+    "sha256": "e9123acbec568a8aa01a7fae9b1a1457278adb2a45236fc2fe3ac704c2c99863"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+    "sha256": "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1",
+    "status": "passed",
+    "negative_cases": 14,
+    "negative_passed": 14,
+    "blockers": 0
+  },
+  "negative_coverage": [
+    "health.malformed-json",
+    "health.bad-schema",
+    "health.ga-claim",
+    "health.signing-authority",
+    "health.secret-marker",
+    "channel.malformed-json",
+    "channel.missing-rc4-binding",
+    "channel.hosted-hash-drift",
+    "channel.stale",
+    "channel.activation-authority",
+    "channel.tui-authority",
+    "channel.large-payload-reference",
+    "channel.entry-activation",
+    "channel.secret-marker"
+  ],
+  "invariants": {
+    "remote_state_mutated": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc5_012_complete": true,
+    "next_task": "RC5-020",
+    "commit_required": true
+  }
+}
