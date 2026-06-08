@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-040",
+  "title": "run Production Distro RC8 final audit and next milestone planning",
+  "status": "completed",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/plan.json",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+    ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+    ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/rc8-controlled-execution-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc8-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/final-rc8-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-040-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "All RC8 pre-closeout tasks are completed.",
+      "RC8 real payload descriptor, public signature ingestion, signed descriptor fail-closed fixtures, installer VM preflight, installer byte fail-closed fixtures, mirror consistency, canary activation denial, rollback denial, and support/recovery binding evidence all pass.",
+      "Live hosted endpoints are reachable through HTTPS curl --resolve and remain non-GA, metadata-only, payload-byte-free, install-blocked, activation-blocked, rollback-blocked, and support-upload-blocked.",
+      "Final audit records remaining GA/execution blockers and next milestone planning for RC9.",
+      "No signing, payload upload, remote payload download, install, activation, rollback, active slot, boot metadata, persistent state, production ring, support upload, recovery execution, remote dispatch, model, shell, or TUI authority is granted."
+    ]
+  }
+}

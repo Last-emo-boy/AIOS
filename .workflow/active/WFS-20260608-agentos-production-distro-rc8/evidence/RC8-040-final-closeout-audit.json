@@ -1,0 +1,64 @@
+{
+  "schema": "agentos.rc8-final-closeout-task-evidence.v1",
+  "generated_at": "2026-06-08T22:00:00+08:00",
+  "task": "RC8-040",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "runner": {
+    "path": "scripts/run-rc8-final-closeout-audit.ps1",
+    "sha256": "a01eafd566bd957a9292eb308cb1009b0a81b3617c2f44490a6a10257b7a2336"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-final-closeout-audit/result.json",
+    "sha256": "26658ad38a734d99b360146730c2c7e67cef370d2c83e58ecc16d9f44d0b7d61",
+    "status": "passed",
+    "checks": 19,
+    "blockers": 0
+  },
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/FINAL-AUDIT-20260608-production-distro-rc8.json",
+      "sha256": "99f45f45df286bbb6fa42a438af66078535382c9e5e757a2cb27fa6ac6529b4a",
+      "verdict": "PASS"
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/final-rc8-closeout-summary.md",
+      "sha256": "577614d62586505808ea483f8f847e175e81f01f43708cb73dff71f3b6243503"
+    }
+  },
+  "verified_controls": {
+    "real_payload_descriptor_ready_blocked": true,
+    "public_signature_ingested_crypto_verified": true,
+    "signed_descriptor_fail_closed_ready": true,
+    "installer_vm_preflight_ready_blocked": true,
+    "installer_byte_fail_closed_ready": true,
+    "hosted_https_mirror_ready": true,
+    "canary_activation_projected_execution_blocked": true,
+    "rollback_drill_projected_execution_blocked": true,
+    "support_recovery_bound_upload_disabled": true,
+    "live_endpoint_ready": true,
+    "production_ready_claim": false
+  },
+  "remaining_blockers_before_ga_or_execution": [
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-unresolved",
+    "canary-activation-evidence-not-executed",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-PlanSpec-not-bound",
+    "AgentCore-rollback-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "SecurityExecutionEngine-rollback-approval-not-bound",
+    "real-external-object-storage-not-integrated",
+    "controlled-canary-activation-not-executed",
+    "controlled-rollback-execution-not-executed"
+  ],
+  "completion": {
+    "rc8_040_complete": true,
+    "workflow_complete": true,
+    "next_milestone": "Production Distro RC9",
+    "commit_required": true
+  }
+}
