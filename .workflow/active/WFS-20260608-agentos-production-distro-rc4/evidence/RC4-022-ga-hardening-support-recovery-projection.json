@@ -1,0 +1,61 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-022",
+  "status": "completed",
+  "recorded_at": "2026-06-08T10:20:00+08:00",
+  "summary": "Implemented and ran the GA-hardening support/recovery projection for RC4. The projection emits a hosted/fleet redacted support bundle, a hosted/fleet recovery projection, and a support/recovery index that explain hosted transport, remote mirror, staged fleet rollout, rollback baseline, RC3 support/recovery, support upload, and incident runbook evidence without granting mutation authority or claiming GA readiness.",
+  "deliverables": {
+    "script": "scripts/project-rc4-ga-hardening-support-recovery.ps1",
+    "result": ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/result.json",
+    "support_bundle_redacted": ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/hosted-fleet-support-bundle-redacted.json",
+    "recovery_projection": ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/hosted-fleet-recovery-projection.json",
+    "support_index": ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/support-recovery-index.json",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-022-ga-hardening-support-recovery-projection.json"
+  },
+  "hashes": {
+    "script_sha256": "94d334bdc25a1e47173ebabb29f814c1ad83af5eee56903764e19b86d975da4f",
+    "result_sha256": "381f4b2fd60955d89f0e866ec6f174bdfa64b2fd6ab0253bc54965852e6e6f14",
+    "support_bundle_redacted_sha256": "7999327c6ea52ce4024c0c015664c3d5788166e8679b7dc67b218e89c2b085af",
+    "recovery_projection_sha256": "a47257f1ba8d06f6a811d0ada9020b86db99d180b673550690bc973f11d00465",
+    "support_index_sha256": "0fd3f8891b4aa525eaa2eadb0df2d321dde5d9c817b6682056e6d2571da7fabf"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-ga-hardening-support-recovery-projection.v1",
+    "result_status": "passed",
+    "checks": 16,
+    "blockers": 0,
+    "rc4_022_complete": true,
+    "ga_support_recovery_projection_ready": true,
+    "hosted_transport_verified": true,
+    "mirror_verified": true,
+    "hosted_consumer_mirror_smoke_verified": true,
+    "fleet_rollout_smoke_verified": true,
+    "rollback_projection_verified": true,
+    "rc3_support_recovery_verified": true,
+    "support_upload_verified": true,
+    "incident_runbook_verified": true,
+    "support_bundle_redacted": true,
+    "recovery_projection_emitted": true,
+    "support_index_written": true,
+    "failure_scenarios": 10,
+    "production_ready_claim": false,
+    "remote_upload_performed": false,
+    "remote_bytes_sent": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc4-ga-hardening-support-recovery.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": "RC4-023"
+  }
+}
