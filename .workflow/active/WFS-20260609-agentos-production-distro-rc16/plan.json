@@ -1,0 +1,173 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc16",
+  "milestone": "Production Distro RC16",
+  "status": "active",
+  "objective": "Turn RC15 controlled local execution readiness into distributable user-facing packaging and release-operation readiness by defining the repo-local release package surface, installable media manifest, installer/update preflight, AgentCore and SecurityExecution install/update PlanSpec binding, rollback/support evidence, and operator explainability without relying on mirror, frontend, signer, object storage, remote dispatch, or production ring authority.",
+  "scope": {
+    "included": [
+      "AIOS-body distributable release packaging planning",
+      "repo-local release package and manifest contract",
+      "installable media manifest and package descriptor evidence",
+      "release package fail-closed fixtures",
+      "installer and updater preflight package binding",
+      "AgentCore PlanSpec and SecurityExecution install/update binding",
+      "rollback baseline plus support/recovery package binding",
+      "TUI/operator installability projection from local evidence",
+      "local release channel consumer smoke execute-or-deny evidence",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload object storage provisioning",
+      "remote fleet dispatch infrastructure",
+      "support upload endpoint",
+      "recovery execution service",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC16 planning and distributable release contract",
+      "tasks": [
+        {
+          "id": "RC16-000",
+          "status": "completed",
+          "title": "plan Production Distro RC16 distributable user packaging and release operations",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-000-planning.json"
+        },
+        {
+          "id": "RC16-001",
+          "status": "pending",
+          "title": "freeze RC16 distributable package and release-operation authority contract",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "release package surface",
+      "tasks": [
+        {
+          "id": "RC16-010",
+          "status": "pending",
+          "title": "project repo-local distributable release package artifact set",
+          "deliverable": ".workflow/artifacts/rc16-release-package-artifact-set/result.json"
+        },
+        {
+          "id": "RC16-011",
+          "status": "pending",
+          "title": "assemble installable media manifest from current AIOS release bytes",
+          "deliverable": ".workflow/artifacts/rc16-installable-media-manifest/result.json"
+        },
+        {
+          "id": "RC16-012",
+          "status": "pending",
+          "title": "verify distributable package descriptor fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc16-package-descriptor-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "installer updater and execution binding",
+      "tasks": [
+        {
+          "id": "RC16-020",
+          "status": "pending",
+          "title": "bind user installer and updater preflight package from repo-local release evidence",
+          "deliverable": ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json"
+        },
+        {
+          "id": "RC16-021",
+          "status": "pending",
+          "title": "bind AgentCore and SecurityExecution install/update PlanSpec package without side effects",
+          "deliverable": ".workflow/artifacts/rc16-install-update-planspec-binding/result.json"
+        },
+        {
+          "id": "RC16-022",
+          "status": "pending",
+          "title": "bind rollback baseline and support recovery package for distributable install/update",
+          "deliverable": ".workflow/artifacts/rc16-rollback-support-package/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "user-facing explainability and local consumer smoke",
+      "tasks": [
+        {
+          "id": "RC16-030",
+          "status": "pending",
+          "title": "project TUI operator installability and update readiness from local release evidence",
+          "deliverable": ".workflow/artifacts/rc16-tui-installability-projection/result.json"
+        },
+        {
+          "id": "RC16-031",
+          "status": "pending",
+          "title": "run local release channel consumer smoke execute-or-deny evidence",
+          "deliverable": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "RC16 closeout",
+      "tasks": [
+        {
+          "id": "RC16-050",
+          "status": "pending",
+          "title": "run Production Distro RC16 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC16-001",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc15",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "rc15_controlled_local_execution_ready_required": true,
+    "release_package_contract_required": true,
+    "installable_media_manifest_required": true,
+    "package_descriptor_fail_closed_required": true,
+    "installer_updater_preflight_required_before_install_authority": true,
+    "agentcore_planspec_required_before_install_update_effects": true,
+    "security_execution_allow_required_before_install_update_effects": true,
+    "rollback_support_binding_required": true,
+    "operator_explainability_required": true,
+    "local_consumer_smoke_must_execute_or_deny_with_audit": true,
+    "production_ready_claim": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.88,
+    "requirements_coverage": 0.94,
+    "task_quality": 0.88,
+    "dependency_correctness": 0.9,
+    "estimation_accuracy": 0.8,
+    "collision_safety": 0.9,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC16 follows the RC15 final audit next_milestone_direction and keeps the next work on repo-local AIOS body distribution readiness. It intentionally separates package metadata, installer/update preflight, AgentCore/SecurityExecution binding, rollback/support, operator explainability, and consumer smoke before any GA, remote, or production authority."
+  }
+}

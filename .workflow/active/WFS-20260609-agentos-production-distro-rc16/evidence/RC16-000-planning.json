@@ -1,0 +1,94 @@
+{
+  "schema": "agentos.rc16-planning-evidence.v1",
+  "generated_at": "2026-06-09T21:45:00+08:00",
+  "task": "RC16-000",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
+  "source": {
+    "rc15_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
+      "verdict": "PASS",
+      "next_milestone_direction": "Plan RC16 around distributable user-facing packaging/release operations without weakening RC15 local execution evidence boundaries.",
+      "readiness_status": {
+        "controlled_local_execution_ready": true,
+        "production_ready_claim": false
+      },
+      "rc16_required_boundaries": [
+        "do-not-weaken-rc15-controlled-execution-evidence",
+        "aios-body-only",
+        "mirror-frontend-nginx-tls-out-of-scope",
+        "remote-signer-private-material-out-of-scope",
+        "object-storage-provisioning-out-of-scope",
+        "remote-dispatch-out-of-scope",
+        "support-upload-and-recovery-execution-disabled",
+        "production-ring-mutation-disabled",
+        "ga-claim-disabled"
+      ]
+    }
+  },
+  "outputs": {
+    "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+    "workflow_session": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/workflow-session.json",
+    "planning_summary": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-plan.md",
+    "maestro_session": ".workflow/.csv-wave/20260609-plan-rc16-distributable-user-packaging"
+  },
+  "plan_surface": {
+    "task_count": 11,
+    "completed_tasks": [
+      "RC16-000"
+    ],
+    "next_task": "RC16-001",
+    "waves": [
+      "wave-0",
+      "wave-1",
+      "wave-2",
+      "wave-3",
+      "wave-4"
+    ],
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "remote_dispatch_out_of_scope": true,
+    "private_signing_material_out_of_scope": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc16_000_complete": true,
+    "next_task": "RC16-001",
+    "commit_required": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-031",
+  "title": "run local release channel consumer smoke execute-or-deny evidence",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc16-tui-installability-projection/result.json",
+    ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+    ".workflow/artifacts/rc16-rollback-support-package/result.json",
+    "scripts/production-runbook-smoke.ps1",
+    "scripts/validate-alpha-rootfs.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc16-local-release-channel-consumer-smoke.ps1",
+      "role": "consumer smoke runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/consumer-smoke-evidence.json",
+      "role": "execute-or-deny evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-031-local-release-channel-consumer-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Consumer smoke follows local release channel metadata and returns exact install/update-ready or denial evidence.",
+      "Any execution path is audited and bounded by AgentCore and SecurityExecution gates.",
+      "No production ring mutation, remote dispatch, support upload, recovery execution, private signing material handling, remote payload download, or mirror/frontend authority occurs."
+    ]
+  }
+}

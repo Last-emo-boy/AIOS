@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-000",
+  "title": "plan Production Distro RC16 distributable user packaging and release operations",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/final-rc15-closeout-summary.md",
+    ".workflow/state.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+      "role": "RC16 execution plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-plan.md",
+      "role": "planning summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-000-planning.json",
+      "role": "planning evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Plan derives RC16 tasks from RC15 final audit next milestone direction.",
+      "Plan preserves AIOS-body-only scope and excludes mirror frontend, nginx/TLS, remote signer, object storage provisioning, remote dispatch, private signing material, support upload, recovery execution, and production ring mutation.",
+      "Plan keeps production_ready_claim=false and sets RC16-001 as next executable task."
+    ]
+  },
+  "completed_at": "2026-06-09T21:45:00+08:00",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-000-planning.json",
+  "next_task": "RC16-001"
+}

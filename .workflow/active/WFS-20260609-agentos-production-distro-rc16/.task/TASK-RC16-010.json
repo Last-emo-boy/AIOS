@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-010",
+  "title": "project repo-local distributable release package artifact set",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
+    "docs/release-artifacts.md",
+    "scripts/build-release.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc16-release-package-artifact-set.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/release-package-artifact-set.json",
+      "role": "release package artifact set"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-010-release-package-artifact-set.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Result binds current AIOS release package inputs to source hashes and RC15 execution evidence.",
+      "Artifact set records manifest, checksum, signature target, revocation, rollback, support, install/update, and explainability references.",
+      "No payload upload, install, activation, rollback execution, support upload, recovery execution, remote dispatch, private signing material handling, or production mutation occurs."
+    ]
+  }
+}

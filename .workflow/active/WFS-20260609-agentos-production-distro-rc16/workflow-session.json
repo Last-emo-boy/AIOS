@@ -1,0 +1,57 @@
+{
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc16",
+  "name": "Production Distro RC16",
+  "status": "active",
+  "created_at": "2026-06-09T21:45:00+08:00",
+  "updated_at": "2026-06-09T21:45:00+08:00",
+  "source": "RC15 final audit; maestro-managed RC16 planning",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc15",
+  "goal": "Plan and execute AIOS-body distributable user packaging and release-operation readiness without giving authority to mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, production rings, TUI projections, shell output, or model replay.",
+  "core_thesis": "AIOS becomes Ubuntu-like only when a user-facing release package can be inspected, preflighted, explained, and safely denied or staged by the AIOS body using signed/hash-bound evidence and AgentCore plus SecurityExecution gates.",
+  "non_goals": [
+    "Do not build mirror frontend, nginx, TLS, remote signer, object storage, or remote dispatch infrastructure in RC16 body tasks.",
+    "Do not read, copy, print, hash, move, or reference private signing material.",
+    "Do not claim GA production readiness.",
+    "Do not treat mirror reachability, signer reachability, frontend output, shell output, TUI output, model replay, object storage UI, or remote service reachability as authority.",
+    "Do not mutate production rings, upload support bundles, execute recovery, or dispatch remote fleet actions."
+  ],
+  "primary_acceptance": [
+    "RC16-050 final closeout audit closes RC16 as a non-GA AIOS-body distributable packaging milestone.",
+    "The plan covers repo-local release package surface, installable media manifest, descriptor fail-closed fixtures, installer/update preflight, AgentCore/SecurityExecution binding, rollback/support package, TUI explainability, local consumer smoke, and final audit.",
+    "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx/TLS, signer infrastructure, object storage provisioning, remote dispatch, private signing material, support upload, recovery execution, and production ring mutation out of scope.",
+    "The plan keeps production_ready_claim=false until final audit proves every required gate."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC16-000",
+      "completed_at": "2026-06-09T21:45:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-000-planning.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC16-001",
+  "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/final-rc15-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-plan.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/workflow-session.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-plan.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-000-planning.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-000.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-001.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-010.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-011.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-012.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-020.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-021.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-022.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-030.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-031.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/.task/TASK-RC16-050.json",
+    ".workflow/.csv-wave/20260609-plan-rc16-distributable-user-packaging/context.md"
+  ]
+}

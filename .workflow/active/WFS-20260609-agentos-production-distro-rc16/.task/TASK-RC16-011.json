@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-011",
+  "title": "assemble installable media manifest from current AIOS release bytes",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+    "image/build-initramfs.ps1",
+    "scripts/build-release.ps1",
+    "scripts/validate-alpha-rootfs.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc16-installable-media-manifest.ps1",
+      "role": "manifest projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "role": "installable media manifest"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-011-installable-media-manifest.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Manifest identifies current AIOS release bytes, rootfs/initramfs provenance, architecture, compatibility, and rollback/support references.",
+      "Manifest remains repo-local and does not publish or upload large payload bytes.",
+      "Install, activation, active slot mutation, boot metadata mutation, production ring mutation, support upload, and recovery execution remain disabled."
+    ]
+  }
+}

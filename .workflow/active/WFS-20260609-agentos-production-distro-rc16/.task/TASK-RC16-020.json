@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-020",
+  "title": "bind user installer and updater preflight package from repo-local release evidence",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+    ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+    ".workflow/artifacts/rc16-package-descriptor-fail-closed/result.json",
+    "scripts/verify-release-reproducibility.ps1",
+    "scripts/verify-candidate-promotion.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc16-installer-updater-preflight-package.ps1",
+      "role": "preflight package runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/installer-updater-preflight-package.json",
+      "role": "preflight package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-020-installer-updater-preflight-package.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Preflight binds package descriptor, installable media manifest, reproducibility, compatibility, rollback, support, and RC15 execution evidence.",
+      "Preflight may report install/update-ready or exact denial, but it must not install, activate, rollback, upload, recover, dispatch, or mutate production state.",
+      "Preflight treats mirror/frontend/signer reachability as non-authoritative."
+    ]
+  }
+}

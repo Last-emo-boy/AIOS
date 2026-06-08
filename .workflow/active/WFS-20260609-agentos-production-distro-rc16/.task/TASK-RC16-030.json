@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-030",
+  "title": "project TUI operator installability and update readiness from local release evidence",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+    ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+    ".workflow/artifacts/rc16-rollback-support-package/result.json",
+    "crates/agentd/src/tui/release_provenance_panel.rs",
+    "crates/agentd/src/tui/update_rollback_panel.rs",
+    "scripts/tui-replay.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc16-tui-installability-projection.ps1",
+      "role": "TUI projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-tui-installability-projection/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-tui-installability-projection/installability-projection.json",
+      "role": "operator projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-030-tui-installability-projection.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Projection explains install/update readiness, blockers, package identity, rollback/support state, and next safe action.",
+      "TUI projection remains read-only and does not grant install, update, activation, rollback, support upload, recovery, remote dispatch, or production authority.",
+      "Secret-like values and private paths are redacted from projection outputs."
+    ]
+  }
+}

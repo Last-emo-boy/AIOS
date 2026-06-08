@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-022",
+  "title": "bind rollback baseline and support recovery package for distributable install/update",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+    ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json",
+    "docs/release-artifacts.md",
+    "crates/agentd/src/support_bundle.rs"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc16-rollback-support-package.ps1",
+      "role": "rollback support package runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/rollback-support-package.json",
+      "role": "rollback support package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-022-rollback-support-package.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Package binds rollback baseline, rollback approval requirements, support bundle manifest, recovery references, and post-install/update observation needs.",
+      "Support bundle remains redacted and local-only.",
+      "Support upload, recovery execution, remote dispatch, active slot mutation, boot metadata mutation, production ring mutation, and private signing material handling remain disabled."
+    ]
+  }
+}

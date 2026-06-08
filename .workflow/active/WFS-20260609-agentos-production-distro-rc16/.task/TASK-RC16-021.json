@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-021",
+  "title": "bind AgentCore and SecurityExecution install/update PlanSpec package without side effects",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+    ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json",
+    ".workflow/artifacts/rc15-security-execution-allow-decision/result.json",
+    "crates/agent_core/src/lib.rs",
+    "crates/security_execution/src/policy.rs"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc16-install-update-planspec-binding.ps1",
+      "role": "PlanSpec binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/install-update-planspec-package.json",
+      "role": "PlanSpec package"
+    },
+    {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/security-execution-install-update-envelope.json",
+      "role": "SecurityExecution envelope"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-021-install-update-planspec-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "AgentCore install/update PlanSpec binds preflight, package identity, rollback baseline, support/recovery, audit sink, nonce, expiry, policy version, and exact approval requirements.",
+      "SecurityExecution envelope is prepared or denied with exact blockers and no side effects.",
+      "Active slot, boot metadata, active artifact set, production ring, remote dispatch, support upload, and recovery execution remain disabled."
+    ]
+  }
+}

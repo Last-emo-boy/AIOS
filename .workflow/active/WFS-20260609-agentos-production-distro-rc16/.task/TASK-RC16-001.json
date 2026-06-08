@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC16-001",
+  "title": "freeze RC16 distributable package and release-operation authority contract",
+  "status": "pending",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
+    "docs/release-artifacts.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+      "role": "authority contract"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-001-distributable-release-operations-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract freezes package, install/update, rollback/support, and operator explainability gate order.",
+      "Contract explicitly states mirror/frontend/nginx/signer/object-storage/remote-dispatch/private-key/support-upload/recovery-execution/production-ring authority remains out of scope.",
+      "Contract names RC16-010 as the next executable package-surface task."
+    ]
+  }
+}
