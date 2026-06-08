@@ -1,0 +1,74 @@
+{
+  "schema": "agentos.rc5-user-release-channel-evidence.v1",
+  "generated_at": "2026-06-08T12:15:00+08:00",
+  "task": "RC5-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "publisher": {
+    "path": "scripts/project-rc5-user-release-channel.ps1",
+    "sha256": "9084cd0bb781d34675a6b86ea4d35f0305faab08a2a9612781e24ef87cf80068"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-user-release-channel/result.json",
+    "sha256": "9b05b946817692b649bd9e01b7becb6e4b10c7341df6005a85c0bd21e085741c",
+    "status": "passed",
+    "checks": 10,
+    "blockers": 0
+  },
+  "local_outputs": {
+    "bootstrap_manifest": {
+      "path": ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+      "sha256": "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529"
+    },
+    "user_release_channel": {
+      "path": ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+      "sha256": "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554"
+    },
+    "hosted_channel_index_after_user_release": {
+      "path": ".workflow/artifacts/rc5-user-release-channel/hosted-channel-index-after-user-release.json",
+      "sha256": "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1"
+    }
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/bootstrap/manifest.json",
+    "http://aios.w33d.xyz/channel/user-release.json",
+    "http://aios.w33d.xyz/channel/index.json"
+  ],
+  "verified_controls": {
+    "bootstrap_http_200": true,
+    "user_channel_http_200": true,
+    "hosted_channel_references_bootstrap": true,
+    "hosted_channel_references_user_release": true,
+    "frontend_still_served": true,
+    "install_allowed": false,
+    "update_allowed": false,
+    "signing_authority": false,
+    "activation_authority": false,
+    "production_ready_claim": false
+  },
+  "remaining_blockers_before_user_install": [
+    "release-payload-storage-deferred",
+    "payload-signature-bundle-deferred",
+    "tls-not-yet-ga-gated",
+    "rollback-execution-drill-pending",
+    "multi-node-canary-execution-pending"
+  ],
+  "invariants": {
+    "metadata_only": true,
+    "large_artifact_storage_deferred": true,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc5_020_complete": true,
+    "next_task": "RC5-021",
+    "commit_required": true
+  }
+}

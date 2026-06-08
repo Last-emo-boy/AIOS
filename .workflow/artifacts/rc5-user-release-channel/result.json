@@ -1,0 +1,203 @@
+{
+  "schema": "agentos.rc5-user-release-channel-result.v1",
+  "generated_at": "2026-06-08T11:10:24.5317075+08:00",
+  "checked_at": "2026-06-08T11:10:28.3015572+08:00",
+  "task": "RC5-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109"
+  },
+  "source_artifacts": {
+    "rc4_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+      "sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413"
+    },
+    "rc4_hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335"
+    },
+    "rc4_mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+    },
+    "rc5_frontend": {
+      "path": ".workflow/artifacts/rc5-mirror-frontend/result.json",
+      "sha256": "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0"
+    },
+    "rc5_fail_closed": {
+      "path": ".workflow/artifacts/rc5-hosted-metadata-fail-closed/result.json",
+      "sha256": "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1"
+    }
+  },
+  "local_outputs": {
+    "bootstrap_manifest": {
+      "path": ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+      "sha256": "374afc5df5edfd5fe65d980468efc570318807e343eb04a1499ce8f4bfc0f529"
+    },
+    "user_release_channel": {
+      "path": ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+      "sha256": "b376e98711c7734794ff3a579490132130d86f72d1e35babf00e60d88b889554"
+    },
+    "hosted_channel_index_after_user_release": {
+      "path": ".workflow/artifacts/rc5-user-release-channel/hosted-channel-index-after-user-release.json",
+      "sha256": "d75f154118ef28048bb0b3e2fa6459112195b829bbec26fe952a8730725ee6d1"
+    }
+  },
+  "hosted_outputs": {
+    "bootstrap_manifest_sha256": "c076904fa16d30ac2098c7f2e4ea659ea04a2689b32236f3e79a699b89697e67",
+    "user_release_channel_sha256": "ebbc1bd15b5296c4a8136ea61426aa77acc20936ddbdab9e46fcfac7cdb32dac",
+    "channel_index_sha256": "15dadb18bac6b21011e79601e4960e3f97bd9fc3dcb48553fdf4b479fd2b54e5"
+  },
+  "invariants": {
+    "metadata_only": true,
+    "large_artifact_storage_deferred": true,
+    "install_allowed": false,
+    "update_allowed": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "remote.active",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote nginx must remain active after user channel projection.",
+      "evidence": [
+        "active\r",
+        "index.json 1427\r",
+        "manifest.json 1377\r",
+        "user-release.json 1756\r",
+        "0a4cf0cdb651d202bbde99d7adb8bb6b99900c35079a15d83a0c715d5102f4e8  /srv/aios-mirror/bootstrap/manifest.json\r",
+        "99a489722c99ef8d59690566d9a09c68395cde62217d817f7d8e10420836dca5  /srv/aios-mirror/channel/user-release.json\r",
+        "f3b3057d26122594fe1e32173c41e330fa2b93ade848e70a8efdb9b263615a82  /srv/aios-mirror/channel/index.json"
+      ]
+    },
+    {
+      "id": "bootstrap.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Bootstrap manifest endpoint must return HTTP 200.",
+      "evidence": 200
+    },
+    {
+      "id": "bootstrap.non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Bootstrap manifest must remain non-GA.",
+      "evidence": false
+    },
+    {
+      "id": "bootstrap.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Bootstrap manifest must not grant activation or signing authority.",
+      "evidence": {
+        "mirror_is_root_of_trust": false,
+        "signing_authority": false,
+        "activation_authority": false,
+        "rollback_execution_authority": false,
+        "production_ring_mutation_authority": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "user_channel.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "User release channel endpoint must return HTTP 200.",
+      "evidence": 200
+    },
+    {
+      "id": "user_channel.blocked_install",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "User release channel must block install/update while payload evidence is deferred.",
+      "evidence": {
+        "bootstrap_metadata_available": true,
+        "release_payload_available": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "reason": "RC5 publishes metadata and bootstrap checks only; payload, signatures, rollback execution, TLS GA gate, and canary evidence are pending."
+      }
+    },
+    {
+      "id": "channel.entries",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted channel index must expose bootstrap and user release channel metadata.",
+      "evidence": [
+        {
+          "id": "rc5-metadata-only-framework",
+          "status": "placeholder",
+          "path": "/releases/README.txt",
+          "activation_allowed": false,
+          "large_payload_deferred": true
+        },
+        {
+          "id": "rc5-user-bootstrap-manifest",
+          "status": "available",
+          "path": "/bootstrap/manifest.json",
+          "activation_allowed": false,
+          "large_payload_deferred": true
+        },
+        {
+          "id": "rc5-user-release-channel",
+          "status": "available",
+          "path": "/channel/user-release.json",
+          "activation_allowed": false,
+          "large_payload_deferred": true
+        }
+      ]
+    },
+    {
+      "id": "channel.no_activation",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted channel entries must not allow activation.",
+      "evidence": {
+        "signing_authority": false,
+        "activation_authority": false,
+        "rollback_execution_authority": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "frontend.still_served",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror frontend must remain available after channel projection.",
+      "evidence": 200
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Published user channel metadata must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 10,
+    "blockers": 0,
+    "rc5_020_complete": true,
+    "published_endpoints": [
+      "http://aios.w33d.xyz/bootstrap/manifest.json",
+      "http://aios.w33d.xyz/channel/user-release.json",
+      "http://aios.w33d.xyz/channel/index.json"
+    ],
+    "tls_required_before_ga_claim": true,
+    "production_ready_claim": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.rc5-user-release-channel.v1",
+  "generated_at": "2026-06-08T11:10:24.5317075+08:00",
+  "status": "inspectable-metadata-only",
+  "production_ready_claim": false,
+  "channel": "production-candidate-rc5",
+  "domain": "aios.w33d.xyz",
+  "source_bindings": {
+    "rc4_final_audit_sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "rc5_frontend_result_sha256": "4ca2d4151c26334e833bbe4597f37da08fd1037be005ff159caf1f8c911d3ca0",
+    "rc5_fail_closed_result_sha256": "c58c94cb8814556bbfd023cd2b9eece73d90aad167e98663398a48b4b87dc4f1"
+  },
+  "user_visible_entries": [
+    {
+      "id": "mirror-home",
+      "path": "/",
+      "kind": "frontend",
+      "status": "available",
+      "activation_allowed": false
+    },
+    {
+      "id": "bootstrap-manifest",
+      "path": "/bootstrap/manifest.json",
+      "kind": "bootstrap-metadata",
+      "status": "available",
+      "activation_allowed": false
+    },
+    {
+      "id": "release-placeholder",
+      "path": "/releases/README.txt",
+      "kind": "release-placeholder",
+      "status": "metadata-only",
+      "activation_allowed": false,
+      "large_payload_deferred": true
+    }
+  ],
+  "install_state": {
+    "bootstrap_metadata_available": true,
+    "release_payload_available": false,
+    "install_allowed": false,
+    "update_allowed": false,
+    "reason": "RC5 publishes metadata and bootstrap checks only; payload, signatures, rollback execution, TLS GA gate, and canary evidence are pending."
+  }
+}

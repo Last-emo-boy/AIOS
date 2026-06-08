@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC5-020",
+  "title": "project downloadable user release channel and bootstrap manifest",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-013-mirror-frontend.json",
+    ".workflow/artifacts/rc5-mirror-frontend/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc5/docs/user-install-update-channel-boundary.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc5-user-release-channel.ps1",
+      "role": "projection publisher"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-user-release-channel/result.json",
+      "role": "projection evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-user-release-channel/bootstrap-manifest.json",
+      "role": "bootstrap manifest"
+    },
+    {
+      "path": ".workflow/artifacts/rc5-user-release-channel/user-release-channel.json",
+      "role": "user channel"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/RC5-020-user-release-channel.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Bootstrap manifest is published at /bootstrap/manifest.json.",
+      "User release channel is published at /channel/user-release.json.",
+      "Hosted channel index references both endpoints.",
+      "Install and update remain blocked until payload, signature, rollback, TLS, and canary evidence exist."
+    ]
+  }
+}

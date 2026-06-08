@@ -1,0 +1,41 @@
+{
+  "schema": "agentos.rc5-user-bootstrap-manifest.v1",
+  "generated_at": "2026-06-08T11:10:24.5317075+08:00",
+  "status": "metadata-only-preview",
+  "production_ready_claim": false,
+  "domain": "aios.w33d.xyz",
+  "channel": "production-candidate-rc5",
+  "mirror_root": "http://aios.w33d.xyz/",
+  "bootstrap_endpoints": {
+    "health": "/health.json",
+    "mirror_descriptor": "/.well-known/aios/mirror.json",
+    "channel_index": "/channel/index.json",
+    "user_release_channel": "/channel/user-release.json",
+    "release_placeholder": "/releases/README.txt"
+  },
+  "trust_requirements": [
+    "schema-verification",
+    "production-ready-false",
+    "signature-verification-before-payload-trust",
+    "hash-verification",
+    "freshness-verification",
+    "revocation-verification",
+    "rollback-baseline-before-activation",
+    "exact-operator-approval-before-canary"
+  ],
+  "blockers": [
+    "release-payload-storage-deferred",
+    "payload-signature-bundle-deferred",
+    "tls-not-yet-ga-gated",
+    "rollback-execution-drill-pending",
+    "multi-node-canary-execution-pending"
+  ],
+  "authority": {
+    "mirror_is_root_of_trust": false,
+    "signing_authority": false,
+    "activation_authority": false,
+    "rollback_execution_authority": false,
+    "production_ring_mutation_authority": false,
+    "tui_authority": false
+  }
+}
