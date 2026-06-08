@@ -1,0 +1,378 @@
+{
+  "schema": "agentos.rc12-object-trust-fail-closed-matrix.v1",
+  "generated_at": "2026-06-09T04:55:00+08:00",
+  "task": "RC12-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "passed",
+  "cases": [
+    {
+      "id": "current.object_trust_candidate",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": false,
+        "uri_https": false,
+        "uri_credential_free": true,
+        "uri_immutable": false,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": false,
+        "freshness_bound": false,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "external-https-object-uri-not-published",
+        "object-uri-not-https",
+        "object-uri-not-immutable",
+        "declared-current-drift-zero-not-proved",
+        "freshness-window-missing"
+      ]
+    },
+    {
+      "id": "negative.endpoint_reachability_only",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": true
+      },
+      "denial_reasons": [
+        "endpoint-reachability-is-not-trust"
+      ]
+    },
+    {
+      "id": "negative.missing_uri",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": false,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "external-https-object-uri-not-published"
+      ]
+    },
+    {
+      "id": "negative.non_https_uri",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": false,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "object-uri-not-https"
+      ]
+    },
+    {
+      "id": "negative.credential_uri",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": false,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "object-uri-credential-bearing"
+      ]
+    },
+    {
+      "id": "negative.mutable_uri",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": false,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "object-uri-not-immutable"
+      ]
+    },
+    {
+      "id": "negative.size_mismatch",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": false,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "object-size-mismatch"
+      ]
+    },
+    {
+      "id": "negative.digest_mismatch",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": false,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "object-digest-mismatch"
+      ]
+    },
+    {
+      "id": "negative.descriptor_unbound",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": false,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "descriptor-binding-missing"
+      ]
+    },
+    {
+      "id": "negative.drift_nonzero",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": false,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "declared-current-drift-zero-not-proved"
+      ]
+    },
+    {
+      "id": "negative.freshness_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": false,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "freshness-window-missing"
+      ]
+    },
+    {
+      "id": "negative.revocation_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": false,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "revocation-snapshot-missing"
+      ]
+    },
+    {
+      "id": "negative.compatibility_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": false,
+        "rollback_bound": true,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "compatibility-metadata-missing"
+      ]
+    },
+    {
+      "id": "negative.rollback_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": false,
+        "support_bound": true,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "rollback-baseline-missing"
+      ]
+    },
+    {
+      "id": "negative.support_missing",
+      "status": "denied",
+      "denied": true,
+      "gates": {
+        "uri_published": true,
+        "uri_https": true,
+        "uri_credential_free": true,
+        "uri_immutable": true,
+        "size_match": true,
+        "digest_match": true,
+        "descriptor_bound": true,
+        "drift_zero": true,
+        "freshness_bound": true,
+        "revocation_bound": true,
+        "compatibility_bound": true,
+        "rollback_bound": true,
+        "support_bound": false,
+        "endpoint_reachability_claimed": false
+      },
+      "denial_reasons": [
+        "support-recovery-binding-missing"
+      ]
+    }
+  ],
+  "summary": {
+    "cases": 15,
+    "denied": 15,
+    "failed_cases": []
+  }
+}

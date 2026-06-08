@@ -1,34 +1,34 @@
 {
-    "schema":  "agentos.task.v1",
-    "id":  "RC12-012",
-    "title":  "verify external descriptor freshness revocation and object trust before installer authority",
-    "status":  "pending",
-    "wave":  "wave-1",
-    "read_first":  [
-                       ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
-                       ".workflow/artifacts/rc12-external-object-publication-binding/result.json",
-                       ".workflow/artifacts/rc12-declared-current-drift-zero/result.json",
-                       ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json"
-                   ],
-    "files":  [
-                  {
-                      "path":  "scripts/project-rc12-object-trust-verification.ps1",
-                      "role":  "object trust verifier"
-                  },
-                  {
-                      "path":  ".workflow/artifacts/rc12-object-trust-verification/result.json",
-                      "role":  "task result"
-                  },
-                  {
-                      "path":  ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-012-object-trust-verification.json",
-                      "role":  "task evidence"
-                  }
-              ],
-    "convergence":  {
-                        "criteria":  [
-                                         "Object trust is granted only when URI, size, digest, descriptor, drift-zero, freshness, revocation, compatibility, rollback, and support bindings are all proved.",
-                                         "Endpoint reachability is recorded as non-authoritative.",
-                                         "If any gate is missing or mismatched, installer quarantine fetch, install, activation, rollback, support upload, recovery, remote dispatch, and production mutation remain denied."
-                                     ]
-                    }
+  "schema": "agentos.task.v1",
+  "id": "RC12-012",
+  "title": "verify external descriptor freshness revocation and object trust before installer authority",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc12/docs/rc12-real-object-controlled-unblock-contract.md",
+    ".workflow/artifacts/rc12-external-object-publication-binding/result.json",
+    ".workflow/artifacts/rc12-declared-current-drift-zero/result.json",
+    ".workflow/artifacts/rc11-installer-quarantine-verifier/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc12-object-trust-verification.ps1",
+      "role": "object trust verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc12-object-trust-verification/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc12/evidence/RC12-012-object-trust-verification.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Object trust is granted only when URI, size, digest, descriptor, drift-zero, freshness, revocation, compatibility, rollback, and support bindings are all proved.",
+      "Endpoint reachability is recorded as non-authoritative.",
+      "If any gate is missing or mismatched, installer quarantine fetch, install, activation, rollback, support upload, recovery, remote dispatch, and production mutation remain denied."
+    ]
+  }
 }
