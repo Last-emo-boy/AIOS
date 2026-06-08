@@ -1,0 +1,58 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-012",
+  "title": "publish rollback baseline to install metadata projection",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/result.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/publish-rc7-install-rollback-baseline.ps1",
+      "role": "metadata-only publication and verifier script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "role": "installer compatibility projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "role": "rollback baseline projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/install-bootstrap-after-rollback-baseline.json",
+      "role": "install bootstrap projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/payload-index-after-rollback-baseline.json",
+      "role": "payload index projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/hosted-channel-index-after-rollback-baseline.json",
+      "role": "hosted channel projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-012-install-rollback-baseline.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The public mirror publishes /install/compatibility.json and /install/rollback-baseline.json as metadata-only projections.",
+      "Install bootstrap, payload index, and channel metadata hash-bind compatibility and rollback baseline documents.",
+      "Live endpoints validate with curl --resolve and local DNS is not trusted.",
+      "Install, activation, rollback execution, active slot mutation, production ring mutation, support upload, remote dispatch, signing, private key access, and TUI authority remain false.",
+      "The next task is RC7-020 mirror frontend signed status refresh."
+    ]
+  }
+}

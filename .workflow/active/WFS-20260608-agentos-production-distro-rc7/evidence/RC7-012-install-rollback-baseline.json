@@ -1,0 +1,92 @@
+{
+  "schema": "agentos.rc7-install-rollback-baseline-evidence.v1",
+  "generated_at": "2026-06-08T15:55:00+08:00",
+  "task": "RC7-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/publish-rc7-install-rollback-baseline.ps1",
+    "sha256": "d286591275a94ebaefbbee3b8a79b42b197ca1f74e3649f5930bea66e1905693"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    "sha256": "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+    "status": "passed",
+    "checks": 14,
+    "blockers": 0
+  },
+  "local_outputs": {
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "file_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "content_sha256": "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45"
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "file_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "content_sha256": "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b"
+    },
+    "payload_index": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/payload-index-after-rollback-baseline.json",
+      "file_sha256": "cacd110514d1fb99f9fb00e4b4ce09262d67b26d079e241ed4a81029b2a5f7b3",
+      "content_sha256": "073dae091d356a4f2d2889275eb8b1d21d210c1ac72abac7a6c12fa40568867b"
+    },
+    "install_bootstrap": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/install-bootstrap-after-rollback-baseline.json",
+      "file_sha256": "5b2cbcdcc11025b4daa3d62ef186aa8317cdf7eb838a7589d5e6704a6a01147d",
+      "content_sha256": "8296d6b2626d5bf8a391f0e0d20d62ecc6405043fe1bd6199d81059417a20fc6"
+    },
+    "channel_index": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/hosted-channel-index-after-rollback-baseline.json",
+      "file_sha256": "29259bf5fb5c545b8b6500dc63731b8fe11fdf605adfc573125698d2163fab6c",
+      "content_sha256": "0369b9f61da83dd2ac8149681befce9b3b619ac0ec2de9359620796a404151e1"
+    }
+  },
+  "published_endpoints": [
+    "http://aios.w33d.xyz/install/compatibility.json",
+    "http://aios.w33d.xyz/install/rollback-baseline.json",
+    "http://aios.w33d.xyz/payloads/index.json",
+    "http://aios.w33d.xyz/install/bootstrap.json",
+    "http://aios.w33d.xyz/channel/index.json"
+  ],
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "compatibility_published": true,
+    "rollback_baseline_published": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "remaining_installer_blockers": [
+    "hosted-byte-hash-canonicalization-pending-for-prior-signed-metadata-artifacts",
+    "cryptographic-signature-not-present",
+    "large-payload-storage-policy-and-object-storage-pending",
+    "installable-media-declared-hash-drift",
+    "tls-required-before-ga-claim",
+    "exact-operator-approval-not-granted"
+  ],
+  "invariants": {
+    "metadata_publication_only": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_012_complete": true,
+    "wave_1_complete": true,
+    "next_task": "RC7-020",
+    "commit_required": true
+  }
+}
