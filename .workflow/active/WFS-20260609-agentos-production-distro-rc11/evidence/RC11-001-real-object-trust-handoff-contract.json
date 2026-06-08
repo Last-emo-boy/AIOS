@@ -1,0 +1,90 @@
+{
+  "schema": "agentos.rc11-real-object-trust-handoff-contract-evidence.v1",
+  "generated_at": "2026-06-09T01:20:00+08:00",
+  "task": "RC11-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "source": {
+    "plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
+      "current_task_before_completion": "RC11-001"
+    },
+    "rc10_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
+      "verdict": "PASS",
+      "remaining_gate_family": "real-object-controlled-execution-unblock"
+    }
+  },
+  "contract": {
+    "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+    "aios_body_only": true,
+    "names_external_transport_to_local_verification_handoff": true,
+    "external_object_reachability_is_trust": false,
+    "descriptor_uri_classification_required": true,
+    "drift_zero_required_before_trust": true,
+    "quarantine_fetch_required_before_interpretation": true,
+    "agentcore_planspec_required_before_activation": true,
+    "security_execution_engine_required_before_activation": true,
+    "rollback_requires_separate_exact_approval": true,
+    "support_recovery_binding_required": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_dispatch_out_of_scope": true,
+    "production_ring_mutation_allowed": false
+  },
+  "fail_closed_families": [
+    "missing-or-unsafe-object-uri",
+    "endpoint-reachability-used-as-trust",
+    "object-size-or-digest-mismatch",
+    "descriptor-canonical-digest-mismatch",
+    "declared-current-drift-nonzero",
+    "missing-quarantine-fetch",
+    "bytes-interpreted-before-verification",
+    "manifest-or-checksum-mismatch",
+    "signature-missing-invalid-or-mismatched",
+    "revocation-stale-or-revoked",
+    "compatibility-missing-or-mismatched",
+    "rollback-baseline-missing-or-mismatched",
+    "support-recovery-missing-or-mismatched",
+    "insufficient-canary-targets",
+    "approval-stale-broad-missing-or-mismatched",
+    "agentcore-planspec-missing-or-mismatched",
+    "security-execution-decision-missing-or-denied",
+    "rollback-specific-approval-missing",
+    "authority-broadening"
+  ],
+  "invariants": {
+    "production_ready_claim": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc11_001_complete": true,
+    "next_task": "RC11-010",
+    "commit_required": true
+  }
+}

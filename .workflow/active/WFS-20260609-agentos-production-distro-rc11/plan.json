@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260609-agentos-production-distro-rc11",
   "milestone": "Production Distro RC11",
-  "status": "planned",
+  "status": "active",
   "objective": "Move AIOS from RC10 fail-closed projection into AIOS-body controlled unblock: define the RC11 trust handoff, verify real immutable external object metadata against current bytes, reconcile declared/current drift to zero or produce precise blockers, prove installer quarantine fetch verification, bind exact approval to AgentCore and SecurityExecutionEngine, then execute or deny controlled canary activation and rollback evidence without mirror, signer, frontend, or remote fleet infrastructure work.",
   "scope": {
     "included": [
@@ -41,7 +41,7 @@
         },
         {
           "id": "RC11-001",
-          "status": "pending",
+          "status": "completed",
           "title": "freeze RC11 real-object trust handoff and AIOS-body execution contract",
           "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md"
         }
@@ -126,7 +126,7 @@
       ]
     }
   ],
-  "current_task": "RC11-001",
+  "current_task": "RC11-010",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
   "acceptance_gates": {
     "hosted_endpoint_domain": "aios.w33d.xyz",
