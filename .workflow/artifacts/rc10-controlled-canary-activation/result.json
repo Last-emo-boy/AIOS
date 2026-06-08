@@ -1,0 +1,415 @@
+{
+  "schema": "agentos.rc10-controlled-canary-activation-result.v1",
+  "generated_at": "2026-06-09T00:30:00+08:00",
+  "task": "RC10-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "activation_surface": {
+    "state": "activation-denied",
+    "activation_attempt_id": "rc10-controlled-canary-activation-attempt",
+    "activation_attempt_digest": "e77f77dffcb256b3730ba9eabf217d8b0dbb23e3d184b81bb45409a25811c965",
+    "activation_allowed": false,
+    "activation_performed": false,
+    "controlled_execution_authorized": false,
+    "exact_approval_granted": false,
+    "agentcore_planspec_bound": false,
+    "security_execution_approval_bound": false,
+    "remote_dispatch_enabled": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "blockers": [
+      "missing-external-https-object-uri",
+      "nonzero-declared-current-drift-count",
+      "installer-quarantine-fetch-not-run",
+      "target-set-not-enrolled",
+      "exact-operator-approval-not-granted",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "publication-not-published-drift-zero",
+      "drift-zero-denied",
+      "quarantine-fetch-not-allowed-by-handoff",
+      "controlled-execution-not-authorized",
+      "fewer-than-two-eligible-targets",
+      "remote-fleet-execution-not-enabled",
+      "installer-quarantine-fetch-not-verified"
+    ]
+  },
+  "outputs": {
+    "activation_gate_report": {
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/activation-gate-report.json",
+      "sha256": "9eedc291b400bf401ce46562e3a9614a8a7bb04bf13fb807e358f8cbde83a463"
+    },
+    "activation_denial_evidence": {
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "122906998c6d0fad6c37c8043f688a807109066885807af8efcc883258400d47"
+    },
+    "controlled_activation_handoff": {
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/controlled-activation-handoff.json",
+      "sha256": "d81a89e6ef21faaeb0908b6971163dd25ac357b404d7f411ab6d1f1172ba6278"
+    }
+  },
+  "source": {
+    "binding_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+      "sha256": "387d5dfe7339a9b6d2cf07f0dd97b1411bbfb537cc57eb07a59285fe271f3d7d",
+      "size_bytes": 11343,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "publication_result": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+      "size_bytes": 11803,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "drift_result": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+      "sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "size_bytes": 7905,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation-result.v1",
+      "status": "passed"
+    },
+    "installer_fetch_result": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+      "sha256": "e1ac5af4cab7f8c5ca44fc74dda5f4af19e39766535f228b3f70868d4bd6706a",
+      "size_bytes": 8735,
+      "present": true,
+      "schema": "agentos.rc10-installer-quarantine-fetch-result.v1",
+      "status": "passed"
+    },
+    "target_enrollment_result": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+      "sha256": "cb7f4ae28701c598771af25c32cf49b80905aca95cb1429869108193293fc4b9",
+      "size_bytes": 11694,
+      "present": true,
+      "schema": "agentos.rc10-two-node-canary-enrollment-result.v1",
+      "status": "passed"
+    },
+    "target_set": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/canary-target-set.json",
+      "sha256": "e678d5a0a00a1b0c52896f8c3e97fecc243e0abe82800c7f1f3608676144e193",
+      "size_bytes": 5638,
+      "present": true,
+      "schema": "agentos.rc10-canary-target-set.v1",
+      "status": "target-set-enrollment-denied"
+    },
+    "target_handoff": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/controlled-execution-handoff.json",
+      "sha256": "bd3e4a94d4a02749cf7321855a026c0d34743f1fdcc67a2f064f67e33cf3f568",
+      "size_bytes": 1697,
+      "present": true,
+      "schema": "agentos.rc10-controlled-execution-handoff.v1",
+      "status": "blocked-by-target-set-denial"
+    },
+    "binding_result": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json",
+      "sha256": "560ae82282462fb2d8ea6e61cbbda97ef190c1b8b3df966c3272486cee81395c",
+      "size_bytes": 12745,
+      "present": true,
+      "schema": "agentos.rc10-exact-approval-execution-enable-result.v1",
+      "status": "passed"
+    },
+    "exact_approval_binding": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/exact-approval-binding.json",
+      "sha256": "1b3bd36161af7c30d4caeb72fc5976ec275ecc64cf54b1c91ecd276a8a161cd8",
+      "size_bytes": 3261,
+      "present": true,
+      "schema": "agentos.rc10-exact-approval-binding.v1",
+      "status": "exact-approval-denied"
+    },
+    "agentcore_planspec_binding": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/agentcore-planspec-binding.json",
+      "sha256": "ec03f87877eab595407cd0274063baf6d8b57711006de0c9d4051a5578de2628",
+      "size_bytes": 3084,
+      "present": true,
+      "schema": "agentos.rc10-agentcore-planspec-binding.v1",
+      "status": "planspec-binding-denied"
+    },
+    "security_execution_decision": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/security-execution-decision.json",
+      "sha256": "352a2697d07eb475ea57467013dda0648a939bd1ab8cf92b4cdaae9cab6444f3",
+      "size_bytes": 2433,
+      "present": true,
+      "schema": "agentos.rc10-security-execution-decision.v1",
+      "status": "security-execution-denied"
+    },
+    "execution_binding_denial": {
+      "path": ".workflow/artifacts/rc10-exact-approval-execution-enable/execution-binding-denial.json",
+      "sha256": "f6d92267635d94480bf951eaabf730da4ad7794101e8d82db981f3de5495d228",
+      "size_bytes": 2603,
+      "present": true,
+      "schema": "agentos.rc10-execution-binding-denial.v1",
+      "status": "execution-binding-denied"
+    },
+    "descriptor": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
+      "sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+      "size_bytes": 2503,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "compatibility-projected-verification-blocked"
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked"
+    },
+    "support_recovery": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only"
+    }
+  },
+  "gate_inputs": {
+    "source_tasks_complete": true,
+    "external_object_descriptor_published": false,
+    "declared_current_artifact_drift_reconciled": false,
+    "installer_quarantine_fetch_verified": false,
+    "target_set_enrolled": false,
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0,
+    "required_target_count": 2,
+    "compatibility_binding_present": true,
+    "rollback_baseline_binding_present": true,
+    "support_recovery_binding_present": true,
+    "exact_operator_approval_bound": false,
+    "exact_operator_approval_granted": false,
+    "agentcore_planspec_bound": false,
+    "agentcore_planspec_hash": "fdd9463850f1e7f0a4341f27b060db600d2dce587853c1506c89f1e8a2a5847e",
+    "security_execution_approval_bound": false,
+    "security_execution_allowed": false,
+    "remote_fleet_execution_enabled": false
+  },
+  "source_bindings": {
+    "binding_contract_sha256": "387d5dfe7339a9b6d2cf07f0dd97b1411bbfb537cc57eb07a59285fe271f3d7d",
+    "publication_result_sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+    "drift_result_sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+    "installer_fetch_result_sha256": "e1ac5af4cab7f8c5ca44fc74dda5f4af19e39766535f228b3f70868d4bd6706a",
+    "target_enrollment_result_sha256": "cb7f4ae28701c598771af25c32cf49b80905aca95cb1429869108193293fc4b9",
+    "target_set_sha256": "e678d5a0a00a1b0c52896f8c3e97fecc243e0abe82800c7f1f3608676144e193",
+    "target_handoff_sha256": "bd3e4a94d4a02749cf7321855a026c0d34743f1fdcc67a2f064f67e33cf3f568",
+    "binding_result_sha256": "560ae82282462fb2d8ea6e61cbbda97ef190c1b8b3df966c3272486cee81395c",
+    "exact_approval_binding_sha256": "1b3bd36161af7c30d4caeb72fc5976ec275ecc64cf54b1c91ecd276a8a161cd8",
+    "exact_approval_binding_digest": "71e98fa0ddb88ad4701840c3a1d6b3a60ab3c9a9e38514e691d41938edc31d51",
+    "agentcore_planspec_binding_sha256": "ec03f87877eab595407cd0274063baf6d8b57711006de0c9d4051a5578de2628",
+    "agentcore_planspec_hash": "fdd9463850f1e7f0a4341f27b060db600d2dce587853c1506c89f1e8a2a5847e",
+    "security_execution_decision_sha256": "352a2697d07eb475ea57467013dda0648a939bd1ab8cf92b4cdaae9cab6444f3",
+    "security_execution_decision_digest": "72cf727afac462f18f1227ba2d8a3ffd5fdf7aee5d9bd5b43a5afc803aa7c0e3",
+    "execution_binding_denial_sha256": "f6d92267635d94480bf951eaabf730da4ad7794101e8d82db981f3de5495d228",
+    "descriptor_sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+    "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+  },
+  "checks": [
+    {
+      "id": "source.rc10_010.publication_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 must consume completed RC10-010 publication denial before activation.",
+      "evidence": {
+        "status": "passed",
+        "state": "publication-blocked-drift-nonzero",
+        "published_drift_zero": false
+      }
+    },
+    {
+      "id": "source.rc10_011.drift_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 must consume completed RC10-011 drift-zero denial before activation.",
+      "evidence": {
+        "status": "passed",
+        "state": "drift-zero-denied",
+        "drift_count": 13
+      }
+    },
+    {
+      "id": "source.rc10_012.fetch_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 must consume completed RC10-012 fetch denial before activation.",
+      "evidence": {
+        "status": "passed",
+        "state": "fetch-denied-before-network",
+        "fetch_allowed": false
+      }
+    },
+    {
+      "id": "source.rc10_020.target_enrollment_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 must consume completed RC10-020 target-set denial before activation.",
+      "evidence": {
+        "status": "passed",
+        "state": "target-set-enrollment-denied",
+        "enrolled": 0,
+        "required": 2
+      }
+    },
+    {
+      "id": "source.rc10_021.binding_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 must consume completed RC10-021 execution binding denial before activation.",
+      "evidence": {
+        "status": "passed",
+        "state": "execution-binding-denied",
+        "exact_approval_granted": false,
+        "security_execution_allowed": false
+      }
+    },
+    {
+      "id": "activation.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled canary activation must deny when any publication, drift, fetch, target, approval, PlanSpec, SecurityExecution, or remote gate is missing.",
+      "evidence": {
+        "activation_allowed": false,
+        "blockers": [
+          "missing-external-https-object-uri",
+          "nonzero-declared-current-drift-count",
+          "installer-quarantine-fetch-not-run",
+          "target-set-not-enrolled",
+          "exact-operator-approval-not-granted",
+          "agentcore-planspec-not-bound",
+          "security-execution-effect-envelope-not-bound",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "publication-not-published-drift-zero",
+          "drift-zero-denied",
+          "quarantine-fetch-not-allowed-by-handoff",
+          "controlled-execution-not-authorized",
+          "fewer-than-two-eligible-targets",
+          "remote-fleet-execution-not-enabled",
+          "installer-quarantine-fetch-not-verified"
+        ]
+      }
+    },
+    {
+      "id": "activation.denial_cases.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Activation denial evidence must cover every missing gate as a fail-closed case.",
+      "evidence": {
+        "cases": 11
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 must not prepare or execute activation, rollback, production mutation, support upload, or remote dispatch side effects.",
+      "evidence": {
+        "activation_attempt_recorded": true,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "persistent_state_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "handoff.rollback_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled activation handoff must move to RC10-030 while keeping rollback execution blocked.",
+      "evidence": {
+        "status": "blocked-by-activation-denial",
+        "next_task": "RC10-030"
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-022 outputs must not contain secret paths, PEM blocks, auth tokens, or signer host internals.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "missing-external-https-object-uri",
+    "nonzero-declared-current-drift-count",
+    "installer-quarantine-fetch-not-run",
+    "target-set-not-enrolled",
+    "exact-operator-approval-not-granted",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "publication-not-published-drift-zero",
+    "drift-zero-denied",
+    "quarantine-fetch-not-allowed-by-handoff",
+    "controlled-execution-not-authorized",
+    "fewer-than-two-eligible-targets",
+    "remote-fleet-execution-not-enabled",
+    "installer-quarantine-fetch-not-verified"
+  ],
+  "invariants": {
+    "local_projection_only": true,
+    "activation_attempt_recorded": true,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 10,
+    "failed_checks": 0,
+    "rc10_022_complete": true,
+    "activation_state": "activation-denied",
+    "activation_allowed": false,
+    "activation_performed": false,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ready_claim": false,
+    "next_task": "RC10-030"
+  }
+}

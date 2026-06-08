@@ -1,0 +1,55 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-022",
+  "title": "execute or deny controlled canary activation through AgentCore and SecurityExecutionEngine gates",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+    ".workflow/artifacts/rc10-external-object-publication/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+    ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+    ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+    ".workflow/artifacts/rc10-exact-approval-execution-enable/result.json",
+    ".workflow/artifacts/rc10-exact-approval-execution-enable/execution-binding-denial.json"
+  ],
+  "files": [
+    {
+      "role": "controlled canary activation gate evaluation and denial projection script",
+      "path": "scripts/project-rc10-controlled-canary-activation.ps1"
+    },
+    {
+      "role": "task result",
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/result.json"
+    },
+    {
+      "role": "activation gate report artifact",
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/activation-gate-report.json"
+    },
+    {
+      "role": "activation denial evidence artifact",
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/activation-denial-evidence.json"
+    },
+    {
+      "role": "controlled activation handoff for rollback drill",
+      "path": ".workflow/artifacts/rc10-controlled-canary-activation/controlled-activation-handoff.json"
+    },
+    {
+      "role": "task evidence",
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-022-controlled-canary-activation.json"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC10-010 publication denial, RC10-011 drift-zero denial, RC10-012 fetch denial, RC10-020 target enrollment denial, and RC10-021 execution binding denial before evaluating activation.",
+      "The activation gate report records activation-denied with activation_allowed=false and activation_performed=false.",
+      "The activation denial evidence covers publication, external URI, drift-zero, quarantine fetch, target enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine, remote dispatch, and controlled execution authorization blockers.",
+      "The controlled activation handoff moves the workflow to RC10-030 while rollback execution remains denied.",
+      "The task preserves production_ready_claim=false and does not mutate install, activation, rollback, active slot, boot metadata, production ring, support upload, or remote dispatch state."
+    ]
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc10-controlled-canary-activation.ps1 -GeneratedAt '2026-06-09T00:30:00+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}
