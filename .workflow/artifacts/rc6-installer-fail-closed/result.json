@@ -1,0 +1,426 @@
+{
+  "schema": "agentos.rc6-installer-fail-closed-result.v1",
+  "generated_at": "2026-06-08T12:17:12.0382530+08:00",
+  "task": "RC6-021",
+  "status": "passed",
+  "production_ready_claim": false,
+  "source": {
+    "bootstrap_preflight_result": {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+      "sha256": "9480cb255136deb4bb1a4b45384117076568f72c11a38c26828906ea393a07f4"
+    },
+    "bootstrap_preflight_report": {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+      "sha256": "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff"
+    },
+    "hosted_payload_index": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-payload-index.json",
+      "sha256": "85c9cb6b0bb49799fe30305270eb733d9688bb2e9e4cd3e639aa8c604a91ee2c"
+    },
+    "payload_manifest": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-manifest.json",
+      "sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e"
+    },
+    "payload_checksums": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-checksums.json",
+      "sha256": "635b88403bf530cff67f13ffa92649c77c4b573fe3fd15142c7b38d213219d71"
+    },
+    "payload_signatures": {
+      "path": ".workflow/artifacts/rc6-installable-payload-manifest/payload-signatures.json",
+      "sha256": "eafa4e6928cd979c6740f11295b0d77ecedde21945a24bcab010dcbfd274a0b6"
+    }
+  },
+  "cases": [
+    {
+      "id": "unsigned-payload",
+      "status": "passed",
+      "expected_reasons": [
+        "unsigned-payload",
+        "missing-signed-metadata-reference"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "stale-payload-index",
+      "status": "passed",
+      "expected_reasons": [
+        "stale-payload-index"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "stale-payload-index",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "stale-payload-manifest",
+      "status": "passed",
+      "expected_reasons": [
+        "stale-payload-manifest"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "stale-payload-manifest",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "stale-signature-metadata",
+      "status": "passed",
+      "expected_reasons": [
+        "stale-signature-metadata"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "stale-signature-metadata",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "revoked-signing-key",
+      "status": "passed",
+      "expected_reasons": [
+        "revoked-signing-key"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "revoked-signing-key",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "oversized-payload-index",
+      "status": "passed",
+      "expected_reasons": [
+        "oversized-payload-index"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "oversized-payload-index",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "oversized-payload-manifest",
+      "status": "passed",
+      "expected_reasons": [
+        "oversized-payload-manifest"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "oversized-payload-manifest",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "oversized-payload-checksums",
+      "status": "passed",
+      "expected_reasons": [
+        "oversized-payload-checksums"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "oversized-payload-checksums",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "oversized-payload-signatures",
+      "status": "passed",
+      "expected_reasons": [
+        "oversized-payload-signatures"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "oversized-payload-signatures",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "large-payload-url-before-policy",
+      "status": "passed",
+      "expected_reasons": [
+        "large-payload-url-before-storage-policy"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "large-payload-url-before-storage-policy",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "manifest-hash-mismatch",
+      "status": "passed",
+      "expected_reasons": [
+        "manifest-hash-mismatch"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "manifest-hash-mismatch",
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "install-authority-broadening",
+      "status": "passed",
+      "expected_reasons": [
+        "install-bootstrap-authority-broadening"
+      ],
+      "observed_state": "verification-blocked",
+      "observed_reasons": [
+        "unsigned-payload",
+        "missing-signed-metadata-reference",
+        "missing-revocation-snapshot",
+        "missing-rollback-baseline",
+        "missing-installer-compatibility-contract",
+        "install-bootstrap-authority-broadening"
+      ],
+      "side_effects": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "failed_cases": [],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_mutation_performed": false,
+    "large_payload_storage_enabled": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "bootstrap_preflight.result",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6-020 bootstrap installer preflight must be passed before fail-closed behavior proof.",
+      "evidence": {
+        "checks": 6,
+        "task_blockers": 0,
+        "preflight_steps": 12,
+        "preflight_blockers": 4,
+        "preflight_state": "verification-blocked",
+        "rc6_020_complete": true,
+        "next_task": "RC6-021"
+      }
+    },
+    {
+      "id": "bootstrap_preflight.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Baseline preflight must be verification-blocked.",
+      "evidence": {
+        "state": "verification-blocked",
+        "blockers": 4
+      }
+    },
+    {
+      "id": "baseline.no_install",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Baseline hosted payload and install bootstrap must not allow install.",
+      "evidence": {
+        "payload_install": false,
+        "bootstrap_install": false
+      }
+    },
+    {
+      "id": "cases.all_fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All installer negative cases must fail closed without side effects.",
+      "evidence": {
+        "passed": 12,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cases.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer fail-closed case results must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 5,
+    "blockers": 0,
+    "cases": 12,
+    "passed_cases": 12,
+    "failed_cases": 0,
+    "rc6_021_complete": true,
+    "next_task": "RC6-030"
+  }
+}

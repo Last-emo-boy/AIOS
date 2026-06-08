@@ -1,0 +1,34 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-021",
+  "title": "prove installer fail-closed behavior for unsigned stale revoked or oversized payload metadata",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/hosted-payload-index.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc6-installer-fail-closed.ps1",
+      "role": "installer fail-closed harness"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-installer-fail-closed/result.json",
+      "role": "fixture result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-021-installer-fail-closed.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Unsigned, stale, revoked, oversized, large-payload-url, hash-mismatch, and authority-broadening payload metadata cases are rejected.",
+      "Every negative case returns verification-blocked.",
+      "No installer side effects are performed.",
+      "No signing, install, activation, rollback, active slot, production ring, support upload, remote dispatch, or TUI authority is granted."
+    ]
+  }
+}
