@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-010",
+  "title": "bind local audit sink nonce expiry and policy version for controlled execution",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md",
+    ".workflow/artifacts/rc14-exact-approval-execution-binding/result.json",
+    ".workflow/artifacts/rc14-controlled-local-activation/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-audit-nonce-policy-binding.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-nonce-policy-binding.json",
+      "role": "audit, nonce, expiry, and policy version binding"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-audit-nonce-policy-binding/audit-nonce-policy-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-010-audit-nonce-policy-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Local audit sink is bound before exact approval can be granted.",
+      "Nonce, expiry, and policy version are bound and replay, stale, missing, and mismatched cases fail closed.",
+      "No activation, rollback, support upload, remote dispatch, private signing material handling, or production mutation occurs."
+    ]
+  },
+  "next_task": "RC15-011"
+}

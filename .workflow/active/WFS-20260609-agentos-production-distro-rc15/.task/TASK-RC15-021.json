@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-021",
+  "title": "make AgentCore PlanSpec executable from RC14 trusted quarantine evidence",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc14-local-object-trust-verification/result.json",
+    ".workflow/artifacts/rc14-verified-quarantine-preflight/result.json",
+    ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-agentcore-executable-planspec.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/agentcore-planspec.json",
+      "role": "executable PlanSpec candidate"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-agentcore-executable-planspec/agentcore-planspec-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-021-agentcore-executable-planspec.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "PlanSpec executable state is true only when object trust, verified quarantine, target identities, exact approval, audit sink, nonce, expiry, policy version, and SecurityExecution preconditions are bound.",
+      "Missing, stale, mismatched, broad, or replayed PlanSpec inputs fail closed.",
+      "No effect is prepared or executed by AgentCore alone."
+    ]
+  },
+  "next_task": "RC15-022"
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-031",
+  "title": "execute or deny separately approved rollback with support and recovery evidence",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc15-controlled-local-activation/result.json",
+    ".workflow/artifacts/rc14-controlled-rollback-support-recovery/result.json",
+    ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-controlled-rollback-support-recovery.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/rollback-support-recovery-gate-report.json",
+      "role": "rollback support recovery gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/rollback-execute-or-deny-evidence.json",
+      "role": "rollback execute-or-deny evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-031-controlled-rollback-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback executes only with separate exact rollback approval, rollback PlanSpec executable state, SecurityExecution rollback allow, audit journal, and support/recovery binding.",
+      "If controlled activation did not execute or rollback gates are missing, rollback is denied with exact blockers.",
+      "Support bundle remains redacted and local unless a later explicit support upload gate exists."
+    ]
+  },
+  "next_task": "RC15-050"
+}

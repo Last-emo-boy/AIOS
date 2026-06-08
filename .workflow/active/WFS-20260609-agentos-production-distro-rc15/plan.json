@@ -1,0 +1,168 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc15",
+  "milestone": "Production Distro RC15",
+  "status": "planned",
+  "objective": "Turn RC14 local trust and verified quarantine readiness into controlled local execution readiness by binding two real local canary target identities, a local audit sink, nonce, expiry, policy version, exact approval, executable AgentCore PlanSpec, and SecurityExecution allow decisions before controlled local activation and separately approved rollback are executed or denied.",
+  "scope": {
+    "included": [
+      "AIOS-body controlled local execution readiness planning",
+      "controlled local execution readiness authority contract",
+      "local audit sink, nonce, expiry, and policy version binding",
+      "two real local canary target identity enrollment",
+      "exact approval binding for actor, targets, PlanSpec, SecurityExecution envelope, audit sink, nonce, expiry, and policy version",
+      "AgentCore executable PlanSpec readiness from RC14 trusted object and quarantine evidence",
+      "SecurityExecution allow decision for controlled local activation",
+      "controlled local activation execute-or-deny evidence",
+      "separately approved rollback execute-or-deny evidence",
+      "support and recovery evidence binding",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload storage service provisioning",
+      "remote fleet dispatch infrastructure",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC15 planning and controlled execution contract",
+      "tasks": [
+        {
+          "id": "RC15-000",
+          "status": "completed",
+          "title": "plan Production Distro RC15 controlled local execution readiness",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-000-planning.json"
+        },
+        {
+          "id": "RC15-001",
+          "status": "pending",
+          "title": "freeze RC15 controlled local execution readiness and authority contract",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "approval substrate and target identities",
+      "tasks": [
+        {
+          "id": "RC15-010",
+          "status": "pending",
+          "title": "bind local audit sink nonce expiry and policy version for controlled execution",
+          "deliverable": ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json"
+        },
+        {
+          "id": "RC15-011",
+          "status": "pending",
+          "title": "enroll two real local canary target identities",
+          "deliverable": ".workflow/artifacts/rc15-two-real-local-target-identities/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "exact approval PlanSpec and SecurityExecution allow",
+      "tasks": [
+        {
+          "id": "RC15-020",
+          "status": "pending",
+          "title": "bind exact approval to actor target set PlanSpec SecurityExecution audit nonce expiry and policy",
+          "deliverable": ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json"
+        },
+        {
+          "id": "RC15-021",
+          "status": "pending",
+          "title": "make AgentCore PlanSpec executable from RC14 trusted quarantine evidence",
+          "deliverable": ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json"
+        },
+        {
+          "id": "RC15-022",
+          "status": "pending",
+          "title": "obtain SecurityExecution allow decision for controlled local activation",
+          "deliverable": ".workflow/artifacts/rc15-security-execution-allow-decision/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "controlled local activation and rollback",
+      "tasks": [
+        {
+          "id": "RC15-030",
+          "status": "pending",
+          "title": "execute or deny controlled local activation through AgentCore and SecurityExecution",
+          "deliverable": ".workflow/artifacts/rc15-controlled-local-activation/result.json"
+        },
+        {
+          "id": "RC15-031",
+          "status": "pending",
+          "title": "execute or deny separately approved rollback with support and recovery evidence",
+          "deliverable": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "RC15 closeout",
+      "tasks": [
+        {
+          "id": "RC15-050",
+          "status": "pending",
+          "title": "run Production Distro RC15 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC15-001",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "rc14_local_object_trust_required": true,
+    "rc14_verified_quarantine_required": true,
+    "two_real_local_canary_identities_required": true,
+    "audit_sink_required_before_exact_approval": true,
+    "nonce_required_before_exact_approval": true,
+    "approval_expiry_required_before_exact_approval": true,
+    "policy_version_required_before_exact_approval": true,
+    "exact_operator_approval_required_before_execution": true,
+    "agentcore_planspec_must_be_executable_before_effects": true,
+    "security_execution_allow_required_before_effects": true,
+    "activation_effect_must_execute_or_deny_with_audit": true,
+    "rollback_requires_separate_exact_approval": true,
+    "rollback_requires_activation_or_explicit_safe_denial_evidence": true,
+    "support_recovery_binding_required": true,
+    "production_ready_claim": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.89,
+    "requirements_coverage": 0.95,
+    "task_quality": 0.89,
+    "dependency_correctness": 0.9,
+    "estimation_accuracy": 0.81,
+    "collision_safety": 0.9,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC15 is derived directly from the RC14 final audit next_milestone direction and remaining controlled execution blockers. It keeps the work AIOS-body-only and narrows the next milestone to satisfiable local execution gates before any remote or production authority."
+  }
+}

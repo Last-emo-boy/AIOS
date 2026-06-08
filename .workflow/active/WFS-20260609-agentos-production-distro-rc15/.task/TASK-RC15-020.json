@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-020",
+  "title": "bind exact approval to actor target set PlanSpec SecurityExecution audit nonce expiry and policy",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json",
+    ".workflow/artifacts/rc15-two-real-local-target-identities/result.json",
+    ".workflow/artifacts/rc14-exact-approval-execution-binding/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-exact-approval-controlled-execution.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-exact-approval-controlled-execution/exact-approval-packet.json",
+      "role": "approval packet"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-exact-approval-controlled-execution/exact-approval-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-020-exact-approval-controlled-execution.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Exact approval is bound to actor authority, target set, release object, PlanSpec, SecurityExecution envelope, audit sink, nonce, expiry, and policy version.",
+      "Broad, stale, replayed, unsigned, actor-mismatched, target-mismatched, object-mismatched, PlanSpec-mismatched, and SecurityExecution-mismatched approvals fail closed.",
+      "Approval does not imply execution; AgentCore and SecurityExecution gates remain separate."
+    ]
+  },
+  "next_task": "RC15-021"
+}

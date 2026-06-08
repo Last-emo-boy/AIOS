@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-030",
+  "title": "execute or deny controlled local activation through AgentCore and SecurityExecution",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json",
+    ".workflow/artifacts/rc15-security-execution-allow-decision/result.json",
+    ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-controlled-local-activation.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-controlled-local-activation/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-controlled-local-activation/activation-gate-report.json",
+      "role": "activation gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-controlled-local-activation/activation-execute-or-deny-evidence.json",
+      "role": "activation execute-or-deny evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-030-controlled-local-activation.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Controlled local activation executes only if AgentCore PlanSpec is executable and SecurityExecution allow is true.",
+      "If any gate is missing, activation is denied with exact blockers and no fabricated audit success.",
+      "No remote dispatch, production ring mutation, support upload, recovery execution, private signing material handling, or mirror/frontend authority occurs."
+    ]
+  },
+  "next_task": "RC15-031"
+}

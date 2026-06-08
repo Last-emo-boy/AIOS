@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-011",
+  "title": "enroll two real local canary target identities",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc14-two-target-local-identity-enrollment/result.json",
+    ".workflow/artifacts/rc14-agentcore-executable-planspec/result.json",
+    ".workflow/artifacts/rc14-security-execution-allow-envelope/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-two-real-local-target-identities.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/target-local-identity-set.json",
+      "role": "target identity set"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-two-real-local-target-identities/target-identity-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-011-two-real-local-target-identities.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "At least two distinct local canary target identities are enrolled or enrollment is explicitly denied with exact blockers.",
+      "Identities are bound to release object, AgentCore PlanSpec, SecurityExecution envelope, rollback baseline, support/recovery references, audit sink, nonce, expiry, and policy version.",
+      "Duplicate, stale, broad, incompatible, mismatched, or replayed identities fail closed."
+    ]
+  },
+  "next_task": "RC15-020"
+}

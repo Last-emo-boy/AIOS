@@ -1,0 +1,56 @@
+{
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc15",
+  "name": "Production Distro RC15",
+  "status": "planned",
+  "created_at": "2026-06-09T17:35:00+08:00",
+  "updated_at": "2026-06-09T17:35:00+08:00",
+  "source": "RC14 final audit; maestro-managed RC15 planning",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc14",
+  "goal": "Plan and execute AIOS-body controlled local execution readiness by binding target identities, audit sink, nonce, expiry, policy version, exact approval, executable AgentCore PlanSpec, SecurityExecution allow, activation, rollback, support, and recovery evidence.",
+  "core_thesis": "AIOS becomes Ubuntu-like distributable only when verified local trust can lead into audited, exact-approved, controlled local execution without giving authority to mirrors, signers, shells, TUI projections, model replay, remote dispatch, or production ring mutation.",
+  "non_goals": [
+    "Do not build mirror frontend, nginx, TLS, remote signer, object storage, or remote dispatch infrastructure in RC15 body tasks.",
+    "Do not read, copy, print, hash, move, or reference private signing material.",
+    "Do not claim GA production readiness.",
+    "Do not treat mirror reachability, signer reachability, frontend output, shell output, TUI output, model replay, object storage UI, or remote service reachability as authority.",
+    "Do not mutate production rings, upload support bundles, or dispatch remote fleet actions."
+  ],
+  "primary_acceptance": [
+    "RC15-050 final closeout audit closes RC15 as a non-GA AIOS-body milestone.",
+    "The plan covers target identities, audit sink, nonce, expiry, policy version, exact approval, AgentCore executable PlanSpec, SecurityExecution allow, controlled activation, rollback, support/recovery, and final audit.",
+    "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx/TLS, signer infrastructure, object storage provisioning, remote dispatch, private signing material, and production ring mutation out of scope.",
+    "The plan keeps production_ready_claim=false until final audit proves every required gate."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC15-000",
+      "completed_at": "2026-06-09T17:35:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-000-planning.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC15-001",
+  "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/evidence/FINAL-AUDIT-20260609-production-distro-rc14.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/final-rc14-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-plan.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/workflow-session.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/rc15-controlled-local-execution-readiness-plan.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-000-planning.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-000.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-001.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-010.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-011.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-020.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-021.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-022.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-030.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-031.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/.task/TASK-RC15-050.json",
+    ".workflow/.csv-wave/20260609-plan-rc15-controlled-local-execution-readiness/context.md"
+  ]
+}

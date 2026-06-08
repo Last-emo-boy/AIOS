@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-022",
+  "title": "obtain SecurityExecution allow decision for controlled local activation",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json",
+    ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json",
+    ".workflow/artifacts/rc14-security-execution-allow-envelope/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc15-security-execution-allow-decision.ps1",
+      "role": "projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-allow-decision.json",
+      "role": "SecurityExecution allow decision"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-security-execution-allow-decision/security-execution-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-022-security-execution-allow-decision.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "SecurityExecution allow is true only when executable PlanSpec, exact approval, target identities, audit sink, nonce, expiry, and policy version are bound.",
+      "Effect envelope is bound to release object, target set, PlanSpec core hash, approval id, rollback baseline, and support/recovery references.",
+      "Policy weakening, shell bypass, broad resource, stale approval, replay, and mismatched envelope cases fail closed."
+    ]
+  },
+  "next_task": "RC15-030"
+}

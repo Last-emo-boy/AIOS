@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC15-050",
+  "title": "run Production Distro RC15 final closeout audit",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc15/plan.json",
+    ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json",
+    ".workflow/artifacts/rc15-two-real-local-target-identities/result.json",
+    ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json",
+    ".workflow/artifacts/rc15-agentcore-executable-planspec/result.json",
+    ".workflow/artifacts/rc15-security-execution-allow-decision/result.json",
+    ".workflow/artifacts/rc15-controlled-local-activation/result.json",
+    ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc15-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc15-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/final-rc15-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/RC15-050-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit covers all RC15 tasks and reports controlled execution readiness truthfully.",
+      "Final audit preserves production_ready_claim=false unless every local execution gate is proved and explicitly allowed by scope.",
+      "Final audit verifies no mirror/frontend/nginx/signer/object-storage/private-key/remote-dispatch/production-ring authority was broadened."
+    ]
+  }
+}
