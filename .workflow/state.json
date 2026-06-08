@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc6",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC6-002",
+    "current_task":  "RC6-003",
     "lifecycle_position":  "rc6-contracts-started",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc6-002-bootstrap-installer-consumption-boundary",
+    "next_allowed_action":  "execute-rc6-003-tls-storage-signed-payload-threat-model",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T12:55:00+08:00",
+    "updated_at":  "2026-06-08T13:05:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC5 is closed with hosted mirror service framework, AIOS mirror frontend, user bootstrap/release metadata, multi-node canary precondition proof, hosted support/recovery metadata, and final closeout audit. Production Distro RC6 is active: RC6-001 defines the installable signed payload channel contract for aios.w33d.xyz while preserving non-GA, no-signing-service, no-activation, no-rollback-execution, no-active-slot-mutation, no-production-ring-mutation, no-large-artifact-storage-without-policy, no-TUI-authority boundaries. Next allowed action is RC6-002 bootstrap and installer consumption boundary.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC5 is closed with hosted mirror service framework, AIOS mirror frontend, user bootstrap/release metadata, multi-node canary precondition proof, hosted support/recovery metadata, and final closeout audit. Production Distro RC6 is active: RC6-001 defines the installable signed payload channel contract for aios.w33d.xyz, and RC6-002 defines bootstrap/installer consumption boundaries that limit RC6 to metadata/preflight states while forbidding install, activation, rollback, active slot, production ring, support upload, remote dispatch, model replay, shell, and TUI authority. Next allowed action is RC6-003 TLS/storage/signed-payload threat model.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1139,6 +1139,18 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-001-installable-signed-payload-channel-contract.json"
+                      },
+                      {
+                          "type":  "rc6_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/.task/TASK-RC6-002.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-002-bootstrap-installer-consumption-boundary.json"
                       }
                   ]
 }

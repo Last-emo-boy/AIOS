@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-002",
+  "title": "define bootstrap and installer consumption boundary for hosted payload metadata",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/installable-signed-payload-channel-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-001-installable-signed-payload-channel-contract.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+      "role": "boundary document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-002-bootstrap-installer-consumption-boundary.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Installer states are defined and RC6 is limited to metadata/preflight states.",
+      "Verification order covers schema, RC5 binding, payload hashes, signature reference, revocation, freshness, compatibility, rollback, and storage policy.",
+      "Allowed outputs are local preflight/explanation evidence only.",
+      "Install, activation, rollback, active slot, production ring, support upload, remote dispatch, model replay, shell, and TUI side effects are forbidden."
+    ]
+  }
+}

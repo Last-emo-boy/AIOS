@@ -1,0 +1,109 @@
+{
+  "schema": "agentos.rc6-bootstrap-installer-consumption-boundary-evidence.v1",
+  "generated_at": "2026-06-08T13:05:00+08:00",
+  "task": "RC6-002",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "boundary": {
+    "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+    "scope": "bootstrap and installer consumption of hosted payload metadata",
+    "rc6_max_state": "install-preflight-ready",
+    "install_authorized": false,
+    "installed": false
+  },
+  "installer_states": [
+    "metadata-unavailable",
+    "metadata-candidate",
+    "verification-blocked",
+    "install-preflight-ready",
+    "install-authorized",
+    "installed"
+  ],
+  "rc6_allowed_states": [
+    "metadata-unavailable",
+    "metadata-candidate",
+    "verification-blocked",
+    "install-preflight-ready"
+  ],
+  "required_verification_order": [
+    "fetch-health-descriptor-channel-bootstrap",
+    "verify-schema-and-production-ready-false",
+    "verify-rc5-final-audit-binding",
+    "verify-payload-index-binding",
+    "verify-payload-manifest-hash",
+    "verify-payload-content-hashes",
+    "verify-signature-or-signed-metadata-reference",
+    "verify-revocation-snapshot",
+    "verify-freshness-window",
+    "verify-installer-compatibility-contract",
+    "verify-rollback-baseline-hash",
+    "verify-storage-policy-for-large-payloads",
+    "produce-preflight-report"
+  ],
+  "allowed_outputs": [
+    "preflight-report",
+    "missing-checks-list",
+    "payload-candidate-explanation",
+    "rollback-readiness-explanation",
+    "redacted-support-bundle-pointer"
+  ],
+  "forbidden_side_effects": [
+    "active-rootfs-install",
+    "boot-metadata-mutation",
+    "active-slot-mutation",
+    "a-b-update-activation",
+    "rollback-execution",
+    "production-ring-mutation",
+    "support-upload",
+    "private-signing-material-read",
+    "remote-command-dispatch",
+    "tui-authority",
+    "model-replay-authority",
+    "normal-shell-authority"
+  ],
+  "approval_binding_required": [
+    "release-id",
+    "payload-manifest-hash",
+    "target-device",
+    "rollback-baseline-hash",
+    "revocation-snapshot-hash",
+    "policy-version",
+    "actor",
+    "expiry"
+  ],
+  "fail_closed_cases": [
+    "missing-bootstrap-metadata",
+    "missing-payload-index",
+    "payload-manifest-mismatch",
+    "missing-checksum-file",
+    "missing-signature-reference",
+    "revoked-key",
+    "stale-revocation-snapshot",
+    "stale-payload-metadata",
+    "missing-rollback-baseline",
+    "missing-compatibility-contract",
+    "oversized-payload-url-before-storage-policy",
+    "authority-broadening"
+  ],
+  "invariants": {
+    "mirror_is_root_of_trust": false,
+    "metadata_reachability_is_trust": false,
+    "install_performed": false,
+    "install_authorized": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false
+  },
+  "completion": {
+    "rc6_002_complete": true,
+    "next_task": "RC6-003",
+    "commit_required": true
+  }
+}
