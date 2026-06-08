@@ -16,7 +16,7 @@
     "Do not install, activate, rollback, mutate boot metadata, mutate active slots, mutate active artifact sets, mutate production rings, upload support bundles, or dispatch remote fleet actions unless a later task proves every gate and records the effect explicitly."
   ],
   "primary_acceptance": [
-    "RC11 plan is active and task-managed with RC11-001 as the next executable task.",
+    "RC11 plan is active and task-managed with RC11-011 as the next executable task.",
     "The plan covers real object trust handoff, drift-zero reconciliation, installer quarantine verification, AgentCore/SecurityExecution binding, two-target canary approval, controlled activation, rollback, support/recovery, and final audit.",
     "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx, signer infrastructure, remote dispatch, and production ring mutation out of scope.",
     "The plan keeps production_ready_claim=false until final audit proves every required gate."
@@ -33,9 +33,15 @@
       "completed_at": "2026-06-09T01:20:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-001-real-object-trust-handoff-contract.json",
       "commit": null
+    },
+    {
+      "task": "RC11-010",
+      "completed_at": "2026-06-09T01:30:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-010-release-object-byte-map.json",
+      "commit": null
     }
   ],
-  "next_task": "RC11-010",
+  "next_task": "RC11-011",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/FINAL-AUDIT-20260608-production-distro-rc10.json",
@@ -52,6 +58,12 @@
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-001-real-object-trust-handoff-contract.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-001.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-010.json",
+    "scripts/project-rc11-release-object-byte-map.ps1",
+    ".workflow/artifacts/rc11-release-object-byte-map/release-object-byte-map.json",
+    ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+    ".workflow/artifacts/rc11-release-object-byte-map/descriptor-candidate-report.json",
+    ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-010-release-object-byte-map.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-011.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-012.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc11/.task/TASK-RC11-020.json",

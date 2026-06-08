@@ -1,0 +1,66 @@
+{
+  "schema": "agentos.rc11-release-object-byte-map.v1",
+  "generated_at": "2026-06-09T01:30:00+08:00",
+  "task": "RC11-010",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "current-byte-map-candidate-verification-blocked",
+  "production_ready_claim": false,
+  "current_payload": {
+    "source_path": "image/out/agentos-initramfs.cpio.gz",
+    "source_artifact_class": "repo-local-current-payload",
+    "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "object_kind": "update-bundle",
+    "size_bytes": 377,
+    "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "sha512": null,
+    "content_type": "application/gzip",
+    "compression": "gzip",
+    "range_request_supported": false,
+    "immutable": true
+  },
+  "required_bindings": {
+    "descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "object_checksums_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+    "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+    "checksums_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+    "public_signature_target_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "public_signature_receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+    "public_signature_summary_sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+    "signed_metadata_sha256": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+    "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+    "installer_compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "rc10_publication_result_sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+    "rc10_publication_report_sha256": "ca097beaeec8cc1fc90d5b549693fe4f9ce114b6b50a655cb2f8b418f56fb060",
+    "rc10_drift_result_sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+    "rc10_drift_reconciliation_sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8"
+  },
+  "rc10_carry_forward": {
+    "publication_state": "publication-blocked-drift-nonzero",
+    "external_object_url_published": false,
+    "drift_state": "drift-zero-denied",
+    "drift_count": 13,
+    "drift_zero": false,
+    "installer_quarantine_fetch_allowed": false
+  },
+  "trust_handoff": {
+    "external_object_reachability_is_trust": false,
+    "descriptor_classification_required": true,
+    "drift_zero_required_before_trust": true,
+    "quarantine_fetch_required_before_interpretation": true,
+    "agentcore_planspec_required_before_activation": true,
+    "security_execution_engine_required_before_activation": true,
+    "rollback_requires_separate_exact_approval": true,
+    "support_recovery_binding_required": true
+  },
+  "blockers": [
+    "external-https-object-uri-not-published",
+    "drift-zero-not-proved-in-rc11",
+    "installer-quarantine-fetch-not-run",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound"
+  ]
+}

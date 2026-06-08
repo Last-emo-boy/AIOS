@@ -1,0 +1,86 @@
+{
+  "schema": "agentos.rc11-release-object-byte-map-evidence.v1",
+  "generated_at": "2026-06-09T01:30:00+08:00",
+  "task": "RC11-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "script": {
+    "path": "scripts/project-rc11-release-object-byte-map.ps1",
+    "sha256": "b9273ee8d13105bc14e550fd937b3058e4160d040f0bf7318ff4fdfbd6b87d77"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+    "status": "passed",
+    "sha256": "b56a82a785bdac498d507e9e4597431cc5bd2969dd04c0bf4d8dc09e015f2348"
+  },
+  "outputs": {
+    "byte_map": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/release-object-byte-map.json",
+      "sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278"
+    },
+    "descriptor_candidate": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+      "sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8"
+    },
+    "descriptor_report": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/descriptor-candidate-report.json",
+      "sha256": "4db5bcdf21dcc534e14932815defe10c482e929ce1134b6c3b774f53020ba7ef"
+    }
+  },
+  "byte_map_surface": {
+    "state": "current-byte-map-candidate-verification-blocked",
+    "current_payload_size_bytes": 377,
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "descriptor_candidate_sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+    "byte_map_sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+    "external_https_object_uri_published": false,
+    "drift_count_carried_forward": 13,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "drift-zero-not-proved-in-rc11",
+      "installer-quarantine-fetch-not-run",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc11_010_complete": true,
+    "next_task": "RC11-011",
+    "commit_required": true
+  }
+}

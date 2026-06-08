@@ -1,0 +1,328 @@
+{
+  "schema": "agentos.rc11-release-object-byte-map-result.v1",
+  "generated_at": "2026-06-09T01:30:00+08:00",
+  "task": "RC11-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "byte_map_surface": {
+    "state": "current-byte-map-candidate-verification-blocked",
+    "current_payload_size_bytes": 377,
+    "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "descriptor_candidate_sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+    "byte_map_sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+    "external_https_object_uri_published": false,
+    "drift_count_carried_forward": 13,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "drift-zero-not-proved-in-rc11",
+      "installer-quarantine-fetch-not-run",
+      "two-target-canary-not-enrolled",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound"
+    ]
+  },
+  "outputs": {
+    "byte_map": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/release-object-byte-map.json",
+      "sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278"
+    },
+    "descriptor_candidate": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+      "sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8"
+    },
+    "descriptor_report": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/descriptor-candidate-report.json",
+      "sha256": "4db5bcdf21dcc534e14932815defe10c482e929ce1134b6c3b774f53020ba7ef"
+    }
+  },
+  "source": {
+    "rc11_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+      "sha256": "73fe35ab92d0c90f590147d0bf5c52670174b7e3566bb56f2354026ac947df4e",
+      "size_bytes": 6429,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc8_descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "size_bytes": 2130,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "rc8_descriptor_result": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+      "sha256": "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+      "size_bytes": 10075,
+      "present": true,
+      "schema": "agentos.rc8-real-payload-object-descriptor-result.v1",
+      "status": "passed"
+    },
+    "rc8_object_checksums": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-checksums.json",
+      "sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+      "size_bytes": 554,
+      "present": true,
+      "schema": "agentos.rc8-payload-object-checksums.v1",
+      "status": null
+    },
+    "rc8_descriptor_report": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/descriptor-report.json",
+      "sha256": "50c6345c08a3dd57496da89256a6489fb5366df860c01cd9c47bd61bc9e7bf83",
+      "size_bytes": 4841,
+      "present": true,
+      "schema": "agentos.rc8-real-payload-object-descriptor-report.v1",
+      "status": null
+    },
+    "rc8_signature_ingestion": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "sha256": "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+      "size_bytes": 6262,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+      "status": "passed"
+    },
+    "rc8_signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "size_bytes": 1533,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null
+    },
+    "rc8_signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "size_bytes": 1011,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null
+    },
+    "rc10_publication_result": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+      "size_bytes": 11803,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "rc10_publication_report": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+      "sha256": "ca097beaeec8cc1fc90d5b549693fe4f9ce114b6b50a655cb2f8b418f56fb060",
+      "size_bytes": 8848,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-report.v1",
+      "status": "publication-blocked-drift-nonzero"
+    },
+    "rc10_drift_result": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+      "sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "size_bytes": 7905,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation-result.v1",
+      "status": "passed"
+    },
+    "rc10_drift_reconciliation": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+      "sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8",
+      "size_bytes": 21510,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation.v1",
+      "status": "drift-zero-denied"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "checks": [
+    {
+      "id": "contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-010 must consume the RC11 trust handoff contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+        "sha256": "73fe35ab92d0c90f590147d0bf5c52670174b7e3566bb56f2354026ac947df4e",
+        "size_bytes": 6429,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "descriptor.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current payload descriptor must exist and pass before byte-map projection.",
+      "evidence": {
+        "descriptor": {
+          "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+          "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+          "size_bytes": 2130,
+          "present": true,
+          "schema": "agentos.payload-object-descriptor.v1",
+          "status": null
+        },
+        "descriptor_result": {
+          "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+          "sha256": "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+          "size_bytes": 10075,
+          "present": true,
+          "schema": "agentos.rc8-real-payload-object-descriptor-result.v1",
+          "status": "passed"
+        }
+      }
+    },
+    {
+      "id": "payload.bytes_match_descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current payload bytes must match descriptor size and SHA-256.",
+      "evidence": {
+        "path": "image/out/agentos-initramfs.cpio.gz",
+        "expected_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "observed_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "expected_size_bytes": 377,
+        "observed_size_bytes": 377
+      }
+    },
+    {
+      "id": "signature.receipt.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Byte map must bind verified public signature receipt evidence.",
+      "evidence": {
+        "signature_ingestion_status": "passed",
+        "receipt_crypto_verified": true,
+        "receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d"
+      }
+    },
+    {
+      "id": "rc10.blockers.carried_forward",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11 byte map must carry RC10 publication and drift status forward.",
+      "evidence": {
+        "publication_state": "publication-blocked-drift-nonzero",
+        "drift_count": 13,
+        "drift_state": "drift-zero-denied"
+      }
+    },
+    {
+      "id": "byte_map.bindings.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Byte map must record manifest, checksum, signature, revocation, compatibility, rollback, and support/recovery bindings.",
+      "evidence": {
+        "descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "object_checksums_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "checksums_sha256": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+        "public_signature_target_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "public_signature_receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+        "public_signature_summary_sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+        "signed_metadata_sha256": "fed5d310dd1d48a76e27e8b3a68101c6c258ff07459068425fdd23b04c205490",
+        "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+        "installer_compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "rc10_publication_result_sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+        "rc10_publication_report_sha256": "ca097beaeec8cc1fc90d5b549693fe4f9ce114b6b50a655cb2f8b418f56fb060",
+        "rc10_drift_result_sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+        "rc10_drift_reconciliation_sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8"
+      }
+    },
+    {
+      "id": "descriptor_candidate.safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Descriptor candidate must be immutable, size-bound, digest-bound, credential-free, and non-authoritative.",
+      "evidence": {
+        "immutable": true,
+        "size_bound": true,
+        "digest_bound": true,
+        "credential_free": true
+      }
+    },
+    {
+      "id": "outputs.side_effects_absent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-010 must not upload, fetch remotely, install, activate, rollback, dispatch, or mutate production rings.",
+      "evidence": {
+        "payload_upload_performed": false,
+        "remote_payload_bytes_downloaded": false,
+        "quarantine_payload_written": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-010 generated outputs must not contain private key paths, PEM blocks, auth tokens, or signer internals.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "external-https-object-uri-not-published",
+    "drift-zero-not-proved-in-rc11",
+    "installer-quarantine-fetch-not-run",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound"
+  ],
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "rc11_010_complete": true,
+    "next_task": "RC11-011"
+  }
+}
