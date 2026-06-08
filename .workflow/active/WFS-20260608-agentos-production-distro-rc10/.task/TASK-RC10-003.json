@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-003",
+  "title": "define exact approval canary activation and rollback execution contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/real-external-object-controlled-execution-enablement-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/docs/controlled-execution-binding-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc9/evidence/FINAL-AUDIT-20260608-production-distro-rc9.json",
+    ".workflow/artifacts/rc9-controlled-canary-activation/result.json",
+    ".workflow/artifacts/rc9-controlled-rollback-drill/result.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/.task/TASK-RC10-003.json",
+      "role": "task spec"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-003-exact-approval-canary-rollback-execution-contract.json",
+      "role": "task evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/plan.json",
+      "role": "workflow status"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/workflow-session.json",
+      "role": "workflow status"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The contract defines two-node canary target eligibility and denial states.",
+      "The contract defines exact approval packet fields and denial cases for activation and rollback.",
+      "The contract defines AgentCore activation and rollback PlanSpec plus SecurityExecutionEngine effect envelope binding requirements.",
+      "The contract preserves production_ready_claim=false, completes RC10 wave-0 contracts, and moves the next task to RC10-010 external object publication."
+    ]
+  }
+}
