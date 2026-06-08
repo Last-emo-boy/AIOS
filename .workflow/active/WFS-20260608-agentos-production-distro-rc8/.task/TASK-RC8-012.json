@@ -1,0 +1,36 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-012",
+  "title": "verify signed object descriptor fail-closed fixtures",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/immutable-payload-object-descriptor-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc8/docs/public-signature-artifact-ingestion-contract.md",
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc8-signed-object-descriptor-fail-closed.ps1",
+      "role": "fail-closed fixture harness"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-012-signed-object-descriptor-fail-closed.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The current signed object remains verification-blocked until external HTTPS object publication, installer VM smoke, and declared/current drift reconciliation complete.",
+      "Negative fixtures cover descriptor schema, URI, immutability, size, object id, source artifact hash, required hashes, expiry, signature binding, canonical payload hash, crypto verification, key id, revocation, freshness, receipt binding, raw identity leak, raw signature leak, and authority broadening.",
+      "All fixtures fail closed without publication, payload transfer, install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, or TUI authority.",
+      "The result keeps production_ready_claim=false and moves the next task to RC8-020 installer VM preflight and quarantined object-fetch smoke."
+    ]
+  }
+}

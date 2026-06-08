@@ -1,0 +1,86 @@
+{
+  "schema": "agentos.rc8-signed-object-descriptor-fail-closed-evidence.v1",
+  "generated_at": "2026-06-08T19:35:00+08:00",
+  "task": "RC8-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": {
+    "path": "scripts/verify-rc8-signed-object-descriptor-fail-closed.ps1",
+    "sha256": "e21b488b0381753b013eabe232359eb1e1678f06aa0510c5e036ef25b432c6b5"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+    "status": "passed",
+    "sha256": "67acffa942e5dda3c2a37f70ca03349bc15a7dc452ad5715fd7f77934efbff52"
+  },
+  "fixture_surface": {
+    "cases": 34,
+    "passed_cases": 34,
+    "failed_cases": 0,
+    "source_descriptor_verified": true,
+    "source_signature_ingestion_verified": true,
+    "current_signed_object_state": "verification-blocked",
+    "remaining_payload_blockers": [
+      "external-https-object-uri-not-published",
+      "installer-vm-smoke-not-run",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "coverage": [
+    "descriptor-schema",
+    "production-ready-claim",
+    "descriptor-uri",
+    "credential-bearing-uri",
+    "immutability",
+    "size",
+    "object-id",
+    "source-artifact-hash",
+    "required-hash-bindings",
+    "descriptor-expiry",
+    "signature-target-path",
+    "signed-object-hash",
+    "canonical-payload-hash",
+    "signature-value",
+    "signature-algorithm",
+    "key-id",
+    "revocation-binding",
+    "revoked-key",
+    "stale-revocation",
+    "stale-freshness",
+    "receipt-descriptor-hash",
+    "receipt-object-hash",
+    "receipt-canonical-hash",
+    "receipt-crypto-status",
+    "raw-public-identity-leak",
+    "raw-signature-value-leak",
+    "authority-broadening"
+  ],
+  "invariants": {
+    "local_fixture_only": true,
+    "remote_publication_performed": false,
+    "payload_bytes_uploaded": false,
+    "payload_bytes_downloaded": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "raw_public_identity_redacted_from_result": true
+  },
+  "completion": {
+    "rc8_012_complete": true,
+    "next_task": "RC8-020",
+    "commit_required": true
+  }
+}
