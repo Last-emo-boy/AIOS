@@ -1,0 +1,47 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-010",
+  "status": "completed",
+  "recorded_at": "2026-06-08T09:20:00+08:00",
+  "summary": "Implemented hosted release transport manifest and local mirror fixture generation. The writer binds RC3 final audit, production signature verification, publication manifest, channel index, consumer smoke, support/recovery, signing/publication gate, and revocation log hashes while performing no network transfer, signing, activation, rollback, active slot mutation, registry mutation, or TUI-authority broadening.",
+  "deliverables": {
+    "script": "scripts/publish-rc4-hosted-release-transport.ps1",
+    "result": ".workflow/artifacts/rc4-hosted-release-transport/result.json",
+    "result_sha256": "6cf6be3136291d730cad1fd5afefa005772f253ad23d34b756a3aabcdbad0064",
+    "hosted_transport_manifest": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "local_mirror_fixture": ".workflow/artifacts/rc4-hosted-release-transport/local-mirror-fixture.json",
+    "local_mirror_fixture_sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-010-hosted-release-transport.json"
+  },
+  "verification": {
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/publish-rc4-hosted-release-transport.ps1 -FailOnBlocked",
+    "status": "passed",
+    "checks": 15,
+    "blockers": 0,
+    "rc4_010_complete": true,
+    "hosted_transport_manifest_written": true,
+    "local_mirror_fixture_written": true,
+    "production_ready_claim": false
+  },
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "cryptographic_verification_performed": false,
+    "network_transfer_performed": false,
+    "remote_upload_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "active_artifact_set_mutated": false,
+    "active_registry_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "handoff": {
+    "next_task": "RC4-011",
+    "required_next": "Implement remote registry mirror publication replay using the RC4 hosted transport manifest and local mirror fixture."
+  }
+}

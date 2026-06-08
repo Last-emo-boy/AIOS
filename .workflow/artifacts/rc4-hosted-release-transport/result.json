@@ -1,0 +1,342 @@
+{
+  "schema": "agentos.rc4-hosted-release-transport-result.v1",
+  "generated_at": "2026-06-08T09:20:00+08:00",
+  "checked_at": "2026-06-08T09:11:51.0834270+08:00",
+  "task": "RC4-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc4_010_complete": true,
+  "hosted_transport_manifest_written": true,
+  "local_mirror_fixture_written": true,
+  "local_private_key_material_used": false,
+  "cryptographic_signing_performed": false,
+  "cryptographic_verification_performed": false,
+  "network_transfer_performed": false,
+  "remote_upload_performed": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "boot_metadata_mutated": false,
+  "active_registry_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": false,
+  "tui_authority": false,
+  "inputs": {
+    "rc4_plan": "eca62489cccf16cf34eb1bd71baeea1fbb79b3f0bab4e614cc91cd5405471358",
+    "rc4_contract": "07521cfbb302356a88311b61d4bc2b4ce797625da67ea3cf717862d1df8a46d2",
+    "rc4_rollout_boundary": "69b933d3cde8799639bf4e3c15c6edb17755c0a66b0011beceb913b3e65d746b",
+    "rc4_ga_gates": "a09bb7144d785311d901bfc949cc273846b202530d9c0f4a12d3b81e1f8593d4",
+    "rc4_threat_model": "346cf7aa244986910f3fbbf79e043d7894e694412541072c9143034db4d680f0",
+    "rc3_final_audit": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+    "production_verification": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+    "publication_manifest": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+    "channel_index": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+    "consumer_smoke": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+    "support_recovery": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+    "signing_publication_gate": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+    "revocation_log": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785"
+  },
+  "source_artifacts": {
+    "rc4_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+      "sha256": "eca62489cccf16cf34eb1bd71baeea1fbb79b3f0bab4e614cc91cd5405471358",
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc4_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-001-hosted-release-transport-fleet-contract.json",
+      "sha256": "07521cfbb302356a88311b61d4bc2b4ce797625da67ea3cf717862d1df8a46d2",
+      "schema": "agentos.production-distro-rc4-task-evidence.v1",
+      "status": "completed"
+    },
+    "rc4_rollout_boundary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-002-staged-rollout-authority-rollback-boundary.json",
+      "sha256": "69b933d3cde8799639bf4e3c15c6edb17755c0a66b0011beceb913b3e65d746b",
+      "schema": "agentos.production-distro-rc4-task-evidence.v1",
+      "status": "completed"
+    },
+    "rc4_ga_gates": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-003-ga-hardening-acceptance-gates.json",
+      "sha256": "a09bb7144d785311d901bfc949cc273846b202530d9c0f4a12d3b81e1f8593d4",
+      "schema": "agentos.production-distro-rc4-task-evidence.v1",
+      "status": "completed"
+    },
+    "rc4_threat_model": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-004-hosted-transport-fleet-threat-model.json",
+      "sha256": "346cf7aa244986910f3fbbf79e043d7894e694412541072c9143034db4d680f0",
+      "schema": "agentos.production-distro-rc4-task-evidence.v1",
+      "status": "completed"
+    },
+    "rc3_final_audit": {
+      "path": ".workflow/active/WFS-20260531-agentos-production-distro-rc3/evidence/FINAL-AUDIT-20260531-production-distro-rc3.json",
+      "sha256": "72c76197e0f37dc8cd7256b8b32e86f6b4bd8ebd7d38e53a1064fc1f69b42932",
+      "schema": "agentos.production-distro-rc3-final-audit.v1",
+      "status": null
+    },
+    "production_verification": {
+      "path": ".workflow/artifacts/rc3-production-signature-verification/result.json",
+      "sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+      "schema": "agentos.production-signature-verification.v1",
+      "status": "passed"
+    },
+    "publication_manifest": {
+      "path": ".workflow/artifacts/rc3-release-channel-publication/publication-manifest.json",
+      "sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+      "schema": "agentos.immutable-release-channel-publication.v1",
+      "status": "published-locally"
+    },
+    "channel_index": {
+      "path": ".workflow/artifacts/rc3-release-channel-publication/channel-index.json",
+      "sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+      "schema": "agentos.release-channel-index.v1",
+      "status": "updated"
+    },
+    "consumer_smoke": {
+      "path": ".workflow/artifacts/rc3-signed-channel-consumer/result.json",
+      "sha256": "93d7ea8ab42c2ba6b126642761a48d556d4a297e642fcf3ab050f8e57b9743da",
+      "schema": "agentos.signed-release-channel-consumer-smoke.v1",
+      "status": "passed"
+    },
+    "support_recovery": {
+      "path": ".workflow/artifacts/rc3-published-release-support-recovery/result.json",
+      "sha256": "08ccbd8023b1c85d051e04b066e29cd53eddda92af9ba943f9197dab4134684d",
+      "schema": "agentos.rc3-published-release-support-recovery.v1",
+      "status": "passed"
+    },
+    "signing_publication_gate": {
+      "path": ".workflow/artifacts/release/rc3-production-signing-publication-gate.json",
+      "sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+      "schema": "agentos.rc3-production-signing-publication-gate.v1",
+      "status": "passed"
+    },
+    "revocation_log": {
+      "path": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json",
+      "sha256": "0cdb6dde03cede9dd6f5f19f00f12665e7a97817ff5814beb85b11a435c76785",
+      "schema": "agentos.production-key-revocation-log.v1",
+      "status": null
+    }
+  },
+  "outputs": {
+    "hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+      "present": true
+    },
+    "local_mirror_fixture": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/local-mirror-fixture.json",
+      "sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75",
+      "present": true
+    }
+  },
+  "checks": [
+    {
+      "id": "rc4.plan.current_task",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 plan must point at RC4-010 before hosted transport artifacts are written.",
+      "evidence": "RC4-010"
+    },
+    {
+      "id": "rc4.wave0.contracts_completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 Wave 0 contracts must be complete before hosted transport manifest generation.",
+      "evidence": {
+        "RC4_001": "completed",
+        "RC4_002": "completed",
+        "RC4_003": "completed",
+        "RC4_004": "completed"
+      }
+    },
+    {
+      "id": "rc3.final_audit.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 final audit must pass and remain non-GA before RC4 hosted transport.",
+      "evidence": {
+        "verdict": "PASS",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "production_verification.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 production signature verification must pass for all required artifacts.",
+      "evidence": {
+        "required_artifacts": 41,
+        "rc2_required_artifacts": 9,
+        "signing_request_entries": 41,
+        "checks": 1209,
+        "blockers": 0
+      }
+    },
+    {
+      "id": "publication_manifest.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 publication manifest must be immutable, append-only, and non-GA.",
+      "evidence": {
+        "id": "production-candidate-rc3",
+        "name": "production-candidate",
+        "track": "rc3",
+        "previous_track": "rc0",
+        "immutable": true,
+        "append_only": true,
+        "content_addressed": true,
+        "in_place_head_mutation_allowed": false,
+        "hosted_network_required": false,
+        "mutation_policy": {
+          "no_in_place_update": true,
+          "update_authority": "AgentCore PlanSpec + SecurityExecutionEngine",
+          "tui_authority": false,
+          "operator_panel_projection_only": true
+        }
+      }
+    },
+    {
+      "id": "channel_index.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 channel index must be append-only and non-GA.",
+      "evidence": {
+        "id": "production-candidate-rc3",
+        "name": "production-candidate",
+        "append_only": true,
+        "content_addressed": true,
+        "head_mutation_allowed": false,
+        "hosted_network_required": false
+      }
+    },
+    {
+      "id": "consumer_smoke.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 signed channel consumer smoke must pass.",
+      "evidence": {
+        "checks": 9,
+        "blockers": 0,
+        "consumer_ready": true,
+        "rc3_021_complete": true,
+        "publication_manifest_sha256": "a90302682be3f6a935f26275103cd73752c9326887b717bffb8d604d929d4025",
+        "channel_index_sha256": "5a5a3b16b70bd32e3a2d4889362f71e9663a246c33036c180a089ea52c26416a",
+        "production_verification_sha256": "b60590a47886d42d6f44a21a3a5e6ddda76f6ce8769c01e8fe8f68ae26a818ba",
+        "rc2_true_block_release_gate_sha256": "7de1e8b2314177578c1e73a5bb99553d455f47522ba753a7a0fc4013c328e1ec"
+      }
+    },
+    {
+      "id": "support_recovery.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 support/recovery projection must be redacted and local-only.",
+      "evidence": {
+        "checks": 15,
+        "blockers": 0,
+        "rc3_022_complete": true,
+        "support_bundle_redacted": true,
+        "recovery_projection_emitted": true,
+        "support_index_written": true,
+        "failure_scenarios": 10,
+        "remote_upload_performed": false,
+        "remote_bytes_sent": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "signing_publication_gate.passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC3 signing/publication gate must pass without GA claim.",
+      "evidence": {
+        "status": "passed",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "revocation_log.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Packaged revocation log must be present for hosted transport binding.",
+      "evidence": "packaging/agentos/rootfs/etc/agentos/production-signing/key-revocation-log.json"
+    },
+    {
+      "id": "hosted_transport.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport writer must not sign, upload, activate, rollback, mutate active artifacts, or grant TUI authority.",
+      "evidence": {
+        "network_transfer_performed": false,
+        "remote_upload_performed": false,
+        "cryptographic_signing_performed": false,
+        "cryptographic_verification_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "hosted_transport_manifest.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport manifest must be written.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+        "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335"
+      }
+    },
+    {
+      "id": "local_mirror_fixture.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local mirror fixture must be written.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc4-hosted-release-transport/local-mirror-fixture.json",
+        "sha256": "8b8de707f2e8e0246b7b1bbcbf83cd2e6083726ab4caefee1760c9165a2ebc75"
+      }
+    },
+    {
+      "id": "hosted_transport_outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport outputs must not contain private keys, signer tokens, or private authority paths.",
+      "evidence": null
+    },
+    {
+      "id": "hosted_transport_outputs.host_path_free",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport outputs must not contain host-local absolute paths.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "handoff": {
+    "next_task": "RC4-011",
+    "rc4_011_consumes": [
+      "hosted_transport_manifest",
+      "local_mirror_fixture",
+      "rc3_final_audit",
+      "publication_manifest",
+      "channel_index",
+      "signing_publication_gate"
+    ]
+  },
+  "summary": {
+    "checks": 15,
+    "blockers": 0,
+    "rc4_010_complete": true,
+    "hosted_transport_manifest_written": true,
+    "local_mirror_fixture_written": true,
+    "production_ready_claim": false,
+    "network_transfer_performed": false,
+    "activation_performed": false,
+    "production_ring_mutated": false
+  }
+}
