@@ -1,0 +1,426 @@
+{
+  "schema": "agentos.rc11-controlled-rollback-support-recovery-result.v1",
+  "generated_at": "2026-06-09T03:15:00+08:00",
+  "task": "RC11-040",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "rollback_surface": {
+    "state": "rollback-denied",
+    "rollback_attempt_id": "rc11-controlled-rollback-support-recovery-attempt",
+    "rollback_planspec_id": "rc11-controlled-rollback-support-recovery-planspec-required",
+    "rollback_planspec_hash": "6b574be4466cab8be810d2404a049fa95914db539109c77bc3ea72a471d32276",
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "controlled_canary_activation_performed": false,
+    "exact_rollback_approval_granted": false,
+    "agentcore_rollback_planspec_bound": false,
+    "security_execution_rollback_approval_bound": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "external-descriptor-verification-denied",
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized",
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "exact-operator-approval-not-granted",
+      "controlled-execution-not-authorized",
+      "target-node-ids-missing",
+      "approval-audit-sink-not-bound",
+      "approval-expiry-not-bound",
+      "approval-nonce-not-bound",
+      "nonzero-declared-current-drift-count",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "quarantine-fetch-not-allowed-by-handoff",
+      "controlled-canary-activation-not-performed",
+      "rollback-exact-operator-approval-not-granted",
+      "agentcore-rollback-planspec-not-bound",
+      "security-execution-rollback-effect-envelope-not-bound",
+      "rollback-execution-not-authorized",
+      "rollback-audit-journal-not-bound",
+      "post-rollback-observations-missing"
+    ]
+  },
+  "support_surface": {
+    "support_recovery_binding_present": true,
+    "support_bundle_redacted": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false
+  },
+  "outputs": {
+    "rollback_planspec_requirement": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-planspec-requirement.json",
+      "sha256": "6874bed4bf0a2cdbf49c0385bc0590d908544815ad71af0729b09a7080c38915"
+    },
+    "rollback_support_gate_report": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-gate-report.json",
+      "sha256": "aab90792a481ec65cdde1a8a02c2772147b06a64a385a255b9c5edf1d88eb03e"
+    },
+    "rollback_support_denial_evidence": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-denial-evidence.json",
+      "sha256": "52e7ba0266253fba74bbac528c46dfefceb447c241598005516f5936bdd33162"
+    },
+    "support_recovery_evidence_chain": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "b2b17f6422357a29b2263b06a26b2151b2ddbacfafceb6e3e3c80c7a12ca536a"
+    },
+    "controlled_execution_support_bundle": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "0db84376b10385840fad36681377a80118ac1553ee8b0e1bc0f39e926692352a"
+    },
+    "recovery_reference_index": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/recovery-reference-index.json",
+      "sha256": "f4dc0aa13f3af072c1e0c5e8d4d234a0fa837517d812e3239d7eed462d257a4f"
+    }
+  },
+  "source": {
+    "activation_result": {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
+      "sha256": "16f764831fc3acd7631f899144b6519927aeaa3b5f6b13f7982c2b3cc0d0f92b",
+      "size_bytes": 17681,
+      "present": true,
+      "schema": "agentos.rc11-controlled-canary-activation-result.v1",
+      "status": "passed"
+    },
+    "activation_gate_report": {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/activation-gate-report.json",
+      "sha256": "7f0f7bd7bda8b7e1506073801980bd629e26b14f76fa1a884a3deb73d1cc58be",
+      "size_bytes": 5150,
+      "present": true,
+      "schema": "agentos.rc11-controlled-canary-activation-gate-report.v1",
+      "status": "activation-gates-evaluated-denied"
+    },
+    "activation_denial_evidence": {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "a6c05904db42777111ae9f60a57bbdcc3153b9f2ae86604dd1909e47ad0184f1",
+      "size_bytes": 11956,
+      "present": true,
+      "schema": "agentos.rc11-controlled-canary-activation-denial-evidence.v1",
+      "status": "activation-denied"
+    },
+    "activation_handoff": {
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/controlled-activation-handoff.json",
+      "sha256": "f10822bea6143f52596f960c1bad1841e4569e0c99e047f7474fd5620cda956f",
+      "size_bytes": 2308,
+      "present": true,
+      "schema": "agentos.rc11-controlled-activation-handoff.v1",
+      "status": "blocked-by-activation-denial"
+    },
+    "rc10_rollback_result": {
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/result.json",
+      "sha256": "97ba56e0f120f1d31b793ef53a02ebee310ad1ea442e082a0cf5ed52d96eb475",
+      "size_bytes": 17751,
+      "present": true,
+      "schema": "agentos.rc10-controlled-rollback-drill-result.v1",
+      "status": "passed"
+    },
+    "rc10_support_recovery_result": {
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/result.json",
+      "sha256": "a99c4d6dc58ca78df33fce297c3c258ee2ba8e789ddebbfaae31c923e3ffce6d",
+      "size_bytes": 16919,
+      "present": true,
+      "schema": "agentos.rc10-controlled-execution-support-recovery-result.v1",
+      "status": "passed"
+    }
+  },
+  "gate_inputs": {
+    "source_tasks_complete": true,
+    "controlled_activation_evidence_ready": true,
+    "controlled_canary_activation_performed": false,
+    "previous_artifact_set_bound": true,
+    "activated_artifact_set_bound": false,
+    "rollback_baseline_bound": true,
+    "target_ids_bound": false,
+    "separate_rollback_approval_granted": false,
+    "agentcore_rollback_planspec_bound": false,
+    "security_execution_rollback_allowed": false,
+    "support_recovery_binding_present": true,
+    "support_bundle_redacted": true,
+    "audit_journal_bound": false,
+    "post_rollback_observations_bound": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_fleet_execution_enabled": false
+  },
+  "source_bindings": {
+    "activation_result_sha256": "16f764831fc3acd7631f899144b6519927aeaa3b5f6b13f7982c2b3cc0d0f92b",
+    "activation_gate_report_sha256": "7f0f7bd7bda8b7e1506073801980bd629e26b14f76fa1a884a3deb73d1cc58be",
+    "activation_denial_evidence_sha256": "a6c05904db42777111ae9f60a57bbdcc3153b9f2ae86604dd1909e47ad0184f1",
+    "activation_handoff_sha256": "f10822bea6143f52596f960c1bad1841e4569e0c99e047f7474fd5620cda956f",
+    "activation_attempt_digest": "b4753ded0e1668898229b85fda97eb90c713b45f14220ef72b3bafb908f14e17",
+    "rc10_rollback_result_sha256": "97ba56e0f120f1d31b793ef53a02ebee310ad1ea442e082a0cf5ed52d96eb475",
+    "rc10_rollback_planspec_hash": "66591fe51cf437ea7c5460b3294c06de960b5756604191d0d341c9beb1744f94",
+    "rc10_support_recovery_result_sha256": "a99c4d6dc58ca78df33fce297c3c258ee2ba8e789ddebbfaae31c923e3ffce6d",
+    "rc10_support_recovery_evidence_chain_sha256": "1a9e7a2a9466f6db2db94ab6f30386c92317a86571770d3917ff3b7543d5ee82",
+    "rc10_controlled_execution_support_bundle_sha256": "9147904a719d90ed7a01f66a0ef02e73fb10f9ae1bd9104e8828ab81676fec9d",
+    "rc10_recovery_reference_index_sha256": "6b3570d4a7bee3cf1295fe67f5a161c75c0d959004bc1e3e6bfe625bf0d3e1b8",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db"
+  },
+  "checks": [
+    {
+      "id": "source.rc11_031.activation_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-040 must consume completed RC11-031 activation denial without treating it as executed activation.",
+      "evidence": {
+        "status": "passed",
+        "state": "activation-denied",
+        "activation_performed": false
+      }
+    },
+    {
+      "id": "source.rc10_rollback_support.carried",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-040 must carry forward RC10 rollback denial and support/recovery binding evidence.",
+      "evidence": {
+        "rollback_state": "rollback-denied",
+        "support_status": "passed"
+      }
+    },
+    {
+      "id": "rollback.planspec_requirement.projected_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback PlanSpec requirement must be projected and non-executable.",
+      "evidence": {
+        "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-planspec-requirement.json",
+        "sha256": "6874bed4bf0a2cdbf49c0385bc0590d908544815ad71af0729b09a7080c38915",
+        "planspec_hash": "6b574be4466cab8be810d2404a049fa95914db539109c77bc3ea72a471d32276"
+      }
+    },
+    {
+      "id": "rollback.denied_when_gates_missing",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback/support execution must deny when activation, separate approval, PlanSpec, SecurityExecution, audit, observation, or remote gates are missing.",
+      "evidence": {
+        "rollback_execution_allowed": false,
+        "blockers": [
+          "external-descriptor-verification-denied",
+          "external-https-object-uri-not-published",
+          "declared-current-drift-zero-not-proved",
+          "object-trust-not-allowed",
+          "freshness-window-missing",
+          "installer-quarantine-fetch-not-run",
+          "payload-not-quarantined",
+          "pre-interpretation-verification-not-run",
+          "exact-approval-not-bound",
+          "agentcore-planspec-not-bound",
+          "security-execution-effect-envelope-not-bound",
+          "installer-preflight-not-verified",
+          "two-target-canary-approval-not-bound",
+          "agentcore-planspec-not-executable",
+          "security-execution-effect-envelope-denied",
+          "controlled-install-activation-rollback-not-authorized",
+          "fewer-than-two-eligible-targets",
+          "target-set-not-enrolled",
+          "remote-fleet-execution-not-enabled",
+          "publication-not-published-drift-zero",
+          "exact-operator-approval-not-granted",
+          "controlled-execution-not-authorized",
+          "target-node-ids-missing",
+          "approval-audit-sink-not-bound",
+          "approval-expiry-not-bound",
+          "approval-nonce-not-bound",
+          "nonzero-declared-current-drift-count",
+          "controlled-activation-not-authorized",
+          "controlled-rollback-not-authorized",
+          "quarantine-fetch-not-allowed-by-handoff",
+          "controlled-canary-activation-not-performed",
+          "rollback-exact-operator-approval-not-granted",
+          "agentcore-rollback-planspec-not-bound",
+          "security-execution-rollback-effect-envelope-not-bound",
+          "rollback-execution-not-authorized",
+          "rollback-audit-journal-not-bound",
+          "post-rollback-observations-missing"
+        ]
+      }
+    },
+    {
+      "id": "rollback.denial_cases.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback/support denial evidence must cover missing rollback, support, and recovery gates as fail-closed.",
+      "evidence": {
+        "cases": 11,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "support.bundle.redacted_no_upload",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support bundle projection must stay redacted, local-only, and upload-disabled.",
+      "evidence": {
+        "redacted": true,
+        "upload_allowed": false
+      }
+    },
+    {
+      "id": "recovery.index.non_executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Recovery reference index must keep every entry non-executable and non-authoritative.",
+      "evidence": {
+        "entries": 6
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-040 must not prepare or execute rollback, support upload, recovery, production mutation, or remote dispatch side effects.",
+      "evidence": {
+        "rollback_attempt_recorded": true,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "boot_metadata_mutated": false,
+        "active_slot_mutated": false,
+        "persistent_state_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "authority.no_infra_or_secret_scope",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-040 must not grant mirror, signer, nginx, frontend, TUI, shell, model, remote dispatch, or production ring authority.",
+      "evidence": {
+        "mirror_authority": false,
+        "signer_authority": false,
+        "nginx_or_tls_authority": false,
+        "frontend_authority": false,
+        "tui_authority": false,
+        "normal_shell_authority": false,
+        "model_replay_authority": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC11-040 outputs must not contain PEM blocks, auth tokens, private key paths, or signer internals.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "external-descriptor-verification-denied",
+    "external-https-object-uri-not-published",
+    "declared-current-drift-zero-not-proved",
+    "object-trust-not-allowed",
+    "freshness-window-missing",
+    "installer-quarantine-fetch-not-run",
+    "payload-not-quarantined",
+    "pre-interpretation-verification-not-run",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "installer-preflight-not-verified",
+    "two-target-canary-approval-not-bound",
+    "agentcore-planspec-not-executable",
+    "security-execution-effect-envelope-denied",
+    "controlled-install-activation-rollback-not-authorized",
+    "fewer-than-two-eligible-targets",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "publication-not-published-drift-zero",
+    "exact-operator-approval-not-granted",
+    "controlled-execution-not-authorized",
+    "target-node-ids-missing",
+    "approval-audit-sink-not-bound",
+    "approval-expiry-not-bound",
+    "approval-nonce-not-bound",
+    "nonzero-declared-current-drift-count",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "quarantine-fetch-not-allowed-by-handoff",
+    "controlled-canary-activation-not-performed",
+    "rollback-exact-operator-approval-not-granted",
+    "agentcore-rollback-planspec-not-bound",
+    "security-execution-rollback-effect-envelope-not-bound",
+    "rollback-execution-not-authorized",
+    "rollback-audit-journal-not-bound",
+    "post-rollback-observations-missing"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "rollback_attempt_recorded": true,
+    "support_bundle_redacted": true,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 10,
+    "failed_checks": 0,
+    "cases": 11,
+    "failed_cases": 0,
+    "rc11_040_complete": true,
+    "rollback_state": "rollback-denied",
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "canary_activation_performed": false,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ready_claim": false,
+    "next_task": "RC11-050"
+  }
+}

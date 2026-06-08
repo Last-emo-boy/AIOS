@@ -1,0 +1,88 @@
+{
+  "schema": "agentos.rc11-controlled-rollback-recovery-reference-index.v1",
+  "generated_at": "2026-06-09T03:15:00+08:00",
+  "task": "RC11-040",
+  "status": "projection-only-recovery-execution-blocked",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "entries": [
+    {
+      "id": "rc11-activation-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "a6c05904db42777111ae9f60a57bbdcc3153b9f2ae86604dd1909e47ad0184f1",
+      "executable": false
+    },
+    {
+      "id": "rc11-activation-handoff",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc11-controlled-canary-activation/controlled-activation-handoff.json",
+      "sha256": "f10822bea6143f52596f960c1bad1841e4569e0c99e047f7474fd5620cda956f",
+      "executable": false
+    },
+    {
+      "id": "rc11-rollback-support-gate-report",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-gate-report.json",
+      "sha256": "aab90792a481ec65cdde1a8a02c2772147b06a64a385a255b9c5edf1d88eb03e",
+      "executable": false
+    },
+    {
+      "id": "rc11-rollback-support-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-denial-evidence.json",
+      "sha256": "52e7ba0266253fba74bbac528c46dfefceb447c241598005516f5936bdd33162",
+      "executable": false
+    },
+    {
+      "id": "rc10-rollback-result",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc10-controlled-rollback-drill/result.json",
+      "sha256": "97ba56e0f120f1d31b793ef53a02ebee310ad1ea442e082a0cf5ed52d96eb475",
+      "executable": false
+    },
+    {
+      "id": "rc10-support-recovery-result",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc10-controlled-execution-support-recovery/result.json",
+      "sha256": "a99c4d6dc58ca78df33fce297c3c258ee2ba8e789ddebbfaae31c923e3ffce6d",
+      "executable": false
+    }
+  ],
+  "required_before_execution": [
+    "executed controlled canary activation",
+    "separate exact rollback approval",
+    "bound rollback target ids",
+    "executable AgentCore rollback PlanSpec",
+    "SecurityExecutionEngine rollback approval",
+    "rollback audit journal",
+    "post-rollback observations",
+    "remote fleet execution gate"
+  ],
+  "recovery_authority": {
+    "plan_authority": "AgentCore",
+    "side_effect_authority": "SecurityExecutionEngine",
+    "mirror_authority": false,
+    "signer_authority": false,
+    "support_metadata_authority": false,
+    "tui_authority": false,
+    "shell_authority": false,
+    "model_replay_authority": false
+  },
+  "side_effects": {
+    "rollback_attempt_recorded": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "boot_metadata_mutated": false,
+    "active_slot_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "schema": "agentos.rc11-controlled-rollback-support-recovery-evidence.v1",
+  "generated_at": "2026-06-09T03:15:00+08:00",
+  "task": "RC11-040",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc11",
+  "script": {
+    "path": "scripts/project-rc11-controlled-rollback-support-recovery.ps1",
+    "sha256": "6030a54ac9d0e62582c0cb0a0b005eedfd8381bdf13c567f671a8835f99130c2"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json",
+    "status": "passed",
+    "sha256": "8828f12103bfaffa4f54c5c0bcec55eaf29a87095d917bda1bae601b9a8ffd5e"
+  },
+  "outputs": {
+    "rollback_planspec_requirement": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-planspec-requirement.json",
+      "sha256": "6874bed4bf0a2cdbf49c0385bc0590d908544815ad71af0729b09a7080c38915"
+    },
+    "rollback_support_gate_report": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-gate-report.json",
+      "sha256": "aab90792a481ec65cdde1a8a02c2772147b06a64a385a255b9c5edf1d88eb03e"
+    },
+    "rollback_support_denial_evidence": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-denial-evidence.json",
+      "sha256": "52e7ba0266253fba74bbac528c46dfefceb447c241598005516f5936bdd33162"
+    },
+    "support_recovery_evidence_chain": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "b2b17f6422357a29b2263b06a26b2151b2ddbacfafceb6e3e3c80c7a12ca536a"
+    },
+    "controlled_execution_support_bundle": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "0db84376b10385840fad36681377a80118ac1553ee8b0e1bc0f39e926692352a"
+    },
+    "recovery_reference_index": {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/recovery-reference-index.json",
+      "sha256": "f4dc0aa13f3af072c1e0c5e8d4d234a0fa837517d812e3239d7eed462d257a4f"
+    }
+  },
+  "rollback_surface": {
+    "state": "rollback-denied",
+    "rollback_attempt_id": "rc11-controlled-rollback-support-recovery-attempt",
+    "rollback_planspec_id": "rc11-controlled-rollback-support-recovery-planspec-required",
+    "rollback_planspec_hash": "6b574be4466cab8be810d2404a049fa95914db539109c77bc3ea72a471d32276",
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "controlled_canary_activation_performed": false,
+    "exact_rollback_approval_granted": false,
+    "agentcore_rollback_planspec_bound": false,
+    "security_execution_rollback_approval_bound": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "external-descriptor-verification-denied",
+      "external-https-object-uri-not-published",
+      "declared-current-drift-zero-not-proved",
+      "object-trust-not-allowed",
+      "freshness-window-missing",
+      "installer-quarantine-fetch-not-run",
+      "payload-not-quarantined",
+      "pre-interpretation-verification-not-run",
+      "exact-approval-not-bound",
+      "agentcore-planspec-not-bound",
+      "security-execution-effect-envelope-not-bound",
+      "installer-preflight-not-verified",
+      "two-target-canary-approval-not-bound",
+      "agentcore-planspec-not-executable",
+      "security-execution-effect-envelope-denied",
+      "controlled-install-activation-rollback-not-authorized",
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "exact-operator-approval-not-granted",
+      "controlled-execution-not-authorized",
+      "target-node-ids-missing",
+      "approval-audit-sink-not-bound",
+      "approval-expiry-not-bound",
+      "approval-nonce-not-bound",
+      "nonzero-declared-current-drift-count",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "quarantine-fetch-not-allowed-by-handoff",
+      "controlled-canary-activation-not-performed",
+      "rollback-exact-operator-approval-not-granted",
+      "agentcore-rollback-planspec-not-bound",
+      "security-execution-rollback-effect-envelope-not-bound",
+      "rollback-execution-not-authorized",
+      "rollback-audit-journal-not-bound",
+      "post-rollback-observations-missing"
+    ]
+  },
+  "support_surface": {
+    "support_recovery_binding_present": true,
+    "support_bundle_redacted": true,
+    "support_upload_allowed": false,
+    "support_upload_performed": false,
+    "recovery_execution_allowed": false,
+    "recovery_execution_performed": false
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "rollback_attempt_recorded": true,
+    "support_bundle_redacted": true,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc11_040_complete": true,
+    "next_task": "RC11-050",
+    "commit_required": true
+  }
+}

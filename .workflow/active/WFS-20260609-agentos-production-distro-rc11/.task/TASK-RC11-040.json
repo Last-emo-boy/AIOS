@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC11-040",
   "title": "execute or deny rollback drill with separate approval and support recovery binding",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-4",
   "read_first": [
     ".workflow/artifacts/rc11-controlled-canary-activation/result.json",
@@ -17,6 +17,34 @@
     {
       "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json",
       "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-planspec-requirement.json",
+      "role": "rollback PlanSpec requirement"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-gate-report.json",
+      "role": "rollback support gate report"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/rollback-support-denial-evidence.json",
+      "role": "rollback support denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
+      "role": "support recovery evidence chain"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
+      "role": "controlled execution support bundle"
+    },
+    {
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/evidence/RC11-040-controlled-rollback-support-recovery.json",
+      "role": "task evidence"
     }
   ],
   "convergence": {
