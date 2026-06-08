@@ -1,0 +1,335 @@
+﻿{
+    "schema":  "agentos.rc7-mirror-frontend-signed-status-result.v1",
+    "generated_at":  "2026-06-08T13:25:15.3542997+08:00",
+    "checked_at":  "2026-06-08T13:25:19.2509625+08:00",
+    "task":  "RC7-020",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "remote":  {
+                   "host":  "47.101.11.109",
+                   "user":  "root",
+                   "domain":  "aios.w33d.xyz",
+                   "static_root":  "/srv/aios-mirror",
+                   "validation_used_local_dns":  false,
+                   "validation_resolve_override":  "aios.w33d.xyz:80:47.101.11.109"
+               },
+    "source_artifacts":  {
+                             "rc7_signed_metadata_revocation":  {
+                                                                    "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+                                                                    "sha256":  "8ccf04045c5e6aa63ccc934c46d72f03a17a8484657abd101c5a01a21b7e54a3",
+                                                                    "present":  true,
+                                                                    "schema":  "agentos.rc7-signed-metadata-revocation-result.v1",
+                                                                    "status":  "passed"
+                                                                },
+                             "rc7_installer_signed_consumption":  {
+                                                                      "path":  ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+                                                                      "sha256":  "289940b5024bb9fb4cf3d33d2adf3b363c789921cee08711bad6868e7f746904",
+                                                                      "present":  true,
+                                                                      "schema":  "agentos.rc7-installer-signed-consumption-result.v1",
+                                                                      "status":  "passed"
+                                                                  },
+                             "rc7_signed_consumption_fail_closed":  {
+                                                                        "path":  ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+                                                                        "sha256":  "b80cd6135bdbf97ffe9ae9f901cb73e76a7e57271e4ed3b6f266215b1f70baae",
+                                                                        "present":  true,
+                                                                        "schema":  "agentos.rc7-signed-consumption-fail-closed-result.v1",
+                                                                        "status":  "passed"
+                                                                    },
+                             "rc7_install_rollback_baseline":  {
+                                                                   "path":  ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+                                                                   "sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                                                                   "present":  true,
+                                                                   "schema":  "agentos.rc7-install-rollback-baseline-result.v1",
+                                                                   "status":  "passed"
+                                                               }
+                         },
+    "published_files":  {
+                            "index_html":  "/srv/aios-mirror/index.html",
+                            "mirror_css":  "/srv/aios-mirror/assets/mirror.css",
+                            "mirror_js":  "/srv/aios-mirror/assets/mirror.js"
+                        },
+    "local_outputs":  {
+                          "index_html":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/index.html",
+                          "mirror_css":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.css",
+                          "mirror_js":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.js"
+                      },
+    "frontend_hashes":  {
+                            "index_html_sha256":  "9a421292c5e6369f0c6185b0f9d5161b1455151eb5e9981ca4f39ec5ffdbedb6",
+                            "mirror_css_sha256":  "2d7bd7993c10626703f271d445b140dbefb5a3a2e6ca0b4e8641448b62124791",
+                            "mirror_js_sha256":  "b421cad47e40ca786bcd67bd1c0ef977d71a44b810ca9fd4f59048d208533f92"
+                        },
+    "preserved_metadata_hashes":  {
+                                      "health":  "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+                                      "descriptor":  "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+                                      "channel":  "0369b9f61da83dd2ac8149681befce9b3b619ac0ec2de9359620796a404151e1",
+                                      "payload_index":  "073dae091d356a4f2d2889275eb8b1d21d210c1ac72abac7a6c12fa40568867b",
+                                      "install_bootstrap":  "8296d6b2626d5bf8a391f0e0d20d62ecc6405043fe1bd6199d81059417a20fc6",
+                                      "compatibility":  "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+                                      "rollback_baseline":  "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+                                      "support_index":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                                      "signed_metadata":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337",
+                                      "revocations":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e",
+                                      "signatures":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01"
+                                  },
+    "payload_surface":  {
+                            "release_id":  "production-distro-rc6-current-artifacts",
+                            "status":  "verification-blocked",
+                            "signed_metadata_published":  true,
+                            "revocation_snapshot_published":  true,
+                            "compatibility_published":  true,
+                            "rollback_baseline_published":  true,
+                            "cryptographic_signature_present":  false,
+                            "signature_available":  false,
+                            "install_allowed":  false,
+                            "activation_allowed":  false,
+                            "rollback_execution_allowed":  false
+                        },
+    "invariants":  {
+                       "static_frontend_only":  true,
+                       "no_external_dependencies":  true,
+                       "metadata_preserved":  true,
+                       "local_private_key_material_used":  false,
+                       "private_key_material_read_or_printed":  false,
+                       "cryptographic_signing_performed":  false,
+                       "payload_upload_performed":  false,
+                       "install_performed":  false,
+                       "activation_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "active_slot_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "tui_authority":  false,
+                       "tls_required_before_ga_claim":  true
+                   },
+    "checks":  [
+                   {
+                       "id":  "source.artifacts.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Frontend refresh must bind RC7 signed metadata, consumption, fail-closed, and rollback baseline evidence.",
+                       "evidence":  {
+                                        "rc7_signed_metadata_revocation":  {
+                                                                               "path":  ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+                                                                               "sha256":  "8ccf04045c5e6aa63ccc934c46d72f03a17a8484657abd101c5a01a21b7e54a3",
+                                                                               "present":  true,
+                                                                               "schema":  "agentos.rc7-signed-metadata-revocation-result.v1",
+                                                                               "status":  "passed"
+                                                                           },
+                                        "rc7_installer_signed_consumption":  {
+                                                                                 "path":  ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+                                                                                 "sha256":  "289940b5024bb9fb4cf3d33d2adf3b363c789921cee08711bad6868e7f746904",
+                                                                                 "present":  true,
+                                                                                 "schema":  "agentos.rc7-installer-signed-consumption-result.v1",
+                                                                                 "status":  "passed"
+                                                                             },
+                                        "rc7_signed_consumption_fail_closed":  {
+                                                                                   "path":  ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+                                                                                   "sha256":  "b80cd6135bdbf97ffe9ae9f901cb73e76a7e57271e4ed3b6f266215b1f70baae",
+                                                                                   "present":  true,
+                                                                                   "schema":  "agentos.rc7-signed-consumption-fail-closed-result.v1",
+                                                                                   "status":  "passed"
+                                                                               },
+                                        "rc7_install_rollback_baseline":  {
+                                                                              "path":  ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+                                                                              "sha256":  "d2091b19399131de97bd960476d037f088036c811960d308f9af95b111d1b7f1",
+                                                                              "present":  true,
+                                                                              "schema":  "agentos.rc7-install-rollback-baseline-result.v1",
+                                                                              "status":  "passed"
+                                                                          }
+                                    }
+                   },
+                   {
+                       "id":  "live.metadata.before.available",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Live RC7 metadata must be reachable before frontend refresh.",
+                       "evidence":  [
+                                        "health",
+                                        "descriptor",
+                                        "channel",
+                                        "payload_index",
+                                        "install_bootstrap",
+                                        "compatibility",
+                                        "rollback_baseline",
+                                        "support_index",
+                                        "signed_metadata",
+                                        "revocations",
+                                        "signatures"
+                                    ]
+                   },
+                   {
+                       "id":  "live.metadata.before.rc7_surface",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Frontend refresh must start after RC7 compatibility and rollback baseline publication while install remains blocked.",
+                       "evidence":  {
+                                        "release_id":  "production-distro-rc6-current-artifacts",
+                                        "status":  "verification-blocked",
+                                        "compatibility_published":  true,
+                                        "rollback_baseline_published":  true,
+                                        "public_signature_projection_available":  true,
+                                        "cryptographic_signature_present":  false,
+                                        "signature_available":  false,
+                                        "install_allowed":  false,
+                                        "activation_allowed":  false,
+                                        "rollback_execution_allowed":  false
+                                    }
+                   },
+                   {
+                       "id":  "local.outputs.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Frontend assets must be generated locally before remote publication.",
+                       "evidence":  {
+                                        "index":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/index.html",
+                                        "css":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.css",
+                                        "js":  ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.js"
+                                    }
+                   },
+                   {
+                       "id":  "local.outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Generated frontend assets must not contain private key paths, PEM private blocks, or tokens.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "local.outputs.size_bounded",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Generated frontend assets must stay bounded for the small mirror host.",
+                       "evidence":  {
+                                        "index_html":  4229,
+                                        "mirror_css":  6211,
+                                        "mirror_js":  9795
+                                    }
+                   },
+                   {
+                       "id":  "remote.nginx.active",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Nginx must remain active after RC7 frontend refresh.",
+                       "evidence":  [
+                                        "active\r",
+                                        "88a16e06a46635fc98da682397857814ffb4c9960dba41200f857170efb7b282  index.html\r",
+                                        "acd6a1f0076b206f908fd1f23826adedb0b3694a815cf48a289cc51db8692b8e  assets/mirror.css\r",
+                                        "d376fa5de9cb875b79ecc574cd26f1a3da832fc7dafb1233f4a493843af57065  assets/mirror.js"
+                                    ]
+                   },
+                   {
+                       "id":  "remote.frontend.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Refreshed frontend assets must be reachable and contain RC7 signed status UI code.",
+                       "evidence":  {
+                                        "index":  200,
+                                        "css":  200,
+                                        "js":  200
+                                    }
+                   },
+                   {
+                       "id":  "remote.metadata.preserved",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Frontend refresh must not mutate existing RC7 metadata endpoint bytes.",
+                       "evidence":  {
+                                        "before":  {
+                                                       "health":  "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+                                                       "descriptor":  "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+                                                       "channel":  "0369b9f61da83dd2ac8149681befce9b3b619ac0ec2de9359620796a404151e1",
+                                                       "payload_index":  "073dae091d356a4f2d2889275eb8b1d21d210c1ac72abac7a6c12fa40568867b",
+                                                       "install_bootstrap":  "8296d6b2626d5bf8a391f0e0d20d62ecc6405043fe1bd6199d81059417a20fc6",
+                                                       "compatibility":  "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+                                                       "rollback_baseline":  "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+                                                       "support_index":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                                                       "signed_metadata":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337",
+                                                       "revocations":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e",
+                                                       "signatures":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01"
+                                                   },
+                                        "after":  {
+                                                      "health":  "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+                                                      "descriptor":  "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+                                                      "channel":  "0369b9f61da83dd2ac8149681befce9b3b619ac0ec2de9359620796a404151e1",
+                                                      "payload_index":  "073dae091d356a4f2d2889275eb8b1d21d210c1ac72abac7a6c12fa40568867b",
+                                                      "install_bootstrap":  "8296d6b2626d5bf8a391f0e0d20d62ecc6405043fe1bd6199d81059417a20fc6",
+                                                      "compatibility":  "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+                                                      "rollback_baseline":  "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+                                                      "support_index":  "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+                                                      "signed_metadata":  "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337",
+                                                      "revocations":  "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e",
+                                                      "signatures":  "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01"
+                                                  }
+                                    }
+                   },
+                   {
+                       "id":  "remote.metadata.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC7 metadata endpoints used by the frontend must remain reachable as JSON.",
+                       "evidence":  [
+                                        "health",
+                                        "descriptor",
+                                        "channel",
+                                        "payload_index",
+                                        "install_bootstrap",
+                                        "compatibility",
+                                        "rollback_baseline",
+                                        "support_index",
+                                        "signed_metadata",
+                                        "revocations",
+                                        "signatures"
+                                    ]
+                   },
+                   {
+                       "id":  "remote.rc7_status.visible",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Live metadata must expose signed, revocation, compatibility, and rollback baseline status for the frontend.",
+                       "evidence":  {
+                                        "compatibility_schema":  "agentos.rc7-installer-compatibility.v1",
+                                        "rollback_schema":  "agentos.rc7-rollback-baseline.v1"
+                                    }
+                   },
+                   {
+                       "id":  "remote.install.blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Refreshed frontend must represent a non-GA install-blocked mirror state.",
+                       "evidence":  {
+                                        "install_allowed":  false,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "remote.frontend.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Remote frontend assets must not expose private key paths, PEM private blocks, or tokens.",
+                       "evidence":  null
+                   },
+                   {
+                       "id":  "remote.directory_listing.blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Install directory listing must remain blocked after frontend refresh.",
+                       "evidence":  404
+                   },
+                   {
+                       "id":  "remote.write_methods.blocked",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "POST to frontend assets must remain blocked.",
+                       "evidence":  403
+                   }
+               ],
+    "blockers":  [
+
+                 ],
+    "summary":  {
+                    "checks":  15,
+                    "blockers":  0,
+                    "rc7_020_complete":  true,
+                    "next_task":  "RC7-021"
+                }
+}

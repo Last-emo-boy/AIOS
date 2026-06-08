@@ -1,0 +1,51 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-020",
+  "title": "refresh mirror frontend for signed payload and revocation visibility",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/provision-rc7-mirror-frontend-signed-status.ps1",
+      "role": "static frontend publication and verifier script"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/index.html",
+      "role": "generated frontend document"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.css",
+      "role": "generated frontend stylesheet"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.js",
+      "role": "generated frontend behavior"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-020-mirror-frontend-signed-status.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The public mirror frontend visibly reflects signed metadata, revocation snapshot, compatibility, and rollback baseline state.",
+      "Frontend refresh preserves existing RC7 metadata endpoint bytes.",
+      "Live endpoint validation uses curl --resolve and does not trust local DNS.",
+      "Generated and remote frontend assets contain no private key paths, PEM private blocks, or tokens.",
+      "Install, activation, rollback execution, active slot mutation, production ring mutation, support upload, remote dispatch, signing, private key access, and TUI authority remain false.",
+      "The next task is RC7-021 TLS and nginx hardening evidence."
+    ]
+  }
+}

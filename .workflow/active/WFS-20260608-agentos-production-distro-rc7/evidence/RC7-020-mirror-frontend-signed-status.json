@@ -1,0 +1,96 @@
+{
+  "schema": "agentos.rc7-mirror-frontend-signed-status-evidence.v1",
+  "generated_at": "2026-06-08T16:05:00+08:00",
+  "task": "RC7-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "script": {
+    "path": "scripts/provision-rc7-mirror-frontend-signed-status.ps1",
+    "sha256": "9c0129c2b87d27276ff78c3ce056dddce45b5817cbb75b6bff53bb7fe48a1f17"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+    "sha256": "0f76efaaf9859faf00ab10b8e94e8d414d09498fbe85509d37d7f6023d67fc79",
+    "status": "passed",
+    "checks": 15,
+    "blockers": 0
+  },
+  "local_outputs": {
+    "index_html": {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/index.html",
+      "sha256": "9a421292c5e6369f0c6185b0f9d5161b1455151eb5e9981ca4f39ec5ffdbedb6"
+    },
+    "mirror_css": {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.css",
+      "sha256": "2d7bd7993c10626703f271d445b140dbefb5a3a2e6ca0b4e8641448b62124791"
+    },
+    "mirror_js": {
+      "path": ".workflow/artifacts/rc7-mirror-frontend-signed-status/mirror.js",
+      "sha256": "b421cad47e40ca786bcd67bd1c0ef977d71a44b810ca9fd4f59048d208533f92"
+    }
+  },
+  "published_files": {
+    "index_html": "/srv/aios-mirror/index.html",
+    "mirror_css": "/srv/aios-mirror/assets/mirror.css",
+    "mirror_js": "/srv/aios-mirror/assets/mirror.js"
+  },
+  "published_endpoint": "http://aios.w33d.xyz/",
+  "validation": {
+    "host": "47.101.11.109",
+    "domain": "aios.w33d.xyz",
+    "validation_used_local_dns": false,
+    "validation_resolve_override": "aios.w33d.xyz:80:47.101.11.109",
+    "metadata_preserved": true
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc6-current-artifacts",
+    "status": "verification-blocked",
+    "signed_metadata_published": true,
+    "revocation_snapshot_published": true,
+    "compatibility_published": true,
+    "rollback_baseline_published": true,
+    "cryptographic_signature_present": false,
+    "signature_available": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "preserved_metadata_hashes": {
+    "health": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+    "descriptor": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+    "channel": "0369b9f61da83dd2ac8149681befce9b3b619ac0ec2de9359620796a404151e1",
+    "payload_index": "073dae091d356a4f2d2889275eb8b1d21d210c1ac72abac7a6c12fa40568867b",
+    "install_bootstrap": "8296d6b2626d5bf8a391f0e0d20d62ecc6405043fe1bd6199d81059417a20fc6",
+    "compatibility": "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+    "rollback_baseline": "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+    "support_index": "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21",
+    "signed_metadata": "4e27e1feef3bc6a406768088055a95cc3ec361bac44e164af4388701d7506337",
+    "revocations": "6059a1bce0b124709ca6c260c76c1ad6eb23858ec73cbdaa36fc13373ef1726e",
+    "signatures": "fb51cf09a11c97a13f5f6353bd873739be7c2030744a8f45ab0eeb0079e32e01"
+  },
+  "invariants": {
+    "static_frontend_only": true,
+    "no_external_dependencies": true,
+    "metadata_preserved": true,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false,
+    "tls_required_before_ga_claim": true
+  },
+  "completion": {
+    "rc7_020_complete": true,
+    "wave_2_started": true,
+    "next_task": "RC7-021",
+    "commit_required": true
+  }
+}

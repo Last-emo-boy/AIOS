@@ -1,0 +1,116 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>AIOS Mirror</title>
+  <link rel="stylesheet" href="/assets/mirror.css">
+</head>
+<body>
+  <div id="app" class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="AIOS Mirror home">
+        <canvas id="brand-sigil" width="44" height="44" aria-hidden="true"></canvas>
+        <span>
+          <strong>AIOS Mirror</strong>
+          <small>aios.w33d.xyz</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Mirror navigation">
+        <a href="/channel/index.json">Channel</a>
+        <a href="/payloads/index.json">Payloads</a>
+        <a href="/install/bootstrap.json">Install</a>
+        <a href="/install/compatibility.json">Compatibility</a>
+        <a href="/install/rollback-baseline.json">Rollback</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Production candidate mirror</p>
+          <h1 id="hero-title">AIOS signed status mirror</h1>
+        </div>
+        <div class="hero-status">
+          <span id="status-service" class="status-pill neutral">Loading</span>
+          <span id="status-ga" class="status-pill caution">non-GA</span>
+          <span id="status-install" class="status-pill caution">install blocked</span>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Mirror summary">
+        <article class="metric">
+          <span class="metric-label">Current Payload</span>
+          <strong id="metric-release">-</strong>
+          <span id="metric-payload-status">-</span>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Signed Metadata</span>
+          <strong id="metric-signed">-</strong>
+          <span id="metric-signed-detail">-</span>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Revocation</span>
+          <strong id="metric-revocation">-</strong>
+          <span id="metric-revocation-detail">-</span>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Install Gates</span>
+          <strong id="metric-install">-</strong>
+          <span id="metric-blockers">-</span>
+        </article>
+      </section>
+
+      <section class="mirror-grid">
+        <section class="panel map-panel" aria-labelledby="map-title">
+          <div class="panel-head">
+            <h2 id="map-title">Trust Path</h2>
+            <span id="map-caption">transport, verify locally</span>
+          </div>
+          <canvas id="trust-map" width="980" height="360" aria-label="AIOS signed mirror trust path"></canvas>
+        </section>
+
+        <section class="panel checks-panel" aria-labelledby="checks-title">
+          <div class="panel-head">
+            <h2 id="checks-title">Verification Gates</h2>
+            <span id="checks-count">0 gates</span>
+          </div>
+          <ul id="checks-list" class="checks-list"></ul>
+        </section>
+      </section>
+
+      <section class="lower-grid">
+        <section class="panel directory-panel" aria-labelledby="directory-title">
+          <div class="panel-head">
+            <h2 id="directory-title">Mirror Directory</h2>
+            <span id="directory-count">0 entries</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Path</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Policy</th>
+                </tr>
+              </thead>
+              <tbody id="directory-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel hash-panel" aria-labelledby="hash-title">
+          <div class="panel-head">
+            <h2 id="hash-title">Hash Bindings</h2>
+            <span id="hash-count">0 hashes</span>
+          </div>
+          <dl id="hash-list" class="hash-list"></dl>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script src="/assets/mirror.js" defer></script>
+</body>
+</html>
