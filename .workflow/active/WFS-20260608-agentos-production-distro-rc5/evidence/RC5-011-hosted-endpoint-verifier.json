@@ -1,0 +1,47 @@
+{
+  "schema": "agentos.rc5-hosted-endpoint-verifier-evidence.v1",
+  "generated_at": "2026-06-08T11:40:00+08:00",
+  "task": "RC5-011",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc5",
+  "verifier": {
+    "path": "scripts/verify-rc5-hosted-endpoint.ps1",
+    "sha256": "2ab91c690c1b0ad247dbb69a1087ca32699951801246cb7ae8fe460e439a83c5"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc5-hosted-endpoint-verifier/result.json",
+    "sha256": "75e0d9477e7f6e798947eba799aef6796a1f8ba01ebcaa54c6003d78e3bc7a62",
+    "status": "passed",
+    "checks": 17,
+    "blockers": 0
+  },
+  "target": {
+    "domain": "aios.w33d.xyz",
+    "remote_host": "47.101.11.109",
+    "validation_used_local_dns": false,
+    "resolve_override": "aios.w33d.xyz:80:47.101.11.109",
+    "require_tls": false,
+    "tls_required_before_ga_claim": true
+  },
+  "verified_controls": {
+    "health_http_200": true,
+    "descriptor_http_200": true,
+    "channel_http_200": true,
+    "release_placeholder_http_200": true,
+    "directory_listing_blocked": true,
+    "post_blocked": true,
+    "channel_hash_bound_to_rc4": true,
+    "metadata_only": true,
+    "production_ready_claim": false,
+    "signing_authority": false,
+    "activation_authority": false,
+    "tui_authority": false,
+    "secret_markers_absent": true
+  },
+  "completion": {
+    "rc5_011_complete": true,
+    "next_task": "RC5-012",
+    "commit_required": true
+  }
+}

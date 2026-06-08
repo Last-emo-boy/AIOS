@@ -1,0 +1,194 @@
+{
+  "schema": "agentos.rc5-hosted-endpoint-verifier-result.v1",
+  "generated_at": "2026-06-08T10:56:04.1480706+08:00",
+  "task": "RC5-011",
+  "status": "passed",
+  "production_ready_claim": false,
+  "target": {
+    "domain": "aios.w33d.xyz",
+    "remote_host": "47.101.11.109",
+    "validation_used_local_dns": false,
+    "resolve_override": "aios.w33d.xyz:80:47.101.11.109",
+    "require_tls": false
+  },
+  "source_artifacts": {
+    "rc4_final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/FINAL-AUDIT-20260608-production-distro-rc4.json",
+      "sha256": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413"
+    },
+    "rc4_hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335"
+    },
+    "rc4_mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+    },
+    "rc5_hosted_mirror_service": {
+      "path": ".workflow/artifacts/rc5-hosted-mirror-service/result.json",
+      "sha256": "314343086f5c90e0f2e8f9d15b430615a0df0855b2819ec1345ac8aab8531ea3"
+    }
+  },
+  "endpoint_hashes": {
+    "health_body_sha256": "1cfd06869967af77e8580ee3b9a8e6488a886db9ee0948a4d2c06875a164bd11",
+    "descriptor_body_sha256": "595826350ccb50c1338d475b19682b5b256b11ef7ad960d6f3f9fa8a5fddb65e",
+    "channel_body_sha256": "d80127e6524ee507cba0a9d96ce55ee618f946716ad81d8bacf2374530a784b6",
+    "release_readme_body_sha256": "ed35d4499c2ae044f26489fd88272e99a14ae414c5f9c580f27ee49d1d474a44"
+  },
+  "checks": [
+    {
+      "id": "health.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Health endpoint must return HTTP 200.",
+      "evidence": 200
+    },
+    {
+      "id": "health.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Health endpoint must return RC5 health schema.",
+      "evidence": "agentos.rc5-hosted-mirror-health.v1"
+    },
+    {
+      "id": "health.non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Health endpoint must remain non-GA.",
+      "evidence": false
+    },
+    {
+      "id": "health.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Health endpoint must not advertise signing, activation, or production ring authority.",
+      "evidence": {
+        "signing": false,
+        "activation": false,
+        "production_ring": false
+      }
+    },
+    {
+      "id": "descriptor.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror descriptor must return HTTP 200.",
+      "evidence": 200
+    },
+    {
+      "id": "descriptor.metadata_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror descriptor must remain metadata-only.",
+      "evidence": "metadata-only"
+    },
+    {
+      "id": "descriptor.no_forbidden_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror descriptor must explicitly disallow signing, activation, and remote dispatch.",
+      "evidence": [
+        "signing",
+        "activation",
+        "rollback-execution",
+        "active-slot-mutation",
+        "production-ring-mutation",
+        "remote-dispatch",
+        "tui-authority"
+      ]
+    },
+    {
+      "id": "channel.http_200",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Channel index must return HTTP 200.",
+      "evidence": 200
+    },
+    {
+      "id": "channel.schema",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Channel index must return RC5 channel schema.",
+      "evidence": "agentos.rc5-hosted-channel-index.v1"
+    },
+    {
+      "id": "channel.non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Channel index must remain non-GA.",
+      "evidence": false
+    },
+    {
+      "id": "channel.hash_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Channel index must bind expected RC4 hashes.",
+      "evidence": {
+        "rc4": "4fc16b4fb2776580a31f890497bf0f1caa884aa74ce2388a8ceafc50ad536413",
+        "hosted": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+        "mirror": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf"
+      }
+    },
+    {
+      "id": "channel.no_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Channel index must not grant signing, activation, or TUI authority.",
+      "evidence": {
+        "signing_authority": false,
+        "activation_authority": false,
+        "rollback_execution_authority": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "releases.placeholder",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release README must be metadata-only placeholder.",
+      "evidence": {
+        "status": 200,
+        "sha256": "ed35d4499c2ae044f26489fd88272e99a14ae414c5f9c580f27ee49d1d474a44"
+      }
+    },
+    {
+      "id": "directory_listing.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release directory listing must be blocked.",
+      "evidence": 404
+    },
+    {
+      "id": "post.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST to health endpoint must be blocked.",
+      "evidence": 403
+    },
+    {
+      "id": "fetched_content.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fetched endpoint content must not contain secret markers.",
+      "evidence": null
+    },
+    {
+      "id": "tls.not_required_for_rc5",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "TLS is not required for RC5 verifier unless RequireTls is set; TLS remains a GA gate.",
+      "evidence": {
+        "require_tls": false,
+        "tls_required_before_ga": true
+      }
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 17,
+    "blockers": 0,
+    "rc5_011_complete": true,
+    "tls_required_before_ga_claim": true,
+    "production_ready_claim": false
+  }
+}
