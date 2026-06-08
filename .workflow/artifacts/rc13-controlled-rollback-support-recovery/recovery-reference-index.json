@@ -1,0 +1,81 @@
+{
+  "schema": "agentos.rc13-controlled-rollback-recovery-reference-index.v1",
+  "generated_at": "2026-06-09T10:45:00+08:00",
+  "task": "RC13-041",
+  "status": "projection-only-recovery-execution-blocked",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "entries": [
+    {
+      "id": "rc13-activation-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc13-controlled-activation/activation-denial-evidence.json",
+      "sha256": "cdec022f2d98164c776b23088af736b424ec520b286b9ddaf044dd0bb28e1eff",
+      "executable": false
+    },
+    {
+      "id": "rc13-activation-handoff",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc13-controlled-activation/controlled-activation-rollback-handoff.json",
+      "sha256": "2b48940f1a924dd02e0eab65ad069cbcaa4738fe04ba6cf23cd2d719d667ccd7",
+      "executable": false
+    },
+    {
+      "id": "rc13-rollback-support-recovery-gate-report",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc13-controlled-rollback-support-recovery/rollback-support-recovery-gate-report.json",
+      "sha256": "244ca6bdfb4eb6091e541ebfcd1074cb98e3826500e528a64ad68003217aed59",
+      "executable": false
+    },
+    {
+      "id": "rc13-rollback-support-recovery-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc13-controlled-rollback-support-recovery/rollback-support-recovery-denial-evidence.json",
+      "sha256": "60f798e42845113a5c7a93961b34fe8f87d98808d5c3b02d0d6bf6710e718268",
+      "executable": false
+    },
+    {
+      "id": "rc13-exact-approval-result",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc13-exact-approval-audit-binding/result.json",
+      "sha256": "e75f68b49cfeca286e61b800a2dcb0c9c5d9b6266639fc1398e3df71323546f4",
+      "executable": false
+    }
+  ],
+  "required_before_execution": [
+    "executed controlled activation",
+    "separate exact rollback approval",
+    "bound rollback target identities",
+    "executable AgentCore rollback PlanSpec",
+    "SecurityExecutionEngine rollback allow decision",
+    "rollback audit journal",
+    "post-rollback observations",
+    "remote fleet execution gate"
+  ],
+  "recovery_authority": {
+    "plan_authority": "AgentCore",
+    "side_effect_authority": "SecurityExecutionEngine",
+    "mirror_authority": false,
+    "signer_authority": false,
+    "support_metadata_authority": false,
+    "tui_authority": false,
+    "shell_authority": false,
+    "model_replay_authority": false
+  },
+  "side_effects": {
+    "rollback_attempt_recorded": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "boot_metadata_mutated": false,
+    "active_slot_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false
+  }
+}
