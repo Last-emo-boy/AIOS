@@ -1,0 +1,383 @@
+{
+  "schema": "agentos.rc14-two-target-local-identity-enrollment-result.v1",
+  "generated_at": "2026-06-09T15:10:00+08:00",
+  "task": "RC14-030",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "enrollment_surface": {
+    "state": "target-local-identity-enrollment-denied",
+    "required_minimum_target_identities": 2,
+    "observed_candidate_target_identities": [],
+    "enrolled_target_identity_count": 0,
+    "target_identity_set_bound": false,
+    "target_identity_set_digest": "e0dce6f6648a7868e20be71aaabfd7791a2318ff6276d3d706aa6cfa5cffa886",
+    "release_object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+    "agentcore_planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+    "rollback_reference_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "support_recovery_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "exact_approval_bound": false,
+    "approval_granted": false,
+    "audit_sink_bound": false,
+    "nonce_bound": false,
+    "expiry_bound": false,
+    "policy_version_bound": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "target-set-not-bound",
+      "audit-sink-not-bound",
+      "nonce-not-bound",
+      "approval-expiry-not-bound",
+      "policy-version-not-bound",
+      "security-execution-envelope-not-bound",
+      "controlled-effect-execution-not-authorized",
+      "security-execution-effect-envelope-denied",
+      "target-identity-enrollment-not-run",
+      "fewer-than-two-local-canary-identities",
+      "target-identity-a-missing",
+      "target-identity-b-missing",
+      "target-identities-missing",
+      "target-identity-set-not-bound",
+      "duplicate-local-canary-identity",
+      "stale-local-canary-identity",
+      "incompatible-local-canary-identity",
+      "broad-target-selector",
+      "target-identity-release-mismatch",
+      "target-identity-object-mismatch",
+      "target-identity-planspec-mismatch",
+      "target-identity-security-envelope-mismatch",
+      "target-identity-rollback-baseline-mismatch",
+      "target-identity-support-recovery-mismatch",
+      "target-identity-audit-sink-not-bound",
+      "target-identity-replay-detected",
+      "remote-dispatch-authority-broadening",
+      "production-mutation-authority-broadening",
+      "exact-approval-execution-binding-not-bound"
+    ]
+  },
+  "outputs": {
+    "target_local_identity_set": {
+      "path": ".workflow/artifacts/rc14-two-target-local-identity-enrollment/target-local-identity-set.json",
+      "sha256": "5fddfa34d1fef80c42229edd156e7a79e2ddb39951ecbfc40371a20480fbd887",
+      "target_identity_set_digest": "e0dce6f6648a7868e20be71aaabfd7791a2318ff6276d3d706aa6cfa5cffa886"
+    },
+    "target_local_identity_enrollment_denial": {
+      "path": ".workflow/artifacts/rc14-two-target-local-identity-enrollment/target-local-identity-enrollment-denial.json",
+      "sha256": "d77e2790cfb10498fdc71973446c67fe2640ce20ed9ae22c176ff1c078568ce0"
+    },
+    "target_local_identity_enrollment_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-two-target-local-identity-enrollment/target-local-identity-enrollment-fail-closed-matrix.json",
+      "sha256": "03ab5552424ced5f3d5c80820545e5b9f4e41b28b8fb8e9b72de4336d1c25af4"
+    },
+    "exact_approval_execution_binding_handoff": {
+      "path": ".workflow/artifacts/rc14-two-target-local-identity-enrollment/exact-approval-execution-binding-handoff.json",
+      "sha256": "ecd92d11d78114e514d8bcb0681dad8f592cf6c204a5b29a71665590ce7cd7e3"
+    }
+  },
+  "source": {
+    "rc14_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "sha256": "a03192e693634f1c8467229abc41feb63e3cb05569a0a006cdd6ed0f48f4b195",
+      "size_bytes": 8717,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc14_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+      "size_bytes": 8634,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "security_execution_result": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/result.json",
+      "sha256": "82e7fbb1c6d71c4d4e5b66fe55c27960ace28626460936fbb3dc9993b29ea681",
+      "size_bytes": 16226,
+      "present": true,
+      "schema": "agentos.rc14-security-execution-allow-envelope-result.v1",
+      "status": "passed"
+    },
+    "security_execution_allow_envelope": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-envelope.json",
+      "sha256": "90bd1866086939e41f4423570db44e9c664374f737701f1544e7c0745e0b8dda",
+      "size_bytes": 4027,
+      "present": true,
+      "schema": "agentos.rc14-security-execution-allow-envelope.v1",
+      "status": "security-execution-allow-envelope-denied"
+    },
+    "security_execution_allow_denial": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-denial.json",
+      "sha256": "c938f9a78dd8fd1f690f09b6c1a302d41cc51ad0adec1e8334286a8244487c3e",
+      "size_bytes": 1614,
+      "present": true,
+      "schema": "agentos.rc14-security-execution-allow-denial.v1",
+      "status": "security-execution-allow-denied"
+    },
+    "security_execution_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/security-execution-allow-fail-closed-matrix.json",
+      "sha256": "6f5bc4def43c1e289b34d6ce73339f3d329478314c84a221e629bc089044666c",
+      "size_bytes": 35153,
+      "present": true,
+      "schema": "agentos.rc14-security-execution-allow-fail-closed-matrix.v1",
+      "status": "passed"
+    },
+    "two_target_local_identity_handoff": {
+      "path": ".workflow/artifacts/rc14-security-execution-allow-envelope/two-target-local-identity-enrollment-handoff.json",
+      "sha256": "0e6cc85931f7458b10b948eb389561bc7cdef88d314f600f509973a4a270c288",
+      "size_bytes": 1882,
+      "present": true,
+      "schema": "agentos.rc14-two-target-local-identity-enrollment-handoff.v1",
+      "status": "ready-for-rc14-030-two-target-local-identity-enrollment"
+    },
+    "agentcore_planspec_candidate": {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-candidate.json",
+      "sha256": "503be861cd83c06251053974b6e07e768a6e3dccb21e4442b4cfd725cf227834",
+      "size_bytes": 7495,
+      "present": true,
+      "schema": "agentos.rc14-agentcore-planspec-candidate.v1",
+      "status": "agentcore-planspec-candidate-non-executable"
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc14_030",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-030 must run after RC14-022 completed, either while current_task is RC14-030 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC14-031",
+        "rc14_022_status": "completed",
+        "rc14_030_status": "completed"
+      }
+    },
+    {
+      "id": "source.rc14_022.complete",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-030 must consume completed RC14-022 SecurityExecution allow-envelope evidence.",
+      "evidence": {
+        "status": "passed",
+        "rc14_022_complete": true,
+        "next_task": "RC14-030",
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "handoff.expected_next_task",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-030 handoff must require two targets, bind the SecurityExecution envelope, and preserve remote dispatch denial.",
+      "evidence": {
+        "expected_next_task": "RC14-030",
+        "minimum_required_targets": 2,
+        "allow_envelope_hash_bound": true,
+        "effect_envelope_hash_bound": true,
+        "remote_dispatch_authority": false
+      }
+    },
+    {
+      "id": "contract.two_target_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14 contract must include two-target local canary and remote dispatch denial gates.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+        "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+        "size_bytes": 8634,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "target_identity.two_distinct_required",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "At least two distinct local canary identities must be required before activation authority.",
+      "evidence": {
+        "required": 2,
+        "slots": 2,
+        "enrolled": 0,
+        "bound": false
+      }
+    },
+    {
+      "id": "target_identity.required_bindings_declared",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target identity requirements must bind release object, PlanSpec, SecurityExecution envelope, audit sink requirement, rollback, and support evidence.",
+      "evidence": {
+        "release_id": "production-distro-rc8-current-artifacts",
+        "release_object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "effect_envelope_core_hash": "11a11e86e20227b72e7532d8943f7a71bceed73f80b7dc3a45484877ca73ce41",
+        "agentcore_planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+        "rollback_reference_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "local_audit_sink_required": true,
+        "remote_dispatch_authority": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "target_identity.quality_gates_fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Duplicate, stale, incompatible, and broad target identities must fail closed.",
+      "evidence": {
+        "duplicate_fail_closed": true,
+        "stale_fail_closed": true,
+        "incompatible_fail_closed": true,
+        "policy": "two-or-more-distinct-fresh-compatible-local-canary-identities-required"
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing, duplicate, stale, incompatible, broad, mismatched, replayed, remote-dispatch, and production-mutation target cases must fail closed.",
+      "evidence": {
+        "cases": 18,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "approval_handoff.denied_until_target_set_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Exact approval handoff must remain denied until the target identity set is bound.",
+      "evidence": {
+        "target_identity_set_bound": false,
+        "exact_approval_bound": false,
+        "expected_next_task": "RC14-031"
+      }
+    },
+    {
+      "id": "authority.remote_dispatch_and_mutation_disabled",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-030 must not enable remote dispatch or production mutation authority.",
+      "evidence": {
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-030 must not authorize install, activation, rollback, support upload, recovery, or remote execution.",
+      "evidence": {
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-030 outputs must not contain key material, auth tokens, private signing paths, signer internals, or sensitive identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "security-execution-envelope-not-bound",
+    "controlled-effect-execution-not-authorized",
+    "security-execution-effect-envelope-denied",
+    "target-identity-enrollment-not-run",
+    "fewer-than-two-local-canary-identities",
+    "target-identity-a-missing",
+    "target-identity-b-missing",
+    "target-identities-missing",
+    "target-identity-set-not-bound",
+    "duplicate-local-canary-identity",
+    "stale-local-canary-identity",
+    "incompatible-local-canary-identity",
+    "broad-target-selector",
+    "target-identity-release-mismatch",
+    "target-identity-object-mismatch",
+    "target-identity-planspec-mismatch",
+    "target-identity-security-envelope-mismatch",
+    "target-identity-rollback-baseline-mismatch",
+    "target-identity-support-recovery-mismatch",
+    "target-identity-audit-sink-not-bound",
+    "target-identity-replay-detected",
+    "remote-dispatch-authority-broadening",
+    "production-mutation-authority-broadening",
+    "exact-approval-execution-binding-not-bound"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "target_identity_enrollment_fabricated": false,
+    "target_identity_set_bound": false,
+    "exact_approval_fabricated": false,
+    "approval_granted": false,
+    "security_execution_effect_allowed": false,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 12,
+    "failed_checks": 0,
+    "cases": 18,
+    "failed_cases": 0,
+    "rc14_030_complete": true,
+    "target_identity_set_bound": false,
+    "enrolled_target_identity_count": 0,
+    "exact_approval_bound": false,
+    "approval_granted": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "next_task": "RC14-031"
+  }
+}
