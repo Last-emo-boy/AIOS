@@ -1,0 +1,41 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-003",
+  "title": "define installer compatibility and rollback baseline publication contract",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+    ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-execution-blockers.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+      "role": "contract document"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-003-installer-compatibility-rollback-baseline-contract.json",
+      "role": "task evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+      "role": "workflow plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/workflow-session.json",
+      "role": "workflow session"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Compatibility and rollback baseline publication schemas, hash bindings, state transitions, and fail-closed cases are defined.",
+      "The contract uses RC6 bootstrap preflight blockers and RC6 rollback baseline evidence as source requirements.",
+      "The contract keeps install, activation, rollback execution, production ring mutation, support upload, remote dispatch, TUI authority, shell authority, model authority, and production_ready_claim false.",
+      "Wave 0 is complete and the next task is RC7-010 installer signed metadata consumption report."
+    ]
+  }
+}

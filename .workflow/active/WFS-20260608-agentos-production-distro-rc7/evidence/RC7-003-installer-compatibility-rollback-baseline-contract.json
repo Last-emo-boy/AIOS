@@ -1,0 +1,118 @@
+{
+  "schema": "agentos.rc7-installer-compatibility-rollback-baseline-contract-evidence.v1",
+  "generated_at": "2026-06-08T15:25:00+08:00",
+  "task": "RC7-003",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "contract": {
+    "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+    "scope": "installer compatibility publication and rollback baseline publication gates",
+    "defines_compatibility_endpoint": "/install/compatibility.json",
+    "defines_rollback_baseline_endpoint": "/install/rollback-baseline.json",
+    "install_allowed_by_contract": false,
+    "activation_allowed_by_contract": false,
+    "rollback_execution_allowed_by_contract": false
+  },
+  "source": {
+    "rc7_signed_metadata_revocation": {
+      "path": ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+      "status": "passed",
+      "checks": 20,
+      "blockers": 0,
+      "cryptographic_signature_present": false,
+      "signature_available": false,
+      "revocation_snapshot_available": true
+    },
+    "rc6_bootstrap_preflight": {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+      "state": "verification-blocked",
+      "expected_blockers": [
+        "verify-signature-or-signed-metadata-reference",
+        "verify-revocation-snapshot",
+        "verify-installer-compatibility-contract",
+        "verify-rollback-baseline-hash"
+      ]
+    },
+    "rc6_rollback_preconditions": {
+      "path": ".workflow/artifacts/rc6-rollback-execution-preconditions/rollback-drill-precondition-matrix.json",
+      "status": "preconditions-projected-execution-blocked",
+      "rollback_readiness_ready": true,
+      "rollback_execution_allowed": false,
+      "rollback_execution_performed": false
+    }
+  },
+  "defined_public_metadata": [
+    "/install/compatibility.json",
+    "/install/rollback-baseline.json",
+    "/install/bootstrap.json#compatibility_contract_sha256",
+    "/install/bootstrap.json#rollback_baseline_sha256",
+    "/payloads/index.json#compatibility_contract_sha256",
+    "/payloads/index.json#rollback_baseline_sha256"
+  ],
+  "compatibility_required_inputs": [
+    "release-id",
+    "payload-manifest-sha256",
+    "payload-checksums-sha256",
+    "signed-metadata-sha256",
+    "revocation-snapshot-sha256",
+    "compatibility-contract-sha256",
+    "rollback-baseline-sha256",
+    "target-architecture",
+    "boot-mode",
+    "minimum-runtime-version",
+    "freshness-window",
+    "policy-version"
+  ],
+  "rollback_required_inputs": [
+    "rollback-baseline-sha256",
+    "previous-active-artifact-set-sha256",
+    "restored-active-artifact-set-sha256",
+    "support-recovery-binding",
+    "agentcore-planspec-hash-before-execution",
+    "security-execution-engine-policy-decision-before-execution",
+    "exact-operator-approval-before-execution"
+  ],
+  "fail_closed_cases": [
+    "missing-compatibility-contract",
+    "compatibility-schema-mismatch",
+    "target-architecture-mismatch",
+    "boot-path-mismatch",
+    "runtime-version-below-minimum",
+    "missing-required-metadata-hash",
+    "compatibility-hash-mismatch",
+    "missing-rollback-baseline",
+    "rollback-baseline-hash-mismatch",
+    "previous-restored-artifact-set-mismatch",
+    "missing-support-recovery-binding",
+    "declared-current-payload-hash-drift",
+    "large-payload-storage-before-policy",
+    "tls-required-before-ga-claim",
+    "authority-broadening"
+  ],
+  "invariants": {
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "install_performed": false,
+    "install_allowed": false,
+    "activation_performed": false,
+    "activation_allowed": false,
+    "rollback_execution_performed": false,
+    "rollback_execution_allowed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_003_complete": true,
+    "wave_0_complete": true,
+    "next_task": "RC7-010",
+    "commit_required": true
+  }
+}
