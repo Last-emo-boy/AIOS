@@ -1,0 +1,100 @@
+{
+  "schema": "agentos.rc9-controlled-rollback-drill-evidence.v1",
+  "generated_at": "2026-06-08T23:40:00+08:00",
+  "task": "RC9-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc9",
+  "script": {
+    "path": "scripts/project-rc9-controlled-rollback-drill.ps1",
+    "sha256": "48060330d1b18ccf66cfdc1efef59cfda35269003cf42971c9697bdc7401b462"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc9-controlled-rollback-drill/result.json",
+    "status": "passed",
+    "sha256": "02030401060d697cf96857d76ba0213a4b833c9027568a8c8fe8848ba48f878b"
+  },
+  "outputs": {
+    "rollback_planspec_requirement": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-planspec-requirement.json",
+      "sha256": "8c97e05bde1a61c4ba9473795440090e873c3fc7db0fd0c2ec6e84e94fee6e4c",
+      "status": "rollback-planspec-required-execution-blocked"
+    },
+    "rollback_drill_gate_report": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-drill-gate-report.json",
+      "sha256": "43e91ced0ddb5dad81fccee2fb09559bf2d75d50fd0e5f681f2b3b71d85f92b7",
+      "status": "rollback-drill-gates-evaluated-denied"
+    },
+    "rollback_drill_denial_evidence": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "sha256": "60949c435b71194ed6ee00785edc61524b4248f78861e714001eebeb71f94a29",
+      "status": "rollback-denied"
+    },
+    "controlled_rollback_handoff": {
+      "path": ".workflow/artifacts/rc9-controlled-rollback-drill/controlled-rollback-handoff.json",
+      "sha256": "f312c8239ff43e2470f14e23f04dfb07fec3a9f7128449814d40b0f171c92ea3",
+      "status": "blocked-by-rollback-denial"
+    }
+  },
+  "rollback_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "rollback-denied",
+    "rollback_readiness_ready": true,
+    "rollback_execution_allowed": false,
+    "rollback_execution_performed": false,
+    "canary_activation_performed": false,
+    "rollback_exact_operator_approval_granted": false,
+    "agentcore_rollback_planspec_bound": false,
+    "security_execution_rollback_approval_bound": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-denied",
+      "installer-quarantine-fetch-not-run",
+      "target-set-not-enrolled",
+      "exact-operator-approval-not-granted",
+      "AgentCore-PlanSpec-not-bound",
+      "SecurityExecutionEngine-approval-not-bound",
+      "controlled-execution-not-authorized",
+      "two-or-more-enrolled-canary-target-nodes-required",
+      "remote-fleet-execution-not-enabled",
+      "controlled-canary-activation-not-performed",
+      "rollback-exact-operator-approval-not-granted",
+      "AgentCore-rollback-PlanSpec-not-bound",
+      "SecurityExecutionEngine-rollback-approval-not-bound",
+      "rollback-execution-not-authorized"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "rollback_attempt_recorded": true,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc9_030_complete": true,
+    "next_task": "RC9-031",
+    "commit_required": true
+  }
+}
