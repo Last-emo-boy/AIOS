@@ -1,0 +1,332 @@
+{
+  "schema": "agentos.rc14-agentcore-executable-planspec-result.v1",
+  "generated_at": "2026-06-09T14:15:00+08:00",
+  "task": "RC14-021",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "readiness_surface": {
+    "state": "agentcore-planspec-readiness-candidate-non-executable",
+    "object_trust_bound": true,
+    "quarantine_evidence_bound": true,
+    "verified_quarantine_preflight_bound": true,
+    "release_object_bound": true,
+    "target_set_bound": false,
+    "exact_approval_bound": false,
+    "rollback_reference_bound": true,
+    "support_recovery_reference_bound": true,
+    "audit_sink_bound": false,
+    "nonce_bound": false,
+    "expiry_bound": false,
+    "policy_version_bound": false,
+    "planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+    "agentcore_planspec_candidate_materialized": true,
+    "agentcore_planspec_executable": false,
+    "security_execution_envelope_required": true,
+    "security_execution_allowed": false,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "target-set-not-bound",
+      "audit-sink-not-bound",
+      "nonce-not-bound",
+      "approval-expiry-not-bound",
+      "policy-version-not-bound",
+      "security-execution-envelope-not-bound",
+      "controlled-effect-execution-not-authorized"
+    ]
+  },
+  "outputs": {
+    "agentcore_planspec_candidate": {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-candidate.json",
+      "sha256": "503be861cd83c06251053974b6e07e768a6e3dccb21e4442b4cfd725cf227834",
+      "planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3"
+    },
+    "agentcore_planspec_readiness": {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-readiness.json",
+      "sha256": "044080833fd4b7aeb875c1ba1b2cbc96fc4d7ae8433fb4b5b73dc3f3ed2aa11d"
+    },
+    "agentcore_planspec_readiness_denial": {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-readiness-denial.json",
+      "sha256": "b5aeaca52319984c28ab26ced10c67a3303d49c2e3f6b167e3db205cd9f992ff"
+    },
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-fail-closed-matrix.json",
+      "sha256": "62451eab03f30bc3b765155f2ae821486fcf1e3f091d1e8fa817d06f6a3cfb03"
+    },
+    "security_execution_allow_envelope_handoff": {
+      "path": ".workflow/artifacts/rc14-agentcore-executable-planspec/security-execution-allow-envelope-handoff.json",
+      "sha256": "306b8bcf0f953b087c70fcf129768bc66460ce2805c777fcb05ed56c64679508"
+    }
+  },
+  "source": {
+    "rc14_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/plan.json",
+      "sha256": "9a9f7f9884703c8deb9fdb1c44e3b5fb7a22046e0121d1a1345f0e81cba11b09",
+      "size_bytes": 8725,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "rc14_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+      "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+      "size_bytes": 8634,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "quarantine_result": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/result.json",
+      "sha256": "9d0fc7bc3062019ddbaa0b1511e53b0c1544d2cf0ef9122625ec129713feafab",
+      "size_bytes": 16886,
+      "present": true,
+      "schema": "agentos.rc14-verified-quarantine-preflight-result.v1",
+      "status": "passed"
+    },
+    "quarantine_manifest": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-manifest.json",
+      "sha256": "7170e360b6001ab98da0884aa1a5ef3e24370bbc8ac22e2466dd941ece994f29",
+      "size_bytes": 8140,
+      "present": true,
+      "schema": "agentos.rc14-verified-quarantine-manifest.v1",
+      "status": "verified-quarantine-preflight-complete"
+    },
+    "quarantine_report": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-report.json",
+      "sha256": "ffe860670b04a400a1fa52604b1ab77451b9ba44f1ea76d3d02f14476370ad00",
+      "size_bytes": 1536,
+      "present": true,
+      "schema": "agentos.rc14-verified-quarantine-preflight-report.v1",
+      "status": "verified-quarantine-preflight-complete"
+    },
+    "quarantine_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/verified-quarantine-preflight-fail-closed-matrix.json",
+      "sha256": "569c3db4c0f1736c2d11a7cac7fdb13693ab954b0acc7001a5906b62c514b3dd",
+      "size_bytes": 36429,
+      "present": true,
+      "schema": "agentos.rc14-verified-quarantine-preflight-fail-closed-matrix.v1",
+      "status": "passed"
+    },
+    "quarantine_handoff": {
+      "path": ".workflow/artifacts/rc14-verified-quarantine-preflight/agentcore-executable-planspec-handoff.json",
+      "sha256": "44829cbdcd5a3c65e8bb78ceabc73d5d4e41448b9cc43b1791e4598d05e3de9d",
+      "size_bytes": 1659,
+      "present": true,
+      "schema": "agentos.rc14-agentcore-executable-planspec-handoff.v1",
+      "status": "ready-for-rc14-021-agentcore-executable-planspec"
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc14_021",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-021 must run after RC14-020 completed, either while current_task is RC14-021 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC14-022",
+        "rc14_020_status": "completed",
+        "rc14_021_status": "completed"
+      }
+    },
+    {
+      "id": "source.rc14_020.verified_quarantine",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-021 must consume completed RC14-020 verified quarantine preflight evidence.",
+      "evidence": {
+        "result_status": "passed",
+        "verified_quarantine_preflight": true,
+        "handoff_status": "ready-for-rc14-021-agentcore-executable-planspec",
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "contract.planspec_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-021 must consume the AgentCore PlanSpec executable gate contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc14/docs/rc14-local-execution-readiness-contract.md",
+        "sha256": "ab837238a6ed4f552086afede1b545c632b7ec7b989372b10f75ecaabf4c8a49",
+        "size_bytes": 8634,
+        "present": true,
+        "schema": null,
+        "status": null
+      }
+    },
+    {
+      "id": "planspec.candidate_materialized",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "PlanSpec candidate must be materialized with a stable core hash.",
+      "evidence": {
+        "planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+        "candidate_path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-candidate.json"
+      }
+    },
+    {
+      "id": "planspec.bound_release_object_and_quarantine",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "PlanSpec candidate must hash-bind object trust, verified quarantine preflight, release object, rollback, and support/recovery references.",
+      "evidence": {
+        "object_trust": true,
+        "verified_quarantine": true,
+        "release_object": true,
+        "rollback": true,
+        "support_recovery": true
+      }
+    },
+    {
+      "id": "planspec.required_binding_slots_declared",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "PlanSpec candidate must declare target, exact approval, audit sink, nonce, expiry, and policy-version binding slots.",
+      "evidence": {
+        "object_trust": true,
+        "verified_quarantine_preflight": true,
+        "release_object": true,
+        "target_set": true,
+        "exact_approval": true,
+        "rollback_baseline": true,
+        "support_recovery": true,
+        "audit_sink": true,
+        "nonce": true,
+        "expiry": true,
+        "policy_version": true
+      }
+    },
+    {
+      "id": "planspec.non_executable_until_all_bindings",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Executable readiness must remain false until every required binding is present.",
+      "evidence": {
+        "planspec_executable": false,
+        "target_set_bound": false,
+        "exact_approval_bound": false,
+        "audit_sink_bound": false,
+        "nonce_bound": false,
+        "expiry_bound": false,
+        "policy_version_bound": false
+      }
+    },
+    {
+      "id": "effects.not_prepared",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "PlanSpec creation must not prepare controlled effects or authorize install/activation.",
+      "evidence": {
+        "planspec_executed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-021 PlanSpec readiness negative cases must fail closed before install, activation, rollback, support upload, remote dispatch, or production mutation.",
+      "evidence": {
+        "cases": 21,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-021 must not execute PlanSpec, prepare effects, interpret payloads, install, activate, rollback, upload support, recover, dispatch, or mutate production state.",
+      "evidence": null
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC14-021 outputs must not contain key blocks, auth tokens, private key paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "security-execution-envelope-not-bound",
+    "controlled-effect-execution-not-authorized"
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_projection_only": true,
+    "agentcore_planspec_candidate_materialized": true,
+    "executable_planspec_created": false,
+    "planspec_executed": false,
+    "security_execution_effect_allowed": false,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "network_probe_performed": false,
+    "network_fetch_attempted": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "new_quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 11,
+    "failed_checks": 0,
+    "cases": 21,
+    "failed_cases": 0,
+    "verified_quarantine_preflight_bound": true,
+    "release_object_bound": true,
+    "agentcore_planspec_candidate_materialized": true,
+    "agentcore_planspec_executable": false,
+    "effect_prepared": false,
+    "security_execution_allowed": false,
+    "rc14_021_complete": true,
+    "next_task": "RC14-022"
+  }
+}

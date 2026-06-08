@@ -1,0 +1,46 @@
+{
+  "schema": "agentos.rc14-agentcore-planspec-readiness-denial.v1",
+  "generated_at": "2026-06-09T14:15:00+08:00",
+  "task": "RC14-021",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "agentcore-planspec-readiness-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+  "denial_reasons": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "security-execution-envelope-not-bound",
+    "controlled-effect-execution-not-authorized"
+  ],
+  "denied_effects": [
+    "install",
+    "activation",
+    "rollback",
+    "support-upload",
+    "recovery",
+    "remote-dispatch",
+    "production-ring-mutation"
+  ],
+  "preserved_boundaries": {
+    "planspec_executed": false,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  }
+}

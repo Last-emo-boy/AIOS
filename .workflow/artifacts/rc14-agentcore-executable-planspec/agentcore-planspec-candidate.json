@@ -1,0 +1,195 @@
+{
+  "schema": "agentos.rc14-agentcore-planspec-candidate.v1",
+  "generated_at": "2026-06-09T14:15:00+08:00",
+  "task": "RC14-021",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "agentcore-planspec-candidate-non-executable",
+  "production_ready_claim": false,
+  "planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+  "planspec_core": {
+    "planspec_id": "rc14-agentcore-executable-planspec-candidate",
+    "schema": "agentos.agentcore.planspec.v1",
+    "plan_kind": "controlled-local-release-readiness",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "production_ready_claim": false,
+    "projection_only": true,
+    "executable": false,
+    "frozen_inputs": {
+      "quarantine_result_sha256": "9d0fc7bc3062019ddbaa0b1511e53b0c1544d2cf0ef9122625ec129713feafab",
+      "quarantine_manifest_sha256": "7170e360b6001ab98da0884aa1a5ef3e24370bbc8ac22e2466dd941ece994f29",
+      "quarantine_report_sha256": "ffe860670b04a400a1fa52604b1ab77451b9ba44f1ea76d3d02f14476370ad00",
+      "quarantine_fail_closed_matrix_sha256": "569c3db4c0f1736c2d11a7cac7fdb13693ab954b0acc7001a5906b62c514b3dd",
+      "quarantine_handoff_sha256": "44829cbdcd5a3c65e8bb78ceabc73d5d4e41448b9cc43b1791e4598d05e3de9d",
+      "release_id": "production-distro-rc8-current-artifacts",
+      "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "payload_size_bytes": 377,
+      "quarantine_payload_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/quarantine/production-distro-rc8-current-artifacts/agentos-initramfs.cpio.gz",
+      "descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "checksum_set_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+      "public_signature_sha256": "95b89f7ae78c93d80cef3d45020af8eeca7990e694eade977cd48f61f6991130",
+      "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "freshness_window_sha256": "ca6d4328157ea4dab275e64eb27ace7ba96060cba6b23474dd8493cdddf7170c",
+      "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+    },
+    "binding_slots": {
+      "object_trust": {
+        "required": true,
+        "bound": true,
+        "source_task": "RC14-012",
+        "source_path": ".workflow/artifacts/rc14-local-object-trust-verification/result.json"
+      },
+      "verified_quarantine_preflight": {
+        "required": true,
+        "bound": true,
+        "source_task": "RC14-020",
+        "source_path": ".workflow/artifacts/rc14-verified-quarantine-preflight/result.json"
+      },
+      "release_object": {
+        "required": true,
+        "bound": true,
+        "source_task": "RC14-020",
+        "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "payload_size_bytes": 377
+      },
+      "target_set": {
+        "required": true,
+        "bound": false,
+        "expected_source_task": "RC14-030",
+        "binding_id": null
+      },
+      "exact_approval": {
+        "required": true,
+        "bound": false,
+        "expected_source_task": "RC14-031",
+        "binding_id": null
+      },
+      "rollback_baseline": {
+        "required": true,
+        "bound": true,
+        "source_path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+        "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e"
+      },
+      "support_recovery": {
+        "required": true,
+        "bound": true,
+        "source_path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+        "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+      },
+      "audit_sink": {
+        "required": true,
+        "bound": false,
+        "expected_source_task": "RC14-031",
+        "binding_id": null
+      },
+      "nonce": {
+        "required": true,
+        "bound": false,
+        "expected_source_task": "RC14-031",
+        "value_sha256": null
+      },
+      "expiry": {
+        "required": true,
+        "bound": false,
+        "expected_source_task": "RC14-031",
+        "value": null
+      },
+      "policy_version": {
+        "required": true,
+        "bound": false,
+        "expected_source_task": "RC14-022",
+        "value": null
+      }
+    },
+    "exact_effect_scope": {
+      "kind": "aios-controlled-local-release-effect",
+      "allowed_effects": [],
+      "denied_effects": [
+        "install",
+        "activation",
+        "rollback",
+        "support-upload",
+        "recovery",
+        "remote-dispatch",
+        "production-ring-mutation"
+      ],
+      "broad_scope_allowed": false,
+      "remote_dispatch_allowed": false,
+      "production_ring_mutation_allowed": false
+    },
+    "required_bindings": {
+      "object_trust": true,
+      "verified_quarantine_preflight": true,
+      "release_object": true,
+      "target_set": true,
+      "exact_approval": true,
+      "rollback_baseline": true,
+      "support_recovery": true,
+      "audit_sink": true,
+      "nonce": true,
+      "expiry": true,
+      "policy_version": true
+    },
+    "observed_bindings": {
+      "object_trust": true,
+      "verified_quarantine_preflight": true,
+      "release_object": true,
+      "target_set": false,
+      "exact_approval": false,
+      "rollback_baseline": true,
+      "support_recovery": true,
+      "audit_sink": false,
+      "nonce": false,
+      "expiry": false,
+      "policy_version": false
+    },
+    "steps": [
+      {
+        "id": "bind-local-object-trust",
+        "authority": "evidence-binding",
+        "executable": true,
+        "source_task": "RC14-012"
+      },
+      {
+        "id": "bind-verified-quarantine-preflight",
+        "authority": "evidence-binding",
+        "executable": true,
+        "evidence_hash": "9d0fc7bc3062019ddbaa0b1511e53b0c1544d2cf0ef9122625ec129713feafab"
+      },
+      {
+        "id": "assert-release-object",
+        "authority": "object-identity",
+        "executable": true,
+        "object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b"
+      },
+      {
+        "id": "require-target-approval-and-audit",
+        "authority": "operator-approval",
+        "executable": false,
+        "denied_until": "RC14-030-and-RC14-031"
+      },
+      {
+        "id": "defer-controlled-effect",
+        "authority": "security-execution",
+        "executable": false,
+        "denied_until": "RC14-022-security-execution-allow-envelope"
+      }
+    ],
+    "blockers": [
+      "agentcore-planspec-not-executable",
+      "security-execution-allow-not-bound",
+      "two-target-local-canary-identities-not-enrolled",
+      "exact-approval-not-bound",
+      "controlled-activation-not-authorized",
+      "controlled-rollback-not-authorized",
+      "target-set-not-bound",
+      "audit-sink-not-bound",
+      "nonce-not-bound",
+      "approval-expiry-not-bound",
+      "policy-version-not-bound",
+      "security-execution-envelope-not-bound",
+      "controlled-effect-execution-not-authorized"
+    ]
+  }
+}

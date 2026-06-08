@@ -1,0 +1,61 @@
+{
+  "schema": "agentos.rc14-security-execution-allow-envelope-handoff.v1",
+  "generated_at": "2026-06-09T14:15:00+08:00",
+  "task": "RC14-021",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "ready-for-rc14-022-security-execution-allow-envelope",
+  "production_ready_claim": false,
+  "expected_next_task": "RC14-022",
+  "planspec": {
+    "candidate_path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-candidate.json",
+    "candidate_sha256": "503be861cd83c06251053974b6e07e768a6e3dccb21e4442b4cfd725cf227834",
+    "readiness_path": ".workflow/artifacts/rc14-agentcore-executable-planspec/agentcore-planspec-readiness.json",
+    "readiness_sha256": "044080833fd4b7aeb875c1ba1b2cbc96fc4d7ae8433fb4b5b73dc3f3ed2aa11d",
+    "planspec_core_hash": "3313e4b8615e41dcb0ccbac06142f1f6912c77ba30d70d3c807a549b1db2f7d3",
+    "candidate_materialized": true,
+    "executable": false,
+    "exact_effect_scope": {
+      "kind": "aios-controlled-local-release-effect",
+      "allowed_effects": [],
+      "denied_effects": [
+        "install",
+        "activation",
+        "rollback",
+        "support-upload",
+        "recovery",
+        "remote-dispatch",
+        "production-ring-mutation"
+      ],
+      "broad_scope_allowed": false,
+      "remote_dispatch_allowed": false,
+      "production_ring_mutation_allowed": false
+    }
+  },
+  "security_execution": {
+    "allow_envelope_preconditions_allowed": true,
+    "security_execution_allowed": false,
+    "effect_preparation_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "blockers": [
+    "agentcore-planspec-not-executable",
+    "security-execution-allow-not-bound",
+    "two-target-local-canary-identities-not-enrolled",
+    "exact-approval-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized",
+    "target-set-not-bound",
+    "audit-sink-not-bound",
+    "nonce-not-bound",
+    "approval-expiry-not-bound",
+    "policy-version-not-bound",
+    "security-execution-envelope-not-bound",
+    "controlled-effect-execution-not-authorized"
+  ]
+}
