@@ -1,0 +1,64 @@
+{
+  "schema": "agentos.production-distro-rc4-task-evidence.v1",
+  "task": "RC4-023",
+  "status": "completed",
+  "recorded_at": "2026-06-08T10:30:00+08:00",
+  "summary": "Implemented and ran the RC4 hosted/fleet promotion gate integration. The integration emits a local RC4 hosted/fleet promotion gate artifact that binds hosted transport, remote registry mirror, fleet rollout preconditions, hosted fail-closed fixtures, hosted consumer/mirror smoke, staged fleet rollout smoke, GA support/recovery, fleet rollout authority, candidate promotion baseline, release provenance baseline, and RC3 signing/publication gate evidence without mutating promotion baselines or claiming GA readiness.",
+  "deliverables": {
+    "script": "scripts/integrate-rc4-hosted-fleet-promotion-gates.ps1",
+    "result": ".workflow/artifacts/rc4-hosted-fleet-promotion-gate-integration/result.json",
+    "promotion_gate": ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json",
+    "evidence_file": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json"
+  },
+  "hashes": {
+    "script_sha256": "735fc30689800dcd2888a5aaa06d6541c7897811294fcd87428ac10c6408aa9f",
+    "result_sha256": "77c16062f42d934e44b6bb895ef518eb59e9f290d9d81de7d6b9205e91eb20cf",
+    "promotion_gate_sha256": "c7fc79a5c094b5e8ce16dc4ae97a935f46f3ed37376adae5ae443894afe79a3c",
+    "rc4_plan_sha256": "fd192286914960f67bd88aafbfb6b13f540b8d2bba0b58c9049850fbb7a1ad05",
+    "workflow_session_sha256": "56cc3e818462861d785b53705d4d77e81bc6e35e5c9eb5dc2cbf37a639449bfe",
+    "workflow_state_sha256": "3744bb6eb445ec23041bdc59ab7637dd04602c0a31f50610103bf09129277f36",
+    "task_index_sha256": "c12bb1236652799dd43fdf14d1af3d86ef2c83f1e5932dad04402a2886fbb3a1"
+  },
+  "acceptance_coverage": {
+    "result_schema": "agentos.rc4-hosted-fleet-promotion-gate-integration.v1",
+    "result_status": "passed",
+    "checks": 16,
+    "blockers": 0,
+    "rc4_023_complete": true,
+    "promotion_gate_integration_ready": true,
+    "gate_artifact_written": true,
+    "failure_cases": 10,
+    "hosted_transport_verified": true,
+    "mirror_verified": true,
+    "fleet_preconditions_verified": true,
+    "hosted_transport_fail_closed_verified": true,
+    "hosted_consumer_mirror_smoke_verified": true,
+    "fleet_rollout_smoke_verified": true,
+    "ga_support_recovery_verified": true,
+    "fleet_rollout_authority_verified": true,
+    "candidate_promotion_baseline_verified": true,
+    "release_provenance_baseline_verified": true,
+    "rc3_signing_publication_gate_verified": true,
+    "production_ready_claim": false,
+    "release_provenance_mutated": false,
+    "candidate_promotion_mutated": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "verification": {
+    "command": ".\\scripts\\integrate-rc4-hosted-fleet-promotion-gates.ps1 -FailOnBlocked",
+    "json_parse": "passed",
+    "result_gate_hash_match": "passed",
+    "workflow_state_advanced_to": "RC4-030",
+    "secret_scan": "artifact-clean; script hits are detector regex literals only",
+    "host_path_scan": "artifact-clean"
+  },
+  "handoff": {
+    "next_task": "RC4-030"
+  }
+}

@@ -3,7 +3,7 @@
   "name": "Production Distro RC4",
   "status": "active",
   "created_at": "2026-06-08T09:05:00+08:00",
-  "updated_at": "2026-06-08T10:20:00+08:00",
+  "updated_at": "2026-06-08T10:30:00+08:00",
   "source": "TASK.md; RC3 final audit",
   "previous_workflow": ".workflow/active/WFS-20260531-agentos-production-distro-rc3",
   "goal": "Turn RC3 signed local publication into hosted release transport, fleet-ring rollout, remote registry mirroring, and GA-hardening evidence without claiming GA production readiness.",
@@ -88,9 +88,15 @@
       "completed_at": "2026-06-08T10:20:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-022-ga-hardening-support-recovery-projection.json",
       "commit": null
+    },
+    {
+      "task": "RC4-023",
+      "completed_at": "2026-06-08T10:30:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json",
+      "commit": null
     }
   ],
-  "next_task": "RC4-023",
+  "next_task": "RC4-030",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
   "docs": [
     ".workflow/active/WFS-20260531-agentos-production-distro-rc3/docs/final-rc3-closeout-summary.md",
@@ -142,6 +148,10 @@
     ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/hosted-fleet-support-bundle-redacted.json",
     ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/hosted-fleet-recovery-projection.json",
     ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/support-recovery-index.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-022-ga-hardening-support-recovery-projection.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-022-ga-hardening-support-recovery-projection.json",
+    "scripts/integrate-rc4-hosted-fleet-promotion-gates.ps1",
+    ".workflow/artifacts/rc4-hosted-fleet-promotion-gate-integration/result.json",
+    ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json"
   ]
 }

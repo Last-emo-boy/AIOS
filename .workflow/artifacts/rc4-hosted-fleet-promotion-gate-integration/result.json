@@ -1,0 +1,638 @@
+{
+  "schema": "agentos.rc4-hosted-fleet-promotion-gate-integration.v1",
+  "generated_at": "2026-06-08T10:30:00+08:00",
+  "checked_at": "2026-06-08T09:53:59.3501542+08:00",
+  "task": "RC4-023",
+  "status": "passed",
+  "production_ready_claim": false,
+  "rc4_023_complete": true,
+  "promotion_gate_integration_ready": true,
+  "gate_artifact_written": true,
+  "gate_artifact_sha256": "c7fc79a5c094b5e8ce16dc4ae97a935f46f3ed37376adae5ae443894afe79a3c",
+  "release_provenance_mutated": false,
+  "candidate_promotion_mutated": false,
+  "activation_performed": false,
+  "rollback_execution_performed": false,
+  "active_registry_mutated": false,
+  "active_slot_mutated": false,
+  "active_artifact_set_mutated": false,
+  "production_ring_mutated": false,
+  "remote_dispatch_enabled": false,
+  "tui_authority": false,
+  "verified": {
+    "hosted_transport": true,
+    "mirror": true,
+    "fleet_preconditions": true,
+    "hosted_transport_fail_closed": true,
+    "hosted_consumer_mirror_smoke": true,
+    "fleet_rollout_smoke": true,
+    "ga_support_recovery": true,
+    "fleet_rollout_authority": true,
+    "candidate_promotion_baseline": true,
+    "release_provenance_baseline": true,
+    "rc3_signing_publication_gate": true
+  },
+  "artifacts": {
+    "rc4_hosted_fleet_promotion_gate": {
+      "path": ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json",
+      "sha256": "c7fc79a5c094b5e8ce16dc4ae97a935f46f3ed37376adae5ae443894afe79a3c",
+      "schema": "agentos.rc4-hosted-fleet-promotion-gate.v1",
+      "status": "passed"
+    }
+  },
+  "source_artifacts": {
+    "rc4_plan": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc4/plan.json",
+      "sha256": "fd192286914960f67bd88aafbfb6b13f540b8d2bba0b58c9049850fbb7a1ad05",
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active"
+    },
+    "hosted_transport_result": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/result.json",
+      "sha256": "6cf6be3136291d730cad1fd5afefa005772f253ad23d34b756a3aabcdbad0064",
+      "present": true,
+      "schema": "agentos.rc4-hosted-release-transport-result.v1",
+      "status": "passed"
+    },
+    "hosted_transport_manifest": {
+      "path": ".workflow/artifacts/rc4-hosted-release-transport/hosted-transport-manifest.json",
+      "sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+      "present": true,
+      "schema": "agentos.rc4-hosted-release-transport-manifest.v1",
+      "status": "published-locally"
+    },
+    "mirror_publication_result": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/result.json",
+      "sha256": "19127e7792e6cdce709884f5f443d7fdaf13071ee79a8fc848e7614ef9a1a097",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-publication-result.v1",
+      "status": "passed"
+    },
+    "mirror_lockfile": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-lockfile.json",
+      "sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-lockfile.v1",
+      "status": "locked-locally"
+    },
+    "mirror_publication": {
+      "path": ".workflow/artifacts/rc4-remote-registry-mirror-publication/mirror-publication.json",
+      "sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+      "present": true,
+      "schema": "agentos.rc4-remote-registry-mirror-publication.v1",
+      "status": "published-locally"
+    },
+    "fleet_rollout_preconditions": {
+      "path": ".workflow/artifacts/rc4-fleet-ring-rollout-preconditions/result.json",
+      "sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75",
+      "present": true,
+      "schema": "agentos.rc4-fleet-ring-rollout-preconditions.v1",
+      "status": "ready-for-fleet-ring-rollout-plan"
+    },
+    "hosted_transport_fail_closed": {
+      "path": ".workflow/artifacts/rc4-hosted-transport-fail-closed-fixtures/result.json",
+      "sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98",
+      "present": true,
+      "schema": "agentos.rc4-hosted-transport-fail-closed-fixtures.v1",
+      "status": "passed"
+    },
+    "hosted_consumer_mirror_smoke": {
+      "path": ".workflow/artifacts/rc4-signed-hosted-channel-consumer-mirror-smoke/result.json",
+      "sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642",
+      "present": true,
+      "schema": "agentos.rc4-signed-hosted-channel-consumer-mirror-smoke.v1",
+      "status": "passed"
+    },
+    "fleet_rollout_smoke": {
+      "path": ".workflow/artifacts/rc4-staged-fleet-ring-rollout-smoke-rollback-drill/result.json",
+      "sha256": "e29e77d6943ef1c5f46da7dceb480c299a308eab710613de856bad9a4b5b8f1a",
+      "present": true,
+      "schema": "agentos.rc4-staged-fleet-ring-rollout-smoke-rollback-drill.v1",
+      "status": "passed"
+    },
+    "ga_support_recovery": {
+      "path": ".workflow/artifacts/rc4-ga-hardening-support-recovery-projection/result.json",
+      "sha256": "381f4b2fd60955d89f0e866ec6f174bdfa64b2fd6ab0253bc54965852e6e6f14",
+      "present": true,
+      "schema": "agentos.rc4-ga-hardening-support-recovery-projection.v1",
+      "status": "passed"
+    },
+    "fleet_rollout_authority": {
+      "path": ".workflow/artifacts/release/fleet-rollout-authority.json",
+      "sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+      "present": true,
+      "schema": "agentos.fleet-rollout-authority.v1",
+      "status": "passed"
+    },
+    "candidate_promotion": {
+      "path": ".workflow/artifacts/candidate-promotion/default-result.json",
+      "sha256": "84a6c5c4a92724b5a3eadec7be60a9dce98cb5ab511aca1149c99bb6c8762a08",
+      "present": true,
+      "schema": "agentos.candidate-promotion-manifest.v1",
+      "status": "passed"
+    },
+    "release_provenance": {
+      "path": ".workflow/artifacts/release/provenance.json",
+      "sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+      "present": true,
+      "schema": "agentos.production-candidate.provenance.v1",
+      "status": null
+    },
+    "rc3_signing_publication_gate": {
+      "path": ".workflow/artifacts/release/rc3-production-signing-publication-gate.json",
+      "sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785",
+      "present": true,
+      "schema": "agentos.rc3-production-signing-publication-gate.v1",
+      "status": "passed"
+    }
+  },
+  "evidence_chain": {
+    "rc4_plan_sha256": "fd192286914960f67bd88aafbfb6b13f540b8d2bba0b58c9049850fbb7a1ad05",
+    "hosted_transport_result_sha256": "6cf6be3136291d730cad1fd5afefa005772f253ad23d34b756a3aabcdbad0064",
+    "hosted_transport_manifest_sha256": "b3e80f8d7202d4c2ff47383f5e8cdeba63b1616f6f146dcd5fcdce2fb483c335",
+    "mirror_publication_result_sha256": "19127e7792e6cdce709884f5f443d7fdaf13071ee79a8fc848e7614ef9a1a097",
+    "mirror_lockfile_sha256": "576eee9e52ba069c83876e521ecdfee40ddb6251771d7bfb33ce5bb96e3045ef",
+    "mirror_publication_sha256": "95b8fb71cac722e5f9be82a0ce9b0c08f2ab3d8a501f1db8ee4c8fd791b7a2bf",
+    "fleet_rollout_preconditions_sha256": "6b150a993d7356202005563b9bc24a2ea94601d64af10e16f9d984849ce27a75",
+    "hosted_transport_fail_closed_sha256": "ab21a6ce08ca5b89ad3e607f0c007720ae1e28bddafb4dfe6911073a0181de98",
+    "hosted_consumer_mirror_smoke_sha256": "a5769065527c005b4ae9ed78f8f567e070b013fdd27847d750494f9c1718e642",
+    "fleet_rollout_smoke_sha256": "e29e77d6943ef1c5f46da7dceb480c299a308eab710613de856bad9a4b5b8f1a",
+    "ga_support_recovery_sha256": "381f4b2fd60955d89f0e866ec6f174bdfa64b2fd6ab0253bc54965852e6e6f14",
+    "fleet_rollout_authority_sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+    "candidate_promotion_sha256": "84a6c5c4a92724b5a3eadec7be60a9dce98cb5ab511aca1149c99bb6c8762a08",
+    "release_provenance_sha256": "ff361547f5a510e78c692154adbae0fd648d0366e0bde2f1f53fb13c346bf875",
+    "rc3_signing_publication_gate_sha256": "833cf9794e135f82247d3291d5e53f279a9d46b3437011be96643416b46fd785"
+  },
+  "checks": [
+    {
+      "id": "rc4.plan.current_task",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 plan must point at RC4-023 before this gate integration, or RC4-030 after completion.",
+      "evidence": {
+        "current_task": "RC4-030",
+        "RC4_022": "completed",
+        "RC4_023": "completed"
+      }
+    },
+    {
+      "id": "hosted_transport.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport evidence must pass, remain local-only, and avoid GA claims.",
+      "evidence": {
+        "checks": 15,
+        "blockers": 0,
+        "rc4_010_complete": true,
+        "hosted_transport_manifest_written": true,
+        "local_mirror_fixture_written": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mirror.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Mirror evidence must pass, remain hash-bound, and avoid active registry mutation.",
+      "evidence": {
+        "checks": 12,
+        "blockers": 0,
+        "rc4_011_complete": true,
+        "mirror_entries": 8,
+        "entry_hash_mismatches": 0,
+        "mirror_lockfile_written": true,
+        "mirror_publication_written": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "active_registry_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "fleet_preconditions.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fleet rollout preconditions must be ready with zero blockers.",
+      "evidence": {
+        "checks": 18,
+        "blockers": 0,
+        "rc4_012_complete": true,
+        "rollout_preconditions_ready": true,
+        "projected_ring": "local",
+        "target_set_sha256": "cbae28aa40132d594dbe87b7b49e575075cdcc7c7c81c84cf48ac13b0a916d30",
+        "rollout_policy_version": "rc4-rollout-policy-v1",
+        "exact_operator_approval_required": true,
+        "exact_operator_approval_granted": false,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "hosted_transport.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted transport fail-closed fixtures must pass all negative cases.",
+      "evidence": {
+        "cases": 13,
+        "passed_cases": 13,
+        "failed_cases": 0,
+        "child_audit_exit_zero_cases": 13,
+        "blockers": 0,
+        "expected_fail_closed_cases": [
+          "hosted-manifest-hash-drift",
+          "missing-rc3-final-audit-binding",
+          "stale-mirror-snapshot",
+          "unsigned-mirror-metadata",
+          "revoked-mirror-artifact",
+          "registry-lockfile-mismatch",
+          "fleet-target-set-drift",
+          "ring-skip-attempt",
+          "missing-rollback-baseline",
+          "tui-rollout-authority-attempt",
+          "model-replay-rollout-authority-attempt",
+          "remote-dispatch-mutation-attempt",
+          "unredacted-support-bundle"
+        ],
+        "rc4_013_complete": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "hosted_consumer_mirror_smoke.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Hosted consumer/mirror smoke must pass and bind hosted/mirror hashes.",
+      "evidence": {
+        "checks": 11,
+        "blockers": 0,
+        "rc4_020_complete": true,
+        "hosted_channel_consumer_ready": true,
+        "mirror_smoke_ready": true,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "fleet_rollout_smoke.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fleet rollout smoke must pass, remain approval-gated, and bind hosted/mirror/precondition hashes.",
+      "evidence": {
+        "checks": 12,
+        "blockers": 0,
+        "rc4_021_complete": true,
+        "staged_fleet_ring_rollout_smoke_ready": true,
+        "rollback_drill_projection_ready": true,
+        "projected_ring": "local",
+        "remote_rings_blocked": true,
+        "rollout_plan_projection_created": true,
+        "rollout_plan_executable": false,
+        "exact_operator_approval_required": true,
+        "exact_operator_approval_granted": false,
+        "production_ready_claim": false,
+        "network_transfer_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "ga_support_recovery.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "GA-hardening support/recovery projection must pass, remain redacted, and avoid mutation authority.",
+      "evidence": {
+        "checks": 16,
+        "blockers": 0,
+        "rc4_022_complete": true,
+        "ga_support_recovery_projection_ready": true,
+        "support_bundle_redacted": true,
+        "recovery_projection_emitted": true,
+        "support_index_written": true,
+        "failure_scenarios": 10,
+        "production_ready_claim": false,
+        "remote_upload_performed": false,
+        "remote_bytes_sent": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "fleet_rollout_authority.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fleet rollout authority and its promotion gate must pass without TUI authority.",
+      "evidence": {
+        "status": "passed",
+        "authority": {
+          "execution_authority": "AgentCore fleet_rollout PlanSpec + SecurityExecutionEngine",
+          "plan_authority": "AgentCore",
+          "side_effect_authority": "SecurityExecutionEngine",
+          "recovery_authority": "RunStore + AuditJournal + release rollback evidence",
+          "tui_authority": false,
+          "projection_controller_only": true,
+          "rollout_execution_in_tui": false,
+          "rollout_mutation_in_tui": false,
+          "remote_command_dispatch_in_tui": false,
+          "rollback_execution_in_tui": false,
+          "promotion_authority_in_tui": false,
+          "signing_authority_in_tui": false,
+          "remote_operator_bypass_allowed": false,
+          "normal_shell_rollout_allowed": false
+        },
+        "promotion_gate": {
+          "fleet_rollout_authority_required": true,
+          "tui_projection_only_required": true,
+          "agentcore_security_execution_required": true,
+          "remote_rollout_from_tui_allowed": false,
+          "status": "passed",
+          "blockers": []
+        }
+      }
+    },
+    {
+      "id": "candidate_promotion.baseline_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Existing candidate promotion baseline must pass with zero blockers before adding RC4 gate evidence.",
+      "evidence": {
+        "status": "passed",
+        "blockers": 0
+      }
+    },
+    {
+      "id": "release_provenance.baseline_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Existing release provenance baseline must remain promotable with zero blockers.",
+      "evidence": {
+        "status": "promotable",
+        "blockers": []
+      }
+    },
+    {
+      "id": "rc3_signing_publication_gate.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 promotion gate must remain chained to passed RC3 signing/publication gate evidence.",
+      "evidence": {
+        "status": "passed",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc4_gate_artifact.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Writer must emit the RC4 hosted/fleet promotion gate artifact.",
+      "evidence": {
+        "path": ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json",
+        "sha256": "c7fc79a5c094b5e8ce16dc4ae97a935f46f3ed37376adae5ae443894afe79a3c"
+      }
+    },
+    {
+      "id": "rc4_gate_artifact.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 gate artifact must not contain raw secret material or private authority paths.",
+      "evidence": {
+        "path": ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json"
+      }
+    },
+    {
+      "id": "rc4_gate_artifact.host_path_free",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 gate artifact must not contain host-local absolute paths.",
+      "evidence": {
+        "path": ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json"
+      }
+    },
+    {
+      "id": "rc4_gate.no_authority_broadened",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC4 gate integration writes evidence only and must not mutate provenance, activate, rollback, mutate active state, dispatch remotely, or grant TUI authority.",
+      "evidence": {
+        "gate_projection_only": true,
+        "release_provenance_mutated": false,
+        "candidate_promotion_mutated": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_registry_mutated": false,
+        "active_slot_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    }
+  ],
+  "blockers": [],
+  "failure_cases": [
+    {
+      "name": "missing-hosted-transport-manifest",
+      "required_input": "hosted_transport_manifest",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "hosted-transport-hash-drift",
+      "required_input": "hosted_consumer_mirror_smoke",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "missing-or-stale-mirror-publication",
+      "required_input": "mirror_publication",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "missing-fleet-preconditions",
+      "required_input": "fleet_rollout_preconditions",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "missing-hosted-transport-fail-closed-fixtures",
+      "required_input": "hosted_transport_fail_closed",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "missing-staged-fleet-rollout-smoke",
+      "required_input": "fleet_rollout_smoke",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "missing-rollback-baseline",
+      "required_input": "fleet_rollout_smoke.rollback_baseline",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "unredacted-support-recovery",
+      "required_input": "ga_support_recovery",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "tui-or-model-authority-attempt",
+      "required_input": "authority_boundary",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    },
+    {
+      "name": "production-ready-claim-attempt",
+      "required_input": "ga_boundary",
+      "status": "fail-closed-required",
+      "promotion_allowed": false,
+      "production_ready_claim": false,
+      "activation_performed": false,
+      "rollback_execution_performed": false,
+      "active_registry_mutated": false,
+      "active_slot_mutated": false,
+      "production_ring_mutated": false,
+      "remote_dispatch_enabled": false,
+      "tui_authority": false
+    }
+  ],
+  "handoff": {
+    "next_task": "RC4-030",
+    "rc4_030_consumes": [
+      "hosted_transport_manifest",
+      "mirror_publication",
+      "fleet_rollout_smoke",
+      "ga_support_recovery",
+      "rc4_hosted_fleet_promotion_gate"
+    ]
+  },
+  "summary": {
+    "checks": 16,
+    "blockers": 0,
+    "rc4_023_complete": true,
+    "promotion_gate_integration_ready": true,
+    "gate_artifact_written": true,
+    "gate_artifact_sha256": "c7fc79a5c094b5e8ce16dc4ae97a935f46f3ed37376adae5ae443894afe79a3c",
+    "failure_cases": 10,
+    "production_ready_claim": false,
+    "release_provenance_mutated": false,
+    "candidate_promotion_mutated": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_registry_mutated": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  }
+}

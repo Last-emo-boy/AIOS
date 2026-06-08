@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc4",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC4-023",
-    "lifecycle_position":  "active-rc4-planning",
+    "current_task":  "RC4-030",
+    "lifecycle_position":  "active-rc4-closeout",
     "blockers":  [],
-    "next_allowed_action":  "integrate-rc4-hosted-transport-and-fleet-evidence-into-promotion-gates",
+    "next_allowed_action":  "run-rc4-final-audit-and-next-milestone-planning",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T10:20:00+08:00",
+    "updated_at":  "2026-06-08T10:30:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC3 is closed with external production signatures verified, immutable local release channel publication, signed channel consumption, support/recovery projection, and signing/publication gate integration. Current active milestone is Production Distro RC4: hosted release transport, fleet rings, remote registry mirroring, staged rollout authority, and GA hardening while preserving RC2/RC3 signing, rollback, support, and TUI authority boundaries. RC4 Wave 0 and Wave 1 are complete, and RC4-020 signed hosted-channel consumer/mirror smoke, RC4-021 staged fleet-ring rollout smoke/rollback drill, and RC4-022 GA-hardening support/recovery projection are complete; the current task is RC4-023 hosted transport and fleet evidence promotion gate integration. RC4 is not a GA production-ready claim until its gates close.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC3 is closed with external production signatures verified, immutable local release channel publication, signed channel consumption, support/recovery projection, and signing/publication gate integration. Current active milestone is Production Distro RC4: hosted release transport, fleet rings, remote registry mirroring, staged rollout authority, and GA hardening while preserving RC2/RC3 signing, rollback, support, and TUI authority boundaries. RC4 Wave 0 and Wave 1 are complete, and RC4-020 signed hosted-channel consumer/mirror smoke, RC4-021 staged fleet-ring rollout smoke/rollback drill, RC4-022 GA-hardening support/recovery projection, and RC4-023 hosted/fleet promotion gate integration are complete; the current task is RC4-030 final audit and next milestone planning. RC4 is not a GA production-ready claim until final audit closes.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -871,6 +871,22 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-022-ga-hardening-support-recovery-projection.json"
+                      },
+                      {
+                          "type":  "rc4_script",
+                          "path":  "scripts/integrate-rc4-hosted-fleet-promotion-gates.ps1"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/rc4-hosted-fleet-promotion-gate-integration/result.json"
+                      },
+                      {
+                          "type":  "rc4_artifact",
+                          "path":  ".workflow/artifacts/release/rc4-hosted-fleet-promotion-gate.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc4/evidence/RC4-023-hosted-fleet-promotion-gate-integration.json"
                       }
                   ]
 }
