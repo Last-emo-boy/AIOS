@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-040",
+  "title": "run Production Distro RC7 final audit and next milestone planning",
+  "status": "completed",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
+    ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    ".workflow/artifacts/rc7-installer-signed-consumption/result.json",
+    ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
+    ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
+    ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    ".workflow/artifacts/rc7-multi-node-canary-approval/result.json",
+    ".workflow/artifacts/rc7-gated-canary-activation/result.json",
+    ".workflow/artifacts/rc7-gated-rollback-drill/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc7-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc7-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/FINAL-AUDIT-20260608-production-distro-rc7.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/final-rc7-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-040-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "All RC7 pre-closeout tasks are completed.",
+      "RC7 signed metadata, revocation, installer consumption, fail-closed fixtures, compatibility, rollback baseline, mirror frontend, TLS, canary approval, gated activation, and gated rollback evidence all pass.",
+      "Live hosted endpoints are reachable through HTTPS curl --resolve and remain non-GA, current-artifacts, signature-projection-only, install-blocked, activation-blocked, and rollback-blocked.",
+      "Final audit records remaining GA/execution blockers and next milestone planning for RC8.",
+      "No signing, payload upload, install, activation, rollback, active slot, boot metadata, production ring, support upload, remote dispatch, model, shell, or TUI authority is granted."
+    ]
+  }
+}

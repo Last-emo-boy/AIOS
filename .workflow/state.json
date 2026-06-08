@@ -4,15 +4,15 @@
     "current_workflow":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
     "current_phase":  "production-distro-rc7",
     "status":  "active",
-    "phase_status":  "active",
-    "current_task":  "RC7-040",
-    "lifecycle_position":  "rc7-wave-4-ready",
+    "phase_status":  "completed",
+    "current_task":  null,
+    "lifecycle_position":  "rc7-complete-rc8-planning",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc7-040-final-audit",
+    "next_allowed_action":  "plan-production-distro-rc8-real-installable-payload-controlled-execution",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T16:55:00+08:00",
+    "updated_at":  "2026-06-08T17:05:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC6 is closed with installable signed payload channel contracts, bounded /payloads and /install metadata, current-artifacts payload projection, hosted payload metadata, signed payload fail-closed fixtures, bootstrap installer preflight, installer fail-closed fixtures, refreshed public mirror frontend, exact-approval-gated canary packet, rollback execution preconditions, and final closeout audit. RC6 verdict is PASS for metadata/readiness projection, not GA. Production Distro RC7 wave 0 is complete: RC7-001 freezes signed payload consumption and controlled execution boundaries, RC7-002 publishes signed metadata plus revocation snapshot projection, and RC7-003 defines installer compatibility plus rollback baseline publication contracts. RC7 Wave 1 is complete: RC7-010 proves the installer can observe signed metadata and revocation references while blocked, RC7-011 adds 21 signed consumption fail-closed fixtures, and RC7-012 publishes /install/compatibility.json plus /install/rollback-baseline.json and hash-binds them from payload/install/channel metadata. RC7 Wave 2 is complete: RC7-020 refreshes the public mirror frontend to show signed metadata, revocation, compatibility, rollback baseline, and non-GA install-blocked status while preserving metadata bytes; RC7-021 configures HTTPS for aios.w33d.xyz, verifies nginx hardening headers, keeps HTTP read-only compatibility, and preserves install/activation/rollback blockers; RC7-022 freezes large payload storage policy so 47.101.11.109 remains metadata-only and external object storage is transport-only with immutable HTTPS object descriptors. RC7 Wave 3 is complete: RC7-030 projects a multi-node canary target set and exact approval packet while keeping canary execution, activation, and rollback blocked by design; RC7-031 produces gated canary activation evidence and proves activation is denied until signature, target enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, and remote fleet execution gates pass; RC7-032 produces gated rollback drill evidence and proves rollback execution is denied until signature, canary activation, target enrollment, exact approval, AgentCore rollback PlanSpec, SecurityExecutionEngine rollback approval, and remote fleet execution gates pass. Current payload remains non-GA and install-blocked on the same execution blockers. Next work is RC7-040: run Production Distro RC7 final audit and next milestone planning.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC6 is closed with installable signed payload channel contracts, bounded /payloads and /install metadata, current-artifacts payload projection, hosted payload metadata, signed payload fail-closed fixtures, bootstrap installer preflight, installer fail-closed fixtures, refreshed public mirror frontend, exact-approval-gated canary packet, rollback execution preconditions, and final closeout audit. RC6 verdict is PASS for metadata/readiness projection, not GA. Production Distro RC7 is now closed with PASS final audit, still not GA: RC7-001 freezes signed payload consumption and controlled execution boundaries; RC7-002 publishes signed metadata plus revocation snapshot projection; RC7-003 defines installer compatibility plus rollback baseline publication contracts; RC7-010 proves installer signed metadata observation while blocked; RC7-011 adds 21 signed consumption fail-closed fixtures; RC7-012 publishes /install/compatibility.json plus /install/rollback-baseline.json; RC7-020 refreshes the mirror frontend for signed, revocation, compatibility, rollback, and non-GA install-blocked visibility; RC7-021 configures HTTPS and nginx hardening for aios.w33d.xyz; RC7-022 freezes metadata-only large payload storage policy; RC7-030 projects multi-node canary targets and exact approval; RC7-031 proves canary activation is denied by missing signature, target enrollment, exact approval, AgentCore PlanSpec, SecurityExecutionEngine approval, and remote fleet gates; RC7-032 proves rollback drill execution is denied by missing signature, canary activation, target enrollment, exact approval, AgentCore rollback PlanSpec, SecurityExecutionEngine rollback approval, and remote fleet gates; RC7-040 records final audit PASS with 19 checks and 0 blockers. Current payload remains non-GA and install-blocked. Next work is Production Distro RC8 planning: real installable payload bytes, public signature artifact ingestion, installer VM smoke, exact-approved canary activation, and rollback drill execution under AgentCore plus SecurityExecutionEngine.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1631,6 +1631,30 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-032-gated-rollback-drill.json"
+                      },
+                      {
+                          "type":  "rc7_script",
+                          "path":  "scripts/run-rc7-final-closeout-audit.ps1"
+                      },
+                      {
+                          "type":  "rc7_artifact",
+                          "path":  ".workflow/artifacts/rc7-final-closeout-audit/result.json"
+                      },
+                      {
+                          "type":  "final_audit",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/FINAL-AUDIT-20260608-production-distro-rc7.json"
+                      },
+                      {
+                          "type":  "rc7_doc",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/final-rc7-closeout-summary.md"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-040.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-040-final-closeout-audit.json"
                       }
                   ]
 }

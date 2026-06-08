@@ -1,0 +1,62 @@
+{
+  "schema": "agentos.rc7-final-closeout-task-evidence.v1",
+  "generated_at": "2026-06-08T15:22:02.2477364+08:00",
+  "task": "RC7-040",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "runner": {
+    "path": "scripts/run-rc7-final-closeout-audit.ps1",
+    "sha256": "ad8605f60235dc0865afec3b9183bdb665627e67f1ad599d09b76e2e26d7425f"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc7-final-closeout-audit/result.json",
+    "sha256": "f5a072de4812d518be72ad63c33e48699b76a4d27869cda492683b1f38de86c3",
+    "status": "passed",
+    "checks": 19,
+    "blockers": 0
+  },
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/FINAL-AUDIT-20260608-production-distro-rc7.json",
+      "sha256": "71586a5b8bfd8ade6a49a9b09020820e5afdaada01cf36c261e8d93a296f37c1",
+      "verdict": "PASS"
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/final-rc7-closeout-summary.md",
+      "sha256": "7f20046354f64df44a1b8e4c6a0952bc1289acab3668543aeac122f823795a99"
+    }
+  },
+  "verified_controls": {
+    "signed_metadata_revocation_ready": true,
+    "installer_signed_consumption_ready": true,
+    "signed_consumption_fail_closed_ready": true,
+    "compatibility_and_rollback_baseline_ready": true,
+    "hosted_https_mirror_ready": true,
+    "large_payload_storage_policy_ready": true,
+    "canary_approval_projected_execution_blocked": true,
+    "gated_activation_projected_execution_blocked": true,
+    "gated_rollback_projected_execution_blocked": true,
+    "live_endpoint_ready": true,
+    "production_ready_claim": false
+  },
+  "remaining_blockers_before_ga_or_execution": [
+    "real-cryptographic-payload-signature-not-present",
+    "canary-activation-evidence-not-executed",
+    "two-or-more-enrolled-canary-target-nodes-required",
+    "remote-fleet-execution-not-enabled",
+    "exact-operator-approval-not-granted",
+    "AgentCore-PlanSpec-not-bound",
+    "SecurityExecutionEngine-approval-not-bound",
+    "AgentCore-rollback-PlanSpec-not-bound",
+    "SecurityExecutionEngine-rollback-approval-not-bound",
+    "large-release-payload-bytes-not-published",
+    "installer-vm-install-smoke-not-run"
+  ],
+  "completion": {
+    "rc7_040_complete": true,
+    "workflow_complete": true,
+    "next_milestone": "Production Distro RC8",
+    "commit_required": true
+  }
+}
