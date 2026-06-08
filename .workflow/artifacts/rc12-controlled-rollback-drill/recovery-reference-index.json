@@ -1,0 +1,81 @@
+{
+  "schema": "agentos.rc12-controlled-rollback-recovery-reference-index.v1",
+  "generated_at": "2026-06-09T06:35:00+08:00",
+  "task": "RC12-041",
+  "status": "projection-only-recovery-execution-blocked",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "entries": [
+    {
+      "id": "rc12-activation-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc12-controlled-canary-activation/activation-denial-evidence.json",
+      "sha256": "a223a6821ef45f3335b5f652c372c0aaac7cabeca5537068aca000a38f17e255",
+      "executable": false
+    },
+    {
+      "id": "rc12-activation-handoff",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc12-controlled-canary-activation/controlled-activation-handoff.json",
+      "sha256": "454ee72b5949f482deeda78f683eab1a3f8b63730902a397ee65909b02336fa9",
+      "executable": false
+    },
+    {
+      "id": "rc12-rollback-drill-gate-report",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc12-controlled-rollback-drill/rollback-drill-gate-report.json",
+      "sha256": "3231df5d8a839dc648c0d76d7a09e0b2994b4332c0ba588ac3a68c2c6a832d5e",
+      "executable": false
+    },
+    {
+      "id": "rc12-rollback-drill-denial",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc12-controlled-rollback-drill/rollback-drill-denial-evidence.json",
+      "sha256": "e8e40b7b5d33a675c7dff1a1a74af6cff3861a6c574b977b8e3c7c6d8fb3e967",
+      "executable": false
+    },
+    {
+      "id": "rc11-rollback-support-result",
+      "kind": "local-artifact",
+      "path": ".workflow/artifacts/rc11-controlled-rollback-support-recovery/result.json",
+      "sha256": "8828f12103bfaffa4f54c5c0bcec55eaf29a87095d917bda1bae601b9a8ffd5e",
+      "executable": false
+    }
+  ],
+  "required_before_execution": [
+    "executed controlled canary activation",
+    "separate exact rollback approval",
+    "bound rollback target identities",
+    "executable AgentCore rollback PlanSpec",
+    "SecurityExecutionEngine rollback approval",
+    "rollback audit journal",
+    "post-rollback observations",
+    "remote fleet execution gate"
+  ],
+  "recovery_authority": {
+    "plan_authority": "AgentCore",
+    "side_effect_authority": "SecurityExecutionEngine",
+    "mirror_authority": false,
+    "signer_authority": false,
+    "support_metadata_authority": false,
+    "tui_authority": false,
+    "shell_authority": false,
+    "model_replay_authority": false
+  },
+  "side_effects": {
+    "rollback_attempt_recorded": true,
+    "effect_prepared": false,
+    "effect_executed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "boot_metadata_mutated": false,
+    "active_slot_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false
+  }
+}
