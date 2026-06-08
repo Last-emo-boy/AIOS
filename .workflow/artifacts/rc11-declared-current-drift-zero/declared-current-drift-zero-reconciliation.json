@@ -1,0 +1,640 @@
+{
+  "schema": "agentos.rc11-declared-current-drift-zero-reconciliation.v1",
+  "generated_at": "2026-06-09T01:45:00+08:00",
+  "task": "RC11-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "declared-current-drift-denied",
+  "production_ready_claim": false,
+  "source": {
+    "rc11_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc11/docs/real-object-trust-handoff-contract.md",
+      "sha256": "73fe35ab92d0c90f590147d0bf5c52670174b7e3566bb56f2354026ac947df4e",
+      "size_bytes": 6429,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "rc11_byte_map_result": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/result.json",
+      "sha256": "b56a82a785bdac498d507e9e4597431cc5bd2969dd04c0bf4d8dc09e015f2348",
+      "size_bytes": 14315,
+      "present": true,
+      "schema": "agentos.rc11-release-object-byte-map-result.v1",
+      "status": "passed"
+    },
+    "rc11_byte_map": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/release-object-byte-map.json",
+      "sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+      "size_bytes": 3560,
+      "present": true,
+      "schema": "agentos.rc11-release-object-byte-map.v1",
+      "status": "current-byte-map-candidate-verification-blocked"
+    },
+    "rc11_descriptor_candidate": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/immutable-descriptor-candidate.json",
+      "sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+      "size_bytes": 2413,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "rc11_descriptor_report": {
+      "path": ".workflow/artifacts/rc11-release-object-byte-map/descriptor-candidate-report.json",
+      "sha256": "4db5bcdf21dcc534e14932815defe10c482e929ce1134b6c3b774f53020ba7ef",
+      "size_bytes": 6316,
+      "present": true,
+      "schema": "agentos.rc11-release-object-descriptor-candidate-report.v1",
+      "status": "current-byte-map-candidate-verification-blocked"
+    },
+    "rc10_drift_result": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+      "sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "size_bytes": 7905,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation-result.v1",
+      "status": "passed"
+    },
+    "rc10_drift_reconciliation": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+      "sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8",
+      "size_bytes": 21510,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation.v1",
+      "status": "drift-zero-denied"
+    },
+    "current_payload_bytes": {
+      "path": "image/out/agentos-initramfs.cpio.gz",
+      "sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "size_bytes": 377,
+      "present": true,
+      "schema": null,
+      "status": null
+    }
+  },
+  "byte_map_binding": {
+    "result_sha256": "b56a82a785bdac498d507e9e4597431cc5bd2969dd04c0bf4d8dc09e015f2348",
+    "byte_map_sha256": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+    "descriptor_candidate_sha256": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+    "descriptor_report_sha256": "4db5bcdf21dcc534e14932815defe10c482e929ce1134b6c3b774f53020ba7ef",
+    "rc10_drift_result_sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+    "rc10_drift_reconciliation_sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8"
+  },
+  "comparison_summary": {
+    "comparisons": 40,
+    "matched": 27,
+    "drift": 13,
+    "rc11_self_drift": 0,
+    "carried_forward_drift": 13,
+    "rc10_source_comparisons": 30,
+    "rc10_source_drift": 13,
+    "drift_zero": false
+  },
+  "comparisons": [
+    {
+      "id": "rc11.release_id.byte_map_vs_descriptor_candidate",
+      "status": "matched",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc8-current-artifacts",
+      "expected_source": "rc11 byte map release_id",
+      "actual_source": "rc11 descriptor candidate release_id",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.payload.sha256.byte_map_vs_descriptor_candidate",
+      "status": "matched",
+      "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_source": "rc11 byte map current_payload.sha256",
+      "actual_source": "rc11 descriptor candidate sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.payload.size.byte_map_vs_descriptor_candidate",
+      "status": "matched",
+      "expected": "377",
+      "actual": "377",
+      "expected_source": "rc11 byte map current_payload.size_bytes",
+      "actual_source": "rc11 descriptor candidate size_bytes",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.payload.sha256.current_bytes_vs_descriptor_candidate",
+      "status": "matched",
+      "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_source": "rc11 descriptor candidate sha256",
+      "actual_source": "current source payload sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.payload.size.current_bytes_vs_descriptor_candidate",
+      "status": "matched",
+      "expected": "377",
+      "actual": "377",
+      "expected_source": "rc11 descriptor candidate size_bytes",
+      "actual_source": "current source payload size_bytes",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.byte_map.sha256.result_vs_file",
+      "status": "matched",
+      "expected": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+      "actual": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+      "expected_source": "rc11 byte map result byte_map_sha256",
+      "actual_source": "current byte map file sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.descriptor.sha256.result_vs_file",
+      "status": "matched",
+      "expected": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+      "actual": "8bf5667a119d1ea97392e8471e62f9920e2a64a8b2b869d2a589e93dd9dc34f8",
+      "expected_source": "rc11 byte map result descriptor_candidate_sha256",
+      "actual_source": "current descriptor candidate file sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.descriptor.byte_map_binding",
+      "status": "matched",
+      "expected": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+      "actual": "0a922886ba4433c307628b40db0c55c5c9d181e1b180e895a391577066e35278",
+      "expected_source": "descriptor candidate byte_map_sha256",
+      "actual_source": "current byte map file sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.rc10_result_sha256.byte_map_vs_file",
+      "status": "matched",
+      "expected": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "actual": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "expected_source": "rc11 byte map rc10_drift_result_sha256",
+      "actual_source": "current rc10 drift result sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc11.rc10_reconciliation_sha256.descriptor_vs_file",
+      "status": "matched",
+      "expected": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8",
+      "actual": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8",
+      "expected_source": "descriptor candidate declared_current_reconciliation_sha256",
+      "actual_source": "current rc10 reconciliation sha256",
+      "denial_reason": null
+    },
+    {
+      "id": "rc10.carry_forward.release.descriptor_vs_publication_result",
+      "status": "matched",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc8-current-artifacts",
+      "expected_source": "descriptor.release_id",
+      "actual_source": "rc9-publication-result.release_id",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.source_artifact.sha256",
+      "status": "matched",
+      "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_source": "descriptor.sha256",
+      "actual_source": "current source artifact",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.source_artifact.size_bytes",
+      "status": "matched",
+      "expected": "377",
+      "actual": "377",
+      "expected_source": "descriptor.size_bytes",
+      "actual_source": "current source artifact",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.payload_manifest.digest",
+      "status": "matched",
+      "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "actual": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "expected_source": "descriptor.manifest_sha256",
+      "actual_source": "current payload manifest file",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.checksum_set.digest",
+      "status": "matched",
+      "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "actual": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "expected_source": "descriptor.checksums_sha256",
+      "actual_source": "rc6 payload manifest file",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.signature_receipt.descriptor_sha256",
+      "status": "matched",
+      "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "expected_source": "descriptor file",
+      "actual_source": "signature receipt",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.signature_receipt.object_sha256",
+      "status": "matched",
+      "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_source": "descriptor.sha256",
+      "actual_source": "signature receipt",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.signature_summary.descriptor_sha256",
+      "status": "matched",
+      "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "expected_source": "descriptor file",
+      "actual_source": "signature summary",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.signature_summary.object_sha256",
+      "status": "matched",
+      "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_source": "descriptor.sha256",
+      "actual_source": "signature summary",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.revocation_snapshot.digest",
+      "status": "matched",
+      "expected": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "actual": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "expected_source": "descriptor.revocation_snapshot_sha256",
+      "actual_source": "revocation snapshot file",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.installer_compatibility.digest",
+      "status": "matched",
+      "expected": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "actual": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "expected_source": "descriptor.installer_compatibility_sha256",
+      "actual_source": "compatibility file",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.rollback_baseline.digest",
+      "status": "matched",
+      "expected": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "actual": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "expected_source": "descriptor.rollback_baseline_sha256",
+      "actual_source": "rollback baseline file",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.support_recovery.digest",
+      "status": "matched",
+      "expected": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "actual": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "expected_source": "descriptor.support_recovery_sha256",
+      "actual_source": "support recovery file",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.mirror.payload_index.object_descriptor_sha256",
+      "status": "matched",
+      "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "expected_source": "descriptor file",
+      "actual_source": "hosted payload index",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.mirror.payload_index.object_sha256",
+      "status": "matched",
+      "expected": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "actual": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_source": "descriptor.sha256",
+      "actual_source": "hosted payload index",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.mirror.install_bootstrap.object_descriptor_sha256",
+      "status": "matched",
+      "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "expected_source": "descriptor file",
+      "actual_source": "install bootstrap",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.mirror.channel.object_descriptor_sha256",
+      "status": "matched",
+      "expected": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "actual": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "expected_source": "descriptor file",
+      "actual_source": "channel index",
+      "denial_reason": null,
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_manifest.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc6 payload manifest release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signed_metadata.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 signed metadata release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signature_claims.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 signature claims release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_revocation.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 revocation release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_compatibility.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 compatibility release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_rollback.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 rollback release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_compatibility.payload_manifest_sha256",
+      "status": "drift",
+      "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "actual": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+      "expected_source": "descriptor.manifest_sha256",
+      "actual_source": "rc7 compatibility required metadata",
+      "denial_reason": "declared-manifest-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_compatibility.payload_checksums_sha256",
+      "status": "drift",
+      "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "actual": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+      "expected_source": "descriptor.checksums_sha256",
+      "actual_source": "rc7 compatibility required metadata",
+      "denial_reason": "declared-checksum-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signed_metadata.payload_manifest_sha256",
+      "status": "drift",
+      "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "actual": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+      "expected_source": "descriptor.manifest_sha256",
+      "actual_source": "rc7 signature claims",
+      "denial_reason": "signed-metadata-manifest-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signed_metadata.revocation_snapshot_sha256",
+      "status": "drift",
+      "expected": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "actual": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381",
+      "expected_source": "descriptor.revocation_snapshot_sha256",
+      "actual_source": "rc7 signature claims",
+      "denial_reason": "signed-metadata-revocation-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_component.update_metadata",
+      "status": "drift",
+      "expected": "67f04cca60933873df6c1316aa11374506a89ab4a05418010f2114412fc4e77c",
+      "actual": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+      "expected_source": "rc6 payload manifest declared_sha256",
+      "actual_source": "current observed component sha256",
+      "denial_reason": "declared-component-hash-drift",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_component.release_channel_metadata",
+      "status": "drift",
+      "expected": "bda248ae0170b098b2abe53093f70fd5decc0055f2bd78aedf499725627a9d5c",
+      "actual": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "expected_source": "rc6 payload manifest declared_sha256",
+      "actual_source": "current observed component sha256",
+      "denial_reason": "declared-component-hash-drift",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_component.qemu_runtime_smoke",
+      "status": "drift",
+      "expected": "3ee8569622500e30cbe1cae6f07b1c4822e37e5fb01923243e469d1a24d51024",
+      "actual": "facc30a92caffb5d4607e6dc884c1a9eae54994f9cd1a5bd90b98f30487b4f4a",
+      "expected_source": "rc6 payload manifest declared_sha256",
+      "actual_source": "current observed component sha256",
+      "denial_reason": "declared-component-hash-drift",
+      "source_task": "RC10-011"
+    }
+  ],
+  "drifts": [
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_manifest.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc6 payload manifest release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signed_metadata.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 signed metadata release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signature_claims.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 signature claims release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_revocation.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 revocation release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_compatibility.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 compatibility release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_rollback.release_id",
+      "status": "drift",
+      "expected": "production-distro-rc8-current-artifacts",
+      "actual": "production-distro-rc6-current-artifacts",
+      "expected_source": "current descriptor release_id",
+      "actual_source": "rc7 rollback release_id",
+      "denial_reason": "declared-release-id-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_compatibility.payload_manifest_sha256",
+      "status": "drift",
+      "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "actual": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+      "expected_source": "descriptor.manifest_sha256",
+      "actual_source": "rc7 compatibility required metadata",
+      "denial_reason": "declared-manifest-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_compatibility.payload_checksums_sha256",
+      "status": "drift",
+      "expected": "b40f8eb080160c9921de3b425b3c442219ffc5dd520a289a3e418462aad3b11e",
+      "actual": "69e3563c61d2d4f70a8f305f343545fd589f83f066d799567f2fd6c64629638e",
+      "expected_source": "descriptor.checksums_sha256",
+      "actual_source": "rc7 compatibility required metadata",
+      "denial_reason": "declared-checksum-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signed_metadata.payload_manifest_sha256",
+      "status": "drift",
+      "expected": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "actual": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+      "expected_source": "descriptor.manifest_sha256",
+      "actual_source": "rc7 signature claims",
+      "denial_reason": "signed-metadata-manifest-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc7_signed_metadata.revocation_snapshot_sha256",
+      "status": "drift",
+      "expected": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+      "actual": "c281ad4821b6672b57dc7405fbf9e8bf07d9ed250bf3e20d2c2dfa961bab6381",
+      "expected_source": "descriptor.revocation_snapshot_sha256",
+      "actual_source": "rc7 signature claims",
+      "denial_reason": "signed-metadata-revocation-digest-superseded",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_component.update_metadata",
+      "status": "drift",
+      "expected": "67f04cca60933873df6c1316aa11374506a89ab4a05418010f2114412fc4e77c",
+      "actual": "7a5d2014a4c112a2a8df1a50af098e6977a32c44118260898ad64f1cff90cd47",
+      "expected_source": "rc6 payload manifest declared_sha256",
+      "actual_source": "current observed component sha256",
+      "denial_reason": "declared-component-hash-drift",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_component.release_channel_metadata",
+      "status": "drift",
+      "expected": "bda248ae0170b098b2abe53093f70fd5decc0055f2bd78aedf499725627a9d5c",
+      "actual": "57aff917a5cf526079e72734ca83541b179a5cc294aea776940e962f37f50c80",
+      "expected_source": "rc6 payload manifest declared_sha256",
+      "actual_source": "current observed component sha256",
+      "denial_reason": "declared-component-hash-drift",
+      "source_task": "RC10-011"
+    },
+    {
+      "id": "rc10.carry_forward.declared.rc6_payload_component.qemu_runtime_smoke",
+      "status": "drift",
+      "expected": "3ee8569622500e30cbe1cae6f07b1c4822e37e5fb01923243e469d1a24d51024",
+      "actual": "facc30a92caffb5d4607e6dc884c1a9eae54994f9cd1a5bd90b98f30487b4f4a",
+      "expected_source": "rc6 payload manifest declared_sha256",
+      "actual_source": "current observed component sha256",
+      "denial_reason": "declared-component-hash-drift",
+      "source_task": "RC10-011"
+    }
+  ],
+  "blockers": [
+    "nonzero-declared-current-drift-count",
+    "rc10-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published",
+    "installer-quarantine-fetch-not-run",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "trust_decision": {
+    "external_object_trust_allowed": false,
+    "external_object_descriptor_verification_allowed": false,
+    "installer_quarantine_fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "drift_repair_performed": false,
+    "declared_metadata_rewritten": false,
+    "descriptor_published": false,
+    "payload_bytes_uploaded": false
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "agentos.rc11-drift-zero-denial.v1",
+  "generated_at": "2026-06-09T01:45:00+08:00",
+  "task": "RC11-011",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "declared-current-drift-denied",
+  "production_ready_claim": false,
+  "denied": true,
+  "denial_reasons": [
+    "nonzero-declared-current-drift-count",
+    "rc10-declared-current-drift-carried-forward",
+    "external-https-object-uri-not-published"
+  ],
+  "drift_count": 13,
+  "drift_ids": [
+    "rc10.carry_forward.declared.rc6_payload_manifest.release_id",
+    "rc10.carry_forward.declared.rc7_signed_metadata.release_id",
+    "rc10.carry_forward.declared.rc7_signature_claims.release_id",
+    "rc10.carry_forward.declared.rc7_revocation.release_id",
+    "rc10.carry_forward.declared.rc7_compatibility.release_id",
+    "rc10.carry_forward.declared.rc7_rollback.release_id",
+    "rc10.carry_forward.declared.rc7_compatibility.payload_manifest_sha256",
+    "rc10.carry_forward.declared.rc7_compatibility.payload_checksums_sha256",
+    "rc10.carry_forward.declared.rc7_signed_metadata.payload_manifest_sha256",
+    "rc10.carry_forward.declared.rc7_signed_metadata.revocation_snapshot_sha256",
+    "rc10.carry_forward.declared.rc6_payload_component.update_metadata",
+    "rc10.carry_forward.declared.rc6_payload_component.release_channel_metadata",
+    "rc10.carry_forward.declared.rc6_payload_component.qemu_runtime_smoke"
+  ],
+  "downstream_gates_blocked": [
+    "installer-quarantine-fetch-not-run",
+    "two-target-canary-not-enrolled",
+    "exact-approval-not-bound",
+    "agentcore-planspec-not-bound",
+    "security-execution-effect-envelope-not-bound",
+    "controlled-activation-not-authorized",
+    "controlled-rollback-not-authorized"
+  ],
+  "side_effects": {
+    "drift_repair_performed": false,
+    "declared_metadata_rewritten": false,
+    "descriptor_published": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  }
+}
