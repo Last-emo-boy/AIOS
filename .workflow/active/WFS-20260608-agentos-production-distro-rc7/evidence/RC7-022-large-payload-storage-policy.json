@@ -1,0 +1,77 @@
+{
+  "schema": "agentos.rc7-large-payload-storage-policy-evidence.v1",
+  "generated_at": "2026-06-08T16:25:00+08:00",
+  "task": "RC7-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc7",
+  "document": {
+    "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+    "sha256": "7deb0cb9380e5f76e3a700a1e80b48ae8d1dd4498d8cd3cdf80de17a534adbbf"
+  },
+  "source_artifacts": {
+    "rc7_tls_nginx_hardening": ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    "rc7_frontend_signed_status": ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
+    "rc7_signed_metadata_revocation": ".workflow/artifacts/rc7-signed-metadata-revocation/result.json",
+    "rc7_install_rollback_baseline": ".workflow/artifacts/rc7-install-rollback-baseline/result.json"
+  },
+  "policy": {
+    "mirror_host": "47.101.11.109",
+    "mirror_domain": "aios.w33d.xyz",
+    "mirror_storage_mode": "metadata-only",
+    "large_payloads_on_mirror_allowed": false,
+    "external_object_storage_required": true,
+    "object_storage_trust": "transport-only",
+    "persistent_metadata_credentials_allowed": false,
+    "persistent_presigned_urls_allowed": false,
+    "https_required_for_object_uri": true,
+    "immutable_object_required": true,
+    "size_and_digest_required": true,
+    "installer_quarantine_required": true,
+    "local_byte_digest_verification_required": true
+  },
+  "required_bindings": [
+    "release_id",
+    "object_id",
+    "uri",
+    "size_bytes",
+    "sha256",
+    "manifest_sha256",
+    "checksums_sha256",
+    "signed_metadata_sha256",
+    "revocation_snapshot_sha256",
+    "compatibility_sha256",
+    "rollback_baseline_sha256",
+    "policy_version"
+  ],
+  "remaining_blockers": [
+    "real-cryptographic-payload-signature-not-present",
+    "prior-signed-metadata-byte-hash-canonicalization-pending",
+    "object-storage-provider-and-upload-evidence-not-selected",
+    "installer-object-fetch-quarantine-verification-not-implemented",
+    "exact-operator-approval-not-granted",
+    "controlled-canary-and-rollback-evidence-pending"
+  ],
+  "invariants": {
+    "metadata_publication_only": true,
+    "payload_upload_performed": false,
+    "large_payload_storage_enabled_on_mirror": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc7_022_complete": true,
+    "wave_2_complete": true,
+    "next_task": "RC7-030",
+    "commit_required": true
+  }
+}

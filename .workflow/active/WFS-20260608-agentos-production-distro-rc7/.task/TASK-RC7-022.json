@@ -1,0 +1,33 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC7-022",
+  "title": "define large payload storage policy and external object storage boundary",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/signed-payload-consumption-controlled-execution-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/installer-compatibility-rollback-baseline-contract.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/tls-storage-signed-payload-threat-model.md",
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+      "role": "large payload storage and external object storage boundary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-022-large-payload-storage-policy.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The policy keeps 47.101.11.109 metadata-only and forbids large payload bytes under /srv/aios-mirror.",
+      "External object storage is defined as transport only, not trust.",
+      "Object references require immutable HTTPS, size, digest, manifest, signature, revocation, compatibility, and rollback hash bindings.",
+      "Installer object fetch remains quarantine-first and fail-closed before any install, activation, or rollback side effect.",
+      "The next task is RC7-030 multi-node canary approval packet projection."
+    ]
+  }
+}

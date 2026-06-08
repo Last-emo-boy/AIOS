@@ -3,7 +3,7 @@
   "name": "Production Distro RC7",
   "status": "active",
   "created_at": "2026-06-08T15:05:00+08:00",
-  "updated_at": "2026-06-08T16:15:00+08:00",
+  "updated_at": "2026-06-08T16:25:00+08:00",
   "source": "RC6 final audit; TASK.md; maestro-managed continuation",
   "previous_workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
   "goal": "Convert the RC6 metadata-only, verification-blocked payload channel into signed payload consumption and controlled execution evidence while keeping the mirror, signer, installer, AgentCore, SecurityExecutionEngine, fleet, and TUI authority boundaries explicit.",
@@ -70,9 +70,15 @@
       "completed_at": "2026-06-08T16:15:00+08:00",
       "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-021-tls-nginx-hardening.json",
       "commit": null
+    },
+    {
+      "task": "RC7-022",
+      "completed_at": "2026-06-08T16:25:00+08:00",
+      "evidence": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-022-large-payload-storage-policy.json",
+      "commit": null
     }
   ],
-  "next_task": "RC7-022",
+  "next_task": "RC7-030",
   "plan": ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
   "docs": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/FINAL-AUDIT-20260608-production-distro-rc6.json",
@@ -85,7 +91,8 @@
     ".workflow/artifacts/rc7-signed-consumption-fail-closed/result.json",
     ".workflow/artifacts/rc7-install-rollback-baseline/result.json",
     ".workflow/artifacts/rc7-mirror-frontend-signed-status/result.json",
-    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json"
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/plan.json",
@@ -137,6 +144,9 @@
     ".workflow/artifacts/rc7-tls-nginx-hardening/tls-certificate-summary.json",
     ".workflow/artifacts/rc7-tls-nginx-hardening/nginx-aios.w33d.xyz.redacted.conf",
     ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-021.json",
-    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-021-tls-nginx-hardening.json"
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-021-tls-nginx-hardening.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/docs/large-payload-storage-policy.md",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/.task/TASK-RC7-022.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc7/evidence/RC7-022-large-payload-storage-policy.json"
   ]
 }
