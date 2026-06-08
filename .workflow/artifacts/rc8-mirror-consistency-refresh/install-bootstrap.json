@@ -1,0 +1,60 @@
+{
+  "schema": "agentos.rc8-install-bootstrap.v1",
+  "generated_at": "2026-06-08T16:29:50.4651648+08:00",
+  "status": "verification-blocked",
+  "production_ready_claim": false,
+  "domain": "aios.w33d.xyz",
+  "default_release_id": "production-distro-rc8-current-artifacts",
+  "current_state": "verification-blocked",
+  "install_allowed": false,
+  "activation_allowed": false,
+  "rollback_execution_allowed": false,
+  "installer_vm_smoke_run": true,
+  "payload_signature_required": true,
+  "payload_signature_crypto_verified": true,
+  "external_https_object_uri_published": false,
+  "remote_payload_bytes_downloaded": false,
+  "payload_bytes_hosted_on_mirror": false,
+  "payload_index_path": "/payloads/index.json",
+  "endpoints": {
+    "payload_index": "/payloads/index.json",
+    "object_descriptor": "/payloads/aios/production-distro-rc8-current-artifacts/object-descriptor.json",
+    "signature_receipt": "/payloads/aios/production-distro-rc8-current-artifacts/signature-receipt.json",
+    "signature_summary": "/payloads/aios/production-distro-rc8-current-artifacts/signature-summary.json",
+    "installer_preflight": "/payloads/aios/production-distro-rc8-current-artifacts/installer-vm-preflight.json",
+    "preflight_report": "/payloads/aios/production-distro-rc8-current-artifacts/preflight-report.json",
+    "object_fetch_report": "/payloads/aios/production-distro-rc8-current-artifacts/object-fetch-report.json",
+    "fail_closed_result": "/payloads/aios/production-distro-rc8-current-artifacts/installer-byte-fail-closed.json",
+    "compatibility": "/install/compatibility.json",
+    "rollback_baseline": "/install/rollback-baseline.json"
+  },
+  "blockers": [
+    "external-https-object-fetch",
+    "external-https-object-uri-not-published",
+    "declared-current-artifact-drift-unresolved",
+    "exact-operator-approval-pending",
+    "controlled-execution-not-authorized"
+  ],
+  "projection": {
+    "payload_index_sha256": "d62af8b6150203e5774172351155a98551f77c1394d256eb2b81e6a81f69db65",
+    "object_descriptor_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+    "signature_receipt_sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+    "installer_preflight_result_sha256": "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b",
+    "installer_byte_fail_closed_sha256": "9391926d751bc42786cee0fcc66e5f65eb9df2a1cb627507954c24ca5abb55be",
+    "installer_compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e"
+  },
+  "forbidden_authority": [
+    "signing",
+    "payload-upload",
+    "remote-payload-download-before-external-object",
+    "install",
+    "activation",
+    "rollback-execution",
+    "active-slot-mutation",
+    "production-ring-mutation",
+    "support-upload",
+    "remote-dispatch",
+    "tui-authority"
+  ]
+}

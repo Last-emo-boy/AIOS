@@ -1,0 +1,105 @@
+{
+  "schema": "agentos.rc8-mirror-consistency-refresh-evidence.v1",
+  "generated_at": "2026-06-08T20:45:00+08:00",
+  "task": "RC8-022",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc8",
+  "script": {
+    "path": "scripts/provision-rc8-mirror-consistency-refresh.ps1",
+    "sha256": "ced1766eb3a81ffd2400d6399d937c69f80217051fe59facd8e51a1aa9e17bb0"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+    "status": "passed",
+    "sha256": "3ac605eb63ec9e048ae001e63614c98868849f68b5cfe32f6540a46d3a1f33ed"
+  },
+  "local_outputs": {
+    "hosted_payload_index": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+      "sha256": "77408fab1641702a3a6baaddc1c82dc5e1ec3681dfcc1bc7cc0878c2705e9e6b"
+    },
+    "install_bootstrap": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+      "sha256": "7442340caa50a714c838e819fb513ef42594ffdfe00754450521111fa58b3ca2"
+    },
+    "hosted_channel_index": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+      "sha256": "0c72d39c7f8369762d17d7e25f3c8b4f811a6d283fe71465cf31e9118326b60b"
+    },
+    "mirror_status": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json",
+      "sha256": "4882269fed05866be2bab88cb46caa9ba967c79212d7890b949c4dc28d76a970"
+    },
+    "index_html": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/index.html",
+      "sha256": "956c85818d4223bbf8c63c3d3553ab6c39f14e02db10a0914d8e7a7734d01e7d"
+    },
+    "mirror_css": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.css",
+      "sha256": "bdf99593bce0c59e8719c4882561fbaf6bbbcf449d83cfb05bf85104b38f27fe"
+    },
+    "mirror_js": {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.js",
+      "sha256": "b50ab73e0aec7bb86da5996b558bf8570ea001d3505cadcf94ce435215842f14"
+    }
+  },
+  "remote_surface": {
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "validation_used_local_dns": false,
+    "https_resolve_override": "aios.w33d.xyz:443:47.101.11.109",
+    "https_root_status": 200,
+    "metadata_checks": 20,
+    "blockers": 0,
+    "preserved_metadata_unchanged": true,
+    "directory_listing_blocked": true,
+    "write_methods_blocked": true
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "status": "verification-blocked",
+    "storage_mode": "metadata-only",
+    "payload_bytes_hosted_on_mirror": false,
+    "external_https_object_uri_published": false,
+    "public_signature_ingested": true,
+    "signature_crypto_verified": true,
+    "installer_vm_smoke_completed": true,
+    "fail_closed_cases": 28,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remaining_payload_blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "invariants": {
+    "hosted_metadata_only": true,
+    "payload_bytes_uploaded": false,
+    "payload_bytes_hosted_on_mirror": false,
+    "remote_payload_bytes_downloaded": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc8_022_complete": true,
+    "next_task": "RC8-030",
+    "commit_required": true
+  }
+}

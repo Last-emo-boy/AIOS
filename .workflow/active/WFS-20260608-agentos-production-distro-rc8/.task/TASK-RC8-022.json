@@ -1,0 +1,65 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC8-022",
+  "title": "publish RC8 mirror metadata and frontend consistency refresh",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+    ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+    ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+    ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+    ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+    ".workflow/artifacts/rc7-tls-nginx-hardening/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/provision-rc8-mirror-consistency-refresh.ps1",
+      "role": "RC8 mirror metadata and frontend refresh publisher"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json",
+      "role": "result artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+      "role": "hosted RC8 payload index"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+      "role": "hosted RC8 install bootstrap"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+      "role": "hosted RC8 channel index"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json",
+      "role": "hosted RC8 mirror status"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/index.html",
+      "role": "frontend HTML"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.css",
+      "role": "frontend CSS"
+    },
+    {
+      "path": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.js",
+      "role": "frontend JavaScript"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-022-mirror-consistency-refresh.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "RC8 metadata is published to the HTTPS mirror as metadata-only descriptors, receipts, preflight evidence, fail-closed evidence, channel index, install bootstrap, and mirror status without hosting payload bytes on the mirror.",
+      "The refreshed frontend renders the RC8 real payload mirror state and reads the RC8 metadata endpoints without external dependencies.",
+      "HTTPS validation uses resolve-pinned curl and proves live endpoint reachability, RC8 hash binding consistency, preserved compatibility/rollback/support metadata, directory listing denial, and POST denial.",
+      "The mirror keeps production_ready_claim=false and install, activation, rollback execution, payload upload, remote payload download, production ring mutation, support upload, remote dispatch, and TUI authority blocked."
+    ]
+  }
+}

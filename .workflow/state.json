@@ -5,14 +5,14 @@
     "current_phase":  "production-distro-rc8",
     "status":  "active",
     "phase_status":  "active",
-    "current_task":  "RC8-022",
+    "current_task":  "RC8-030",
     "lifecycle_position":  "rc8-active-real-installable-payload-controlled-execution",
     "blockers":  [],
-    "next_allowed_action":  "execute-rc8-022-mirror-metadata-frontend-consistency-refresh",
+    "next_allowed_action":  "execute-rc8-030-exact-approved-canary-activation-smoke-packet",
     "created_at":  "2026-05-22T21:31:25+08:00",
-    "updated_at":  "2026-06-08T20:20:00+08:00",
+    "updated_at":  "2026-06-08T20:45:00+08:00",
     "source":  "research.md",
-    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is active: RC8 Wave 0 is complete; RC8-010 projected a real payload object descriptor candidate from current build bytes; RC8-011 ingested the existing public detached signature for that payload with crypto verification and redacted receipt; RC8-012 proved signed object descriptor fail-closed fixtures across descriptor, signature, receipt, revocation, freshness, redaction, and authority broadening cases; RC8-020 ran QEMU installer VM preflight and repo-local quarantine byte smoke; RC8-021 proved installer byte, signature, storage, compatibility, redaction, and side-effect authority negative fixtures fail closed. The payload remains non-GA and install-blocked because external HTTPS object publication and declared/current drift reconciliation are still missing. Next work is RC8-022 mirror metadata and frontend consistency refresh.",
+    "summary":  "Agent-first OS: Linux LTS base, agentd as PID 1/control plane, terminal-first UX, generic Agent Core Runtime, semantic capability execution, audit and rollback before autonomy. Production Distro RC7 is closed with PASS final audit, still not GA: signed metadata projection, revocation snapshot, installer compatibility, rollback baseline, HTTPS mirror hardening, gated canary activation denial, and gated rollback drill denial are proved, but exact approval, 2+ canary targets, AgentCore PlanSpec binding, SecurityExecutionEngine approval, activation execution, and rollback execution remain missing. Production Distro RC8 is active: RC8 Wave 0 is complete; RC8-010 projected a real payload object descriptor candidate from current build bytes; RC8-011 ingested the existing public detached signature for that payload with crypto verification and redacted receipt; RC8-012 proved signed object descriptor fail-closed fixtures across descriptor, signature, receipt, revocation, freshness, redaction, and authority broadening cases; RC8-020 ran QEMU installer VM preflight and repo-local quarantine byte smoke; RC8-021 proved installer byte, signature, storage, compatibility, redaction, and side-effect authority negative fixtures fail closed; RC8-022 refreshed HTTPS mirror metadata and frontend consistency for the real RC8 payload while preserving metadata-only and install-blocked semantics. The payload remains non-GA and install-blocked because external HTTPS object publication, declared/current drift reconciliation, exact approval, and controlled execution gates are still missing. Next work is RC8-030 exact-approved canary activation smoke under AgentCore and SecurityExecutionEngine.",
     "active_decisions":  [
                              {
                                  "id":  "DEC-001",
@@ -1815,6 +1815,50 @@
                       {
                           "type":  "task_evidence",
                           "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-021-installer-byte-fail-closed.json"
+                      },
+                      {
+                          "type":  "rc8_script",
+                          "path":  "scripts/provision-rc8-mirror-consistency-refresh.ps1"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/result.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/index.html"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.css"
+                      },
+                      {
+                          "type":  "rc8_artifact",
+                          "path":  ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.js"
+                      },
+                      {
+                          "type":  "task_spec",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/.task/TASK-RC8-022.json"
+                      },
+                      {
+                          "type":  "task_evidence",
+                          "path":  ".workflow/active/WFS-20260608-agentos-production-distro-rc8/evidence/RC8-022-mirror-consistency-refresh.json"
                       }
                   ]
 }

@@ -1,0 +1,443 @@
+{
+  "schema": "agentos.rc8-mirror-consistency-refresh-result.v1",
+  "generated_at": "2026-06-08T16:29:50.4651648+08:00",
+  "checked_at": "2026-06-08T16:30:01.1697189+08:00",
+  "task": "RC8-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "remote": {
+    "host": "47.101.11.109",
+    "user": "root",
+    "domain": "aios.w33d.xyz",
+    "static_root": "/srv/aios-mirror",
+    "validation_used_local_dns": false,
+    "https_resolve_override": "aios.w33d.xyz:443:47.101.11.109"
+  },
+  "source": {
+    "descriptor": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/payload-object-descriptor.json",
+      "sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "descriptor_result": {
+      "path": ".workflow/artifacts/rc8-real-payload-object-descriptor/result.json",
+      "sha256": "8f94492df3f051825f6bd284b23110070be848137c1f9bd14c9853cc491caa43",
+      "present": true,
+      "schema": "agentos.rc8-real-payload-object-descriptor-result.v1",
+      "status": "passed"
+    },
+    "signature_ingestion_result": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/result.json",
+      "sha256": "83347310516547fb58e08c166ff2d4aa42678ba7d715e6cdaadfdca837779627",
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-result.v1",
+      "status": "passed"
+    },
+    "signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null
+    },
+    "signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null
+    },
+    "signed_descriptor_fail_closed": {
+      "path": ".workflow/artifacts/rc8-signed-object-descriptor-fail-closed/result.json",
+      "sha256": "67acffa942e5dda3c2a37f70ca03349bc15a7dc452ad5715fd7f77934efbff52",
+      "present": true,
+      "schema": "agentos.rc8-signed-object-descriptor-fail-closed-result.v1",
+      "status": "passed"
+    },
+    "installer_vm_preflight": {
+      "path": ".workflow/artifacts/rc8-installer-vm-preflight/result.json",
+      "sha256": "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b",
+      "present": true,
+      "schema": "agentos.rc8-installer-vm-preflight-result.v1",
+      "status": "passed"
+    },
+    "installer_byte_fail_closed": {
+      "path": ".workflow/artifacts/rc8-installer-byte-fail-closed/result.json",
+      "sha256": "9391926d751bc42786cee0fcc66e5f65eb9df2a1cb627507954c24ca5abb55be",
+      "present": true,
+      "schema": "agentos.rc8-installer-byte-fail-closed-result.v1",
+      "status": "passed"
+    },
+    "tls_hardening": {
+      "path": ".workflow/artifacts/rc7-tls-nginx-hardening/result.json",
+      "sha256": "7b426b311f5fbee4ae6392d2ae4325b67034969b60c180e8dad1e0fbc4426fb0",
+      "present": true,
+      "schema": "agentos.rc7-tls-nginx-hardening-result.v1",
+      "status": "passed"
+    }
+  },
+  "local_outputs": {
+    "hosted_payload_index": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+    "install_bootstrap": ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+    "hosted_channel_index": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+    "mirror_status": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json",
+    "index_html": ".workflow/artifacts/rc8-mirror-consistency-refresh/index.html",
+    "mirror_css": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.css",
+    "mirror_js": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.js"
+  },
+  "published_files": {
+    "payload_index": "/srv/aios-mirror/payloads/index.json",
+    "install_bootstrap": "/srv/aios-mirror/install/bootstrap.json",
+    "channel_index": "/srv/aios-mirror/channel/index.json",
+    "mirror_status": "/srv/aios-mirror/.well-known/aios/rc8-mirror-status.json",
+    "object_descriptor": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/object-descriptor.json",
+    "signature_receipt": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/signature-receipt.json",
+    "signature_summary": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/signature-summary.json",
+    "installer_vm_preflight": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/installer-vm-preflight.json",
+    "preflight_report": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/preflight-report.json",
+    "object_fetch_report": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/object-fetch-report.json",
+    "installer_byte_fail_closed": "/srv/aios-mirror/payloads/aios/production-distro-rc8-current-artifacts/installer-byte-fail-closed.json",
+    "index_html": "/srv/aios-mirror/index.html",
+    "mirror_css": "/srv/aios-mirror/assets/mirror.css",
+    "mirror_js": "/srv/aios-mirror/assets/mirror.js"
+  },
+  "output_hashes": {
+    "hosted_payload_index_sha256": "d62af8b6150203e5774172351155a98551f77c1394d256eb2b81e6a81f69db65",
+    "install_bootstrap_sha256": "a13a8ad1f6f4cec48afaebdfd7a571b6ade373deeff088ff171922ae056c7c9d",
+    "hosted_channel_index_sha256": "77b041725f762567c7ea5a43f95b3375cd61a292f50eb1f51badd282045d6cbd",
+    "mirror_status_sha256": "708b61c030bfa8fac751dc3412c9b959661580a9231b7e34f52efb2f5a8f211a",
+    "index_html_sha256": "956c85818d4223bbf8c63c3d3553ab6c39f14e02db10a0914d8e7a7734d01e7d",
+    "mirror_css_sha256": "bdf99593bce0c59e8719c4882561fbaf6bbbcf449d83cfb05bf85104b38f27fe",
+    "mirror_js_sha256": "b50ab73e0aec7bb86da5996b558bf8570ea001d3505cadcf94ce435215842f14"
+  },
+  "preserved_metadata_hashes": {
+    "before": {
+      "health": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+      "mirror_descriptor": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+      "compatibility": "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+      "rollback_baseline": "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+      "support_index": "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+    },
+    "after": {
+      "health": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+      "mirror_descriptor": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+      "compatibility": "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+      "rollback_baseline": "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+      "support_index": "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+    }
+  },
+  "payload_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "base_path": "/payloads/aios/production-distro-rc8-current-artifacts",
+    "status": "verification-blocked",
+    "storage_mode": "metadata-only",
+    "payload_bytes_hosted_on_mirror": false,
+    "external_https_object_uri_published": false,
+    "public_signature_ingested": true,
+    "signature_crypto_verified": true,
+    "installer_vm_smoke_completed": true,
+    "fail_closed_cases": 28,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "external-https-object-uri-not-published",
+      "declared-current-artifact-drift-unresolved"
+    ]
+  },
+  "invariants": {
+    "hosted_metadata_only": true,
+    "payload_bytes_uploaded": false,
+    "payload_bytes_hosted_on_mirror": false,
+    "remote_payload_bytes_downloaded": false,
+    "local_private_key_material_used": false,
+    "private_key_material_read_or_printed": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "checks": [
+    {
+      "id": "source.rc8_010.descriptor",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-010 descriptor projection must be passed and immutable.",
+      "evidence": {
+        "checks": 9,
+        "blockers": 0,
+        "payload_blockers": 4,
+        "rc8_010_complete": true,
+        "next_task": "RC8-011"
+      }
+    },
+    {
+      "id": "source.rc8_011.signature",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-011 public signature ingestion must be passed with crypto verification.",
+      "evidence": {
+        "checks": 12,
+        "blockers": 0,
+        "payload_blockers": 3,
+        "rc8_011_complete": true,
+        "next_task": "RC8-012"
+      }
+    },
+    {
+      "id": "source.rc8_012.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-012 signed descriptor fail-closed fixtures must pass.",
+      "evidence": {
+        "checks": 5,
+        "blockers": 0,
+        "cases": 34,
+        "passed_cases": 34,
+        "failed_cases": 0,
+        "rc8_012_complete": true,
+        "next_task": "RC8-020"
+      }
+    },
+    {
+      "id": "source.rc8_020.preflight",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-020 installer VM preflight must pass while external object fetch remains blocked.",
+      "evidence": {
+        "checks": 10,
+        "task_blockers": 0,
+        "preflight_steps": 7,
+        "preflight_blockers": 1,
+        "preflight_state": "verification-blocked",
+        "rc8_020_complete": true,
+        "next_task": "RC8-021"
+      }
+    },
+    {
+      "id": "source.rc8_021.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8-021 installer byte/signature/storage/compatibility fail-closed fixtures must pass.",
+      "evidence": {
+        "checks": 6,
+        "blockers": 0,
+        "cases": 28,
+        "passed_cases": 28,
+        "failed_cases": 0,
+        "rc8_021_complete": true,
+        "next_task": "RC8-022"
+      }
+    },
+    {
+      "id": "source.rc7_tls.https",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC7 HTTPS/Nginx hardening must be passed before RC8 mirror refresh.",
+      "evidence": {
+        "checks": 12,
+        "blockers": 0,
+        "rc7_021_complete": true,
+        "https_url": "https://aios.w33d.xyz/",
+        "next_task": "RC7-022"
+      }
+    },
+    {
+      "id": "remote.preserved_metadata.before",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Existing mirror health, descriptor, compatibility, rollback, and support metadata must be reachable before RC8 refresh.",
+      "evidence": [
+        "health",
+        "mirror_descriptor",
+        "compatibility",
+        "rollback_baseline",
+        "support_index"
+      ]
+    },
+    {
+      "id": "local.outputs.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 mirror metadata and frontend outputs must be generated locally.",
+      "evidence": {
+        "payload_index": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-payload-index.json",
+        "install_bootstrap": ".workflow/artifacts/rc8-mirror-consistency-refresh/install-bootstrap.json",
+        "channel_index": ".workflow/artifacts/rc8-mirror-consistency-refresh/hosted-channel-index.json",
+        "mirror_status": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror-status.json",
+        "index": ".workflow/artifacts/rc8-mirror-consistency-refresh/index.html",
+        "css": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.css",
+        "js": ".workflow/artifacts/rc8-mirror-consistency-refresh/mirror.js"
+      }
+    },
+    {
+      "id": "local.outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 mirror metadata and frontend outputs must not contain private key paths, PEM private blocks, or tokens.",
+      "evidence": null
+    },
+    {
+      "id": "local.outputs.size_bounded",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 mirror metadata and frontend outputs must stay bounded for the small mirror host.",
+      "evidence": {
+        "payload_index": 3498,
+        "install_bootstrap": 2996,
+        "channel_index": 3339,
+        "mirror_status": 697,
+        "index_html": 3304,
+        "mirror_css": 5573,
+        "mirror_js": 9004
+      }
+    },
+    {
+      "id": "remote.nginx.active",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Nginx must remain active after RC8 mirror consistency refresh.",
+      "evidence": [
+        "active",
+        "956c85818d4223bbf8c63c3d3553ab6c39f14e02db10a0914d8e7a7734d01e7d  index.html",
+        "bdf99593bce0c59e8719c4882561fbaf6bbbcf449d83cfb05bf85104b38f27fe  assets/mirror.css",
+        "b50ab73e0aec7bb86da5996b558bf8570ea001d3505cadcf94ce435215842f14  assets/mirror.js",
+        "d62af8b6150203e5774172351155a98551f77c1394d256eb2b81e6a81f69db65  payloads/index.json",
+        "a13a8ad1f6f4cec48afaebdfd7a571b6ade373deeff088ff171922ae056c7c9d  install/bootstrap.json",
+        "77b041725f762567c7ea5a43f95b3375cd61a292f50eb1f51badd282045d6cbd  channel/index.json",
+        "708b61c030bfa8fac751dc3412c9b959661580a9231b7e34f52efb2f5a8f211a  .well-known/aios/rc8-mirror-status.json",
+        "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e  payloads/aios/production-distro-rc8-current-artifacts/object-descriptor.json",
+        "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d  payloads/aios/production-distro-rc8-current-artifacts/signature-receipt.json",
+        "b935b8494f7e010be4f485a6596d944b752b3ffa9a578f538fd35cf76b82ae9b  payloads/aios/production-distro-rc8-current-artifacts/installer-vm-preflight.json",
+        "9391926d751bc42786cee0fcc66e5f65eb9df2a1cb627507954c24ca5abb55be  payloads/aios/production-distro-rc8-current-artifacts/installer-byte-fail-closed.json"
+      ]
+    },
+    {
+      "id": "remote.https.metadata.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 frontend and metadata endpoints must be reachable over HTTPS through resolve-pinned validation.",
+      "evidence": {
+        "root": 200,
+        "payload_index": 200,
+        "install_bootstrap": 200,
+        "channel": 200,
+        "mirror_status": 200,
+        "object_descriptor": 200,
+        "signature_receipt": 200,
+        "installer_preflight": 200,
+        "installer_fail_closed": 200
+      }
+    },
+    {
+      "id": "remote.frontend.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 frontend must render the real payload mirror dashboard assets.",
+      "evidence": {
+        "root": 200,
+        "css": 200,
+        "js": 200
+      }
+    },
+    {
+      "id": "remote.rc8_semantics.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC8 mirror metadata must expose real payload evidence while keeping install, activation, and rollback blocked.",
+      "evidence": {
+        "release_id": "production-distro-rc8-current-artifacts",
+        "install_state": "verification-blocked",
+        "external_object": false
+      }
+    },
+    {
+      "id": "remote.hash_bindings.match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC8 channel, install bootstrap, and payload index hash bindings must match local artifacts.",
+      "evidence": {
+        "payload_index_sha256": "d62af8b6150203e5774172351155a98551f77c1394d256eb2b81e6a81f69db65",
+        "install_bootstrap_sha256": "a13a8ad1f6f4cec48afaebdfd7a571b6ade373deeff088ff171922ae056c7c9d"
+      }
+    },
+    {
+      "id": "remote.source_evidence.visible",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Live RC8 detail endpoints must expose descriptor, signature receipt, installer VM preflight, and fail-closed result evidence.",
+      "evidence": {
+        "descriptor_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "signature_crypto_verified": true,
+        "preflight_status": "passed",
+        "fail_closed_status": "passed"
+      }
+    },
+    {
+      "id": "remote.preserved_metadata.unchanged",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC8 refresh must not mutate health, mirror descriptor, compatibility, rollback baseline, or support metadata bytes.",
+      "evidence": {
+        "before": {
+          "health": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+          "mirror_descriptor": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+          "compatibility": "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+          "rollback_baseline": "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+          "support_index": "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+        },
+        "after": {
+          "health": "8d3e059a452c551f1fb460d6c4aa229afe0f0e1ad7b024120476a94f7e33de25",
+          "mirror_descriptor": "e82bec80778bc50df511320447d50b0f8089210a22cf390edbab5ab24c0c31a5",
+          "compatibility": "d79bcb833afca605fdb9465a3906a1b55fec91921537354c6b7b611299a75f45",
+          "rollback_baseline": "4ec50d90ea97a002b27cfb1d80232fa7697c537df8755a0c3ee1386ae43f2a3b",
+          "support_index": "faa2aaf64ff54993f3f12bc7d3342ebccc3275dfa452bd0f9be11fed43defc21"
+        }
+      }
+    },
+    {
+      "id": "remote.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Remote RC8 metadata and frontend responses must not expose private key paths, PEM private blocks, or tokens.",
+      "evidence": null
+    },
+    {
+      "id": "remote.directory_listing.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Payload directory listing must remain blocked.",
+      "evidence": {
+        "payloads": 404,
+        "release": 404
+      }
+    },
+    {
+      "id": "remote.write_methods.blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "POST to RC8 payload metadata must remain blocked.",
+      "evidence": 403
+    }
+  ],
+  "blockers": [],
+  "summary": {
+    "checks": 20,
+    "blockers": 0,
+    "rc8_022_complete": true,
+    "next_task": "RC8-030"
+  }
+}
