@@ -1,0 +1,229 @@
+{
+  "schema": "agentos.rc10-installer-quarantine-fetch-result.v1",
+  "generated_at": "2026-06-09T00:00:00+08:00",
+  "task": "RC10-012",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "fetch_surface": {
+    "state": "fetch-denied-before-network",
+    "published_drift_zero": false,
+    "drift_zero_reconciled": false,
+    "fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "remote_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "blockers": [
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "quarantine-fetch-not-allowed-by-handoff",
+      "installer-quarantine-fetch-not-run",
+      "exact-operator-approval-pending",
+      "controlled-execution-not-authorized"
+    ]
+  },
+  "outputs": {
+    "fetch_report": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/external-object-fetch-report.json",
+      "sha256": "a4680dcdb3fa8266be123fff0c1b08f9306a990e8ece163da9a2c42576aa83d1"
+    },
+    "installer_fail_closed_evidence": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/installer-fail-closed-evidence.json",
+      "sha256": "08b8390faf0eeeaf589f103ca2b31054ba7653b1bb6ad9074aaa09bf952cbe81"
+    },
+    "installer_gate_report": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/installer-gate-report.json",
+      "sha256": "34f551d1189ed7b01a30003ea3eee6139436dcece924a5343bab2f3678af3040"
+    }
+  },
+  "source": {
+    "publication_result": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+      "size_bytes": 11803,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "publication_report": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+      "sha256": "ca097beaeec8cc1fc90d5b549693fe4f9ce114b6b50a655cb2f8b418f56fb060",
+      "size_bytes": 8848,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-report.v1",
+      "status": "publication-blocked-drift-nonzero"
+    },
+    "publication_handoff": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
+      "sha256": "59d8233f7a1c4054b6c93a2428f3a2028ff18082472ad8717ed32cebc37d4fac",
+      "size_bytes": 2984,
+      "present": true,
+      "schema": "agentos.rc10-installer-handoff.v1",
+      "status": "blocked-before-quarantine"
+    },
+    "drift_result": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+      "sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "size_bytes": 7905,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation-result.v1",
+      "status": "passed"
+    },
+    "drift_reconciliation": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+      "sha256": "bf2ddc3fe4744ec2dadc2e5fd5fb76b48d339a9e6b89edd4a5233c7a0ba302b8",
+      "size_bytes": 21510,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation.v1",
+      "status": "drift-zero-denied"
+    },
+    "drift_handoff": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/installer-handoff.json",
+      "sha256": "cd2054740923d760abd251f13a7eb81e6cfcb277860aacfb57febf8bd3c01bab",
+      "size_bytes": 2879,
+      "present": true,
+      "schema": "agentos.rc10-drift-zero-installer-handoff.v1",
+      "status": "blocked-by-drift-zero-denial"
+    },
+    "descriptor_candidate": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
+      "sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+      "size_bytes": 2503,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "signature_receipt": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/signature-ingestion-receipt.json",
+      "sha256": "66920550877ade68427a08f4a967340d998009e9eea7b320f5afc30c2eaa747d",
+      "size_bytes": 1533,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-ingestion-receipt.v1",
+      "status": null
+    },
+    "signature_summary": {
+      "path": ".workflow/artifacts/rc8-public-signature-ingestion/public-signature-artifact-summary.json",
+      "sha256": "8776bc04273140a5b26a15d0341297e2357d996ef56346da0708f0f27e2b5b19",
+      "size_bytes": 1011,
+      "present": true,
+      "schema": "agentos.rc8-public-signature-artifact-summary.v1",
+      "status": null
+    }
+  },
+  "checks": [
+    {
+      "id": "source.rc10_010.publication",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-012 requires RC10-010 publication evidence.",
+      "evidence": {
+        "status": "passed",
+        "state": "publication-blocked-drift-nonzero"
+      }
+    },
+    {
+      "id": "source.rc10_011.drift_zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-012 requires RC10-011 drift-zero evidence.",
+      "evidence": {
+        "status": "passed",
+        "state": "drift-zero-denied",
+        "drift_count": 13
+      }
+    },
+    {
+      "id": "fetch.denied_before_network",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer fetch must deny before network when publication or drift-zero gates fail.",
+      "evidence": {
+        "fetch_allowed": false,
+        "publication_ready": false,
+        "drift_ready": false,
+        "handoff_allows_fetch": false,
+        "blockers": [
+          "publication-not-published-drift-zero",
+          "missing-external-https-object-uri",
+          "drift-zero-denied",
+          "quarantine-fetch-not-allowed-by-handoff",
+          "installer-quarantine-fetch-not-run",
+          "exact-operator-approval-pending",
+          "controlled-execution-not-authorized"
+        ]
+      }
+    },
+    {
+      "id": "fixtures.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-012 installer fetch negative cases must fail closed.",
+      "evidence": {
+        "cases": 9,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "side_effects.none",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-012 must not fetch, write quarantine bytes, interpret payload bytes, install, activate, rollback, mutate rings, upload support, or dispatch.",
+      "evidence": null
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-012 outputs must not contain private key paths, PEM blocks, auth tokens, or signer internals.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "quarantine-fetch-not-allowed-by-handoff",
+    "installer-quarantine-fetch-not-run",
+    "exact-operator-approval-pending",
+    "controlled-execution-not-authorized"
+  ],
+  "invariants": {
+    "local_projection_only": true,
+    "network_fetch_attempted": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 6,
+    "failed_checks": 0,
+    "cases": 9,
+    "failed_cases": 0,
+    "rc10_012_complete": true,
+    "wave_1_complete": true,
+    "next_task": "RC10-020"
+  }
+}

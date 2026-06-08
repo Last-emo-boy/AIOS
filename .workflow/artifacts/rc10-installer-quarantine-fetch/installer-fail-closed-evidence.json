@@ -1,0 +1,313 @@
+{
+  "schema": "agentos.rc10-installer-quarantine-fetch-fail-closed-evidence.v1",
+  "generated_at": "2026-06-09T00:00:00+08:00",
+  "task": "RC10-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "passed",
+  "production_ready_claim": false,
+  "fetch_report_path": ".workflow/artifacts/rc10-installer-quarantine-fetch/external-object-fetch-report.json",
+  "cases": [
+    {
+      "id": "missing-external-object-uri",
+      "status": "passed",
+      "expected_blockers": [
+        "missing-external-https-object-uri"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "publication-not-published-drift-zero",
+      "status": "passed",
+      "expected_blockers": [
+        "publication-not-published-drift-zero"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "drift-zero-denied-before-fetch",
+      "status": "passed",
+      "expected_blockers": [
+        "drift-zero-denied"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "network-fetch-before-publication-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "publication-not-published-drift-zero",
+        "installer-quarantine-fetch-not-run"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "quarantine-write-before-fetch-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "installer-quarantine-fetch-not-run"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "payload-interpret-before-verification-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "installer-quarantine-fetch-not-run"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "install-before-quarantine-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "installer-quarantine-fetch-not-run"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "activation-before-controlled-gates-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "remote-dispatch-before-gates-denied",
+      "status": "passed",
+      "expected_blockers": [
+        "controlled-execution-not-authorized"
+      ],
+      "observed_blocked": true,
+      "observed_blockers": [
+        "publication-not-published-drift-zero",
+        "missing-external-https-object-uri",
+        "drift-zero-denied",
+        "quarantine-fetch-not-allowed-by-handoff",
+        "installer-quarantine-fetch-not-run",
+        "exact-operator-approval-pending",
+        "controlled-execution-not-authorized"
+      ],
+      "missing_expected_blockers": [],
+      "side_effects": {
+        "network_fetch_attempted": false,
+        "quarantine_payload_written": false,
+        "payload_interpreted": false,
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    }
+  ],
+  "failed_cases": [],
+  "authority": {
+    "installer_install_authority": false,
+    "installer_activation_authority": false,
+    "installer_rollback_authority": false,
+    "mirror_authority": false,
+    "object_storage_authority": false,
+    "signer_authority": false,
+    "frontend_authority": false,
+    "tui_authority": false,
+    "remote_dispatch_authority": false
+  }
+}

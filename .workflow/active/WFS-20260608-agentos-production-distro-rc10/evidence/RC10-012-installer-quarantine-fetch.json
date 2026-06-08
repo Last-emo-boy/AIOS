@@ -1,0 +1,101 @@
+{
+  "schema": "agentos.rc10-installer-quarantine-fetch-evidence.v1",
+  "generated_at": "2026-06-09T00:00:00+08:00",
+  "task": "RC10-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "script": {
+    "path": "scripts/project-rc10-installer-quarantine-fetch.ps1",
+    "sha256": "82997dfbf8a2ac2ed7b12cdbc501444e58ae628f2cf365ed90ff0b7c37c6b437"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+    "status": "passed",
+    "sha256": "e1ac5af4cab7f8c5ca44fc74dda5f4af19e39766535f228b3f70868d4bd6706a"
+  },
+  "outputs": {
+    "fetch_report": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/external-object-fetch-report.json",
+      "sha256": "a4680dcdb3fa8266be123fff0c1b08f9306a990e8ece163da9a2c42576aa83d1"
+    },
+    "installer_fail_closed_evidence": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/installer-fail-closed-evidence.json",
+      "sha256": "08b8390faf0eeeaf589f103ca2b31054ba7653b1bb6ad9074aaa09bf952cbe81"
+    },
+    "installer_gate_report": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/installer-gate-report.json",
+      "sha256": "34f551d1189ed7b01a30003ea3eee6139436dcece924a5343bab2f3678af3040"
+    }
+  },
+  "fetch_surface": {
+    "state": "fetch-denied-before-network",
+    "published_drift_zero": false,
+    "drift_zero_reconciled": false,
+    "fetch_allowed": false,
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "checks": 6,
+    "failed_checks": 0,
+    "cases": 9,
+    "failed_cases": 0,
+    "blockers": [
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "quarantine-fetch-not-allowed-by-handoff",
+      "installer-quarantine-fetch-not-run",
+      "exact-operator-approval-pending",
+      "controlled-execution-not-authorized"
+    ]
+  },
+  "gate_report": {
+    "status": "verification-blocked",
+    "rc10_010_publication_passed": true,
+    "rc10_010_published_drift_zero": false,
+    "rc10_011_reconciliation_passed": true,
+    "rc10_011_drift_zero": false,
+    "public_signature_crypto_verified": true,
+    "fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "fail_closed": {
+    "status": "passed",
+    "case_count": 9,
+    "failed_cases": []
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "network_fetch_attempted": false,
+    "payload_bytes_uploaded": false,
+    "remote_payload_bytes_downloaded": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "canary_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc10_012_complete": true,
+    "wave_1_complete": true,
+    "next_task": "RC10-020",
+    "commit_required": true
+  }
+}

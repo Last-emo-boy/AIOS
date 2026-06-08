@@ -1,0 +1,55 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-012",
+  "title": "verify installer quarantine fetch against the published external object descriptor",
+  "status": "completed",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc10-external-object-publication/result.json",
+    ".workflow/artifacts/rc10-external-object-publication/publication-report.json",
+    ".workflow/artifacts/rc10-external-object-publication/installer-handoff.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/artifact-drift-zero-reconciliation.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/installer-handoff.json",
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/drift-zero-external-object-publication-contract.md",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-installer-quarantine-fetch.ps1",
+      "role": "projection and verification script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/external-object-fetch-report.json",
+      "role": "fetch report"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/installer-fail-closed-evidence.json",
+      "role": "installer fail-closed evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/installer-gate-report.json",
+      "role": "installer gate report"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-012-installer-quarantine-fetch.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The script consumes RC10-010 publication evidence and RC10-011 drift-zero reconciliation evidence before installer fetch evaluation.",
+      "The script denies installer fetch before network when publication is not published-drift-zero or drift-zero reconciliation is denied.",
+      "The script proves quarantine payload bytes are not written and payload bytes are not interpreted before fetch gates pass.",
+      "The task preserves production_ready_claim=false and keeps install, activation, rollback, support upload, production ring mutation, and remote dispatch disabled."
+    ]
+  },
+  "verification": {
+    "command": ".\\\\scripts\\\\project-rc10-installer-quarantine-fetch.ps1 -GeneratedAt '2026-06-09T00:00:00+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}

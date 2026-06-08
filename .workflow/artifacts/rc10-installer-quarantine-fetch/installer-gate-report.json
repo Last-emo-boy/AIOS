@@ -1,0 +1,30 @@
+{
+  "schema": "agentos.rc10-installer-gate-report.v1",
+  "generated_at": "2026-06-09T00:00:00+08:00",
+  "task": "RC10-012",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "status": "verification-blocked",
+  "production_ready_claim": false,
+  "checks": {
+    "rc10_010_publication_passed": true,
+    "rc10_010_published_drift_zero": false,
+    "rc10_011_reconciliation_passed": true,
+    "rc10_011_reconciliation_state": "drift-zero-denied",
+    "rc10_011_drift_zero": false,
+    "public_signature_crypto_verified": true,
+    "fetch_allowed": false,
+    "install_allowed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "blockers": [
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "quarantine-fetch-not-allowed-by-handoff",
+    "installer-quarantine-fetch-not-run",
+    "exact-operator-approval-pending",
+    "controlled-execution-not-authorized"
+  ],
+  "next_task": "RC10-020"
+}
