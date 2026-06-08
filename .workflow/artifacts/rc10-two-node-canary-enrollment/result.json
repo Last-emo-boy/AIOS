@@ -1,0 +1,300 @@
+{
+  "schema": "agentos.rc10-two-node-canary-enrollment-result.v1",
+  "generated_at": "2026-06-09T00:10:00+08:00",
+  "task": "RC10-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "enrollment_surface": {
+    "state": "target-set-enrollment-denied",
+    "required_minimum_target_count": 2,
+    "observed_candidate_node_count": 1,
+    "inherited_rc8_enrolled_target_count": 0,
+    "enrolled_target_count": 0,
+    "target_set_enrolled": false,
+    "compatibility_binding_present": true,
+    "rollback_baseline_binding_present": true,
+    "support_recovery_binding_present": true,
+    "published_drift_zero": false,
+    "drift_zero_reconciled": false,
+    "installer_quarantine_fetch_verified": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": [
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "installer-quarantine-fetch-not-verified",
+      "exact-operator-approval-pending"
+    ]
+  },
+  "outputs": {
+    "canary_target_set": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/canary-target-set.json",
+      "sha256": "e678d5a0a00a1b0c52896f8c3e97fecc243e0abe82800c7f1f3608676144e193"
+    },
+    "target_enrollment_denial": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/target-enrollment-denial.json",
+      "sha256": "712b900a425889d988d848e0fad6028b016432ca64bdcb1635b70ee7f089ac10"
+    },
+    "controlled_execution_handoff": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/controlled-execution-handoff.json",
+      "sha256": "bd3e4a94d4a02749cf7321855a026c0d34743f1fdcc67a2f064f67e33cf3f568"
+    }
+  },
+  "source": {
+    "execution_contract": {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+      "sha256": "387d5dfe7339a9b6d2cf07f0dd97b1411bbfb537cc57eb07a59285fe271f3d7d",
+      "size_bytes": 11343,
+      "present": true,
+      "schema": null,
+      "status": null
+    },
+    "publication_result": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/result.json",
+      "sha256": "cf4d89948f940c833a72a1f51b591f598b7da4e3930375e963773656b035d2d0",
+      "size_bytes": 11803,
+      "present": true,
+      "schema": "agentos.rc10-external-object-publication-result.v1",
+      "status": "passed"
+    },
+    "drift_result": {
+      "path": ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+      "sha256": "e6e58ddc31e4d370e5a1969cac1f5bf70ca21b3fadf7bba961f3ff0e7bbf9197",
+      "size_bytes": 7905,
+      "present": true,
+      "schema": "agentos.rc10-artifact-drift-zero-reconciliation-result.v1",
+      "status": "passed"
+    },
+    "installer_fetch_result": {
+      "path": ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+      "sha256": "e1ac5af4cab7f8c5ca44fc74dda5f4af19e39766535f228b3f70868d4bd6706a",
+      "size_bytes": 8735,
+      "present": true,
+      "schema": "agentos.rc10-installer-quarantine-fetch-result.v1",
+      "status": "passed"
+    },
+    "rc8_canary_result": {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+      "sha256": "1e5c00d55d51b5220b6871832abeba0859015e129cf2117e70a5422b941acef5",
+      "size_bytes": 37796,
+      "present": true,
+      "schema": "agentos.rc8-exact-approved-canary-smoke-result.v1",
+      "status": "passed"
+    },
+    "rc8_canary_target_set": {
+      "path": ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+      "sha256": "81453c21737d4e5184078231f97af6e99fb585cd878e36e304bbbfc40fa2941d",
+      "size_bytes": 2136,
+      "present": true,
+      "schema": "agentos.rc8-canary-target-set.v1",
+      "status": "projected-target-set-enrollment-blocked"
+    },
+    "rc8_rollback_result": {
+      "path": ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+      "sha256": "4bc3c094829dbf3a126d83bb9acf75833f080d1d4f13eca9aa739778734421db",
+      "size_bytes": 38473,
+      "present": true,
+      "schema": "agentos.rc8-controlled-rollback-drill-result.v1",
+      "status": "passed"
+    },
+    "descriptor_candidate": {
+      "path": ".workflow/artifacts/rc10-external-object-publication/external-object-descriptor-candidate.json",
+      "sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+      "size_bytes": 2503,
+      "present": true,
+      "schema": "agentos.payload-object-descriptor.v1",
+      "status": null
+    },
+    "compatibility": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/compatibility.json",
+      "sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "size_bytes": 1905,
+      "present": true,
+      "schema": "agentos.rc7-installer-compatibility.v1",
+      "status": "compatibility-projected-verification-blocked"
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked"
+    },
+    "support_recovery": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only"
+    },
+    "fleet_authority": {
+      "path": ".workflow/artifacts/release/fleet-rollout-authority.json",
+      "sha256": "0ef963a2a62bac6a7a502745c28e60ee0ea796bd036240d47563f30cc90d9ddc",
+      "size_bytes": 6191,
+      "present": true,
+      "schema": "agentos.fleet-rollout-authority.v1",
+      "status": "passed"
+    }
+  },
+  "checks": [
+    {
+      "id": "source.rc10_010.publication",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-020 requires RC10-010 publication evidence.",
+      "evidence": {
+        "status": "passed",
+        "state": "publication-blocked-drift-nonzero",
+        "published_drift_zero": false
+      }
+    },
+    {
+      "id": "source.rc10_011.drift_zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-020 requires RC10-011 drift-zero evidence.",
+      "evidence": {
+        "status": "passed",
+        "state": "drift-zero-denied",
+        "drift_count": 13
+      }
+    },
+    {
+      "id": "source.rc10_012.fetch",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-020 requires RC10-012 installer quarantine fetch evidence.",
+      "evidence": {
+        "status": "passed",
+        "state": "fetch-denied-before-network",
+        "fetch_allowed": false
+      }
+    },
+    {
+      "id": "source.rc8.target_set_under_enrolled",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Inherited RC8 target set must remain projected and under-enrolled instead of being treated as real enrollment.",
+      "evidence": {
+        "observed": 1,
+        "required": 2,
+        "inherited_enrolled": 0
+      }
+    },
+    {
+      "id": "bindings.compatibility_rollback_support_present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target enrollment denial must bind compatibility, rollback baseline, and support/recovery references.",
+      "evidence": {
+        "compatibility": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "rollback_baseline": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8"
+      }
+    },
+    {
+      "id": "target_set.denied_not_enrolled",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-020 must deny target enrollment when two enrolled canary targets are unavailable.",
+      "evidence": {
+        "state": "target-set-enrollment-denied",
+        "observed": 1,
+        "enrolled": 0,
+        "required": 2,
+        "blockers": [
+          "fewer-than-two-eligible-targets",
+          "target-set-not-enrolled",
+          "remote-fleet-execution-not-enabled",
+          "publication-not-published-drift-zero",
+          "missing-external-https-object-uri",
+          "drift-zero-denied",
+          "installer-quarantine-fetch-not-verified",
+          "exact-operator-approval-pending"
+        ]
+      }
+    },
+    {
+      "id": "execution.side_effects_blocked",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target enrollment must not authorize activation, rollback, support upload, production ring mutation, or remote dispatch.",
+      "evidence": {
+        "exact_approval_allowed": false,
+        "agentcore_planspec_allowed": false,
+        "security_execution_approval_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC10-020 outputs must not contain private key paths, PEM blocks, auth tokens, or signer internals.",
+      "evidence": null
+    }
+  ],
+  "blockers": [
+    "fewer-than-two-eligible-targets",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "installer-quarantine-fetch-not-verified",
+    "exact-operator-approval-pending"
+  ],
+  "invariants": {
+    "local_projection_only": true,
+    "target_enrollment_fabricated": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "summary": {
+    "checks": 8,
+    "failed_checks": 0,
+    "rc10_020_complete": true,
+    "target_set_state": "target-set-enrollment-denied",
+    "target_set_enrolled": false,
+    "required_minimum_target_count": 2,
+    "observed_candidate_node_count": 1,
+    "enrolled_target_count": 0,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "next_task": "RC10-021"
+  }
+}

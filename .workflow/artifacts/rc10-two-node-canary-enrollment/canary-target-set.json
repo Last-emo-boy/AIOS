@@ -1,0 +1,123 @@
+{
+  "schema": "agentos.rc10-canary-target-set.v1",
+  "generated_at": "2026-06-09T00:10:00+08:00",
+  "task": "RC10-020",
+  "status": "target-set-enrollment-denied",
+  "production_ready_claim": false,
+  "release_id": "production-distro-rc8-current-artifacts",
+  "object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+  "object_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+  "object_descriptor_sha256": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+  "ring": "canary",
+  "required_minimum_target_count": 2,
+  "observed_candidate_node_count": 1,
+  "inherited_rc8_enrolled_target_count": 0,
+  "enrolled_target_count": 0,
+  "target_set_enrolled": false,
+  "target_selection_policy": "two-or-more-enrolled-compatible-canary-targets-required-before-controlled-execution",
+  "target_set_digest": "6794d9381551d87939ac2e9638cc459e73e9637aec9c097cd13d9ff9e07d0f68",
+  "duplicate_node_check": {
+    "duplicate_node_ids_detected": false,
+    "evaluated_enrolled_node_count": 0
+  },
+  "stale_node_check": {
+    "stale_enrollment_detected": false,
+    "evaluated_enrolled_node_count": 0
+  },
+  "compatibility_summary": {
+    "binding_present": true,
+    "compatibility_digest": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+    "compatibility_status": "compatibility-projected-verification-blocked",
+    "compatibility_release_id": "production-distro-rc6-current-artifacts",
+    "authorizes_enrollment": false,
+    "denial_reason": "target-records-missing-and-rc10-drift-zero-denied"
+  },
+  "rollback_readiness_summary": {
+    "binding_present": true,
+    "rollback_baseline_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+    "rollback_baseline_status": "rollback-baseline-projected-execution-blocked",
+    "rollback_execution_allowed": false,
+    "authorizes_enrollment": false,
+    "denial_reason": "target-records-missing-and-activation-not-authorized"
+  },
+  "support_recovery_summary": {
+    "binding_present": true,
+    "support_recovery_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+    "support_recovery_status": "hosted-metadata-only",
+    "support_upload_allowed": false
+  },
+  "audit_sink_summary": {
+    "audit_journal_sink_required": true,
+    "audit_journal_sink_bound": false,
+    "denial_reason": "target-records-missing"
+  },
+  "ordered_targets": [
+    {
+      "slot": "canary-a",
+      "required": true,
+      "enrollment_state": "missing",
+      "node_id": null,
+      "target_role": "canary",
+      "current_active_artifact_set_digest": null,
+      "desired_artifact_set_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_release_id": "production-distro-rc8-current-artifacts",
+      "expected_external_object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_descriptor_digest": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+      "compatibility_result_digest": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "rollback_baseline_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "support_recovery_reference_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "audit_journal_sink": null,
+      "health_evidence_digest": null,
+      "node_uniqueness_proof": null,
+      "enrollment_freshness_window": null,
+      "policy_version": "rc10-exact-approval-canary-rollback-v1",
+      "denial_reasons": [
+        "target-enrollment-record-missing"
+      ]
+    },
+    {
+      "slot": "canary-b",
+      "required": true,
+      "enrollment_state": "missing",
+      "node_id": null,
+      "target_role": "canary",
+      "current_active_artifact_set_digest": null,
+      "desired_artifact_set_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_release_id": "production-distro-rc8-current-artifacts",
+      "expected_external_object_digest": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "expected_descriptor_digest": "df4e28ac1bf35b815415e2814f5f499fb84a27e3a8af0b9c3d1e0b05479d0f1b",
+      "compatibility_result_digest": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+      "rollback_baseline_digest": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "support_recovery_reference_digest": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "audit_journal_sink": null,
+      "health_evidence_digest": null,
+      "node_uniqueness_proof": null,
+      "enrollment_freshness_window": null,
+      "policy_version": "rc10-exact-approval-canary-rollback-v1",
+      "denial_reasons": [
+        "target-enrollment-record-missing"
+      ]
+    }
+  ],
+  "denial_reasons": [
+    "fewer-than-two-eligible-targets",
+    "target-set-not-enrolled",
+    "remote-fleet-execution-not-enabled",
+    "publication-not-published-drift-zero",
+    "missing-external-https-object-uri",
+    "drift-zero-denied",
+    "installer-quarantine-fetch-not-verified",
+    "exact-operator-approval-pending"
+  ],
+  "authority": {
+    "plan_authority": "AgentCore",
+    "side_effect_authority": "SecurityExecutionEngine",
+    "mirror_authority": false,
+    "object_storage_authority": false,
+    "signer_authority": false,
+    "frontend_authority": false,
+    "tui_authority": false,
+    "shell_authority": false,
+    "model_replay_authority": false
+  }
+}

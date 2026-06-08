@@ -1,0 +1,56 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC10-020",
+  "title": "enroll two or more canary target nodes with compatibility rollback and support bindings",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc10/docs/exact-approval-canary-rollback-execution-contract.md",
+    ".workflow/artifacts/rc10-external-object-publication/result.json",
+    ".workflow/artifacts/rc10-artifact-drift-zero-reconciliation/result.json",
+    ".workflow/artifacts/rc10-installer-quarantine-fetch/result.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/result.json",
+    ".workflow/artifacts/rc8-exact-approved-canary-smoke/canary-target-set.json",
+    ".workflow/artifacts/rc8-controlled-rollback-drill/result.json",
+    ".workflow/artifacts/release/fleet-rollout-authority.json",
+    "TASK.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc10-two-node-canary-enrollment.ps1",
+      "role": "two-node canary target enrollment denial projection script"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/canary-target-set.json",
+      "role": "target set artifact"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/target-enrollment-denial.json",
+      "role": "target enrollment denial evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/controlled-execution-handoff.json",
+      "role": "handoff for exact approval and controlled execution binding"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc10/evidence/RC10-020-two-node-canary-enrollment.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "The projection script consumes RC10-010 publication, RC10-011 drift-zero, RC10-012 installer fetch, and inherited RC8 canary/rollback evidence before evaluating target enrollment.",
+      "The target set artifact records target-set-enrollment-denied, required_minimum_target_count=2, observed_candidate_node_count=1, enrolled_target_count=0, and target_set_enrolled=false.",
+      "The denial evidence binds compatibility, rollback baseline, and support/recovery references while preserving activation_allowed=false, rollback_execution_allowed=false, support_upload_allowed=false, and remote_dispatch_enabled=false.",
+      "The task preserves production_ready_claim=false and moves the next task to RC10-021 exact approval execution binding."
+    ]
+  },
+  "verification": {
+    "command": ".\\scripts\\project-rc10-two-node-canary-enrollment.ps1 -GeneratedAt '2026-06-09T00:10:00+08:00' -FailOnFailedChecks",
+    "result": "passed"
+  }
+}

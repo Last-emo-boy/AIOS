@@ -1,0 +1,95 @@
+{
+  "schema": "agentos.rc10-two-node-canary-enrollment-evidence.v1",
+  "generated_at": "2026-06-09T00:10:00+08:00",
+  "task": "RC10-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc10",
+  "script": {
+    "path": "scripts/project-rc10-two-node-canary-enrollment.ps1",
+    "sha256": "ee39884be45d6123c42dfc5da8abc433bfcb3b92363dd7de52b3e14ef19be42a"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/result.json",
+    "status": "passed",
+    "sha256": "cb7f4ae28701c598771af25c32cf49b80905aca95cb1429869108193293fc4b9"
+  },
+  "outputs": {
+    "canary_target_set": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/canary-target-set.json",
+      "sha256": "e678d5a0a00a1b0c52896f8c3e97fecc243e0abe82800c7f1f3608676144e193"
+    },
+    "target_enrollment_denial": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/target-enrollment-denial.json",
+      "sha256": "712b900a425889d988d848e0fad6028b016432ca64bdcb1635b70ee7f089ac10"
+    },
+    "controlled_execution_handoff": {
+      "path": ".workflow/artifacts/rc10-two-node-canary-enrollment/controlled-execution-handoff.json",
+      "sha256": "bd3e4a94d4a02749cf7321855a026c0d34743f1fdcc67a2f064f67e33cf3f568"
+    }
+  },
+  "enrollment_surface": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "state": "target-set-enrollment-denied",
+    "required_minimum_target_count": 2,
+    "observed_candidate_node_count": 1,
+    "inherited_rc8_enrolled_target_count": 0,
+    "enrolled_target_count": 0,
+    "target_set_enrolled": false,
+    "compatibility_binding_present": true,
+    "rollback_baseline_binding_present": true,
+    "support_recovery_binding_present": true,
+    "published_drift_zero": false,
+    "drift_zero_reconciled": false,
+    "installer_quarantine_fetch_verified": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "remote_dispatch_enabled": false,
+    "checks": 8,
+    "failed_checks": 0,
+    "blockers": [
+      "fewer-than-two-eligible-targets",
+      "target-set-not-enrolled",
+      "remote-fleet-execution-not-enabled",
+      "publication-not-published-drift-zero",
+      "missing-external-https-object-uri",
+      "drift-zero-denied",
+      "installer-quarantine-fetch-not-verified",
+      "exact-operator-approval-pending"
+    ]
+  },
+  "invariants": {
+    "local_projection_only": true,
+    "target_enrollment_fabricated": false,
+    "external_payload_bytes_uploaded": false,
+    "network_fetch_attempted": false,
+    "quarantine_payload_written": false,
+    "payload_interpreted": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "persistent_state_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_authority": false,
+    "production_ready_claim": false
+  },
+  "completion": {
+    "rc10_020_complete": true,
+    "wave_2_started": true,
+    "next_task": "RC10-021",
+    "commit_required": true
+  }
+}
