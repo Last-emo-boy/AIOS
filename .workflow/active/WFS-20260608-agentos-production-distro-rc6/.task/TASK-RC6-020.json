@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC6-020",
+  "title": "project bootstrap installer preflight against hosted payload metadata",
+  "status": "completed",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260608-agentos-production-distro-rc6/docs/bootstrap-installer-consumption-boundary.md",
+    ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+    ".workflow/artifacts/rc6-signed-payload-fail-closed/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc6-bootstrap-installer-preflight.ps1",
+      "role": "hosted metadata preflight projector"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+      "role": "preflight result"
+    },
+    {
+      "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+      "role": "preflight report"
+    },
+    {
+      "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc6/evidence/RC6-020-bootstrap-installer-preflight.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Hosted health, descriptor, channel, install bootstrap, payload index, payload manifest, checksums, signatures, and support metadata are fetched with curl --resolve.",
+      "Preflight follows RC6 verification order and produces a local report.",
+      "Preflight state is verification-blocked for missing signature/signed metadata, revocation snapshot, installer compatibility contract, and rollback baseline.",
+      "No install, activation, rollback, active slot mutation, production ring mutation, support upload, remote dispatch, signing, or TUI authority is performed."
+    ]
+  }
+}

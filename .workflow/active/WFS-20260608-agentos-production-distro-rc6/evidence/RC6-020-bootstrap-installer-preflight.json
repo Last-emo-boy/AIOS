@@ -1,0 +1,48 @@
+{
+  "schema": "agentos.rc6-bootstrap-installer-preflight-evidence.v1",
+  "generated_at": "2026-06-08T14:05:00+08:00",
+  "task": "RC6-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260608-agentos-production-distro-rc6",
+  "script": "scripts/project-rc6-bootstrap-installer-preflight.ps1",
+  "result": {
+    "path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/result.json",
+    "status": "passed",
+    "checks": 6,
+    "task_blockers": 0,
+    "preflight_steps": 12,
+    "preflight_blockers": 4
+  },
+  "preflight": {
+    "report_path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+    "state": "verification-blocked",
+    "release_id": "production-distro-rc6-current-artifacts",
+    "blockers": [
+      "verify-signature-or-signed-metadata-reference",
+      "verify-revocation-snapshot",
+      "verify-installer-compatibility-contract",
+      "verify-rollback-baseline-hash"
+    ]
+  },
+  "invariants": {
+    "metadata_preflight_only": true,
+    "validation_used_local_dns": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc6_020_complete": true,
+    "next_task": "RC6-021",
+    "commit_required": true
+  }
+}

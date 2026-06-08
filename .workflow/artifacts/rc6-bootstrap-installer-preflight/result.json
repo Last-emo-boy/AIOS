@@ -1,0 +1,389 @@
+{
+  "schema": "agentos.rc6-bootstrap-installer-preflight-result.v1",
+  "generated_at": "2026-06-08T12:10:55.0162926+08:00",
+  "task": "RC6-020",
+  "status": "passed",
+  "production_ready_claim": false,
+  "preflight": {
+    "report_path": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json",
+    "report_sha256": "cb37e4c1b836cde443ee647089e6d099e5fec45d0816f1ce564ad80872cc28ff",
+    "state": "verification-blocked",
+    "blockers": 4,
+    "release_id": "production-distro-rc6-current-artifacts"
+  },
+  "fetched_endpoints": [
+    {
+      "path": "/health.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/.well-known/aios/mirror.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/channel/index.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/install/bootstrap.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/payloads/index.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/support/index.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+      "status_code": 200,
+      "parsed_json": true
+    },
+    {
+      "path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+      "status_code": 200,
+      "parsed_json": true
+    }
+  ],
+  "source": {
+    "hosted_payload_metadata_result": {
+      "path": ".workflow/artifacts/rc6-hosted-payload-metadata/result.json",
+      "sha256": "41a2916dbc6ef13d1b4c413a554f1adee9e9832dcad31a25e200f1d7921058ec"
+    }
+  },
+  "invariants": {
+    "metadata_preflight_only": true,
+    "validation_used_local_dns": false,
+    "local_private_key_material_used": false,
+    "cryptographic_signing_performed": false,
+    "install_allowed": false,
+    "install_performed": false,
+    "activation_performed": false,
+    "rollback_execution_performed": false,
+    "active_slot_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "remote_dispatch_enabled": false,
+    "tui_authority": false
+  },
+  "checks": [
+    {
+      "id": "hosted_payload_metadata.result",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6-011 hosted payload metadata result must be passed.",
+      "evidence": {
+        "checks": 17,
+        "blockers": 0,
+        "rc6_011_complete": true,
+        "next_task": "RC6-012"
+      }
+    },
+    {
+      "id": "fetch.required_endpoints",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All required hosted metadata endpoints must return JSON 200.",
+      "evidence": [
+        {
+          "path": "/health.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/.well-known/aios/mirror.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/channel/index.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/install/bootstrap.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/payloads/index.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/support/index.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+          "status": 200,
+          "parsed": true
+        },
+        {
+          "path": "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json",
+          "status": 200,
+          "parsed": true
+        }
+      ]
+    },
+    {
+      "id": "preflight.report.generated",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Preflight report must be generated.",
+      "evidence": ".workflow/artifacts/rc6-bootstrap-installer-preflight/preflight-report.json"
+    },
+    {
+      "id": "preflight.expected_state",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC6 preflight should be verification-blocked until signature, revocation, compatibility, and rollback evidence exist.",
+      "evidence": {
+        "state": "verification-blocked",
+        "blockers": 4
+      }
+    },
+    {
+      "id": "preflight.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Preflight must not perform install, activation, rollback, or dispatch side effects.",
+      "evidence": {
+        "install_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "active_slot_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "remote_dispatch_enabled": false,
+        "tui_authority": false
+      }
+    },
+    {
+      "id": "preflight.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Preflight report must not contain private key or token markers.",
+      "evidence": null
+    }
+  ],
+  "task_blockers": [],
+  "preflight_steps": [
+    {
+      "id": "fetch-health-descriptor-channel-bootstrap",
+      "status": "passed",
+      "message": "Fetched health, descriptor, channel, install bootstrap, payload index, payload details, and support metadata.",
+      "evidence": [
+        "/health.json",
+        "/.well-known/aios/mirror.json",
+        "/channel/index.json",
+        "/install/bootstrap.json",
+        "/payloads/index.json",
+        "/support/index.json",
+        "/payloads/aios/production-distro-rc6-current-artifacts/manifest.json",
+        "/payloads/aios/production-distro-rc6-current-artifacts/checksums.json",
+        "/payloads/aios/production-distro-rc6-current-artifacts/signatures.json"
+      ]
+    },
+    {
+      "id": "verify-schema-and-production-ready-false",
+      "status": "passed",
+      "message": "Schemas are recognized and production_ready_claim remains false.",
+      "evidence": null
+    },
+    {
+      "id": "verify-rc5-final-audit-binding",
+      "status": "passed",
+      "message": "Payload metadata binds RC5 final audit evidence.",
+      "evidence": {
+        "name": "rc5_final_audit",
+        "path": ".workflow/active/WFS-20260608-agentos-production-distro-rc5/evidence/FINAL-AUDIT-20260608-production-distro-rc5.json",
+        "sha256": "28bb57aa0f89cdabb85f120fd5760b9da301207f152cfc0611d50c6b6b575c18",
+        "present": true,
+        "schema": "agentos.production-distro-rc5-final-audit.v1",
+        "status": "PASS"
+      }
+    },
+    {
+      "id": "verify-payload-index-binding",
+      "status": "passed",
+      "message": "Channel and install bootstrap point at the same payload index and release id.",
+      "evidence": {
+        "channel_release": "production-distro-rc6-current-artifacts",
+        "install_release": "production-distro-rc6-current-artifacts",
+        "payload_release": "production-distro-rc6-current-artifacts"
+      }
+    },
+    {
+      "id": "verify-payload-manifest-hash",
+      "status": "passed",
+      "message": "Payload manifest hash is bound by payload index and checksums metadata.",
+      "evidence": {
+        "entry_manifest": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e",
+        "checksums_manifest": "9baf143a08f1aa7281b8141e079dcfaca98e5261746c7051ccda95fc0a93261e"
+      }
+    },
+    {
+      "id": "verify-payload-content-hashes",
+      "status": "passed",
+      "message": "Payload component hashes are present in checksums metadata.",
+      "evidence": {
+        "components": 8
+      }
+    },
+    {
+      "id": "verify-signature-or-signed-metadata-reference",
+      "status": "blocked",
+      "message": "Public signature or signed metadata reference must exist before install.",
+      "evidence": {
+        "signature_available": false,
+        "signed_metadata_reference": null
+      }
+    },
+    {
+      "id": "verify-revocation-snapshot",
+      "status": "blocked",
+      "message": "Revocation snapshot hash must exist before install.",
+      "evidence": {
+        "revocation_snapshot_sha256": null
+      }
+    },
+    {
+      "id": "verify-freshness-window",
+      "status": "passed",
+      "message": "Payload and install metadata must be within freshness window.",
+      "evidence": {
+        "payload_generated_at": "2026-06-08T12:04:00.9234764+08:00",
+        "install_generated_at": "2026-06-08T12:04:00.9234764+08:00"
+      }
+    },
+    {
+      "id": "verify-installer-compatibility-contract",
+      "status": "blocked",
+      "message": "Installer compatibility contract hash must exist before install.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "current_state": "verification-blocked",
+        "allowed_rc6_states": [
+          "metadata-unavailable",
+          "metadata-candidate",
+          "verification-blocked",
+          "install-preflight-ready"
+        ]
+      }
+    },
+    {
+      "id": "verify-rollback-baseline-hash",
+      "status": "blocked",
+      "message": "Rollback baseline hash must exist before install.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "current_state": "verification-blocked",
+        "allowed_rc6_states": [
+          "metadata-unavailable",
+          "metadata-candidate",
+          "verification-blocked",
+          "install-preflight-ready"
+        ]
+      }
+    },
+    {
+      "id": "verify-storage-policy-for-large-payloads",
+      "status": "passed",
+      "message": "Large payload storage remains deferred and no large payload URL is advertised.",
+      "evidence": {
+        "mirror_storage_mode": "metadata-only",
+        "large_payload_storage_enabled": false,
+        "large_payload_url": null,
+        "large_payload_sha256": null,
+        "large_payload_size_bytes": null,
+        "large_payload_deferred_until_policy_upgrade": true
+      }
+    }
+  ],
+  "preflight_blockers": [
+    {
+      "id": "verify-signature-or-signed-metadata-reference",
+      "status": "blocked",
+      "message": "Public signature or signed metadata reference must exist before install.",
+      "evidence": {
+        "signature_available": false,
+        "signed_metadata_reference": null
+      }
+    },
+    {
+      "id": "verify-revocation-snapshot",
+      "status": "blocked",
+      "message": "Revocation snapshot hash must exist before install.",
+      "evidence": {
+        "revocation_snapshot_sha256": null
+      }
+    },
+    {
+      "id": "verify-installer-compatibility-contract",
+      "status": "blocked",
+      "message": "Installer compatibility contract hash must exist before install.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "current_state": "verification-blocked",
+        "allowed_rc6_states": [
+          "metadata-unavailable",
+          "metadata-candidate",
+          "verification-blocked",
+          "install-preflight-ready"
+        ]
+      }
+    },
+    {
+      "id": "verify-rollback-baseline-hash",
+      "status": "blocked",
+      "message": "Rollback baseline hash must exist before install.",
+      "evidence": {
+        "install_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "current_state": "verification-blocked",
+        "allowed_rc6_states": [
+          "metadata-unavailable",
+          "metadata-candidate",
+          "verification-blocked",
+          "install-preflight-ready"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "task_blockers": 0,
+    "preflight_steps": 12,
+    "preflight_blockers": 4,
+    "preflight_state": "verification-blocked",
+    "rc6_020_complete": true,
+    "next_task": "RC6-021"
+  }
+}
