@@ -3,7 +3,7 @@
   "name": "Production Distro RC20",
   "status": "active",
   "created_at": "2026-06-10T13:05:00+08:00",
-  "updated_at": "2026-06-10T15:45:00+08:00",
+  "updated_at": "2026-06-10T16:05:00+08:00",
   "source": "RC19 final audit; maestro-managed RC20 planning",
   "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
   "goal": "Plan and execute an AIOS-body single-user distribution candidate from RC19 local consumer readiness without giving authority to external mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, host boot state, production rings, TUI projections, shell output, endpoint reachability, or model replay.",
@@ -75,9 +75,15 @@
       "completed_at": "2026-06-10T15:45:00+08:00",
       "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-030-post-install-update-drill.json",
       "commit": null
+    },
+    {
+      "task": "RC20-031",
+      "completed_at": "2026-06-10T16:05:00+08:00",
+      "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-031-post-update-rollback-drill.json",
+      "commit": null
     }
   ],
-  "next_task": "RC20-031",
+  "next_task": "RC20-032",
   "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
   "docs": [
     ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/FINAL-AUDIT-20260610-production-distro-rc19.json",
@@ -139,6 +145,11 @@
     ".workflow/artifacts/rc20-post-install-update-drill/update-drill-evidence.json",
     ".workflow/artifacts/rc20-post-install-update-drill/update-audit-record.json",
     ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-030-post-install-update-drill.json",
+    "scripts/run-rc20-post-update-rollback-drill.ps1",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/result.json",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/rollback-drill-evidence.json",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/rollback-audit-record.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-031-post-update-rollback-drill.json",
     ".workflow/.csv-wave/20260610-plan-rc20-single-user-distribution-candidate/context.md"
   ]
 }

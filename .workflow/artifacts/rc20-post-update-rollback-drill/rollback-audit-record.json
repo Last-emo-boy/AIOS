@@ -1,0 +1,70 @@
+{
+  "schema": "agentos.rc20-post-update-rollback-audit-record.v1",
+  "generated_at": "2026-06-10T16:05:00+08:00",
+  "task": "RC20-031",
+  "status": "post-update-rollback-audit-bound",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "rollback_audit_record_id": "sha256:1f3978ad53cf01c00d59ecb84483f948dba62a33bbbd51edc6a45fe787609e18",
+  "rollback_approval_id": "sha256:a1aea839b971b9f0d0caa05cf8a8af3e8764cf02b4548e43f2d92f2f70bf623b",
+  "rollback_plan_id": "sha256:54ab8a1d80dc6a8020181b397c3fa9dcc8310c2d1c5a269d11f91658952799fb",
+  "post_rollback_observation_id": "sha256:1b910cce6c03aa237b034a9868ce2c5687a0f05fafc02e8b7807f976323b026b",
+  "rollback_allowed": true,
+  "rollback_performed": true,
+  "fabricated": false,
+  "local_only": true,
+  "events": [
+    {
+      "id": "rc20-update-bound",
+      "update_drill_id": "sha256:5c30f08fa634d94b06e4c529c97d47a0a561b816a7030acbd7587aced6e4964e",
+      "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45"
+    },
+    {
+      "id": "rollback-approval-surrogate-bound",
+      "rollback_approval_id": "sha256:a1aea839b971b9f0d0caa05cf8a8af3e8764cf02b4548e43f2d92f2f70bf623b"
+    },
+    {
+      "id": "rollback-plan-bound",
+      "rollback_plan_id": "sha256:54ab8a1d80dc6a8020181b397c3fa9dcc8310c2d1c5a269d11f91658952799fb"
+    },
+    {
+      "id": "rc18-isolated-rollback-bound",
+      "source": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+      "restored_target_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    },
+    {
+      "id": "post-rollback-observation-bound",
+      "post_rollback_observation_id": "sha256:1b910cce6c03aa237b034a9868ce2c5687a0f05fafc02e8b7807f976323b026b"
+    },
+    {
+      "id": "support-recovery-remains-local",
+      "support_bundle_id": "rc19-first-user-support-b1c927261884cb5a",
+      "support_upload_performed": false,
+      "recovery_execution_performed": false
+    }
+  ],
+  "side_effects": {
+    "rollback_plan_bound": true,
+    "rollback_audit_record_bound": true,
+    "post_rollback_observation_bound": true,
+    "isolated_rollback_performed": true,
+    "disposable_image_state_mutated": true,
+    "restored_target_state_bound": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "object_storage_provisioned": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false
+  }
+}
