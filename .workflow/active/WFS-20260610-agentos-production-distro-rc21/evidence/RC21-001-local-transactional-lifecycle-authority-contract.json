@@ -1,0 +1,151 @@
+{
+  "schema": "agentos.rc21-local-transactional-lifecycle-authority-contract-evidence.v1",
+  "generated_at": "2026-06-10T17:45:00+08:00",
+  "task": "RC21-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc21",
+  "source": {
+    "rc21_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+      "current_task": "RC21-001",
+      "status": "active"
+    },
+    "rc20_final_audit": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json",
+      "verdict": "PASS",
+      "decision": "rc20-single-user-distribution-local-consumer-ready-non-ga",
+      "single_user_distribution_local_consumer_ready": true,
+      "consumer_ready_claim": true,
+      "production_ready_claim": false,
+      "remaining_gap_carried_into_rc21": "transactional-local-user-lifecycle-surface-not-proved"
+    }
+  },
+  "contract": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    "gate_order": [
+      "rc20-final-audit-and-single-user-local-consumer-readiness-passed",
+      "rc21-local-transactional-lifecycle-authority-contract-frozen",
+      "local-lifecycle-operation-intent-catalog-bound",
+      "transaction-journal-and-snapshot-baseline-package-bound",
+      "lifecycle-operation-fail-closed-fixtures-verified",
+      "install-update-reinstall-dry-run-execution-plan-bound",
+      "transactional-install-update-dry-run-acceptance-audited",
+      "user-visible-explain-resume-audit-package-bound",
+      "repair-reinstall-drill-audited-inside-disposable-installed-system-boundary",
+      "downgrade-rollback-drill-audited-from-local-channel-history",
+      "lifecycle-support-recovery-closure-bound-local-redacted-projection-only",
+      "transactional-lifecycle-local-consumer-smoke-audited",
+      "final-closeout-truthful-non-ga"
+    ],
+    "writable_surface": {
+      "disposable_installed_system_evidence_only_for_repair_reinstall_downgrade_rollback": true,
+      "transaction_journal_required_before_effect_planning": true,
+      "snapshot_baseline_required_before_effect_planning": true,
+      "operation_intent_required_before_lifecycle_operation": true,
+      "host_rootfs_mutation_allowed": false,
+      "host_active_slot_mutation_allowed": false,
+      "host_boot_metadata_mutation_allowed": false,
+      "active_artifact_set_mutation_allowed": false,
+      "production_ring_mutation_allowed": false
+    },
+    "non_authority_sources": [
+      "external-mirror-reachability-or-rendered-metadata",
+      "frontend-output",
+      "nginx-or-tls-service-status",
+      "signer-reachability",
+      "object-storage-ui",
+      "endpoint-reachability-without-local-evidence-binding",
+      "normal-shell-output",
+      "tui-projection",
+      "model-replay",
+      "remote-service-health",
+      "support-upload-availability",
+      "recovery-service-availability",
+      "local-channel-metadata-without-bound-rc20-rc21-artifact-identity"
+    ],
+    "forbidden_authority": {
+      "host_rootfs_mutation_allowed": false,
+      "host_active_slot_mutation_allowed": false,
+      "host_boot_metadata_mutation_allowed": false,
+      "active_artifact_set_mutation_allowed": false,
+      "production_ring_mutation_allowed": false,
+      "remote_dispatch_enabled": false,
+      "support_upload_allowed": false,
+      "recovery_execution_allowed": false,
+      "external_mirror_frontend_authority": false,
+      "nginx_or_tls_authority": false,
+      "signer_authority": false,
+      "object_storage_authority": false,
+      "private_signing_material_handling_allowed": false,
+      "ga_claim_allowed": false
+    }
+  },
+  "checks": [
+    {
+      "id": "gate_order.frozen",
+      "status": "passed",
+      "message": "RC21 gate order is frozen from RC20 local consumer readiness through operation intent catalog, journal/snapshot, fail-closed fixtures, dry-run plan, dry-run acceptance, explain/resume audit, repair/reinstall, downgrade/rollback, support/recovery, consumer smoke, and final audit."
+    },
+    {
+      "id": "lifecycle_effects.disposable_boundary_only",
+      "status": "passed",
+      "message": "Repair, reinstall, downgrade, and rollback effects may run only inside disposable installed-system evidence until a later milestone explicitly authorizes host effects."
+    },
+    {
+      "id": "forbidden_authority.disabled",
+      "status": "passed",
+      "message": "External mirror, frontend, Nginx/TLS, signer, object storage, private-key, support-upload, recovery-execution, remote-dispatch, host-rootfs, host-boot, production-ring authority, and GA claims remain forbidden."
+    },
+    {
+      "id": "non_authority_sources.frozen",
+      "status": "passed",
+      "message": "Mirror, frontend, Nginx/TLS, signer, shell, TUI, model, endpoint, object storage, support upload, recovery service, and remote service reachability are not authority."
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "message": "RC21 contract keeps production_ready_claim=false."
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "external_mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "repair_performed": false,
+    "reinstall_performed": false,
+    "downgrade_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "nginx_or_tls_authority": false,
+    "signer_reachability_authority": false,
+    "object_storage_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc21_001_complete": true,
+    "next_task": "RC21-010",
+    "commit_required": true
+  }
+}
