@@ -1,0 +1,1009 @@
+{
+  "schema": "agentos.rc17-security-execution-install-update-fail-closed-matrix.v1",
+  "generated_at": "2026-06-10T02:25:00+08:00",
+  "task": "RC17-021",
+  "status": "passed",
+  "production_ready_claim": false,
+  "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+  "decision_material_hash": "361e8ac6c9857d79afc5f7941d049afb7d20ba8332c2b4614a921f1e8341a194",
+  "cases": [
+    {
+      "id": "missing-executable-planspec-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "agentcore-install-update-planspec-not-executable"
+      ],
+      "observed_blockers": [
+        "agentcore-install-update-planspec-not-executable"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Executable AgentCore PlanSpec is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-target-binding-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "exact-install-update-target-not-bound"
+      ],
+      "observed_blockers": [
+        "exact-install-update-target-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Exact target binding is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-approval-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "exact-install-update-approval-not-bound"
+      ],
+      "observed_blockers": [
+        "exact-install-update-approval-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Exact approval is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "approval-not-granted-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "approval-not-granted"
+      ],
+      "observed_blockers": [
+        "approval-not-granted"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Unapproved envelopes must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-preflight-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "installer-updater-preflight-not-bound"
+      ],
+      "observed_blockers": [
+        "installer-updater-preflight-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Installer/updater preflight is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-audit-sink-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "audit-sink-not-bound"
+      ],
+      "observed_blockers": [
+        "audit-sink-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Audit sink is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-nonce-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "approval-nonce-not-bound"
+      ],
+      "observed_blockers": [
+        "approval-nonce-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Nonce binding is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-expiry-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "approval-expiry-not-bound"
+      ],
+      "observed_blockers": [
+        "approval-expiry-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Expiry binding is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-policy-version-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "policy-version-not-bound"
+      ],
+      "observed_blockers": [
+        "policy-version-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Policy version is required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-rollback-support-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "rollback-support-not-bound"
+      ],
+      "observed_blockers": [
+        "rollback-support-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Rollback/support references are required.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "broad-effect-envelope-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "broad-effect-envelope"
+      ],
+      "observed_blockers": [
+        "broad-effect-envelope"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Broad effect envelope must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale-envelope-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-envelope-stale"
+      ],
+      "observed_blockers": [
+        "effect-envelope-stale"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Stale envelope must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "replayed-envelope-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-envelope-replay-detected"
+      ],
+      "observed_blockers": [
+        "effect-envelope-replay-detected"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Replayed envelope must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "package-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-package-mismatch"
+      ],
+      "observed_blockers": [
+        "effect-package-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Package mismatch must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "media-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-media-mismatch"
+      ],
+      "observed_blockers": [
+        "effect-media-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Media mismatch must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "target-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-target-mismatch"
+      ],
+      "observed_blockers": [
+        "effect-target-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target mismatch must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "approval-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-approval-mismatch"
+      ],
+      "observed_blockers": [
+        "effect-approval-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Approval mismatch must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "planspec-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-planspec-mismatch"
+      ],
+      "observed_blockers": [
+        "effect-planspec-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "PlanSpec mismatch must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "policy-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "effect-policy-mismatch"
+      ],
+      "observed_blockers": [
+        "effect-policy-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Policy mismatch must deny.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-effect-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "remote-effect-forbidden"
+      ],
+      "observed_blockers": [
+        "remote-effect-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Remote effects are not allowed.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-upload-effect-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "support-upload-effect-forbidden"
+      ],
+      "observed_blockers": [
+        "support-upload-effect-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Support upload is not allowed.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "recovery-effect-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "recovery-effect-forbidden"
+      ],
+      "observed_blockers": [
+        "recovery-effect-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Recovery execution is not allowed.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "host-active-slot-mutation-forbidden"
+      ],
+      "observed_blockers": [
+        "host-active-slot-mutation-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Host active slot mutation is not allowed in allow decision.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "host-boot-metadata-mutation-forbidden"
+      ],
+      "observed_blockers": [
+        "host-boot-metadata-mutation-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Host boot metadata mutation is not allowed in allow decision.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "production-ring-mutation-forbidden"
+      ],
+      "observed_blockers": [
+        "production-ring-mutation-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Production ring mutation is not allowed.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "effect-preparation-before-rollback-preconditions-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "rollback-preconditions-not-bound"
+      ],
+      "observed_blockers": [
+        "rollback-preconditions-not-bound"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Effect preparation waits for rollback preconditions.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "install-execution-at-allow-decision-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "install-execution-not-in-allow-decision"
+      ],
+      "observed_blockers": [
+        "install-execution-not-in-allow-decision"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Allow decision alone must not execute install.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "update-execution-at-allow-decision-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "update-execution-not-in-allow-decision"
+      ],
+      "observed_blockers": [
+        "update-execution-not-in-allow-decision"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Allow decision alone must not execute update.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "frontend-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "frontend-output-not-authority"
+      ],
+      "observed_blockers": [
+        "frontend-output-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Frontend output cannot authorize effects.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "tui-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "tui-output-not-authority"
+      ],
+      "observed_blockers": [
+        "tui-output-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "TUI output cannot authorize effects.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "model-replay-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "model-replay-not-authority"
+      ],
+      "observed_blockers": [
+        "model-replay-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Model replay cannot authorize effects.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "shell-output-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "shell-output-not-authority"
+      ],
+      "observed_blockers": [
+        "shell-output-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Shell output cannot authorize effects.",
+      "side_effects": {
+        "security_execution_allowed": false,
+        "effect_prepared": false,
+        "effect_executed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "cases": 32,
+    "passed": 32,
+    "failed": 0,
+    "failed_cases": []
+  }
+}

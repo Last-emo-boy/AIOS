@@ -1,0 +1,163 @@
+{
+  "schema": "agentos.rc17-security-execution-install-update-allow-decision.v1",
+  "generated_at": "2026-06-10T02:25:00+08:00",
+  "task": "RC17-021",
+  "status": "security-execution-install-update-allow-bound-effects-denied",
+  "production_ready_claim": false,
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+  "approval_id": "rc17-install-update-approval-0dc14d0029707ca9",
+  "approval_binding_digest": "0dc14d0029707ca9b0757ddb0628c7edd02b58130628b15cc41402b36b90fb1c",
+  "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+  "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+  "decision_material_hash": "361e8ac6c9857d79afc5f7941d049afb7d20ba8332c2b4614a921f1e8341a194",
+  "security_execution_install_update_allow": true,
+  "security_execution_allowed_effects": [
+    "install",
+    "update"
+  ],
+  "effect_envelope_core": {
+    "schema": "agentos.security-execution.install-update-effect-envelope.v1",
+    "task": "RC17-021",
+    "decision_kind": "exact-install-update-allow",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "preflight_id": "sha256:2bd08fb7d7eda7c320b52ff9a0b3d8429f68456204019910d2515f003c340dd8",
+    "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+    "approval_id": "rc17-install-update-approval-0dc14d0029707ca9",
+    "approval_binding_digest": "0dc14d0029707ca9b0757ddb0628c7edd02b58130628b15cc41402b36b90fb1c",
+    "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "planspec_materialization_digest": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+    "target_identity_ids": [
+      "rc15-local-canary-a-834e96734a2cada2",
+      "rc15-local-canary-b-f19bef8bea5dfc12"
+    ],
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "audit_sink_descriptor_sha256": "87273edab2b62bf546a6dfb52ab938032f034ff2e56f1d96e974e68ee48dd5da",
+    "approval_nonce_sha256": "e95f4c4884755b2bc3d5efee74f8f9b12c93ae9ba187dd027abbb71420c0d8b1",
+    "approval_valid_until": "06/10/2026 05:55:00",
+    "policy_version": "rc17-exact-install-update-v1",
+    "security_policy_sha256": "033f317679eec2a3adb68c9323bf1119c5717ce4b90dad8500f152c38b969ce9",
+    "security_tools_sha256": "0580af910ac39717d2d26a802019d44798f9ea18c2a0676398a3a46ab4061893",
+    "allowed_effects": [
+      {
+        "effect": "install",
+        "scope": "repo-local-controlled-target",
+        "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+        "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "effect_preparation_allowed": false,
+        "effect_executed": false
+      },
+      {
+        "effect": "update",
+        "scope": "repo-local-controlled-target",
+        "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+        "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "update_strategy": {
+          "mode": "ab-rootfs",
+          "stage_target": "inactive-slot",
+          "active_slot_modified_in_place": false,
+          "rollback_required": true
+        },
+        "effect_preparation_allowed": false,
+        "effect_executed": false
+      }
+    ],
+    "forbidden_effects": [
+      "activation",
+      "rollback",
+      "support-upload",
+      "recovery",
+      "remote-dispatch",
+      "host-active-slot-mutation",
+      "host-boot-metadata-mutation",
+      "production-ring-mutation",
+      "signing"
+    ],
+    "downstream_gates": {
+      "rollback_preconditions_required": true,
+      "rollback_preconditions_bound": false,
+      "controlled_install_required": true,
+      "controlled_update_required": true,
+      "local_consumer_smoke_required": true
+    }
+  },
+  "decision_material": {
+    "schema": "agentos.security-execution.install-update-decision-material.v1",
+    "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+    "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "approval_binding_digest": "0dc14d0029707ca9b0757ddb0628c7edd02b58130628b15cc41402b36b90fb1c",
+    "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+    "security_policy_sha256": "033f317679eec2a3adb68c9323bf1119c5717ce4b90dad8500f152c38b969ce9",
+    "security_tools_sha256": "0580af910ac39717d2d26a802019d44798f9ea18c2a0676398a3a46ab4061893",
+    "preconditions": {
+      "plan_allows_run": true,
+      "planspec_executable": true,
+      "target_bound": true,
+      "approval_bound": true,
+      "preflight_bound": true,
+      "audit_nonce_policy_bound": true,
+      "rollback_support_bound": true,
+      "operation_scope_exact": true,
+      "security_code_bound": true
+    }
+  },
+  "effect_preparation_allowed": false,
+  "install_effect_preparation_allowed": false,
+  "update_effect_preparation_allowed": false,
+  "install_allowed": true,
+  "update_allowed": true,
+  "install_performed": false,
+  "update_performed": false,
+  "activation_allowed": false,
+  "rollback_execution_allowed": false,
+  "support_upload_allowed": false,
+  "recovery_execution_allowed": false,
+  "remote_dispatch_enabled": false,
+  "production_ring_mutation_allowed": false,
+  "blockers": [
+    "rc17-rollback-preconditions-not-bound",
+    "rc17-controlled-local-install-not-run",
+    "rc17-controlled-local-update-not-run",
+    "rc17-local-release-channel-consumer-smoke-not-run"
+  ],
+  "side_effects": {
+    "install_effect_prepared": false,
+    "update_effect_prepared": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "authority": {
+    "aios_body_only": true,
+    "repo_local_projection_only": true,
+    "security_execution_install_update_authority": true,
+    "security_execution_scope": "repo-local-exact-install-update-only",
+    "install_execution_authority": false,
+    "update_execution_authority": false,
+    "activation_authority": false,
+    "rollback_execution_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "production_ring_mutation_authority": false
+  }
+}
