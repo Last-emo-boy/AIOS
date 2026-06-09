@@ -1,0 +1,298 @@
+{
+  "schema": "agentos.rc19-installer-media-manifest.v1",
+  "generated_at": "2026-06-10T09:45:00+08:00",
+  "task": "RC19-011",
+  "status": "installer-media-manifest-bound-install-gated",
+  "production_ready_claim": false,
+  "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+  "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+  "boot_target_descriptor": {
+    "path": ".workflow/artifacts/rc19-installer-media-manifest/boot-target-descriptor.json",
+    "sha256": "1c103af6d3ef592a659f7c4442261235dad3dbc06399e7dd1202af86e1c9f046",
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb"
+  },
+  "source_artifact": {
+    "rc19_artifact_result": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+      "sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c",
+      "size_bytes": 40493,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-result.v1",
+      "status": "passed",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_artifact_set": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+      "size_bytes": 35799,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-set.v1",
+      "status": "reproducible-installable-image-artifact-set-bound-non-ga",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_reproducibility_input_map": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+      "size_bytes": 27303,
+      "present": true,
+      "schema": "agentos.rc19-reproducibility-input-map.v1",
+      "status": "reproducibility-input-map-bound",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    }
+  },
+  "base_media": {
+    "rc16_media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "rc16_media_result": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef",
+      "size_bytes": 21051,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest-result.v1",
+      "status": "passed",
+      "task": "RC16-011",
+      "production_ready_claim": false
+    },
+    "rc16_media_manifest": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+      "size_bytes": 22474,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest.v1",
+      "status": "installable-media-manifest-projected-install-update-gated",
+      "task": "RC16-011",
+      "production_ready_claim": false
+    },
+    "release_id": "production-distro-rc8-current-artifacts",
+    "package_id": "production-distro-rc16-repo-local-distributable-package"
+  },
+  "build_inputs": {
+    "build_initramfs_script": {
+      "path": "image/build-initramfs.ps1",
+      "sha256": "821d31158349502baab3220a7aa19b10fe4989a99da4aa0bc69caad8151b5a0b",
+      "size_bytes": 13724,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "build_release_script": {
+      "path": "scripts/build-release.ps1",
+      "sha256": "08c134fa9a31ea3c4a3db8c1e2a7a1b2fe2af2494d2b1c24fbfb3239f0813023",
+      "size_bytes": 94167,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "build_executed": false,
+    "image_built": false,
+    "iso_created": false,
+    "disk_image_created": false
+  },
+  "boot": {
+    "target_arch": [
+      "x86_64"
+    ],
+    "boot_modes": [
+      "uefi",
+      "bios"
+    ],
+    "kernel_family": "linux-lts",
+    "initramfs_contract": "agentos-initramfs-stage-copy-only",
+    "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+    "boot_markers": [
+      "AGENTD_HANDOFF_OK",
+      "AGENTOS_RUNTIME_ARTIFACTS_OK",
+      "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "AGENTOS_TUI_CONSOLE_READY",
+      "AGENTOS_RUNTIME_ARTIFACT_COUNT=15"
+    ],
+    "runtime_artifact_ids": [
+      "policy.pack",
+      "tools.semantic",
+      "operator.commands",
+      "production_signing.key_custody",
+      "production_signing.key_rotation_log",
+      "production_signing.key_revocation_log",
+      "ecosystem.registry_snapshot",
+      "ecosystem.core_policy",
+      "ecosystem.workflow_service_recovery",
+      "model_broker.config",
+      "tui.config",
+      "state.runs",
+      "state.audit",
+      "state.rollback",
+      "state.memory"
+    ]
+  },
+  "rootfs": {
+    "source_rootfs": "packaging\\agentos\\rootfs",
+    "staged_rootfs": "image\\out\\agentos-alpha-rootfs",
+    "rootfs_runtime_manifest": "image\\out\\agentos-alpha-rootfs\\usr\\lib\\agentos\\release\\rootfs-runtime-manifest.json",
+    "rootfs_runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+    "runtime_artifact_count": 15,
+    "validation_result": "passed"
+  },
+  "rollback_support": {
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked",
+      "production_ready_claim": false
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only",
+      "production_ready_claim": false
+    },
+    "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false
+  },
+  "install_gate": {
+    "first_user_install_target_boundary_required": true,
+    "first_user_install_drill_required": true,
+    "install_effects_gated_until": "RC19-021",
+    "install_allowed": false,
+    "first_user_install_allowed": false,
+    "update_allowed": false,
+    "rollback_execution_allowed": false,
+    "host_rootfs_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "next_task": "RC19-012"
+  },
+  "authority": {
+    "aios_body_only": true,
+    "projection_only": true,
+    "production_ready_claim": false,
+    "install_authority": false,
+    "first_user_install_authority": false,
+    "update_authority": false,
+    "rollback_execution_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "host_rootfs_mutation_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "active_artifact_set_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false
+  },
+  "source": {
+    "rc19_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+      "sha256": "cac2ef768262e42f92c6bbdcebc731307f1abe268a180262e30dbbe5e884fa60",
+      "size_bytes": 7942,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc19_contract": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+      "sha256": "375f8fde6a2725c9d20832edb9ffa9d25f64ba9ddb9879d8b72749b7fa57c7a3",
+      "size_bytes": 6285,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc19_artifact_result": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+      "sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c",
+      "size_bytes": 40493,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-result.v1",
+      "status": "passed",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_artifact_set": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+      "size_bytes": 35799,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-set.v1",
+      "status": "reproducible-installable-image-artifact-set-bound-non-ga",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_reproducibility_input_map": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+      "size_bytes": 27303,
+      "present": true,
+      "schema": "agentos.rc19-reproducibility-input-map.v1",
+      "status": "reproducibility-input-map-bound",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc16_media_result": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef",
+      "size_bytes": 21051,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest-result.v1",
+      "status": "passed",
+      "task": "RC16-011",
+      "production_ready_claim": false
+    },
+    "rc16_media_manifest": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+      "size_bytes": 22474,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest.v1",
+      "status": "installable-media-manifest-projected-install-update-gated",
+      "task": "RC16-011",
+      "production_ready_claim": false
+    },
+    "build_initramfs_script": {
+      "path": "image/build-initramfs.ps1",
+      "sha256": "821d31158349502baab3220a7aa19b10fe4989a99da4aa0bc69caad8151b5a0b",
+      "size_bytes": 13724,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "build_release_script": {
+      "path": "scripts/build-release.ps1",
+      "sha256": "08c134fa9a31ea3c4a3db8c1e2a7a1b2fe2af2494d2b1c24fbfb3239f0813023",
+      "size_bytes": 94167,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    }
+  }
+}

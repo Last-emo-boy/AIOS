@@ -1,0 +1,77 @@
+{
+  "schema": "agentos.rc19-boot-target-descriptor.v1",
+  "generated_at": "2026-06-10T09:45:00+08:00",
+  "task": "RC19-011",
+  "status": "boot-target-descriptor-bound-projection-only",
+  "production_ready_claim": false,
+  "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+  "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+  "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+  "projection_only": true,
+  "target": {
+    "target_arch": [
+      "x86_64"
+    ],
+    "boot_modes": [
+      "uefi",
+      "bios"
+    ],
+    "kernel_family": "linux-lts",
+    "initramfs_contract": "agentos-initramfs-stage-copy-only",
+    "console_readiness_marker_required": true
+  },
+  "boot_projection": {
+    "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+    "boot_markers": [
+      "AGENTD_HANDOFF_OK",
+      "AGENTOS_RUNTIME_ARTIFACTS_OK",
+      "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "AGENTOS_TUI_CONSOLE_READY",
+      "AGENTOS_RUNTIME_ARTIFACT_COUNT=15"
+    ],
+    "runtime_artifact_ids": [
+      "policy.pack",
+      "tools.semantic",
+      "operator.commands",
+      "production_signing.key_custody",
+      "production_signing.key_rotation_log",
+      "production_signing.key_revocation_log",
+      "ecosystem.registry_snapshot",
+      "ecosystem.core_policy",
+      "ecosystem.workflow_service_recovery",
+      "model_broker.config",
+      "tui.config",
+      "state.runs",
+      "state.audit",
+      "state.rollback",
+      "state.memory"
+    ],
+    "rootfs_runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+    "runtime_artifact_count": 15
+  },
+  "image_state_projection": {
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+    "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+    "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+  },
+  "authority": {
+    "host_boot_state_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "active_artifact_set_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "shell_authority": false,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "endpoint_reachability_authority": false
+  },
+  "next_required_gate": {
+    "first_user_target_boundary_task": "RC19-020",
+    "first_user_install_drill_task": "RC19-021",
+    "install_effects_gated_until": "RC19-021",
+    "host_boot_mutation_allowed_now": false
+  }
+}
