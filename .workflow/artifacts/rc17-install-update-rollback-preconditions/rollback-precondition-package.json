@@ -1,0 +1,227 @@
+{
+  "schema": "agentos.rc17-install-update-rollback-precondition-package.v1",
+  "generated_at": "2026-06-10T02:45:00+08:00",
+  "task": "RC17-022",
+  "status": "rollback-preconditions-bound-effects-denied",
+  "production_ready_claim": false,
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+  "approval_id": "rc17-install-update-approval-0dc14d0029707ca9",
+  "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+  "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+  "decision_material_hash": "361e8ac6c9857d79afc5f7941d049afb7d20ba8332c2b4614a921f1e8341a194",
+  "rollback_preconditions_bound": true,
+  "rollback_precondition_core_hash": "32f261e5e71bcb07b443c37473c1ea33fdfee39c3ef6b1cede276544e422ee3d",
+  "precondition_core": {
+    "schema": "agentos.rc17-install-update-rollback-precondition-core.v1",
+    "task": "RC17-022",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+    "approval_id": "rc17-install-update-approval-0dc14d0029707ca9",
+    "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+    "decision_material_hash": "361e8ac6c9857d79afc5f7941d049afb7d20ba8332c2b4614a921f1e8341a194",
+    "audit_sink_descriptor_sha256": "87273edab2b62bf546a6dfb52ab938032f034ff2e56f1d96e974e68ee48dd5da",
+    "approval_nonce_sha256": "e95f4c4884755b2bc3d5efee74f8f9b12c93ae9ba187dd027abbb71420c0d8b1",
+    "approval_valid_until": "06/10/2026 05:55:00",
+    "policy_version": "rc17-exact-install-update-v1",
+    "target_identity_ids": [
+      "rc15-local-canary-a-834e96734a2cada2",
+      "rc15-local-canary-b-f19bef8bea5dfc12"
+    ],
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "restore_equality_required": true
+    },
+    "rc16_rollback_support_package": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/rollback-support-package.json",
+      "sha256": "6e25d7266e76242bc331151231a95521d0b2a71d4189966d993379d92c879118",
+      "core_hash": "62fe9e2064682453bbb153e23ffdaf14bb005373ec96d910532e2d444d00dbe7"
+    },
+    "local_support_recovery": {
+      "rc15_result_path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json",
+      "rc15_support_recovery_chain_sha256": "14cddf20cb275582ee0229c724ab39b33d5943c89a0238589ed2a13acacffe7a",
+      "support_bundle_sha256": "cb6cd35c8baf92849d8d789b852dfe49c13e96b6aebc7c669207a9f6a2a286d5",
+      "recovery_index_sha256": "e16cf80d90b3ee875cd30102d992986f2a703f6bab6532afe44b4108a4067b10",
+      "support_bundle_local_only": true,
+      "support_upload_allowed": false,
+      "recovery_execution_allowed": false
+    },
+    "post_install_update_observation_plan": {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/post-install-update-observation-plan.json",
+      "sha256": "c9c491eac4c16257a11f1fee799427b8d9cbd705ae74d1d3d26dafd821c35d57",
+      "required_observations": 11
+    },
+    "preparation_gate": {
+      "rollback_preconditions_bound": true,
+      "install_effect_preparation_allowed_in_this_task": false,
+      "update_effect_preparation_allowed_in_this_task": false,
+      "downstream_install_task": "RC17-030",
+      "downstream_update_task": "RC17-031"
+    }
+  },
+  "binding_summary": {
+    "security_execution_install_update_allow_bound": true,
+    "agentcore_install_update_planspec_bound": true,
+    "exact_target_package_bound": true,
+    "exact_approval_bound": true,
+    "audit_nonce_expiry_policy_bound": true,
+    "rc16_rollback_support_package_bound": true,
+    "rc15_local_support_recovery_bound": true,
+    "post_install_update_observation_plan_bound": true
+  },
+  "downstream_effect_authority": {
+    "install_effect_preparation_allowed": false,
+    "update_effect_preparation_allowed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "blockers": [
+      "rc17-controlled-local-install-not-run",
+      "rc17-controlled-local-update-not-run",
+      "rc17-local-release-channel-consumer-smoke-not-run"
+    ]
+  },
+  "authority": {
+    "aios_body_only": true,
+    "repo_local_projection_only": true,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "private_signing_material_authority": false
+  },
+  "source": {
+    "rc17_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
+      "sha256": "880d523fcd2fe0adc20ce3f2ae608d1b9857da3833bfd59550f7a1429949b4ad",
+      "size_bytes": 8255,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc17_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+      "sha256": "7efbc7763eb494eb7feb93ca95479a3d1c9bca658cc68b5b70811532ba9f914d",
+      "size_bytes": 3432,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc17_security_allow_result": {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+      "sha256": "b1137094b9f40f01145d7196f64565fbe29c864ba3db14feed814ad2749d1b8d",
+      "size_bytes": 15236,
+      "present": true,
+      "schema": "agentos.rc17-security-execution-install-update-allow-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_security_allow_decision": {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/security-execution-install-update-allow-decision.json",
+      "sha256": "7accf82683b75e8a1fb7fd930efe93fb85465c4ff5c35c2ece5817145f810599",
+      "size_bytes": 7857,
+      "present": true,
+      "schema": "agentos.rc17-security-execution-install-update-allow-decision.v1",
+      "status": "security-execution-install-update-allow-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_agentcore_planspec_result": {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+      "sha256": "af0f99bc40f32d43153f6ab23750d7d5a96b0ff261dd0b4faaf61f4bf1308969",
+      "size_bytes": 21854,
+      "present": true,
+      "schema": "agentos.rc17-agentcore-install-update-executable-planspec-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_agentcore_planspec": {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/install-update-planspec.json",
+      "sha256": "63925696bfea66223a6a1966833b9f03c360ef7fa9bb47b850536243d255086f",
+      "size_bytes": 10901,
+      "present": true,
+      "schema": "agentos.rc17-agentcore-install-update-planspec.v1",
+      "status": "agentcore-install-update-planspec-executable-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_approval_packet": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/exact-install-update-approval-packet.json",
+      "sha256": "067d7a0bc75b0c78d67866c5fd145753a0eb81ce3d5fec8a35a05c5ac12949b2",
+      "size_bytes": 9115,
+      "present": true,
+      "schema": "agentos.rc17-exact-install-update-approval-packet.v1",
+      "status": "exact-install-update-approval-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_target_package": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/exact-install-update-target-package.json",
+      "sha256": "f22f274cd1fc197af1c48ed00d41a065d552b270cc72eea1dce4a95826ac850d",
+      "size_bytes": 22225,
+      "present": true,
+      "schema": "agentos.rc17-exact-install-update-target-package.v1",
+      "status": "exact-install-update-target-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc16_rollback_support_result": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/result.json",
+      "sha256": "0ac94932712ddda54b34945b1312f3f9cac911acd7662b0d93cf39da3ed9549a",
+      "size_bytes": 59353,
+      "present": true,
+      "schema": "agentos.rc16-rollback-support-package-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_rollback_support_package": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/rollback-support-package.json",
+      "sha256": "6e25d7266e76242bc331151231a95521d0b2a71d4189966d993379d92c879118",
+      "size_bytes": 55745,
+      "present": true,
+      "schema": "agentos.rc16-rollback-support-package.v1",
+      "status": "rollback-support-package-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc15_rollback_support_result": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json",
+      "sha256": "48774a0463a55fd014d88173e648bcd2630c8b2e33fa9e186b15711f69c20541",
+      "size_bytes": 17748,
+      "present": true,
+      "schema": "agentos.rc15-controlled-rollback-support-recovery-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc15_support_recovery_chain": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/support-recovery-evidence-chain.json",
+      "sha256": "14cddf20cb275582ee0229c724ab39b33d5943c89a0238589ed2a13acacffe7a",
+      "size_bytes": 770,
+      "present": true,
+      "schema": "agentos.rc15-rollback-support-recovery-evidence-chain.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc15_support_bundle": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/controlled-execution-support-bundle.json",
+      "sha256": "cb6cd35c8baf92849d8d789b852dfe49c13e96b6aebc7c669207a9f6a2a286d5",
+      "size_bytes": 731,
+      "present": true,
+      "schema": "agentos.rc15-controlled-execution-support-bundle.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc15_recovery_index": {
+      "path": ".workflow/artifacts/rc15-controlled-rollback-support-recovery/recovery-reference-index.json",
+      "sha256": "e16cf80d90b3ee875cd30102d992986f2a703f6bab6532afe44b4108a4067b10",
+      "size_bytes": 725,
+      "present": true,
+      "schema": "agentos.rc15-recovery-reference-index.v1",
+      "status": null,
+      "production_ready_claim": null
+    }
+  }
+}

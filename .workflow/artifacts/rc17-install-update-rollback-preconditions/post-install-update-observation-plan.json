@@ -1,0 +1,107 @@
+{
+  "schema": "agentos.rc17-post-install-update-observation-plan.v1",
+  "generated_at": "2026-06-10T02:45:00+08:00",
+  "task": "RC17-022",
+  "status": "post-install-update-observation-plan-bound-effects-denied",
+  "production_ready_claim": false,
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "required_before_effect_preparation": [
+    "rollback-baseline-hash-bound",
+    "target-package-bound",
+    "exact-approval-bound",
+    "agentcore-install-update-planspec-bound",
+    "security-execution-install-update-allow-bound",
+    "audit-sink-nonce-expiry-policy-bound",
+    "local-support-recovery-evidence-bound",
+    "post-effect-observation-plan-bound"
+  ],
+  "observations": [
+    {
+      "id": "pre-effect-active-artifact-set-hash",
+      "phase": "before-install-update",
+      "required": true,
+      "authority": "runstore-audit"
+    },
+    {
+      "id": "pre-effect-rollback-baseline-hash",
+      "phase": "before-install-update",
+      "required": true,
+      "authority": "rollback-baseline"
+    },
+    {
+      "id": "post-install-artifact-set-hash",
+      "phase": "after-install",
+      "required": true,
+      "authority": "runstore-audit"
+    },
+    {
+      "id": "post-update-artifact-set-hash",
+      "phase": "after-update",
+      "required": true,
+      "authority": "runstore-audit"
+    },
+    {
+      "id": "install-audit-journal-seal",
+      "phase": "after-install",
+      "required": true,
+      "authority": "audit-journal"
+    },
+    {
+      "id": "update-audit-journal-seal",
+      "phase": "after-update",
+      "required": true,
+      "authority": "audit-journal"
+    },
+    {
+      "id": "rollback-restore-equality-proof",
+      "phase": "after-rollback-drill",
+      "required": true,
+      "authority": "rollback-support"
+    },
+    {
+      "id": "support-bundle-redaction-proof",
+      "phase": "after-install-update",
+      "required": true,
+      "authority": "local-support-bundle"
+    },
+    {
+      "id": "recovery-reference-index-proof",
+      "phase": "after-install-update",
+      "required": true,
+      "authority": "local-recovery-index"
+    },
+    {
+      "id": "no-host-boot-metadata-mutation-proof",
+      "phase": "after-install-update",
+      "required": true,
+      "authority": "audit-journal"
+    },
+    {
+      "id": "no-production-ring-mutation-proof",
+      "phase": "after-install-update",
+      "required": true,
+      "authority": "audit-journal"
+    }
+  ],
+  "forbidden_observation_authority": [
+    "frontend-output",
+    "tui-output",
+    "model-replay",
+    "shell-output",
+    "remote-service-reachability"
+  ],
+  "side_effects": {
+    "install_effect_prepared": false,
+    "update_effect_prepared": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_boot_metadata_mutated": false,
+    "production_ring_mutated": false
+  }
+}
