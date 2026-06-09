@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260609-agentos-production-distro-rc16",
   "name": "Production Distro RC16",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-09T21:45:00+08:00",
-  "updated_at": "2026-06-10T00:20:00+08:00",
+  "updated_at": "2026-06-10T00:40:00+08:00",
   "source": "RC15 final audit; maestro-managed RC16 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc15",
   "goal": "Plan and execute AIOS-body distributable user packaging and release-operation readiness without giving authority to mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, production rings, TUI projections, shell output, or model replay.",
@@ -81,15 +81,23 @@
       "completed_at": "2026-06-10T00:20:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-031-local-release-channel-consumer-smoke.json",
       "commit": null
+    },
+    {
+      "task": "RC16-050",
+      "completed_at": "2026-06-10T00:40:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-050-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC16-050",
+  "next_task": "RC17-planning",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc15/evidence/FINAL-AUDIT-20260609-production-distro-rc15.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc15/docs/final-rc15-closeout-summary.md",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-plan.md",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/rc16-distributable-release-operations-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/final-rc16-closeout-summary.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
@@ -143,6 +151,11 @@
     "scripts/run-rc16-local-release-channel-consumer-smoke.ps1",
     ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json",
     ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/consumer-smoke-evidence.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-031-local-release-channel-consumer-smoke.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-031-local-release-channel-consumer-smoke.json",
+    "scripts/run-rc16-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc16-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/final-rc16-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/RC16-050-final-closeout-audit.json"
   ]
 }

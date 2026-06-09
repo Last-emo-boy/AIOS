@@ -1,0 +1,596 @@
+{
+  "schema": "agentos.rc16-final-closeout-audit-result.v1",
+  "generated_at": "2026-06-10T00:40:00+08:00",
+  "task": "RC16-050",
+  "status": "passed",
+  "decision": "PASS",
+  "production_ready_claim": false,
+  "milestone": "Production Distro RC16",
+  "milestone_status": "rc16-distributable-packaging-ready-install-update-denied-non-ga",
+  "distributable_packaging_ready": true,
+  "install_update_ready": false,
+  "install_readiness": "denied",
+  "update_readiness": "denied",
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
+      "sha256": "273c22bbf130c7ce53ead31aa5809eed2523f7b60d5597519f4d89b2900a9468",
+      "present": true
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/final-rc16-closeout-summary.md",
+      "sha256": "9d34164fe57f59962f9770a9c5593bd89518630e267ca9a13d457619b75cc051",
+      "present": true
+    }
+  },
+  "source_artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/plan.json",
+      "sha256": "7a9f87f7dc7db4ffd3c20ca7456a54c61183976108d654dff8c58cf1eada87e2",
+      "size_bytes": 7623,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "completed"
+    },
+    {
+      "task": "RC16-010",
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+      "sha256": "53a01b6836f62dac4a9ba4c69c9f87ca319ea524ee06695f8e92aae2d2d90188",
+      "schema": "agentos.rc16-release-package-artifact-set-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-011",
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef",
+      "schema": "agentos.rc16-installable-media-manifest-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-012",
+      "path": ".workflow/artifacts/rc16-package-descriptor-fail-closed/result.json",
+      "sha256": "6a998625300e79f122d57fc22f7a55ae027f70110e6c668c8fa9d7cc736de2cc",
+      "schema": "agentos.rc16-package-descriptor-fail-closed-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-020",
+      "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+      "sha256": "c7e4b7f79fee84812ae36308dbafad302bfa4477830d05419094c3e18358fa13",
+      "schema": "agentos.rc16-installer-updater-preflight-package-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-021",
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+      "sha256": "c5b4b07c075d7bed0a7eebc90224200e85203980063e0639bd0d11e30587023c",
+      "schema": "agentos.rc16-install-update-planspec-binding-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-022",
+      "path": ".workflow/artifacts/rc16-rollback-support-package/result.json",
+      "sha256": "0ac94932712ddda54b34945b1312f3f9cac911acd7662b0d93cf39da3ed9549a",
+      "schema": "agentos.rc16-rollback-support-package-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-030",
+      "path": ".workflow/artifacts/rc16-tui-installability-projection/result.json",
+      "sha256": "99d8d7307b1d95e4cfc6e02fb0e00961f8b3c53a0c958d40b5f32eb985994d6c",
+      "schema": "agentos.rc16-tui-installability-projection-result.v1",
+      "status": "passed"
+    },
+    {
+      "task": "RC16-031",
+      "path": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json",
+      "sha256": "d93706031410f1f9243dda66205e5e93d4f219633408a71b351c8f073ed0c797",
+      "schema": "agentos.rc16-local-release-channel-consumer-smoke-result.v1",
+      "status": "passed"
+    }
+  ],
+  "checks": [
+    {
+      "id": "plan.pointer.rc16_050",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 final audit must run at RC16-050 after all prior RC16 tasks.",
+      "evidence": {
+        "plan_status": "completed",
+        "current_task": null,
+        "final_task_status": "completed"
+      }
+    },
+    {
+      "id": "tasks.previous.completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16-000 through RC16-031 must be completed before final closeout.",
+      "evidence": [
+        {
+          "task": "RC16-000",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-001",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-010",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-011",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-012",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-020",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-021",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-022",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-030",
+          "status": "completed"
+        },
+        {
+          "task": "RC16-031",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "results.all_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC16 executable task results must be passed.",
+      "evidence": [
+        {
+          "task": "RC16-010",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json"
+        },
+        {
+          "task": "RC16-011",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json"
+        },
+        {
+          "task": "RC16-012",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-package-descriptor-fail-closed/result.json"
+        },
+        {
+          "task": "RC16-020",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json"
+        },
+        {
+          "task": "RC16-021",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-install-update-planspec-binding/result.json"
+        },
+        {
+          "task": "RC16-022",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-rollback-support-package/result.json"
+        },
+        {
+          "task": "RC16-030",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-tui-installability-projection/result.json"
+        },
+        {
+          "task": "RC16-031",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json"
+        }
+      ]
+    },
+    {
+      "id": "results.failed_checks.zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 task checks and cases must have zero failures.",
+      "evidence": {
+        "failed_checks": 0,
+        "cases": 163,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "release_package.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Repo-local distributable package artifact set must be bound while install/update remain gated.",
+      "evidence": {
+        "state": "repo-local-package-artifact-set-projected-install-update-gated",
+        "artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+        "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "current_payload_size_bytes": 377,
+        "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "checksum_set_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa",
+        "signature_target_sha256": "e7ff15d18699129d11ef8e18e0ab62209dba8de8e165a115d3ab93116999b22e",
+        "revocation_snapshot_sha256": "2bb1cf604bff1dd61a01fd39986bb03e4445a0d7d81d20a8869476bed4a489c3",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "rc15_controlled_local_execution_ready": true,
+        "install_allowed": false,
+        "update_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "media_manifest.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installable media manifest must bind runtime artifacts, boot markers, architecture, and kernel family.",
+      "evidence": {
+        "state": "installable-media-manifest-projected-install-update-gated",
+        "manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+        "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+        "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "current_payload_size_bytes": 377,
+        "initramfs_manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+        "alpha_rootfs_manifest_sha256": "cd10d0b193dfe34a17d1b1257a8c4edd4c7515844be220eaba7a7e5dbca57374",
+        "alpha_rootfs_validation_sha256": "2464e285719878781976ad63d07c73fa48aaf5534fe8551e26775787d5a7ff8f",
+        "target_arch": [
+          "x86_64"
+        ],
+        "kernel_family": "linux-lts",
+        "compatibility_sha256": "aaa7641a7cdb03045140ade204023308a6a043759fe1110be51927e51aad58db",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_recovery_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "install_allowed": false,
+        "update_allowed": false,
+        "activation_allowed": false,
+        "active_slot_mutation_allowed": false,
+        "boot_metadata_mutation_allowed": false,
+        "production_ring_mutation_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "descriptor.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Distributable package descriptor fail-closed fixtures must pass before consumer use.",
+      "evidence": {
+        "state": "package-descriptor-fail-closed-fixtures-passed-install-update-still-gated",
+        "matrix_sha256": "a73c653e165954cf66541013b754ab80a32693d19691f75111855da28a072292",
+        "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+        "installable_media_manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+        "current_payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+        "current_payload_size_bytes": 377,
+        "cases": 33,
+        "failed_cases": 0,
+        "install_allowed": false,
+        "update_allowed": false,
+        "activation_allowed": false,
+        "active_slot_mutation_allowed": false,
+        "boot_metadata_mutation_allowed": false,
+        "production_ring_mutation_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "installer_updater.preflight_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer/updater preflight package must bind evidence and deny effects.",
+      "evidence": {
+        "state": "installer-updater-preflight-bound-effects-denied",
+        "package_sha256": "2e397bf85154224fb7e816c3282b0530b0802795296614d3ce9b08f70fd1bfab",
+        "release_package_artifact_set_sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+        "installable_media_manifest_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+        "package_descriptor_result_sha256": "6a998625300e79f122d57fc22f7a55ae027f70110e6c668c8fa9d7cc736de2cc",
+        "release_reproducibility_sha256": "e4f067824bb8fef19d991b78c3651eff946322142b545b18e0dbcda3678077da",
+        "candidate_promotion_sha256": "a9ffe96a8ca21a790ff06cc4a2b5656fc3dc95c72c359e5a46a539f3908aed2d",
+        "evidence_bound": true,
+        "install_preflight_ready": true,
+        "update_preflight_ready": true,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc16-install-update-planspec-not-bound",
+          "rc16-security-execution-install-update-allow-not-bound",
+          "rc16-rollback-support-package-not-bound",
+          "rc16-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "agentcore_security.install_update_bound_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "AgentCore install/update PlanSpec and SecurityExecution envelope must be bound but denied until exact target and approval are bound.",
+      "evidence": {
+        "state": "agentcore-install-update-planspec-bound-security-execution-denied-effects-denied",
+        "preflight_evidence_bound": true,
+        "release_package_complete": true,
+        "installable_media_complete": true,
+        "descriptor_fail_closed_complete": true,
+        "package_identity_bound": true,
+        "release_bytes_bound": true,
+        "update_strategy_bound": true,
+        "rollback_support_source_bound": true,
+        "rollback_support_package_bound": false,
+        "rc15_execution_source_bound": true,
+        "exact_install_update_target_bound": false,
+        "exact_install_update_approval_bound": false,
+        "audit_sink_required": true,
+        "nonce_required": true,
+        "expiry_required": true,
+        "policy_version_required": true,
+        "required_policy_version": "policy-v1",
+        "planspec_core_hash": "a4221f98d16b5599a545f29295026e9211598ce27f4348f850004c0949090e2b",
+        "planspec_materialization_digest": "a4221f98d16b5599a545f29295026e9211598ce27f4348f850004c0949090e2b",
+        "effect_envelope_core_hash": "d98cf2121b2f692c1e789b68915521d7b5e062be73f927584a575ec8007f28b4",
+        "decision_material_hash": "e13ce9b34578e500b66b170006965337fa6c5999e4a48ae3ec878c1e7882649d",
+        "agentcore_install_update_planspec_bound": true,
+        "agentcore_install_update_planspec_executable": false,
+        "security_execution_install_update_envelope_bound": true,
+        "security_execution_allowed": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "effect_prepared": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_allowed": false,
+        "activation_performed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc16-exact-install-update-target-not-bound",
+          "rc16-exact-install-update-approval-not-bound",
+          "rc16-install-update-planspec-not-executable",
+          "rc16-security-execution-install-update-allow-not-bound",
+          "rc16-rollback-support-package-not-bound",
+          "rc16-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "rollback_support.package_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback/support package must be bound with local-only support evidence and no rollback/support/recovery effects.",
+      "evidence": {
+        "checks": 11,
+        "failed_checks": 0,
+        "cases": 23,
+        "failed_cases": 0,
+        "rc16_022_complete": true,
+        "rollback_support_package_bound": true,
+        "support_bundle_local_only": true,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "rollback_execution_performed": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "next_task": "RC16-030"
+      }
+    },
+    {
+      "id": "tui.projection_read_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "TUI installability projection must be read-only and non-authoritative.",
+      "evidence": {
+        "state": "operator-installability-projection-blocked-read-only",
+        "projection_digest": "62e1d0af6a831d7dbd61611643e7aedc73bb7139b085f1b8acddfa3dc7516f4b",
+        "install_readiness": "blocked",
+        "update_readiness": "blocked",
+        "rollback_support_package_bound": true,
+        "support_bundle_local_only": true,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "read_only": true,
+        "projection_controller_only": true,
+        "tui_authority": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "rollback_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc16-exact-install-update-target-not-bound",
+          "rc16-exact-install-update-approval-not-bound",
+          "rc16-install-update-planspec-not-executable",
+          "rc16-security-execution-install-update-allow-not-bound",
+          "rc16-local-release-channel-consumer-smoke-not-run"
+        ],
+        "next_safe_action": "bind exact install/update target and approval before SecurityExecution allow"
+      }
+    },
+    {
+      "id": "consumer_smoke.denied_before_effect",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local release channel consumer smoke must follow the channel and deny before effect with audit.",
+      "evidence": {
+        "state": "local-release-channel-consumer-denied-before-effect",
+        "local_release_channel_followed": true,
+        "install_readiness": "denied",
+        "update_readiness": "denied",
+        "consumer_decision": "denied-before-effect",
+        "audited": true,
+        "audit_digest": "975e9462beaba3b8adc95576197edcf0def6988ff1bf0f58c2f1094bb640a558",
+        "agentcore_planspec_bound": true,
+        "agentcore_planspec_executable": false,
+        "security_execution_envelope_bound": true,
+        "security_execution_allowed": false,
+        "effect_preparation_allowed": false,
+        "rollback_support_package_bound": true,
+        "blockers": [
+          "rc16-exact-install-update-target-not-bound",
+          "rc16-exact-install-update-approval-not-bound",
+          "rc16-install-update-planspec-not-executable",
+          "rc16-security-execution-install-update-allow-not-bound"
+        ]
+      }
+    },
+    {
+      "id": "install_update.not_ready_truthful",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 must truthfully report install/update as not ready because exact target, exact approval, executable PlanSpec, and SecurityExecution allow remain unbound.",
+      "evidence": {
+        "install_readiness": "denied",
+        "update_readiness": "denied",
+        "remaining_blockers": [
+          "rc16-exact-install-update-target-not-bound",
+          "rc16-exact-install-update-approval-not-bound",
+          "rc16-install-update-planspec-not-executable",
+          "rc16-security-execution-install-update-allow-not-bound"
+        ]
+      }
+    },
+    {
+      "id": "authority.boundaries.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 must not broaden mirror, frontend, nginx, signer, object storage, private signing, payload publication, remote fetch, install/update, support upload, recovery execution, remote dispatch, TUI authority, or production ring authority.",
+      "evidence": null
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 must remain non-GA and must not claim production readiness.",
+      "evidence": null
+    },
+    {
+      "id": "distributable_packaging.ready_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 may close only as non-GA distributable packaging and release-operation readiness, not install/update or GA readiness.",
+      "evidence": {
+        "distributable_packaging_ready": true,
+        "install_update_ready": false,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc16.final_audit.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 final audit evidence must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
+        "present": true
+      }
+    },
+    {
+      "id": "rc16.closeout_summary.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 closeout summary must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/final-rc16-closeout-summary.md",
+        "sha256": "9d34164fe57f59962f9770a9c5593bd89518630e267ca9a13d457619b75cc051"
+      }
+    }
+  ],
+  "blockers": [],
+  "remaining_blockers_before_install_update_or_ga": [
+    "rc16-exact-install-update-target-not-bound",
+    "rc16-exact-install-update-approval-not-bound",
+    "rc16-install-update-planspec-not-executable",
+    "rc16-security-execution-install-update-allow-not-bound"
+  ],
+  "final_audit": {
+    "verdict": "PASS",
+    "readiness_status": {
+      "distributable_package_surface_ready": true,
+      "installable_media_manifest_ready": true,
+      "package_descriptor_fail_closed_ready": true,
+      "installer_updater_preflight_ready": true,
+      "agentcore_install_update_planspec_bound": true,
+      "agentcore_install_update_planspec_executable": false,
+      "security_execution_install_update_envelope_bound": true,
+      "security_execution_allowed": false,
+      "rollback_support_package_bound": true,
+      "tui_projection_ready": true,
+      "local_consumer_smoke_audited": true,
+      "local_consumer_decision": "denied-before-effect",
+      "install_readiness": "denied",
+      "update_readiness": "denied",
+      "install_update_ready": false,
+      "distributable_packaging_ready": true,
+      "production_ready_claim": false,
+      "remaining_blockers_before_install_update_or_ga": [
+        "rc16-exact-install-update-target-not-bound",
+        "rc16-exact-install-update-approval-not-bound",
+        "rc16-install-update-planspec-not-executable",
+        "rc16-security-execution-install-update-allow-not-bound"
+      ]
+    },
+    "next_milestone": {
+      "id": "Production Distro RC17",
+      "title": "bind exact install/update execution gates and run install/update execute-or-deny",
+      "direction": "Bind exact install/update target, exact operator approval, executable AgentCore install/update PlanSpec, SecurityExecution allow policy, and rollback preconditions before any install/update effect, while preserving AIOS-body-only scope and no GA claim."
+    }
+  },
+  "summary": {
+    "checks": 18,
+    "failed_checks": 0,
+    "cases": 163,
+    "failed_cases": 0,
+    "rc16_050_complete": true,
+    "verdict": "PASS",
+    "distributable_packaging_ready": true,
+    "install_update_ready": false,
+    "install_readiness": "denied",
+    "update_readiness": "denied",
+    "consumer_decision": "denied-before-effect",
+    "agentcore_install_update_planspec_bound": true,
+    "agentcore_install_update_planspec_executable": false,
+    "security_execution_allowed": false,
+    "exact_install_update_target_bound": false,
+    "exact_install_update_approval_bound": false,
+    "rollback_support_package_bound": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ready_claim": false,
+    "next_task": "RC17-planning"
+  }
+}
