@@ -1,0 +1,367 @@
+{
+  "schema": "agentos.rc19-reproducible-installable-image-artifact-evidence.v1",
+  "generated_at": "2026-06-10T09:25:00+08:00",
+  "task": "RC19-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "script": {
+    "path": "scripts/project-rc19-reproducible-installable-image-artifact.ps1",
+    "sha256": "ee6e850696c48526b01213b7b34193285c02f23d6fdd5b26a9a4d934c215d28e"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    "status": "passed",
+    "sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c"
+  },
+  "outputs": {
+    "installable_image_artifact_set": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+      "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2"
+    },
+    "reproducibility_input_map": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+      "identity_material_hash": "598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2"
+    }
+  },
+  "artifact_surface": {
+    "state": "installable-image-artifact-bound-evidence-only",
+    "deterministic_output_identity": true,
+    "reproducibility_inputs_bound": true,
+    "source_artifact_hashes_bound": true,
+    "artifact_materialized": false,
+    "image_built": false,
+    "iso_created": false,
+    "disk_image_created": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "external_mirror_changed": false,
+    "object_storage_provisioned": false,
+    "install_allowed": false,
+    "first_user_install_allowed": false,
+    "update_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "artifact_identity": {
+    "release": {
+      "release_id": "production-distro-rc8-current-artifacts",
+      "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+      "package_id": "production-distro-rc16-repo-local-distributable-package",
+      "release_package_id": "production-distro-rc16-repo-local-distributable-package",
+      "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "checksum_set_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa"
+    },
+    "image": {
+      "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+      "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+      "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+      "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+      "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+      "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    },
+    "readiness": {
+      "final_audit_status": "passed",
+      "final_audit_decision": "PASS",
+      "installed_system_image_ready": true,
+      "install_readiness": "ready",
+      "update_readiness": "ready",
+      "rollback_readiness": "ready",
+      "support_recovery_readiness": "ready",
+      "consumer_decision": "installed-system-image-ready",
+      "consumer_audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35"
+    }
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "reproducible_identity_bound": true,
+    "artifact_materialized": false,
+    "image_built": false,
+    "iso_created": false,
+    "disk_image_created": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "external_mirror_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc19_010_complete": true,
+    "next_task": "RC19-011",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must run after RC19-001 completed, while current_task is RC19-010 or during an idempotent rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-011",
+        "rc19_001_status": "completed",
+        "rc19_010_status": "completed"
+      }
+    },
+    {
+      "id": "contract.artifact_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must consume the RC19 installable image authority contract.",
+      "evidence": {
+        "id": "rc19-authority-contract",
+        "role": "rc19 contract",
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+        "sha256": "375f8fde6a2725c9d20832edb9ffa9d25f64ba9ddb9879d8b72749b7fa57c7a3",
+        "size_bytes": 6285,
+        "present": true,
+        "required": true,
+        "schema": null,
+        "status": null,
+        "task": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "sources.required.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC19-010 required source inputs must be present and hashable.",
+      "evidence": []
+    },
+    {
+      "id": "rc18.final_audit.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit must prove installed-system image readiness without GA claim.",
+      "evidence": {
+        "status": "passed",
+        "decision": "PASS",
+        "installed_system_image_ready": true,
+        "production_ready_claim": false,
+        "blockers": 0,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "rc18.sources.passed_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC18 source task results must be passed and non-GA.",
+      "evidence": {
+        "all_passed": true,
+        "all_non_ga": true
+      }
+    },
+    {
+      "id": "rc18.final_source_hashes.match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit source hashes must match current repo-local evidence files.",
+      "evidence": []
+    },
+    {
+      "id": "rc18.consumer.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 installed-system consumer smoke must report install, update, rollback, and support readiness.",
+      "evidence": {
+        "state": "installed-system-consumer-installed-system-image-ready",
+        "local_release_channel_followed": true,
+        "install_readiness": "ready",
+        "update_readiness": "ready",
+        "rollback_readiness": "ready",
+        "support_recovery_readiness": "ready",
+        "consumer_decision": "installed-system-image-ready",
+        "audited": true,
+        "audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35",
+        "blockers": []
+      }
+    },
+    {
+      "id": "rc18.image_state_chain.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install, update, rollback, support, consumer, and boundary identity must remain coherent.",
+      "evidence": {
+        "image_state_chain_coherent": true,
+        "boundary_identity_coherent": true,
+        "installed": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "updated": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "restored": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2"
+      }
+    },
+    {
+      "id": "rc18.support_recovery.local_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 support/recovery evidence must remain local-only with upload, recovery execution, remote dispatch, and private material handling disabled.",
+      "evidence": {
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "current_release_inputs.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current AIOS release and media inputs must be hash-bound for reproducible installable image artifact identity.",
+      "evidence": {
+        "release_package_status": "passed",
+        "media_manifest_status": "passed",
+        "release_id": "production-distro-rc8-current-artifacts",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "package_id": "production-distro-rc16-repo-local-distributable-package"
+      }
+    },
+    {
+      "id": "identity.deterministic",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installable image artifact identity must be deterministic from source material and exclude generated output hashes.",
+      "evidence": {
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "identity_material_hash": "598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "generated_at_excluded": true
+      }
+    },
+    {
+      "id": "artifact_set.bound_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Artifact set must record reproducibility inputs, source hashes, output identity, and non-GA boundaries without building or publishing payloads.",
+      "evidence": {
+        "state": "installable-image-artifact-bound-evidence-only",
+        "deterministic_output_identity": true,
+        "reproducibility_inputs_bound": true,
+        "source_artifact_hashes_bound": true,
+        "artifact_materialized": false,
+        "image_built": false,
+        "iso_created": false,
+        "disk_image_created": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "external_mirror_changed": false,
+        "object_storage_provisioned": false,
+        "install_allowed": false,
+        "first_user_install_allowed": false,
+        "update_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "authority.no_broadening",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must not broaden host, production, remote, signer, mirror, object storage, support upload, recovery, shell, TUI, endpoint, or model authority.",
+      "evidence": {
+        "authority": {
+          "aios_body_only": true,
+          "production_ready_claim": false,
+          "install_authority": false,
+          "first_user_install_authority": false,
+          "update_authority": false,
+          "rollback_execution_authority": false,
+          "support_upload_authority": false,
+          "recovery_execution_authority": false,
+          "remote_dispatch_authority": false,
+          "host_rootfs_mutation_authority": false,
+          "host_active_slot_mutation_authority": false,
+          "host_boot_metadata_mutation_authority": false,
+          "active_artifact_set_mutation_authority": false,
+          "production_ring_mutation_authority": false,
+          "mirror_authority": false,
+          "frontend_authority": false,
+          "signer_authority": false,
+          "object_storage_authority": false,
+          "normal_shell_authority": false,
+          "tui_authority": false,
+          "endpoint_reachability_authority": false,
+          "model_replay_authority": false
+        },
+        "side_effects": {
+          "artifact_materialized": false,
+          "image_built": false,
+          "iso_created": false,
+          "disk_image_created": false,
+          "payload_uploaded": false,
+          "external_payload_published": false,
+          "external_mirror_changed": false,
+          "object_storage_provisioned": false,
+          "cryptographic_signing_performed": false,
+          "private_signing_material_handled": false,
+          "install_performed": false,
+          "update_performed": false,
+          "rollback_execution_performed": false,
+          "support_upload_performed": false,
+          "recovery_execution_performed": false,
+          "remote_dispatch_enabled": false,
+          "host_rootfs_mutated": false,
+          "host_active_slot_mutated": false,
+          "host_boot_metadata_mutated": false,
+          "active_artifact_set_mutated": false,
+          "production_ring_mutated": false
+        }
+      }
+    },
+    {
+      "id": "outputs.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must write reproducibility input map and installable image artifact set outputs.",
+      "evidence": {
+        "input_map": {
+          "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+          "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9"
+        },
+        "artifact_set": {
+          "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+          "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0"
+        }
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}

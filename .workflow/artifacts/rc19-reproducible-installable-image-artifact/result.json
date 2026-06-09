@@ -1,0 +1,1011 @@
+{
+  "schema": "agentos.rc19-reproducible-installable-image-artifact-result.v1",
+  "generated_at": "2026-06-10T09:25:00+08:00",
+  "task": "RC19-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+  "identity_material_hash": "598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+  "artifact_set_sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+  "reproducibility_input_map_sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+  "outputs": {
+    "installable_image_artifact_set": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+      "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2"
+    },
+    "reproducibility_input_map": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+      "identity_material_hash": "598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2"
+    }
+  },
+  "artifact_surface": {
+    "state": "installable-image-artifact-bound-evidence-only",
+    "deterministic_output_identity": true,
+    "reproducibility_inputs_bound": true,
+    "source_artifact_hashes_bound": true,
+    "artifact_materialized": false,
+    "image_built": false,
+    "iso_created": false,
+    "disk_image_created": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "external_mirror_changed": false,
+    "object_storage_provisioned": false,
+    "install_allowed": false,
+    "first_user_install_allowed": false,
+    "update_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "artifact_identity": {
+    "release": {
+      "release_id": "production-distro-rc8-current-artifacts",
+      "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+      "package_id": "production-distro-rc16-repo-local-distributable-package",
+      "release_package_id": "production-distro-rc16-repo-local-distributable-package",
+      "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+      "manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+      "checksum_set_sha256": "87c96dc9cbe0c0aebc9b3798710012d4e4989d1533d652610a09b084c4b68bfa"
+    },
+    "image": {
+      "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+      "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+      "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+      "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+      "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+      "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    },
+    "readiness": {
+      "final_audit_status": "passed",
+      "final_audit_decision": "PASS",
+      "installed_system_image_ready": true,
+      "install_readiness": "ready",
+      "update_readiness": "ready",
+      "rollback_readiness": "ready",
+      "support_recovery_readiness": "ready",
+      "consumer_decision": "installed-system-image-ready",
+      "consumer_audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35"
+    }
+  },
+  "source": [
+    {
+      "id": "rc19-plan",
+      "role": "rc19 workflow plan",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+      "sha256": "f57af9eb4cfa3859ae201be8c0b7d46e9731cbeb2e3964c88ed730995b7a032e",
+      "size_bytes": 7940,
+      "present": true,
+      "required": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null
+    },
+    {
+      "id": "rc19-authority-contract",
+      "role": "rc19 installable image authority contract",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+      "sha256": "375f8fde6a2725c9d20832edb9ffa9d25f64ba9ddb9879d8b72749b7fa57c7a3",
+      "size_bytes": 6285,
+      "present": true,
+      "required": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    {
+      "id": "rc18-final-audit-result",
+      "role": "rc18 final closeout result",
+      "path": ".workflow/artifacts/rc18-final-closeout-audit/result.json",
+      "sha256": "ba128f99be727233874eb4f55c030558dda412d5f76101436cc3d57689f031be",
+      "size_bytes": 24328,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-final-closeout-audit-result.v1",
+      "status": "passed",
+      "task": "RC18-050",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-final-audit-evidence",
+      "role": "rc18 final audit evidence",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
+      "sha256": "9529a9bac47e4546be5942e29de5ca172f68d43d698559eaa103bc6c630e9230",
+      "size_bytes": 29588,
+      "present": true,
+      "required": true,
+      "schema": "agentos.production-distro-rc18-final-audit.v1",
+      "status": null,
+      "task": null,
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-boundary-result",
+      "role": "disposable image boundary result",
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a",
+      "size_bytes": 25772,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+      "status": "passed",
+      "task": "RC18-010",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-image-boundary",
+      "role": "disposable image boundary artifact",
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "size_bytes": 25924,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-disposable-installed-system-image-boundary.v1",
+      "status": "disposable-image-boundary-bound-no-image-mutation",
+      "task": "RC18-010",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-baseline-result",
+      "role": "installed-system baseline result",
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/result.json",
+      "sha256": "0b0c7005e5c98c556dddb4a931cea2221257df2cb7c20db74eb70990e8e1a256",
+      "size_bytes": 27636,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-installed-system-baseline-result.v1",
+      "status": "passed",
+      "task": "RC18-011",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-baseline-identity",
+      "role": "installed-system baseline identity",
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/baseline-identity.json",
+      "sha256": "75d6ec9fd88e2fed7991d9517a19280a88df5662564c3cdea79f8214b274e556",
+      "size_bytes": 7188,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-installed-system-baseline-identity.v1",
+      "status": "installed-system-baseline-bound-projection-only",
+      "task": "RC18-011",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-boot-state-projection",
+      "role": "image-local boot projection",
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/boot-state-projection.json",
+      "sha256": "c1958844501fca5dd87bccc4e1d974ff60a7c2bebbcd4f99056351070c3b8e98",
+      "size_bytes": 2470,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-installed-system-boot-state-projection.v1",
+      "status": "image-local-boot-state-projected-non-authoritative",
+      "task": "RC18-011",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-image-boundary-fail-closed-result",
+      "role": "image boundary fail-closed result",
+      "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json",
+      "sha256": "e315df879aa9e7e5bdcc38df2c3586213fc05f7c445e7b87894da779c35dfc1a",
+      "size_bytes": 10087,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-image-boundary-fail-closed-result.v1",
+      "status": "passed",
+      "task": "RC18-012",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-isolated-install-result",
+      "role": "isolated install result",
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+      "sha256": "70c8bb7ffe13bde1f0bc887047090d52aba145ebff28239d9d305a11b4d717b2",
+      "size_bytes": 39553,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-install-drill-result.v1",
+      "status": "passed",
+      "task": "RC18-020",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-isolated-install-evidence",
+      "role": "isolated install evidence",
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/install-drill-evidence.json",
+      "sha256": "e5f523e36bff01996e3fd06469c15e87d86f798a51049ffdc2f891c0f3e4ecaa",
+      "size_bytes": 33965,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-install-drill-evidence.v1",
+      "status": "isolated-install-executed-inside-disposable-image",
+      "task": "RC18-020",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-isolated-update-result",
+      "role": "isolated update result",
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+      "sha256": "067513a7ebed25c2d7e3209a91a9bb5f58b79dd8de151277e56759c0159bea9e",
+      "size_bytes": 41493,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-update-drill-result.v1",
+      "status": "passed",
+      "task": "RC18-021",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-isolated-update-evidence",
+      "role": "isolated update evidence",
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/update-drill-evidence.json",
+      "sha256": "ee522b0d97921ce95da9e80ff4bbcc3b10a71a4c833e6245f4ac1c0108c96ade",
+      "size_bytes": 36658,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-update-drill-evidence.v1",
+      "status": "isolated-update-executed-inside-disposable-image",
+      "task": "RC18-021",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-rollback-preconditions-result",
+      "role": "image rollback preconditions result",
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/result.json",
+      "sha256": "dac3cab86af79bcf4073849b388cdd603e88d044bf7b47d62683bea0da19c6bb",
+      "size_bytes": 36418,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-image-rollback-preconditions-result.v1",
+      "status": "passed",
+      "task": "RC18-022",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-isolated-rollback-result",
+      "role": "isolated rollback result",
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+      "sha256": "35d1ff3488d5d0b21d7dead735e23b9351e3762413cd6a183b8ac0de331f6d78",
+      "size_bytes": 40943,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-rollback-drill-result.v1",
+      "status": "passed",
+      "task": "RC18-030",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-isolated-rollback-evidence",
+      "role": "isolated rollback evidence",
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/rollback-drill-evidence.json",
+      "sha256": "e95a64e61e6b360ddd1400b9c93661dddbe16c7a7489b1eec8e02bab12d7295b",
+      "size_bytes": 36578,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-rollback-drill-evidence.v1",
+      "status": "isolated-rollback-executed-inside-disposable-image",
+      "task": "RC18-030",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-support-recovery-result",
+      "role": "isolated support recovery result",
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/result.json",
+      "sha256": "edac34ee16df8258425363247d5274901e7fb0aa9a77c057819b43d7df96e040",
+      "size_bytes": 30578,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-support-recovery-result.v1",
+      "status": "passed",
+      "task": "RC18-031",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-support-bundle",
+      "role": "local redacted support bundle",
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/isolated-support-bundle.json",
+      "sha256": "c9e8f6e29cb578a5da6d986929cf3223535ddd954242a2764cdd0e91c1dee599",
+      "size_bytes": 7800,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-image-support-bundle.v1",
+      "status": "isolated-support-bundle-local-redacted",
+      "task": "RC18-031",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-recovery-reference-index",
+      "role": "projection-only recovery reference index",
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/recovery-reference-index.json",
+      "sha256": "a6ef16c64a2d98b95f7df8ee39e6850825c35570e40cb85c1faf1418a69928ea",
+      "size_bytes": 6457,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-isolated-image-recovery-reference-index.v1",
+      "status": "projection-only-no-recovery-execution",
+      "task": "RC18-031",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-consumer-smoke-result",
+      "role": "installed-system consumer smoke result",
+      "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json",
+      "sha256": "60f891000510c879b792cc43ce8d6465194ba27b4816829eea38f295da5372af",
+      "size_bytes": 39387,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-installed-system-consumer-smoke-result.v1",
+      "status": "passed",
+      "task": "RC18-040",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc18-consumer-smoke-evidence",
+      "role": "installed-system consumer smoke evidence",
+      "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/consumer-smoke-evidence.json",
+      "sha256": "eaf3e2d58d201bd37f44d929505a78bbabf481604c8aa1945e982d17b46d2d50",
+      "size_bytes": 33625,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc18-installed-system-consumer-smoke-evidence.v1",
+      "status": "installed-system-consumer-installed-system-image-ready",
+      "task": "RC18-040",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc16-release-package-result",
+      "role": "current AIOS release package result",
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+      "sha256": "53a01b6836f62dac4a9ba4c69c9f87ca319ea524ee06695f8e92aae2d2d90188",
+      "size_bytes": 26797,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc16-release-package-artifact-set-result.v1",
+      "status": "passed",
+      "task": "RC16-010",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc16-release-package-artifact-set",
+      "role": "current AIOS release package artifact set",
+      "path": ".workflow/artifacts/rc16-release-package-artifact-set/release-package-artifact-set.json",
+      "sha256": "5801a934827361ae51e287bf3823d526017ca795066c4c510d37f79e0439671c",
+      "size_bytes": 35232,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc16-release-package-artifact-set.v1",
+      "status": "repo-local-distributable-release-package-artifact-set-projected",
+      "task": "RC16-010",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc16-media-manifest-result",
+      "role": "current AIOS installable media result",
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef",
+      "size_bytes": 21051,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc16-installable-media-manifest-result.v1",
+      "status": "passed",
+      "task": "RC16-011",
+      "production_ready_claim": false
+    },
+    {
+      "id": "rc16-media-manifest",
+      "role": "current AIOS installable media manifest",
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+      "size_bytes": 22474,
+      "present": true,
+      "required": true,
+      "schema": "agentos.rc16-installable-media-manifest.v1",
+      "status": "installable-media-manifest-projected-install-update-gated",
+      "task": "RC16-011",
+      "production_ready_claim": false
+    }
+  ],
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must run after RC19-001 completed, while current_task is RC19-010 or during an idempotent rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-011",
+        "rc19_001_status": "completed",
+        "rc19_010_status": "completed"
+      }
+    },
+    {
+      "id": "contract.artifact_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must consume the RC19 installable image authority contract.",
+      "evidence": {
+        "id": "rc19-authority-contract",
+        "role": "rc19 contract",
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+        "sha256": "375f8fde6a2725c9d20832edb9ffa9d25f64ba9ddb9879d8b72749b7fa57c7a3",
+        "size_bytes": 6285,
+        "present": true,
+        "required": true,
+        "schema": null,
+        "status": null,
+        "task": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "sources.required.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC19-010 required source inputs must be present and hashable.",
+      "evidence": []
+    },
+    {
+      "id": "rc18.final_audit.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit must prove installed-system image readiness without GA claim.",
+      "evidence": {
+        "status": "passed",
+        "decision": "PASS",
+        "installed_system_image_ready": true,
+        "production_ready_claim": false,
+        "blockers": 0,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "rc18.sources.passed_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC18 source task results must be passed and non-GA.",
+      "evidence": {
+        "all_passed": true,
+        "all_non_ga": true
+      }
+    },
+    {
+      "id": "rc18.final_source_hashes.match",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit source hashes must match current repo-local evidence files.",
+      "evidence": []
+    },
+    {
+      "id": "rc18.consumer.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 installed-system consumer smoke must report install, update, rollback, and support readiness.",
+      "evidence": {
+        "state": "installed-system-consumer-installed-system-image-ready",
+        "local_release_channel_followed": true,
+        "install_readiness": "ready",
+        "update_readiness": "ready",
+        "rollback_readiness": "ready",
+        "support_recovery_readiness": "ready",
+        "consumer_decision": "installed-system-image-ready",
+        "audited": true,
+        "audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35",
+        "blockers": []
+      }
+    },
+    {
+      "id": "rc18.image_state_chain.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install, update, rollback, support, consumer, and boundary identity must remain coherent.",
+      "evidence": {
+        "image_state_chain_coherent": true,
+        "boundary_identity_coherent": true,
+        "installed": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "updated": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "restored": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2"
+      }
+    },
+    {
+      "id": "rc18.support_recovery.local_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 support/recovery evidence must remain local-only with upload, recovery execution, remote dispatch, and private material handling disabled.",
+      "evidence": {
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "current_release_inputs.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Current AIOS release and media inputs must be hash-bound for reproducible installable image artifact identity.",
+      "evidence": {
+        "release_package_status": "passed",
+        "media_manifest_status": "passed",
+        "release_id": "production-distro-rc8-current-artifacts",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "package_id": "production-distro-rc16-repo-local-distributable-package"
+      }
+    },
+    {
+      "id": "identity.deterministic",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installable image artifact identity must be deterministic from source material and exclude generated output hashes.",
+      "evidence": {
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "identity_material_hash": "598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "generated_at_excluded": true
+      }
+    },
+    {
+      "id": "artifact_set.bound_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Artifact set must record reproducibility inputs, source hashes, output identity, and non-GA boundaries without building or publishing payloads.",
+      "evidence": {
+        "state": "installable-image-artifact-bound-evidence-only",
+        "deterministic_output_identity": true,
+        "reproducibility_inputs_bound": true,
+        "source_artifact_hashes_bound": true,
+        "artifact_materialized": false,
+        "image_built": false,
+        "iso_created": false,
+        "disk_image_created": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "external_mirror_changed": false,
+        "object_storage_provisioned": false,
+        "install_allowed": false,
+        "first_user_install_allowed": false,
+        "update_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "authority.no_broadening",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must not broaden host, production, remote, signer, mirror, object storage, support upload, recovery, shell, TUI, endpoint, or model authority.",
+      "evidence": {
+        "authority": {
+          "aios_body_only": true,
+          "production_ready_claim": false,
+          "install_authority": false,
+          "first_user_install_authority": false,
+          "update_authority": false,
+          "rollback_execution_authority": false,
+          "support_upload_authority": false,
+          "recovery_execution_authority": false,
+          "remote_dispatch_authority": false,
+          "host_rootfs_mutation_authority": false,
+          "host_active_slot_mutation_authority": false,
+          "host_boot_metadata_mutation_authority": false,
+          "active_artifact_set_mutation_authority": false,
+          "production_ring_mutation_authority": false,
+          "mirror_authority": false,
+          "frontend_authority": false,
+          "signer_authority": false,
+          "object_storage_authority": false,
+          "normal_shell_authority": false,
+          "tui_authority": false,
+          "endpoint_reachability_authority": false,
+          "model_replay_authority": false
+        },
+        "side_effects": {
+          "artifact_materialized": false,
+          "image_built": false,
+          "iso_created": false,
+          "disk_image_created": false,
+          "payload_uploaded": false,
+          "external_payload_published": false,
+          "external_mirror_changed": false,
+          "object_storage_provisioned": false,
+          "cryptographic_signing_performed": false,
+          "private_signing_material_handled": false,
+          "install_performed": false,
+          "update_performed": false,
+          "rollback_execution_performed": false,
+          "support_upload_performed": false,
+          "recovery_execution_performed": false,
+          "remote_dispatch_enabled": false,
+          "host_rootfs_mutated": false,
+          "host_active_slot_mutated": false,
+          "host_boot_metadata_mutated": false,
+          "active_artifact_set_mutated": false,
+          "production_ring_mutated": false
+        }
+      }
+    },
+    {
+      "id": "outputs.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 must write reproducibility input map and installable image artifact set outputs.",
+      "evidence": {
+        "input_map": {
+          "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+          "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9"
+        },
+        "artifact_set": {
+          "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+          "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0"
+        }
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-010 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "fail_closed_boundaries": [
+    {
+      "id": "missing-rc18-final-audit",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc18-final-audit-not-bound"
+      ],
+      "reason": "Installable image artifact binding requires RC18 final audit evidence.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "missing-rc18-consumer-smoke",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc18-installed-system-consumer-smoke-not-bound"
+      ],
+      "reason": "Artifact readiness must be derived from consumer smoke readiness.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "source-hash-drift",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc18-source-hash-drift"
+      ],
+      "reason": "RC18 final audit source hashes must match current repo-local evidence.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "host-rootfs-mutation-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "RC19-010 cannot mutate host rootfs.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "RC19-010 cannot mutate host boot metadata.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "active-artifact-set-mutation-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "reason": "RC19-010 cannot mutate active artifact state.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "RC19-010 cannot mutate production rings.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "external-payload-publication-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "external-payload-publication-denied"
+      ],
+      "reason": "RC19-010 does not publish payload bytes.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "object-storage-provisioning-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "object-storage-provisioning-denied"
+      ],
+      "reason": "Object storage provisioning is outside RC19 body scope.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "signer-authority-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "signer-authority-denied"
+      ],
+      "reason": "Signer reachability is not installable image artifact authority.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is outside RC19-010 scope.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is outside RC19-010 scope.",
+      "denied_before_effect": true,
+      "side_effects": {
+        "artifact_built": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "reproducible_identity_bound": true,
+    "artifact_materialized": false,
+    "image_built": false,
+    "iso_created": false,
+    "disk_image_created": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "external_mirror_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "summary": {
+    "checks": 15,
+    "failed_checks": 0,
+    "cases": 12,
+    "failed_cases": 0,
+    "rc19_010_complete": true,
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "source_inputs": 26,
+    "missing_required_inputs": 0,
+    "source_hash_mismatches": 0,
+    "next_task": "RC19-011"
+  }
+}
