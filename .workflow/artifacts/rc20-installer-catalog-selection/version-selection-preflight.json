@@ -1,0 +1,58 @@
+{
+  "schema": "agentos.rc20-version-selection-preflight.v1",
+  "generated_at": "2026-06-10T14:45:00+08:00",
+  "task": "RC20-020",
+  "status": "version-selection-preflight-bound-install-gated",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "version_selection_preflight_id": "sha256:4eff1f3b47d2be678f030953f3c31e1f02b5961b896b6363773cf6a54a1a4995",
+  "installer_catalog_id": "sha256:3f1768d9504af7da603ede661a74911234677c53215ccf7cc67eaf52f72ccc46",
+  "selected": {
+    "channel": "stable",
+    "version": "rc20-single-user-stable-local-projection",
+    "choice_id": "sha256:2a38c682681ecb80f919dc0e76bf2b82e753e7e6445dd2885698f1785406d2c0",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+    "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+    "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+    "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa"
+  },
+  "bindings": {
+    "release_bundle_bound": true,
+    "installer_media_bound": true,
+    "boot_target_descriptor_bound": true,
+    "rollback_support_bound": true,
+    "local_channel_identity_bound": true,
+    "bundle_channel_fail_closed_bound": true
+  },
+  "authorization": {
+    "host_install_authorized": false,
+    "remote_fetch_authorized": false,
+    "external_mirror_trusted": false,
+    "support_upload_authorized": false,
+    "recovery_execution_authorized": false,
+    "production_mutation_authorized": false
+  },
+  "preflight_material": {
+    "schema": "agentos.rc20-version-selection-preflight-material.v1",
+    "task": "RC20-020",
+    "installer_catalog_id": "sha256:3f1768d9504af7da603ede661a74911234677c53215ccf7cc67eaf52f72ccc46",
+    "selected_channel": "stable",
+    "selected_version": "rc20-single-user-stable-local-projection",
+    "selected_choice_id": "sha256:2a38c682681ecb80f919dc0e76bf2b82e753e7e6445dd2885698f1785406d2c0",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+    "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+    "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+    "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+    "rollback_support": {
+      "update_readiness": "ready",
+      "rollback_readiness": "ready",
+      "support_bundle_local_only": true,
+      "support_upload_performed": false,
+      "recovery_execution_performed": false
+    }
+  }
+}

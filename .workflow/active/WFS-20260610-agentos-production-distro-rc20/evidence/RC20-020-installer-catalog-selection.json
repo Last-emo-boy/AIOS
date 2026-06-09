@@ -1,0 +1,223 @@
+{
+  "schema": "agentos.rc20-installer-catalog-selection-task-evidence.v1",
+  "generated_at": "2026-06-10T14:45:00+08:00",
+  "task": "RC20-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "script": {
+    "path": "scripts/project-rc20-installer-catalog-selection.ps1",
+    "sha256": "8c65a5ca816e3cb87d84a8e706eccb5f47f751bcebbafbb5b622d7178a8d0394"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc20-installer-catalog-selection/result.json",
+    "status": "passed",
+    "sha256": "5bb0f792c68d0eaea3afb139ccbccc6a726f9ad6fa0c59d41281e8feb0aedc63"
+  },
+  "outputs": {
+    "installer_catalog": {
+      "path": ".workflow/artifacts/rc20-installer-catalog-selection/installer-catalog.json",
+      "sha256": "c479c1ca9eb1864a7a56e231a835e77f5e7d64e527d6eb3c9b4d7ea7c7d1250a",
+      "installer_catalog_id": "sha256:3f1768d9504af7da603ede661a74911234677c53215ccf7cc67eaf52f72ccc46"
+    },
+    "version_selection_preflight": {
+      "path": ".workflow/artifacts/rc20-installer-catalog-selection/version-selection-preflight.json",
+      "sha256": "e3183bc8bfb08f6f234fef5ff4cfedf4f10a2e4aaf8db448a7a6d1f2cb92defb",
+      "version_selection_preflight_id": "sha256:4eff1f3b47d2be678f030953f3c31e1f02b5961b896b6363773cf6a54a1a4995"
+    }
+  },
+  "selection_surface": {
+    "state": "installer-catalog-version-selection-preflight-bound-install-gated",
+    "catalog_exactly_expected": true,
+    "choice_count": 2,
+    "channels": [
+      "candidate",
+      "stable"
+    ],
+    "selected_channel": "stable",
+    "selected_version": "rc20-single-user-stable-local-projection",
+    "preflight_binds_required_identity": true,
+    "host_install_authorized": false,
+    "remote_fetch_authorized": false,
+    "external_mirror_trusted": false,
+    "support_upload_authorized": false,
+    "recovery_execution_authorized": false,
+    "production_mutation_authorized": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "installer_selection_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "host_install_authorized": false,
+    "remote_fetch_authorized": false,
+    "external_mirror_trusted": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "signer_authority": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc20_020_complete": true,
+    "next_task": "RC20-021",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc20_020",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-020 must run after RC20-012 completed, with current_task set to RC20-020.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-020",
+        "rc20_012_status": "completed",
+        "rc20_020_status": "pending"
+      }
+    },
+    {
+      "id": "contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-020 must consume the RC20 authority contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+        "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db"
+      }
+    },
+    {
+      "id": "upstream.release_channel_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release bundle, channel promotion, and fail-closed verification must all be complete and identity-compatible.",
+      "evidence": {
+        "release_bundle_status": "passed",
+        "channel_promotion_status": "passed",
+        "fail_closed_status": "passed",
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b"
+      }
+    },
+    {
+      "id": "installer_media.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer media manifest and boot target descriptor must match the RC20 release bundle identity.",
+      "evidence": {
+        "installer_media_result_status": "passed",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "release_bundle_installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+        "release_bundle_boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb"
+      }
+    },
+    {
+      "id": "lifecycle.rollback_support_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Version selection preflight must bind rollback/update compatibility and local support/recovery references.",
+      "evidence": {
+        "post_install_status": "passed",
+        "update_readiness": "ready",
+        "rollback_readiness": "ready",
+        "support_status": "passed",
+        "support_bundle_local_only": true
+      }
+    },
+    {
+      "id": "catalog.exact_candidate_stable_choices",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer catalog must expose exactly the expected local candidate and stable release bundle choices.",
+      "evidence": {
+        "choice_count": 2,
+        "channels": [
+          "candidate",
+          "stable"
+        ],
+        "candidate_release_bundle": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "stable_release_bundle": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b"
+      }
+    },
+    {
+      "id": "preflight.binds_required_identity",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Version selection preflight must bind release bundle, installer media, boot descriptor, rollback/support, and local channel identity.",
+      "evidence": {
+        "channel": "stable",
+        "version": "rc20-single-user-stable-local-projection",
+        "choice_id": "sha256:2a38c682681ecb80f919dc0e76bf2b82e753e7e6445dd2885698f1785406d2c0",
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+        "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+        "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+        "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa"
+      }
+    },
+    {
+      "id": "authority.no_forbidden_authority",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer catalog selection cannot authorize host install, remote fetch, external mirror trust, support upload, recovery execution, remote dispatch, active artifact mutation, or production mutation.",
+      "evidence": {
+        "preflight_authorization": {
+          "host_install_authorized": false,
+          "remote_fetch_authorized": false,
+          "external_mirror_trusted": false,
+          "support_upload_authorized": false,
+          "recovery_execution_authorized": false,
+          "production_mutation_authorized": false
+        },
+        "catalog_authority": {
+          "aios_body_only": true,
+          "catalog_authority_only": true,
+          "host_install_authority": false,
+          "update_authority": false,
+          "rollback_execution_authority": false,
+          "support_upload_authority": false,
+          "recovery_execution_authority": false,
+          "remote_dispatch_authority": false,
+          "host_rootfs_mutation_authority": false,
+          "host_active_slot_mutation_authority": false,
+          "host_boot_metadata_mutation_authority": false,
+          "active_artifact_set_mutation_authority": false,
+          "production_ring_mutation_authority": false,
+          "mirror_authority": false,
+          "frontend_authority": false,
+          "signer_authority": false,
+          "object_storage_authority": false,
+          "endpoint_reachability_authority": false
+        }
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer catalog selection must deny missing sources, identity mismatch, extra channels, host install, remote fetch, external mirror trust, support/recovery execution, production mutation, and GA claims.",
+      "evidence": {
+        "cases": 20,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-020 outputs must not contain key blocks, private authority paths, auth tokens, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}

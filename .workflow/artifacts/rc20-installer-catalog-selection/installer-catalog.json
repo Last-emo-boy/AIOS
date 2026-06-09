@@ -1,0 +1,192 @@
+{
+  "schema": "agentos.rc20-installer-catalog.v1",
+  "generated_at": "2026-06-10T14:45:00+08:00",
+  "task": "RC20-020",
+  "status": "installer-catalog-bound-local-selection-gated",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "installer_catalog_id": "sha256:3f1768d9504af7da603ede661a74911234677c53215ccf7cc67eaf52f72ccc46",
+  "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+  "choices": [
+    {
+      "channel": "candidate",
+      "version": "rc20-single-user-candidate",
+      "choice_id": "sha256:72b081367cab85d6b0c57cce036c3f1f0b78108ec80a2eed93a8fb6b6edf5f15",
+      "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+      "stable_channel_projection_id": null,
+      "selectable_for_preflight": true,
+      "selected_by_default": false,
+      "surface": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+        "first_user_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+        "support_bundle_id": "rc19-first-user-support-b1c927261884cb5a",
+        "local_only": true,
+        "host_install_authorized": false,
+        "remote_fetch_authorized": false,
+        "external_mirror_trusted": false,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "channel": "stable",
+      "version": "rc20-single-user-stable-local-projection",
+      "choice_id": "sha256:2a38c682681ecb80f919dc0e76bf2b82e753e7e6445dd2885698f1785406d2c0",
+      "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+      "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+      "selectable_for_preflight": true,
+      "selected_by_default": true,
+      "surface": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+        "first_user_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+        "support_bundle_id": "rc19-first-user-support-b1c927261884cb5a",
+        "local_only": true,
+        "host_install_authorized": false,
+        "remote_fetch_authorized": false,
+        "external_mirror_trusted": false,
+        "production_ready_claim": false
+      }
+    }
+  ],
+  "expected_choice_count": 2,
+  "selection_policy": {
+    "default_channel": "stable",
+    "allowed_channels": [
+      "candidate",
+      "stable"
+    ],
+    "require_release_bundle_identity": true,
+    "require_installer_media_identity": true,
+    "require_boot_target_descriptor": true,
+    "require_rollback_support": true,
+    "require_local_channel_identity": true,
+    "host_install_authorized": false,
+    "remote_fetch_authorized": false,
+    "external_mirror_trusted": false
+  },
+  "authority": {
+    "aios_body_only": true,
+    "catalog_authority_only": true,
+    "host_install_authority": false,
+    "update_authority": false,
+    "rollback_execution_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "host_rootfs_mutation_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "active_artifact_set_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "endpoint_reachability_authority": false
+  },
+  "source": {
+    "rc20_release_bundle_result": {
+      "role": "rc20 release bundle result",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+      "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+      "size_bytes": 45355,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-result.v1",
+      "status": "passed",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_channel_promotion_result": {
+      "role": "rc20 channel promotion result",
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+      "sha256": "6c82a84c1f977003e7d78d387a711c6679edd546fcc181d563f50a3f23ca9ad6",
+      "size_bytes": 57559,
+      "present": true,
+      "schema": "agentos.rc20-local-channel-promotion-result.v1",
+      "status": "passed",
+      "task": "RC20-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_bundle_channel_fail_closed": {
+      "role": "rc20 bundle/channel fail-closed result",
+      "path": ".workflow/artifacts/rc20-release-bundle-channel-fail-closed/result.json",
+      "sha256": "bfe1f74328e9a2d7b5f7036a1e091cde3d3ef0adb24ddb4b45f33cfbc5508a28",
+      "size_bytes": 12725,
+      "present": true,
+      "schema": "agentos.rc20-release-bundle-channel-fail-closed-result.v1",
+      "status": "passed",
+      "task": "RC20-012",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc19_installer_media_result": {
+      "role": "rc19 installer media result",
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+      "sha256": "0a74cd866f16388dcfec4b5396e66490dd26ab9c2383b107c85e02f52c1f8ae1",
+      "size_bytes": 23381,
+      "present": true,
+      "schema": "agentos.rc19-installer-media-manifest-result.v1",
+      "status": "passed",
+      "task": "RC19-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": null
+    },
+    "rc19_installer_media_manifest": {
+      "role": "rc19 installer media manifest",
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/installer-media-manifest.json",
+      "sha256": "2d706fdc6d7f6fc002ea757e9cfb869c516ed354d83fd8a8a4f3627dbff7bf43",
+      "size_bytes": 12279,
+      "present": true,
+      "schema": "agentos.rc19-installer-media-manifest.v1",
+      "status": "installer-media-manifest-bound-install-gated",
+      "task": "RC19-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": null
+    },
+    "rc19_boot_target_descriptor": {
+      "role": "rc19 boot target descriptor",
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/boot-target-descriptor.json",
+      "sha256": "1c103af6d3ef592a659f7c4442261235dad3dbc06399e7dd1202af86e1c9f046",
+      "size_bytes": 3159,
+      "present": true,
+      "schema": "agentos.rc19-boot-target-descriptor.v1",
+      "status": "boot-target-descriptor-bound-projection-only",
+      "task": "RC19-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": null
+    },
+    "rc19_post_install_lifecycle": {
+      "role": "rc19 post-install lifecycle",
+      "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json",
+      "sha256": "ba4416539a8837a55d2b58d91611c52a24d01f1482ef94990687eb9d8a94c680",
+      "size_bytes": 52364,
+      "present": true,
+      "schema": "agentos.rc19-post-install-update-rollback-smoke-result.v1",
+      "status": "passed",
+      "task": "RC19-031",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc19_support_recovery": {
+      "role": "rc19 support recovery",
+      "path": ".workflow/artifacts/rc19-first-user-support-recovery/result.json",
+      "sha256": "85bc2db6f4efd09bbb29d4cff540114b83c8ef01036f0e06db4e79a822f5ac2d",
+      "size_bytes": 41441,
+      "present": true,
+      "schema": "agentos.rc19-first-user-support-recovery-result.v1",
+      "status": "passed",
+      "task": "RC19-032",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    }
+  }
+}
