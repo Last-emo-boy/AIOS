@@ -1,0 +1,472 @@
+{
+  "schema": "agentos.rc17-local-release-channel-install-update-consumer-smoke-evidence.v1",
+  "generated_at": "2026-06-10T04:05:00+08:00",
+  "task": "RC17-040",
+  "status": "local-release-channel-consumer-exact-install-update-ready",
+  "production_ready_claim": false,
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "local_release_channel": {
+    "followed": true,
+    "local_only": true,
+    "remote_payload_download_attempted": false,
+    "rc16_consumer_result_sha256": "d93706031410f1f9243dda66205e5e93d4f219633408a71b351c8f073ed0c797"
+  },
+  "decision": {
+    "outcome": "exact-install-update-ready",
+    "install_readiness": "ready",
+    "update_readiness": "ready",
+    "rollback_support_readiness": "ready",
+    "exact_denial_blockers": [],
+    "next_safe_action": "run-rc17-final-closeout-audit"
+  },
+  "bounded_by": {
+    "exact_target": true,
+    "exact_approval": true,
+    "agentcore_install_update_planspec": true,
+    "security_execution_install_update_allow": true,
+    "rollback_preconditions": true,
+    "controlled_install": true,
+    "controlled_update": true,
+    "rollback_support": true
+  },
+  "audit": {
+    "schema": "agentos.rc17-local-consumer-smoke-audit.v1",
+    "generated_at": "2026-06-10T04:05:00+08:00",
+    "task": "RC17-040",
+    "local_only": true,
+    "fabricated": false,
+    "decision": "exact-install-update-ready",
+    "decision_digest": "250d050272e81f25b1e3944ec16e00d182de673eb35171f51c914c26b59e78bd",
+    "exact_target_bound": true,
+    "exact_approval_bound": true,
+    "agentcore_bound": true,
+    "security_execution_bound": true,
+    "rollback_support_bound": true,
+    "production_ready_claim": false,
+    "blockers": []
+  },
+  "fail_closed_cases": [
+    {
+      "id": "missing-local-release-channel",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "local-release-channel-metadata-not-bound"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-controlled-install",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "controlled-local-install-not-ready"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-controlled-update",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "controlled-local-update-not-ready"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-rollback-support",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "controlled-rollback-support-not-ready"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "identity-mismatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "install-update-rollback-identity-mismatch"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-payload-download",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-payload-download-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-upload",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "recovery-execution",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "active-artifact-set-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-ring-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "mirror-frontend-authority",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "mirror-frontend-authority-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "private-material",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "private-signing-material-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "release-signing",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "cryptographic-signing-denied"
+      ],
+      "side_effects": {
+        "remote_payload_downloaded": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "side_effects": {
+    "consumer_smoke_evaluated": true,
+    "remote_payload_downloaded": false,
+    "install_effect_prepared": false,
+    "update_effect_prepared": false,
+    "install_performed_by_consumer_smoke": false,
+    "update_performed_by_consumer_smoke": false,
+    "rollback_execution_performed_by_consumer_smoke": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_authority": false
+  },
+  "source": {
+    "rc17_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
+      "sha256": "d9436b8135abc4003428da29e2776bad4cba04cde1f9cdd2dc78214ae9da596a",
+      "size_bytes": 8256,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc17_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+      "sha256": "7efbc7763eb494eb7feb93ca95479a3d1c9bca658cc68b5b70811532ba9f914d",
+      "size_bytes": 3432,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc17_controlled_local_install_result": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/result.json",
+      "sha256": "165cec6f706c213d96707666fd30a9f18af8ad1fe7e65c87c69b76905f1faa97",
+      "size_bytes": 25657,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-install-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_local_update_result": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/result.json",
+      "sha256": "6947404d3171129f7eb19d40b0040f2f821391527f982d226342a0389901c7d6",
+      "size_bytes": 27220,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-update-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_rollback_support_result": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+      "sha256": "fb3c305eb332b8b823abe2facbe0f9d6550292e3041c7f3cbb552669b1ee9683",
+      "size_bytes": 25138,
+      "present": true,
+      "schema": "agentos.rc17-controlled-install-update-rollback-support-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_local_release_channel_consumer_result": {
+      "path": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json",
+      "sha256": "d93706031410f1f9243dda66205e5e93d4f219633408a71b351c8f073ed0c797",
+      "size_bytes": 94738,
+      "present": true,
+      "schema": "agentos.rc16-local-release-channel-consumer-smoke-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_local_release_channel_consumer_evidence": {
+      "path": ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/consumer-smoke-evidence.json",
+      "sha256": "0e81a15835f11f76ac701949e4ea2d06032dbfb289178330f93b576a5f0b6d14",
+      "size_bytes": 88071,
+      "present": true,
+      "schema": "agentos.rc16-local-release-channel-consumer-smoke-evidence.v1",
+      "status": "local-consumer-smoke-denied-before-effect",
+      "production_ready_claim": false
+    }
+  }
+}

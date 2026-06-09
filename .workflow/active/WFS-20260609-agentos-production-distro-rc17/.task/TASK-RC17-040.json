@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC17-040",
   "title": "run local release channel exact install/update consumer smoke",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-4",
   "read_first": [
     ".workflow/artifacts/rc17-controlled-local-install/result.json",
@@ -34,5 +34,9 @@
       "Any execution path is audited and bounded by exact target, exact approval, AgentCore, SecurityExecution, and rollback/support evidence.",
       "No production ring mutation, remote dispatch, support upload, recovery execution, private signing material handling, remote payload download, host boot mutation, or mirror/frontend authority occurs."
     ]
-  }
+  },
+  "completed_at": "2026-06-10T04:05:00+08:00",
+  "result": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-040-local-release-channel-install-update-consumer-smoke.json",
+  "next_task": "RC17-050"
 }
