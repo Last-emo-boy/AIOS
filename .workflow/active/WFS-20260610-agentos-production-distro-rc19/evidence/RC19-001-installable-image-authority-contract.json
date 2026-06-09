@@ -1,0 +1,146 @@
+{
+  "schema": "agentos.rc19-installable-image-authority-contract-evidence.v1",
+  "generated_at": "2026-06-10T09:05:00+08:00",
+  "task": "RC19-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "source": {
+    "rc19_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+      "current_task": "RC19-001",
+      "status": "active"
+    },
+    "rc18_final_audit": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
+      "verdict": "PASS",
+      "decision": "rc18-isolated-installed-system-image-ready-non-ga",
+      "installed_system_image_ready": true,
+      "production_ready_claim": false,
+      "remaining_gap_carried_into_rc19": "reproducible-installable-image-and-first-user-install-path-not-proved"
+    }
+  },
+  "contract": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+    "gate_order": [
+      "rc18-final-audit-and-isolated-installed-system-image-readiness-passed",
+      "rc19-authority-contract-frozen",
+      "reproducible-installable-image-artifact-set-bound",
+      "installer-media-manifest-and-boot-target-descriptor-bound",
+      "installable-image-artifact-reproducibility-fail-closed-fixtures-verified",
+      "first-user-install-target-boundary-and-preflight-bound",
+      "first-user-install-drill-execute-or-deny-audited-inside-disposable-target",
+      "first-boot-provisioning-and-local-operator-identity-projection-bound",
+      "offline-local-channel-consumption-bound",
+      "post-install-update-rollback-compatibility-smoke-audited",
+      "first-user-support-recovery-evidence-bound-local-redacted-only",
+      "installable-image-local-consumer-smoke-audited",
+      "final-closeout-truthful-non-ga"
+    ],
+    "writable_surface": {
+      "disposable_first_user_install_target_only": true,
+      "install_target_descriptor_required_before_mutation": true,
+      "allowed_write_surface_bound_by_rc19_020": true,
+      "host_rootfs_mutation_allowed": false,
+      "host_active_slot_mutation_allowed": false,
+      "host_boot_metadata_mutation_allowed": false,
+      "active_artifact_set_mutation_allowed": false,
+      "production_ring_mutation_allowed": false
+    },
+    "non_authority_sources": [
+      "external-mirror-reachability-or-rendered-metadata",
+      "frontend-output",
+      "signer-reachability",
+      "object-storage-ui",
+      "endpoint-reachability-without-local-evidence-binding",
+      "normal-shell-output",
+      "tui-projection",
+      "model-replay",
+      "remote-service-health",
+      "support-upload-availability",
+      "recovery-service-availability",
+      "local-offline-channel-metadata-without-bound-artifact-identity"
+    ],
+    "forbidden_authority": {
+      "host_rootfs_mutation_allowed": false,
+      "host_active_slot_mutation_allowed": false,
+      "host_boot_metadata_mutation_allowed": false,
+      "active_artifact_set_mutation_allowed": false,
+      "production_ring_mutation_allowed": false,
+      "remote_dispatch_enabled": false,
+      "support_upload_allowed": false,
+      "recovery_execution_allowed": false,
+      "external_mirror_frontend_authority": false,
+      "signer_authority": false,
+      "private_signing_material_handling_allowed": false,
+      "ga_claim_allowed": false
+    }
+  },
+  "checks": [
+    {
+      "id": "gate_order.frozen",
+      "status": "passed",
+      "message": "RC19 gate order is frozen from RC18 image readiness through installable image artifact, installer media, first-user install target, first boot, local channel, post-install update/rollback, support/recovery, consumer smoke, and final audit."
+    },
+    {
+      "id": "writable_surface.disposable_target_only",
+      "status": "passed",
+      "message": "The disposable first-user install target is the only writable install drill surface."
+    },
+    {
+      "id": "host_install.not_authorized",
+      "status": "passed",
+      "message": "First-user install effects may run only inside disposable target evidence until a later milestone explicitly authorizes host install."
+    },
+    {
+      "id": "forbidden_authority.disabled",
+      "status": "passed",
+      "message": "Host rootfs mutation, host active slot mutation, host boot metadata mutation, active artifact set mutation, support upload, recovery execution service, remote dispatch, production ring mutation, external mirror/frontend authority, signer authority, private signing material handling, and GA claims remain forbidden."
+    },
+    {
+      "id": "non_authority_sources.frozen",
+      "status": "passed",
+      "message": "External mirror, frontend, signer, shell, TUI, model, endpoint, object storage, support upload, recovery service, and remote service reachability are not authority."
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "message": "RC19 contract keeps production_ready_claim=false."
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "external_mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc19_001_complete": true,
+    "next_task": "RC19-010",
+    "commit_required": true
+  }
+}
