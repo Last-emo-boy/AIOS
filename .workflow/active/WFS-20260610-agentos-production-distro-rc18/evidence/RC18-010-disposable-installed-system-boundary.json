@@ -1,0 +1,243 @@
+{
+  "schema": "agentos.rc18-disposable-installed-system-boundary-evidence.v1",
+  "generated_at": "2026-06-10T05:30:00+08:00",
+  "task": "RC18-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "script": {
+    "path": "scripts/project-rc18-disposable-installed-system-boundary.ps1",
+    "sha256": "5eee352d2ae8f49fee5a8cb63f84f48853489c7568f962215896a98d1299c8cf"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+    "status": "passed",
+    "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a"
+  },
+  "outputs": {
+    "image_boundary": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+      "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f"
+    }
+  },
+  "boundary_surface": {
+    "state": "disposable-installed-system-boundary-bound-no-image-mutation",
+    "state_root_bound": true,
+    "allowed_write_surface_bound": true,
+    "denied_host_write_surface_bound": true,
+    "artifact_roots_bound": true,
+    "rc17_exact_evidence_bound": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_authority": false,
+    "signer_authority": false,
+    "blockers": [
+      "rc18-installed-system-baseline-not-bound",
+      "rc18-image-boundary-fail-closed-not-run",
+      "rc18-isolated-install-not-run",
+      "rc18-isolated-update-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "disposable_image_or_vm_only": true,
+    "image_materialized": false,
+    "image_mutation_performed_before_boundary_bound": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_frontend_changed": false,
+    "signer_authority": false
+  },
+  "completion": {
+    "rc18_010_complete": true,
+    "next_task": "RC18-011",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc18_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must run after RC18-001 completed, either while current_task is RC18-010 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC18-010",
+        "rc18_001_status": "completed",
+        "rc18_010_status": "pending"
+      }
+    },
+    {
+      "id": "contract.boundary_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must consume the isolated installed-system boundary contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+        "sha256": "d452dae7e4511d8497368523ccbac3029a2cf9dd384b6b6f1431315958877ce8",
+        "size_bytes": 5721,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.rc17_exact_evidence.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must be hash-bound to RC17 exact install/update/rollback evidence and consumer smoke.",
+      "evidence": {
+        "exact_install_update_ready": true,
+        "install_performed": true,
+        "update_performed": true,
+        "rollback_performed": true,
+        "consumer_decision": "exact-install-update-ready"
+      }
+    },
+    {
+      "id": "state_root.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Disposable image state root must be hash-bound to RC17 evidence, allowed write surface, denied host write surface, and artifact roots.",
+      "evidence": {
+        "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+        "artifact_root_binding_hash": "ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f"
+      }
+    },
+    {
+      "id": "write_surface.image_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installed-system image or VM must be the only writable drill surface and artifact roots must be declared.",
+      "evidence": {
+        "only_writable_drill_surface": "disposable-installed-system-image-or-vm",
+        "boundary_task_writes": [
+          ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+          ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json"
+        ],
+        "future_image_state_root": ".workflow/artifacts/rc18-installed-system-image-state",
+        "future_image_mutation_requires": [
+          "rc18-010-boundary-bound",
+          "rc18-011-baseline-bound",
+          "rc18-012-fail-closed-fixtures-passed"
+        ],
+        "host_write_surface_allowed": false,
+        "artifact_roots": [
+          {
+            "id": "rc18-boundary",
+            "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary",
+            "writable_in_task": true
+          },
+          {
+            "id": "rc18-baseline",
+            "path": ".workflow/artifacts/rc18-installed-system-baseline",
+            "writable_after_task": "RC18-010"
+          },
+          {
+            "id": "rc18-image-fail-closed",
+            "path": ".workflow/artifacts/rc18-image-boundary-fail-closed",
+            "writable_after_task": "RC18-011"
+          },
+          {
+            "id": "rc18-isolated-install",
+            "path": ".workflow/artifacts/rc18-isolated-install-drill",
+            "writable_after_task": "RC18-012"
+          },
+          {
+            "id": "rc18-isolated-update",
+            "path": ".workflow/artifacts/rc18-isolated-update-drill",
+            "writable_after_task": "RC18-020"
+          },
+          {
+            "id": "rc18-rollback-preconditions",
+            "path": ".workflow/artifacts/rc18-image-rollback-preconditions",
+            "writable_after_task": "RC18-021"
+          },
+          {
+            "id": "rc18-isolated-rollback",
+            "path": ".workflow/artifacts/rc18-isolated-rollback-drill",
+            "writable_after_task": "RC18-022"
+          },
+          {
+            "id": "rc18-support-recovery",
+            "path": ".workflow/artifacts/rc18-isolated-support-recovery",
+            "writable_after_task": "RC18-030"
+          },
+          {
+            "id": "rc18-consumer-smoke",
+            "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke",
+            "writable_after_task": "RC18-031"
+          }
+        ]
+      }
+    },
+    {
+      "id": "host_write_surface.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Host rootfs, host active slot, host boot metadata, active artifact set, production ring, support upload, recovery service, remote dispatch, mirror/frontend, and signer authority must remain disabled.",
+      "evidence": {
+        "host_rootfs_mutation_allowed": false,
+        "host_active_slot_mutation_allowed": false,
+        "host_boot_metadata_mutation_allowed": false,
+        "active_artifact_set_mutation_allowed": false,
+        "production_ring_mutation_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_authority": false,
+        "signer_authority": false
+      }
+    },
+    {
+      "id": "image.no_mutation_before_boundary",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must not mutate or boot an image before the boundary is bound.",
+      "evidence": {
+        "image_materialized": false,
+        "image_mutation_performed_before_boundary_bound": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "vm_booted": false,
+        "network_fetch_attempted": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing RC17 evidence, host mutation, support upload, recovery, remote dispatch, mirror/frontend, signer, and pre-boundary image mutation attempts must fail closed.",
+      "evidence": {
+        "cases": 16,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 image boundary output must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}

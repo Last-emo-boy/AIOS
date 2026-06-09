@@ -1,0 +1,680 @@
+{
+  "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+  "generated_at": "2026-06-10T05:30:00+08:00",
+  "task": "RC18-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+  "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+  "image_boundary_bound": true,
+  "image_mutation_performed_before_boundary_bound": false,
+  "outputs": {
+    "image_boundary": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+      "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f"
+    }
+  },
+  "boundary_surface": {
+    "state": "disposable-installed-system-boundary-bound-no-image-mutation",
+    "state_root_bound": true,
+    "allowed_write_surface_bound": true,
+    "denied_host_write_surface_bound": true,
+    "artifact_roots_bound": true,
+    "rc17_exact_evidence_bound": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_authority": false,
+    "signer_authority": false,
+    "blockers": [
+      "rc18-installed-system-baseline-not-bound",
+      "rc18-image-boundary-fail-closed-not-run",
+      "rc18-isolated-install-not-run",
+      "rc18-isolated-update-not-run"
+    ]
+  },
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "7574ae28ac46fe8106784db4cb9eec0073ad6f43f6659225cf8ce055909d3f9e",
+      "size_bytes": 7419,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc18_contract": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+      "sha256": "d452dae7e4511d8497368523ccbac3029a2cf9dd384b6b6f1431315958877ce8",
+      "size_bytes": 5721,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc17_final_audit_result": {
+      "path": ".workflow/artifacts/rc17-final-closeout-audit/result.json",
+      "sha256": "275a14dda99d99b4218c1a251d5372443564f35fe66350fe75a599930543bd02",
+      "size_bytes": 24961,
+      "present": true,
+      "schema": "agentos.rc17-final-closeout-audit-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_final_audit_evidence": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+      "sha256": "2f445dee83f0856d37b25a400899f39e6a843129a024e59888e006f534f2945a",
+      "size_bytes": 30032,
+      "present": true,
+      "schema": "agentos.production-distro-rc17-final-audit.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "rc17_controlled_install_result": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/result.json",
+      "sha256": "165cec6f706c213d96707666fd30a9f18af8ad1fe7e65c87c69b76905f1faa97",
+      "size_bytes": 25657,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-install-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_update_result": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/result.json",
+      "sha256": "6947404d3171129f7eb19d40b0040f2f821391527f982d226342a0389901c7d6",
+      "size_bytes": 27220,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-update-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_support_result": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+      "sha256": "fb3c305eb332b8b823abe2facbe0f9d6550292e3041c7f3cbb552669b1ee9683",
+      "size_bytes": 25138,
+      "present": true,
+      "schema": "agentos.rc17-controlled-install-update-rollback-support-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_consumer_smoke_result": {
+      "path": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json",
+      "sha256": "36a6d3f123c00cce7d2656ad78971e57c7df64f25d722de77d797c731140f81a",
+      "size_bytes": 21167,
+      "present": true,
+      "schema": "agentos.rc17-local-release-channel-install-update-consumer-smoke-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc18_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must run after RC18-001 completed, either while current_task is RC18-010 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC18-010",
+        "rc18_001_status": "completed",
+        "rc18_010_status": "pending"
+      }
+    },
+    {
+      "id": "contract.boundary_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must consume the isolated installed-system boundary contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+        "sha256": "d452dae7e4511d8497368523ccbac3029a2cf9dd384b6b6f1431315958877ce8",
+        "size_bytes": 5721,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.rc17_exact_evidence.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must be hash-bound to RC17 exact install/update/rollback evidence and consumer smoke.",
+      "evidence": {
+        "exact_install_update_ready": true,
+        "install_performed": true,
+        "update_performed": true,
+        "rollback_performed": true,
+        "consumer_decision": "exact-install-update-ready"
+      }
+    },
+    {
+      "id": "state_root.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Disposable image state root must be hash-bound to RC17 evidence, allowed write surface, denied host write surface, and artifact roots.",
+      "evidence": {
+        "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+        "artifact_root_binding_hash": "ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f"
+      }
+    },
+    {
+      "id": "write_surface.image_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installed-system image or VM must be the only writable drill surface and artifact roots must be declared.",
+      "evidence": {
+        "only_writable_drill_surface": "disposable-installed-system-image-or-vm",
+        "boundary_task_writes": [
+          ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+          ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json"
+        ],
+        "future_image_state_root": ".workflow/artifacts/rc18-installed-system-image-state",
+        "future_image_mutation_requires": [
+          "rc18-010-boundary-bound",
+          "rc18-011-baseline-bound",
+          "rc18-012-fail-closed-fixtures-passed"
+        ],
+        "host_write_surface_allowed": false,
+        "artifact_roots": [
+          {
+            "id": "rc18-boundary",
+            "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary",
+            "writable_in_task": true
+          },
+          {
+            "id": "rc18-baseline",
+            "path": ".workflow/artifacts/rc18-installed-system-baseline",
+            "writable_after_task": "RC18-010"
+          },
+          {
+            "id": "rc18-image-fail-closed",
+            "path": ".workflow/artifacts/rc18-image-boundary-fail-closed",
+            "writable_after_task": "RC18-011"
+          },
+          {
+            "id": "rc18-isolated-install",
+            "path": ".workflow/artifacts/rc18-isolated-install-drill",
+            "writable_after_task": "RC18-012"
+          },
+          {
+            "id": "rc18-isolated-update",
+            "path": ".workflow/artifacts/rc18-isolated-update-drill",
+            "writable_after_task": "RC18-020"
+          },
+          {
+            "id": "rc18-rollback-preconditions",
+            "path": ".workflow/artifacts/rc18-image-rollback-preconditions",
+            "writable_after_task": "RC18-021"
+          },
+          {
+            "id": "rc18-isolated-rollback",
+            "path": ".workflow/artifacts/rc18-isolated-rollback-drill",
+            "writable_after_task": "RC18-022"
+          },
+          {
+            "id": "rc18-support-recovery",
+            "path": ".workflow/artifacts/rc18-isolated-support-recovery",
+            "writable_after_task": "RC18-030"
+          },
+          {
+            "id": "rc18-consumer-smoke",
+            "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke",
+            "writable_after_task": "RC18-031"
+          }
+        ]
+      }
+    },
+    {
+      "id": "host_write_surface.denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Host rootfs, host active slot, host boot metadata, active artifact set, production ring, support upload, recovery service, remote dispatch, mirror/frontend, and signer authority must remain disabled.",
+      "evidence": {
+        "host_rootfs_mutation_allowed": false,
+        "host_active_slot_mutation_allowed": false,
+        "host_boot_metadata_mutation_allowed": false,
+        "active_artifact_set_mutation_allowed": false,
+        "production_ring_mutation_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_authority": false,
+        "signer_authority": false
+      }
+    },
+    {
+      "id": "image.no_mutation_before_boundary",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 must not mutate or boot an image before the boundary is bound.",
+      "evidence": {
+        "image_materialized": false,
+        "image_mutation_performed_before_boundary_bound": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "vm_booted": false,
+        "network_fetch_attempted": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing RC17 evidence, host mutation, support upload, recovery, remote dispatch, mirror/frontend, signer, and pre-boundary image mutation attempts must fail closed.",
+      "evidence": {
+        "cases": 16,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-010 image boundary output must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ],
+  "fail_closed_cases": [
+    {
+      "id": "missing-rc17-final-audit",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc17-final-audit-not-bound"
+      ],
+      "reason": "RC18 image boundary requires RC17 final audit evidence.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "missing-controlled-install",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc17-controlled-install-not-bound"
+      ],
+      "reason": "RC18 image boundary requires RC17 install evidence.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "missing-controlled-update",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc17-controlled-update-not-bound"
+      ],
+      "reason": "RC18 image boundary requires RC17 update evidence.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "missing-rollback-support",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc17-rollback-support-not-bound"
+      ],
+      "reason": "RC18 image boundary requires RC17 rollback/support evidence.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "missing-consumer-smoke",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "rc17-consumer-smoke-not-bound"
+      ],
+      "reason": "RC18 image boundary requires RC17 consumer smoke evidence.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "host-rootfs-write-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs is outside the writable drill surface.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "host-active-slot-write-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot metadata is outside the writable drill surface.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-write-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata is outside the writable drill surface.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "active-artifact-set-write-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "reason": "Host active artifact set is outside the writable drill surface.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "production-ring-write-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production rings are outside the writable drill surface.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of RC18 scope.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution service is out of RC18 scope.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of RC18 scope.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "mirror-frontend-authority-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "mirror-frontend-authority-denied"
+      ],
+      "reason": "Mirror/frontend output is not authority.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "signer-authority-attempt",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "signer-authority-denied"
+      ],
+      "reason": "Signer reachability is not image-boundary authority.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    },
+    {
+      "id": "image-mutation-before-boundary",
+      "status": "passed",
+      "observed_denied": true,
+      "blockers": [
+        "image-mutation-before-boundary-denied"
+      ],
+      "reason": "No image mutation is allowed before the boundary is bound.",
+      "image_mutation_performed": false,
+      "side_effects": {
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false
+      }
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "disposable_image_or_vm_only": true,
+    "image_materialized": false,
+    "image_mutation_performed_before_boundary_bound": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_frontend_changed": false,
+    "signer_authority": false
+  },
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "cases": 16,
+    "failed_cases": 0,
+    "rc18_010_complete": true,
+    "image_boundary_bound": true,
+    "state_root_bound": true,
+    "rc17_exact_evidence_bound": true,
+    "image_mutation_performed_before_boundary_bound": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "next_task": "RC18-011"
+  }
+}
