@@ -1,0 +1,228 @@
+{
+  "schema": "agentos.rc19-offline-local-channel-consumption-task-evidence.v1",
+  "generated_at": "2026-06-10T11:25:00+08:00",
+  "task": "RC19-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "script": {
+    "path": "scripts/project-rc19-offline-local-channel-consumption.ps1",
+    "sha256": "7fe6c7473608b3a73df956af9b890d2bbe2ce64db8db6e460632712ab10c2ec5"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+    "status": "passed",
+    "sha256": "a1fe9e9cff6be77018a027f0d02e177a675a097385356909eefc296cdb004c14"
+  },
+  "outputs": {
+    "offline_local_channel_package": {
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/offline-local-channel-package.json",
+      "sha256": "afb5e9986f4187319be80d5d6a3a07940141c85b7278f2471862ec1a2c180df5",
+      "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa"
+    },
+    "local_channel_consumption_evidence": {
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/local-channel-consumption-evidence.json",
+      "sha256": "1bbf28438a40efcc3b8d502d443c38dc95c975aacf515c5ab1008234114e9162"
+    }
+  },
+  "channel_surface": {
+    "state": "offline-local-channel-consumption-bound",
+    "local_only": true,
+    "offline_only": true,
+    "package_bound": true,
+    "consumption_evaluated": true,
+    "external_mirror_required": false,
+    "endpoint_reachability_authority": false,
+    "frontend_output_authority": false,
+    "shell_output_authority": false,
+    "tui_output_authority": false,
+    "model_replay_authority": false,
+    "remote_payload_downloaded": false,
+    "object_storage_provisioned": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "consumer_ready_claim": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "offline_local_only": true,
+    "external_mirror_infrastructure_required": false,
+    "endpoint_reachability_authority": false,
+    "frontend_output_authority": false,
+    "shell_output_authority": false,
+    "tui_output_authority": false,
+    "model_replay_authority": false,
+    "remote_payload_downloaded": false,
+    "object_storage_provisioned": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false
+  },
+  "completion": {
+    "rc19_030_complete": true,
+    "next_task": "RC19-031",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_030",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-030 must run after RC19-022 completed, while current_task is RC19-030 or during a completed rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-031",
+        "rc19_022_status": "completed",
+        "rc19_030_status": "completed"
+      }
+    },
+    {
+      "id": "source.first_user_install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Offline local channel package must bind RC19 first-user install evidence without host or remote mutation.",
+      "evidence": {
+        "first_user_install_ready": true,
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "host_rootfs_mutated": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "source.first_boot_projection.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Offline local channel package must bind first boot provisioning and local operator identity projections.",
+      "evidence": {
+        "first_boot_projection_ready": true,
+        "projection_only": true,
+        "first_boot_executed": false,
+        "local_operator_identity_projection_bound": true
+      }
+    },
+    {
+      "id": "source.image_artifact.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Offline local channel package must bind installable image artifact and artifact set identities.",
+      "evidence": {
+        "image_artifact_ready": true,
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2"
+      }
+    },
+    {
+      "id": "source.local_channel_precedent.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Offline local channel consumption must carry forward local-only channel consumption precedent without remote payload download.",
+      "evidence": {
+        "rc17_consumer_status": "passed",
+        "local_release_channel_followed": true,
+        "remote_payload_downloaded": false
+      }
+    },
+    {
+      "id": "package.binds.required_refs",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local channel package must bind installable image artifact, first-user install evidence, first boot projection, and local operator identity projection.",
+      "evidence": {
+        "schema": "agentos.rc19-offline-local-channel-material.v1",
+        "task": "RC19-030",
+        "mode": "offline-local-only",
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "first_user_install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+        "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+        "first_user_install_result_sha256": "68d8cd653e153caff049961e7d72b35855d7f72f30d6944cc1aa210e22208278",
+        "first_user_install_evidence_sha256": "aac6cdc3e37c4104b6f1b2006ee68bfa36634da6b7c89deea11befb29c60cfb7",
+        "first_boot_projection_result_sha256": "d37bff0616f8a204bcd82aef5d28c94812f4f78442721dc9dba72084001bcf93",
+        "first_boot_projection_sha256": "de2de4d08557208b11e7c16204454d73b65da6e6cef80df44fad344ba0e722f8",
+        "local_operator_identity_projection_sha256": "e9508d4f39380e10ac0293e8b8d18d72def437bea2cc5904251714296c33d76c",
+        "image_artifact_result_sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c",
+        "image_artifact_set_sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+        "rc17_local_channel_consumer_sha256": "36a6d3f123c00cce7d2656ad78971e57c7df64f25d722de77d797c731140f81a",
+        "external_mirror_required": false,
+        "endpoint_reachability_authority": false,
+        "frontend_output_authority": false,
+        "shell_output_authority": false,
+        "tui_output_authority": false,
+        "model_replay_authority": false
+      }
+    },
+    {
+      "id": "authority.local_only_no_external_trust",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Consumption evidence must be offline/local-only and must not trust endpoint reachability, frontend, shell, TUI, or model replay output.",
+      "evidence": {
+        "external_mirror_trusted": false,
+        "endpoint_reachability_trusted": false,
+        "frontend_output_trusted": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-030 must not download remote payloads, provision object storage, execute install/update/rollback, upload support, execute recovery, remote-dispatch, mutate host/production state, or claim consumer readiness.",
+      "evidence": {
+        "offline_local_channel_package_bound": true,
+        "local_channel_consumption_evaluated": true,
+        "remote_payload_downloaded": false,
+        "object_storage_provisioned": false,
+        "endpoint_reachability_trusted": false,
+        "frontend_output_trusted": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false,
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing sources and forbidden authority surfaces must fail closed before channel consumption or side effects.",
+      "evidence": {
+        "cases": 24,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-030 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}

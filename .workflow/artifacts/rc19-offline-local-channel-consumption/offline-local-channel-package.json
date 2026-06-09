@@ -1,0 +1,69 @@
+{
+  "schema": "agentos.rc19-offline-local-channel-package.v1",
+  "generated_at": "2026-06-10T11:25:00+08:00",
+  "task": "RC19-030",
+  "status": "offline-local-channel-package-bound",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+  "local_only": true,
+  "offline_only": true,
+  "channel_material": {
+    "schema": "agentos.rc19-offline-local-channel-material.v1",
+    "task": "RC19-030",
+    "mode": "offline-local-only",
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "first_user_install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+    "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+    "first_user_install_result_sha256": "68d8cd653e153caff049961e7d72b35855d7f72f30d6944cc1aa210e22208278",
+    "first_user_install_evidence_sha256": "aac6cdc3e37c4104b6f1b2006ee68bfa36634da6b7c89deea11befb29c60cfb7",
+    "first_boot_projection_result_sha256": "d37bff0616f8a204bcd82aef5d28c94812f4f78442721dc9dba72084001bcf93",
+    "first_boot_projection_sha256": "de2de4d08557208b11e7c16204454d73b65da6e6cef80df44fad344ba0e722f8",
+    "local_operator_identity_projection_sha256": "e9508d4f39380e10ac0293e8b8d18d72def437bea2cc5904251714296c33d76c",
+    "image_artifact_result_sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c",
+    "image_artifact_set_sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+    "rc17_local_channel_consumer_sha256": "36a6d3f123c00cce7d2656ad78971e57c7df64f25d722de77d797c731140f81a",
+    "external_mirror_required": false,
+    "endpoint_reachability_authority": false,
+    "frontend_output_authority": false,
+    "shell_output_authority": false,
+    "tui_output_authority": false,
+    "model_replay_authority": false
+  },
+  "channel_index": {
+    "installable_image_artifact": {
+      "id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+      "result_path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+      "artifact_set_path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json"
+    },
+    "first_user_install": {
+      "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+      "result_path": ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+      "evidence_path": ".workflow/artifacts/rc19-first-user-install-drill/first-user-install-evidence.json"
+    },
+    "first_boot_projection": {
+      "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+      "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+      "result_path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json",
+      "projection_path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/first-boot-provisioning-projection.json"
+    }
+  },
+  "authority": {
+    "external_mirror_authority": false,
+    "frontend_output_authority": false,
+    "endpoint_reachability_authority": false,
+    "shell_output_authority": false,
+    "tui_output_authority": false,
+    "model_replay_authority": false,
+    "remote_dispatch_authority": false,
+    "production_ring_mutation_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false
+  },
+  "next_required_gate": {
+    "post_install_update_rollback_smoke_task": "RC19-031",
+    "installable_image_consumer_smoke_task": "RC19-040",
+    "consumption_package_does_not_claim_consumer_ready": true
+  }
+}
