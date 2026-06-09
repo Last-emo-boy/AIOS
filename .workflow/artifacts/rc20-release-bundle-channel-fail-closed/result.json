@@ -1,0 +1,295 @@
+{
+  "schema": "agentos.rc20-release-bundle-channel-fail-closed-result.v1",
+  "generated_at": "2026-06-10T14:25:00+08:00",
+  "task": "RC20-012",
+  "status": "passed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+  "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+  "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+  "outputs": {
+    "fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc20-release-bundle-channel-fail-closed/fail-closed-matrix.json",
+      "sha256": "5fca10ccc448ff75ef3ea74df6409b6caa0d9aeb3e98b9f9884f83a467462521",
+      "cases": 40,
+      "failed_cases": 0
+    }
+  },
+  "verifier_surface": {
+    "state": "release-bundle-channel-fail-closed-verified-non-ga",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+    "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+    "release_bundle_ready": true,
+    "channel_promotion_ready": true,
+    "identity_coherent": true,
+    "output_hash_parity": true,
+    "local_non_ga_boundaries": true,
+    "external_mirror_publication_performed": false,
+    "remote_payload_downloaded": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false
+  },
+  "source": {
+    "rc20_plan": {
+      "role": "rc20 workflow plan",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
+      "sha256": "f2c3d5d07912b1506eb0d7c7109a88e2052bd263160df911a00c862927bb48ae",
+      "size_bytes": 8336,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null,
+      "consumer_ready_claim": null
+    },
+    "rc20_authority_contract": {
+      "role": "rc20 authority contract",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+      "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db",
+      "size_bytes": 3825,
+      "present": true
+    },
+    "rc20_release_bundle_result": {
+      "role": "rc20 release bundle result",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+      "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+      "size_bytes": 45355,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-result.v1",
+      "status": "passed",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_release_bundle_manifest": {
+      "role": "rc20 release bundle manifest",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-manifest.json",
+      "sha256": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d",
+      "size_bytes": 46467,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-manifest.v1",
+      "status": "single-user-release-bundle-bound-non-ga",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_release_bundle_input_map": {
+      "role": "rc20 release bundle input map",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-input-map.json",
+      "sha256": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64",
+      "size_bytes": 20884,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-input-map.v1",
+      "status": "single-user-release-bundle-inputs-bound",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": null
+    },
+    "rc20_channel_promotion_result": {
+      "role": "rc20 channel promotion result",
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+      "sha256": "6c82a84c1f977003e7d78d387a711c6679edd546fcc181d563f50a3f23ca9ad6",
+      "size_bytes": 57559,
+      "present": true,
+      "schema": "agentos.rc20-local-channel-promotion-result.v1",
+      "status": "passed",
+      "task": "RC20-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_candidate_channel_package": {
+      "role": "rc20 candidate channel package",
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/candidate-channel-package.json",
+      "sha256": "a64e996e2a0b36246f27339d6f5f30c08ef63fe12dec495d5a2da17aa3b0434a",
+      "size_bytes": 10903,
+      "present": true,
+      "schema": "agentos.rc20-local-candidate-channel-package.v1",
+      "status": "local-candidate-channel-package-bound",
+      "task": "RC20-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_stable_channel_projection": {
+      "role": "rc20 stable channel projection",
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/stable-channel-projection.json",
+      "sha256": "82326f2bdfd2b4341b3c917caa41cf11e755f466cf2fc8065f3cf48d65654221",
+      "size_bytes": 7621,
+      "present": true,
+      "schema": "agentos.rc20-local-stable-channel-projection.v1",
+      "status": "local-stable-channel-projection-bound-non-ga",
+      "task": "RC20-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc20_012",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-012 must run after RC20-011 completed, with current_task set to RC20-012.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-012",
+        "rc20_011_status": "completed",
+        "rc20_012_status": "pending"
+      }
+    },
+    {
+      "id": "contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-012 must consume the RC20 authority contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+        "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db"
+      }
+    },
+    {
+      "id": "release_bundle.ready_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 release bundle inputs must be complete, coherent, and non-GA.",
+      "evidence": {
+        "result_status": "passed",
+        "rc20_010_complete": true,
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "channel_promotion.ready_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 channel promotion inputs must be complete, local-only, and non-GA.",
+      "evidence": {
+        "result_status": "passed",
+        "rc20_011_complete": true,
+        "candidate_channel_package_bound": true,
+        "stable_channel_projection_bound": true,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "identity.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release bundle, candidate channel package, and stable channel projection identities must match.",
+      "evidence": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "promotion_release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+        "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+        "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa"
+      }
+    },
+    {
+      "id": "output_hash_parity",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Referenced output hashes must match current artifact bytes for bundle manifest/input map and channel promotion outputs.",
+      "evidence": {
+        "bundle_manifest_expected": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d",
+        "bundle_manifest_actual": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d",
+        "input_map_expected": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64",
+        "input_map_actual": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64",
+        "candidate_expected": "a64e996e2a0b36246f27339d6f5f30c08ef63fe12dec495d5a2da17aa3b0434a",
+        "candidate_actual": "a64e996e2a0b36246f27339d6f5f30c08ef63fe12dec495d5a2da17aa3b0434a",
+        "stable_expected": "82326f2bdfd2b4341b3c917caa41cf11e755f466cf2fc8065f3cf48d65654221",
+        "stable_actual": "82326f2bdfd2b4341b3c917caa41cf11e755f466cf2fc8065f3cf48d65654221"
+      }
+    },
+    {
+      "id": "local_non_ga_boundaries",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release bundle/channel fail-closed verifier must preserve local-only, projection-only, non-GA boundaries.",
+      "evidence": {
+        "candidate_local_only": true,
+        "stable_local_only": true,
+        "stable_projection_only": true,
+        "external_stable_channel_published": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing source artifacts, hash drift, stale metadata, broad authority, remote fetch, unsigned mutation, host mutation, and GA claims must fail closed.",
+      "evidence": {
+        "cases": 40,
+        "failed_cases": [],
+        "coverage": {
+          "missing_sources": 6,
+          "hash_drift": 4,
+          "stale_metadata": 2,
+          "identity_mismatch": 4,
+          "authority_broadening": 7,
+          "remote_effects": 3,
+          "unsigned_mutation": 2,
+          "host_mutation": 3,
+          "production_mutation": 1,
+          "effects": 6,
+          "claims": 2
+        }
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-012 outputs must not contain key blocks, private authority paths, auth tokens, or signing key file names.",
+      "evidence": null
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "local_verification_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "external_mirror_publication_performed": false,
+    "external_payload_published": false,
+    "object_storage_provisioned": false,
+    "remote_payload_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "signer_authority": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_authority": false,
+    "frontend_authority": false,
+    "shell_output_authority": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "cases": 40,
+    "failed_cases": 0,
+    "rc20_012_complete": true,
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+    "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+    "identity_coherent": true,
+    "output_hash_parity": true,
+    "local_non_ga_boundaries": true,
+    "next_task": "RC20-020"
+  }
+}
