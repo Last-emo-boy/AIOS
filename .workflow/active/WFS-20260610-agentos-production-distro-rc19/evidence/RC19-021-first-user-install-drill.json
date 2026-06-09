@@ -1,0 +1,236 @@
+{
+  "schema": "agentos.rc19-first-user-install-drill-task-evidence.v1",
+  "generated_at": "2026-06-10T10:45:00+08:00",
+  "task": "RC19-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "script": {
+    "path": "scripts/run-rc19-first-user-install-drill.ps1",
+    "sha256": "614eb9033225e0dcf5872f896a726ffe8c412b37af27b8c261f2d4076d145006"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    "status": "passed",
+    "sha256": "68d8cd653e153caff049961e7d72b35855d7f72f30d6944cc1aa210e22208278"
+  },
+  "outputs": {
+    "first_user_install_evidence": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/first-user-install-evidence.json",
+      "sha256": "aac6cdc3e37c4104b6f1b2006ee68bfa36634da6b7c89deea11befb29c60cfb7",
+      "install_drill_digest": "93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+      "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+    },
+    "install_audit_record": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/install-audit-record.json",
+      "sha256": "0a26c0f13930235d8a9a1c78c5a0ca9b9b851dbe99d8839b23c7e5f456e088a6",
+      "fabricated": false
+    },
+    "disposable_target_state_root": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/state-root.json",
+      "sha256": "5ea5aa3656ae0dcd554e7ab7f6ea04e0a8a31273a8dc87777a0e33b08380c4a5",
+      "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+    },
+    "disposable_target_audit_log": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/install-audit.json",
+      "sha256": "0a26c0f13930235d8a9a1c78c5a0ca9b9b851dbe99d8839b23c7e5f456e088a6"
+    }
+  },
+  "install_surface": {
+    "state": "first-user-install-executed-inside-disposable-target",
+    "target_kind": "disposable-first-user-install-target",
+    "target_root": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target",
+    "target_materialized": true,
+    "install_preflight_executed": true,
+    "first_user_install_allowed": true,
+    "first_user_install_performed": true,
+    "disposable_target_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "consumer_ready_claim": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "disposable_first_user_install_target_only": true,
+    "target_materialized": true,
+    "first_user_install_performed": true,
+    "disposable_target_state_mutated": true,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "object_storage_provisioned": false,
+    "cryptographic_signing_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "completion": {
+    "rc19_021_complete": true,
+    "next_task": "RC19-022",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_021",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-021 must run after RC19-020 completed, while current_task is RC19-021 or during a completed rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-022",
+        "rc19_020_status": "completed",
+        "rc19_021_status": "completed"
+      }
+    },
+    {
+      "id": "source.rc19_020.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-021 must bind the RC19-020 target boundary and preflight package.",
+      "evidence": {
+        "target_surface_ready": true,
+        "preflight_ready": true,
+        "target_boundary_id": "sha256:23e9e7ff0ed6508a6c6713ddd477fc6872395345d94610f8f9df235cc3b8f321",
+        "install_preflight_package_id": "sha256:07dc8e2a6a44f7efe1e6a1fbdda7383e59f3f1eec036fd281395bc28ea24d5c0"
+      }
+    },
+    {
+      "id": "source.artifact.media.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-021 must bind installable image artifact, installer media, and boot target descriptor identities.",
+      "evidence": {
+        "image_artifact_ready": true,
+        "media_ready": true,
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb"
+      }
+    },
+    {
+      "id": "source.rc18_install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-021 must consume RC18 isolated install evidence that executed inside the disposable image boundary.",
+      "evidence": {
+        "isolated_install_performed": true,
+        "disposable_image_state_mutated": true,
+        "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+      }
+    },
+    {
+      "id": "source.rollback_support.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback and support references must be bound while rollback execution, support upload, and recovery execution remain disabled.",
+      "evidence": {
+        "rollback_support_ready": true,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false
+      }
+    },
+    {
+      "id": "install.disposable_target.execute_or_deny",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First-user install drill must execute only inside the disposable target or deny before effect.",
+      "evidence": {
+        "first_user_install_allowed": true,
+        "first_user_install_performed": true,
+        "disposable_target_state_mutated": true,
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "blockers": []
+      }
+    },
+    {
+      "id": "evidence.binds.required_refs",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install evidence must bind artifact identity, media, boot target, target boundary, preflight, audit, rollback, and support references.",
+      "evidence": {
+        "schema": "agentos.rc19-first-user-install-drill-material.v1",
+        "task": "RC19-021",
+        "execution_mode": "execute-inside-disposable-first-user-install-target",
+        "target_kind": "disposable-first-user-install-target",
+        "target_root": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target",
+        "target_state_root": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/state-root.json",
+        "target_audit_log": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/install-audit.json",
+        "target_boundary_id": "sha256:23e9e7ff0ed6508a6c6713ddd477fc6872395345d94610f8f9df235cc3b8f321",
+        "install_preflight_package_id": "sha256:07dc8e2a6a44f7efe1e6a1fbdda7383e59f3f1eec036fd281395bc28ea24d5c0",
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+        "rc18_installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "rc18_install_drill_digest": "3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "rollback_baseline_sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+        "support_index_sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+        "host_rootfs_mutation_allowed": false,
+        "host_active_slot_mutation_allowed": false,
+        "host_boot_metadata_mutation_allowed": false,
+        "active_artifact_set_mutation_allowed": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-021 must not mutate host or production state, upload or publish payloads, sign, upload support, execute recovery, remote-dispatch, or claim consumer readiness.",
+      "evidence": {
+        "target_materialized": true,
+        "install_preflight_executed": true,
+        "first_user_install_performed": true,
+        "disposable_target_state_mutated": true,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "payload_uploaded": false,
+        "external_payload_published": false,
+        "object_storage_provisioned": false,
+        "cryptographic_signing_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing gates and forbidden authority surfaces must deny before first-user install or host mutation.",
+      "evidence": {
+        "cases": 24,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-021 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}

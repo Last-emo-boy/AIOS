@@ -3,7 +3,7 @@
   "name": "Production Distro RC19",
   "status": "active",
   "created_at": "2026-06-10T08:45:00+08:00",
-  "updated_at": "2026-06-10T10:25:00+08:00",
+  "updated_at": "2026-06-10T10:45:00+08:00",
   "source": "RC18 final audit; maestro-managed RC19 planning",
   "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
   "goal": "Plan and execute an AIOS-body reproducible installable image artifact and first-user installation path without giving authority to external mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, host boot state, production rings, TUI projections, shell output, endpoint reachability, or model replay.",
@@ -57,9 +57,15 @@
       "completed_at": "2026-06-10T10:25:00+08:00",
       "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-020-first-user-install-target-boundary.json",
       "commit": null
+    },
+    {
+      "task": "RC19-021",
+      "completed_at": "2026-06-10T10:45:00+08:00",
+      "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-021-first-user-install-drill.json",
+      "commit": null
     }
   ],
-  "next_task": "RC19-021",
+  "next_task": "RC19-022",
   "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
   "docs": [
     ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
@@ -106,6 +112,13 @@
     ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json",
     ".workflow/artifacts/rc19-first-user-install-target-boundary/first-user-install-target-boundary.json",
     ".workflow/artifacts/rc19-first-user-install-target-boundary/install-preflight-package.json",
-    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-020-first-user-install-target-boundary.json"
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-020-first-user-install-target-boundary.json",
+    "scripts/run-rc19-first-user-install-drill.ps1",
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-first-user-install-drill/first-user-install-evidence.json",
+    ".workflow/artifacts/rc19-first-user-install-drill/install-audit-record.json",
+    ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/state-root.json",
+    ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/install-audit.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-021-first-user-install-drill.json"
   ]
 }
