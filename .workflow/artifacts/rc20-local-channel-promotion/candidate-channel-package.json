@@ -1,0 +1,222 @@
+{
+  "schema": "agentos.rc20-local-candidate-channel-package.v1",
+  "generated_at": "2026-06-10T14:05:00+08:00",
+  "task": "RC20-011",
+  "status": "local-candidate-channel-package-bound",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+  "candidate_channel_package_id": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+  "stable_channel_projection_id": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+  "local_only": true,
+  "offline_only": true,
+  "channel": "candidate",
+  "promotion_identity_material": {
+    "schema": "agentos.rc20-local-channel-promotion-identity-material.v1",
+    "task": "RC20-011",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+    "first_user_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+    "consumer_audit_digest": "f92d833290d15ea5cc2db50760a867b163188c59423fa4823582609a0133ef4c",
+    "source_hashes": [
+      {
+        "id": "rc20-release-bundle-result",
+        "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+        "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+        "schema": "agentos.rc20-single-user-release-bundle-result.v1",
+        "status": "passed"
+      },
+      {
+        "id": "rc20-release-bundle-manifest",
+        "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-manifest.json",
+        "sha256": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d",
+        "schema": "agentos.rc20-single-user-release-bundle-manifest.v1",
+        "status": "single-user-release-bundle-bound-non-ga"
+      },
+      {
+        "id": "rc20-release-bundle-input-map",
+        "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-input-map.json",
+        "sha256": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64",
+        "schema": "agentos.rc20-single-user-release-bundle-input-map.v1",
+        "status": "single-user-release-bundle-inputs-bound"
+      },
+      {
+        "id": "rc19-offline-channel-result",
+        "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+        "sha256": "a1fe9e9cff6be77018a027f0d02e177a675a097385356909eefc296cdb004c14",
+        "schema": "agentos.rc19-offline-local-channel-consumption-result.v1",
+        "status": "passed"
+      },
+      {
+        "id": "rc19-offline-channel-package",
+        "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/offline-local-channel-package.json",
+        "sha256": "afb5e9986f4187319be80d5d6a3a07940141c85b7278f2471862ec1a2c180df5",
+        "schema": "agentos.rc19-offline-local-channel-package.v1",
+        "status": "offline-local-channel-package-bound"
+      },
+      {
+        "id": "rc19-offline-channel-evidence",
+        "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/local-channel-consumption-evidence.json",
+        "sha256": "1bbf28438a40efcc3b8d502d443c38dc95c975aacf515c5ab1008234114e9162",
+        "schema": "agentos.rc19-offline-local-channel-consumption-evidence.v1",
+        "status": "offline-local-channel-consumption-bound"
+      },
+      {
+        "id": "rc19-consumer-smoke-result",
+        "path": ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json",
+        "sha256": "4b6a6c8a8d89d1a5be07828aacb15118f6a340137eeecd009cd2d33ab9dbccf0",
+        "schema": "agentos.rc19-installable-image-consumer-smoke-result.v1",
+        "status": "passed"
+      }
+    ],
+    "deterministic_rules": {
+      "generated_at_excluded_from_identity": true,
+      "output_hashes_excluded_from_identity": true,
+      "external_reachability_excluded_from_identity": true,
+      "source_hashes_required": true
+    }
+  },
+  "candidate_surface": {
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "first_user_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+    "local_consumer_ready_carried": true,
+    "candidate_channel_bound": true,
+    "stable_projection_required": true,
+    "external_stable_channel_claim_allowed": false,
+    "install_allowed_by_channel_package": false,
+    "update_allowed_by_channel_package": false,
+    "rollback_allowed_by_channel_package": false
+  },
+  "authority": {
+    "aios_body_only": true,
+    "external_mirror_publication_authority": false,
+    "frontend_authority": false,
+    "endpoint_reachability_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "host_rootfs_mutation_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "active_artifact_set_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "remote_dispatch_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false
+  },
+  "next_required_gate": {
+    "rc20_012_release_bundle_channel_fail_closed": "required-before-bundle-trust",
+    "rc20_020_installer_selection": "required-before-single-user-install-acceptance",
+    "rc20_040_consumer_smoke": "required-before-rc20-consumer-ready-claim",
+    "rc20_050_final_audit": "required-before-rc20-closeout"
+  },
+  "source": {
+    "rc20_plan": {
+      "role": "rc20 workflow plan",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
+      "sha256": "6829c068aa1b88bfef5f26190be420487fc63178f2a47ef75c482d5f113485e5",
+      "size_bytes": 8334,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null,
+      "consumer_ready_claim": null
+    },
+    "rc20_authority_contract": {
+      "role": "rc20 authority contract",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+      "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db",
+      "size_bytes": 3825,
+      "present": true
+    },
+    "rc20_release_bundle_result": {
+      "role": "rc20 release bundle result",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+      "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+      "size_bytes": 45355,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-result.v1",
+      "status": "passed",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_release_bundle_manifest": {
+      "role": "rc20 release bundle manifest",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-manifest.json",
+      "sha256": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d",
+      "size_bytes": 46467,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-manifest.v1",
+      "status": "single-user-release-bundle-bound-non-ga",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_release_bundle_input_map": {
+      "role": "rc20 release bundle input map",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-input-map.json",
+      "sha256": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64",
+      "size_bytes": 20884,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-input-map.v1",
+      "status": "single-user-release-bundle-inputs-bound",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": null
+    },
+    "rc19_offline_channel_result": {
+      "role": "rc19 offline channel result",
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+      "sha256": "a1fe9e9cff6be77018a027f0d02e177a675a097385356909eefc296cdb004c14",
+      "size_bytes": 43023,
+      "present": true,
+      "schema": "agentos.rc19-offline-local-channel-consumption-result.v1",
+      "status": "passed",
+      "task": "RC19-030",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc19_offline_channel_package": {
+      "role": "rc19 offline channel package",
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/offline-local-channel-package.json",
+      "sha256": "afb5e9986f4187319be80d5d6a3a07940141c85b7278f2471862ec1a2c180df5",
+      "size_bytes": 4054,
+      "present": true,
+      "schema": "agentos.rc19-offline-local-channel-package.v1",
+      "status": "offline-local-channel-package-bound",
+      "task": "RC19-030",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc19_offline_channel_evidence": {
+      "role": "rc19 offline channel evidence",
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/local-channel-consumption-evidence.json",
+      "sha256": "1bbf28438a40efcc3b8d502d443c38dc95c975aacf515c5ab1008234114e9162",
+      "size_bytes": 34467,
+      "present": true,
+      "schema": "agentos.rc19-offline-local-channel-consumption-evidence.v1",
+      "status": "offline-local-channel-consumption-bound",
+      "task": "RC19-030",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc19_consumer_smoke_result": {
+      "role": "rc19 consumer smoke result",
+      "path": ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json",
+      "sha256": "4b6a6c8a8d89d1a5be07828aacb15118f6a340137eeecd009cd2d33ab9dbccf0",
+      "size_bytes": 51240,
+      "present": true,
+      "schema": "agentos.rc19-installable-image-consumer-smoke-result.v1",
+      "status": "passed",
+      "task": "RC19-040",
+      "production_ready_claim": false,
+      "consumer_ready_claim": true
+    }
+  }
+}
