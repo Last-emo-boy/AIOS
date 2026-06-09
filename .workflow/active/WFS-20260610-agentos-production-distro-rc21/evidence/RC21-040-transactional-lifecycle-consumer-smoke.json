@@ -1,0 +1,324 @@
+{
+    "schema":  "agentos.rc21-transactional-lifecycle-consumer-smoke-task-evidence.v1",
+    "generated_at":  "2026-06-10T21:05:00+08:00",
+    "task":  "RC21-040",
+    "status":  "completed",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  true,
+    "workflow":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21",
+    "script":  {
+                   "path":  "scripts/run-rc21-transactional-lifecycle-consumer-smoke.ps1",
+                   "sha256":  "c95f27e02161ab1b5514d9546672238c352fbc682c56beca2293dbd6304e34d7"
+               },
+    "result":  {
+                   "path":  ".workflow/artifacts/rc21-transactional-lifecycle-consumer-smoke/result.json",
+                   "status":  "passed",
+                   "sha256":  "447a82735277445c06562f7e6a09073dd2f77d62653ca8c2feca92f3d22ad8eb"
+               },
+    "outputs":  {
+                    "consumer_smoke_evidence":  {
+                                                    "path":  ".workflow/artifacts/rc21-transactional-lifecycle-consumer-smoke/consumer-smoke-evidence.json",
+                                                    "sha256":  "2ebcaae008606a5f807f6f499a7a87538bfbf00fbd0d0723b1cc886cff903e08",
+                                                    "audit_digest":  "274514ae943fc932c6825d6abe1edb6bee1c5c0b2ce2195f72b2a4390557c006"
+                                                }
+                },
+    "consumer_surface":  {
+                             "state":  "transactional-lifecycle-local-consumer-ready",
+                             "rc20_single_user_consumer_readiness":  "ready",
+                             "operation_intent_catalog_readiness":  "ready",
+                             "transaction_journal_snapshot_readiness":  "ready",
+                             "lifecycle_fail_closed_readiness":  "ready",
+                             "dry_run_plan_readiness":  "ready",
+                             "dry_run_acceptance_readiness":  "ready",
+                             "explain_resume_audit_readiness":  "ready",
+                             "repair_reinstall_readiness":  "ready",
+                             "downgrade_rollback_readiness":  "ready",
+                             "support_recovery_readiness":  "ready",
+                             "lifecycle_state_chain_readiness":  "ready",
+                             "consumer_decision":  "transactional-lifecycle-local-consumer-ready",
+                             "consumer_ready_claim":  true,
+                             "production_ready_claim":  false,
+                             "audited":  true,
+                             "audit_digest":  "274514ae943fc932c6825d6abe1edb6bee1c5c0b2ce2195f72b2a4390557c006",
+                             "blockers":  [
+
+                                          ]
+                         },
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "transactional_lifecycle_consumer_smoke_only":  true,
+                       "consumer_ready_claim":  true,
+                       "local_only":  true,
+                       "audited":  true,
+                       "install_performed_by_consumer_smoke":  false,
+                       "update_performed_by_consumer_smoke":  false,
+                       "repair_reinstall_performed_by_consumer_smoke":  false,
+                       "downgrade_rollback_performed_by_consumer_smoke":  false,
+                       "rollback_execution_performed_by_consumer_smoke":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_payload_downloaded":  false,
+                       "object_storage_provisioned":  false,
+                       "remote_dispatch_enabled":  false,
+                       "host_rootfs_mutated":  false,
+                       "host_active_slot_mutated":  false,
+                       "host_boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "mirror_frontend_authority":  false,
+                       "nginx_or_tls_authority":  false,
+                       "endpoint_reachability_authority":  false,
+                       "shell_output_authority":  false,
+                       "tui_output_authority":  false,
+                       "model_replay_authority":  false,
+                       "signer_authority":  false,
+                       "object_storage_authority":  false,
+                       "private_signing_material_handled":  false,
+                       "cryptographic_signing_performed":  false
+                   },
+    "completion":  {
+                       "rc21_040_complete":  true,
+                       "next_task":  "RC21-050",
+                       "commit_required":  true
+                   },
+    "checks":  [
+                   {
+                       "id":  "plan.current_task.rc21_040",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-040 must run after RC21-032 completed, with current_task set to RC21-040 or during an idempotent rerun.",
+                       "evidence":  {
+                                        "status":  "active",
+                                        "current_task":  "RC21-050",
+                                        "rc21_032_status":  "completed",
+                                        "rc21_040_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "contract.consumer.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21 contract must allow only transactional local lifecycle consumer readiness and deny production readiness authority.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                        "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                        "size_bytes":  8744,
+                                        "present":  true
+                                    }
+                   },
+                   {
+                       "id":  "source.rc20.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Consumer smoke must bind RC20 final audit and single-user distribution local consumer readiness.",
+                       "evidence":  {
+                                        "final_audit_ready":  true,
+                                        "rc20_consumer_ready":  true,
+                                        "consumer_ready_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "source.operation_intent.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Consumer smoke must bind the RC21 local lifecycle operation intent catalog.",
+                       "evidence":  {
+                                        "intent_count":  6,
+                                        "operation_intent_catalog_id":  "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80"
+                                    }
+                   },
+                   {
+                       "id":  "source.transaction_baseline.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Consumer smoke must bind transaction journal and snapshot baseline packages.",
+                       "evidence":  {
+                                        "journal_entry_count":  6,
+                                        "snapshot_count":  5,
+                                        "transaction_journal_package_id":  "sha256:5ea7ab41f0c093c69f3d742430871d29ba3d33a8a314bc1f94006b8801e5c4a0",
+                                        "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62"
+                                    }
+                   },
+                   {
+                       "id":  "source.fail_closed.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Lifecycle operation fail-closed fixtures must pass before consumer readiness.",
+                       "evidence":  {
+                                        "cases":  45,
+                                        "failed_cases":  0,
+                                        "all_cases_denied_before_effect":  true
+                                    }
+                   },
+                   {
+                       "id":  "source.dry_run.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Dry-run execution plan and dry-run acceptance must be bound with no effect preparation or execution.",
+                       "evidence":  {
+                                        "dry_run_plan_ready":  true,
+                                        "dry_run_acceptance_ready":  true,
+                                        "accepted_operations":  [
+                                                                    "install",
+                                                                    "update"
+                                                                ],
+                                        "effect_preparation_performed":  false
+                                    }
+                   },
+                   {
+                       "id":  "source.explain_resume.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Explain/resume/audit package must be bound while resume remains projection-only.",
+                       "evidence":  {
+                                        "decision_count":  3,
+                                        "resume_projection_count":  3,
+                                        "resume_executable":  false
+                                    }
+                   },
+                   {
+                       "id":  "source.lifecycle_drills.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Repair/reinstall and downgrade/rollback drills must be complete inside the disposable installed-system boundary.",
+                       "evidence":  {
+                                        "repair_ready":  true,
+                                        "downgrade_ready":  true,
+                                        "repair_restored":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "downgrade_restored":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+                                    }
+                   },
+                   {
+                       "id":  "source.support_recovery.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Lifecycle support/recovery closure must be local-only, redacted, projection-only, and no-upload/no-execution.",
+                       "evidence":  {
+                                        "support_bundle_id":  "rc21-lifecycle-support-70c0cee39f99090e",
+                                        "support_bundle_local_only":  true,
+                                        "support_bundle_redacted":  true,
+                                        "support_upload_performed":  false,
+                                        "recovery_execution_performed":  false
+                                    }
+                   },
+                   {
+                       "id":  "lifecycle.state_chain.coherent",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Consumer smoke must bind a coherent RC20/RC21 target, update, repair, downgrade, rollback, and support state chain.",
+                       "evidence":  {
+                                        "target_state_id":  "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+                                        "updated_image_state_id":  "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+                                        "restored_target_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "repair_restored_target_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "downgrade_restored_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "support_restored_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "coherent":  true
+                                    }
+                   },
+                   {
+                       "id":  "consumer.ready_or_denial",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Consumer smoke must report transactional local lifecycle readiness or explicit denial from bound RC21 evidence.",
+                       "evidence":  {
+                                        "decision":  "transactional-lifecycle-local-consumer-ready",
+                                        "blockers":  [
+
+                                                     ],
+                                        "consumer_ready_claim":  true,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "consumer.audit.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Consumer smoke must be audited and non-fabricated.",
+                       "evidence":  {
+                                        "schema":  "agentos.rc21-transactional-lifecycle-consumer-smoke-audit.v1",
+                                        "generated_at":  "2026-06-10T21:05:00+08:00",
+                                        "task":  "RC21-040",
+                                        "local_only":  true,
+                                        "fabricated":  false,
+                                        "decision":  "transactional-lifecycle-local-consumer-ready",
+                                        "decision_digest":  "274514ae943fc932c6825d6abe1edb6bee1c5c0b2ce2195f72b2a4390557c006",
+                                        "rc20_consumer_bound":  true,
+                                        "operation_intent_catalog_bound":  true,
+                                        "transaction_journal_snapshot_bound":  true,
+                                        "fail_closed_bound":  true,
+                                        "dry_run_plan_bound":  true,
+                                        "dry_run_acceptance_bound":  true,
+                                        "explain_resume_audit_bound":  true,
+                                        "repair_reinstall_bound":  true,
+                                        "downgrade_rollback_bound":  true,
+                                        "support_recovery_bound":  true,
+                                        "state_chain_bound":  true,
+                                        "consumer_ready_claim":  true,
+                                        "production_ready_claim":  false,
+                                        "blockers":  [
+
+                                                     ]
+                                    }
+                   },
+                   {
+                       "id":  "authority.no_forbidden_side_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-040 must not execute new lifecycle effects, upload support, execute recovery, fetch remote payloads, provision object storage, dispatch remotely, mutate host/production state, trust projection surfaces, handle private material, or sign.",
+                       "evidence":  {
+                                        "consumer_smoke_evaluated":  true,
+                                        "install_effect_prepared":  false,
+                                        "update_effect_prepared":  false,
+                                        "repair_reinstall_effect_prepared":  false,
+                                        "downgrade_rollback_effect_prepared":  false,
+                                        "install_performed_by_consumer_smoke":  false,
+                                        "update_performed_by_consumer_smoke":  false,
+                                        "repair_reinstall_performed_by_consumer_smoke":  false,
+                                        "downgrade_rollback_performed_by_consumer_smoke":  false,
+                                        "rollback_execution_performed_by_consumer_smoke":  false,
+                                        "support_upload_performed":  false,
+                                        "recovery_execution_performed":  false,
+                                        "remote_payload_downloaded":  false,
+                                        "object_storage_provisioned":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "host_rootfs_mutated":  false,
+                                        "host_active_slot_mutated":  false,
+                                        "host_boot_metadata_mutated":  false,
+                                        "host_boot_state_authority":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "mirror_frontend_authority":  false,
+                                        "nginx_or_tls_authority":  false,
+                                        "endpoint_reachability_authority":  false,
+                                        "shell_output_authority":  false,
+                                        "tui_output_authority":  false,
+                                        "model_replay_authority":  false,
+                                        "signer_authority":  false,
+                                        "private_signing_material_handled":  false,
+                                        "cryptographic_signing_performed":  false
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.fail_closed.pass",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Missing evidence and forbidden authority surfaces must fail closed before consumer readiness or side effects.",
+                       "evidence":  {
+                                        "cases":  37,
+                                        "failed_cases":  [
+
+                                                         ]
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-040 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, raw passwords, raw secrets, or signing key file names.",
+                       "evidence":  null
+                   }
+               ]
+}
