@@ -1,0 +1,906 @@
+{
+  "schema": "agentos.rc18-isolated-update-drill-evidence.v1",
+  "generated_at": "2026-06-10T06:50:00+08:00",
+  "task": "RC18-021",
+  "status": "isolated-update-executed-inside-disposable-image",
+  "production_ready_claim": false,
+  "isolated_update_allowed": true,
+  "isolated_update_performed": true,
+  "denied": false,
+  "denial_reasons": [],
+  "update_drill_digest": "29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+  "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+  "update_drill_material": {
+    "schema": "agentos.rc18-isolated-update-drill-material.v1",
+    "task": "RC18-021",
+    "operation": "update",
+    "execution_mode": "execute-inside-disposable-image",
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+    "previous_installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+    "approval_id": "rc17-install-update-approval-0dc14d0029707ca9",
+    "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+    "decision_material_hash": "361e8ac6c9857d79afc5f7941d049afb7d20ba8332c2b4614a921f1e8341a194",
+    "rollback_precondition_core_hash": "32f261e5e71bcb07b443c37473c1ea33fdfee39c3ef6b1cede276544e422ee3d",
+    "update_strategy": {
+      "mode": "ab-rootfs",
+      "stage_target": "inactive-slot",
+      "active_slot_modified_in_place": false,
+      "rollback_required": true
+    },
+    "observation_plan_sha256": "c9c491eac4c16257a11f1fee799427b8d9cbd705ae74d1d3d26dafd821c35d57",
+    "rc18_install_drill_digest": "3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "rc18_install_evidence_sha256": "e5f523e36bff01996e3fd06469c15e87d86f798a51049ffdc2f891c0f3e4ecaa",
+    "rc17_update_attempt_digest": "bcc87f005bd410c3a6f3b87abc5e4a7d6daa1449e40c167b405c0d09e416a84a",
+    "rc17_update_audit_sha256": "372c9e41ac2413ce12970b856387863d3360f1efc9f32c0c2aec414d2e085c2d",
+    "host_mutation_allowed": false,
+    "production_ring_mutation_allowed": false
+  },
+  "gate_bindings": {
+    "image_boundary_bound": true,
+    "prior_isolated_install_bound": true,
+    "rc17_controlled_update_ready": true,
+    "exact_target_bound": true,
+    "exact_approval_bound": true,
+    "agentcore_planspec_bound": true,
+    "security_execution_allow_bound": true,
+    "rollback_preconditions_bound": true,
+    "identity_matches_isolated_install": true,
+    "post_update_observation_plan_bound": true
+  },
+  "image_effect": {
+    "image_scope": "disposable-installed-system-image-or-vm",
+    "isolated_update_allowed": true,
+    "image_update_effect_prepared": true,
+    "image_update_effect_executed": true,
+    "isolated_update_performed": true,
+    "disposable_image_state_mutated": true,
+    "previous_installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "updated_image_state_digest": "29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "fail_closed_cases": [
+    {
+      "id": "missing-boundary",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-disposable-image-boundary-not-bound"
+      ],
+      "reason": "Isolated update requires RC18 image boundary.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-isolated-install",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-isolated-install-evidence-not-bound"
+      ],
+      "reason": "Update drill requires prior isolated install evidence.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "stale-installed-image-state",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "installed-image-state-mismatch"
+      ],
+      "reason": "Update must start from the RC18-020 installed image state.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-rc17-update",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc17-controlled-local-update-not-ready"
+      ],
+      "reason": "RC17 controlled update evidence is required.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-target",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "exact-install-update-target-not-bound"
+      ],
+      "reason": "Exact target binding is required.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-approval",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "exact-install-update-approval-not-bound"
+      ],
+      "reason": "Exact approval binding is required.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-agentcore",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "agentcore-install-update-planspec-not-bound"
+      ],
+      "reason": "AgentCore executable PlanSpec is required.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-security-execution",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "security-execution-install-update-allow-not-bound"
+      ],
+      "reason": "SecurityExecution allow is required.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-rollback-preconditions",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-preconditions-not-bound"
+      ],
+      "reason": "Rollback preconditions are required before update drill.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "identity-mismatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "update-identity-does-not-match-isolated-install"
+      ],
+      "reason": "Update identity must match the isolated installed image identity.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-observation-plan",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "post-update-observation-plan-not-bound"
+      ],
+      "reason": "Post-update observation plan must be bound for the next rollback precondition task.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "host-rootfs-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs writes are outside the image boundary.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot writes are outside the image boundary.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata writes are outside the image boundary.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "active-artifact-set-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "reason": "Active artifact set writes are outside the image boundary.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is out of RC18 update drill scope.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of RC18 update drill scope.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is out of RC18 update drill scope.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of RC18 update drill scope.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "remote-payload-download-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-payload-download-denied"
+      ],
+      "reason": "Remote payload download is out of RC18 update drill scope.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "signer-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "signer-authority-denied"
+      ],
+      "reason": "Signer reachability is not update authority.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "mirror-frontend-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "mirror-frontend-authority-denied"
+      ],
+      "reason": "Mirror/frontend output is not update authority.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "private-material-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "private-signing-material-denied"
+      ],
+      "reason": "Private signing material is out of RC18 update drill scope.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "ga-claim-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "ga-claim-denied"
+      ],
+      "reason": "RC18 update drill cannot claim GA production readiness.",
+      "denied_before_image_update": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_update_effect_prepared": false,
+        "isolated_update_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    }
+  ],
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "07d5542d539019cc0cde4cf6c44690e9c780ef1fc892416fa860a02cec3b6003",
+      "size_bytes": 7420,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc18_boundary_result": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a",
+      "size_bytes": 25772,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_image_boundary": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "size_bytes": 25924,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-image-boundary.v1",
+      "status": "disposable-image-boundary-bound-no-image-mutation",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_install_result": {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+      "sha256": "70c8bb7ffe13bde1f0bc887047090d52aba145ebff28239d9d305a11b4d717b2",
+      "size_bytes": 39553,
+      "present": true,
+      "schema": "agentos.rc18-isolated-install-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_install_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/install-drill-evidence.json",
+      "sha256": "e5f523e36bff01996e3fd06469c15e87d86f798a51049ffdc2f891c0f3e4ecaa",
+      "size_bytes": 33965,
+      "present": true,
+      "schema": "agentos.rc18-isolated-install-drill-evidence.v1",
+      "status": "isolated-install-executed-inside-disposable-image",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_local_update_result": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/result.json",
+      "sha256": "6947404d3171129f7eb19d40b0040f2f821391527f982d226342a0389901c7d6",
+      "size_bytes": 27220,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-update-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_local_update_evidence": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/update-execute-or-deny-evidence.json",
+      "sha256": "e33686dcf90dee2f018a51958a5acd312b69200bce30dcb99d32fc98a6543f23",
+      "size_bytes": 11292,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-update-execute-or-deny-evidence.v1",
+      "status": "controlled-local-update-executed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_local_update_audit": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/update-audit-record.json",
+      "sha256": "372c9e41ac2413ce12970b856387863d3360f1efc9f32c0c2aec414d2e085c2d",
+      "size_bytes": 1365,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-update-audit-record.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "rc17_target_binding_result": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+      "sha256": "dd4c958a314eaf99360d055329dbc13800222a6a72a7e067c0ea90b20af429dc",
+      "size_bytes": 21090,
+      "present": true,
+      "schema": "agentos.rc17-exact-install-update-target-binding-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_approval_binding_result": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+      "sha256": "20e5ba1f1bfb388b8205d01d9ca5140da86b9e34f05600837f7691f753f974ae",
+      "size_bytes": 18063,
+      "present": true,
+      "schema": "agentos.rc17-exact-install-update-approval-binding-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_agentcore_result": {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+      "sha256": "af0f99bc40f32d43153f6ab23750d7d5a96b0ff261dd0b4faaf61f4bf1308969",
+      "size_bytes": 21854,
+      "present": true,
+      "schema": "agentos.rc17-agentcore-install-update-executable-planspec-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_security_execution_result": {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+      "sha256": "b1137094b9f40f01145d7196f64565fbe29c864ba3db14feed814ad2749d1b8d",
+      "size_bytes": 15236,
+      "present": true,
+      "schema": "agentos.rc17-security-execution-install-update-allow-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_preconditions_result": {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json",
+      "sha256": "51a13ce7b198a48cfd55fc0a6b2d86869101e5a484a369eafa52e894d1438655",
+      "size_bytes": 33107,
+      "present": true,
+      "schema": "agentos.rc17-install-update-rollback-preconditions-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_observation_plan": {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/post-install-update-observation-plan.json",
+      "sha256": "c9c491eac4c16257a11f1fee799427b8d9cbd705ae74d1d3d26dafd821c35d57",
+      "size_bytes": 3265,
+      "present": true,
+      "schema": "agentos.rc17-post-install-update-observation-plan.v1",
+      "status": "post-install-update-observation-plan-bound-effects-denied",
+      "production_ready_claim": false
+    }
+  }
+}
