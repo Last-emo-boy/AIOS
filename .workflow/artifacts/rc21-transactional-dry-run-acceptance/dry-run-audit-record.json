@@ -1,0 +1,126 @@
+{
+    "schema":  "agentos.rc21-dry-run-audit-record.v1",
+    "generated_at":  "2026-06-10T19:25:00+08:00",
+    "task":  "RC21-021",
+    "status":  "dry-run-audit-record-local-only",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "dry_run_audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+    "dry_run_acceptance_id":  "sha256:09770367573122ab5390a1d9e6fff1feb37a3099485fa9f036ab955f63d5bae8",
+    "local_only":  true,
+    "append_only_projection":  true,
+    "journal_sink_files_written":  false,
+    "entries":  [
+                    {
+                        "operation":  "install",
+                        "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                        "audit_sink_id":  "rc21-011-audit-install-5941f22e2fbc02e5",
+                        "checkpoint_id":  "rc21-011-resume-install-5941f22e2fbc02e5",
+                        "decision":  "accepted-for-dry-run-only",
+                        "effect_preparation_performed":  false,
+                        "lifecycle_effect_performed":  false
+                    },
+                    {
+                        "operation":  "update",
+                        "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                        "audit_sink_id":  "rc21-011-audit-update-14733e6575519569",
+                        "checkpoint_id":  "rc21-011-resume-update-14733e6575519569",
+                        "decision":  "accepted-for-dry-run-only",
+                        "effect_preparation_performed":  false,
+                        "lifecycle_effect_performed":  false
+                    }
+                ],
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "31f87a3a4b8233817e83d03b3a88af56827c51de48b3a6bfb465e9b5bb10c211",
+                                     "size_bytes":  8629,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_dry_run_plan_result":  {
+                                                    "role":  "rc21 dry-run plan result",
+                                                    "path":  ".workflow/artifacts/rc21-dry-run-execution-plan/result.json",
+                                                    "sha256":  "405cc230aae4c68e61320d4b2cc2d9efb3bdf001efd9ec6034bab345daf68091",
+                                                    "size_bytes":  27553,
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc21-dry-run-execution-plan-result.v1",
+                                                    "status":  "passed",
+                                                    "task":  "RC21-020",
+                                                    "production_ready_claim":  false,
+                                                    "consumer_ready_claim":  false
+                                                },
+                   "rc21_dry_run_plan":  {
+                                             "role":  "rc21 dry-run plan",
+                                             "path":  ".workflow/artifacts/rc21-dry-run-execution-plan/dry-run-execution-plan.json",
+                                             "sha256":  "05531d35b8940f5f36e6343d73535103dca209195ae1ae7fc0a038b1e3e8956d",
+                                             "size_bytes":  41822,
+                                             "present":  true,
+                                             "schema":  "agentos.rc21-dry-run-execution-plan.v1",
+                                             "status":  "dry-run-execution-plan-bound-non-executable",
+                                             "task":  "RC21-020",
+                                             "production_ready_claim":  false,
+                                             "consumer_ready_claim":  false
+                                         },
+                   "rc21_transaction_journal_package":  {
+                                                            "role":  "rc21 transaction journal package",
+                                                            "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/transaction-journal-package.json",
+                                                            "sha256":  "fe936acf4fff5baec60b9ce9369fcfa733759d558aaca12f9fd998c51234fe2c",
+                                                            "size_bytes":  28080,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-transaction-journal-package.v1",
+                                                            "status":  "transaction-journal-baseline-bound-non-executable",
+                                                            "task":  "RC21-011",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_snapshot_baseline_package":  {
+                                                          "role":  "rc21 snapshot baseline package",
+                                                          "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/snapshot-baseline-package.json",
+                                                          "sha256":  "619e15a62095359691f9f310d0c6c3efed495fd15846896bf27f1359447e5979",
+                                                          "size_bytes":  11849,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-snapshot-baseline-package.v1",
+                                                          "status":  "snapshot-baseline-bound-projection-only",
+                                                          "task":  "RC21-011",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc20_install_acceptance_result":  {
+                                                          "role":  "rc20 install acceptance result",
+                                                          "path":  ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+                                                          "sha256":  "be6f35ddae17cfbd39cf97231057dab581a94ae56526238e8b07c3e230590bf9",
+                                                          "size_bytes":  31835,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc20-single-user-install-acceptance-result.v1",
+                                                          "status":  "passed",
+                                                          "task":  "RC20-021",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc20_update_result":  {
+                                              "role":  "rc20 update result",
+                                              "path":  ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+                                              "sha256":  "3e14ca1fb126edae29e589ab2746a0968388c01b2cb8fd5070364831f5a0c6af",
+                                              "size_bytes":  29863,
+                                              "present":  true,
+                                              "schema":  "agentos.rc20-post-install-update-drill-result.v1",
+                                              "status":  "passed",
+                                              "task":  "RC20-030",
+                                              "production_ready_claim":  false,
+                                              "consumer_ready_claim":  false
+                                          }
+               }
+}
