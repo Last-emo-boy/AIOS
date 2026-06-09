@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-031",
+  "title": "run post-update rollback execution drill",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+    ".workflow/artifacts/rc19-first-user-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc20-post-update-rollback-drill.ps1",
+      "role": "post-update rollback drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-post-update-rollback-drill/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-post-update-rollback-drill/rollback-drill-evidence.json",
+      "role": "rollback drill evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-post-update-rollback-drill/rollback-audit-record.json",
+      "role": "rollback audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-031-post-update-rollback-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback drill executes only inside the disposable installed-system boundary after RC20 update drill evidence.",
+      "Result binds rollback approval surrogate, rollback plan, rollback audit, post-rollback observation, and restored target state.",
+      "Support upload, recovery execution, remote dispatch, host mutation, active artifact set mutation, production ring mutation, signer authority, and object storage authority remain disabled."
+    ]
+  },
+  "next_task": "RC20-032"
+}

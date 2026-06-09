@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-040",
+  "title": "run single-user distribution local consumer smoke",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
+    ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+    ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+    ".workflow/artifacts/rc20-installer-catalog-selection/result.json",
+    ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/result.json",
+    ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc20-single-user-distribution-consumer-smoke.ps1",
+      "role": "consumer smoke runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/consumer-smoke-evidence.json",
+      "role": "consumer smoke evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-040-single-user-distribution-consumer-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Consumer smoke follows the RC20 local channel and release bundle evidence without executing new install, update, rollback, support upload, recovery, remote dispatch, host, production, mirror, signer, shell, TUI, endpoint, or model authority.",
+      "Consumer decision reports single-user distribution local readiness only if release bundle, channel, installer, install, update, rollback, support, and recovery evidence are all bound.",
+      "production_ready_claim remains false even if local consumer readiness is true."
+    ]
+  },
+  "next_task": "RC20-050"
+}

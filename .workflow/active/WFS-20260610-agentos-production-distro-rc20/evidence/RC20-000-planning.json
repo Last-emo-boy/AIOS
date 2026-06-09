@@ -1,0 +1,118 @@
+{
+  "schema": "agentos.rc20-planning-evidence.v1",
+  "generated_at": "2026-06-10T13:05:00+08:00",
+  "task": "RC20-000",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "source": {
+    "rc19_final_audit": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/FINAL-AUDIT-20260610-production-distro-rc19.json",
+      "verdict": "PASS",
+      "decision": "rc19-installable-image-local-consumer-ready-non-ga",
+      "installable_image_local_consumer_ready": true,
+      "consumer_ready_claim": true,
+      "production_ready_claim": false,
+      "next_milestone": {
+        "id": "Production Distro RC20",
+        "direction": "Plan the next AIOS-body iteration from RC19 local consumer readiness, keeping external distribution infrastructure separate unless explicitly scoped."
+      },
+      "rc20_required_boundaries": [
+        "do-not-weaken-rc19-installable-image-local-consumer-readiness",
+        "aios-body-only",
+        "canonical-release-bundle-required",
+        "local-candidate-stable-channel-required",
+        "single-user-installer-selection-required",
+        "single-user-install-acceptance-required",
+        "post-install-update-execution-drill-required",
+        "post-update-rollback-execution-drill-required",
+        "local-support-recovery-closure-required",
+        "host-rootfs-mutation-disabled",
+        "host-active-slot-and-boot-metadata-mutation-disabled",
+        "active-artifact-set-mutation-disabled",
+        "production-ring-mutation-disabled",
+        "mirror-frontend-nginx-tls-out-of-scope",
+        "remote-signer-private-material-out-of-scope",
+        "object-storage-provisioning-out-of-scope",
+        "remote-dispatch-out-of-scope",
+        "support-upload-and-recovery-execution-disabled",
+        "ga-claim-disabled"
+      ]
+    }
+  },
+  "outputs": {
+    "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
+    "workflow_session": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/workflow-session.json",
+    "planning_summary": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-candidate-plan.md",
+    "maestro_session": ".workflow/.csv-wave/20260610-plan-rc20-single-user-distribution-candidate"
+  },
+  "plan_surface": {
+    "task_count": 13,
+    "completed_tasks": [
+      "RC20-000"
+    ],
+    "next_task": "RC20-001",
+    "waves": [
+      "wave-0",
+      "wave-1",
+      "wave-2",
+      "wave-3",
+      "wave-4"
+    ],
+    "aios_body_only": true,
+    "canonical_release_bundle_required": true,
+    "local_candidate_stable_channel_required": true,
+    "single_user_installer_selection_required": true,
+    "single_user_install_acceptance_required": true,
+    "post_install_update_execution_drill_required": true,
+    "post_update_rollback_execution_drill_required": true,
+    "local_support_recovery_closure_required": true,
+    "host_rootfs_mutation_out_of_scope": true,
+    "host_active_slot_mutation_out_of_scope": true,
+    "host_boot_metadata_mutation_out_of_scope": true,
+    "active_artifact_set_mutation_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "remote_dispatch_out_of_scope": true,
+    "private_signing_material_out_of_scope": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "host_install_performed": false,
+    "host_update_performed": false,
+    "host_rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "endpoint_reachability_authority": false
+  },
+  "completion": {
+    "rc20_000_complete": true,
+    "next_task": "RC20-001",
+    "commit_required": true
+  }
+}

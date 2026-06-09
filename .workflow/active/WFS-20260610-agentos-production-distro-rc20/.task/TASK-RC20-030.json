@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-030",
+  "title": "run post-install local update execution drill",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    ".workflow/artifacts/rc20-first-boot-user-acceptance/result.json",
+    ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc20-post-install-update-drill.ps1",
+      "role": "post-install update drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-post-install-update-drill/update-drill-evidence.json",
+      "role": "update drill evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-post-install-update-drill/update-audit-record.json",
+      "role": "update audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-030-post-install-update-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Update drill executes only inside the disposable installed-system boundary created by RC20 install acceptance.",
+      "Result binds pre-update state, selected channel version, update audit, post-update observation, and rollback prerequisites.",
+      "No host active slot, host boot metadata, active artifact set, production ring, remote dispatch, support upload, recovery execution, signer, or object storage authority is broadened."
+    ]
+  },
+  "next_task": "RC20-031"
+}

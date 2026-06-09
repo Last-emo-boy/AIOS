@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-010",
+  "title": "bind canonical single-user release bundle manifest",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc19-final-closeout-audit/result.json",
+    ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+    ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc20-single-user-release-bundle.ps1",
+      "role": "release bundle binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-manifest.json",
+      "role": "release bundle manifest"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-input-map.json",
+      "role": "source input map"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-010-single-user-release-bundle.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Result binds RC19 image, installer, channel, first-user, update/rollback compatibility, support, and recovery evidence into a canonical release bundle identity.",
+      "Bundle manifest records source artifact hashes, required metadata, output identity, and non-GA boundaries without publishing external payloads.",
+      "No host rootfs, host boot, active artifact set, production ring, remote dispatch, signer, object storage, support upload, or recovery execution authority is broadened."
+    ]
+  },
+  "next_task": "RC20-011"
+}

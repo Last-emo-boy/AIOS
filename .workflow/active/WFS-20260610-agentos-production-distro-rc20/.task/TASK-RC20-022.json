@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-022",
+  "title": "bind first boot user acceptance and local operator posture",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc20-first-boot-user-acceptance.ps1",
+      "role": "first boot user acceptance runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/first-boot-acceptance.json",
+      "role": "first boot acceptance"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/local-operator-posture.json",
+      "role": "local operator posture"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-022-first-boot-user-acceptance.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "First boot acceptance is bound to the RC20 install acceptance target state and remains projection-only for credentials.",
+      "Local operator posture records redacted identity posture, audit expectations, rollback/support references, and no raw credential material.",
+      "No host boot, support upload, recovery execution, remote dispatch, TUI, shell, endpoint, or model replay authority is introduced."
+    ]
+  },
+  "next_task": "RC20-030"
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-050",
+  "title": "run Production Distro RC20 final closeout audit",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
+    ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+    ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+    ".workflow/artifacts/rc20-release-bundle-channel-fail-closed/result.json",
+    ".workflow/artifacts/rc20-installer-catalog-selection/result.json",
+    ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    ".workflow/artifacts/rc20-first-boot-user-acceptance/result.json",
+    ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/result.json",
+    ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+    ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc20-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/final-rc20-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-050-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit covers all RC20 tasks and reports single-user distribution readiness truthfully.",
+      "Final audit preserves production_ready_claim=false unless every scoped single-user distribution gate is proved and still forbids GA claims.",
+      "Final audit verifies no external mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery-execution/remote-dispatch/host-rootfs/host-boot/active-artifact-set/production-ring authority was broadened."
+    ]
+  },
+  "next_task": "RC21-planning"
+}

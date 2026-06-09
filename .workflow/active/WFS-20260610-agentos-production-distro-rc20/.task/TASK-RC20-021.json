@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-021",
+  "title": "run single-user install acceptance drill inside disposable target",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-installer-catalog-selection/result.json",
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc20-single-user-install-acceptance.ps1",
+      "role": "single-user install acceptance runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-install-acceptance/install-acceptance-evidence.json",
+      "role": "install acceptance evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-single-user-install-acceptance/install-audit-record.json",
+      "role": "install audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-021-single-user-install-acceptance.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Acceptance drill executes only inside the disposable single-user target boundary.",
+      "Result binds selected version, release bundle, installer media, target state, acceptance checks, and audit record.",
+      "Host rootfs, host active slot, host boot metadata, active artifact set, production ring, support upload, recovery execution, remote dispatch, object storage, and signer authority remain untouched."
+    ]
+  },
+  "next_task": "RC20-022"
+}

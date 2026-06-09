@@ -1,0 +1,191 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260610-agentos-production-distro-rc20",
+  "milestone": "Production Distro RC20",
+  "status": "active",
+  "objective": "Move RC19 non-GA installable image local consumer readiness into a single-user AIOS distribution candidate with a canonical release bundle, local candidate-to-stable channel promotion evidence, installer selection and acceptance drills, post-install update and rollback execution drills, and local support/recovery closure, without mutating the host, production rings, mirror infrastructure, signer infrastructure, object storage, remote dispatch, support upload, recovery services, private signing material, or GA authority.",
+  "scope": {
+    "included": [
+      "AIOS-body RC20 planning",
+      "single-user distribution authority contract",
+      "canonical release bundle manifest binding",
+      "local candidate and stable channel promotion package",
+      "release bundle and channel promotion fail-closed fixtures",
+      "installer catalog and version selection preflight",
+      "single-user install acceptance drill inside a disposable target",
+      "first boot user acceptance and local operator posture binding",
+      "post-install local update execution drill inside a disposable installed-system boundary",
+      "post-update rollback execution drill inside a disposable installed-system boundary",
+      "local support/recovery closure after install/update/rollback drills",
+      "single-user distribution local consumer smoke",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "external mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload object storage provisioning",
+      "remote fleet dispatch infrastructure",
+      "support upload endpoint",
+      "recovery execution service",
+      "host rootfs mutation",
+      "host active slot mutation",
+      "host boot metadata mutation",
+      "active artifact set mutation",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC20 planning and single-user distribution authority contract",
+      "tasks": [
+        {
+          "id": "RC20-000",
+          "status": "completed",
+          "title": "plan Production Distro RC20 single-user distribution candidate",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-000-planning.json"
+        },
+        {
+          "id": "RC20-001",
+          "status": "pending",
+          "title": "freeze RC20 single-user distribution authority contract",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "single-user release bundle and local channel promotion",
+      "tasks": [
+        {
+          "id": "RC20-010",
+          "status": "pending",
+          "title": "bind canonical single-user release bundle manifest",
+          "deliverable": ".workflow/artifacts/rc20-single-user-release-bundle/result.json"
+        },
+        {
+          "id": "RC20-011",
+          "status": "pending",
+          "title": "bind local candidate-to-stable channel promotion package",
+          "deliverable": ".workflow/artifacts/rc20-local-channel-promotion/result.json"
+        },
+        {
+          "id": "RC20-012",
+          "status": "pending",
+          "title": "verify release bundle and channel promotion fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc20-release-bundle-channel-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "installer selection and single-user acceptance",
+      "tasks": [
+        {
+          "id": "RC20-020",
+          "status": "pending",
+          "title": "bind installer catalog and version selection preflight",
+          "deliverable": ".workflow/artifacts/rc20-installer-catalog-selection/result.json"
+        },
+        {
+          "id": "RC20-021",
+          "status": "pending",
+          "title": "run single-user install acceptance drill inside disposable target",
+          "deliverable": ".workflow/artifacts/rc20-single-user-install-acceptance/result.json"
+        },
+        {
+          "id": "RC20-022",
+          "status": "pending",
+          "title": "bind first boot user acceptance and local operator posture",
+          "deliverable": ".workflow/artifacts/rc20-first-boot-user-acceptance/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "post-install lifecycle execution drills",
+      "tasks": [
+        {
+          "id": "RC20-030",
+          "status": "pending",
+          "title": "run post-install local update execution drill",
+          "deliverable": ".workflow/artifacts/rc20-post-install-update-drill/result.json"
+        },
+        {
+          "id": "RC20-031",
+          "status": "pending",
+          "title": "run post-update rollback execution drill",
+          "deliverable": ".workflow/artifacts/rc20-post-update-rollback-drill/result.json"
+        },
+        {
+          "id": "RC20-032",
+          "status": "pending",
+          "title": "bind local support and recovery closure after lifecycle drills",
+          "deliverable": ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "single-user distribution consumer smoke and closeout",
+      "tasks": [
+        {
+          "id": "RC20-040",
+          "status": "pending",
+          "title": "run single-user distribution local consumer smoke",
+          "deliverable": ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/result.json"
+        },
+        {
+          "id": "RC20-050",
+          "status": "pending",
+          "title": "run Production Distro RC20 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC20-001",
+  "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "rc19_installable_image_local_consumer_ready_required": true,
+    "canonical_release_bundle_required": true,
+    "local_candidate_stable_channel_required": true,
+    "single_user_installer_selection_required": true,
+    "single_user_install_acceptance_required": true,
+    "post_install_update_execution_drill_required": true,
+    "post_update_rollback_execution_drill_required": true,
+    "local_support_recovery_closure_required": true,
+    "host_rootfs_mutation_allowed": false,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ready_claim": false,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.86,
+    "requirements_coverage": 0.92,
+    "task_quality": 0.87,
+    "dependency_correctness": 0.9,
+    "estimation_accuracy": 0.76,
+    "collision_safety": 0.85,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC20 follows the RC19 final audit next milestone direction and narrows the next work to AIOS-body single-user distribution candidate evidence. The plan separates release bundle identity, local channel promotion, installer selection, acceptance install, first boot posture, update execution, rollback execution, support/recovery closure, consumer smoke, and final audit while preserving non-GA and no host, remote, mirror, signer, object-storage, or production mutation scope."
+  }
+}

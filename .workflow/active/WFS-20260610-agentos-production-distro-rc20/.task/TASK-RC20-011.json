@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-011",
+  "title": "bind local candidate-to-stable channel promotion package",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+    ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+    ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc20-local-channel-promotion.ps1",
+      "role": "local channel promotion runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/candidate-channel-package.json",
+      "role": "candidate channel package"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/stable-channel-projection.json",
+      "role": "stable channel projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-011-local-channel-promotion.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Local candidate and stable channel identities are hash-bound to the RC20 release bundle and RC19 offline/local channel evidence.",
+      "Stable promotion remains local evidence and does not imply external mirror publication or active artifact set mutation.",
+      "Promotion package denies missing, stale, broad, remote, or host-mutating channel updates."
+    ]
+  },
+  "next_task": "RC20-012"
+}

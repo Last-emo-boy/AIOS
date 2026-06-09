@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-032",
+  "title": "bind local support and recovery closure after lifecycle drills",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/result.json",
+    ".workflow/artifacts/rc19-first-user-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc20-lifecycle-support-recovery.ps1",
+      "role": "support recovery closure runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/lifecycle-support-bundle.json",
+      "role": "local support bundle"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-032-lifecycle-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Support bundle is local-only, redacted, and bound to install, update, rollback, first boot, and release bundle evidence.",
+      "Recovery reference index remains projection-only and cannot execute recovery service operations.",
+      "No support upload, recovery execution, remote dispatch, host mutation, production ring mutation, private signing material handling, or external infra authority is introduced."
+    ]
+  },
+  "next_task": "RC20-040"
+}

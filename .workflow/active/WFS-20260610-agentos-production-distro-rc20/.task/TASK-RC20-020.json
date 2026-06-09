@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC20-020",
+  "title": "bind installer catalog and version selection preflight",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+    ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+    ".workflow/artifacts/rc20-release-bundle-channel-fail-closed/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc20-installer-catalog-selection.ps1",
+      "role": "installer catalog runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-installer-catalog-selection/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-installer-catalog-selection/installer-catalog.json",
+      "role": "installer catalog"
+    },
+    {
+      "path": ".workflow/artifacts/rc20-installer-catalog-selection/version-selection-preflight.json",
+      "role": "version selection preflight"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-020-installer-catalog-selection.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Installer catalog exposes exactly the local candidate/stable release bundle choices expected by RC20.",
+      "Version selection preflight binds release bundle, installer media, boot descriptor, rollback/support references, and local channel identity.",
+      "Selection cannot authorize host install, remote fetch, external mirror trust, support upload, recovery execution, or production mutation."
+    ]
+  },
+  "next_task": "RC20-021"
+}
