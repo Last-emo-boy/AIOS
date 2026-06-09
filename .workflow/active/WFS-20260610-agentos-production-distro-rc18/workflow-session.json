@@ -3,7 +3,7 @@
   "name": "Production Distro RC18",
   "status": "active",
   "created_at": "2026-06-10T04:50:00+08:00",
-  "updated_at": "2026-06-10T04:50:00+08:00",
+  "updated_at": "2026-06-10T05:10:00+08:00",
   "source": "RC17 final audit; maestro-managed RC18 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc17",
   "goal": "Plan and execute an AIOS-body isolated installed-system image install/update/rollback drill without giving authority to mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, host boot state, production rings, TUI projections, shell output, or model replay.",
@@ -27,14 +27,21 @@
       "completed_at": "2026-06-10T04:50:00+08:00",
       "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-000-planning.json",
       "commit": null
+    },
+    {
+      "task": "RC18-001",
+      "completed_at": "2026-06-10T05:10:00+08:00",
+      "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-001-isolated-installed-system-drill-contract.json",
+      "commit": null
     }
   ],
-  "next_task": "RC18-001",
+  "next_task": "RC18-010",
   "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md",
-    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-plan.md"
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-plan.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
@@ -53,6 +60,8 @@
     ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-031.json",
     ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-040.json",
     ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-050.json",
-    ".workflow/.csv-wave/20260610-plan-rc18-isolated-installed-system-drill/context.md"
+    ".workflow/.csv-wave/20260610-plan-rc18-isolated-installed-system-drill/context.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-001-isolated-installed-system-drill-contract.json"
   ]
 }

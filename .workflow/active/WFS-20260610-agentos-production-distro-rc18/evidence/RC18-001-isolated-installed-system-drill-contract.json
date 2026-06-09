@@ -1,0 +1,139 @@
+{
+  "schema": "agentos.rc18-isolated-installed-system-drill-contract-evidence.v1",
+  "generated_at": "2026-06-10T05:10:00+08:00",
+  "task": "RC18-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "current_task": "RC18-001",
+      "status": "active"
+    },
+    "rc17_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+      "verdict": "PASS",
+      "decision": "rc17-exact-install-update-execute-or-deny-ready-non-ga",
+      "exact_install_update_ready": true,
+      "production_ready_claim": false,
+      "repo_local_install_update_rollback_evidence": true,
+      "remaining_gap_carried_into_rc18": "installed-system-image-or-vm-drill-not-proved"
+    }
+  },
+  "contract": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+    "gate_order": [
+      "rc17-final-audit-and-exact-install-update-evidence-passed",
+      "rc18-authority-contract-frozen",
+      "disposable-installed-system-image-boundary-and-state-root-bound",
+      "installed-system-baseline-identity-and-boot-state-projection-bound",
+      "image-boundary-side-effect-fail-closed-fixtures-verified",
+      "isolated-installed-system-install-drill-execute-or-deny-audited",
+      "isolated-installed-system-update-drill-execute-or-deny-audited",
+      "post-update-observation-and-rollback-preconditions-bound-inside-image",
+      "isolated-installed-system-rollback-drill-execute-or-deny-audited",
+      "isolated-image-support-recovery-evidence-bound-local-redacted-only",
+      "installed-system-local-release-channel-consumer-smoke-audited",
+      "final-closeout-truthful-non-ga"
+    ],
+    "writable_surface": {
+      "installed_system_image_or_vm_only": true,
+      "state_root_required_before_mutation": true,
+      "allowed_write_surface_bound_by_rc18_010": true,
+      "host_rootfs_mutation_allowed": false,
+      "host_active_slot_mutation_allowed": false,
+      "host_boot_metadata_mutation_allowed": false,
+      "active_artifact_set_mutation_allowed": false,
+      "production_ring_mutation_allowed": false
+    },
+    "non_authority_sources": [
+      "mirror-reachability-or-rendered-metadata",
+      "frontend-output",
+      "signer-reachability",
+      "object-storage-ui",
+      "endpoint-reachability-without-local-evidence-binding",
+      "normal-shell-output",
+      "tui-projection",
+      "model-replay",
+      "remote-service-health",
+      "support-upload-availability",
+      "recovery-service-availability"
+    ],
+    "forbidden_authority": {
+      "host_rootfs_mutation_allowed": false,
+      "host_active_slot_mutation_allowed": false,
+      "host_boot_metadata_mutation_allowed": false,
+      "active_artifact_set_mutation_allowed": false,
+      "production_ring_mutation_allowed": false,
+      "remote_dispatch_enabled": false,
+      "support_upload_allowed": false,
+      "recovery_execution_allowed": false,
+      "mirror_frontend_authority": false,
+      "signer_authority": false,
+      "private_signing_material_handling_allowed": false,
+      "ga_claim_allowed": false
+    }
+  },
+  "checks": [
+    {
+      "id": "gate_order.frozen",
+      "status": "passed",
+      "message": "RC18 gate order is frozen from RC17 exact evidence through disposable image boundary, baseline, fail-closed fixtures, isolated install, isolated update, rollback preconditions, rollback, support/recovery, consumer smoke, and final audit."
+    },
+    {
+      "id": "writable_surface.image_only",
+      "status": "passed",
+      "message": "The installed-system image or VM is the only writable drill surface."
+    },
+    {
+      "id": "forbidden_authority.disabled",
+      "status": "passed",
+      "message": "Host rootfs mutation, host active slot mutation, host boot metadata mutation, support upload, recovery execution service, remote dispatch, production ring mutation, mirror/frontend authority, signer authority, private signing material handling, and GA claims remain forbidden."
+    },
+    {
+      "id": "non_authority_sources.frozen",
+      "status": "passed",
+      "message": "Mirror, frontend, signer, shell, TUI, model, endpoint, object storage, support upload, recovery service, and remote service reachability are not authority."
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "message": "RC18 contract keeps production_ready_claim=false."
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc18_001_complete": true,
+    "next_task": "RC18-010",
+    "commit_required": true
+  }
+}
