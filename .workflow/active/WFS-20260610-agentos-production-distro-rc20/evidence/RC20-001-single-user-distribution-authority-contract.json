@@ -1,0 +1,99 @@
+{
+  "schema": "agentos.rc20-single-user-distribution-authority-contract-evidence.v1",
+  "generated_at": "2026-06-10T13:25:00+08:00",
+  "task": "RC20-001",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "source": {
+    "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/plan.json",
+    "planning_summary": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-candidate-plan.md",
+    "rc19_final_audit": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/FINAL-AUDIT-20260610-production-distro-rc19.json",
+    "rc19_decision": "rc19-installable-image-local-consumer-ready-non-ga",
+    "rc19_consumer_ready_claim": true,
+    "rc19_production_ready_claim": false
+  },
+  "outputs": {
+    "authority_contract": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+    "task_evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/RC20-001-single-user-distribution-authority-contract.json"
+  },
+  "gate_order": [
+    "rc19-local-consumer-readiness-baseline",
+    "canonical-single-user-release-bundle-manifest",
+    "local-candidate-stable-channel-promotion-package",
+    "release-bundle-channel-fail-closed-fixtures",
+    "installer-catalog-version-selection-preflight",
+    "single-user-install-acceptance-disposable-target",
+    "first-boot-user-acceptance-local-operator-posture",
+    "post-install-local-update-execution-drill",
+    "post-update-rollback-execution-drill",
+    "local-support-recovery-closure",
+    "single-user-distribution-local-consumer-smoke",
+    "rc20-final-closeout-audit"
+  ],
+  "authority_boundary": {
+    "aios_body_only": true,
+    "release_bundle_identity_authority": "local-hash-bound-evidence",
+    "channel_promotion_authority": "local-evidence-only",
+    "installer_selection_authority": "local-rc20-bundle-entries-only",
+    "install_update_rollback_effect_boundary": "disposable-target-evidence-only",
+    "support_boundary": "local-redacted-bundle-only",
+    "recovery_boundary": "projection-and-reference-index-only",
+    "consumer_readiness_scope": "local-single-user-distribution-only",
+    "production_ready_claim": false
+  },
+  "writable_surfaces": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+    ".workflow/artifacts/rc20-*",
+    "rc20-disposable-target-state-roots",
+    "rc20-local-support-recovery-projections"
+  ],
+  "forbidden_surfaces": [
+    "host-rootfs",
+    "host-active-slot",
+    "host-boot-metadata",
+    "active-artifact-set",
+    "production-rings",
+    "external-mirror-frontend",
+    "nginx-or-tls-infrastructure",
+    "remote-signer-service",
+    "object-storage-provisioning",
+    "support-upload-endpoint",
+    "recovery-execution-service",
+    "remote-fleet-dispatch"
+  ],
+  "invariants": {
+    "production_ready_claim": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "host_install_performed": false,
+    "host_update_performed": false,
+    "host_rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "endpoint_reachability_authority": false
+  },
+  "completion": {
+    "rc20_001_complete": true,
+    "next_task": "RC20-010",
+    "commit_required": true
+  }
+}
