@@ -1,0 +1,612 @@
+{
+  "schema": "agentos.rc17-final-closeout-audit-result.v1",
+  "generated_at": "2026-06-10T04:30:00+08:00",
+  "task": "RC17-050",
+  "status": "passed",
+  "decision": "PASS",
+  "production_ready_claim": false,
+  "milestone": "Production Distro RC17",
+  "milestone_status": "rc17-exact-install-update-execute-or-deny-ready-non-ga",
+  "exact_install_update_ready": true,
+  "install_readiness": "ready",
+  "update_readiness": "ready",
+  "rollback_support_readiness": "ready",
+  "outputs": {
+    "final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+      "sha256": "8b34b3af2ea2c252e8d671948312a2ed5626508d810b277c2a01e74f924c81ac",
+      "present": true
+    },
+    "closeout_summary": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md",
+      "sha256": "e878b06363da5a79ff01c2391f1678d42933af93222762ec3d1bc1988170f278",
+      "present": true
+    }
+  },
+  "source_artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
+      "sha256": "d58318c28146b867ee13b4db479f0bb38ad0342c6ccd855071f3f276e0211a15",
+      "size_bytes": 8248,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "completed",
+      "production_ready_claim": null
+    },
+    {
+      "task": "RC17-010",
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+      "sha256": "dd4c958a314eaf99360d055329dbc13800222a6a72a7e067c0ea90b20af429dc",
+      "schema": "agentos.rc17-exact-install-update-target-binding-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-011",
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+      "sha256": "20e5ba1f1bfb388b8205d01d9ca5140da86b9e34f05600837f7691f753f974ae",
+      "schema": "agentos.rc17-exact-install-update-approval-binding-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-020",
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+      "sha256": "af0f99bc40f32d43153f6ab23750d7d5a96b0ff261dd0b4faaf61f4bf1308969",
+      "schema": "agentos.rc17-agentcore-install-update-executable-planspec-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-021",
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+      "sha256": "b1137094b9f40f01145d7196f64565fbe29c864ba3db14feed814ad2749d1b8d",
+      "schema": "agentos.rc17-security-execution-install-update-allow-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-022",
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json",
+      "sha256": "51a13ce7b198a48cfd55fc0a6b2d86869101e5a484a369eafa52e894d1438655",
+      "schema": "agentos.rc17-install-update-rollback-preconditions-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-030",
+      "path": ".workflow/artifacts/rc17-controlled-local-install/result.json",
+      "sha256": "165cec6f706c213d96707666fd30a9f18af8ad1fe7e65c87c69b76905f1faa97",
+      "schema": "agentos.rc17-controlled-local-install-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-031",
+      "path": ".workflow/artifacts/rc17-controlled-local-update/result.json",
+      "sha256": "6947404d3171129f7eb19d40b0040f2f821391527f982d226342a0389901c7d6",
+      "schema": "agentos.rc17-controlled-local-update-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-032",
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+      "sha256": "fb3c305eb332b8b823abe2facbe0f9d6550292e3041c7f3cbb552669b1ee9683",
+      "schema": "agentos.rc17-controlled-install-update-rollback-support-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC17-040",
+      "path": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json",
+      "sha256": "36a6d3f123c00cce7d2656ad78971e57c7df64f25d722de77d797c731140f81a",
+      "schema": "agentos.rc17-local-release-channel-install-update-consumer-smoke-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    }
+  ],
+  "checks": [
+    {
+      "id": "plan.pointer.rc17_050",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 final audit must run at RC17-050 after RC17-040 completed.",
+      "evidence": {
+        "plan_status": "completed",
+        "current_task": null,
+        "final_task_status": "completed"
+      }
+    },
+    {
+      "id": "tasks.previous.completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-000 through RC17-040 must be completed before final closeout.",
+      "evidence": [
+        {
+          "task": "RC17-000",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-001",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-010",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-011",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-020",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-021",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-022",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-030",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-031",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-032",
+          "status": "completed"
+        },
+        {
+          "task": "RC17-040",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "results.all_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC17 executable task results must be passed.",
+      "evidence": [
+        {
+          "task": "RC17-010",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json"
+        },
+        {
+          "task": "RC17-011",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json"
+        },
+        {
+          "task": "RC17-020",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json"
+        },
+        {
+          "task": "RC17-021",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json"
+        },
+        {
+          "task": "RC17-022",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json"
+        },
+        {
+          "task": "RC17-030",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-controlled-local-install/result.json"
+        },
+        {
+          "task": "RC17-031",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-controlled-local-update/result.json"
+        },
+        {
+          "task": "RC17-032",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json"
+        },
+        {
+          "task": "RC17-040",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json"
+        }
+      ]
+    },
+    {
+      "id": "results.failed_checks.zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 task checks and fail-closed cases must have zero failures.",
+      "evidence": {
+        "failed_checks": 0,
+        "cases": 217,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "target.exact_repo_local_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Exact repo-local install/update targets and two target identities must be bound.",
+      "evidence": {
+        "state": "exact-repo-local-install-update-target-bound",
+        "exact_install_update_target_bound": true,
+        "install_target_bound": true,
+        "update_target_bound": true,
+        "repo_local_target_identity_set_bound": true,
+        "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+        "enrolled_target_identity_count": 2,
+        "distinct_target_identity_count": 2,
+        "package_identity_bound": true,
+        "installable_media_bound": true,
+        "installer_updater_preflight_bound": true,
+        "rc16_planspec_package_bound": true,
+        "rc16_rollback_support_package_bound": true,
+        "rc16_consumer_smoke_bound": true,
+        "exact_install_update_approval_bound": false,
+        "agentcore_install_update_planspec_executable": false,
+        "security_execution_install_update_allow": false,
+        "rollback_preconditions_bound": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc17-exact-install-update-approval-not-bound",
+          "rc17-agentcore-install-update-planspec-not-executable",
+          "rc17-security-execution-install-update-allow-not-bound",
+          "rc17-rollback-preconditions-not-bound",
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "approval.exact_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Exact install/update approval must bind actor, audit sink, nonce, expiry, policy, rollback, and support references.",
+      "evidence": {
+        "state": "exact-install-update-approval-bound-execution-still-gated",
+        "exact_install_update_target_bound": true,
+        "exact_install_update_approval_bound": true,
+        "approval_granted": true,
+        "approved_operation_count": 2,
+        "approved_operations": [
+          "install",
+          "update"
+        ],
+        "audit_sink_bound": true,
+        "nonce_bound": true,
+        "expiry_bound": true,
+        "policy_version_bound": true,
+        "rollback_support_reference_bound": true,
+        "agentcore_install_update_planspec_executable": false,
+        "security_execution_install_update_allow": false,
+        "rollback_preconditions_bound": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc17-agentcore-install-update-planspec-not-executable",
+          "rc17-security-execution-install-update-allow-not-bound",
+          "rc17-rollback-preconditions-not-bound",
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "agentcore.install_update_executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "AgentCore install/update PlanSpec must be executable before effects.",
+      "evidence": {
+        "state": "agentcore-install-update-planspec-executable-effects-denied",
+        "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+        "planspec_materialization_digest": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+        "agentcore_install_update_planspec_executable": true,
+        "exact_install_update_target_bound": true,
+        "exact_install_update_approval_bound": true,
+        "audit_nonce_policy_bound": true,
+        "rollback_support_reference_bound": true,
+        "security_execution_install_update_allow": false,
+        "rollback_preconditions_bound": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc17-security-execution-install-update-allow-not-bound",
+          "rc17-rollback-preconditions-not-bound",
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "security_execution.install_update_allow",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "SecurityExecution install/update allow decision must be bound before install/update effects.",
+      "evidence": {
+        "state": "security-execution-install-update-allow-bound-effects-denied",
+        "security_execution_install_update_allow": true,
+        "exact_install_update_target_bound": true,
+        "exact_install_update_approval_bound": true,
+        "agentcore_install_update_planspec_executable": true,
+        "rollback_preconditions_bound": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_allowed": true,
+        "update_allowed": true,
+        "install_performed": false,
+        "update_performed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc17-rollback-preconditions-not-bound",
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "rollback.preconditions_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback preconditions and post-effect observation package must be bound before install/update effects.",
+      "evidence": {
+        "state": "rollback-preconditions-bound-effects-denied",
+        "rollback_preconditions_bound": true,
+        "security_execution_install_update_allow": true,
+        "exact_install_update_target_bound": true,
+        "exact_install_update_approval_bound": true,
+        "agentcore_install_update_planspec_executable": true,
+        "audit_nonce_expiry_policy_bound": true,
+        "rollback_support_package_bound": true,
+        "local_support_recovery_bound": true,
+        "post_install_update_observation_plan_bound": true,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "rollback_precondition_core_hash": "32f261e5e71bcb07b443c37473c1ea33fdfee39c3ef6b1cede276544e422ee3d",
+        "blockers": [
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "controlled_install.executed_audited",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled local install must execute repo-local evidence with no host slot or boot mutation.",
+      "evidence": {
+        "state": "controlled-local-install-executed",
+        "install_allowed": true,
+        "install_effect_prepared": true,
+        "install_effect_executed": true,
+        "install_performed": true,
+        "repo_local_install_evidence_written": true,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "production_ring_mutation_allowed": false,
+        "install_attempt_digest": "623bfc6ec67f5626613628d617110feb4546cdaf2b1de7a1f329a5da90986d3b",
+        "install_audit_record_sha256": "ba5d4a6fd17eb6f3ed312f7cb3a960c79713fdfe91ca2ea1439c3956a23ba835",
+        "blockers": []
+      }
+    },
+    {
+      "id": "controlled_update.executed_audited",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled local update must execute repo-local evidence after prior controlled install with no host slot or boot mutation.",
+      "evidence": {
+        "state": "controlled-local-update-executed",
+        "prior_install_performed": true,
+        "update_allowed": true,
+        "update_effect_prepared": true,
+        "update_effect_executed": true,
+        "update_performed": true,
+        "repo_local_update_evidence_written": true,
+        "rollback_execution_performed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "production_ring_mutation_allowed": false,
+        "update_attempt_digest": "bcc87f005bd410c3a6f3b87abc5e4a7d6daa1449e40c167b405c0d09e416a84a",
+        "update_audit_record_sha256": "372c9e41ac2413ce12970b856387863d3360f1efc9f32c0c2aec414d2e085c2d",
+        "blockers": []
+      }
+    },
+    {
+      "id": "rollback_support.executed_local_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback/support evidence must execute repo-local rollback evidence while support upload and recovery execution remain disabled.",
+      "evidence": {
+        "state": "controlled-install-update-rollback-executed-support-bound",
+        "controlled_install_performed": true,
+        "controlled_update_performed": true,
+        "rollback_preconditions_bound": true,
+        "rollback_support_package_bound": true,
+        "rollback_approval_bound": true,
+        "rollback_planspec_executable": true,
+        "security_execution_rollback_allowed": true,
+        "rollback_execution_allowed": true,
+        "rollback_execution_performed": true,
+        "support_bundle_local_only": true,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutation_allowed": false,
+        "rollback_attempt_digest": "a4b479707fbdc37d6b434d2d83c7b6905b413b6072f692328f792e0c789d51b7",
+        "rollback_audit_digest": "61227e0991ffc4944ca9015e1f32db40de8eeedf358b0240e66b050c238ecb3a",
+        "blockers": []
+      }
+    },
+    {
+      "id": "consumer_smoke.exact_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local release channel consumer smoke must report exact install/update ready without executing new effects.",
+      "evidence": {
+        "state": "local-release-channel-consumer-exact-install-update-ready",
+        "local_release_channel_followed": true,
+        "install_readiness": "ready",
+        "update_readiness": "ready",
+        "rollback_support_readiness": "ready",
+        "consumer_decision": "exact-install-update-ready",
+        "audited": true,
+        "audit_digest": "250d050272e81f25b1e3944ec16e00d182de673eb35171f51c914c26b59e78bd",
+        "blockers": []
+      }
+    },
+    {
+      "id": "identity.bound_across_rc17",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 target, approval, AgentCore, SecurityExecution, rollback, install, update, rollback/support, and consumer evidence must bind the same package identity.",
+      "evidence": {
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "release_id": "production-distro-rc8-current-artifacts"
+      }
+    },
+    {
+      "id": "authority.boundaries.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 must not broaden mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery/remote-dispatch/host-boot/production-ring authority.",
+      "evidence": {
+        "invariant_violations": null,
+        "host_mutation_preserved": true
+      }
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 must remain non-GA and must not claim production readiness.",
+      "evidence": null
+    },
+    {
+      "id": "exact_install_update.ready_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 may close only as non-GA exact install/update execute-or-deny readiness.",
+      "evidence": {
+        "exact_install_update_ready": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc17.final_audit.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 final audit evidence must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+        "present": true
+      }
+    },
+    {
+      "id": "rc17.closeout_summary.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 closeout summary must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md",
+        "sha256": "e878b06363da5a79ff01c2391f1678d42933af93222762ec3d1bc1988170f278"
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 final audit outputs must not contain key blocks, auth tokens, private paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "remaining_non_ga_boundaries": [
+    "GA production-ready claim remains false",
+    "mirror/frontend/nginx/TLS work remains out of RC17 body scope",
+    "remote signer and private signing material handling remain out of scope",
+    "large object storage provisioning remains out of scope",
+    "support upload and recovery execution remain disabled",
+    "remote dispatch, host boot mutation, and production ring mutation remain disabled"
+  ],
+  "final_audit": {
+    "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+    "verdict": "PASS",
+    "sha256": "2f445dee83f0856d37b25a400899f39e6a843129a024e59888e006f534f2945a"
+  },
+  "summary": {
+    "checks": 20,
+    "blockers": 0,
+    "cases": 217,
+    "failed_cases": 0,
+    "exact_install_update_ready": true,
+    "production_ready_claim": false
+  }
+}

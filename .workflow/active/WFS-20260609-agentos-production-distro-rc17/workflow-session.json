@@ -1,9 +1,9 @@
 {
   "workflow_id": "WFS-20260609-agentos-production-distro-rc17",
   "name": "Production Distro RC17",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-06-10T01:00:00+08:00",
-  "updated_at": "2026-06-10T04:05:00+08:00",
+  "updated_at": "2026-06-10T04:30:00+08:00",
   "source": "RC16 final audit; maestro-managed RC17 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
   "goal": "Plan and execute AIOS-body exact install/update execute-or-deny readiness without giving authority to mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, production rings, TUI projections, shell output, or model replay.",
@@ -87,15 +87,22 @@
       "completed_at": "2026-06-10T04:05:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-040-local-release-channel-install-update-consumer-smoke.json",
       "commit": null
+    },
+    {
+      "task": "RC17-050",
+      "completed_at": "2026-06-10T04:30:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-050-final-closeout-audit.json",
+      "commit": null
     }
   ],
-  "next_task": "RC17-050",
+  "next_task": "RC18-planning",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/final-rc16-closeout-summary.md",
     ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execute-or-deny-plan.md",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md"
   ],
   "artifacts": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
@@ -162,6 +169,11 @@
     "scripts/run-rc17-local-release-channel-install-update-consumer-smoke.ps1",
     ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json",
     ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/consumer-smoke-evidence.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-040-local-release-channel-install-update-consumer-smoke.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-040-local-release-channel-install-update-consumer-smoke.json",
+    "scripts/run-rc17-final-closeout-audit.ps1",
+    ".workflow/artifacts/rc17-final-closeout-audit/result.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-050-final-closeout-audit.json"
   ]
 }
