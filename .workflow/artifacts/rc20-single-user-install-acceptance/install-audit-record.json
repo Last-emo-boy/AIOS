@@ -1,0 +1,64 @@
+{
+  "schema": "agentos.rc20-single-user-install-audit-record.v1",
+  "generated_at": "2026-06-10T15:05:00+08:00",
+  "task": "RC20-021",
+  "status": "install-acceptance-audit-bound",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "audit_record_id": "sha256:cc89cc070448cea398610d3256c031ab923278c8db180b13571a56e762de8b2f",
+  "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84",
+  "audit_record_material": {
+    "schema": "agentos.rc20-single-user-install-acceptance-audit-material.v1",
+    "task": "RC20-021",
+    "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "selected_version": "rc20-single-user-stable-local-projection",
+    "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "acceptance_check_count": 5
+  },
+  "events": [
+    {
+      "id": "version-selection-bound",
+      "source": ".workflow/artifacts/rc20-installer-catalog-selection/version-selection-preflight.json",
+      "selected_channel": "stable",
+      "selected_version": "rc20-single-user-stable-local-projection"
+    },
+    {
+      "id": "disposable-boundary-verified",
+      "source": ".workflow/artifacts/rc19-first-user-install-target-boundary/first-user-install-target-boundary.json",
+      "target_kind": "disposable-first-user-install-target",
+      "target_root": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target"
+    },
+    {
+      "id": "first-user-install-evidence-bound",
+      "source": ".workflow/artifacts/rc19-first-user-install-drill/first-user-install-evidence.json",
+      "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+    },
+    {
+      "id": "acceptance-checks-recorded",
+      "checks": 5,
+      "failed_checks": 0
+    }
+  ],
+  "side_effects": {
+    "acceptance_evidence_bound": true,
+    "audit_record_bound": true,
+    "disposable_target_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_payload_downloaded": false,
+    "object_storage_provisioned": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "signer_authority_granted": false,
+    "cryptographic_signing_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false
+  }
+}

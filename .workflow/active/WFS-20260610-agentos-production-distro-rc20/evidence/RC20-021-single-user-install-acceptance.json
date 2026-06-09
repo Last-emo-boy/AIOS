@@ -1,0 +1,171 @@
+{
+  "schema": "agentos.rc20-single-user-install-acceptance-task-evidence.v1",
+  "generated_at": "2026-06-10T15:05:00+08:00",
+  "task": "RC20-021",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "script": {
+    "path": "scripts/run-rc20-single-user-install-acceptance.ps1",
+    "sha256": "5d888cf21f0a5c6ccb2a3683f1de3883c85b61cc850fad1e91fa78873bc4c4e5"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    "status": "passed",
+    "sha256": "be6f35ddae17cfbd39cf97231057dab581a94ae56526238e8b07c3e230590bf9"
+  },
+  "outputs": {
+    "install_acceptance_evidence": {
+      "path": ".workflow/artifacts/rc20-single-user-install-acceptance/install-acceptance-evidence.json",
+      "sha256": "13f792e9c50fe77c85f8b8585cbbf7fd32550bef1a8bead1293fb2cb1a9debee",
+      "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84"
+    },
+    "install_audit_record": {
+      "path": ".workflow/artifacts/rc20-single-user-install-acceptance/install-audit-record.json",
+      "sha256": "58732546e77c519416522bf29718a2ae112b35801b88e1abd13591c230040b8a",
+      "audit_record_id": "sha256:cc89cc070448cea398610d3256c031ab923278c8db180b13571a56e762de8b2f"
+    }
+  },
+  "acceptance_surface": {
+    "state": "single-user-install-acceptance-bound-inside-disposable-target",
+    "selected_version_bound": true,
+    "release_bundle_bound": true,
+    "disposable_target_boundary_bound": true,
+    "first_user_install_drill_bound": true,
+    "identity_matches": true,
+    "first_user_install_performed_inside_disposable_target": true,
+    "disposable_target_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "disposable_target_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_payload_downloaded": false,
+    "object_storage_provisioned": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "signer_authority": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc20_021_complete": true,
+    "next_task": "RC20-022",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc20_021",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-021 must run after RC20-020 completed, with current_task set to RC20-021.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-021",
+        "rc20_020_status": "completed",
+        "rc20_021_status": "pending"
+      }
+    },
+    {
+      "id": "contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-021 must consume the RC20 authority contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+        "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db"
+      }
+    },
+    {
+      "id": "installer_selection.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install acceptance must bind selected RC20 version from installer catalog preflight.",
+      "evidence": {
+        "selection_status": "passed",
+        "selected_channel": "stable",
+        "selected_version": "rc20-single-user-stable-local-projection",
+        "host_install_authorized": false
+      }
+    },
+    {
+      "id": "target_boundary.disposable_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install acceptance must be constrained to the disposable first-user install target boundary.",
+      "evidence": {
+        "boundary_status": "passed",
+        "only_writable_surface": "disposable-first-user-install-target",
+        "host_write_surface_allowed": false
+      }
+    },
+    {
+      "id": "install_drill.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install acceptance must bind first-user install drill evidence and deny host/production side effects.",
+      "evidence": {
+        "install_status": "passed",
+        "first_user_install_performed": true,
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "host_rootfs_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "identity.matches",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Selected version, release bundle, installer media, boot descriptor, and target state identities must match.",
+      "evidence": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "selected_release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "bundle_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "acceptance.audit_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Acceptance evidence must bind the audit record bytes and id.",
+      "evidence": {
+        "audit_record_id": "sha256:cc89cc070448cea398610d3256c031ab923278c8db180b13571a56e762de8b2f",
+        "audit_record_sha256": "58732546e77c519416522bf29718a2ae112b35801b88e1abd13591c230040b8a"
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install acceptance must deny missing sources, identity mismatch, non-disposable target, host mutation, remote effects, support/recovery execution, remote dispatch, signer authority, and GA claims.",
+      "evidence": {
+        "cases": 20,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-021 outputs must not contain key blocks, private authority paths, auth tokens, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
