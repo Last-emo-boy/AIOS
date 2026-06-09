@@ -1,0 +1,227 @@
+{
+    "schema":  "agentos.rc21-explain-resume-audit-package.v1",
+    "generated_at":  "2026-06-10T19:45:00+08:00",
+    "task":  "RC21-022",
+    "status":  "explain-resume-audit-package-bound-projection-only",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "explain_resume_audit_package_id":  "sha256:d895cdc5694b15150614b93c2233fcae1860e6b413b1afa26308d0f2c2912e97",
+    "dry_run_execution_plan_id":  "sha256:bfee4fff643fb61dafbce0922430e988a4ec58697cc8ac3ab627b80208577455",
+    "dry_run_acceptance_id":  "sha256:09770367573122ab5390a1d9e6fff1feb37a3099485fa9f036ab955f63d5bae8",
+    "dry_run_audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+    "redacted":  true,
+    "local_only":  true,
+    "decision_explanations":  [
+                                  {
+                                      "operation":  "install",
+                                      "decision":  "dry-run-accepted-no-effect",
+                                      "user_visible_summary":  "install is accepted for dry-run only from bound transaction, snapshot, and audit evidence.",
+                                      "evidence_chain":  [
+                                                             "rc21-dry-run-execution-plan",
+                                                             "rc21-transactional-dry-run-acceptance",
+                                                             "rc21-dry-run-audit-record"
+                                                         ],
+                                      "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                                      "resume_checkpoint_id":  "rc21-011-resume-install-5941f22e2fbc02e5",
+                                      "audit_sink_id":  "rc21-011-audit-install-5941f22e2fbc02e5",
+                                      "audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+                                      "denial_reason":  "Lifecycle effect execution remains a later gate.",
+                                      "effect_preparation_performed":  false,
+                                      "lifecycle_effect_performed":  false
+                                  },
+                                  {
+                                      "operation":  "update",
+                                      "decision":  "dry-run-accepted-no-effect",
+                                      "user_visible_summary":  "update is accepted for dry-run only from bound transaction, snapshot, and audit evidence.",
+                                      "evidence_chain":  [
+                                                             "rc21-dry-run-execution-plan",
+                                                             "rc21-transactional-dry-run-acceptance",
+                                                             "rc21-dry-run-audit-record"
+                                                         ],
+                                      "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                                      "resume_checkpoint_id":  "rc21-011-resume-update-14733e6575519569",
+                                      "audit_sink_id":  "rc21-011-audit-update-14733e6575519569",
+                                      "audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+                                      "denial_reason":  "Lifecycle effect execution remains a later gate.",
+                                      "effect_preparation_performed":  false,
+                                      "lifecycle_effect_performed":  false
+                                  },
+                                  {
+                                      "operation":  "repair-reinstall",
+                                      "decision":  "deferred-after-dry-run-plan",
+                                      "user_visible_summary":  "repair-reinstall remains planned but deferred until its drill gate.",
+                                      "evidence_chain":  [
+                                                             "rc21-dry-run-execution-plan"
+                                                         ],
+                                      "transaction_id":  "sha256:1beb6554cbd5296ae8aa4530a8774f098dd4577f3e3350481a07a463ce9dbcc1",
+                                      "resume_checkpoint_id":  "rc21-011-resume-repair-reinstall-1beb6554cbd5296a",
+                                      "audit_sink_id":  "rc21-011-audit-repair-reinstall-1beb6554cbd5296a",
+                                      "audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+                                      "denial_reason":  "RC21-021 only accepted install/update dry-run; repair/reinstall is later.",
+                                      "effect_preparation_performed":  false,
+                                      "lifecycle_effect_performed":  false
+                                  }
+                              ],
+    "resume_projections":  [
+                               {
+                                   "operation":  "install",
+                                   "checkpoint_id":  "rc21-011-resume-install-5941f22e2fbc02e5",
+                                   "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                                   "projection_only":  true,
+                                   "resume_executable":  false,
+                                   "host_effect_authority":  false,
+                                   "endpoint_authority":  false,
+                                   "shell_output_authority":  false,
+                                   "tui_authority":  false,
+                                   "model_replay_authority":  false,
+                                   "next_gate_required":  "RC21-030/RC21-031 drill gates before effects"
+                               },
+                               {
+                                   "operation":  "update",
+                                   "checkpoint_id":  "rc21-011-resume-update-14733e6575519569",
+                                   "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                                   "projection_only":  true,
+                                   "resume_executable":  false,
+                                   "host_effect_authority":  false,
+                                   "endpoint_authority":  false,
+                                   "shell_output_authority":  false,
+                                   "tui_authority":  false,
+                                   "model_replay_authority":  false,
+                                   "next_gate_required":  "RC21-030/RC21-031 drill gates before effects"
+                               },
+                               {
+                                   "operation":  "repair-reinstall",
+                                   "checkpoint_id":  "rc21-011-resume-repair-reinstall-1beb6554cbd5296a",
+                                   "transaction_id":  "sha256:1beb6554cbd5296ae8aa4530a8774f098dd4577f3e3350481a07a463ce9dbcc1",
+                                   "projection_only":  true,
+                                   "resume_executable":  false,
+                                   "host_effect_authority":  false,
+                                   "endpoint_authority":  false,
+                                   "shell_output_authority":  false,
+                                   "tui_authority":  false,
+                                   "model_replay_authority":  false,
+                                   "next_gate_required":  "RC21-030 repair/reinstall drill"
+                               }
+                           ],
+    "audit_chain":  {
+                        "local_only":  true,
+                        "redacted":  true,
+                        "audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+                        "journal_sink_files_written":  false,
+                        "entries":  [
+                                        {
+                                            "operation":  "install",
+                                            "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                                            "audit_sink_id":  "rc21-011-audit-install-5941f22e2fbc02e5",
+                                            "decision":  "accepted-for-dry-run-only",
+                                            "effect_preparation_performed":  false,
+                                            "lifecycle_effect_performed":  false
+                                        },
+                                        {
+                                            "operation":  "update",
+                                            "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                                            "audit_sink_id":  "rc21-011-audit-update-14733e6575519569",
+                                            "decision":  "accepted-for-dry-run-only",
+                                            "effect_preparation_performed":  false,
+                                            "lifecycle_effect_performed":  false
+                                        }
+                                    ]
+                    },
+    "authority":  {
+                      "package_authority":  true,
+                      "resume_execution_authority":  false,
+                      "endpoint_authority":  false,
+                      "shell_output_authority":  false,
+                      "tui_authority":  false,
+                      "model_replay_authority":  false,
+                      "support_upload_authority":  false,
+                      "recovery_execution_authority":  false,
+                      "remote_dispatch_authority":  false,
+                      "host_rootfs_mutation_authority":  false,
+                      "active_artifact_set_mutation_authority":  false,
+                      "production_ring_mutation_authority":  false,
+                      "signer_authority":  false,
+                      "object_storage_authority":  false
+                  },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "02993e54be529d439f2c890543aaac1f06f0c55fd3b9cf51f02a584177d4769b",
+                                     "size_bytes":  8631,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_dry_run_plan_result":  {
+                                                    "role":  "rc21 dry-run plan result",
+                                                    "path":  ".workflow/artifacts/rc21-dry-run-execution-plan/result.json",
+                                                    "sha256":  "405cc230aae4c68e61320d4b2cc2d9efb3bdf001efd9ec6034bab345daf68091",
+                                                    "size_bytes":  27553,
+                                                    "present":  true,
+                                                    "schema":  "agentos.rc21-dry-run-execution-plan-result.v1",
+                                                    "status":  "passed",
+                                                    "task":  "RC21-020",
+                                                    "production_ready_claim":  false,
+                                                    "consumer_ready_claim":  false
+                                                },
+                   "rc21_dry_run_plan":  {
+                                             "role":  "rc21 dry-run plan",
+                                             "path":  ".workflow/artifacts/rc21-dry-run-execution-plan/dry-run-execution-plan.json",
+                                             "sha256":  "05531d35b8940f5f36e6343d73535103dca209195ae1ae7fc0a038b1e3e8956d",
+                                             "size_bytes":  41822,
+                                             "present":  true,
+                                             "schema":  "agentos.rc21-dry-run-execution-plan.v1",
+                                             "status":  "dry-run-execution-plan-bound-non-executable",
+                                             "task":  "RC21-020",
+                                             "production_ready_claim":  false,
+                                             "consumer_ready_claim":  false
+                                         },
+                   "rc21_dry_run_acceptance_result":  {
+                                                          "role":  "rc21 dry-run acceptance result",
+                                                          "path":  ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+                                                          "sha256":  "4e66dd67a3bbfb3484629ef3c82e6f96c5ba66046e3db4b3851b8b1d10931c96",
+                                                          "size_bytes":  22451,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-transactional-dry-run-acceptance-result.v1",
+                                                          "status":  "passed",
+                                                          "task":  "RC21-021",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc21_dry_run_acceptance_evidence":  {
+                                                            "role":  "rc21 dry-run acceptance evidence",
+                                                            "path":  ".workflow/artifacts/rc21-transactional-dry-run-acceptance/dry-run-acceptance-evidence.json",
+                                                            "sha256":  "99a6c78592cdafa640d0de76d1710f84833e8dabae2ce2e0cf66ee44cb723fe5",
+                                                            "size_bytes":  22669,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-transactional-dry-run-acceptance-evidence.v1",
+                                                            "status":  "transactional-dry-run-accepted-no-effect",
+                                                            "task":  "RC21-021",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_dry_run_audit_record":  {
+                                                     "role":  "rc21 dry-run audit record",
+                                                     "path":  ".workflow/artifacts/rc21-transactional-dry-run-acceptance/dry-run-audit-record.json",
+                                                     "sha256":  "29d5b4bd9f1e87c88908827374e6626d9a1938d7ee014e3ade5130a09a6b93c5",
+                                                     "size_bytes":  9762,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc21-dry-run-audit-record.v1",
+                                                     "status":  "dry-run-audit-record-local-only",
+                                                     "task":  "RC21-021",
+                                                     "production_ready_claim":  false,
+                                                     "consumer_ready_claim":  false
+                                                 }
+               }
+}

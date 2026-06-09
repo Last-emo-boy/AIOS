@@ -1,0 +1,225 @@
+{
+    "schema":  "agentos.rc21-explain-resume-audit-package-task-evidence.v1",
+    "generated_at":  "2026-06-10T19:45:00+08:00",
+    "task":  "RC21-022",
+    "status":  "completed",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "workflow":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21",
+    "script":  {
+                   "path":  "scripts/project-rc21-explain-resume-audit-package.ps1",
+                   "sha256":  "aacc382c4aa08e0315beea5555398bc09e16955f09df112ab0c36034fff088ba"
+               },
+    "result":  {
+                   "path":  ".workflow/artifacts/rc21-explain-resume-audit-package/result.json",
+                   "status":  "passed",
+                   "sha256":  "0b5203ecc8d6e99a63d3c719b692a905001d54cd8a4aaf5dd0c42084509bf76d"
+               },
+    "outputs":  {
+                    "explain_resume_audit_package":  {
+                                                         "path":  ".workflow/artifacts/rc21-explain-resume-audit-package/explain-resume-audit-package.json",
+                                                         "sha256":  "2effc6d3c3b6b08536c9640655c197e340b233da19a168d911e172b0274f97ec",
+                                                         "explain_resume_audit_package_id":  "sha256:d895cdc5694b15150614b93c2233fcae1860e6b413b1afa26308d0f2c2912e97",
+                                                         "decision_count":  3,
+                                                         "resume_projection_count":  3
+                                                     }
+                },
+    "explain_resume_audit_surface":  {
+                                         "state":  "explain-resume-audit-package-bound-projection-only",
+                                         "package_bound":  true,
+                                         "local_only":  true,
+                                         "redacted":  true,
+                                         "decision_count":  3,
+                                         "resume_projection_count":  3,
+                                         "resume_executable":  false,
+                                         "endpoint_authority":  false,
+                                         "shell_output_authority":  false,
+                                         "tui_authority":  false,
+                                         "model_replay_authority":  false,
+                                         "support_upload_allowed":  false,
+                                         "recovery_execution_allowed":  false,
+                                         "host_rootfs_mutation_allowed":  false,
+                                         "production_ring_mutation_allowed":  false
+                                     },
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "consumer_ready_claim":  false,
+                       "explain_resume_audit_package_written":  true,
+                       "package_redacted":  true,
+                       "resume_executable":  false,
+                       "endpoint_authority":  false,
+                       "shell_output_authority":  false,
+                       "tui_authority":  false,
+                       "model_replay_authority":  false,
+                       "effect_preparation_performed":  false,
+                       "install_performed":  false,
+                       "update_performed":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "host_rootfs_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "signer_authority":  false,
+                       "object_storage_authority":  false,
+                       "private_signing_material_handled":  false
+                   },
+    "completion":  {
+                       "rc21_022_complete":  true,
+                       "next_task":  "RC21-030",
+                       "commit_required":  true
+                   },
+    "checks":  [
+                   {
+                       "id":  "plan.current_task.rc21_022",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-022 must run after RC21-021 completed, with current_task set to RC21-022 or during an idempotent rerun.",
+                       "evidence":  {
+                                        "status":  "active",
+                                        "current_task":  "RC21-030",
+                                        "rc21_021_status":  "completed",
+                                        "rc21_022_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "contract.explain_resume_audit.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-022 must consume the explain/resume/audit and non-authority contract language.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                        "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf"
+                                    }
+                   },
+                   {
+                       "id":  "dry_run.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Explain/resume/audit package must bind completed dry-run execution plan evidence.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "operations":  3,
+                                        "executable":  false
+                                    }
+                   },
+                   {
+                       "id":  "acceptance.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Explain/resume/audit package must bind completed dry-run acceptance evidence.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "accepted_operations":  2,
+                                        "effect_preparation":  false
+                                    }
+                   },
+                   {
+                       "id":  "audit.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Explain/resume/audit package must bind local dry-run audit records.",
+                       "evidence":  {
+                                        "audit_status":  "dry-run-audit-record-local-only",
+                                        "entries":  2,
+                                        "journal_sink_files_written":  false
+                                    }
+                   },
+                   {
+                       "id":  "explanations.user_visible",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Package must explain each local lifecycle decision from bound evidence, transaction journal, dry-run plan, and audit record.",
+                       "evidence":  [
+                                        {
+                                            "operation":  "install",
+                                            "decision":  "dry-run-accepted-no-effect",
+                                            "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                                            "checkpoint_id":  "rc21-011-resume-install-5941f22e2fbc02e5"
+                                        },
+                                        {
+                                            "operation":  "update",
+                                            "decision":  "dry-run-accepted-no-effect",
+                                            "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                                            "checkpoint_id":  "rc21-011-resume-update-14733e6575519569"
+                                        },
+                                        {
+                                            "operation":  "repair-reinstall",
+                                            "decision":  "deferred-after-dry-run-plan",
+                                            "transaction_id":  "sha256:1beb6554cbd5296ae8aa4530a8774f098dd4577f3e3350481a07a463ce9dbcc1",
+                                            "checkpoint_id":  "rc21-011-resume-repair-reinstall-1beb6554cbd5296a"
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "resume.projection_only",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Resume checkpoints must be projection-only and cannot execute host effects or claim endpoint, shell, TUI, or model authority.",
+                       "evidence":  [
+                                        {
+                                            "operation":  "install",
+                                            "projection_only":  true,
+                                            "resume_executable":  false,
+                                            "endpoint_authority":  false,
+                                            "tui_authority":  false
+                                        },
+                                        {
+                                            "operation":  "update",
+                                            "projection_only":  true,
+                                            "resume_executable":  false,
+                                            "endpoint_authority":  false,
+                                            "tui_authority":  false
+                                        },
+                                        {
+                                            "operation":  "repair-reinstall",
+                                            "projection_only":  true,
+                                            "resume_executable":  false,
+                                            "endpoint_authority":  false,
+                                            "tui_authority":  false
+                                        }
+                                    ]
+                   },
+                   {
+                       "id":  "audit.local_redacted",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Audit chain must remain local-only, redacted, and non-executing.",
+                       "evidence":  {
+                                        "audit_record_id":  "sha256:88d7471cf818af599649320930d1b9121501712e0203f9ece825b433f5cb620f",
+                                        "entries":  2,
+                                        "journal_sink_files_written":  false
+                                    }
+                   },
+                   {
+                       "id":  "authority.no_broadening",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Package must not grant resume execution, endpoint, shell, TUI, model, support upload, recovery execution, remote dispatch, host, production, signer, object storage, or GA authority.",
+                       "evidence":  {
+                                        "package_authority":  true,
+                                        "resume_execution_authority":  false,
+                                        "endpoint_authority":  false,
+                                        "shell_output_authority":  false,
+                                        "tui_authority":  false,
+                                        "model_replay_authority":  false,
+                                        "support_upload_authority":  false,
+                                        "recovery_execution_authority":  false,
+                                        "remote_dispatch_authority":  false,
+                                        "host_rootfs_mutation_authority":  false,
+                                        "active_artifact_set_mutation_authority":  false,
+                                        "production_ring_mutation_authority":  false,
+                                        "signer_authority":  false,
+                                        "object_storage_authority":  false
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Package must be redacted and contain no private material, tokens, raw secrets, support upload payloads, or recovery execution authority.",
+                       "evidence":  null
+                   }
+               ]
+}
