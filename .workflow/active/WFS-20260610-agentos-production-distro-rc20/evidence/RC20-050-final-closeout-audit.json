@@ -1,0 +1,359 @@
+{
+  "schema": "agentos.rc20-final-closeout-task-evidence.v1",
+  "generated_at": "2026-06-10T17:05:00+08:00",
+  "task": "RC20-050",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": true,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "script": {
+    "path": "scripts/run-rc20-final-closeout-audit.ps1",
+    "sha256": "8bec9820472b1ccf048473f8c6ed8030c7d38fa76f0d136c64627e6870f0307e"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc20-final-closeout-audit/result.json",
+    "status": "passed",
+    "sha256": "2121eab36c052d885203118b1deb8d98747e33ae99e1872fb12704aff5a9f0c6"
+  },
+  "final_audit": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json",
+    "sha256": "68446224923b92779f460dae0c707ea1f2244d0fc543ab36fd609e0fd67a6992"
+  },
+  "closeout_summary": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/final-rc20-closeout-summary.md",
+    "sha256": "de92eff9e84daf8d838a9f169e306db52057e60ae852c8b88d2c2d29ef71a48d"
+  },
+  "checks": [
+    {
+      "id": "plan.pointer.rc20_050",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 final audit must run at RC20-050 or as an idempotent completed closeout rerun.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-050",
+        "rc20_050_status": "pending"
+      }
+    },
+    {
+      "id": "tasks.previous.completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC20 pre-closeout tasks must be completed.",
+      "evidence": [
+        {
+          "task": "RC20-000",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-001",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-010",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-011",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-012",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-020",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-021",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-022",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-030",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-031",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-032",
+          "status": "completed"
+        },
+        {
+          "task": "RC20-040",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "results.all_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC20 scoped result artifacts must have passed status.",
+      "evidence": [
+        {
+          "task": "RC20-010",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json"
+        },
+        {
+          "task": "RC20-011",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-local-channel-promotion/result.json"
+        },
+        {
+          "task": "RC20-012",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-release-bundle-channel-fail-closed/result.json"
+        },
+        {
+          "task": "RC20-020",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-installer-catalog-selection/result.json"
+        },
+        {
+          "task": "RC20-021",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-single-user-install-acceptance/result.json"
+        },
+        {
+          "task": "RC20-022",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/result.json"
+        },
+        {
+          "task": "RC20-030",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-post-install-update-drill/result.json"
+        },
+        {
+          "task": "RC20-031",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-post-update-rollback-drill/result.json"
+        },
+        {
+          "task": "RC20-032",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json"
+        },
+        {
+          "task": "RC20-040",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/result.json"
+        }
+      ]
+    },
+    {
+      "id": "results.no_failed_checks_or_cases",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 scoped results must have zero failed checks and zero failed fail-closed cases.",
+      "evidence": {
+        "failed_checks": 0,
+        "cases": 245,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "results.production_ready_false",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Every RC20 result must keep production_ready_claim=false.",
+      "evidence": [
+        {
+          "task": "RC20-010",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-011",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-012",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-020",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-021",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-022",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-030",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-031",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-032",
+          "production_ready_claim": false
+        },
+        {
+          "task": "RC20-040",
+          "production_ready_claim": false
+        }
+      ]
+    },
+    {
+      "id": "gate.release_bundle",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 release bundle identity and target chain must be bound.",
+      "evidence": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "gate.local_channel",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 local channel promotion must be bound without external mirror or production mutation.",
+      "evidence": {
+        "candidate": "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+        "stable": "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+        "external_mirror_publication_performed": false
+      }
+    },
+    {
+      "id": "gate.fail_closed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 release bundle and channel fail-closed fixtures must pass with local non-GA boundaries.",
+      "evidence": {
+        "cases": 40,
+        "failed_cases": 0,
+        "local_non_ga_boundaries": true
+      }
+    },
+    {
+      "id": "gate.installer_catalog",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 installer catalog and version selection preflight must be bound without host install or remote fetch authority.",
+      "evidence": {
+        "installer_catalog_id": "sha256:3f1768d9504af7da603ede661a74911234677c53215ccf7cc67eaf52f72ccc46",
+        "version_selection_preflight_id": "sha256:4eff1f3b47d2be678f030953f3c31e1f02b5961b896b6363773cf6a54a1a4995",
+        "host_install_authorized": false,
+        "remote_fetch_authorized": false
+      }
+    },
+    {
+      "id": "gate.install_first_boot",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 install acceptance and first boot posture must be bound without host, credential, support upload, recovery, or remote authority.",
+      "evidence": {
+        "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84",
+        "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53",
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "gate.update_rollback",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 update and rollback drills must be bound inside disposable installed-system evidence and avoid host/production mutation.",
+      "evidence": {
+        "update_drill_id": "sha256:5c30f08fa634d94b06e4c529c97d47a0a561b816a7030acbd7587aced6e4964e",
+        "rollback_audit_record_id": "sha256:1f3978ad53cf01c00d59ecb84483f948dba62a33bbbd51edc6a45fe787609e18",
+        "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "restored_target_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+      }
+    },
+    {
+      "id": "gate.support_recovery",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 lifecycle support/recovery must be local-only, redacted, and projection-only.",
+      "evidence": {
+        "support_bundle_id": "rc20-lifecycle-support-6f370c1ba46e584a",
+        "recovery_reference_digest": "9b3b2add1fc1e4baf38ac1cf3d4c28ecaf93f48adcdc06acf75cbdf56e19ae56",
+        "support_upload_performed": false,
+        "recovery_execution_performed": false
+      }
+    },
+    {
+      "id": "gate.consumer_smoke",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 consumer smoke must report local single-user readiness without new effects and without production readiness.",
+      "evidence": {
+        "decision": "single-user-distribution-local-consumer-ready",
+        "consumer_ready_claim": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "invariants.forbidden_authority_clean",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Forbidden authority invariants must remain false across RC20 results.",
+      "evidence": null
+    },
+    {
+      "id": "milestone.single_user_distribution_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 must close only if every scoped single-user distribution gate is proved.",
+      "evidence": {
+        "release": true,
+        "channel": true,
+        "fail_closed": true,
+        "installer": true,
+        "install": true,
+        "first_boot": true,
+        "update": true,
+        "rollback": true,
+        "support": true,
+        "consumer": true
+      }
+    },
+    {
+      "id": "rc20.final_audit.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 final audit evidence must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json",
+        "present": true
+      }
+    },
+    {
+      "id": "rc20.closeout_summary.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 closeout summary must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/final-rc20-closeout-summary.md",
+        "sha256": "de92eff9e84daf8d838a9f169e306db52057e60ae852c8b88d2c2d29ef71a48d"
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 final audit outputs must not contain key blocks, auth tokens, private paths, signer internals, raw passwords, raw secrets, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "completion": {
+    "rc20_050_complete": true,
+    "next_task": "RC21-planning",
+    "commit_required": true
+  }
+}

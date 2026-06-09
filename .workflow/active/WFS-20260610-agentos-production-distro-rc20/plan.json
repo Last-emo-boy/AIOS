@@ -2,7 +2,7 @@
   "schema": "agentos.workflow-plan.v1",
   "workflow_id": "WFS-20260610-agentos-production-distro-rc20",
   "milestone": "Production Distro RC20",
-  "status": "active",
+  "status": "completed",
   "objective": "Move RC19 non-GA installable image local consumer readiness into a single-user AIOS distribution candidate with a canonical release bundle, local candidate-to-stable channel promotion evidence, installer selection and acceptance drills, post-install update and rollback execution drills, and local support/recovery closure, without mutating the host, production rings, mirror infrastructure, signer infrastructure, object storage, remote dispatch, support upload, recovery services, private signing material, or GA authority.",
   "scope": {
     "included": [
@@ -141,14 +141,14 @@
         },
         {
           "id": "RC20-050",
-          "status": "pending",
+          "status": "completed",
           "title": "run Production Distro RC20 final closeout audit",
           "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json"
         }
       ]
     }
   ],
-  "current_task": "RC20-050",
+  "current_task": null,
   "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
   "acceptance_gates": {
     "aios_body_only": true,
