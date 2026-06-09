@@ -1,0 +1,208 @@
+{
+  "schema": "agentos.rc19-image-artifact-reproducibility-fail-closed-evidence.v1",
+  "generated_at": "2026-06-10T10:05:00+08:00",
+  "task": "RC19-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "script": {
+    "path": "scripts/verify-rc19-image-artifact-reproducibility-fail-closed.ps1",
+    "sha256": "050273ced36eddb43067b5277c5a22cb232eef1f8cb3209f7d843ea673851b31"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/result.json",
+    "status": "passed",
+    "sha256": "a7adb4f16e2271fb7816ee91a5c3afda8c1a913e705f0debc813d501734c8a3e"
+  },
+  "outputs": {
+    "reproducibility_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/reproducibility-fail-closed-matrix.json",
+      "sha256": "d3a801459f80a6c52c5106209c1cbfb669516b1f50946e71b28d14e94ae6046e"
+    }
+  },
+  "fail_closed_surface": {
+    "state": "image-artifact-reproducibility-fail-closed-fixtures-passed-install-still-gated",
+    "cases": 41,
+    "failed_cases": 0,
+    "denied_before_install": true,
+    "denied_before_host_mutation": true,
+    "denied_before_publication": true,
+    "denied_before_signing": true,
+    "denied_before_support_upload": true,
+    "denied_before_recovery_execution": true,
+    "denied_before_remote_dispatch": true,
+    "local_only_fixture_execution": true,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "object_storage_provisioned": false,
+    "cryptographic_signing_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_fixture_execution": true,
+    "projection_only": true,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "external_mirror_changed": false,
+    "object_storage_provisioned": false,
+    "object_storage_authority": false,
+    "cryptographic_signing_performed": false,
+    "private_signing_material_handled": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "signer_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc19_012_complete": true,
+    "next_task": "RC19-020",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_012",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-012 must run after RC19-010 and RC19-011 completed, while current_task is RC19-012 or during a completed rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-020",
+        "rc19_010_status": "completed",
+        "rc19_011_status": "completed",
+        "rc19_012_status": "completed"
+      }
+    },
+    {
+      "id": "contract.fail_closed_scope.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-012 must consume the installable image authority contract fail-closed scope.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+        "sha256": "375f8fde6a2725c9d20832edb9ffa9d25f64ba9ddb9879d8b72749b7fa57c7a3",
+        "size_bytes": 6285,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "task": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "sources.required.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC19-012 required source artifacts must be present and hashable.",
+      "evidence": []
+    },
+    {
+      "id": "source.artifact.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-012 must bind the completed RC19 installable image artifact result, artifact set, and input map with current output hashes.",
+      "evidence": {
+        "result_status": "passed",
+        "artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "artifact_set_sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+        "input_map_sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9"
+      }
+    },
+    {
+      "id": "source.media.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-012 must bind the completed installer media manifest and boot target descriptor with current output hashes.",
+      "evidence": {
+        "media_status": "passed",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+        "media_manifest_sha256": "2d706fdc6d7f6fc002ea757e9cfb869c516ed354d83fd8a8a4f3627dbff7bf43",
+        "boot_target_descriptor_sha256": "1c103af6d3ef592a659f7c4442261235dad3dbc06399e7dd1202af86e1c9f046"
+      }
+    },
+    {
+      "id": "baseline.fixture.valid_non_authoritative",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "The unmodified RC19 image artifact reproducibility fixture must be internally valid and non-authoritative.",
+      "evidence": {
+        "observed_state": "artifact-reproducibility-valid-non-authoritative",
+        "reasons": []
+      }
+    },
+    {
+      "id": "baseline.install_effects.gated",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Baseline installer media and boot target descriptor must remain projection-only and gated until RC19-021.",
+      "evidence": {
+        "boot_projection_only": true,
+        "install_allowed": false,
+        "first_user_install_allowed": false,
+        "install_effects_gated_until": "RC19-021"
+      }
+    },
+    {
+      "id": "fixtures.coverage",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-012 negative fixtures must cover missing, stale, mismatched, broad, replayed, remote, host-mutating, support upload, recovery execution, signing, publication, and authority-broadening cases.",
+      "evidence": {
+        "cases": 41,
+        "required_minimum": 35
+      }
+    },
+    {
+      "id": "fixtures.all_cases_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC19 image artifact reproducibility negative fixtures must deny before install, host mutation, publication, signing, support upload, recovery execution, or remote dispatch.",
+      "evidence": {
+        "cases": 41,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "fixtures.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fixture execution must be local-only and create no install, host, publication, signing, support, recovery, remote dispatch, production, mirror/frontend, object storage, or network side effects.",
+      "evidence": {
+        "side_effect_case_ids": []
+      }
+    },
+    {
+      "id": "outputs.matrix.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-012 fail-closed matrix must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
