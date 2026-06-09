@@ -1,0 +1,1036 @@
+{
+  "schema": "agentos.rc18-installed-system-consumer-smoke-result.v1",
+  "generated_at": "2026-06-10T08:10:00+08:00",
+  "task": "RC18-040",
+  "status": "passed",
+  "production_ready_claim": false,
+  "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+  "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+  "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+  "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+  "consumer_surface": {
+    "state": "installed-system-consumer-installed-system-image-ready",
+    "local_release_channel_followed": true,
+    "install_readiness": "ready",
+    "update_readiness": "ready",
+    "rollback_readiness": "ready",
+    "support_recovery_readiness": "ready",
+    "consumer_decision": "installed-system-image-ready",
+    "audited": true,
+    "audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35",
+    "blockers": []
+  },
+  "outputs": {
+    "consumer_smoke_evidence": {
+      "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/consumer-smoke-evidence.json",
+      "sha256": "eaf3e2d58d201bd37f44d929505a78bbabf481604c8aa1945e982d17b46d2d50",
+      "audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35"
+    }
+  },
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "7b3e2d9062a61f1901a6db0beb2ce98153b9f36ddb99ceb85e36e0f68164e021",
+      "size_bytes": 7400,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc18_contract": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+      "sha256": "d452dae7e4511d8497368523ccbac3029a2cf9dd384b6b6f1431315958877ce8",
+      "size_bytes": 5721,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc18_isolated_install_result": {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+      "sha256": "70c8bb7ffe13bde1f0bc887047090d52aba145ebff28239d9d305a11b4d717b2",
+      "size_bytes": 39553,
+      "present": true,
+      "schema": "agentos.rc18-isolated-install-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_update_result": {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+      "sha256": "067513a7ebed25c2d7e3209a91a9bb5f58b79dd8de151277e56759c0159bea9e",
+      "size_bytes": 41493,
+      "present": true,
+      "schema": "agentos.rc18-isolated-update-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_rollback_result": {
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+      "sha256": "35d1ff3488d5d0b21d7dead735e23b9351e3762413cd6a183b8ac0de331f6d78",
+      "size_bytes": 40943,
+      "present": true,
+      "schema": "agentos.rc18-isolated-rollback-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_support_recovery_result": {
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/result.json",
+      "sha256": "edac34ee16df8258425363247d5274901e7fb0aa9a77c057819b43d7df96e040",
+      "size_bytes": 30578,
+      "present": true,
+      "schema": "agentos.rc18-isolated-support-recovery-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_local_release_channel_consumer_result": {
+      "path": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json",
+      "sha256": "36a6d3f123c00cce7d2656ad78971e57c7df64f25d722de77d797c731140f81a",
+      "size_bytes": 21167,
+      "present": true,
+      "schema": "agentos.rc17-local-release-channel-install-update-consumer-smoke-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_local_release_channel_consumer_evidence": {
+      "path": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/consumer-smoke-evidence.json",
+      "sha256": "12d07d803545f257fda2eeab3f6e0f79e45cffc9ac6494147d8a9e651163c702",
+      "size_bytes": 16471,
+      "present": true,
+      "schema": "agentos.rc17-local-release-channel-install-update-consumer-smoke-evidence.v1",
+      "status": "local-release-channel-consumer-exact-install-update-ready",
+      "production_ready_claim": false
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc18_040",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-040 must run after RC18-031 completed, either while current_task is RC18-040 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC18-050",
+        "rc18_031_status": "completed",
+        "rc18_040_status": "completed"
+      }
+    },
+    {
+      "id": "contract.consumer.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 contract must require installed-system consumer smoke to explain readiness or denial from RC18 evidence without new authority.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+        "sha256": "d452dae7e4511d8497368523ccbac3029a2cf9dd384b6b6f1431315958877ce8",
+        "size_bytes": 5721,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "local_release_channel.followed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Consumer smoke must follow local release channel metadata from RC17 consumer evidence.",
+      "evidence": {
+        "rc17_consumer_status": "passed",
+        "rc17_consumer_decision": "exact-install-update-ready",
+        "local_only": true
+      }
+    },
+    {
+      "id": "rc18.image_evidence.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Consumer smoke must bind RC18 isolated install, update, rollback, and support/recovery evidence.",
+      "evidence": {
+        "install_ready": true,
+        "update_ready": true,
+        "rollback_ready": true,
+        "support_ready": true
+      }
+    },
+    {
+      "id": "rc18.image_state_chain.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installed-system consumer smoke must report readiness from a coherent install/update/rollback image state chain.",
+      "evidence": {
+        "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "coherent": true
+      }
+    },
+    {
+      "id": "consumer.decision.ready_or_denial",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Consumer smoke must report installed-system install/update/rollback readiness or explicit denial from RC18 evidence.",
+      "evidence": {
+        "decision": "installed-system-image-ready",
+        "blockers": []
+      }
+    },
+    {
+      "id": "consumer.audit.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Consumer smoke must be audited and non-fabricated.",
+      "evidence": {
+        "schema": "agentos.rc18-installed-system-consumer-smoke-audit.v1",
+        "generated_at": "2026-06-10T08:10:00+08:00",
+        "task": "RC18-040",
+        "local_only": true,
+        "fabricated": false,
+        "decision": "installed-system-image-ready",
+        "decision_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35",
+        "local_release_channel_followed": true,
+        "isolated_install_bound": true,
+        "isolated_update_bound": true,
+        "isolated_rollback_bound": true,
+        "support_recovery_bound": true,
+        "production_ready_claim": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "authority.no_new_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-040 must not execute new install/update/rollback, support upload, recovery, remote dispatch, host, production, mirror/frontend, signer, shell, TUI, or model-authority effects.",
+      "evidence": {
+        "consumer_smoke_evaluated": true,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "rollback_effect_prepared": false,
+        "install_performed_by_consumer_smoke": false,
+        "update_performed_by_consumer_smoke": false,
+        "rollback_execution_performed_by_consumer_smoke": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false,
+        "endpoint_reachability_trusted": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing evidence and forbidden authority surfaces must fail closed before new effect.",
+      "evidence": {
+        "cases": 24,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-040 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "installed_system_consumer_only": true,
+    "local_release_channel_followed": true,
+    "audited": true,
+    "install_performed_by_consumer_smoke": false,
+    "update_performed_by_consumer_smoke": false,
+    "rollback_execution_performed_by_consumer_smoke": false,
+    "remote_payload_bytes_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_frontend_authority": false,
+    "signer_authority": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "shell_output_authority": false,
+    "tui_output_authority": false,
+    "model_replay_authority": false
+  },
+  "fail_closed_cases": [
+    {
+      "id": "missing-local-release-channel",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "local-release-channel-metadata-not-bound"
+      ],
+      "reason": "Consumer smoke requires local release channel metadata.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "missing-install-evidence",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-isolated-install-not-ready"
+      ],
+      "reason": "Consumer smoke requires RC18 isolated install evidence.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "missing-update-evidence",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-isolated-update-not-ready"
+      ],
+      "reason": "Consumer smoke requires RC18 isolated update evidence.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "missing-rollback-evidence",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-isolated-rollback-not-ready"
+      ],
+      "reason": "Consumer smoke requires RC18 isolated rollback evidence.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "missing-support-recovery",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-isolated-support-recovery-not-ready"
+      ],
+      "reason": "Consumer smoke requires RC18 support/recovery evidence.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "state-chain-mismatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "isolated-image-state-chain-mismatch"
+      ],
+      "reason": "Consumer smoke cannot report readiness for incoherent image states.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "new-install-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "consumer-install-effect-denied"
+      ],
+      "reason": "Consumer smoke must not perform install.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "new-update-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "consumer-update-effect-denied"
+      ],
+      "reason": "Consumer smoke must not perform update.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "new-rollback-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "consumer-rollback-effect-denied"
+      ],
+      "reason": "Consumer smoke must not perform rollback.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of RC18 scope.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is out of RC18 scope.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "remote-payload-download-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-payload-download-denied"
+      ],
+      "reason": "Remote payload download is out of RC18 consumer smoke scope.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of RC18 scope.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "host-rootfs-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs mutation is forbidden.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "host-slot-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot mutation is forbidden.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata mutation is forbidden.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is forbidden.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "mirror-frontend-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "mirror-frontend-authority-denied"
+      ],
+      "reason": "Mirror/frontend output is not authority.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "signer-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "signer-authority-denied"
+      ],
+      "reason": "Signer reachability is not authority.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "private-material-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "private-signing-material-denied"
+      ],
+      "reason": "Private signing material is forbidden.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "shell-output-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "shell-output-authority-denied"
+      ],
+      "reason": "Shell output is not authority.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "tui-output-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "tui-output-authority-denied"
+      ],
+      "reason": "TUI output is not authority.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "model-replay-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "model-replay-authority-denied"
+      ],
+      "reason": "Model replay is not authority.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    },
+    {
+      "id": "ga-claim-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "ga-claim-denied"
+      ],
+      "reason": "RC18 consumer smoke cannot claim GA production readiness.",
+      "denied_before_new_effect": true,
+      "side_effects": {
+        "install_performed": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_authority": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false
+      }
+    }
+  ],
+  "summary": {
+    "checks": 10,
+    "failed_checks": 0,
+    "cases": 24,
+    "failed_cases": 0,
+    "rc18_040_complete": true,
+    "consumer_decision": "installed-system-image-ready",
+    "install_readiness": "ready",
+    "update_readiness": "ready",
+    "rollback_readiness": "ready",
+    "support_recovery_readiness": "ready",
+    "audited": true,
+    "next_task": "RC18-050"
+  }
+}
