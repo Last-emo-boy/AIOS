@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC17-031",
   "title": "run controlled local update execute-or-deny evidence",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-3",
   "read_first": [
     ".workflow/artifacts/rc17-controlled-local-install/result.json",
@@ -39,5 +39,9 @@
       "Update execution is impossible unless exact target, exact approval, executable AgentCore PlanSpec, SecurityExecution allow, rollback preconditions, and install/update ordering evidence are bound.",
       "No remote payload download, host active slot mutation, host boot metadata mutation, production ring mutation, support upload, recovery execution, or remote dispatch occurs."
     ]
-  }
+  },
+  "completed_at": "2026-06-10T03:25:00+08:00",
+  "result": ".workflow/artifacts/rc17-controlled-local-update/result.json",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-031-controlled-local-update.json",
+  "next_task": "RC17-032"
 }

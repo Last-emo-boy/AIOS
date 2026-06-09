@@ -1,0 +1,712 @@
+{
+  "schema": "agentos.rc17-controlled-local-update-result.v1",
+  "generated_at": "2026-06-10T03:25:00+08:00",
+  "task": "RC17-031",
+  "status": "passed",
+  "production_ready_claim": false,
+  "package_id": "production-distro-rc16-repo-local-distributable-package",
+  "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+  "release_id": "production-distro-rc8-current-artifacts",
+  "update_surface": {
+    "state": "controlled-local-update-executed",
+    "prior_install_performed": true,
+    "update_allowed": true,
+    "update_effect_prepared": true,
+    "update_effect_executed": true,
+    "update_performed": true,
+    "repo_local_update_evidence_written": true,
+    "rollback_execution_performed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "production_ring_mutation_allowed": false,
+    "update_attempt_digest": "bcc87f005bd410c3a6f3b87abc5e4a7d6daa1449e40c167b405c0d09e416a84a",
+    "update_audit_record_sha256": "372c9e41ac2413ce12970b856387863d3360f1efc9f32c0c2aec414d2e085c2d",
+    "blockers": []
+  },
+  "outputs": {
+    "update_execute_or_deny_evidence": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/update-execute-or-deny-evidence.json",
+      "sha256": "e33686dcf90dee2f018a51958a5acd312b69200bce30dcb99d32fc98a6543f23",
+      "update_attempt_digest": "bcc87f005bd410c3a6f3b87abc5e4a7d6daa1449e40c167b405c0d09e416a84a"
+    },
+    "update_audit_record": {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/update-audit-record.json",
+      "sha256": "372c9e41ac2413ce12970b856387863d3360f1efc9f32c0c2aec414d2e085c2d",
+      "fabricated": false
+    }
+  },
+  "source": {
+    "rc17_plan": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
+      "sha256": "4c96efe6df057a5ca1ea471fe6b029fa1337de1545f77e6e74bbeceb9f183e05",
+      "size_bytes": 8259,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc17_contract": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+      "sha256": "7efbc7763eb494eb7feb93ca95479a3d1c9bca658cc68b5b70811532ba9f914d",
+      "size_bytes": 3432,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc17_controlled_local_install_result": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/result.json",
+      "sha256": "165cec6f706c213d96707666fd30a9f18af8ad1fe7e65c87c69b76905f1faa97",
+      "size_bytes": 25657,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-install-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_local_install_evidence": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/install-execute-or-deny-evidence.json",
+      "sha256": "6c927aa1aa619bff55cf28af97c12b6b151b493f7e7c5ee538a9d7e190eb212a",
+      "size_bytes": 9576,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-install-execute-or-deny-evidence.v1",
+      "status": "controlled-local-install-executed",
+      "production_ready_claim": false
+    },
+    "rc17_controlled_local_install_audit": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/install-audit-record.json",
+      "sha256": "ba5d4a6fd17eb6f3ed312f7cb3a960c79713fdfe91ca2ea1439c3956a23ba835",
+      "size_bytes": 1273,
+      "present": true,
+      "schema": "agentos.rc17-controlled-local-install-audit-record.v1",
+      "status": null,
+      "production_ready_claim": false
+    },
+    "rc17_security_allow_result": {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+      "sha256": "b1137094b9f40f01145d7196f64565fbe29c864ba3db14feed814ad2749d1b8d",
+      "size_bytes": 15236,
+      "present": true,
+      "schema": "agentos.rc17-security-execution-install-update-allow-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_security_allow_decision": {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/security-execution-install-update-allow-decision.json",
+      "sha256": "7accf82683b75e8a1fb7fd930efe93fb85465c4ff5c35c2ece5817145f810599",
+      "size_bytes": 7857,
+      "present": true,
+      "schema": "agentos.rc17-security-execution-install-update-allow-decision.v1",
+      "status": "security-execution-install-update-allow-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_preconditions_result": {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json",
+      "sha256": "51a13ce7b198a48cfd55fc0a6b2d86869101e5a484a369eafa52e894d1438655",
+      "size_bytes": 33107,
+      "present": true,
+      "schema": "agentos.rc17-install-update-rollback-preconditions-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_precondition_package": {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/rollback-precondition-package.json",
+      "sha256": "a4392b08aa02de22fa543ae4a66d47037376f6d5d41cfe0aa6374e0f34f36ffe",
+      "size_bytes": 11413,
+      "present": true,
+      "schema": "agentos.rc17-install-update-rollback-precondition-package.v1",
+      "status": "rollback-preconditions-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_observation_plan": {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/post-install-update-observation-plan.json",
+      "sha256": "c9c491eac4c16257a11f1fee799427b8d9cbd705ae74d1d3d26dafd821c35d57",
+      "size_bytes": 3265,
+      "present": true,
+      "schema": "agentos.rc17-post-install-update-observation-plan.v1",
+      "status": "post-install-update-observation-plan-bound-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_agentcore_planspec_result": {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+      "sha256": "af0f99bc40f32d43153f6ab23750d7d5a96b0ff261dd0b4faaf61f4bf1308969",
+      "size_bytes": 21854,
+      "present": true,
+      "schema": "agentos.rc17-agentcore-install-update-executable-planspec-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_agentcore_planspec": {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/install-update-planspec.json",
+      "sha256": "63925696bfea66223a6a1966833b9f03c360ef7fa9bb47b850536243d255086f",
+      "size_bytes": 10901,
+      "present": true,
+      "schema": "agentos.rc17-agentcore-install-update-planspec.v1",
+      "status": "agentcore-install-update-planspec-executable-effects-denied",
+      "production_ready_claim": false
+    },
+    "rc17_approval_binding_result": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+      "sha256": "20e5ba1f1bfb388b8205d01d9ca5140da86b9e34f05600837f7691f753f974ae",
+      "size_bytes": 18063,
+      "present": true,
+      "schema": "agentos.rc17-exact-install-update-approval-binding-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_target_binding_result": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+      "sha256": "dd4c958a314eaf99360d055329dbc13800222a6a72a7e067c0ea90b20af429dc",
+      "size_bytes": 21090,
+      "present": true,
+      "schema": "agentos.rc17-exact-install-update-target-binding-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc17_031",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-031 must run after RC17-030 completed, either while current_task is RC17-031 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC17-032",
+        "rc17_030_status": "completed",
+        "rc17_031_status": "completed"
+      }
+    },
+    {
+      "id": "contract.controlled_update.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 contract must require controlled local update execute-or-deny evidence and forbid host/production mutation.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+        "sha256": "7efbc7763eb494eb7feb93ca95479a3d1c9bca658cc68b5b70811532ba9f914d",
+        "size_bytes": 3432,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.required_gates.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Update execution is impossible unless install ordering evidence, exact target, exact approval, executable PlanSpec, SecurityExecution allow, rollback preconditions, and observation plan are bound.",
+      "evidence": {
+        "install_ordering_bound": true,
+        "target_bound": true,
+        "approval_bound": true,
+        "planspec_executable": true,
+        "security_allow": true,
+        "rollback_preconditions_bound": true,
+        "observation_plan_bound": true
+      }
+    },
+    {
+      "id": "update.identity.audit.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled local update must bind package/media/release/target identity and audit material.",
+      "evidence": {
+        "identity_bound": true,
+        "audit_material_bound": true,
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "release_id": "production-distro-rc8-current-artifacts"
+      }
+    },
+    {
+      "id": "update.executed_or_denied_with_audit",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled local update must either execute against the exact repo-local target or deny before effect with non-fabricated audit evidence.",
+      "evidence": {
+        "update_allowed": true,
+        "update_performed": true,
+        "audit_sha256": "372c9e41ac2413ce12970b856387863d3360f1efc9f32c0c2aec414d2e085c2d",
+        "fabricated": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-031 must not download remote payloads, mutate host slot or boot metadata, mutate production rings, upload support, execute recovery, remote-dispatch, or handle private signing material.",
+      "evidence": {
+        "prior_install_performed": true,
+        "update_effect_prepared": true,
+        "update_effect_executed": true,
+        "update_performed": true,
+        "repo_local_update_evidence_written": true,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing gates and forbidden authority surfaces must fail closed.",
+      "evidence": {
+        "cases": 17,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-031 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ],
+  "blockers": [],
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "controlled_local_update": true,
+    "prior_install_performed": true,
+    "update_performed": true,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "fail_closed_cases": [
+    {
+      "id": "missing-install-ordering",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "controlled-local-install-evidence-not-bound"
+      ],
+      "reason": "Update requires prior controlled install evidence.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-target",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "exact-install-update-target-not-bound"
+      ],
+      "reason": "Exact target is required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-approval",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "exact-install-update-approval-not-bound"
+      ],
+      "reason": "Exact approval is required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-planspec",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "agentcore-install-update-planspec-not-executable"
+      ],
+      "reason": "Executable PlanSpec is required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-security-allow",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "security-execution-install-update-allow-not-bound"
+      ],
+      "reason": "SecurityExecution allow is required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-rollback-preconditions",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-preconditions-not-bound"
+      ],
+      "reason": "Rollback preconditions are required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-observation-plan",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "post-install-update-observation-plan-not-bound"
+      ],
+      "reason": "Observation plan is required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "target-mismatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "update-target-identity-mismatch"
+      ],
+      "reason": "Target mismatch must deny.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "audit-material-missing",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "update-audit-material-not-bound"
+      ],
+      "reason": "Audit material is required.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-payload-download",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-payload-download-denied"
+      ],
+      "reason": "Remote payload download is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot mutation is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata mutation is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-ring-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-upload",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "recovery-execution",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of scope.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "fabricated-audit",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "update-audit-fabrication-denied"
+      ],
+      "reason": "Fabricated audit cannot prove update.",
+      "side_effects": {
+        "update_effect_prepared": false,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "checks": 8,
+    "failed_checks": 0,
+    "cases": 17,
+    "failed_cases": 0,
+    "rc17_031_complete": true,
+    "prior_install_performed": true,
+    "update_allowed": true,
+    "update_performed": true,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "production_ring_mutated": false,
+    "next_task": "RC17-032"
+  }
+}
