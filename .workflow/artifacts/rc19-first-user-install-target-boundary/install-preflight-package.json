@@ -1,0 +1,460 @@
+{
+  "schema": "agentos.rc19-first-user-install-preflight-package.v1",
+  "generated_at": "2026-06-10T10:25:00+08:00",
+  "task": "RC19-020",
+  "status": "first-user-install-preflight-package-bound-install-gated",
+  "production_ready_claim": false,
+  "install_preflight_package_id": "sha256:07dc8e2a6a44f7efe1e6a1fbdda7383e59f3f1eec036fd281395bc28ea24d5c0",
+  "target_boundary": {
+    "path": ".workflow/artifacts/rc19-first-user-install-target-boundary/first-user-install-target-boundary.json",
+    "sha256": "2dd36f258cc67b06b79a75b6cd8aac1fbf2316d25379c1235ba82e4e9eaa1f3c",
+    "target_boundary_id": "sha256:23e9e7ff0ed6508a6c6713ddd477fc6872395345d94610f8f9df235cc3b8f321",
+    "only_writable_surface": "disposable-first-user-install-target"
+  },
+  "installable_image_artifact": {
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "artifact_result": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+      "sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c",
+      "size_bytes": 40493,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-result.v1",
+      "status": "passed",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "artifact_set": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+      "size_bytes": 35799,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-set.v1",
+      "status": "reproducible-installable-image-artifact-set-bound-non-ga",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "reproducibility_input_map": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+      "size_bytes": 27303,
+      "present": true,
+      "schema": "agentos.rc19-reproducibility-input-map.v1",
+      "status": "reproducibility-input-map-bound",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "reproducibility_fail_closed_result": {
+      "path": ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/result.json",
+      "sha256": "a7adb4f16e2271fb7816ee91a5c3afda8c1a913e705f0debc813d501734c8a3e",
+      "size_bytes": 12050,
+      "present": true,
+      "schema": "agentos.rc19-image-artifact-reproducibility-fail-closed-result.v1",
+      "status": "passed",
+      "task": "RC19-012",
+      "production_ready_claim": false
+    }
+  },
+  "installer_media": {
+    "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+    "installer_media_result": {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+      "sha256": "0a74cd866f16388dcfec4b5396e66490dd26ab9c2383b107c85e02f52c1f8ae1",
+      "size_bytes": 23381,
+      "present": true,
+      "schema": "agentos.rc19-installer-media-manifest-result.v1",
+      "status": "passed",
+      "task": "RC19-011",
+      "production_ready_claim": false
+    },
+    "installer_media_manifest": {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/installer-media-manifest.json",
+      "sha256": "2d706fdc6d7f6fc002ea757e9cfb869c516ed354d83fd8a8a4f3627dbff7bf43",
+      "size_bytes": 12279,
+      "present": true,
+      "schema": "agentos.rc19-installer-media-manifest.v1",
+      "status": "installer-media-manifest-bound-install-gated",
+      "task": "RC19-011",
+      "production_ready_claim": false
+    },
+    "boot_target_descriptor": {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/boot-target-descriptor.json",
+      "sha256": "1c103af6d3ef592a659f7c4442261235dad3dbc06399e7dd1202af86e1c9f046",
+      "size_bytes": 3159,
+      "present": true,
+      "schema": "agentos.rc19-boot-target-descriptor.v1",
+      "status": "boot-target-descriptor-bound-projection-only",
+      "task": "RC19-011",
+      "production_ready_claim": false
+    },
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb"
+  },
+  "agentcore_reference": {
+    "agent_core_lib": {
+      "path": "crates/agent_core/src/lib.rs",
+      "sha256": "a201a54178f08c2af286cf6ea3b8ce8f7dd72ee2c20d4ccf3de55209b51f1d55",
+      "size_bytes": 842529,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc16_planspec_result": {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+      "sha256": "c5b4b07c075d7bed0a7eebc90224200e85203980063e0639bd0d11e30587023c",
+      "size_bytes": 19922,
+      "present": true,
+      "schema": "agentos.rc16-install-update-planspec-binding-result.v1",
+      "status": "passed",
+      "task": "RC16-021",
+      "production_ready_claim": false
+    },
+    "rc16_planspec_package": {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/install-update-planspec-package.json",
+      "sha256": "543b9ae7a9b10b4695c849c401a2dff30844e6d7b5663b32cc99d6f6e27b0334",
+      "size_bytes": 126775,
+      "present": true,
+      "schema": "agentos.rc16-install-update-planspec-package.v1",
+      "status": "agentcore-install-update-planspec-bound-non-executable",
+      "task": "RC16-021",
+      "production_ready_claim": false
+    },
+    "previous_planspec_core_hash": "a4221f98d16b5599a545f29295026e9211598ce27f4348f850004c0949090e2b",
+    "first_user_install_planspec_required_next": true,
+    "executable_now": false
+  },
+  "security_execution_reference": {
+    "security_execution_policy": {
+      "path": "crates/security_execution/src/policy.rs",
+      "sha256": "033f317679eec2a3adb68c9323bf1119c5717ce4b90dad8500f152c38b969ce9",
+      "size_bytes": 17597,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "security_execution_tools": {
+      "path": "crates/security_execution/src/tools.rs",
+      "sha256": "0580af910ac39717d2d26a802019d44798f9ea18c2a0676398a3a46ab4061893",
+      "size_bytes": 53671,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc16_security_execution_envelope": {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/security-execution-install-update-envelope.json",
+      "sha256": "aa9e997850608b30df132081747c4c454fb0c5c02daa5e559bbf3630590d82ab",
+      "size_bytes": 121980,
+      "present": true,
+      "schema": "agentos.rc16-security-execution-install-update-envelope.v1",
+      "status": "security-execution-install-update-denied",
+      "task": "RC16-021",
+      "production_ready_claim": false
+    },
+    "previous_effect_envelope_core_hash": "d98cf2121b2f692c1e789b68915521d7b5e062be73f927584a575ec8007f28b4",
+    "security_execution_allow_required_next": true,
+    "security_execution_allowed_now": false
+  },
+  "rollback_support": {
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked",
+      "task": null,
+      "production_ready_claim": false
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only",
+      "task": null,
+      "production_ready_claim": false
+    },
+    "rc16_rollback_support_result": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/result.json",
+      "sha256": "0ac94932712ddda54b34945b1312f3f9cac911acd7662b0d93cf39da3ed9549a",
+      "size_bytes": 59353,
+      "present": true,
+      "schema": "agentos.rc16-rollback-support-package-result.v1",
+      "status": "passed",
+      "task": "RC16-022",
+      "production_ready_claim": false
+    },
+    "rc16_rollback_support_package": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/rollback-support-package.json",
+      "sha256": "6e25d7266e76242bc331151231a95521d0b2a71d4189966d993379d92c879118",
+      "size_bytes": 55745,
+      "present": true,
+      "schema": "agentos.rc16-rollback-support-package.v1",
+      "status": "rollback-support-package-bound-effects-denied",
+      "task": "RC16-022",
+      "production_ready_claim": false
+    },
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false
+  },
+  "preflight_gate": {
+    "target_boundary_bound": true,
+    "installable_image_artifact_bound": true,
+    "installer_media_bound": true,
+    "reproducibility_fail_closed_bound": true,
+    "disposable_boundary_bound": true,
+    "agentcore_security_references_bound": true,
+    "rollback_support_references_bound": true,
+    "first_user_install_drill_required": true,
+    "install_effects_gated_until": "RC19-021",
+    "install_allowed": false,
+    "first_user_install_allowed": false,
+    "update_allowed": false,
+    "rollback_execution_allowed": false,
+    "host_rootfs_mutation_allowed": false,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false
+  },
+  "side_effects": {
+    "target_materialized": false,
+    "install_preflight_executed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "object_storage_provisioned": false,
+    "cryptographic_signing_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "source": {
+    "rc19_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+      "sha256": "ba28658e123cbb375537bb7f1f85677f580674608bcfc3ac1268c894e2fbf56e",
+      "size_bytes": 7946,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc19_contract": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+      "sha256": "375f8fde6a2725c9d20832edb9ffa9d25f64ba9ddb9879d8b72749b7fa57c7a3",
+      "size_bytes": 6285,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc19_artifact_result": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+      "sha256": "0a9f04b0b90da9030dcb16c8ba1c17937e506ff3e387f7ebdd0bc3b42c3e366c",
+      "size_bytes": 40493,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-result.v1",
+      "status": "passed",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_artifact_set": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "sha256": "57bb4c4ce543b19c8219c01630493aaf64d1fa9790dd7c6270d890dbda9b63c0",
+      "size_bytes": 35799,
+      "present": true,
+      "schema": "agentos.rc19-reproducible-installable-image-artifact-set.v1",
+      "status": "reproducible-installable-image-artifact-set-bound-non-ga",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_reproducibility_input_map": {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "sha256": "2d5d7c50a3eee3c9d2861293edc9b39bb055dcec9506e351f71cfdb1f71b4fd9",
+      "size_bytes": 27303,
+      "present": true,
+      "schema": "agentos.rc19-reproducibility-input-map.v1",
+      "status": "reproducibility-input-map-bound",
+      "task": "RC19-010",
+      "production_ready_claim": false
+    },
+    "rc19_media_result": {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+      "sha256": "0a74cd866f16388dcfec4b5396e66490dd26ab9c2383b107c85e02f52c1f8ae1",
+      "size_bytes": 23381,
+      "present": true,
+      "schema": "agentos.rc19-installer-media-manifest-result.v1",
+      "status": "passed",
+      "task": "RC19-011",
+      "production_ready_claim": false
+    },
+    "rc19_installer_media_manifest": {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/installer-media-manifest.json",
+      "sha256": "2d706fdc6d7f6fc002ea757e9cfb869c516ed354d83fd8a8a4f3627dbff7bf43",
+      "size_bytes": 12279,
+      "present": true,
+      "schema": "agentos.rc19-installer-media-manifest.v1",
+      "status": "installer-media-manifest-bound-install-gated",
+      "task": "RC19-011",
+      "production_ready_claim": false
+    },
+    "rc19_boot_target_descriptor": {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/boot-target-descriptor.json",
+      "sha256": "1c103af6d3ef592a659f7c4442261235dad3dbc06399e7dd1202af86e1c9f046",
+      "size_bytes": 3159,
+      "present": true,
+      "schema": "agentos.rc19-boot-target-descriptor.v1",
+      "status": "boot-target-descriptor-bound-projection-only",
+      "task": "RC19-011",
+      "production_ready_claim": false
+    },
+    "rc19_reproducibility_fail_closed_result": {
+      "path": ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/result.json",
+      "sha256": "a7adb4f16e2271fb7816ee91a5c3afda8c1a913e705f0debc813d501734c8a3e",
+      "size_bytes": 12050,
+      "present": true,
+      "schema": "agentos.rc19-image-artifact-reproducibility-fail-closed-result.v1",
+      "status": "passed",
+      "task": "RC19-012",
+      "production_ready_claim": false
+    },
+    "rc18_boundary_result": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a",
+      "size_bytes": 25772,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+      "status": "passed",
+      "task": "RC18-010",
+      "production_ready_claim": false
+    },
+    "rc18_image_boundary": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "size_bytes": 25924,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-image-boundary.v1",
+      "status": "disposable-image-boundary-bound-no-image-mutation",
+      "task": "RC18-010",
+      "production_ready_claim": false
+    },
+    "rc16_planspec_result": {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+      "sha256": "c5b4b07c075d7bed0a7eebc90224200e85203980063e0639bd0d11e30587023c",
+      "size_bytes": 19922,
+      "present": true,
+      "schema": "agentos.rc16-install-update-planspec-binding-result.v1",
+      "status": "passed",
+      "task": "RC16-021",
+      "production_ready_claim": false
+    },
+    "rc16_planspec_package": {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/install-update-planspec-package.json",
+      "sha256": "543b9ae7a9b10b4695c849c401a2dff30844e6d7b5663b32cc99d6f6e27b0334",
+      "size_bytes": 126775,
+      "present": true,
+      "schema": "agentos.rc16-install-update-planspec-package.v1",
+      "status": "agentcore-install-update-planspec-bound-non-executable",
+      "task": "RC16-021",
+      "production_ready_claim": false
+    },
+    "rc16_security_execution_envelope": {
+      "path": ".workflow/artifacts/rc16-install-update-planspec-binding/security-execution-install-update-envelope.json",
+      "sha256": "aa9e997850608b30df132081747c4c454fb0c5c02daa5e559bbf3630590d82ab",
+      "size_bytes": 121980,
+      "present": true,
+      "schema": "agentos.rc16-security-execution-install-update-envelope.v1",
+      "status": "security-execution-install-update-denied",
+      "task": "RC16-021",
+      "production_ready_claim": false
+    },
+    "rc16_rollback_support_result": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/result.json",
+      "sha256": "0ac94932712ddda54b34945b1312f3f9cac911acd7662b0d93cf39da3ed9549a",
+      "size_bytes": 59353,
+      "present": true,
+      "schema": "agentos.rc16-rollback-support-package-result.v1",
+      "status": "passed",
+      "task": "RC16-022",
+      "production_ready_claim": false
+    },
+    "rc16_rollback_support_package": {
+      "path": ".workflow/artifacts/rc16-rollback-support-package/rollback-support-package.json",
+      "sha256": "6e25d7266e76242bc331151231a95521d0b2a71d4189966d993379d92c879118",
+      "size_bytes": 55745,
+      "present": true,
+      "schema": "agentos.rc16-rollback-support-package.v1",
+      "status": "rollback-support-package-bound-effects-denied",
+      "task": "RC16-022",
+      "production_ready_claim": false
+    },
+    "rollback_baseline": {
+      "path": ".workflow/artifacts/rc7-install-rollback-baseline/rollback-baseline.json",
+      "sha256": "e85e07ca689c27991167c8ed17ed1da6b002697d9ec878a9b16edccec65b7b6e",
+      "size_bytes": 2178,
+      "present": true,
+      "schema": "agentos.rc7-rollback-baseline.v1",
+      "status": "rollback-baseline-projected-execution-blocked",
+      "task": null,
+      "production_ready_claim": false
+    },
+    "support_index": {
+      "path": ".workflow/artifacts/rc5-hosted-support-recovery/support-index.json",
+      "sha256": "ca4cd2db40aad274253e23776f92308b09c5ebd21e276779fb7e62f05c6ea8f8",
+      "size_bytes": 3659,
+      "present": true,
+      "schema": "agentos.rc5-hosted-support-index.v1",
+      "status": "hosted-metadata-only",
+      "task": null,
+      "production_ready_claim": false
+    },
+    "agent_core_lib": {
+      "path": "crates/agent_core/src/lib.rs",
+      "sha256": "a201a54178f08c2af286cf6ea3b8ce8f7dd72ee2c20d4ccf3de55209b51f1d55",
+      "size_bytes": 842529,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "security_execution_policy": {
+      "path": "crates/security_execution/src/policy.rs",
+      "sha256": "033f317679eec2a3adb68c9323bf1119c5717ce4b90dad8500f152c38b969ce9",
+      "size_bytes": 17597,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "security_execution_tools": {
+      "path": "crates/security_execution/src/tools.rs",
+      "sha256": "0580af910ac39717d2d26a802019d44798f9ea18c2a0676398a3a46ab4061893",
+      "size_bytes": 53671,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    }
+  }
+}
