@@ -1,0 +1,492 @@
+{
+    "schema":  "agentos.rc21-dry-run-execution-plan.v1",
+    "generated_at":  "2026-06-10T19:05:00+08:00",
+    "task":  "RC21-020",
+    "status":  "dry-run-execution-plan-bound-non-executable",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "dry_run_execution_plan_id":  "sha256:bfee4fff643fb61dafbce0922430e988a4ec58697cc8ac3ab627b80208577455",
+    "operation_intent_catalog_id":  "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+    "transaction_journal_package_id":  "sha256:5ea7ab41f0c093c69f3d742430871d29ba3d33a8a314bc1f94006b8801e5c4a0",
+    "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62",
+    "release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "selected_version":  "rc20-single-user-stable-local-projection",
+    "dry_run_only":  true,
+    "executable":  false,
+    "effect_preparation_performed":  false,
+    "operation_count":  3,
+    "operations":  [
+                       {
+                           "operation":  "install",
+                           "kind":  "install",
+                           "title":  "Install selected local AIOS release into a disposable target",
+                           "dry_run_operation_plan_id":  "sha256:943176ebe3a6d84156596fc59960c82b6feda8e66584cca07f7cb1b046c485cc",
+                           "operation_intent_id":  "sha256:d2e906c0b1faec63f5c5a4d41415fddb9e091b1d2d5aa011133d3814ed05a8d2",
+                           "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                           "audit_sink":  {
+                                              "audit_sink_id":  "rc21-011-audit-install-5941f22e2fbc02e5",
+                                              "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/install.jsonl",
+                                              "local_only":  true,
+                                              "append_only_required":  true,
+                                              "written":  false
+                                          },
+                           "resume_checkpoint":  {
+                                                     "checkpoint_id":  "rc21-011-resume-install-5941f22e2fbc02e5",
+                                                     "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/install.json",
+                                                     "local_only":  true,
+                                                     "written":  false,
+                                                     "required_before_resume":  true
+                                                 },
+                           "snapshots":  {
+                                             "source_snapshot_id":  "sha256:68c5e4c5e3d35dbf00167893c69c23c2ae62e5fa767192616cf20625611b933a",
+                                             "target_snapshot_id":  "sha256:6542cdac87ce9c7d20ce6ccd60b7be10f76c686ae7ffaa60f4c2fe1a78d88565",
+                                             "rollback_snapshot_id":  "sha256:68c5e4c5e3d35dbf00167893c69c23c2ae62e5fa767192616cf20625611b933a"
+                                         },
+                           "release_binding":  {
+                                                   "release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+                                                   "selected_version":  "rc20-single-user-stable-local-projection",
+                                                   "local_channel_release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+                                                   "local_channel_status":  "passed"
+                                               },
+                           "preconditions":  [
+                                                 "rc21-authority-contract-bound",
+                                                 "rc20-release-bundle-bound",
+                                                 "rc20-local-channel-bound",
+                                                 "operation-intent-catalog-bound",
+                                                 "transaction-journal-entry-bound",
+                                                 "snapshot-baseline-bound",
+                                                 "lifecycle-fail-closed-fixtures-passed",
+                                                 "dry-run-only-no-effect-preparation"
+                                             ],
+                           "ordered_steps":  [
+                                                 {
+                                                     "step_id":  "install-bind-intent",
+                                                     "action":  "bind operation intent and required inputs",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "operation intent identity is stable and local-only"
+                                                 },
+                                                 {
+                                                     "step_id":  "install-bind-journal",
+                                                     "action":  "bind transaction id, audit sink, resume checkpoint, and rollback reference",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "journal entry remains append-only evidence"
+                                                 },
+                                                 {
+                                                     "step_id":  "install-bind-snapshots",
+                                                     "action":  "bind source, target, and rollback snapshots from projection-only baseline",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "snapshot baseline has no host boot authority"
+                                                 },
+                                                 {
+                                                     "step_id":  "install-explain-denial",
+                                                     "action":  "explain denial before lifecycle effect until dry-run acceptance gate",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "effect preparation remains false"
+                                                 }
+                                             ],
+                           "predicted_effects":  {
+                                                     "effect_preparation_performed":  false,
+                                                     "install_performed":  false,
+                                                     "update_performed":  false,
+                                                     "repair_performed":  false,
+                                                     "reinstall_performed":  false,
+                                                     "rollback_execution_performed":  false,
+                                                     "support_upload_performed":  false,
+                                                     "recovery_execution_performed":  false,
+                                                     "remote_dispatch_enabled":  false,
+                                                     "host_rootfs_mutated":  false,
+                                                     "host_active_slot_mutated":  false,
+                                                     "host_boot_metadata_mutated":  false,
+                                                     "active_artifact_set_mutated":  false,
+                                                     "production_ring_mutated":  false,
+                                                     "signer_authority_granted":  false,
+                                                     "object_storage_provisioned":  false,
+                                                     "private_signing_material_handled":  false,
+                                                     "cryptographic_signing_performed":  false,
+                                                     "production_ready_claim":  false
+                                                 },
+                           "denial_reasons":  [
+                                                  [
+                                                      "missing rc20 release bundle",
+                                                      "missing local channel projection",
+                                                      "missing installer catalog",
+                                                      "stale selected version",
+                                                      "host mutation requested"
+                                                  ],
+                                                  "dry-run acceptance gate not yet executed",
+                                                  "effect preparation is reserved for RC21-021 acceptance",
+                                                  "host mutation, support upload, recovery execution, remote dispatch, signer authority, object storage, and production mutation remain disabled"
+                                              ],
+                           "explainability":  {
+                                                  "user_visible_summary":  "install dry-run plan is bound and non-executable until RC21-021 acceptance.",
+                                                  "resume_hint":  "Use the bound resume checkpoint after RC21-021 acceptance evidence exists.",
+                                                  "audit_hint":  "Use the bound local audit sink; no audit record is fabricated by RC21-020."
+                                              },
+                           "executable":  false,
+                           "dry_run_only":  true
+                       },
+                       {
+                           "operation":  "update",
+                           "kind":  "update",
+                           "title":  "Update installed local AIOS release inside disposable installed-system evidence",
+                           "dry_run_operation_plan_id":  "sha256:e173d8ae31cd5c617d0cdd1f3c2ff91e871d5ee5cf13120a2dd7857070c8c514",
+                           "operation_intent_id":  "sha256:8e90e1b197341fa8832761777711b24e4c02f3181131bb68c7439b02890b0b89",
+                           "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                           "audit_sink":  {
+                                              "audit_sink_id":  "rc21-011-audit-update-14733e6575519569",
+                                              "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/update.jsonl",
+                                              "local_only":  true,
+                                              "append_only_required":  true,
+                                              "written":  false
+                                          },
+                           "resume_checkpoint":  {
+                                                     "checkpoint_id":  "rc21-011-resume-update-14733e6575519569",
+                                                     "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/update.json",
+                                                     "local_only":  true,
+                                                     "written":  false,
+                                                     "required_before_resume":  true
+                                                 },
+                           "snapshots":  {
+                                             "source_snapshot_id":  "sha256:355ad393a7ba7d7b9e9ec3a2e0aa0f7806088b059c69986723e574cf781225fd",
+                                             "target_snapshot_id":  "sha256:63e2211aeb708eead14a176a4cffcd901cb7a9ef51514109068b33371f61d96b",
+                                             "rollback_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc"
+                                         },
+                           "release_binding":  {
+                                                   "release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+                                                   "selected_version":  "rc20-single-user-stable-local-projection",
+                                                   "local_channel_release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+                                                   "local_channel_status":  "passed"
+                                               },
+                           "preconditions":  [
+                                                 "rc21-authority-contract-bound",
+                                                 "rc20-release-bundle-bound",
+                                                 "rc20-local-channel-bound",
+                                                 "operation-intent-catalog-bound",
+                                                 "transaction-journal-entry-bound",
+                                                 "snapshot-baseline-bound",
+                                                 "lifecycle-fail-closed-fixtures-passed",
+                                                 "dry-run-only-no-effect-preparation"
+                                             ],
+                           "ordered_steps":  [
+                                                 {
+                                                     "step_id":  "update-bind-intent",
+                                                     "action":  "bind operation intent and required inputs",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "operation intent identity is stable and local-only"
+                                                 },
+                                                 {
+                                                     "step_id":  "update-bind-journal",
+                                                     "action":  "bind transaction id, audit sink, resume checkpoint, and rollback reference",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "journal entry remains append-only evidence"
+                                                 },
+                                                 {
+                                                     "step_id":  "update-bind-snapshots",
+                                                     "action":  "bind source, target, and rollback snapshots from projection-only baseline",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "snapshot baseline has no host boot authority"
+                                                 },
+                                                 {
+                                                     "step_id":  "update-explain-denial",
+                                                     "action":  "explain denial before lifecycle effect until dry-run acceptance gate",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "effect preparation remains false"
+                                                 }
+                                             ],
+                           "predicted_effects":  {
+                                                     "effect_preparation_performed":  false,
+                                                     "install_performed":  false,
+                                                     "update_performed":  false,
+                                                     "repair_performed":  false,
+                                                     "reinstall_performed":  false,
+                                                     "rollback_execution_performed":  false,
+                                                     "support_upload_performed":  false,
+                                                     "recovery_execution_performed":  false,
+                                                     "remote_dispatch_enabled":  false,
+                                                     "host_rootfs_mutated":  false,
+                                                     "host_active_slot_mutated":  false,
+                                                     "host_boot_metadata_mutated":  false,
+                                                     "active_artifact_set_mutated":  false,
+                                                     "production_ring_mutated":  false,
+                                                     "signer_authority_granted":  false,
+                                                     "object_storage_provisioned":  false,
+                                                     "private_signing_material_handled":  false,
+                                                     "cryptographic_signing_performed":  false,
+                                                     "production_ready_claim":  false
+                                                 },
+                           "denial_reasons":  [
+                                                  [
+                                                      "missing update evidence",
+                                                      "missing rollback baseline",
+                                                      "stale local channel",
+                                                      "host active slot mutation requested"
+                                                  ],
+                                                  "dry-run acceptance gate not yet executed",
+                                                  "effect preparation is reserved for RC21-021 acceptance",
+                                                  "host mutation, support upload, recovery execution, remote dispatch, signer authority, object storage, and production mutation remain disabled"
+                                              ],
+                           "explainability":  {
+                                                  "user_visible_summary":  "update dry-run plan is bound and non-executable until RC21-021 acceptance.",
+                                                  "resume_hint":  "Use the bound resume checkpoint after RC21-021 acceptance evidence exists.",
+                                                  "audit_hint":  "Use the bound local audit sink; no audit record is fabricated by RC21-020."
+                                              },
+                           "executable":  false,
+                           "dry_run_only":  true
+                       },
+                       {
+                           "operation":  "repair-reinstall",
+                           "kind":  "repair-reinstall",
+                           "title":  "Repair or reinstall selected local AIOS release inside disposable installed-system evidence",
+                           "dry_run_operation_plan_id":  "sha256:bf640b81ac617038437379e69b4d73a6c9ee655681595cb57cdc437291851b3b",
+                           "operation_intent_id":  "sha256:16a0d52d9f4c78253790e9c40a5df959453d2eba1a05e063be42af1d1b11e5ef",
+                           "transaction_id":  "sha256:1beb6554cbd5296ae8aa4530a8774f098dd4577f3e3350481a07a463ce9dbcc1",
+                           "audit_sink":  {
+                                              "audit_sink_id":  "rc21-011-audit-repair-reinstall-1beb6554cbd5296a",
+                                              "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/repair-reinstall.jsonl",
+                                              "local_only":  true,
+                                              "append_only_required":  true,
+                                              "written":  false
+                                          },
+                           "resume_checkpoint":  {
+                                                     "checkpoint_id":  "rc21-011-resume-repair-reinstall-1beb6554cbd5296a",
+                                                     "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/repair-reinstall.json",
+                                                     "local_only":  true,
+                                                     "written":  false,
+                                                     "required_before_resume":  true
+                                                 },
+                           "snapshots":  {
+                                             "source_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                                             "target_snapshot_id":  "sha256:6542cdac87ce9c7d20ce6ccd60b7be10f76c686ae7ffaa60f4c2fe1a78d88565",
+                                             "rollback_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc"
+                                         },
+                           "release_binding":  {
+                                                   "release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+                                                   "selected_version":  "rc20-single-user-stable-local-projection",
+                                                   "local_channel_release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+                                                   "local_channel_status":  "passed"
+                                               },
+                           "preconditions":  [
+                                                 "rc21-authority-contract-bound",
+                                                 "rc20-release-bundle-bound",
+                                                 "rc20-local-channel-bound",
+                                                 "operation-intent-catalog-bound",
+                                                 "transaction-journal-entry-bound",
+                                                 "snapshot-baseline-bound",
+                                                 "lifecycle-fail-closed-fixtures-passed",
+                                                 "dry-run-only-no-effect-preparation"
+                                             ],
+                           "ordered_steps":  [
+                                                 {
+                                                     "step_id":  "repair-reinstall-bind-intent",
+                                                     "action":  "bind operation intent and required inputs",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "operation intent identity is stable and local-only"
+                                                 },
+                                                 {
+                                                     "step_id":  "repair-reinstall-bind-journal",
+                                                     "action":  "bind transaction id, audit sink, resume checkpoint, and rollback reference",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "journal entry remains append-only evidence"
+                                                 },
+                                                 {
+                                                     "step_id":  "repair-reinstall-bind-snapshots",
+                                                     "action":  "bind source, target, and rollback snapshots from projection-only baseline",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "snapshot baseline has no host boot authority"
+                                                 },
+                                                 {
+                                                     "step_id":  "repair-reinstall-explain-denial",
+                                                     "action":  "explain denial before lifecycle effect until dry-run acceptance gate",
+                                                     "prepares_effect":  false,
+                                                     "expected_observation":  "effect preparation remains false"
+                                                 }
+                                             ],
+                           "predicted_effects":  {
+                                                     "effect_preparation_performed":  false,
+                                                     "install_performed":  false,
+                                                     "update_performed":  false,
+                                                     "repair_performed":  false,
+                                                     "reinstall_performed":  false,
+                                                     "rollback_execution_performed":  false,
+                                                     "support_upload_performed":  false,
+                                                     "recovery_execution_performed":  false,
+                                                     "remote_dispatch_enabled":  false,
+                                                     "host_rootfs_mutated":  false,
+                                                     "host_active_slot_mutated":  false,
+                                                     "host_boot_metadata_mutated":  false,
+                                                     "active_artifact_set_mutated":  false,
+                                                     "production_ring_mutated":  false,
+                                                     "signer_authority_granted":  false,
+                                                     "object_storage_provisioned":  false,
+                                                     "private_signing_material_handled":  false,
+                                                     "cryptographic_signing_performed":  false,
+                                                     "production_ready_claim":  false
+                                                 },
+                           "denial_reasons":  [
+                                                  [
+                                                      "missing install acceptance",
+                                                      "missing first boot posture",
+                                                      "missing support reference",
+                                                      "broad reinstall scope",
+                                                      "host rootfs mutation requested"
+                                                  ],
+                                                  "dry-run acceptance gate not yet executed",
+                                                  "effect preparation is reserved for RC21-021 acceptance",
+                                                  "host mutation, support upload, recovery execution, remote dispatch, signer authority, object storage, and production mutation remain disabled"
+                                              ],
+                           "explainability":  {
+                                                  "user_visible_summary":  "repair-reinstall dry-run plan is bound and non-executable until RC21-021 acceptance.",
+                                                  "resume_hint":  "Use the bound resume checkpoint after RC21-021 acceptance evidence exists.",
+                                                  "audit_hint":  "Use the bound local audit sink; no audit record is fabricated by RC21-020."
+                                              },
+                           "executable":  false,
+                           "dry_run_only":  true
+                       }
+                   ],
+    "authority":  {
+                      "dry_run_plan_authority":  true,
+                      "effect_preparation_authority":  false,
+                      "install_authority":  false,
+                      "update_authority":  false,
+                      "repair_authority":  false,
+                      "reinstall_authority":  false,
+                      "rollback_execution_authority":  false,
+                      "support_upload_authority":  false,
+                      "recovery_execution_authority":  false,
+                      "remote_dispatch_authority":  false,
+                      "host_rootfs_mutation_authority":  false,
+                      "active_artifact_set_mutation_authority":  false,
+                      "production_ring_mutation_authority":  false,
+                      "signer_authority":  false,
+                      "object_storage_authority":  false
+                  },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "402e2b88720f88a26f3f9c8e1fd164467fa03d1364e28ca5ecd1df673eed1dce",
+                                     "size_bytes":  8627,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_operation_intent_catalog_result":  {
+                                                                "role":  "rc21 operation intent catalog result",
+                                                                "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+                                                                "sha256":  "96755fd238fcebdaa46ec5f3d90ba89a1b1f7bef070c0c256553638722d7cf47",
+                                                                "size_bytes":  57638,
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc21-local-operation-intent-catalog-result.v1",
+                                                                "status":  "passed",
+                                                                "task":  "RC21-010",
+                                                                "production_ready_claim":  false,
+                                                                "consumer_ready_claim":  false
+                                                            },
+                   "rc21_operation_intent_catalog":  {
+                                                         "role":  "rc21 operation intent catalog",
+                                                         "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+                                                         "sha256":  "10e671302515e6b9c36fd50fac3532f2abca9c7b0f0da99f4796ed257b86da6d",
+                                                         "size_bytes":  25256,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc21-local-operation-intent-catalog.v1",
+                                                         "status":  "local-operation-intent-catalog-bound-non-ga",
+                                                         "task":  "RC21-010",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc21_journal_snapshot_result":  {
+                                                        "role":  "rc21 journal snapshot result",
+                                                        "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+                                                        "sha256":  "beb0bfcf8e15f41c2dda4fa3d90367806132a561d657b9d0fa36e956ee6e52b7",
+                                                        "size_bytes":  83460,
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc21-transaction-journal-snapshot-baseline-result.v1",
+                                                        "status":  "passed",
+                                                        "task":  "RC21-011",
+                                                        "production_ready_claim":  false,
+                                                        "consumer_ready_claim":  false
+                                                    },
+                   "rc21_transaction_journal_package":  {
+                                                            "role":  "rc21 transaction journal package",
+                                                            "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/transaction-journal-package.json",
+                                                            "sha256":  "fe936acf4fff5baec60b9ce9369fcfa733759d558aaca12f9fd998c51234fe2c",
+                                                            "size_bytes":  28080,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-transaction-journal-package.v1",
+                                                            "status":  "transaction-journal-baseline-bound-non-executable",
+                                                            "task":  "RC21-011",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_snapshot_baseline_package":  {
+                                                          "role":  "rc21 snapshot baseline package",
+                                                          "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/snapshot-baseline-package.json",
+                                                          "sha256":  "619e15a62095359691f9f310d0c6c3efed495fd15846896bf27f1359447e5979",
+                                                          "size_bytes":  11849,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-snapshot-baseline-package.v1",
+                                                          "status":  "snapshot-baseline-bound-projection-only",
+                                                          "task":  "RC21-011",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc21_fail_closed_result":  {
+                                                   "role":  "rc21 fail-closed result",
+                                                   "path":  ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/result.json",
+                                                   "sha256":  "1c8ddf6842ce8c041a794dc9c26e4506f4c72774c1686cf4f7280156d26ae3a9",
+                                                   "size_bytes":  23661,
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc21-lifecycle-operation-fail-closed-result.v1",
+                                                   "status":  "passed",
+                                                   "task":  "RC21-012",
+                                                   "production_ready_claim":  false,
+                                                   "consumer_ready_claim":  false
+                                               },
+                   "rc21_fail_closed_matrix":  {
+                                                   "role":  "rc21 fail-closed matrix",
+                                                   "path":  ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/fail-closed-matrix.json",
+                                                   "sha256":  "2f7fb8b637521b6e9141dab316c3763791e606883a63ace38c67ec35abe30111",
+                                                   "size_bytes":  173035,
+                                                   "present":  true,
+                                                   "schema":  "agentos.rc21-lifecycle-operation-fail-closed-matrix.v1",
+                                                   "status":  "passed",
+                                                   "task":  "RC21-012",
+                                                   "production_ready_claim":  false,
+                                                   "consumer_ready_claim":  false
+                                               },
+                   "rc20_release_bundle_result":  {
+                                                      "role":  "rc20 release bundle result",
+                                                      "path":  ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+                                                      "sha256":  "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+                                                      "size_bytes":  45355,
+                                                      "present":  true,
+                                                      "schema":  "agentos.rc20-single-user-release-bundle-result.v1",
+                                                      "status":  "passed",
+                                                      "task":  "RC20-010",
+                                                      "production_ready_claim":  false,
+                                                      "consumer_ready_claim":  false
+                                                  },
+                   "rc20_local_channel_result":  {
+                                                     "role":  "rc20 local channel result",
+                                                     "path":  ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+                                                     "sha256":  "6c82a84c1f977003e7d78d387a711c6679edd546fcc181d563f50a3f23ca9ad6",
+                                                     "size_bytes":  57559,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc20-local-channel-promotion-result.v1",
+                                                     "status":  "passed",
+                                                     "task":  "RC20-011",
+                                                     "production_ready_claim":  false,
+                                                     "consumer_ready_claim":  false
+                                                 }
+               }
+}
