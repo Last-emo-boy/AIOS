@@ -1,0 +1,320 @@
+{
+  "schema": "agentos.rc17-exact-install-update-target-binding-evidence.v1",
+  "generated_at": "2026-06-10T01:40:00+08:00",
+  "task": "RC17-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc17",
+  "script": {
+    "path": "scripts/project-rc17-exact-install-update-target-binding.ps1",
+    "sha256": "ef8797b9afd9cc01fe8d969d8d152ec417fa7f1935c4b7bcb62dddf528cff03c"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+    "status": "passed",
+    "sha256": "dd4c958a314eaf99360d055329dbc13800222a6a72a7e067c0ea90b20af429dc"
+  },
+  "outputs": {
+    "exact_install_update_target_package": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/exact-install-update-target-package.json",
+      "sha256": "f22f274cd1fc197af1c48ed00d41a065d552b270cc72eea1dce4a95826ac850d",
+      "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302"
+    },
+    "target_binding_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/target-binding-fail-closed-matrix.json",
+      "sha256": "f21a0b8b4449774f12e3f4ba3bf800bb9179fe525c336cf5741401dc338ce7ec"
+    }
+  },
+  "target_binding_surface": {
+    "state": "exact-repo-local-install-update-target-bound",
+    "exact_install_update_target_bound": true,
+    "install_target_bound": true,
+    "update_target_bound": true,
+    "repo_local_target_identity_set_bound": true,
+    "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+    "enrolled_target_identity_count": 2,
+    "distinct_target_identity_count": 2,
+    "package_identity_bound": true,
+    "installable_media_bound": true,
+    "installer_updater_preflight_bound": true,
+    "rc16_planspec_package_bound": true,
+    "rc16_rollback_support_package_bound": true,
+    "rc16_consumer_smoke_bound": true,
+    "exact_install_update_approval_bound": false,
+    "agentcore_install_update_planspec_executable": false,
+    "security_execution_install_update_allow": false,
+    "rollback_preconditions_bound": false,
+    "install_effect_preparation_allowed": false,
+    "update_effect_preparation_allowed": false,
+    "install_allowed": false,
+    "update_allowed": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_allowed": false,
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": [
+      "rc17-exact-install-update-approval-not-bound",
+      "rc17-agentcore-install-update-planspec-not-executable",
+      "rc17-security-execution-install-update-allow-not-bound",
+      "rc17-rollback-preconditions-not-bound",
+      "rc17-controlled-local-install-not-run",
+      "rc17-controlled-local-update-not-run",
+      "rc17-local-release-channel-consumer-smoke-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "exact_install_update_target_bound": true,
+    "exact_install_update_approval_bound": false,
+    "agentcore_install_update_planspec_executable": false,
+    "security_execution_install_update_allow": false,
+    "rollback_preconditions_bound": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "endpoint_reachability_trusted": false,
+    "frontend_output_trusted": false,
+    "signer_reachability_trusted": false,
+    "shell_output_trusted": false,
+    "tui_output_trusted": false,
+    "model_replay_trusted": false,
+    "object_storage_ui_trusted": false,
+    "install_effect_prepared": false,
+    "update_effect_prepared": false,
+    "install_performed": false,
+    "update_performed": false,
+    "activation_performed": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false
+  },
+  "completion": {
+    "rc17_010_complete": true,
+    "next_task": "RC17-011",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc17_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-010 must run after RC17-001 completed, either while current_task is RC17-010 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC17-011",
+        "rc17_001_status": "completed",
+        "rc17_010_status": "completed"
+      }
+    },
+    {
+      "id": "contract.exact_target_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-010 must consume the exact install/update target contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+        "sha256": "7efbc7763eb494eb7feb93ca95479a3d1c9bca658cc68b5b70811532ba9f914d",
+        "size_bytes": 3432,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.rc16_final_audit.distributable_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-010 must start from RC16 non-GA distributable packaging readiness and denied install/update readiness.",
+      "evidence": {
+        "status": "passed",
+        "decision": "PASS",
+        "distributable_packaging_ready": true,
+        "install_update_ready": false
+      }
+    },
+    {
+      "id": "source.rc16_package_media_preflight.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 package identity, installable media, and installer/updater preflight evidence must be hash-bound and matching.",
+      "evidence": {
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "release_id": "production-distro-rc8-current-artifacts",
+        "preflight_id": "sha256:2bd08fb7d7eda7c320b52ff9a0b3d8429f68456204019910d2515f003c340dd8"
+      }
+    },
+    {
+      "id": "source.rc16_planspec_rollback_consumer.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC16 PlanSpec binding, rollback/support package, and consumer smoke evidence must be present.",
+      "evidence": {
+        "planspec_bound": true,
+        "planspec_executable": false,
+        "rollback_support_package_bound": true,
+        "consumer_decision": "denied-before-effect"
+      }
+    },
+    {
+      "id": "source.rc15_target_identities.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-010 must bind two distinct repo-local target identities without remote dispatch or production mutation authority.",
+      "evidence": {
+        "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+        "enrolled": 2,
+        "distinct": 2,
+        "remote_dispatch_authority": false,
+        "production_ring_mutation_allowed": false
+      }
+    },
+    {
+      "id": "target_package.exact_install_update_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Exact install and update targets must bind target identities, package identity, installable media, and preflight evidence.",
+      "evidence": {
+        "state": "exact-repo-local-install-update-target-bound",
+        "exact_install_update_target_bound": true,
+        "install_target_bound": true,
+        "update_target_bound": true,
+        "repo_local_target_identity_set_bound": true,
+        "target_identity_set_digest": "78741cde1a9db980b67f86030fe9cd01ebbd10cfc32cf836a9deb36929c665e0",
+        "enrolled_target_identity_count": 2,
+        "distinct_target_identity_count": 2,
+        "package_identity_bound": true,
+        "installable_media_bound": true,
+        "installer_updater_preflight_bound": true,
+        "rc16_planspec_package_bound": true,
+        "rc16_rollback_support_package_bound": true,
+        "rc16_consumer_smoke_bound": true,
+        "exact_install_update_approval_bound": false,
+        "agentcore_install_update_planspec_executable": false,
+        "security_execution_install_update_allow": false,
+        "rollback_preconditions_bound": false,
+        "install_effect_preparation_allowed": false,
+        "update_effect_preparation_allowed": false,
+        "install_allowed": false,
+        "update_allowed": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_allowed": false,
+        "rollback_execution_allowed": false,
+        "support_upload_allowed": false,
+        "recovery_execution_allowed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutation_allowed": false,
+        "blockers": [
+          "rc17-exact-install-update-approval-not-bound",
+          "rc17-agentcore-install-update-planspec-not-executable",
+          "rc17-security-execution-install-update-allow-not-bound",
+          "rc17-rollback-preconditions-not-bound",
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ]
+      }
+    },
+    {
+      "id": "target_package.effect_authority_denied",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Target binding alone must not grant approval, executable PlanSpec, SecurityExecution allow, or install/update effects.",
+      "evidence": {
+        "blockers": [
+          "rc17-exact-install-update-approval-not-bound",
+          "rc17-agentcore-install-update-planspec-not-executable",
+          "rc17-security-execution-install-update-allow-not-bound",
+          "rc17-rollback-preconditions-not-bound",
+          "rc17-controlled-local-install-not-run",
+          "rc17-controlled-local-update-not-run",
+          "rc17-local-release-channel-consumer-smoke-not-run"
+        ],
+        "authority": {
+          "aios_body_only": true,
+          "repo_local_projection_only": true,
+          "exact_target_authority": true,
+          "exact_approval_authority": false,
+          "agentcore_execution_authority": false,
+          "security_execution_authority": false,
+          "endpoint_reachability_authority": false,
+          "frontend_output_authority": false,
+          "signer_reachability_authority": false,
+          "shell_output_authority": false,
+          "tui_authority": false,
+          "model_replay_authority": false,
+          "object_storage_ui_authority": false,
+          "install_authority": false,
+          "update_authority": false,
+          "activation_authority": false,
+          "rollback_execution_authority": false,
+          "support_upload_authority": false,
+          "recovery_execution_authority": false,
+          "remote_dispatch_authority": false,
+          "host_active_slot_mutation_authority": false,
+          "host_boot_metadata_mutation_authority": false,
+          "production_ring_mutation_authority": false,
+          "signing_authority": false
+        }
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Broad, missing, mismatched, stale, replayed, unowned, display-surface, and authority-broadening target packages must fail closed.",
+      "evidence": {
+        "cases": 29,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "authority.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-010 must not install, update, activate, mutate host slot/boot metadata, dispatch remotely, upload support, recover, or mutate production rings.",
+      "evidence": {
+        "payload_upload_performed": false,
+        "payload_published": false,
+        "network_fetch_attempted": false,
+        "remote_payload_bytes_downloaded": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-010 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}

@@ -1,0 +1,944 @@
+{
+  "schema": "agentos.rc17-target-binding-fail-closed-matrix.v1",
+  "generated_at": "2026-06-10T01:40:00+08:00",
+  "task": "RC17-010",
+  "status": "passed",
+  "production_ready_claim": false,
+  "target_binding_id": "sha256:3bf42e43dd480f38d93549559d512e09397f61afd179a91f7dc51ea9be4e8302",
+  "cases": [
+    {
+      "id": "missing-package-identity-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "package-identity-missing"
+      ],
+      "observed_blockers": [
+        "package-identity-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Install/update target packages must carry the RC16 package identity.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-media-identity-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "media-identity-missing"
+      ],
+      "observed_blockers": [
+        "media-identity-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Install/update target packages must bind installable media identity.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-preflight-evidence-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "installer-updater-preflight-missing"
+      ],
+      "observed_blockers": [
+        "installer-updater-preflight-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Preflight evidence is required before target binding can feed later gates.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "package-media-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "package-media-mismatch"
+      ],
+      "observed_blockers": [
+        "package-media-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Package and media identities must match the RC16 package surface.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "payload-digest-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "payload-digest-mismatch"
+      ],
+      "observed_blockers": [
+        "payload-digest-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target package payload digest must match the installable media payload digest.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "stale-target-package-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "target-package-stale"
+      ],
+      "observed_blockers": [
+        "target-package-stale"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Stale target packages must not authorize install/update preparation.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "broad-target-selector-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "broad-target-selector"
+      ],
+      "observed_blockers": [
+        "broad-target-selector"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "A broad target selector cannot satisfy exact target binding.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-target-identity-set-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "target-identity-set-missing"
+      ],
+      "observed_blockers": [
+        "target-identity-set-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Two repo-local target identities are required.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-install-target-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "install-target-missing"
+      ],
+      "observed_blockers": [
+        "install-target-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Install must have its own exact target binding.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-update-target-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "update-target-missing"
+      ],
+      "observed_blockers": [
+        "update-target-missing"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Update must have its own exact target binding.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "target-identity-mismatch-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "target-identity-mismatch"
+      ],
+      "observed_blockers": [
+        "target-identity-mismatch"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target package identities must match the RC15 target identity set.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "target-count-below-minimum-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "fewer-than-two-target-identities"
+      ],
+      "observed_blockers": [
+        "fewer-than-two-target-identities"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "The target set must retain two distinct repo-local identities.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "duplicate-target-identity-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "duplicate-target-identity"
+      ],
+      "observed_blockers": [
+        "duplicate-target-identity"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Duplicate target identities cannot satisfy exact target binding.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "replayed-target-package-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "target-package-replay-detected"
+      ],
+      "observed_blockers": [
+        "target-package-replay-detected"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Replayed target packages must fail before effect preparation.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "unowned-target-package-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "target-package-unowned"
+      ],
+      "observed_blockers": [
+        "target-package-unowned"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Unowned target packages cannot become install/update authority.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "operation-type-broadening-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "operation-type-broadening"
+      ],
+      "observed_blockers": [
+        "operation-type-broadening"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding cannot broaden install/update into activation, rollback, support, recovery, dispatch, signing, or production mutation.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "endpoint-reachability-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "endpoint-reachability-not-authority"
+      ],
+      "observed_blockers": [
+        "endpoint-reachability-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Endpoint reachability is not local evidence binding.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "frontend-output-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "frontend-output-not-authority"
+      ],
+      "observed_blockers": [
+        "frontend-output-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Frontend output cannot bind exact target authority.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "tui-output-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "tui-output-not-authority"
+      ],
+      "observed_blockers": [
+        "tui-output-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "TUI projection cannot bind exact target authority.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "model-replay-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "model-replay-not-authority"
+      ],
+      "observed_blockers": [
+        "model-replay-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Model replay cannot bind exact target authority.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "shell-output-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "shell-output-not-authority"
+      ],
+      "observed_blockers": [
+        "shell-output-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Shell output cannot bind exact target authority.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "signer-reachability-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "signer-reachability-not-authority"
+      ],
+      "observed_blockers": [
+        "signer-reachability-not-authority"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Signer reachability cannot bind exact target authority.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "host-active-slot-mutation-forbidden"
+      ],
+      "observed_blockers": [
+        "host-active-slot-mutation-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not mutate host active slot state.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "host-boot-metadata-mutation-forbidden"
+      ],
+      "observed_blockers": [
+        "host-boot-metadata-mutation-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not mutate host boot metadata.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "remote-dispatch-authority-forbidden"
+      ],
+      "observed_blockers": [
+        "remote-dispatch-authority-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not enable remote dispatch.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-upload-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "support-upload-authority-forbidden"
+      ],
+      "observed_blockers": [
+        "support-upload-authority-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not enable support upload.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "recovery-execution-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "recovery-execution-authority-forbidden"
+      ],
+      "observed_blockers": [
+        "recovery-execution-authority-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not enable recovery execution.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "production-ring-mutation-forbidden"
+      ],
+      "observed_blockers": [
+        "production-ring-mutation-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not mutate production rings.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "private-signing-material-authority-denied",
+      "status": "passed",
+      "observed_denied": true,
+      "expected_blockers": [
+        "private-signing-material-forbidden"
+      ],
+      "observed_blockers": [
+        "private-signing-material-forbidden"
+      ],
+      "missing_expected_blockers": [],
+      "reason": "Target binding must not handle private signing material.",
+      "side_effects": {
+        "target_package_bound": false,
+        "exact_approval_granted": false,
+        "agentcore_planspec_executable": false,
+        "security_execution_allowed": false,
+        "install_effect_prepared": false,
+        "update_effect_prepared": false,
+        "install_performed": false,
+        "update_performed": false,
+        "activation_performed": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "summary": {
+    "cases": 29,
+    "passed": 29,
+    "failed": 0,
+    "failed_cases": []
+  }
+}
