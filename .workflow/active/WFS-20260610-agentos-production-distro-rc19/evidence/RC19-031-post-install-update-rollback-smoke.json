@@ -1,0 +1,232 @@
+{
+  "schema": "agentos.rc19-post-install-update-rollback-smoke-task-evidence.v1",
+  "generated_at": "2026-06-10T11:45:00+08:00",
+  "task": "RC19-031",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "script": {
+    "path": "scripts/run-rc19-post-install-update-rollback-smoke.ps1",
+    "sha256": "cf6a1c122b22567bf30192647d8f50af8c0c7c7d6adf637465458353b0b42f71"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json",
+    "status": "passed",
+    "sha256": "ba4416539a8837a55d2b58d91611c52a24d01f1482ef94990687eb9d8a94c680"
+  },
+  "outputs": {
+    "post_install_update_rollback_evidence": {
+      "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/post-install-update-rollback-evidence.json",
+      "sha256": "e9ddc8646fede98b5fd82dafd651a70f4f12f7486f0ca967ef2c729a276ea70c",
+      "smoke_digest": "4b6f8c8a5e85a73c7c60e7d00386085edc6e25dddd9b6728afb3ee6c527659eb"
+    }
+  },
+  "post_install_surface": {
+    "state": "post-install-update-rollback-compatible",
+    "local_only": true,
+    "first_user_install_bound": true,
+    "offline_channel_bound": true,
+    "update_compatibility_readiness": "ready",
+    "rollback_compatibility_readiness": "ready",
+    "disposable_boundary_compatible": true,
+    "update_or_rollback_executed_by_this_smoke": false,
+    "audited": true,
+    "audit_digest": "4b6f8c8a5e85a73c7c60e7d00386085edc6e25dddd9b6728afb3ee6c527659eb",
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "post_install_smoke_only": true,
+    "disposable_target_boundary_only": true,
+    "update_compatibility_evaluated": true,
+    "rollback_compatibility_evaluated": true,
+    "install_performed_by_smoke": false,
+    "update_performed_by_smoke": false,
+    "rollback_execution_performed_by_smoke": false,
+    "remote_payload_downloaded": false,
+    "object_storage_provisioned": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "endpoint_reachability_authority": false,
+    "frontend_output_authority": false,
+    "shell_output_authority": false,
+    "tui_output_authority": false,
+    "model_replay_authority": false,
+    "signer_authority": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc19_031_complete": true,
+    "next_task": "RC19-032",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_031",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-031 must run after RC19-030 completed, while current_task is RC19-031 or during a completed rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-032",
+        "rc19_030_status": "completed",
+        "rc19_031_status": "completed"
+      }
+    },
+    {
+      "id": "source.first_user_install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install smoke must bind RC19 first-user install evidence and disposable target state.",
+      "evidence": {
+        "first_user_install_ready": true,
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "target_kind": "disposable-first-user-install-target",
+        "host_rootfs_mutated": false
+      }
+    },
+    {
+      "id": "source.offline_channel.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install smoke must bind RC19 offline/local channel consumption without remote payload or consumer-ready claim.",
+      "evidence": {
+        "offline_channel_ready": true,
+        "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+        "remote_payload_downloaded": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "source.rc18_update.compatible",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install update compatibility must be derived from RC18 isolated update evidence inside disposable image boundary.",
+      "evidence": {
+        "update_compatibility_ready": true,
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "isolated_update_performed": true,
+        "host_rootfs_mutated": false
+      }
+    },
+    {
+      "id": "source.rc18_rollback.compatible",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install rollback compatibility must be derived from RC18 isolated rollback evidence inside disposable image boundary.",
+      "evidence": {
+        "rollback_compatibility_ready": true,
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "isolated_rollback_performed": true,
+        "host_rootfs_mutated": false
+      }
+    },
+    {
+      "id": "boundary.disposable_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Update and rollback compatibility must be evaluated only against disposable first-user target and disposable installed-system image boundaries.",
+      "evidence": {
+        "rc19_target_kind": "disposable-first-user-install-target",
+        "rc18_update_image_scope": "disposable-installed-system-image-or-vm",
+        "rc18_rollback_image_scope": "disposable-installed-system-image-or-vm",
+        "disposable_boundary_compatible": true,
+        "update_or_rollback_executed_by_this_smoke": false
+      }
+    },
+    {
+      "id": "smoke.ready_or_denial",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Smoke must report post-install update/rollback compatibility readiness or explicit denial.",
+      "evidence": {
+        "decision": "post-install-update-rollback-compatible",
+        "blockers": []
+      }
+    },
+    {
+      "id": "smoke.audit.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install smoke must be audited and non-fabricated.",
+      "evidence": {
+        "schema": "agentos.rc19-post-install-update-rollback-smoke-audit.v1",
+        "generated_at": "2026-06-10T11:45:00+08:00",
+        "task": "RC19-031",
+        "local_only": true,
+        "fabricated": false,
+        "decision": "post-install-update-rollback-compatible",
+        "decision_digest": "4b6f8c8a5e85a73c7c60e7d00386085edc6e25dddd9b6728afb3ee6c527659eb",
+        "first_user_install_bound": true,
+        "offline_channel_bound": true,
+        "update_compatibility_bound": true,
+        "rollback_compatibility_bound": true,
+        "disposable_boundary_compatible": true,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-031 must not execute new install/update/rollback, upload support, execute recovery, remote dispatch, mutate host/production state, trust external surfaces, handle private material, or claim consumer readiness.",
+      "evidence": {
+        "post_install_smoke_evaluated": true,
+        "update_compatibility_evaluated": true,
+        "rollback_compatibility_evaluated": true,
+        "install_performed_by_smoke": false,
+        "update_performed_by_smoke": false,
+        "rollback_execution_performed_by_smoke": false,
+        "disposable_target_state_mutated_by_smoke": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "object_storage_provisioned": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "endpoint_reachability_trusted": false,
+        "frontend_output_trusted": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing sources and forbidden authority surfaces must fail closed before post-install effects.",
+      "evidence": {
+        "cases": 30,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-031 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
