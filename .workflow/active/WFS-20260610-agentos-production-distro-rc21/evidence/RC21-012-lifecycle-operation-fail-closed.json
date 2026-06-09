@@ -1,0 +1,236 @@
+{
+    "schema":  "agentos.rc21-lifecycle-operation-fail-closed-task-evidence.v1",
+    "generated_at":  "2026-06-10T18:45:00+08:00",
+    "task":  "RC21-012",
+    "status":  "completed",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "workflow":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21",
+    "script":  {
+                   "path":  "scripts/verify-rc21-lifecycle-operation-fail-closed.ps1",
+                   "sha256":  "e6ae6c07002fee976726bc0cf0f243dedf14ba5b4c66fc433b07d366a5eb7d2f"
+               },
+    "result":  {
+                   "path":  ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/result.json",
+                   "status":  "passed",
+                   "sha256":  "1c8ddf6842ce8c041a794dc9c26e4506f4c72774c1686cf4f7280156d26ae3a9"
+               },
+    "outputs":  {
+                    "fail_closed_matrix":  {
+                                               "path":  ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/fail-closed-matrix.json",
+                                               "sha256":  "2f7fb8b637521b6e9141dab316c3763791e606883a63ace38c67ec35abe30111",
+                                               "case_count":  45,
+                                               "failed_case_count":  0
+                                           }
+                },
+    "fail_closed_surface":  {
+                                "state":  "lifecycle-operation-fixtures-fail-closed-before-effect",
+                                "fixture_count":  45,
+                                "failed_fixture_count":  0,
+                                "all_cases_denied_before_effect":  true,
+                                "required_intents":  [
+                                                         "install",
+                                                         "update",
+                                                         "repair-reinstall",
+                                                         "downgrade-rollback",
+                                                         "support-export",
+                                                         "recovery-reference"
+                                                     ],
+                                "coverage_categories":  [
+                                                            "operation-gate",
+                                                            "source",
+                                                            "intent",
+                                                            "scope",
+                                                            "journal",
+                                                            "snapshot",
+                                                            "effect",
+                                                            "host",
+                                                            "production",
+                                                            "remote",
+                                                            "authority",
+                                                            "support",
+                                                            "recovery",
+                                                            "non-authority"
+                                                        ],
+                                "support_upload_allowed":  false,
+                                "recovery_execution_allowed":  false,
+                                "remote_dispatch_enabled":  false,
+                                "host_rootfs_mutation_allowed":  false,
+                                "active_artifact_set_mutation_allowed":  false,
+                                "production_ring_mutation_allowed":  false,
+                                "endpoint_authority":  false
+                            },
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "consumer_ready_claim":  false,
+                       "lifecycle_operation_effect_preparation_performed":  false,
+                       "dry_run_plan_written":  false,
+                       "install_performed":  false,
+                       "update_performed":  false,
+                       "repair_performed":  false,
+                       "reinstall_performed":  false,
+                       "downgrade_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "host_rootfs_mutated":  false,
+                       "host_active_slot_mutated":  false,
+                       "host_boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "signer_authority":  false,
+                       "object_storage_authority":  false,
+                       "private_signing_material_handled":  false,
+                       "cryptographic_signing_performed":  false,
+                       "endpoint_authority":  false,
+                       "shell_output_authority":  false,
+                       "tui_authority":  false,
+                       "model_replay_authority":  false
+                   },
+    "completion":  {
+                       "rc21_012_complete":  true,
+                       "next_task":  "RC21-020",
+                       "commit_required":  true
+                   },
+    "checks":  [
+                   {
+                       "id":  "plan.current_task.rc21_012",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-012 must run after RC21-011 completed, with current_task set to RC21-012 or during an idempotent rerun.",
+                       "evidence":  {
+                                        "status":  "active",
+                                        "current_task":  "RC21-020",
+                                        "rc21_011_status":  "completed",
+                                        "rc21_012_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "contract.fail_closed_authority.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-012 must consume the RC21 fail-closed contract language.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                        "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf"
+                                    }
+                   },
+                   {
+                       "id":  "catalog.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fail-closed fixtures must bind the completed operation intent catalog.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "catalog_status":  "local-operation-intent-catalog-bound-non-ga",
+                                        "intent_count":  6
+                                    }
+                   },
+                   {
+                       "id":  "journal_snapshot.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fail-closed fixtures must bind the completed transaction journal and projection-only snapshot baseline packages.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "journal_entry_count":  6,
+                                        "snapshot_projection_only":  true
+                                    }
+                   },
+                   {
+                       "id":  "rc20.state.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must bind RC20 target, updated, and restored lifecycle states.",
+                       "evidence":  {
+                                        "target_state_id":  "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+                                        "updated_image_state_id":  "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+                                        "restored_target_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.required_coverage",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must cover required lifecycle intents and fail-closed categories.",
+                       "evidence":  {
+                                        "cases":  45,
+                                        "failed_cases":  0,
+                                        "categories":  [
+                                                           "operation-gate",
+                                                           "source",
+                                                           "intent",
+                                                           "scope",
+                                                           "journal",
+                                                           "snapshot",
+                                                           "effect",
+                                                           "host",
+                                                           "production",
+                                                           "remote",
+                                                           "authority",
+                                                           "support",
+                                                           "recovery",
+                                                           "non-authority"
+                                                       ]
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.required_reasons.covered",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must cover missing/stale RC20 evidence, intent, journal, snapshot, broad scope, host, remote, signer, support, recovery, and GA denial reasons.",
+                       "evidence":  [
+                                        "dry-run-gate-required",
+                                        "rc20-lifecycle-support-required",
+                                        "stale-rc20-lifecycle-support-denied",
+                                        "rc20-state-identity-mismatch-denied",
+                                        "operation-intent-catalog-mismatch-denied",
+                                        "operation-intent-mismatch-denied",
+                                        "unknown-operation-intent-denied",
+                                        "broad-operation-scope-denied",
+                                        "transaction-journal-entry-required",
+                                        "stale-transaction-journal-denied",
+                                        "transaction-journal-package-mismatch-denied",
+                                        "transaction-id-mismatch-denied",
+                                        "audit-sink-required",
+                                        "resume-checkpoint-required",
+                                        "rollback-snapshot-reference-required",
+                                        "snapshot-baseline-required",
+                                        "stale-snapshot-baseline-denied",
+                                        "snapshot-baseline-package-mismatch-denied",
+                                        "snapshot-reference-mismatch-denied",
+                                        "snapshot-authority-broadening-denied",
+                                        "effect-execution-authority-denied",
+                                        "host-mutation-denied",
+                                        "production-ring-mutation-denied",
+                                        "remote-dependency-denied",
+                                        "signer-authority-denied",
+                                        "object-storage-provisioning-denied",
+                                        "support-upload-denied",
+                                        "recovery-execution-denied",
+                                        "non-authoritative-surface-denied",
+                                        "ga-claim-denied"
+                                    ]
+                   },
+                   {
+                       "id":  "fixtures.deny_before_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "All fixtures must fail closed before effect preparation, host mutation, support upload, recovery execution, remote dispatch, or production mutation.",
+                       "evidence":  {
+                                        "failed_cases":  [
+
+                                                         ]
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixture outputs must be local-only and contain no private material, tokens, raw secrets, or endpoint authority claims.",
+                       "evidence":  null
+                   }
+               ]
+}

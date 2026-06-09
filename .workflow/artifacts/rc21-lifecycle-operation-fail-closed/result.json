@@ -1,0 +1,335 @@
+{
+    "schema":  "agentos.rc21-lifecycle-operation-fail-closed-result.v1",
+    "generated_at":  "2026-06-10T18:45:00+08:00",
+    "task":  "RC21-012",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "operation_intent_catalog_id":  "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+    "transaction_journal_package_id":  "sha256:5ea7ab41f0c093c69f3d742430871d29ba3d33a8a314bc1f94006b8801e5c4a0",
+    "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62",
+    "outputs":  {
+                    "fail_closed_matrix":  {
+                                               "path":  ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/fail-closed-matrix.json",
+                                               "sha256":  "2f7fb8b637521b6e9141dab316c3763791e606883a63ace38c67ec35abe30111",
+                                               "case_count":  45,
+                                               "failed_case_count":  0
+                                           }
+                },
+    "fail_closed_surface":  {
+                                "state":  "lifecycle-operation-fixtures-fail-closed-before-effect",
+                                "fixture_count":  45,
+                                "failed_fixture_count":  0,
+                                "all_cases_denied_before_effect":  true,
+                                "required_intents":  [
+                                                         "install",
+                                                         "update",
+                                                         "repair-reinstall",
+                                                         "downgrade-rollback",
+                                                         "support-export",
+                                                         "recovery-reference"
+                                                     ],
+                                "coverage_categories":  [
+                                                            "operation-gate",
+                                                            "source",
+                                                            "intent",
+                                                            "scope",
+                                                            "journal",
+                                                            "snapshot",
+                                                            "effect",
+                                                            "host",
+                                                            "production",
+                                                            "remote",
+                                                            "authority",
+                                                            "support",
+                                                            "recovery",
+                                                            "non-authority"
+                                                        ],
+                                "support_upload_allowed":  false,
+                                "recovery_execution_allowed":  false,
+                                "remote_dispatch_enabled":  false,
+                                "host_rootfs_mutation_allowed":  false,
+                                "active_artifact_set_mutation_allowed":  false,
+                                "production_ring_mutation_allowed":  false,
+                                "endpoint_authority":  false
+                            },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "a326524eb50c4e3b89d5706650a9bbc343ccfbd477d0283ec4b7e24158700f97",
+                                     "size_bytes":  8625,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_operation_intent_catalog_result":  {
+                                                                "role":  "rc21 operation intent catalog result",
+                                                                "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+                                                                "sha256":  "96755fd238fcebdaa46ec5f3d90ba89a1b1f7bef070c0c256553638722d7cf47",
+                                                                "size_bytes":  57638,
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc21-local-operation-intent-catalog-result.v1",
+                                                                "status":  "passed",
+                                                                "task":  "RC21-010",
+                                                                "production_ready_claim":  false,
+                                                                "consumer_ready_claim":  false
+                                                            },
+                   "rc21_operation_intent_catalog":  {
+                                                         "role":  "rc21 operation intent catalog",
+                                                         "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+                                                         "sha256":  "10e671302515e6b9c36fd50fac3532f2abca9c7b0f0da99f4796ed257b86da6d",
+                                                         "size_bytes":  25256,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc21-local-operation-intent-catalog.v1",
+                                                         "status":  "local-operation-intent-catalog-bound-non-ga",
+                                                         "task":  "RC21-010",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc21_journal_snapshot_result":  {
+                                                        "role":  "rc21 journal snapshot result",
+                                                        "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+                                                        "sha256":  "beb0bfcf8e15f41c2dda4fa3d90367806132a561d657b9d0fa36e956ee6e52b7",
+                                                        "size_bytes":  83460,
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc21-transaction-journal-snapshot-baseline-result.v1",
+                                                        "status":  "passed",
+                                                        "task":  "RC21-011",
+                                                        "production_ready_claim":  false,
+                                                        "consumer_ready_claim":  false
+                                                    },
+                   "rc21_transaction_journal_package":  {
+                                                            "role":  "rc21 transaction journal package",
+                                                            "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/transaction-journal-package.json",
+                                                            "sha256":  "fe936acf4fff5baec60b9ce9369fcfa733759d558aaca12f9fd998c51234fe2c",
+                                                            "size_bytes":  28080,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-transaction-journal-package.v1",
+                                                            "status":  "transaction-journal-baseline-bound-non-executable",
+                                                            "task":  "RC21-011",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_snapshot_baseline_package":  {
+                                                          "role":  "rc21 snapshot baseline package",
+                                                          "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/snapshot-baseline-package.json",
+                                                          "sha256":  "619e15a62095359691f9f310d0c6c3efed495fd15846896bf27f1359447e5979",
+                                                          "size_bytes":  11849,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-snapshot-baseline-package.v1",
+                                                          "status":  "snapshot-baseline-bound-projection-only",
+                                                          "task":  "RC21-011",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc20_lifecycle_support_result":  {
+                                                         "role":  "rc20 lifecycle support result",
+                                                         "path":  ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+                                                         "sha256":  "6e475b3ef5a1da47c464ed3f86fd018684836e176c4857cb79eef5ed91a67733",
+                                                         "size_bytes":  59069,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc20-lifecycle-support-recovery-result.v1",
+                                                         "status":  "passed",
+                                                         "task":  "RC20-032",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     }
+               },
+    "checks":  [
+                   {
+                       "id":  "plan.current_task.rc21_012",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-012 must run after RC21-011 completed, with current_task set to RC21-012 or during an idempotent rerun.",
+                       "evidence":  {
+                                        "status":  "active",
+                                        "current_task":  "RC21-020",
+                                        "rc21_011_status":  "completed",
+                                        "rc21_012_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "contract.fail_closed_authority.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-012 must consume the RC21 fail-closed contract language.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                        "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf"
+                                    }
+                   },
+                   {
+                       "id":  "catalog.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fail-closed fixtures must bind the completed operation intent catalog.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "catalog_status":  "local-operation-intent-catalog-bound-non-ga",
+                                        "intent_count":  6
+                                    }
+                   },
+                   {
+                       "id":  "journal_snapshot.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fail-closed fixtures must bind the completed transaction journal and projection-only snapshot baseline packages.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "journal_entry_count":  6,
+                                        "snapshot_projection_only":  true
+                                    }
+                   },
+                   {
+                       "id":  "rc20.state.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must bind RC20 target, updated, and restored lifecycle states.",
+                       "evidence":  {
+                                        "target_state_id":  "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+                                        "updated_image_state_id":  "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+                                        "restored_target_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.required_coverage",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must cover required lifecycle intents and fail-closed categories.",
+                       "evidence":  {
+                                        "cases":  45,
+                                        "failed_cases":  0,
+                                        "categories":  [
+                                                           "operation-gate",
+                                                           "source",
+                                                           "intent",
+                                                           "scope",
+                                                           "journal",
+                                                           "snapshot",
+                                                           "effect",
+                                                           "host",
+                                                           "production",
+                                                           "remote",
+                                                           "authority",
+                                                           "support",
+                                                           "recovery",
+                                                           "non-authority"
+                                                       ]
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.required_reasons.covered",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixtures must cover missing/stale RC20 evidence, intent, journal, snapshot, broad scope, host, remote, signer, support, recovery, and GA denial reasons.",
+                       "evidence":  [
+                                        "dry-run-gate-required",
+                                        "rc20-lifecycle-support-required",
+                                        "stale-rc20-lifecycle-support-denied",
+                                        "rc20-state-identity-mismatch-denied",
+                                        "operation-intent-catalog-mismatch-denied",
+                                        "operation-intent-mismatch-denied",
+                                        "unknown-operation-intent-denied",
+                                        "broad-operation-scope-denied",
+                                        "transaction-journal-entry-required",
+                                        "stale-transaction-journal-denied",
+                                        "transaction-journal-package-mismatch-denied",
+                                        "transaction-id-mismatch-denied",
+                                        "audit-sink-required",
+                                        "resume-checkpoint-required",
+                                        "rollback-snapshot-reference-required",
+                                        "snapshot-baseline-required",
+                                        "stale-snapshot-baseline-denied",
+                                        "snapshot-baseline-package-mismatch-denied",
+                                        "snapshot-reference-mismatch-denied",
+                                        "snapshot-authority-broadening-denied",
+                                        "effect-execution-authority-denied",
+                                        "host-mutation-denied",
+                                        "production-ring-mutation-denied",
+                                        "remote-dependency-denied",
+                                        "signer-authority-denied",
+                                        "object-storage-provisioning-denied",
+                                        "support-upload-denied",
+                                        "recovery-execution-denied",
+                                        "non-authoritative-surface-denied",
+                                        "ga-claim-denied"
+                                    ]
+                   },
+                   {
+                       "id":  "fixtures.deny_before_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "All fixtures must fail closed before effect preparation, host mutation, support upload, recovery execution, remote dispatch, or production mutation.",
+                       "evidence":  {
+                                        "failed_cases":  [
+
+                                                         ]
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Fixture outputs must be local-only and contain no private material, tokens, raw secrets, or endpoint authority claims.",
+                       "evidence":  null
+                   }
+               ],
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "consumer_ready_claim":  false,
+                       "lifecycle_operation_effect_preparation_performed":  false,
+                       "dry_run_plan_written":  false,
+                       "install_performed":  false,
+                       "update_performed":  false,
+                       "repair_performed":  false,
+                       "reinstall_performed":  false,
+                       "downgrade_performed":  false,
+                       "rollback_execution_performed":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "host_rootfs_mutated":  false,
+                       "host_active_slot_mutated":  false,
+                       "host_boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "signer_authority":  false,
+                       "object_storage_authority":  false,
+                       "private_signing_material_handled":  false,
+                       "cryptographic_signing_performed":  false,
+                       "endpoint_authority":  false,
+                       "shell_output_authority":  false,
+                       "tui_authority":  false,
+                       "model_replay_authority":  false
+                   },
+    "summary":  {
+                    "checks":  9,
+                    "failed_checks":  0,
+                    "cases":  45,
+                    "failed_cases":  0,
+                    "rc21_012_complete":  true,
+                    "all_cases_denied_before_effect":  true,
+                    "operation_intent_catalog_id":  "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+                    "transaction_journal_package_id":  "sha256:5ea7ab41f0c093c69f3d742430871d29ba3d33a8a314bc1f94006b8801e5c4a0",
+                    "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62",
+                    "support_upload_performed":  false,
+                    "recovery_execution_performed":  false,
+                    "remote_dispatch_enabled":  false,
+                    "host_rootfs_mutated":  false,
+                    "active_artifact_set_mutated":  false,
+                    "production_ring_mutated":  false,
+                    "next_task":  "RC21-020"
+                }
+}
