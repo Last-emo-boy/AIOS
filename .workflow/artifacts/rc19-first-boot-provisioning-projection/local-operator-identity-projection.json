@@ -1,0 +1,53 @@
+{
+  "schema": "agentos.rc19-local-operator-identity-projection.v1",
+  "generated_at": "2026-06-10T11:05:00+08:00",
+  "task": "RC19-022",
+  "status": "local-operator-identity-projection-bound-non-authoritative",
+  "projection_only": true,
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+  "operator_handle": "local-operator://rc19/c3c0d942c87259c3",
+  "operator_origin": "first-user-install-disposable-target-projection",
+  "derived_from": {
+    "first_user_install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "first_user_install_evidence_sha256": "aac6cdc3e37c4104b6f1b2006ee68bfa36634da6b7c89deea11befb29c60cfb7",
+    "target_state_root_sha256": "5ea5aa3656ae0dcd554e7ab7f6ea04e0a8a31273a8dc87777a0e33b08380c4a5",
+    "operator_commands_sha256": "a1a7747d5c628f2fe51ff231f171d8459ade1af06d0807417ac92798814fd1fb"
+  },
+  "public_projection": {
+    "role": "local-operator",
+    "default_session_scope": "read-only-projection",
+    "allowed_initial_commands": [
+      "node.identity.show",
+      "tui.dashboard",
+      "tui.audit.show",
+      "support.bundle.export"
+    ],
+    "activation_commands_require_later_exact_approval": [
+      "node.enrollment.activate",
+      "registry.refresh.commit",
+      "org.overlay.activate",
+      "rollback.trigger"
+    ]
+  },
+  "authority": {
+    "non_authoritative": true,
+    "projection_grants_host_authority": false,
+    "projection_grants_production_authority": false,
+    "projection_grants_remote_dispatch": false,
+    "projection_grants_support_upload": false,
+    "projection_grants_recovery_execution": false,
+    "projection_grants_signing": false,
+    "projection_grants_active_artifact_set_mutation": false,
+    "model_replay_authority": false,
+    "tui_authority": false
+  },
+  "secrecy": {
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "enrollment_secret_material_present": false,
+    "operator_secret_exported": false,
+    "handle_only": true
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "agentos.rc19-first-boot-provisioning-projection.v1",
+  "generated_at": "2026-06-10T11:05:00+08:00",
+  "task": "RC19-022",
+  "status": "first-boot-provisioning-projection-bound",
+  "projection_only": true,
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+  "projection_material": {
+    "schema": "agentos.rc19-first-boot-provisioning-projection-material.v1",
+    "task": "RC19-022",
+    "projection_mode": "projection-only",
+    "first_user_install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "target_boundary_id": "sha256:23e9e7ff0ed6508a6c6713ddd477fc6872395345d94610f8f9df235cc3b8f321",
+    "install_preflight_package_id": "sha256:07dc8e2a6a44f7efe1e6a1fbdda7383e59f3f1eec036fd281395bc28ea24d5c0",
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+    "install_evidence_sha256": "aac6cdc3e37c4104b6f1b2006ee68bfa36634da6b7c89deea11befb29c60cfb7",
+    "target_state_root_sha256": "5ea5aa3656ae0dcd554e7ab7f6ea04e0a8a31273a8dc87777a0e33b08380c4a5",
+    "target_audit_sha256": "0a26c0f13930235d8a9a1c78c5a0ca9b9b851dbe99d8839b23c7e5f456e088a6",
+    "operator_commands_sha256": "a1a7747d5c628f2fe51ff231f171d8459ade1af06d0807417ac92798814fd1fb",
+    "validate_rootfs_script_sha256": "73ca2c811cab2ad8c949fcd51d6a52e653343f3eaa619b79b9721607939b9d24",
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_authority_granted": false,
+    "production_authority_granted": false
+  },
+  "first_boot_plan": {
+    "derived_from_first_user_install": true,
+    "first_boot_execution_allowed_now": false,
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "local_operator_identity_created": false,
+    "local_operator_identity_projection_bound": true,
+    "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+    "next_realization_gate": "post-install first boot execution remains outside RC19-022 projection",
+    "required_before_execution": [
+      "first-user-install-evidence-bound",
+      "operator-command-registry-bound",
+      "rootfs-validation-runner-bound",
+      "no-secret-material-in-projection",
+      "later-first-boot-execution-authority"
+    ]
+  },
+  "boot_projection": {
+    "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+    "boot_markers": [
+      "AGENTD_HANDOFF_OK",
+      "AGENTOS_RUNTIME_ARTIFACTS_OK",
+      "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "AGENTOS_TUI_CONSOLE_READY",
+      "AGENTOS_RUNTIME_ARTIFACT_COUNT=15"
+    ],
+    "runtime_artifact_ids": [
+      "policy.pack",
+      "tools.semantic",
+      "operator.commands",
+      "production_signing.key_custody",
+      "production_signing.key_rotation_log",
+      "production_signing.key_revocation_log",
+      "ecosystem.registry_snapshot",
+      "ecosystem.core_policy",
+      "ecosystem.workflow_service_recovery",
+      "model_broker.config",
+      "tui.config",
+      "state.runs",
+      "state.audit",
+      "state.rollback",
+      "state.memory"
+    ],
+    "rootfs_runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+    "runtime_artifact_count": 15
+  },
+  "operator_command_registry": {
+    "path": "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    "sha256": "a1a7747d5c628f2fe51ff231f171d8459ade1af06d0807417ac92798814fd1fb",
+    "schema": "agentos.operator-commands.v1",
+    "normal_mode_shell_exec": "absent-and-denied",
+    "command_count": 45,
+    "node_identity_show_bound": true,
+    "shell_exec_exposed": false
+  },
+  "validation_runner": {
+    "path": "scripts/validate-alpha-rootfs.ps1",
+    "sha256": "73ca2c811cab2ad8c949fcd51d6a52e653343f3eaa619b79b9721607939b9d24",
+    "bound": true,
+    "executed_by_rc19_022": false
+  },
+  "local_operator_identity": {
+    "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/local-operator-identity-projection.json",
+    "sha256": "e9508d4f39380e10ac0293e8b8d18d72def437bea2cc5904251714296c33d76c",
+    "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+    "non_authoritative": true,
+    "handle_only": true
+  },
+  "denial_reasons": [],
+  "side_effects": {
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "local_operator_identity_created": false,
+    "local_operator_identity_projection_bound": true,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "consumer_ready_claim": false
+  }
+}

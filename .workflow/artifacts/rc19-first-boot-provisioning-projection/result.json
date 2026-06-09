@@ -1,0 +1,851 @@
+{
+  "schema": "agentos.rc19-first-boot-provisioning-projection-result.v1",
+  "generated_at": "2026-06-10T11:05:00+08:00",
+  "task": "RC19-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+  "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+  "first_user_install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+  "outputs": {
+    "first_boot_provisioning_projection": {
+      "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/first-boot-provisioning-projection.json",
+      "sha256": "de2de4d08557208b11e7c16204454d73b65da6e6cef80df44fad344ba0e722f8",
+      "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e"
+    },
+    "local_operator_identity_projection": {
+      "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/local-operator-identity-projection.json",
+      "sha256": "e9508d4f39380e10ac0293e8b8d18d72def437bea2cc5904251714296c33d76c",
+      "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08"
+    }
+  },
+  "projection_surface": {
+    "state": "first-boot-provisioning-and-local-operator-projection-bound",
+    "projection_only": true,
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "local_operator_identity_created": false,
+    "local_operator_identity_projection_bound": true,
+    "local_operator_identity_non_authoritative": true,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "consumer_ready_claim": false,
+    "blockers": []
+  },
+  "source": {
+    "rc19_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+      "sha256": "a27d24fdbfa7026df9d2f73306a0aa5577854bb5a4b883cf7d359ff10ef5b744",
+      "size_bytes": 7950,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null
+    },
+    "rc19_first_user_install_result": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+      "sha256": "68d8cd653e153caff049961e7d72b35855d7f72f30d6944cc1aa210e22208278",
+      "size_bytes": 45518,
+      "present": true,
+      "schema": "agentos.rc19-first-user-install-drill-result.v1",
+      "status": "passed",
+      "task": "RC19-021",
+      "production_ready_claim": false
+    },
+    "rc19_first_user_install_evidence": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/first-user-install-evidence.json",
+      "sha256": "aac6cdc3e37c4104b6f1b2006ee68bfa36634da6b7c89deea11befb29c60cfb7",
+      "size_bytes": 37968,
+      "present": true,
+      "schema": "agentos.rc19-first-user-install-drill-evidence.v1",
+      "status": "first-user-install-executed-inside-disposable-target",
+      "task": "RC19-021",
+      "production_ready_claim": false
+    },
+    "rc19_disposable_target_state_root": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/state-root.json",
+      "sha256": "5ea5aa3656ae0dcd554e7ab7f6ea04e0a8a31273a8dc87777a0e33b08380c4a5",
+      "size_bytes": 4983,
+      "present": true,
+      "schema": "agentos.rc19-disposable-first-user-install-target-state-root.v1",
+      "status": "first-user-installed-inside-disposable-target",
+      "task": "RC19-021",
+      "production_ready_claim": false
+    },
+    "rc19_disposable_target_audit": {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/disposable-target/install-audit.json",
+      "sha256": "0a26c0f13930235d8a9a1c78c5a0ca9b9b851dbe99d8839b23c7e5f456e088a6",
+      "size_bytes": 1501,
+      "present": true,
+      "schema": "agentos.rc19-first-user-install-audit-record.v1",
+      "status": null,
+      "task": "RC19-021",
+      "production_ready_claim": false
+    },
+    "rc19_target_boundary_result": {
+      "path": ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json",
+      "sha256": "8a66922c434125c03f433e15eb4306773b94d6f24c9179c9b04dc9e0f1776521",
+      "size_bytes": 46083,
+      "present": true,
+      "schema": "agentos.rc19-first-user-install-target-boundary-result.v1",
+      "status": "passed",
+      "task": "RC19-020",
+      "production_ready_claim": false
+    },
+    "operator_commands": {
+      "path": "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+      "sha256": "a1a7747d5c628f2fe51ff231f171d8459ade1af06d0807417ac92798814fd1fb",
+      "size_bytes": 16337,
+      "present": true,
+      "schema": "agentos.operator-commands.v1",
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    },
+    "validate_alpha_rootfs_runner": {
+      "path": "scripts/validate-alpha-rootfs.ps1",
+      "sha256": "73ca2c811cab2ad8c949fcd51d6a52e653343f3eaa619b79b9721607939b9d24",
+      "size_bytes": 36594,
+      "present": true,
+      "schema": null,
+      "status": null,
+      "task": null,
+      "production_ready_claim": null
+    }
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc19_022",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-022 must run after RC19-021 completed, while current_task is RC19-022 or during a completed rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC19-030",
+        "rc19_021_status": "completed",
+        "rc19_022_status": "completed"
+      }
+    },
+    {
+      "id": "source.first_user_install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-022 must derive from completed RC19-021 first-user install evidence, target state, and non-fabricated audit.",
+      "evidence": {
+        "first_user_install_ready": true,
+        "evidence_ready": true,
+        "target_state_ready": true,
+        "target_audit_ready": true,
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "operator.registry.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Operator command registry must expose local read-only identity projection and deny normal shell authority.",
+      "evidence": {
+        "schema": "agentos.operator-commands.v1",
+        "normal_mode_shell_exec": "absent-and-denied",
+        "command_count": 45,
+        "node_identity_show_count": 1,
+        "shell_exec_count": 0
+      }
+    },
+    {
+      "id": "rootfs.validation.runner.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rootfs validation runner must be bound as a source reference without executing first boot effects.",
+      "evidence": {
+        "path": "scripts/validate-alpha-rootfs.ps1",
+        "sha256": "73ca2c811cab2ad8c949fcd51d6a52e653343f3eaa619b79b9721607939b9d24",
+        "size_bytes": 36594,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "task": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "projection.only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First boot provisioning must remain projection-only in RC19-022.",
+      "evidence": {
+        "derived_from_first_user_install": true,
+        "first_boot_execution_allowed_now": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "local_operator_identity_projection_bound": true,
+        "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+        "next_realization_gate": "post-install first boot execution remains outside RC19-022 projection",
+        "required_before_execution": [
+          "first-user-install-evidence-bound",
+          "operator-command-registry-bound",
+          "rootfs-validation-runner-bound",
+          "no-secret-material-in-projection",
+          "later-first-boot-execution-authority"
+        ]
+      }
+    },
+    {
+      "id": "operator.identity.non_authoritative",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local operator identity must be non-secret, handle-only, and non-authoritative.",
+      "evidence": {
+        "projection_only": true,
+        "non_authoritative": true,
+        "handle_only": true,
+        "operator_handle": "local-operator://rc19/c3c0d942c87259c3"
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-022 must not execute first boot, introduce secrets, mutate host state, upload support, execute recovery, remote-dispatch, mutate production, or claim consumer readiness.",
+      "evidence": {
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "local_operator_identity_projection_bound": true,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing sources and forbidden authority surfaces must fail closed before first boot effects.",
+      "evidence": {
+        "cases": 22,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-022 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ],
+  "fail_closed_cases": [
+    {
+      "id": "missing-first-user-install-result",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "first-user-install-result-not-ready"
+      ],
+      "reason": "First boot projection requires RC19-021 result.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-first-user-install-evidence",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "first-user-install-evidence-not-ready"
+      ],
+      "reason": "First boot projection requires RC19-021 evidence.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-target-state",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "disposable-target-state-not-ready"
+      ],
+      "reason": "First boot projection requires disposable target state.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-target-audit",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "disposable-target-audit-not-ready"
+      ],
+      "reason": "First boot projection requires non-fabricated target audit.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-operator-command-registry",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "operator-command-registry-not-ready"
+      ],
+      "reason": "Operator identity projection requires operator command registry.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "missing-rootfs-validation-runner",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rootfs-validation-runner-not-bound"
+      ],
+      "reason": "Rootfs validation runner must be bound.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "raw-user-secret-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "raw-user-secret-denied"
+      ],
+      "reason": "Projection must not introduce raw user secret material.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "credential-material-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "credential-material-denied"
+      ],
+      "reason": "Projection must not introduce credential material.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "secret-handle-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "secret-handle-authority-denied"
+      ],
+      "reason": "Handle-only projection cannot grant authority.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "shell-exec-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "shell-exec-authority-denied"
+      ],
+      "reason": "Normal shell authority is absent and denied.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-rootfs-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs mutation is out of RC19-022 scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot mutation is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata mutation is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "active-artifact-set-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "reason": "Active artifact set mutation is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is out of scope.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "model-replay-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "model-replay-authority-denied"
+      ],
+      "reason": "Model replay is not first boot authority.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "tui-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "tui-authority-denied"
+      ],
+      "reason": "TUI projection is not first boot authority.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "consumer-ready-claim-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "consumer-ready-claim-denied"
+      ],
+      "reason": "Consumer readiness waits for later smoke.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "ga-claim-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "ga-claim-denied"
+      ],
+      "reason": "RC19-022 cannot claim GA production readiness.",
+      "denied_before_first_boot_effect": true,
+      "side_effects": {
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false
+      }
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "projection_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "local_operator_identity_created": false,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "model_replay_authority": false,
+    "tui_authority": false
+  },
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "cases": 22,
+    "failed_cases": 0,
+    "rc19_022_complete": true,
+    "projection_only": true,
+    "first_boot_provisioning_executed": false,
+    "local_operator_identity_projection_bound": true,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "next_task": "RC19-030"
+  }
+}
