@@ -1,0 +1,84 @@
+{
+  "schema": "agentos.rc20-post-install-update-audit-record.v1",
+  "generated_at": "2026-06-10T15:45:00+08:00",
+  "task": "RC20-030",
+  "status": "post-install-update-audit-bound",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "update_audit_record_id": "sha256:7c341fac73c2f840cf020e8c7c2234b1e947eee2a97f214fca0161f5ff3f9473",
+  "update_drill_id": "sha256:5c30f08fa634d94b06e4c529c97d47a0a561b816a7030acbd7587aced6e4964e",
+  "audit_material": {
+    "schema": "agentos.rc20-post-install-update-audit-material.v1",
+    "task": "RC20-030",
+    "update_drill_id": "sha256:5c30f08fa634d94b06e4c529c97d47a0a561b816a7030acbd7587aced6e4964e",
+    "selected_version": "rc20-single-user-stable-local-projection",
+    "previous_installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "rollback_required": true
+  },
+  "events": [
+    {
+      "id": "pre-update-state-bound",
+      "state": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    },
+    {
+      "id": "selected-version-bound",
+      "selected_version": "rc20-single-user-stable-local-projection"
+    },
+    {
+      "id": "isolated-update-evidence-bound",
+      "source": ".workflow/artifacts/rc18-isolated-update-drill/update-drill-evidence.json",
+      "updated_state": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45"
+    },
+    {
+      "id": "post-update-observation-bound",
+      "source": ".workflow/artifacts/rc18-image-rollback-preconditions/post-update-observation.json",
+      "rollback_required": true
+    },
+    {
+      "id": "host-production-surfaces-unchanged",
+      "evidence": {
+        "update_drill_evidence_bound": true,
+        "update_audit_record_bound": true,
+        "post_update_observation_bound": true,
+        "rollback_prerequisites_bound": true,
+        "isolated_update_performed": true,
+        "disposable_image_state_mutated": true,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "signer_authority_granted": false,
+        "object_storage_provisioned": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    }
+  ],
+  "side_effects": {
+    "update_drill_evidence_bound": true,
+    "update_audit_record_bound": true,
+    "post_update_observation_bound": true,
+    "rollback_prerequisites_bound": true,
+    "isolated_update_performed": true,
+    "disposable_image_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "signer_authority_granted": false,
+    "object_storage_provisioned": false,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false
+  }
+}

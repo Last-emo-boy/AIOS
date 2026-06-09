@@ -1,0 +1,179 @@
+{
+  "schema": "agentos.rc20-post-install-update-drill-task-evidence.v1",
+  "generated_at": "2026-06-10T15:45:00+08:00",
+  "task": "RC20-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "script": {
+    "path": "scripts/run-rc20-post-install-update-drill.ps1",
+    "sha256": "7b3affb6aff26a836d525b476325f42f5598bfdbdc55002791000cebca7476b8"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+    "status": "passed",
+    "sha256": "3e14ca1fb126edae29e589ab2746a0968388c01b2cb8fd5070364831f5a0c6af"
+  },
+  "outputs": {
+    "update_drill_evidence": {
+      "path": ".workflow/artifacts/rc20-post-install-update-drill/update-drill-evidence.json",
+      "sha256": "22ac11c74f1647f719d6563f73110be363f712459f80f2d009250cd4930e1ef1",
+      "update_drill_id": "sha256:5c30f08fa634d94b06e4c529c97d47a0a561b816a7030acbd7587aced6e4964e"
+    },
+    "update_audit_record": {
+      "path": ".workflow/artifacts/rc20-post-install-update-drill/update-audit-record.json",
+      "sha256": "b9e8f363f7a9a5882f80bba5427c68ea67b3193f23c9798c552aa1a9c21ea6db",
+      "update_audit_record_id": "sha256:7c341fac73c2f840cf020e8c7c2234b1e947eee2a97f214fca0161f5ff3f9473"
+    }
+  },
+  "update_surface": {
+    "state": "post-install-local-update-executed-inside-disposable-installed-system",
+    "rc20_install_acceptance_bound": true,
+    "selected_channel_version_bound": true,
+    "update_compatibility_ready": true,
+    "isolated_update_performed": true,
+    "post_update_observation_bound": true,
+    "rollback_prerequisites_bound": true,
+    "disposable_image_state_mutated": true,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "signer_authority_granted": false,
+    "object_storage_provisioned": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "disposable_installed_system_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "signer_authority": false,
+    "object_storage_provisioned": false
+  },
+  "completion": {
+    "rc20_030_complete": true,
+    "next_task": "RC20-031",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc20_030",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-030 must run after RC20-022 completed, with current_task set to RC20-030.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-030",
+        "rc20_022_status": "completed",
+        "rc20_030_status": "pending"
+      }
+    },
+    {
+      "id": "contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-030 must consume the RC20 authority contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+        "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db"
+      }
+    },
+    {
+      "id": "rc20.install_first_boot.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install update must bind RC20 install acceptance and first boot acceptance.",
+      "evidence": {
+        "install_status": "passed",
+        "first_boot_status": "passed",
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "selection.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install update must bind selected channel version and installer preflight.",
+      "evidence": {
+        "selection_status": "passed",
+        "selected_version": "rc20-single-user-stable-local-projection",
+        "host_install_authorized": false
+      }
+    },
+    {
+      "id": "compatibility.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install update requires update/rollback compatibility readiness.",
+      "evidence": {
+        "update_readiness": "ready",
+        "rollback_readiness": "ready",
+        "update_or_rollback_executed_by_smoke": false
+      }
+    },
+    {
+      "id": "isolated_update.executed_inside_boundary",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Update drill must execute only inside disposable installed-system image boundary and leave host/production surfaces untouched.",
+      "evidence": {
+        "isolated_update_performed": true,
+        "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "host_rootfs_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "rollback_prerequisites.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-update observation and rollback prerequisites must be bound for RC20-031.",
+      "evidence": {
+        "rollback_preconditions_bound": true,
+        "post_update_observation_bound": true,
+        "observed_updated_state": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45"
+      }
+    },
+    {
+      "id": "audit.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Update drill evidence must bind update audit record bytes and id.",
+      "evidence": {
+        "update_audit_record_id": "sha256:7c341fac73c2f840cf020e8c7c2234b1e947eee2a97f214fca0161f5ff3f9473",
+        "update_audit_record_sha256": "b9e8f363f7a9a5882f80bba5427c68ea67b3193f23c9798c552aa1a9c21ea6db"
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Update drill must deny missing sources, stale state, host mutation, production mutation, remote dispatch, support/recovery execution, signer/object storage authority, and GA claims.",
+      "evidence": {
+        "cases": 18,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-030 outputs must not contain key blocks, private authority paths, auth tokens, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
