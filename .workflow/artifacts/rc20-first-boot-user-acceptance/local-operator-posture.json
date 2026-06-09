@@ -1,0 +1,76 @@
+{
+  "schema": "agentos.rc20-local-operator-posture.v1",
+  "generated_at": "2026-06-10T15:25:00+08:00",
+  "task": "RC20-022",
+  "status": "local-operator-posture-bound-redacted",
+  "projection_only": true,
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "local_operator_posture_id": "sha256:8b2c66ff3dcb8c0b31517ca0b16f67e41a2a2671d6ceee6cece452a4d749b85b",
+  "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53",
+  "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+  "operator_handle": "local-operator://rc19/c3c0d942c87259c3",
+  "public_projection": {
+    "role": "local-operator",
+    "default_session_scope": "read-only-projection",
+    "allowed_initial_commands": [
+      "node.identity.show",
+      "tui.dashboard",
+      "tui.audit.show",
+      "support.bundle.export"
+    ],
+    "activation_commands_require_later_exact_approval": [
+      "node.enrollment.activate",
+      "registry.refresh.commit",
+      "org.overlay.activate",
+      "rollback.trigger"
+    ]
+  },
+  "audit_expectations": {
+    "install_audit_record_id": "sha256:cc89cc070448cea398610d3256c031ab923278c8db180b13571a56e762de8b2f",
+    "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53",
+    "local_operator_posture_id": "sha256:8b2c66ff3dcb8c0b31517ca0b16f67e41a2a2671d6ceee6cece452a4d749b85b",
+    "exact_approval_required_before_activation": true,
+    "support_bundle_export_local_only": true
+  },
+  "rollback_support_references": {
+    "support_bundle_id": "rc19-first-user-support-b1c927261884cb5a",
+    "update_readiness": "ready",
+    "rollback_readiness": "ready",
+    "support_bundle_local_only": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false
+  },
+  "secrecy": {
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "enrollment_secret_material_present": false,
+    "operator_secret_exported": false,
+    "handle_only": true,
+    "redacted_identity_posture": true
+  },
+  "authority": {
+    "non_authoritative": true,
+    "projection_grants_host_authority": false,
+    "projection_grants_production_authority": false,
+    "projection_grants_remote_dispatch": false,
+    "projection_grants_support_upload": false,
+    "projection_grants_recovery_execution": false,
+    "projection_grants_shell": false,
+    "projection_grants_tui": false,
+    "projection_grants_endpoint_reachability": false,
+    "model_replay_authority": false
+  },
+  "posture_material": {
+    "schema": "agentos.rc20-local-operator-posture-material.v1",
+    "task": "RC20-022",
+    "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+    "operator_handle": "local-operator://rc19/c3c0d942c87259c3",
+    "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "support_bundle_id": "rc19-first-user-support-b1c927261884cb5a",
+    "update_readiness": "ready",
+    "rollback_readiness": "ready",
+    "support_bundle_local_only": true,
+    "credential_projection_only": true
+  }
+}

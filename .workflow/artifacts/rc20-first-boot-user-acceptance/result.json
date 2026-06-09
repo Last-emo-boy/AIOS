@@ -1,0 +1,772 @@
+{
+  "schema": "agentos.rc20-first-boot-user-acceptance-result.v1",
+  "generated_at": "2026-06-10T15:25:00+08:00",
+  "task": "RC20-022",
+  "status": "passed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53",
+  "local_operator_posture_id": "sha256:8b2c66ff3dcb8c0b31517ca0b16f67e41a2a2671d6ceee6cece452a4d749b85b",
+  "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+  "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+  "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+  "outputs": {
+    "first_boot_acceptance": {
+      "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/first-boot-acceptance.json",
+      "sha256": "deccac8001420b449b9699a777d8cdc35dfdad452972bff8b92846798c4e9b81",
+      "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53"
+    },
+    "local_operator_posture": {
+      "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/local-operator-posture.json",
+      "sha256": "5f2f6923eec28a9a7a9c50d5fe4eaf2903324a21e948a567a04625fc93b0a5b5",
+      "local_operator_posture_id": "sha256:8b2c66ff3dcb8c0b31517ca0b16f67e41a2a2671d6ceee6cece452a4d749b85b"
+    }
+  },
+  "first_boot_surface": {
+    "state": "first-boot-user-acceptance-local-operator-posture-bound",
+    "install_acceptance_bound": true,
+    "first_boot_projection_bound": true,
+    "local_operator_posture_bound": true,
+    "identity_matches": true,
+    "projection_only_for_credentials": true,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_boot_metadata_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "shell_authority": false,
+    "tui_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "blockers": []
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc20_022",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-022 must run after RC20-021 completed, with current_task set to RC20-022.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-022",
+        "rc20_021_status": "completed",
+        "rc20_022_status": "pending"
+      }
+    },
+    {
+      "id": "contract.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-022 must consume the RC20 authority contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+        "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db"
+      }
+    },
+    {
+      "id": "install_acceptance.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First boot acceptance must bind RC20 install acceptance target state and audit.",
+      "evidence": {
+        "status": "passed",
+        "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84",
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "host_rootfs_mutated": false
+      }
+    },
+    {
+      "id": "first_boot.projection_only_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First boot acceptance must remain projection-only and contain no raw credential material.",
+      "evidence": {
+        "status": "passed",
+        "projection_only": true,
+        "first_boot_provisioning_executed": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false
+      }
+    },
+    {
+      "id": "identity.matches",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install acceptance target state, release bundle, installer media, boot descriptor, and first boot projection must match.",
+      "evidence": {
+        "install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "first_boot_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "release_bundle_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "operator_posture.rollback_support_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Local operator posture must bind rollback/support references without support upload or recovery execution.",
+      "evidence": {
+        "update_readiness": "ready",
+        "rollback_readiness": "ready",
+        "support_bundle_local_only": true,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false
+      }
+    },
+    {
+      "id": "authority.no_projection_broadening",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First boot acceptance must not introduce host boot, support upload, recovery, remote dispatch, shell, TUI, endpoint, or model replay authority.",
+      "evidence": {
+        "host_boot_state_authority": false,
+        "host_boot_metadata_mutation_authority": false,
+        "host_active_slot_mutation_authority": false,
+        "support_upload_authority": false,
+        "recovery_execution_authority": false,
+        "remote_dispatch_authority": false,
+        "shell_authority": false,
+        "tui_authority": false,
+        "endpoint_reachability_authority": false,
+        "model_replay_authority": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First boot posture must deny missing sources, identity mismatch, raw credentials, host boot mutation, support/recovery execution, remote dispatch, projection authority, production mutation, and GA claims.",
+      "evidence": {
+        "cases": 17,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-022 outputs must not contain key blocks, private authority paths, auth tokens, signing key file names, raw passwords, or raw secrets.",
+      "evidence": null
+    }
+  ],
+  "fail_closed_cases": [
+    {
+      "id": "missing-install-acceptance",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "install-acceptance-required"
+      ],
+      "reason": "First boot acceptance requires RC20 install acceptance.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "missing-first-boot-projection",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "first-boot-projection-required"
+      ],
+      "reason": "First boot acceptance requires first boot projection.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "missing-local-operator-projection",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "local-operator-projection-required"
+      ],
+      "reason": "Operator posture requires local operator identity projection.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "target-state-mismatch",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "target-state-mismatch"
+      ],
+      "reason": "First boot acceptance denies target state mismatch.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "raw-user-secret-present",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "raw-user-secret-denied"
+      ],
+      "reason": "Raw user secret material is forbidden.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "credential-material-present",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "credential-material-denied"
+      ],
+      "reason": "Credential material is forbidden.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata mutation is forbidden.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "host-rootfs-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs mutation is forbidden.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of scope.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is out of scope.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of scope.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "shell-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "shell-authority-denied"
+      ],
+      "reason": "Shell output is not first boot authority.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "tui-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "tui-authority-denied"
+      ],
+      "reason": "TUI output is not first boot authority.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "endpoint-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "endpoint-authority-denied"
+      ],
+      "reason": "Endpoint reachability is not first boot authority.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "model-replay-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "model-replay-authority-denied"
+      ],
+      "reason": "Model replay is not first boot authority.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "production-ring-mutation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is forbidden.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    },
+    {
+      "id": "ga-claim-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "ga-claim-denied"
+      ],
+      "reason": "First boot posture cannot claim GA production readiness.",
+      "denied_before_first_boot_authority": true,
+      "side_effects": {
+        "first_boot_acceptance_bound": false,
+        "local_operator_posture_bound": false,
+        "first_boot_provisioning_executed": false,
+        "first_boot_state_mutated": false,
+        "local_operator_identity_created": false,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "shell_authority_granted": false,
+        "tui_authority_granted": false,
+        "endpoint_reachability_authority_granted": false,
+        "model_replay_authority_granted": false,
+        "production_ready_claim": false,
+        "consumer_ready_claim": false
+      }
+    }
+  ],
+  "invariants": {
+    "aios_body_only": true,
+    "projection_only_for_credentials": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutated": false,
+    "shell_authority": false,
+    "tui_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false
+  },
+  "summary": {
+    "checks": 9,
+    "failed_checks": 0,
+    "cases": 17,
+    "failed_cases": 0,
+    "rc20_022_complete": true,
+    "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53",
+    "local_operator_posture_id": "sha256:8b2c66ff3dcb8c0b31517ca0b16f67e41a2a2671d6ceee6cece452a4d749b85b",
+    "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "projection_only_for_credentials": true,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_boot_metadata_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "next_task": "RC20-030"
+  }
+}

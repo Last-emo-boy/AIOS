@@ -1,0 +1,127 @@
+{
+  "schema": "agentos.rc20-first-boot-acceptance.v1",
+  "generated_at": "2026-06-10T15:25:00+08:00",
+  "task": "RC20-022",
+  "status": "first-boot-acceptance-bound-projection-only",
+  "projection_only": true,
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "first_boot_acceptance_id": "sha256:45d886ed5bcf93f23c1ae47667787429ddfc2078156ec4ef6674c3ea0602bb53",
+  "local_operator_posture_id": "sha256:8b2c66ff3dcb8c0b31517ca0b16f67e41a2a2671d6ceee6cece452a4d749b85b",
+  "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+  "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84",
+  "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+  "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+  "selected_version": "rc20-single-user-stable-local-projection",
+  "first_boot_projection": {
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "local_operator_identity_created": false,
+    "local_operator_identity_projection_bound": true,
+    "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false
+  },
+  "acceptance_material": {
+    "schema": "agentos.rc20-first-boot-user-acceptance-material.v1",
+    "task": "RC20-022",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "install_acceptance_id": "sha256:70916e5b2cf45282df524e9b42a68da0c0dd002d29afc4edf8d16ea0d9190d84",
+    "first_boot_provisioning_projection_id": "sha256:3b19517b959af7ee697f1ece6c5b939e56f0435f4218105587ea49421265106e",
+    "local_operator_identity_projection_id": "sha256:c3c0d942c87259c399162928efc633959b3c425e0edec1d16131a46f22097a08",
+    "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "operator_handle": "local-operator://rc19/c3c0d942c87259c3",
+    "selected_version": "rc20-single-user-stable-local-projection",
+    "source_hashes": [
+      {
+        "id": "rc20-install-acceptance-result",
+        "path": ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+        "sha256": "be6f35ddae17cfbd39cf97231057dab581a94ae56526238e8b07c3e230590bf9",
+        "status": "passed"
+      },
+      {
+        "id": "rc20-install-acceptance-evidence",
+        "path": ".workflow/artifacts/rc20-single-user-install-acceptance/install-acceptance-evidence.json",
+        "sha256": "13f792e9c50fe77c85f8b8585cbbf7fd32550bef1a8bead1293fb2cb1a9debee",
+        "status": "single-user-install-acceptance-bound-inside-disposable-target"
+      },
+      {
+        "id": "rc20-install-audit-record",
+        "path": ".workflow/artifacts/rc20-single-user-install-acceptance/install-audit-record.json",
+        "sha256": "58732546e77c519416522bf29718a2ae112b35801b88e1abd13591c230040b8a",
+        "status": "install-acceptance-audit-bound"
+      },
+      {
+        "id": "rc19-first-boot-result",
+        "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json",
+        "sha256": "d37bff0616f8a204bcd82aef5d28c94812f4f78442721dc9dba72084001bcf93",
+        "status": "passed"
+      },
+      {
+        "id": "rc19-first-boot-projection",
+        "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/first-boot-provisioning-projection.json",
+        "sha256": "de2de4d08557208b11e7c16204454d73b65da6e6cef80df44fad344ba0e722f8",
+        "status": "first-boot-provisioning-projection-bound"
+      },
+      {
+        "id": "rc19-local-operator-identity",
+        "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/local-operator-identity-projection.json",
+        "sha256": "e9508d4f39380e10ac0293e8b8d18d72def437bea2cc5904251714296c33d76c",
+        "status": "local-operator-identity-projection-bound-non-authoritative"
+      },
+      {
+        "id": "rc20-release-bundle-result",
+        "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+        "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+        "status": "passed"
+      },
+      {
+        "id": "rc19-post-install-lifecycle",
+        "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json",
+        "sha256": "ba4416539a8837a55d2b58d91611c52a24d01f1482ef94990687eb9d8a94c680",
+        "status": "passed"
+      },
+      {
+        "id": "rc19-support-recovery",
+        "path": ".workflow/artifacts/rc19-first-user-support-recovery/result.json",
+        "sha256": "85bc2db6f4efd09bbb29d4cff540114b83c8ef01036f0e06db4e79a822f5ac2d",
+        "status": "passed"
+      }
+    ]
+  },
+  "authority": {
+    "host_boot_state_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "shell_authority": false,
+    "tui_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false
+  },
+  "side_effects": {
+    "first_boot_acceptance_bound": true,
+    "local_operator_posture_bound": true,
+    "first_boot_provisioning_executed": false,
+    "first_boot_state_mutated": false,
+    "local_operator_identity_created": false,
+    "raw_user_secret_introduced": false,
+    "credential_material_introduced": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "shell_authority_granted": false,
+    "tui_authority_granted": false,
+    "endpoint_reachability_authority_granted": false,
+    "model_replay_authority_granted": false,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false
+  }
+}
