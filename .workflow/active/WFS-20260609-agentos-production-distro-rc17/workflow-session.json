@@ -3,7 +3,7 @@
   "name": "Production Distro RC17",
   "status": "active",
   "created_at": "2026-06-10T01:00:00+08:00",
-  "updated_at": "2026-06-10T03:25:00+08:00",
+  "updated_at": "2026-06-10T03:45:00+08:00",
   "source": "RC16 final audit; maestro-managed RC17 planning",
   "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
   "goal": "Plan and execute AIOS-body exact install/update execute-or-deny readiness without giving authority to mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, production rings, TUI projections, shell output, or model replay.",
@@ -75,9 +75,15 @@
       "completed_at": "2026-06-10T03:25:00+08:00",
       "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-031-controlled-local-update.json",
       "commit": null
+    },
+    {
+      "task": "RC17-032",
+      "completed_at": "2026-06-10T03:45:00+08:00",
+      "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-032-controlled-install-update-rollback-support.json",
+      "commit": null
     }
   ],
-  "next_task": "RC17-032",
+  "next_task": "RC17-040",
   "plan": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
   "docs": [
     ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
@@ -139,6 +145,13 @@
     ".workflow/artifacts/rc17-controlled-local-update/result.json",
     ".workflow/artifacts/rc17-controlled-local-update/update-execute-or-deny-evidence.json",
     ".workflow/artifacts/rc17-controlled-local-update/update-audit-record.json",
-    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-031-controlled-local-update.json"
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-031-controlled-local-update.json",
+    "scripts/run-rc17-controlled-install-update-rollback-support.ps1",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/rollback-execute-or-deny-evidence.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/support-recovery-evidence-chain.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/controlled-install-update-support-bundle.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/recovery-reference-index.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-032-controlled-install-update-rollback-support.json"
   ]
 }

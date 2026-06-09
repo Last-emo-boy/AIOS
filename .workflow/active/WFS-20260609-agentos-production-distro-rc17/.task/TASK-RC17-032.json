@@ -2,7 +2,7 @@
   "schema": "agentos.task.v1",
   "id": "RC17-032",
   "title": "run controlled rollback and support evidence after install/update",
-  "status": "pending",
+  "status": "completed",
   "wave": "wave-3",
   "read_first": [
     ".workflow/artifacts/rc17-controlled-local-install/result.json",
@@ -38,5 +38,9 @@
       "Support evidence remains local-only and redacted, and recovery execution remains disabled.",
       "No support upload, remote dispatch, host active slot mutation, host boot metadata mutation, active artifact set mutation, production ring mutation, private signing material handling, or cryptographic signing occurs."
     ]
-  }
+  },
+  "completed_at": "2026-06-10T03:45:00+08:00",
+  "result": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+  "evidence": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-032-controlled-install-update-rollback-support.json",
+  "next_task": "RC17-040"
 }
