@@ -1,0 +1,164 @@
+{
+  "schema": "agentos.rc18-isolated-image-support-bundle.v1",
+  "generated_at": "2026-06-10T07:50:00+08:00",
+  "task": "RC18-031",
+  "status": "isolated-support-bundle-local-redacted",
+  "production_ready_claim": false,
+  "support_bundle_id": "rc18-isolated-support-3b83a28f0d57133d",
+  "support_bundle_digest": "3b83a28f0d57133ddcafa2501f7c54c5dde7f4e0fc0d9ed8da844c4db7617dab",
+  "local_only": true,
+  "uploaded": false,
+  "redacted": true,
+  "redaction_policy": "no-raw-secrets-no-tokens-no-private-material-no-host-private-state",
+  "projection_only": true,
+  "support_bundle_core": {
+    "schema": "agentos.rc18-isolated-support-bundle-core.v1",
+    "task": "RC18-031",
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "install_evidence_sha256": "e5f523e36bff01996e3fd06469c15e87d86f798a51049ffdc2f891c0f3e4ecaa",
+    "update_evidence_sha256": "ee522b0d97921ce95da9e80ff4bbcc3b10a71a4c833e6245f4ac1c0108c96ade",
+    "rollback_evidence_sha256": "e95a64e61e6b360ddd1400b9c93661dddbe16c7a7489b1eec8e02bab12d7295b",
+    "rc17_support_recovery_chain_sha256": "cf364d1ab268b5426a202a0bace762712140a8b07858822c08f1c5240d299bf0",
+    "rc17_support_bundle_sha256": "b045c4bdbc71a1b6dc22304ae70706c144b9a57fa7d0d3606d62529d05fd4553",
+    "rc17_recovery_reference_index_sha256": "3319622bd3d066c9a1aa66ee16f4ee9297c3563aa7f42c0a420a791100e906fc",
+    "local_only": true,
+    "redacted": true,
+    "uploaded": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false
+  },
+  "included_evidence": [
+    "rc18-isolated-install-result",
+    "rc18-isolated-install-evidence",
+    "rc18-isolated-update-result",
+    "rc18-isolated-update-evidence",
+    "rc18-isolated-rollback-result",
+    "rc18-isolated-rollback-evidence",
+    "rc17-support-recovery-chain",
+    "rc17-recovery-reference-index"
+  ],
+  "side_effects": {
+    "support_bundle_created": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "2be904174cafba676b89b378a67ccdfa947e49be8a8892a50fd907bd8734ccce",
+      "size_bytes": 7404,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc18_isolated_install_result": {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+      "sha256": "70c8bb7ffe13bde1f0bc887047090d52aba145ebff28239d9d305a11b4d717b2",
+      "size_bytes": 39553,
+      "present": true,
+      "schema": "agentos.rc18-isolated-install-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_install_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/install-drill-evidence.json",
+      "sha256": "e5f523e36bff01996e3fd06469c15e87d86f798a51049ffdc2f891c0f3e4ecaa",
+      "size_bytes": 33965,
+      "present": true,
+      "schema": "agentos.rc18-isolated-install-drill-evidence.v1",
+      "status": "isolated-install-executed-inside-disposable-image",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_update_result": {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+      "sha256": "067513a7ebed25c2d7e3209a91a9bb5f58b79dd8de151277e56759c0159bea9e",
+      "size_bytes": 41493,
+      "present": true,
+      "schema": "agentos.rc18-isolated-update-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_update_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/update-drill-evidence.json",
+      "sha256": "ee522b0d97921ce95da9e80ff4bbcc3b10a71a4c833e6245f4ac1c0108c96ade",
+      "size_bytes": 36658,
+      "present": true,
+      "schema": "agentos.rc18-isolated-update-drill-evidence.v1",
+      "status": "isolated-update-executed-inside-disposable-image",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_rollback_result": {
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+      "sha256": "35d1ff3488d5d0b21d7dead735e23b9351e3762413cd6a183b8ac0de331f6d78",
+      "size_bytes": 40943,
+      "present": true,
+      "schema": "agentos.rc18-isolated-rollback-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_rollback_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/rollback-drill-evidence.json",
+      "sha256": "e95a64e61e6b360ddd1400b9c93661dddbe16c7a7489b1eec8e02bab12d7295b",
+      "size_bytes": 36578,
+      "present": true,
+      "schema": "agentos.rc18-isolated-rollback-drill-evidence.v1",
+      "status": "isolated-rollback-executed-inside-disposable-image",
+      "production_ready_claim": false
+    },
+    "rc17_support_result": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+      "sha256": "fb3c305eb332b8b823abe2facbe0f9d6550292e3041c7f3cbb552669b1ee9683",
+      "size_bytes": 25138,
+      "present": true,
+      "schema": "agentos.rc17-controlled-install-update-rollback-support-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_support_recovery_chain": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/support-recovery-evidence-chain.json",
+      "sha256": "cf364d1ab268b5426a202a0bace762712140a8b07858822c08f1c5240d299bf0",
+      "size_bytes": 1820,
+      "present": true,
+      "schema": "agentos.rc17-install-update-support-recovery-evidence-chain.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc17_support_bundle": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/controlled-install-update-support-bundle.json",
+      "sha256": "b045c4bdbc71a1b6dc22304ae70706c144b9a57fa7d0d3606d62529d05fd4553",
+      "size_bytes": 1052,
+      "present": true,
+      "schema": "agentos.rc17-controlled-install-update-support-bundle.v1",
+      "status": null,
+      "production_ready_claim": null
+    },
+    "rc17_recovery_reference_index": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/recovery-reference-index.json",
+      "sha256": "3319622bd3d066c9a1aa66ee16f4ee9297c3563aa7f42c0a420a791100e906fc",
+      "size_bytes": 1099,
+      "present": true,
+      "schema": "agentos.rc17-install-update-recovery-reference-index.v1",
+      "status": null,
+      "production_ready_claim": null
+    }
+  }
+}
