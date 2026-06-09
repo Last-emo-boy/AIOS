@@ -1,0 +1,320 @@
+{
+  "schema": "agentos.rc21-local-operation-intent-catalog-task-evidence.v1",
+  "generated_at": "2026-06-10T18:05:00+08:00",
+  "task": "RC21-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc21",
+  "script": {
+    "path": "scripts/project-rc21-local-operation-intent-catalog.ps1",
+    "sha256": "8f8b72029265a8302e6c52918df7e7fdcb5722e6d6a3a93717736e6e455c7a7d"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+    "status": "passed",
+    "sha256": "96755fd238fcebdaa46ec5f3d90ba89a1b1f7bef070c0c256553638722d7cf47"
+  },
+  "outputs": {
+    "operation_intent_catalog": {
+      "path": ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+      "sha256": "10e671302515e6b9c36fd50fac3532f2abca9c7b0f0da99f4796ed257b86da6d",
+      "operation_intent_catalog_id": "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+      "intent_count": 6
+    }
+  },
+  "catalog_surface": {
+    "state": "local-operation-intent-catalog-bound-non-ga",
+    "operation_intent_catalog_bound": true,
+    "operation_intent_catalog_id": "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+    "intent_count": 6,
+    "required_intents": [
+      "install",
+      "update",
+      "repair-reinstall",
+      "downgrade-rollback",
+      "support-export",
+      "recovery-reference"
+    ],
+    "executable_by_catalog": false,
+    "transaction_journal_required": true,
+    "snapshot_baseline_required": true,
+    "dry_run_required_before_effect": true,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "operation_intent_catalog_bound": true,
+    "operation_intent_catalog_local_only": true,
+    "operation_intent_catalog_executable": false,
+    "transaction_journal_written": false,
+    "snapshot_baseline_written": false,
+    "dry_run_plan_written": false,
+    "install_performed": false,
+    "update_performed": false,
+    "repair_performed": false,
+    "reinstall_performed": false,
+    "downgrade_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "external_mirror_frontend_authority": false,
+    "nginx_or_tls_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "endpoint_reachability_authority": false,
+    "shell_output_authority": false,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc21_010_complete": true,
+    "next_task": "RC21-011",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc21_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC21-010 must run after RC21-001 completed, with current_task set to RC21-010 or during an idempotent rerun.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC21-010",
+        "rc21_001_status": "completed",
+        "rc21_010_status": "pending"
+      }
+    },
+    {
+      "id": "contract.catalog_authority.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC21-010 must consume the RC21 local transactional lifecycle authority contract.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+        "sha256": "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf"
+      }
+    },
+    {
+      "id": "rc20.final.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 final audit must prove single-user distribution local consumer readiness and keep production readiness false.",
+      "evidence": {
+        "status": "passed",
+        "single_user_distribution_local_consumer_ready": true,
+        "consumer_ready_claim": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc20.consumer.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 consumer smoke must report local consumer readiness without production readiness.",
+      "evidence": {
+        "status": "passed",
+        "decision": "single-user-distribution-local-consumer-ready",
+        "consumer_ready_claim": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc20.release_channel.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Catalog must bind RC20 release bundle and local channel evidence without external mirror, active artifact set, or production ring mutation.",
+      "evidence": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "channel_release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "external_mirror_publication_performed": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false
+      }
+    },
+    {
+      "id": "rc20.lifecycle.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Catalog must bind RC20 installer, install, first boot, update, rollback, and support/recovery evidence.",
+      "evidence": {
+        "installer_catalog_status": "passed",
+        "install_status": "passed",
+        "first_boot_status": "passed",
+        "update_status": "passed",
+        "rollback_status": "passed",
+        "support_status": "passed"
+      }
+    },
+    {
+      "id": "rc20.state_identity.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Catalog must bind a coherent RC20 release, target state, support, and rollback identity chain.",
+      "evidence": {
+        "consumer_release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "consumer_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "restored_target_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+      }
+    },
+    {
+      "id": "catalog.required_intents.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Catalog must bind install, update, repair/reinstall, downgrade/rollback, support export, and recovery reference intents.",
+      "evidence": [
+        "install",
+        "update",
+        "repair-reinstall",
+        "downgrade-rollback",
+        "support-export",
+        "recovery-reference"
+      ]
+    },
+    {
+      "id": "catalog.local_only_non_executable",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Catalog must remain local-only, non-executable, non-GA, and must not authorize host mutation, remote dispatch, support upload, or recovery execution.",
+      "evidence": {
+        "aios_body_only": true,
+        "local_operation_intent_catalog_authority": true,
+        "transaction_journal_authority": false,
+        "snapshot_baseline_authority": false,
+        "dry_run_plan_authority": false,
+        "install_authority": false,
+        "update_authority": false,
+        "repair_authority": false,
+        "reinstall_authority": false,
+        "downgrade_authority": false,
+        "rollback_execution_authority": false,
+        "support_upload_authority": false,
+        "recovery_execution_authority": false,
+        "remote_dispatch_authority": false,
+        "host_rootfs_mutation_authority": false,
+        "host_active_slot_mutation_authority": false,
+        "host_boot_metadata_mutation_authority": false,
+        "active_artifact_set_mutation_authority": false,
+        "production_ring_mutation_authority": false,
+        "external_mirror_frontend_authority": false,
+        "nginx_or_tls_authority": false,
+        "signer_authority": false,
+        "object_storage_authority": false,
+        "ga_claim_authority": false
+      }
+    },
+    {
+      "id": "catalog.required_inputs.audit_denial.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Every intent must record exact required inputs, audit expectations, and denial reasons.",
+      "evidence": [
+        {
+          "id": "install",
+          "required_inputs": 7,
+          "audit_expectations": 4,
+          "denial_reasons": 5
+        },
+        {
+          "id": "update",
+          "required_inputs": 8,
+          "audit_expectations": 4,
+          "denial_reasons": 4
+        },
+        {
+          "id": "repair-reinstall",
+          "required_inputs": 8,
+          "audit_expectations": 4,
+          "denial_reasons": 5
+        },
+        {
+          "id": "downgrade-rollback",
+          "required_inputs": 8,
+          "audit_expectations": 4,
+          "denial_reasons": 4
+        },
+        {
+          "id": "support-export",
+          "required_inputs": 7,
+          "audit_expectations": 4,
+          "denial_reasons": 4
+        },
+        {
+          "id": "recovery-reference",
+          "required_inputs": 7,
+          "audit_expectations": 4,
+          "denial_reasons": 4
+        }
+      ]
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC21-010 must not execute lifecycle operations or broaden host, production, remote, signer, object storage, support upload, recovery, or GA authority.",
+      "evidence": {
+        "operation_intent_catalog_bound": true,
+        "transaction_journal_written": false,
+        "snapshot_baseline_written": false,
+        "dry_run_plan_written": false,
+        "install_performed": false,
+        "update_performed": false,
+        "repair_performed": false,
+        "reinstall_performed": false,
+        "downgrade_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "external_mirror_published": false,
+        "frontend_changed": false,
+        "nginx_or_tls_changed": false,
+        "signer_authority_granted": false,
+        "object_storage_provisioned": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing/stale RC20 evidence and forbidden authority attempts must deny before operation intent authority.",
+      "evidence": {
+        "cases": 25,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC21-010 outputs must not contain key blocks, private authority paths, auth tokens, signing key file names, raw passwords, raw secrets, or public identity markers.",
+      "evidence": null
+    }
+  ]
+}

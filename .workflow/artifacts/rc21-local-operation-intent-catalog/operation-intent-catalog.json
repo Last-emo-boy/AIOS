@@ -1,0 +1,681 @@
+{
+  "schema": "agentos.rc21-local-operation-intent-catalog.v1",
+  "generated_at": "2026-06-10T18:05:00+08:00",
+  "task": "RC21-010",
+  "status": "local-operation-intent-catalog-bound-non-ga",
+  "production_ready_claim": false,
+  "consumer_ready_claim": false,
+  "operation_intent_catalog_id": "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+  "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+  "selected_version": "rc20-single-user-stable-local-projection",
+  "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+  "consumer_decision": "single-user-distribution-local-consumer-ready",
+  "local_only": true,
+  "executable_by_catalog": false,
+  "intent_count": 6,
+  "operation_intents": [
+    {
+      "id": "install",
+      "kind": "install",
+      "title": "Install selected local AIOS release into a disposable target",
+      "operation_intent_id": "sha256:d2e906c0b1faec63f5c5a4d41415fddb9e091b1d2d5aa011133d3814ed05a8d2",
+      "local_only": true,
+      "executable_by_catalog": false,
+      "requires_transaction_journal": true,
+      "requires_snapshot_baseline": true,
+      "requires_dry_run_before_effect": true,
+      "required_inputs": [
+        "rc21-authority-contract",
+        "rc20-final-audit-result",
+        "rc20-consumer-smoke-result",
+        "rc20-release-bundle-result",
+        "rc20-local-channel-result",
+        "rc20-installer-catalog-result",
+        "rc20-install-acceptance-result"
+      ],
+      "audit_expectations": [
+        "bind selected version",
+        "bind target state",
+        "record denial before host effect",
+        "record non-GA decision"
+      ],
+      "denial_reasons": [
+        "missing rc20 release bundle",
+        "missing local channel projection",
+        "missing installer catalog",
+        "stale selected version",
+        "host mutation requested"
+      ],
+      "effect_boundary": "dry-run-only-until-transaction-journal-and-disposable-target-acceptance",
+      "forbidden_authority": {
+        "host_rootfs_mutation": true,
+        "host_active_slot_mutation": true,
+        "host_boot_metadata_mutation": true,
+        "active_artifact_set_mutation": true,
+        "production_ring_mutation": true,
+        "remote_dispatch": true,
+        "support_upload": true,
+        "recovery_execution_service": true,
+        "signer_authority": true,
+        "object_storage_authority": true,
+        "external_mirror_or_frontend_authority": true,
+        "ga_claim": true
+      }
+    },
+    {
+      "id": "update",
+      "kind": "update",
+      "title": "Update installed local AIOS release inside disposable installed-system evidence",
+      "operation_intent_id": "sha256:8e90e1b197341fa8832761777711b24e4c02f3181131bb68c7439b02890b0b89",
+      "local_only": true,
+      "executable_by_catalog": false,
+      "requires_transaction_journal": true,
+      "requires_snapshot_baseline": true,
+      "requires_dry_run_before_effect": true,
+      "required_inputs": [
+        "rc21-authority-contract",
+        "rc20-final-audit-result",
+        "rc20-consumer-smoke-result",
+        "rc20-release-bundle-result",
+        "rc20-local-channel-result",
+        "rc20-update-result",
+        "rc20-rollback-result",
+        "rc20-lifecycle-support-result"
+      ],
+      "audit_expectations": [
+        "bind previous installed state",
+        "bind target update state",
+        "bind rollback baseline",
+        "record denial before host active slot mutation"
+      ],
+      "denial_reasons": [
+        "missing update evidence",
+        "missing rollback baseline",
+        "stale local channel",
+        "host active slot mutation requested"
+      ],
+      "effect_boundary": "dry-run-only-until-transaction-journal-and-disposable-installed-system-acceptance",
+      "forbidden_authority": {
+        "host_rootfs_mutation": true,
+        "host_active_slot_mutation": true,
+        "host_boot_metadata_mutation": true,
+        "active_artifact_set_mutation": true,
+        "production_ring_mutation": true,
+        "remote_dispatch": true,
+        "support_upload": true,
+        "recovery_execution_service": true,
+        "signer_authority": true,
+        "object_storage_authority": true,
+        "external_mirror_or_frontend_authority": true,
+        "ga_claim": true
+      }
+    },
+    {
+      "id": "repair-reinstall",
+      "kind": "repair-reinstall",
+      "title": "Repair or reinstall selected local AIOS release inside disposable installed-system evidence",
+      "operation_intent_id": "sha256:16a0d52d9f4c78253790e9c40a5df959453d2eba1a05e063be42af1d1b11e5ef",
+      "local_only": true,
+      "executable_by_catalog": false,
+      "requires_transaction_journal": true,
+      "requires_snapshot_baseline": true,
+      "requires_dry_run_before_effect": true,
+      "required_inputs": [
+        "rc21-authority-contract",
+        "rc20-final-audit-result",
+        "rc20-consumer-smoke-result",
+        "rc20-release-bundle-result",
+        "rc20-local-channel-result",
+        "rc20-install-acceptance-result",
+        "rc20-first-boot-acceptance-result",
+        "rc20-lifecycle-support-result"
+      ],
+      "audit_expectations": [
+        "bind source snapshot",
+        "bind reinstall target snapshot",
+        "preserve local operator posture projection",
+        "record denial before host rootfs mutation"
+      ],
+      "denial_reasons": [
+        "missing install acceptance",
+        "missing first boot posture",
+        "missing support reference",
+        "broad reinstall scope",
+        "host rootfs mutation requested"
+      ],
+      "effect_boundary": "disposable-installed-system-evidence-only",
+      "forbidden_authority": {
+        "host_rootfs_mutation": true,
+        "host_active_slot_mutation": true,
+        "host_boot_metadata_mutation": true,
+        "active_artifact_set_mutation": true,
+        "production_ring_mutation": true,
+        "remote_dispatch": true,
+        "support_upload": true,
+        "recovery_execution_service": true,
+        "signer_authority": true,
+        "object_storage_authority": true,
+        "external_mirror_or_frontend_authority": true,
+        "ga_claim": true
+      }
+    },
+    {
+      "id": "downgrade-rollback",
+      "kind": "downgrade-rollback",
+      "title": "Downgrade or rollback from local channel history inside disposable installed-system evidence",
+      "operation_intent_id": "sha256:b6e33047da1299340e8c7216e108511291ba362d6a78722b869926f20903cd89",
+      "local_only": true,
+      "executable_by_catalog": false,
+      "requires_transaction_journal": true,
+      "requires_snapshot_baseline": true,
+      "requires_dry_run_before_effect": true,
+      "required_inputs": [
+        "rc21-authority-contract",
+        "rc20-final-audit-result",
+        "rc20-consumer-smoke-result",
+        "rc20-release-bundle-result",
+        "rc20-local-channel-result",
+        "rc20-update-result",
+        "rc20-rollback-result",
+        "rc20-recovery-reference-index"
+      ],
+      "audit_expectations": [
+        "bind local channel history",
+        "bind updated state",
+        "bind restored state",
+        "record denial before boot metadata mutation"
+      ],
+      "denial_reasons": [
+        "missing local channel history",
+        "missing rollback audit",
+        "stale rollback baseline",
+        "host boot metadata mutation requested"
+      ],
+      "effect_boundary": "disposable-installed-system-evidence-only",
+      "forbidden_authority": {
+        "host_rootfs_mutation": true,
+        "host_active_slot_mutation": true,
+        "host_boot_metadata_mutation": true,
+        "active_artifact_set_mutation": true,
+        "production_ring_mutation": true,
+        "remote_dispatch": true,
+        "support_upload": true,
+        "recovery_execution_service": true,
+        "signer_authority": true,
+        "object_storage_authority": true,
+        "external_mirror_or_frontend_authority": true,
+        "ga_claim": true
+      }
+    },
+    {
+      "id": "support-export",
+      "kind": "support-export",
+      "title": "Export local redacted support bundle for lifecycle evidence",
+      "operation_intent_id": "sha256:30fdbfdc23d991905285a80bccd779de40f0cb8d9a9a52ebac229e582f6ccdc2",
+      "local_only": true,
+      "executable_by_catalog": false,
+      "requires_transaction_journal": true,
+      "requires_snapshot_baseline": true,
+      "requires_dry_run_before_effect": true,
+      "required_inputs": [
+        "rc21-authority-contract",
+        "rc20-final-audit-result",
+        "rc20-consumer-smoke-result",
+        "rc20-release-bundle-result",
+        "rc20-local-channel-result",
+        "rc20-lifecycle-support-result",
+        "rc20-support-bundle"
+      ],
+      "audit_expectations": [
+        "bind local support bundle id",
+        "prove redaction",
+        "prove no upload",
+        "record denial before network transfer"
+      ],
+      "denial_reasons": [
+        "missing support bundle",
+        "support bundle not redacted",
+        "support upload requested",
+        "remote dispatch requested"
+      ],
+      "effect_boundary": "local-redacted-bundle-only",
+      "forbidden_authority": {
+        "host_rootfs_mutation": true,
+        "host_active_slot_mutation": true,
+        "host_boot_metadata_mutation": true,
+        "active_artifact_set_mutation": true,
+        "production_ring_mutation": true,
+        "remote_dispatch": true,
+        "support_upload": true,
+        "recovery_execution_service": true,
+        "signer_authority": true,
+        "object_storage_authority": true,
+        "external_mirror_or_frontend_authority": true,
+        "ga_claim": true
+      }
+    },
+    {
+      "id": "recovery-reference",
+      "kind": "recovery-reference",
+      "title": "Produce local recovery reference index without executing recovery service",
+      "operation_intent_id": "sha256:9ad8e2c8942454d200369b79ee9a72fd4eaaa771e9034e6ce000a97203376968",
+      "local_only": true,
+      "executable_by_catalog": false,
+      "requires_transaction_journal": true,
+      "requires_snapshot_baseline": true,
+      "requires_dry_run_before_effect": true,
+      "required_inputs": [
+        "rc21-authority-contract",
+        "rc20-final-audit-result",
+        "rc20-consumer-smoke-result",
+        "rc20-release-bundle-result",
+        "rc20-local-channel-result",
+        "rc20-lifecycle-support-result",
+        "rc20-recovery-reference-index"
+      ],
+      "audit_expectations": [
+        "bind recovery reference digest",
+        "prove projection-only",
+        "prove no recovery execution",
+        "record denial before recovery service call"
+      ],
+      "denial_reasons": [
+        "missing recovery reference index",
+        "recovery execution requested",
+        "support upload requested",
+        "remote dispatch requested"
+      ],
+      "effect_boundary": "projection-and-reference-index-only",
+      "forbidden_authority": {
+        "host_rootfs_mutation": true,
+        "host_active_slot_mutation": true,
+        "host_boot_metadata_mutation": true,
+        "active_artifact_set_mutation": true,
+        "production_ring_mutation": true,
+        "remote_dispatch": true,
+        "support_upload": true,
+        "recovery_execution_service": true,
+        "signer_authority": true,
+        "object_storage_authority": true,
+        "external_mirror_or_frontend_authority": true,
+        "ga_claim": true
+      }
+    }
+  ],
+  "required_next_gates": {
+    "rc21_011_transaction_journal_snapshot_baseline": "required-before-effect-planning",
+    "rc21_012_lifecycle_operation_fail_closed": "required-before-dry-run-trust",
+    "rc21_020_dry_run_execution_plan": "required-before-dry-run-acceptance",
+    "rc21_021_transactional_dry_run_acceptance": "required-before-explain-resume-audit",
+    "rc21_030_repair_reinstall_drill": "disposable-installed-system-only",
+    "rc21_031_downgrade_rollback_drill": "disposable-installed-system-only"
+  },
+  "authority": {
+    "aios_body_only": true,
+    "local_operation_intent_catalog_authority": true,
+    "transaction_journal_authority": false,
+    "snapshot_baseline_authority": false,
+    "dry_run_plan_authority": false,
+    "install_authority": false,
+    "update_authority": false,
+    "repair_authority": false,
+    "reinstall_authority": false,
+    "downgrade_authority": false,
+    "rollback_execution_authority": false,
+    "support_upload_authority": false,
+    "recovery_execution_authority": false,
+    "remote_dispatch_authority": false,
+    "host_rootfs_mutation_authority": false,
+    "host_active_slot_mutation_authority": false,
+    "host_boot_metadata_mutation_authority": false,
+    "active_artifact_set_mutation_authority": false,
+    "production_ring_mutation_authority": false,
+    "external_mirror_frontend_authority": false,
+    "nginx_or_tls_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "ga_claim_authority": false
+  },
+  "denial_reasons": [
+    {
+      "id": "missing-rc20-final-audit",
+      "blockers": [
+        "rc20-final-audit-required"
+      ],
+      "reason": "Catalog requires RC20 final audit PASS."
+    },
+    {
+      "id": "missing-rc20-consumer-smoke",
+      "blockers": [
+        "rc20-consumer-smoke-required"
+      ],
+      "reason": "Catalog requires RC20 local consumer smoke readiness."
+    },
+    {
+      "id": "missing-release-bundle",
+      "blockers": [
+        "rc20-release-bundle-required"
+      ],
+      "reason": "Catalog requires RC20 release bundle evidence."
+    },
+    {
+      "id": "missing-local-channel",
+      "blockers": [
+        "rc20-local-channel-required"
+      ],
+      "reason": "Catalog requires RC20 local channel evidence."
+    },
+    {
+      "id": "missing-installer-catalog",
+      "blockers": [
+        "rc20-installer-catalog-required"
+      ],
+      "reason": "Install intent requires installer catalog evidence."
+    },
+    {
+      "id": "missing-update-evidence",
+      "blockers": [
+        "rc20-update-required"
+      ],
+      "reason": "Update intent requires RC20 update evidence."
+    },
+    {
+      "id": "missing-rollback-evidence",
+      "blockers": [
+        "rc20-rollback-required"
+      ],
+      "reason": "Downgrade/rollback intent requires RC20 rollback evidence."
+    },
+    {
+      "id": "missing-support-reference",
+      "blockers": [
+        "rc20-support-required"
+      ],
+      "reason": "Support and recovery intents require RC20 support/recovery evidence."
+    },
+    {
+      "id": "stale-rc20-final-audit",
+      "blockers": [
+        "stale-rc20-final-audit-denied"
+      ],
+      "reason": "Catalog denies stale RC20 final audit evidence."
+    },
+    {
+      "id": "stale-consumer-smoke",
+      "blockers": [
+        "stale-consumer-smoke-denied"
+      ],
+      "reason": "Catalog denies stale consumer smoke evidence."
+    },
+    {
+      "id": "release-channel-mismatch",
+      "blockers": [
+        "release-channel-mismatch-denied"
+      ],
+      "reason": "Catalog denies mismatched release/channel identities."
+    },
+    {
+      "id": "target-state-mismatch",
+      "blockers": [
+        "target-state-mismatch-denied"
+      ],
+      "reason": "Catalog denies mismatched target state identities."
+    },
+    {
+      "id": "broad-operation-scope",
+      "blockers": [
+        "broad-operation-scope-denied"
+      ],
+      "reason": "Catalog denies operations broader than local single-user lifecycle scope."
+    },
+    {
+      "id": "host-rootfs-mutation",
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs mutation is forbidden."
+    },
+    {
+      "id": "host-active-slot-mutation",
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot mutation is forbidden."
+    },
+    {
+      "id": "host-boot-metadata-mutation",
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata mutation is forbidden."
+    },
+    {
+      "id": "active-artifact-set-mutation",
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "reason": "Active artifact set mutation is forbidden."
+    },
+    {
+      "id": "production-ring-mutation",
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is forbidden."
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is outside RC21 body scope."
+    },
+    {
+      "id": "support-upload-attempt",
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is outside RC21 body scope."
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution service is outside RC21 body scope."
+    },
+    {
+      "id": "signer-authority-attempt",
+      "blockers": [
+        "signer-authority-denied"
+      ],
+      "reason": "Signer authority is outside RC21 body scope."
+    },
+    {
+      "id": "object-storage-attempt",
+      "blockers": [
+        "object-storage-denied"
+      ],
+      "reason": "Object storage provisioning is outside RC21 body scope."
+    },
+    {
+      "id": "external-mirror-frontend-attempt",
+      "blockers": [
+        "external-mirror-frontend-denied"
+      ],
+      "reason": "External mirror/frontend authority is outside RC21 body scope."
+    },
+    {
+      "id": "ga-claim-attempt",
+      "blockers": [
+        "ga-claim-denied"
+      ],
+      "reason": "Operation intent catalog cannot claim GA production readiness."
+    }
+  ],
+  "source": {
+    "rc21_plan": {
+      "role": "rc21 workflow plan",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+      "sha256": "cbd4daf4b32ad6cea0c8ded742f91726263626c5b9aecc937e80a1b8d4837b28",
+      "size_bytes": 8425,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "task": null,
+      "production_ready_claim": null,
+      "consumer_ready_claim": null
+    },
+    "rc21_authority_contract": {
+      "role": "rc21 authority contract",
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+      "sha256": "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+      "size_bytes": 8744,
+      "present": true
+    },
+    "rc20_final_audit_result": {
+      "role": "rc20 final audit result",
+      "path": ".workflow/artifacts/rc20-final-closeout-audit/result.json",
+      "sha256": "2121eab36c052d885203118b1deb8d98747e33ae99e1872fb12704aff5a9f0c6",
+      "size_bytes": 17437,
+      "present": true,
+      "schema": "agentos.rc20-final-closeout-audit-result.v1",
+      "status": "passed",
+      "task": "RC20-050",
+      "production_ready_claim": false,
+      "consumer_ready_claim": true
+    },
+    "rc20_consumer_smoke_result": {
+      "role": "rc20 consumer smoke result",
+      "path": ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/result.json",
+      "sha256": "73a0f7a5d51b48b71627c08fc5a4969c58a96f983ad6c07cfcffb48d35d49127",
+      "size_bytes": 65319,
+      "present": true,
+      "schema": "agentos.rc20-single-user-distribution-consumer-smoke-result.v1",
+      "status": "passed",
+      "task": "RC20-040",
+      "production_ready_claim": false,
+      "consumer_ready_claim": true
+    },
+    "rc20_release_bundle_result": {
+      "role": "rc20 release bundle result",
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+      "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b",
+      "size_bytes": 45355,
+      "present": true,
+      "schema": "agentos.rc20-single-user-release-bundle-result.v1",
+      "status": "passed",
+      "task": "RC20-010",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_local_channel_result": {
+      "role": "rc20 local channel result",
+      "path": ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+      "sha256": "6c82a84c1f977003e7d78d387a711c6679edd546fcc181d563f50a3f23ca9ad6",
+      "size_bytes": 57559,
+      "present": true,
+      "schema": "agentos.rc20-local-channel-promotion-result.v1",
+      "status": "passed",
+      "task": "RC20-011",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_installer_catalog_result": {
+      "role": "rc20 installer catalog result",
+      "path": ".workflow/artifacts/rc20-installer-catalog-selection/result.json",
+      "sha256": "5bb0f792c68d0eaea3afb139ccbccc6a726f9ad6fa0c59d41281e8feb0aedc63",
+      "size_bytes": 39662,
+      "present": true,
+      "schema": "agentos.rc20-installer-catalog-selection-result.v1",
+      "status": "passed",
+      "task": "RC20-020",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_install_acceptance_result": {
+      "role": "rc20 install acceptance result",
+      "path": ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+      "sha256": "be6f35ddae17cfbd39cf97231057dab581a94ae56526238e8b07c3e230590bf9",
+      "size_bytes": 31835,
+      "present": true,
+      "schema": "agentos.rc20-single-user-install-acceptance-result.v1",
+      "status": "passed",
+      "task": "RC20-021",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_first_boot_acceptance_result": {
+      "role": "rc20 first boot acceptance result",
+      "path": ".workflow/artifacts/rc20-first-boot-user-acceptance/result.json",
+      "sha256": "ff926ab18243bdc4f60f850b3a7fbc125161c123784f32225d45ff754eaba7a3",
+      "size_bytes": 30874,
+      "present": true,
+      "schema": "agentos.rc20-first-boot-user-acceptance-result.v1",
+      "status": "passed",
+      "task": "RC20-022",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_update_result": {
+      "role": "rc20 post-install update result",
+      "path": ".workflow/artifacts/rc20-post-install-update-drill/result.json",
+      "sha256": "3e14ca1fb126edae29e589ab2746a0968388c01b2cb8fd5070364831f5a0c6af",
+      "size_bytes": 29863,
+      "present": true,
+      "schema": "agentos.rc20-post-install-update-drill-result.v1",
+      "status": "passed",
+      "task": "RC20-030",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_rollback_result": {
+      "role": "rc20 post-update rollback result",
+      "path": ".workflow/artifacts/rc20-post-update-rollback-drill/result.json",
+      "sha256": "b73aa97ee19c948ccbbdc29ac3ea36d444402740bd1429137af32a4013ff560b",
+      "size_bytes": 46963,
+      "present": true,
+      "schema": "agentos.rc20-post-update-rollback-drill-result.v1",
+      "status": "passed",
+      "task": "RC20-031",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_lifecycle_support_result": {
+      "role": "rc20 lifecycle support result",
+      "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+      "sha256": "6e475b3ef5a1da47c464ed3f86fd018684836e176c4857cb79eef5ed91a67733",
+      "size_bytes": 59069,
+      "present": true,
+      "schema": "agentos.rc20-lifecycle-support-recovery-result.v1",
+      "status": "passed",
+      "task": "RC20-032",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_support_bundle": {
+      "role": "rc20 support bundle",
+      "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/lifecycle-support-bundle.json",
+      "sha256": "1c974de1e8aeaafb123394a66461840a2af128524ca439cd691c56d2bd007213",
+      "size_bytes": 10988,
+      "present": true,
+      "schema": "agentos.rc20-lifecycle-support-bundle.v1",
+      "status": "lifecycle-support-bundle-local-redacted",
+      "task": "RC20-032",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    },
+    "rc20_recovery_reference_index": {
+      "role": "rc20 recovery reference index",
+      "path": ".workflow/artifacts/rc20-lifecycle-support-recovery/recovery-reference-index.json",
+      "sha256": "e1bb907dbca54e10a5047abc3928d3eadd6399abacf7631bdd2805ead4a06350",
+      "size_bytes": 8519,
+      "present": true,
+      "schema": "agentos.rc20-lifecycle-recovery-reference-index.v1",
+      "status": "projection-only-no-recovery-execution",
+      "task": "RC20-032",
+      "production_ready_claim": false,
+      "consumer_ready_claim": false
+    }
+  }
+}
