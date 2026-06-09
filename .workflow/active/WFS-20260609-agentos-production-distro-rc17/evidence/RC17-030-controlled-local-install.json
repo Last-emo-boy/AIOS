@@ -1,0 +1,183 @@
+{
+  "schema": "agentos.rc17-controlled-local-install-evidence.v1",
+  "generated_at": "2026-06-10T03:05:00+08:00",
+  "task": "RC17-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc17",
+  "script": {
+    "path": "scripts/run-rc17-controlled-local-install.ps1",
+    "sha256": "2b6e524956ab96731443a6debe724b79b2ea44a23440cf2dd636d3fc4ab79b65"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc17-controlled-local-install/result.json",
+    "status": "passed",
+    "sha256": "165cec6f706c213d96707666fd30a9f18af8ad1fe7e65c87c69b76905f1faa97"
+  },
+  "outputs": {
+    "install_execute_or_deny_evidence": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/install-execute-or-deny-evidence.json",
+      "sha256": "6c927aa1aa619bff55cf28af97c12b6b151b493f7e7c5ee538a9d7e190eb212a",
+      "install_attempt_digest": "623bfc6ec67f5626613628d617110feb4546cdaf2b1de7a1f329a5da90986d3b"
+    },
+    "install_audit_record": {
+      "path": ".workflow/artifacts/rc17-controlled-local-install/install-audit-record.json",
+      "sha256": "ba5d4a6fd17eb6f3ed312f7cb3a960c79713fdfe91ca2ea1439c3956a23ba835",
+      "fabricated": false
+    }
+  },
+  "install_surface": {
+    "state": "controlled-local-install-executed",
+    "install_allowed": true,
+    "install_effect_prepared": true,
+    "install_effect_executed": true,
+    "install_performed": true,
+    "repo_local_install_evidence_written": true,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "production_ring_mutation_allowed": false,
+    "install_attempt_digest": "623bfc6ec67f5626613628d617110feb4546cdaf2b1de7a1f329a5da90986d3b",
+    "install_audit_record_sha256": "ba5d4a6fd17eb6f3ed312f7cb3a960c79713fdfe91ca2ea1439c3956a23ba835",
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "repo_local_projection_only": true,
+    "controlled_local_install": true,
+    "install_performed": true,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc17_030_complete": true,
+    "next_task": "RC17-031",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc17_030",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-030 must run after RC17-022 completed, either while current_task is RC17-030 or while rerunning after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC17-031",
+        "rc17_022_status": "completed",
+        "rc17_030_status": "completed"
+      }
+    },
+    {
+      "id": "contract.controlled_install.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17 contract must require controlled local install execute-or-deny evidence and forbid host/production mutation.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+        "sha256": "7efbc7763eb494eb7feb93ca95479a3d1c9bca658cc68b5b70811532ba9f914d",
+        "size_bytes": 3432,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.required_gates.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install execution is impossible unless exact target, exact approval, executable PlanSpec, SecurityExecution allow, rollback preconditions, and observation plan are bound.",
+      "evidence": {
+        "target_bound": true,
+        "approval_bound": true,
+        "planspec_executable": true,
+        "security_allow": true,
+        "rollback_preconditions_bound": true,
+        "observation_plan_bound": true
+      }
+    },
+    {
+      "id": "install.identity.audit.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled local install must bind package/media/release/target identity and audit material.",
+      "evidence": {
+        "identity_bound": true,
+        "audit_material_bound": true,
+        "package_id": "production-distro-rc16-repo-local-distributable-package",
+        "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+        "release_id": "production-distro-rc8-current-artifacts"
+      }
+    },
+    {
+      "id": "install.executed_or_denied_with_audit",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Controlled local install must either execute against the exact repo-local target or deny before effect with non-fabricated audit evidence.",
+      "evidence": {
+        "install_allowed": true,
+        "install_performed": true,
+        "audit_sha256": "ba5d4a6fd17eb6f3ed312f7cb3a960c79713fdfe91ca2ea1439c3956a23ba835",
+        "fabricated": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-030 must not download remote payloads, mutate host slot or boot metadata, mutate production rings, upload support, execute recovery, remote-dispatch, or handle private signing material.",
+      "evidence": {
+        "install_effect_prepared": true,
+        "install_effect_executed": true,
+        "install_performed": true,
+        "repo_local_install_evidence_written": true,
+        "update_performed": false,
+        "rollback_execution_performed": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "active_slot_mutated": false,
+        "boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing gates and forbidden authority surfaces must fail closed.",
+      "evidence": {
+        "cases": 16,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC17-030 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
