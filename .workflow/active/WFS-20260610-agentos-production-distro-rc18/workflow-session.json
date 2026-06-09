@@ -1,0 +1,58 @@
+{
+  "workflow_id": "WFS-20260610-agentos-production-distro-rc18",
+  "name": "Production Distro RC18",
+  "status": "active",
+  "created_at": "2026-06-10T04:50:00+08:00",
+  "updated_at": "2026-06-10T04:50:00+08:00",
+  "source": "RC17 final audit; maestro-managed RC18 planning",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc17",
+  "goal": "Plan and execute an AIOS-body isolated installed-system image install/update/rollback drill without giving authority to mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, host boot state, production rings, TUI projections, shell output, or model replay.",
+  "core_thesis": "AIOS becomes closer to a distributable OS when exact install/update/rollback evidence moves from repo-local artifacts into a disposable installed-system image or VM boundary while the host and production rings remain untouched.",
+  "non_goals": [
+    "Do not build mirror frontend, nginx, TLS, remote signer, object storage, or remote dispatch infrastructure in RC18 body tasks.",
+    "Do not read, copy, print, hash, move, or reference private signing material.",
+    "Do not claim GA production readiness.",
+    "Do not mutate host rootfs, host active slot metadata, host boot metadata, active artifact set, or production rings.",
+    "Do not upload support bundles, execute recovery services, or dispatch remote fleet actions."
+  ],
+  "primary_acceptance": [
+    "RC18-050 final closeout audit closes RC18 as a non-GA AIOS-body isolated installed-system drill milestone.",
+    "The plan covers disposable image boundary, baseline boot-state projection, image-boundary fail-closed fixtures, isolated install, isolated update, rollback preconditions, isolated rollback, support/recovery evidence, consumer smoke, and final audit.",
+    "The plan preserves AIOS-body-only scope and keeps mirror frontend, nginx/TLS, signer infrastructure, object storage provisioning, remote dispatch, private signing material, support upload, recovery execution service, host boot mutation, and production ring mutation out of scope.",
+    "The plan keeps production_ready_claim=false until final audit and still forbids GA claims."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC18-000",
+      "completed_at": "2026-06-10T04:50:00+08:00",
+      "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-000-planning.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC18-001",
+  "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-plan.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/workflow-session.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-plan.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-000-planning.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-000.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-001.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-010.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-011.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-012.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-020.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-021.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-022.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-030.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-031.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-040.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/.task/TASK-RC18-050.json",
+    ".workflow/.csv-wave/20260610-plan-rc18-isolated-installed-system-drill/context.md"
+  ]
+}

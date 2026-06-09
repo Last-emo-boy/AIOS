@@ -1,0 +1,176 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260610-agentos-production-distro-rc18",
+  "milestone": "Production Distro RC18",
+  "status": "active",
+  "objective": "Move RC17 non-GA exact repo-local install/update execute-or-deny readiness into an isolated installed-system image drill that proves install, update, rollback, support evidence, and consumer smoke inside a disposable image or VM boundary without mutating the host, production rings, mirror, signer, object storage, remote dispatch, support upload, recovery services, or GA authority.",
+  "scope": {
+    "included": [
+      "AIOS-body isolated installed-system drill planning",
+      "isolated installed-system drill authority contract",
+      "disposable installed-system image boundary and state root binding",
+      "installed-system baseline identity and boot-state projection",
+      "image boundary and side-effect fail-closed fixtures",
+      "isolated installed-system install drill evidence",
+      "isolated installed-system update drill evidence",
+      "post-update observation and rollback precondition binding inside the image",
+      "isolated rollback drill evidence",
+      "local support/recovery evidence after isolated image drill",
+      "installed-system local release channel consumer smoke",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload object storage provisioning",
+      "remote fleet dispatch infrastructure",
+      "support upload endpoint",
+      "recovery execution service",
+      "host active slot mutation",
+      "host boot metadata mutation",
+      "host rootfs mutation",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC18 planning and isolated installed-system contract",
+      "tasks": [
+        {
+          "id": "RC18-000",
+          "status": "completed",
+          "title": "plan Production Distro RC18 isolated installed-system drill",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-000-planning.json"
+        },
+        {
+          "id": "RC18-001",
+          "status": "pending",
+          "title": "freeze RC18 isolated installed-system drill authority contract",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "disposable image boundary and baseline",
+      "tasks": [
+        {
+          "id": "RC18-010",
+          "status": "pending",
+          "title": "bind disposable installed-system image boundary and state root",
+          "deliverable": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json"
+        },
+        {
+          "id": "RC18-011",
+          "status": "pending",
+          "title": "bind installed-system baseline identity and boot-state projection",
+          "deliverable": ".workflow/artifacts/rc18-installed-system-baseline/result.json"
+        },
+        {
+          "id": "RC18-012",
+          "status": "pending",
+          "title": "verify image-boundary side-effect fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "isolated install update and rollback preconditions",
+      "tasks": [
+        {
+          "id": "RC18-020",
+          "status": "pending",
+          "title": "run isolated installed-system install drill",
+          "deliverable": ".workflow/artifacts/rc18-isolated-install-drill/result.json"
+        },
+        {
+          "id": "RC18-021",
+          "status": "pending",
+          "title": "run isolated installed-system update drill",
+          "deliverable": ".workflow/artifacts/rc18-isolated-update-drill/result.json"
+        },
+        {
+          "id": "RC18-022",
+          "status": "pending",
+          "title": "bind post-update observation and rollback preconditions inside the image",
+          "deliverable": ".workflow/artifacts/rc18-image-rollback-preconditions/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "isolated rollback and support evidence",
+      "tasks": [
+        {
+          "id": "RC18-030",
+          "status": "pending",
+          "title": "run isolated installed-system rollback drill",
+          "deliverable": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json"
+        },
+        {
+          "id": "RC18-031",
+          "status": "pending",
+          "title": "bind isolated image support and recovery evidence",
+          "deliverable": ".workflow/artifacts/rc18-isolated-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "installed-system consumer smoke and closeout",
+      "tasks": [
+        {
+          "id": "RC18-040",
+          "status": "pending",
+          "title": "run installed-system local release channel consumer smoke",
+          "deliverable": ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json"
+        },
+        {
+          "id": "RC18-050",
+          "status": "pending",
+          "title": "run Production Distro RC18 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC18-001",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc17",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "rc17_exact_install_update_ready_required": true,
+    "isolated_image_boundary_required": true,
+    "host_rootfs_mutation_allowed": false,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "production_ready_claim": false,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.86,
+    "requirements_coverage": 0.93,
+    "task_quality": 0.86,
+    "dependency_correctness": 0.9,
+    "estimation_accuracy": 0.76,
+    "collision_safety": 0.88,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC18 follows the RC17 final audit next_milestone direction and narrows the next work to an isolated installed-system image drill. The plan separates image boundary, baseline, fail-closed fixtures, install, update, rollback preconditions, rollback, support/recovery, consumer smoke, and final audit while preserving AIOS-body-only boundaries and non-GA scope."
+  }
+}

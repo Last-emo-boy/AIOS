@@ -1,0 +1,103 @@
+{
+  "schema": "agentos.rc18-planning-evidence.v1",
+  "generated_at": "2026-06-10T04:50:00+08:00",
+  "task": "RC18-000",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "source": {
+    "rc17_final_audit": {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+      "verdict": "PASS",
+      "decision": "rc17-exact-install-update-execute-or-deny-ready-non-ga",
+      "exact_install_update_ready": true,
+      "production_ready_claim": false,
+      "next_milestone": {
+        "id": "Production Distro RC18",
+        "title": "isolated installed-system install/update/rollback drill",
+        "direction": "Move from repo-local evidence to an isolated installed-system image drill that proves install, update, rollback, and support evidence in a disposable image or VM while preserving AIOS-body-only scope and no host or production ring mutation."
+      },
+      "rc18_required_boundaries": [
+        "do-not-weaken-rc17-exact-install-update-evidence",
+        "aios-body-only",
+        "disposable-image-or-vm-boundary-required",
+        "host-rootfs-mutation-disabled",
+        "host-active-slot-and-boot-metadata-mutation-disabled",
+        "production-ring-mutation-disabled",
+        "mirror-frontend-nginx-tls-out-of-scope",
+        "remote-signer-private-material-out-of-scope",
+        "object-storage-provisioning-out-of-scope",
+        "remote-dispatch-out-of-scope",
+        "support-upload-and-recovery-execution-disabled",
+        "ga-claim-disabled"
+      ]
+    }
+  },
+  "outputs": {
+    "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+    "workflow_session": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/workflow-session.json",
+    "planning_summary": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-plan.md",
+    "maestro_session": ".workflow/.csv-wave/20260610-plan-rc18-isolated-installed-system-drill"
+  },
+  "plan_surface": {
+    "task_count": 12,
+    "completed_tasks": [
+      "RC18-000"
+    ],
+    "next_task": "RC18-001",
+    "waves": [
+      "wave-0",
+      "wave-1",
+      "wave-2",
+      "wave-3",
+      "wave-4"
+    ],
+    "aios_body_only": true,
+    "isolated_image_boundary_required": true,
+    "host_rootfs_mutation_out_of_scope": true,
+    "host_active_slot_mutation_out_of_scope": true,
+    "host_boot_metadata_mutation_out_of_scope": true,
+    "production_ring_mutation_out_of_scope": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "remote_dispatch_out_of_scope": true,
+    "private_signing_material_out_of_scope": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true
+  },
+  "invariants": {
+    "production_ready_claim": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "mirror_frontend_changed": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "object_storage_infra_changed": false,
+    "payload_upload_performed": false,
+    "remote_payload_bytes_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "remote_dispatch_enabled": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "frontend_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc18_000_complete": true,
+    "next_task": "RC18-001",
+    "commit_required": true
+  }
+}

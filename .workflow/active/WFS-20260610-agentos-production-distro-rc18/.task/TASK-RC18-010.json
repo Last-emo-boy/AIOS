@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-010",
+  "title": "bind disposable installed-system image boundary and state root",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+    ".workflow/artifacts/rc17-final-closeout-audit/result.json",
+    ".workflow/artifacts/rc17-controlled-local-install/result.json",
+    ".workflow/artifacts/rc17-controlled-local-update/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc18-disposable-installed-system-boundary.ps1",
+      "role": "boundary projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "role": "disposable image boundary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-010-disposable-installed-system-boundary.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Disposable image state root, allowed write surface, denied host write surface, and artifact roots are hash-bound to RC17 exact install/update evidence.",
+      "Result proves host rootfs, host active slot, host boot metadata, active artifact set, production ring, support upload, recovery service, remote dispatch, mirror/frontend, and signer authority remain disabled.",
+      "No image mutation is performed before the boundary is bound."
+    ]
+  }
+}

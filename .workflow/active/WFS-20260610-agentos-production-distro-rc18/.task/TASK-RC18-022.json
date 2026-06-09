@@ -1,0 +1,41 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-022",
+  "title": "bind post-update observation and rollback preconditions inside the image",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc18-image-rollback-preconditions.ps1",
+      "role": "rollback precondition runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/post-update-observation.json",
+      "role": "post-update observation"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/rollback-precondition-package.json",
+      "role": "rollback precondition package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-022-image-rollback-preconditions.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Post-update observations and rollback preconditions are bound inside the disposable image boundary after install and update evidence.",
+      "Rollback execution remains gated until RC18-030.",
+      "No host boot, host slot, host rootfs, active artifact set, support upload, recovery service, remote dispatch, or production ring mutation occurs."
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-012",
+  "title": "verify image-boundary side-effect fail-closed fixtures",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+    ".workflow/artifacts/rc18-installed-system-baseline/result.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc18-image-boundary-fail-closed.ps1",
+      "role": "fail-closed fixture runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/image-boundary-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-012-image-boundary-fail-closed.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Negative cases cover missing boundary, stale baseline, host write broadening, remote dispatch, support upload, recovery execution, signer authority, mirror/frontend authority, production ring mutation, and GA claim.",
+      "All negative cases deny before image mutation or host mutation.",
+      "Fixture execution is local-only and does not create remote or host side effects."
+    ]
+  }
+}

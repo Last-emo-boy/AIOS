@@ -1,0 +1,37 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-021",
+  "title": "run isolated installed-system update drill",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+    ".workflow/artifacts/rc17-controlled-local-update/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc18-isolated-update-drill.ps1",
+      "role": "isolated update drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/update-drill-evidence.json",
+      "role": "update drill evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-021-isolated-update-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Update drill requires prior isolated install evidence and executes or denies only inside the disposable image boundary.",
+      "Update evidence binds exact target, exact approval, AgentCore PlanSpec, SecurityExecution allow, rollback preconditions, install evidence, and image boundary.",
+      "No host, remote, support upload, recovery service, production ring, mirror/frontend, signer, or private material authority is broadened."
+    ]
+  }
+}

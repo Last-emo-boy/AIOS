@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-031",
+  "title": "bind isolated image support and recovery evidence",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc18-isolated-support-recovery.ps1",
+      "role": "support/recovery evidence runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/isolated-support-bundle.json",
+      "role": "local support bundle"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-031-isolated-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Support bundle is local-only, redacted, and bound to isolated install/update/rollback evidence.",
+      "Recovery reference index is projection-only and does not execute recovery service.",
+      "No support upload, remote dispatch, host mutation, production ring mutation, signer authority, mirror/frontend authority, or private material handling occurs."
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-040",
+  "title": "run installed-system local release channel consumer smoke",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc18-installed-system-consumer-smoke.ps1",
+      "role": "installed-system consumer smoke runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/consumer-smoke-evidence.json",
+      "role": "consumer smoke evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-040-installed-system-consumer-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Consumer smoke follows local release channel metadata and reports installed-system install/update/rollback readiness from RC18 image evidence.",
+      "Consumer smoke is audited and does not execute new install, update, rollback, support upload, recovery, remote dispatch, host, or production effects.",
+      "No mirror/frontend, signer, object storage, private material, shell, TUI, model, or endpoint reachability authority is granted."
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-050",
+  "title": "run Production Distro RC18 final closeout audit",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+    ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+    ".workflow/artifacts/rc18-installed-system-baseline/result.json",
+    ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json",
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc18-image-rollback-preconditions/result.json",
+    ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-support-recovery/result.json",
+    ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc18-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/final-rc18-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-050-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit covers all RC18 tasks and reports isolated installed-system install/update/rollback readiness truthfully.",
+      "Final audit preserves production_ready_claim=false unless every scoped isolated image gate is proved and still forbids GA claims.",
+      "Final audit verifies no mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery-execution/remote-dispatch/host-rootfs/host-boot/production-ring authority was broadened."
+    ]
+  }
+}

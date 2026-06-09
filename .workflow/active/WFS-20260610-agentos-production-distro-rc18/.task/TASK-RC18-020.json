@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-020",
+  "title": "run isolated installed-system install drill",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+    ".workflow/artifacts/rc18-installed-system-baseline/result.json",
+    ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json",
+    ".workflow/artifacts/rc17-controlled-local-install/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc18-isolated-install-drill.ps1",
+      "role": "isolated install drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/install-drill-evidence.json",
+      "role": "install drill evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-020-isolated-install-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Install drill executes or denies only inside the disposable installed-system image boundary.",
+      "Install evidence binds exact target, exact approval, AgentCore PlanSpec, SecurityExecution allow, rollback preconditions, baseline identity, and image boundary.",
+      "Host rootfs, host active slot, host boot metadata, active artifact set, production ring, remote dispatch, support upload, recovery execution, mirror/frontend, signer, and private material remain untouched."
+    ]
+  }
+}

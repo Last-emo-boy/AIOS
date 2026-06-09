@@ -1,0 +1,37 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-030",
+  "title": "run isolated installed-system rollback drill",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc18-image-rollback-preconditions/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc18-isolated-rollback-drill.ps1",
+      "role": "isolated rollback drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/rollback-drill-evidence.json",
+      "role": "rollback drill evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-030-isolated-rollback-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback drill executes or denies only inside the disposable installed-system image boundary.",
+      "Rollback evidence binds post-update observation, rollback preconditions, separate rollback approval, AgentCore rollback PlanSpec, SecurityExecution rollback allow, audit, and support/recovery references.",
+      "No host, remote, production ring, support upload, recovery service, mirror/frontend, signer, or private material authority is broadened."
+    ]
+  }
+}

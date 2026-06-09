@@ -1,0 +1,41 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC18-011",
+  "title": "bind installed-system baseline identity and boot-state projection",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+    ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+    ".workflow/artifacts/rc17-final-closeout-audit/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc18-installed-system-baseline.ps1",
+      "role": "baseline projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/baseline-identity.json",
+      "role": "baseline identity"
+    },
+    {
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/boot-state-projection.json",
+      "role": "boot-state projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/RC18-011-installed-system-baseline.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Baseline installed-system identity binds release, media, package, AgentCore, SecurityExecution, rollback, support, and image-boundary references.",
+      "Boot-state projection is explicit about being image-local and non-authoritative for host boot state.",
+      "No host boot metadata, active slot, active artifact set, production ring, remote dispatch, or support upload mutation occurs."
+    ]
+  }
+}
