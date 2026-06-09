@@ -1,0 +1,160 @@
+{
+  "schema": "agentos.rc18-installed-system-baseline-identity.v1",
+  "generated_at": "2026-06-10T05:50:00+08:00",
+  "task": "RC18-011",
+  "status": "installed-system-baseline-bound-projection-only",
+  "production_ready_claim": false,
+  "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+  "baseline_material_hash": "4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+  "release": {
+    "release_id": "production-distro-rc8-current-artifacts",
+    "payload_object_id": "sha256:9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_sha256": "9ce50b6ce14fb07bd274c82de5ab90c5a4158a167e06b2e9a40a811fde32227b",
+    "payload_size_bytes": 377,
+    "descriptor_sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+    "initramfs_manifest_sha256": "341e5add1a0fb78da8d4a5cceba94e7f3f2ddacb5e75e43ec8110c782119e8f8",
+    "runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+    "runtime_artifact_count": 15
+  },
+  "media": {
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "target_arch": [
+      "x86_64"
+    ],
+    "boot_modes": [
+      "uefi",
+      "bios"
+    ],
+    "kernel_family": "linux-lts",
+    "initramfs_contract": "agentos-initramfs-stage-copy-only"
+  },
+  "agentcore": {
+    "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "agentcore_install_update_planspec_executable": true,
+    "exact_install_update_target_bound": true,
+    "exact_install_update_approval_bound": true
+  },
+  "security_execution": {
+    "planspec_core_hash": "773cea89239822574478152e92c19b373ac3eab5ddbbc055c26f05d688fd27ae",
+    "effect_envelope_core_hash": "fea11edbc8f77e0c44fb6fb793930f3ef01a3699155729e250c951ff585a89c8",
+    "decision_material_hash": "361e8ac6c9857d79afc5f7941d049afb7d20ba8332c2b4614a921f1e8341a194",
+    "security_execution_install_update_allow": true
+  },
+  "rollback_support": {
+    "rc17_rollback_execution_performed": true,
+    "rollback_preconditions_bound": true,
+    "support_bundle_local_only": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "image_boundary": {
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+    "image_boundary_bound": true,
+    "only_writable_drill_surface": "disposable-installed-system-image-or-vm"
+  },
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "9827061825306fad0affad7e3169b3050424c43e9f794fcb7b9f83763f5903a4",
+      "size_bytes": 7421,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc18_boundary_result": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a",
+      "size_bytes": 25772,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_image_boundary": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "size_bytes": 25924,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-image-boundary.v1",
+      "status": "disposable-image-boundary-bound-no-image-mutation",
+      "production_ready_claim": false
+    },
+    "rc16_media_result": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+      "sha256": "3aaa892c44cac3391f26c8eab639199254e592b0f131921187b2f470eb64abef",
+      "size_bytes": 21051,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc16_media_manifest": {
+      "path": ".workflow/artifacts/rc16-installable-media-manifest/installable-media-manifest.json",
+      "sha256": "197eb2970eadc5babb7313c12bdbe4ba59ac73b2464e14bb4796a75d0523629e",
+      "size_bytes": 22474,
+      "present": true,
+      "schema": "agentos.rc16-installable-media-manifest.v1",
+      "status": "installable-media-manifest-projected-install-update-gated",
+      "production_ready_claim": false
+    },
+    "rc17_final_audit_result": {
+      "path": ".workflow/artifacts/rc17-final-closeout-audit/result.json",
+      "sha256": "275a14dda99d99b4218c1a251d5372443564f35fe66350fe75a599930543bd02",
+      "size_bytes": 24961,
+      "present": true,
+      "schema": "agentos.rc17-final-closeout-audit-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_agentcore_result": {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+      "sha256": "af0f99bc40f32d43153f6ab23750d7d5a96b0ff261dd0b4faaf61f4bf1308969",
+      "size_bytes": 21854,
+      "present": true,
+      "schema": "agentos.rc17-agentcore-install-update-executable-planspec-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_security_execution_result": {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+      "sha256": "b1137094b9f40f01145d7196f64565fbe29c864ba3db14feed814ad2749d1b8d",
+      "size_bytes": 15236,
+      "present": true,
+      "schema": "agentos.rc17-security-execution-install-update-allow-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_support_result": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+      "sha256": "fb3c305eb332b8b823abe2facbe0f9d6550292e3041c7f3cbb552669b1ee9683",
+      "size_bytes": 25138,
+      "present": true,
+      "schema": "agentos.rc17-controlled-install-update-rollback-support-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    }
+  },
+  "authority": {
+    "aios_body_only": true,
+    "baseline_projection_only": true,
+    "image_materialized": false,
+    "vm_booted": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed_in_rc18": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_authority": false,
+    "signer_authority": false
+  }
+}

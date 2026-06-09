@@ -1,0 +1,66 @@
+{
+  "schema": "agentos.rc18-installed-system-boot-state-projection.v1",
+  "generated_at": "2026-06-10T05:50:00+08:00",
+  "task": "RC18-011",
+  "status": "image-local-boot-state-projected-non-authoritative",
+  "production_ready_claim": false,
+  "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+  "boot_state_projection_hash": "5d0a7480f6a55473feaed59ea587196d18f90b56bb7ff1ca2288f2a8ebe4a47c",
+  "image_scope": "disposable-installed-system-image-or-vm",
+  "projection_authority": {
+    "image_local_projection": true,
+    "non_authoritative_for_host_boot_state": true,
+    "host_boot_metadata_authority": false,
+    "host_active_slot_authority": false,
+    "active_artifact_set_authority": false,
+    "production_ring_authority": false,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false
+  },
+  "projected_boot": {
+    "boot_args": "console=ttyS0 rdinit=/sbin/agentd panic=-1",
+    "markers": [
+      "AGENTD_HANDOFF_OK",
+      "AGENTOS_RUNTIME_ARTIFACTS_OK",
+      "AGENTOS_RUNTIME_MANIFEST_SHA256=ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+      "AGENTOS_TUI_CONSOLE_READY",
+      "AGENTOS_RUNTIME_ARTIFACT_COUNT=15"
+    ],
+    "runtime_manifest_sha256": "ff71e75e390367fa0a516b0e63b8bf83cfd6c5a0f6e2ffd2285977e554c3c305",
+    "runtime_artifact_count": 15,
+    "runtime_artifact_ids": [
+      "policy.pack",
+      "tools.semantic",
+      "operator.commands",
+      "production_signing.key_custody",
+      "production_signing.key_rotation_log",
+      "production_signing.key_revocation_log",
+      "ecosystem.registry_snapshot",
+      "ecosystem.core_policy",
+      "ecosystem.workflow_service_recovery",
+      "model_broker.config",
+      "tui.config",
+      "state.runs",
+      "state.audit",
+      "state.rollback",
+      "state.memory"
+    ],
+    "generated_agentd_sha256": "0b76993a7347e95603f62bcddbbef48d0c08b91f3780a0e0ebc3586c9993a222"
+  },
+  "host_state": {
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false
+  },
+  "next_gate": {
+    "next_task": "RC18-012",
+    "required_before_image_mutation": [
+      "rc18-011-baseline-bound",
+      "rc18-012-image-boundary-fail-closed-passed"
+    ],
+    "image_mutation_allowed_now": false
+  }
+}
