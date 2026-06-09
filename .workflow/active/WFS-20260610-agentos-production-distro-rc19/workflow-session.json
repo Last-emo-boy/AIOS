@@ -1,0 +1,59 @@
+{
+  "workflow_id": "WFS-20260610-agentos-production-distro-rc19",
+  "name": "Production Distro RC19",
+  "status": "active",
+  "created_at": "2026-06-10T08:45:00+08:00",
+  "updated_at": "2026-06-10T08:45:00+08:00",
+  "source": "RC18 final audit; maestro-managed RC19 planning",
+  "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "goal": "Plan and execute an AIOS-body reproducible installable image artifact and first-user installation path without giving authority to external mirror frontend, Nginx/TLS, remote signer, object storage, remote dispatch, private signing material, support upload, recovery execution, host boot state, production rings, TUI projections, shell output, endpoint reachability, or model replay.",
+  "core_thesis": "AIOS becomes closer to an Ubuntu-like distributable OS when isolated installed-system readiness is packaged into a reproducible installable image artifact with a first-user install path and local/offline channel consumption evidence, while the host and production rings remain untouched.",
+  "non_goals": [
+    "Do not build external mirror frontend, Nginx, TLS, remote signer, object storage, or remote dispatch infrastructure in RC19 body tasks.",
+    "Do not read, copy, print, hash, move, or reference private signing material.",
+    "Do not claim GA production readiness.",
+    "Do not mutate host rootfs, host active slot metadata, host boot metadata, active artifact set, or production rings.",
+    "Do not upload support bundles, execute recovery services, or dispatch remote fleet actions."
+  ],
+  "primary_acceptance": [
+    "RC19-050 final closeout audit closes RC19 as a non-GA AIOS-body reproducible installable image artifact and first-user install path milestone.",
+    "The plan covers artifact reproducibility, installer media manifest, fail-closed fixtures, first-user install target boundary, disposable install drill, first boot projection, local/offline channel consumption, post-install update/rollback smoke, support/recovery evidence, consumer smoke, and final audit.",
+    "The plan preserves AIOS-body-only scope and keeps external mirror frontend, nginx/TLS, signer infrastructure, object storage provisioning, remote dispatch, private signing material, support upload, recovery execution service, host boot mutation, and production ring mutation out of scope.",
+    "The plan keeps production_ready_claim=false until final audit and still forbids GA claims."
+  ],
+  "completed_tasks": [
+    {
+      "task": "RC19-000",
+      "completed_at": "2026-06-10T08:45:00+08:00",
+      "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-000-planning.json",
+      "commit": null
+    }
+  ],
+  "next_task": "RC19-001",
+  "plan": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+  "docs": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/final-rc18-closeout-summary.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-reproducible-installable-image-plan.md"
+  ],
+  "artifacts": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/workflow-session.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-reproducible-installable-image-plan.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-000-planning.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-000.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-001.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-010.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-011.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-012.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-020.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-021.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-022.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-030.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-031.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-032.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-040.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/.task/TASK-RC19-050.json",
+    ".workflow/.csv-wave/20260610-plan-rc19-reproducible-installable-image/context.md"
+  ]
+}

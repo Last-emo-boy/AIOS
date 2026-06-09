@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-011",
+  "title": "bind installer media manifest and boot target descriptor",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+    ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    ".workflow/artifacts/rc16-installable-media-manifest/result.json",
+    "image/build-initramfs.ps1",
+    "scripts/build-release.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc19-installer-media-manifest.ps1",
+      "role": "manifest binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/installer-media-manifest.json",
+      "role": "installer media manifest"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-installer-media-manifest/boot-target-descriptor.json",
+      "role": "boot target descriptor"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-011-installer-media-manifest.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Manifest binds installable artifact identity, boot markers, architecture, kernel family, rootfs references, rollback references, and support references.",
+      "Boot target descriptor is projection-only and is not authority to mutate host boot state.",
+      "Result keeps production_ready_claim=false and reports install effects as gated until RC19-021."
+    ]
+  }
+}

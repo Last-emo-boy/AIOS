@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-001",
+  "title": "freeze RC19 installable image and first-user install authority contract",
+  "status": "pending",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-reproducible-installable-image-plan.md",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+      "role": "authority contract"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-001-installable-image-authority-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract freezes gate order from RC18 isolated image readiness through reproducible installable image artifact, installer media, first-user install target, first boot, local/offline channel, post-install update/rollback, support/recovery, consumer smoke, and final audit.",
+      "Contract states first-user install effects may run only inside disposable target evidence until a later milestone explicitly authorizes host install.",
+      "Contract forbids external mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery-execution/remote-dispatch/host-rootfs/host-boot/production-ring authority and keeps production_ready_claim=false."
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-032",
+  "title": "bind first-user install support and recovery evidence",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json",
+    ".workflow/artifacts/rc18-isolated-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc19-first-user-support-recovery.ps1",
+      "role": "support recovery runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-support-recovery/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-support-recovery/first-user-support-bundle.json",
+      "role": "support bundle"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-032-first-user-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Support bundle is local-only, redacted, and hash-bound to first-user install and post-install smoke evidence.",
+      "Recovery reference index is projection-only and does not execute recovery.",
+      "Support upload, recovery execution, remote dispatch, host mutation, production mutation, private material handling, and signing remain disabled."
+    ]
+  }
+}

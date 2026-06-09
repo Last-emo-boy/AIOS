@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-022",
+  "title": "bind first boot provisioning and local operator identity projection",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json",
+    "packaging/agentos/rootfs/etc/agentos/operator-commands.json",
+    "scripts/validate-alpha-rootfs.ps1"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc19-first-boot-provisioning-projection.ps1",
+      "role": "first boot projection runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/first-boot-provisioning-projection.json",
+      "role": "first boot projection"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/local-operator-identity-projection.json",
+      "role": "local operator identity projection"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-022-first-boot-provisioning-projection.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "First boot provisioning is projection-only and derived from first-user install evidence.",
+      "Local operator identity is non-secret, non-authoritative, and does not grant production or host authority.",
+      "No user secrets, tokens, host state, support upload, recovery execution, or remote dispatch are introduced."
+    ]
+  }
+}

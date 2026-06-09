@@ -1,0 +1,187 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260610-agentos-production-distro-rc19",
+  "milestone": "Production Distro RC19",
+  "status": "active",
+  "objective": "Move RC18 non-GA isolated installed-system image readiness into a reproducible installable image artifact and first-user installation path with local/offline channel consumption evidence, without mutating the host, production rings, mirror infrastructure, signer infrastructure, object storage, remote dispatch, support upload, recovery services, private signing material, or GA authority.",
+  "scope": {
+    "included": [
+      "AIOS-body RC19 planning",
+      "installable image artifact and first-user install authority contract",
+      "reproducible installable image artifact set binding",
+      "installer media manifest and boot target descriptor",
+      "image artifact reproducibility and fail-closed fixtures",
+      "first-user install target boundary and preflight package",
+      "first-user install drill inside a disposable target",
+      "first boot provisioning and local operator identity projection",
+      "offline/local channel consumption evidence",
+      "post-install update and rollback compatibility smoke",
+      "first-user install support/recovery evidence",
+      "installable image consumer smoke",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "external mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload object storage provisioning",
+      "remote fleet dispatch infrastructure",
+      "support upload endpoint",
+      "recovery execution service",
+      "host rootfs mutation",
+      "host active slot mutation",
+      "host boot metadata mutation",
+      "active artifact set mutation",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC19 planning and installable image authority contract",
+      "tasks": [
+        {
+          "id": "RC19-000",
+          "status": "completed",
+          "title": "plan Production Distro RC19 reproducible installable image artifact",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-000-planning.json"
+        },
+        {
+          "id": "RC19-001",
+          "status": "pending",
+          "title": "freeze RC19 installable image and first-user install authority contract",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "reproducible installable image artifact surface",
+      "tasks": [
+        {
+          "id": "RC19-010",
+          "status": "pending",
+          "title": "bind reproducible installable image artifact set",
+          "deliverable": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json"
+        },
+        {
+          "id": "RC19-011",
+          "status": "pending",
+          "title": "bind installer media manifest and boot target descriptor",
+          "deliverable": ".workflow/artifacts/rc19-installer-media-manifest/result.json"
+        },
+        {
+          "id": "RC19-012",
+          "status": "pending",
+          "title": "verify installable image artifact reproducibility fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "first-user install target and disposable install drill",
+      "tasks": [
+        {
+          "id": "RC19-020",
+          "status": "pending",
+          "title": "bind first-user install target boundary and preflight package",
+          "deliverable": ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json"
+        },
+        {
+          "id": "RC19-021",
+          "status": "pending",
+          "title": "run first-user install drill inside disposable target",
+          "deliverable": ".workflow/artifacts/rc19-first-user-install-drill/result.json"
+        },
+        {
+          "id": "RC19-022",
+          "status": "pending",
+          "title": "bind first boot provisioning and local operator identity projection",
+          "deliverable": ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "local channel consumption and post-install operations",
+      "tasks": [
+        {
+          "id": "RC19-030",
+          "status": "pending",
+          "title": "bind offline local channel consumption package",
+          "deliverable": ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json"
+        },
+        {
+          "id": "RC19-031",
+          "status": "pending",
+          "title": "run post-install update and rollback compatibility smoke",
+          "deliverable": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json"
+        },
+        {
+          "id": "RC19-032",
+          "status": "pending",
+          "title": "bind first-user install support and recovery evidence",
+          "deliverable": ".workflow/artifacts/rc19-first-user-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "installable image consumer smoke and closeout",
+      "tasks": [
+        {
+          "id": "RC19-040",
+          "status": "pending",
+          "title": "run installable image local consumer smoke",
+          "deliverable": ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json"
+        },
+        {
+          "id": "RC19-050",
+          "status": "pending",
+          "title": "run Production Distro RC19 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/FINAL-AUDIT-20260610-production-distro-rc19.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC19-001",
+  "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "rc18_installed_system_image_ready_required": true,
+    "reproducible_installable_image_artifact_required": true,
+    "first_user_install_path_required": true,
+    "offline_local_channel_consumption_required": true,
+    "host_rootfs_mutation_allowed": false,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ready_claim": false,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.85,
+    "requirements_coverage": 0.92,
+    "task_quality": 0.86,
+    "dependency_correctness": 0.89,
+    "estimation_accuracy": 0.75,
+    "collision_safety": 0.84,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC19 follows the RC18 final audit next_milestone direction and narrows the next work to AIOS-body installable image artifact and first-user installation evidence. The plan separates artifact reproducibility, media manifest, target boundary, first-user install drill, first boot projection, local channel consumption, post-install operations, support/recovery, consumer smoke, and final audit while preserving non-GA and no host or production mutation scope."
+  }
+}

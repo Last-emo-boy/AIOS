@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-030",
+  "title": "bind offline local channel consumption package",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json",
+    ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc19-offline-local-channel-consumption.ps1",
+      "role": "local channel runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/offline-local-channel-package.json",
+      "role": "local channel package"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/local-channel-consumption-evidence.json",
+      "role": "consumption evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-030-offline-local-channel-consumption.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Local channel package binds installable image artifact and first-user install evidence without external mirror infrastructure.",
+      "Consumption evidence is offline/local-only and does not trust endpoint reachability, frontend output, shell output, TUI output, or model replay.",
+      "Remote payload download, object storage provisioning, support upload, recovery execution, remote dispatch, and production mutation remain disabled."
+    ]
+  }
+}

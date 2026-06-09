@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-031",
+  "title": "run post-install update and rollback compatibility smoke",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-rollback-drill/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc19-post-install-update-rollback-smoke.ps1",
+      "role": "post-install smoke runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/post-install-update-rollback-evidence.json",
+      "role": "smoke evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-031-post-install-update-rollback-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Smoke binds first-user install evidence to post-install update and rollback compatibility readiness.",
+      "Update and rollback compatibility are evaluated or executed only inside the disposable target boundary.",
+      "Host boot, active artifact set, production ring, remote dispatch, support upload, and recovery execution remain disabled."
+    ]
+  }
+}

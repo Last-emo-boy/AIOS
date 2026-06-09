@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-020",
+  "title": "bind first-user install target boundary and preflight package",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+    ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/result.json",
+    ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc19-first-user-install-target-boundary.ps1",
+      "role": "target boundary runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-install-target-boundary/first-user-install-target-boundary.json",
+      "role": "target boundary"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-install-target-boundary/install-preflight-package.json",
+      "role": "install preflight package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-020-first-user-install-target-boundary.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Target boundary declares disposable target as the only writable first-user install surface.",
+      "Preflight package binds installable image artifact, media manifest, boot target descriptor, AgentCore/SecurityExecution references, rollback references, and support references.",
+      "Host rootfs, host active slot, host boot metadata, active artifact set, production ring, remote dispatch, support upload, and recovery execution remain disabled."
+    ]
+  }
+}

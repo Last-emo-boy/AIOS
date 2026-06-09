@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-000",
+  "title": "plan Production Distro RC19 reproducible installable image artifact",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/final-rc18-closeout-summary.md",
+    ".workflow/state.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/plan.json",
+      "role": "RC19 execution plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-reproducible-installable-image-plan.md",
+      "role": "planning summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-000-planning.json",
+      "role": "planning evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Plan derives RC19 tasks from RC18 final audit next milestone direction.",
+      "Plan preserves AIOS-body-only scope and excludes external mirror frontend, nginx/TLS, remote signer, object storage provisioning, remote dispatch, private signing material, support upload, recovery execution, host rootfs mutation, host active slot mutation, host boot metadata mutation, active artifact set mutation, and production ring mutation.",
+      "Plan keeps production_ready_claim=false and sets RC19-001 as next executable task."
+    ]
+  },
+  "completed_at": "2026-06-10T08:45:00+08:00",
+  "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-000-planning.json",
+  "next_task": "RC19-001"
+}

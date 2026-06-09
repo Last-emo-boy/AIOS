@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-010",
+  "title": "bind reproducible installable image artifact set",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/rc19-installable-image-authority-contract.md",
+    ".workflow/artifacts/rc18-final-closeout-audit/result.json",
+    ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json",
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+    ".workflow/artifacts/rc18-isolated-rollback-drill/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc19-reproducible-installable-image-artifact.ps1",
+      "role": "artifact binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/installable-image-artifact-set.json",
+      "role": "artifact set"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/reproducibility-input-map.json",
+      "role": "reproducibility input map"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-010-reproducible-installable-image-artifact.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Result binds RC18 installed-system image readiness to a deterministic installable image artifact set.",
+      "Artifact set records reproducibility inputs, source artifact hashes, output identity, and non-GA boundaries without building or publishing external payloads.",
+      "No host rootfs, host boot, active artifact set, production ring, remote dispatch, signer, object storage, support upload, or recovery execution authority is broadened."
+    ]
+  }
+}

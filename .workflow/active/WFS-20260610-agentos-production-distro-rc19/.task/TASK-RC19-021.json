@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-021",
+  "title": "run first-user install drill inside disposable target",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json",
+    ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    ".workflow/artifacts/rc19-installer-media-manifest/result.json",
+    ".workflow/artifacts/rc18-isolated-install-drill/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc19-first-user-install-drill.ps1",
+      "role": "install drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/first-user-install-evidence.json",
+      "role": "install evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-first-user-install-drill/install-audit-record.json",
+      "role": "audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-021-first-user-install-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "First-user install drill executes only inside the disposable target boundary or denies before effect.",
+      "Install evidence binds artifact identity, installer media, target boundary, preflight package, audit, rollback references, and support references.",
+      "Host and production mutation remain false; consumer-facing readiness is not claimed until later smoke and final audit."
+    ]
+  }
+}

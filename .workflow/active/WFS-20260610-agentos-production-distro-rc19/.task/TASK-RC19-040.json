@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC19-040",
+  "title": "run installable image local consumer smoke",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json",
+    ".workflow/artifacts/rc19-first-user-install-drill/result.json",
+    ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json",
+    ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json",
+    ".workflow/artifacts/rc19-first-user-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc19-installable-image-consumer-smoke.ps1",
+      "role": "consumer smoke runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc19-installable-image-consumer-smoke/consumer-smoke-evidence.json",
+      "role": "consumer smoke evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/RC19-040-installable-image-consumer-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Consumer smoke follows local/offline channel evidence and reports installable image, first-user install, post-install update/rollback, and support/recovery readiness truthfully.",
+      "Consumer smoke does not execute new install, update, rollback, support upload, recovery execution, remote dispatch, host mutation, production mutation, mirror/frontend authority, signer authority, shell/TUI/model/endpoint authority, or private material handling.",
+      "Result is audited and keeps production_ready_claim=false."
+    ]
+  }
+}
