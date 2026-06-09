@@ -1,0 +1,60 @@
+{
+  "schema": "agentos.rc18-image-rollback-precondition-package.v1",
+  "generated_at": "2026-06-10T07:10:00+08:00",
+  "task": "RC18-022",
+  "status": "image-rollback-preconditions-bound-execution-gated",
+  "production_ready_claim": false,
+  "rollback_precondition_id": "sha256:bcd61fba39e82a893e90f86a8f3bf5ce14c1cc4ea6b1e63e79090c8882b764f4",
+  "rollback_preconditions_bound": true,
+  "rollback_execution_allowed": false,
+  "rollback_execution_performed": false,
+  "rollback_execution_gate": "RC18-030",
+  "denial_reasons": [
+    "rollback-execution-deferred-to-rc18-030"
+  ],
+  "precondition_core": {
+    "schema": "agentos.rc18-image-rollback-precondition-core.v1",
+    "task": "RC18-022",
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "prior_install_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "post_update_observation_id": "sha256:c24cc3f9fe61410fd9dbd1016eb348503f9d6c0bc61b8e760d60c1080367ca9d",
+    "post_update_observation_sha256": "342236109f351606e2172a1edb622e0b556b8ed9457442325a2e0b0a7d062fac",
+    "rollback_precondition_core_hash": "32f261e5e71bcb07b443c37473c1ea33fdfee39c3ef6b1cede276544e422ee3d",
+    "rc17_rollback_attempt_digest": "a4b479707fbdc37d6b434d2d83c7b6905b413b6072f692328f792e0c789d51b7",
+    "rc17_rollback_audit_digest": "61227e0991ffc4944ca9015e1f32db40de8eeedf358b0240e66b050c238ecb3a",
+    "rc17_support_recovery_chain_sha256": "cf364d1ab268b5426a202a0bace762712140a8b07858822c08f1c5240d299bf0",
+    "rollback_execution_gated_until": "RC18-030",
+    "rollback_execution_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "host_mutation_allowed": false
+  },
+  "requirements": {
+    "image_boundary_bound": true,
+    "install_evidence_bound": true,
+    "update_evidence_bound": true,
+    "identity_matches_update": true,
+    "rc17_rollback_support_bound": true,
+    "post_update_observation_bound": true,
+    "rollback_execution_separate_task_required": true
+  },
+  "authority": {
+    "host_rootfs_mutation_allowed": false,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ring_mutation_allowed": false,
+    "support_upload_allowed": false,
+    "recovery_execution_allowed": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_authority": false,
+    "signer_authority": false,
+    "private_signing_material_handled": false
+  }
+}

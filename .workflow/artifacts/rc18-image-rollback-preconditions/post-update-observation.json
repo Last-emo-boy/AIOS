@@ -1,0 +1,93 @@
+{
+  "schema": "agentos.rc18-image-post-update-observation.v1",
+  "generated_at": "2026-06-10T07:10:00+08:00",
+  "task": "RC18-022",
+  "status": "post-update-observation-bound-inside-disposable-image",
+  "production_ready_claim": false,
+  "observation_id": "sha256:c24cc3f9fe61410fd9dbd1016eb348503f9d6c0bc61b8e760d60c1080367ca9d",
+  "observation_core": {
+    "schema": "agentos.rc18-image-post-update-observation-core.v1",
+    "task": "RC18-022",
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "previous_installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "update_drill_digest": "29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "install_drill_digest": "3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "observation_plan_sha256": "c9c491eac4c16257a11f1fee799427b8d9cbd705ae74d1d3d26dafd821c35d57",
+    "observed_inside_disposable_image": true,
+    "host_boot_state_authoritative": false,
+    "host_mutation_allowed": false,
+    "rollback_execution_allowed": false
+  },
+  "observed_state": {
+    "image_scope": "disposable-installed-system-image-or-vm",
+    "previous_installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "image_boundary_bound": true,
+    "install_evidence_bound": true,
+    "update_evidence_bound": true,
+    "identity_matches_update": true,
+    "observation_plan_bound": true,
+    "rollback_required": true
+  },
+  "observations": [
+    {
+      "id": "updated-image-state-bound",
+      "status": "observed",
+      "evidence": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45"
+    },
+    {
+      "id": "previous-image-state-bound",
+      "status": "observed",
+      "evidence": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    },
+    {
+      "id": "release-identity-bound",
+      "status": "observed",
+      "evidence": "production-distro-rc8-current-artifacts"
+    },
+    {
+      "id": "package-identity-bound",
+      "status": "observed",
+      "evidence": "production-distro-rc16-repo-local-distributable-package"
+    },
+    {
+      "id": "rollback-precondition-core-bound",
+      "status": "observed",
+      "evidence": "32f261e5e71bcb07b443c37473c1ea33fdfee39c3ef6b1cede276544e422ee3d"
+    },
+    {
+      "id": "host-rootfs-unchanged",
+      "status": "observed",
+      "evidence": false
+    },
+    {
+      "id": "host-slot-unchanged",
+      "status": "observed",
+      "evidence": false
+    },
+    {
+      "id": "host-boot-metadata-unchanged",
+      "status": "observed",
+      "evidence": false
+    },
+    {
+      "id": "support-upload-not-performed",
+      "status": "observed",
+      "evidence": false
+    },
+    {
+      "id": "remote-dispatch-disabled",
+      "status": "observed",
+      "evidence": false
+    }
+  ],
+  "source_observation_plan": {
+    "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/post-install-update-observation-plan.json",
+    "sha256": "c9c491eac4c16257a11f1fee799427b8d9cbd705ae74d1d3d26dafd821c35d57",
+    "observation_count": 11
+  }
+}
