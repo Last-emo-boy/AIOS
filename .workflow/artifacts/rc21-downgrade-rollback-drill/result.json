@@ -1,0 +1,330 @@
+{
+    "schema":  "agentos.rc21-downgrade-rollback-drill-result.v1",
+    "generated_at":  "2026-06-10T20:25:00+08:00",
+    "task":  "RC21-031",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "downgrade_rollback_drill_id":  "sha256:119c3168a6e0859a5ab4e688cd2c5e4865289c2dfc4e9824689d840530683656",
+    "downgrade_rollback_audit_record_id":  "sha256:2d1691511a72fe494b3d919a8dd879f6c3448d2ca4951fc18ea7c9c5d993c7d7",
+    "transaction_id":  "sha256:bfbec201fbac0c13ed34a8142898fcac441ce5214017490e8a6d865f886bfa5b",
+    "restored_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "outputs":  {
+                    "downgrade_rollback_evidence":  {
+                                                        "path":  ".workflow/artifacts/rc21-downgrade-rollback-drill/downgrade-rollback-evidence.json",
+                                                        "sha256":  "54c522c1b5e51eb8d4803b4ead7ca2e98e91f4ac3084c83e0d99b73c33a24e6c",
+                                                        "downgrade_rollback_drill_id":  "sha256:119c3168a6e0859a5ab4e688cd2c5e4865289c2dfc4e9824689d840530683656"
+                                                    },
+                    "downgrade_rollback_audit_record":  {
+                                                            "path":  ".workflow/artifacts/rc21-downgrade-rollback-drill/downgrade-rollback-audit-record.json",
+                                                            "sha256":  "79cbfd9ed3f8ce2162c193daacaacdb6950d09e8d4d82cffae3d2dbe78910647",
+                                                            "downgrade_rollback_audit_record_id":  "sha256:2d1691511a72fe494b3d919a8dd879f6c3448d2ca4951fc18ea7c9c5d993c7d7"
+                                                        }
+                },
+    "downgrade_rollback_surface":  {
+                                       "state":  "downgrade-rollback-drill-complete-inside-disposable-installed-system",
+                                       "downgrade_rollback_drill_performed":  true,
+                                       "disposable_installed_system_boundary_only":  true,
+                                       "local_channel_history_only":  true,
+                                       "remote_fetch_performed":  false,
+                                       "host_boot_state_authority":  false,
+                                       "host_rootfs_mutation_allowed":  false,
+                                       "active_artifact_set_mutation_allowed":  false,
+                                       "production_ring_mutation_allowed":  false,
+                                       "support_upload_allowed":  false,
+                                       "recovery_execution_allowed":  false,
+                                       "remote_dispatch_enabled":  false
+                                   },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "436c5cc21eb0074773f82430286e50e2051ae9ea5650b75ce87034182a8783bf",
+                                     "size_bytes":  8622,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_operation_intent_catalog":  {
+                                                         "role":  "rc21 operation intent catalog",
+                                                         "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+                                                         "sha256":  "10e671302515e6b9c36fd50fac3532f2abca9c7b0f0da99f4796ed257b86da6d",
+                                                         "size_bytes":  25256,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc21-local-operation-intent-catalog.v1",
+                                                         "status":  "local-operation-intent-catalog-bound-non-ga",
+                                                         "task":  "RC21-010",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc21_repair_reinstall_result":  {
+                                                        "role":  "rc21 repair/reinstall result",
+                                                        "path":  ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+                                                        "sha256":  "0ae77aa9517464ef12e448dac2844d552ce0f93b015539bcb38602812515bfd3",
+                                                        "size_bytes":  27032,
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc21-repair-reinstall-drill-result.v1",
+                                                        "status":  "passed",
+                                                        "task":  "RC21-030",
+                                                        "production_ready_claim":  false,
+                                                        "consumer_ready_claim":  false
+                                                    },
+                   "rc21_repair_reinstall_evidence":  {
+                                                          "role":  "rc21 repair/reinstall evidence",
+                                                          "path":  ".workflow/artifacts/rc21-repair-reinstall-drill/repair-reinstall-evidence.json",
+                                                          "sha256":  "ca91a9e2d4717fa6c1bd561c4c8e02bcfebb4eaab41a771b969a6b1d388b2bd8",
+                                                          "size_bytes":  16614,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-repair-reinstall-evidence.v1",
+                                                          "status":  "repair-reinstall-drill-executed-inside-disposable-installed-system",
+                                                          "task":  "RC21-030",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc21_transaction_journal_package":  {
+                                                            "role":  "rc21 transaction journal package",
+                                                            "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/transaction-journal-package.json",
+                                                            "sha256":  "fe936acf4fff5baec60b9ce9369fcfa733759d558aaca12f9fd998c51234fe2c",
+                                                            "size_bytes":  28080,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-transaction-journal-package.v1",
+                                                            "status":  "transaction-journal-baseline-bound-non-executable",
+                                                            "task":  "RC21-011",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_snapshot_baseline_package":  {
+                                                          "role":  "rc21 snapshot baseline package",
+                                                          "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/snapshot-baseline-package.json",
+                                                          "sha256":  "619e15a62095359691f9f310d0c6c3efed495fd15846896bf27f1359447e5979",
+                                                          "size_bytes":  11849,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-snapshot-baseline-package.v1",
+                                                          "status":  "snapshot-baseline-bound-projection-only",
+                                                          "task":  "RC21-011",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc20_local_channel_promotion_result":  {
+                                                               "role":  "rc20 local channel promotion result",
+                                                               "path":  ".workflow/artifacts/rc20-local-channel-promotion/result.json",
+                                                               "sha256":  "6c82a84c1f977003e7d78d387a711c6679edd546fcc181d563f50a3f23ca9ad6",
+                                                               "size_bytes":  57559,
+                                                               "present":  true,
+                                                               "schema":  "agentos.rc20-local-channel-promotion-result.v1",
+                                                               "status":  "passed",
+                                                               "task":  "RC20-011",
+                                                               "production_ready_claim":  false,
+                                                               "consumer_ready_claim":  false
+                                                           },
+                   "rc20_candidate_channel_package":  {
+                                                          "role":  "rc20 candidate channel package",
+                                                          "path":  ".workflow/artifacts/rc20-local-channel-promotion/candidate-channel-package.json",
+                                                          "sha256":  "a64e996e2a0b36246f27339d6f5f30c08ef63fe12dec495d5a2da17aa3b0434a",
+                                                          "size_bytes":  10903,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc20-local-candidate-channel-package.v1",
+                                                          "status":  "local-candidate-channel-package-bound",
+                                                          "task":  "RC20-011",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc20_stable_channel_projection":  {
+                                                          "role":  "rc20 stable channel projection",
+                                                          "path":  ".workflow/artifacts/rc20-local-channel-promotion/stable-channel-projection.json",
+                                                          "sha256":  "82326f2bdfd2b4341b3c917caa41cf11e755f466cf2fc8065f3cf48d65654221",
+                                                          "size_bytes":  7621,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc20-local-stable-channel-projection.v1",
+                                                          "status":  "local-stable-channel-projection-bound-non-ga",
+                                                          "task":  "RC20-011",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      }
+               },
+    "checks":  [
+                   {
+                       "id":  "plan.current_task.rc21_031",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-031 must run after RC21-030 completed, with current_task set to RC21-031 or during an idempotent rerun.",
+                       "evidence":  {
+                                        "status":  "active",
+                                        "current_task":  "RC21-032",
+                                        "rc21_030_status":  "completed",
+                                        "rc21_031_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "contract.downgrade_rollback.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-031 must consume the downgrade/rollback local channel history and disposable installed-system boundary contract language.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                        "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf"
+                                    }
+                   },
+                   {
+                       "id":  "repair_reinstall.prerequisite.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback drill must bind completed RC21-030 repair/reinstall evidence before running.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "restored_target_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "host_rootfs_mutated":  false
+                                    }
+                   },
+                   {
+                       "id":  "journal_snapshot.downgrade_ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback drill must bind transaction journal entry, intent, resume checkpoint, audit sink, and projection-only snapshot baseline.",
+                       "evidence":  {
+                                        "transaction_id":  "sha256:bfbec201fbac0c13ed34a8142898fcac441ce5214017490e8a6d865f886bfa5b",
+                                        "operation_intent_id":  "sha256:b6e33047da1299340e8c7216e108511291ba362d6a78722b869926f20903cd89",
+                                        "checkpoint_id":  "rc21-011-resume-downgrade-rollback-bfbec201fbac0c13",
+                                        "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62"
+                                    }
+                   },
+                   {
+                       "id":  "local_channel.history.ready",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback drill must bind RC20 local candidate/stable channel history without external publication or active artifact mutation.",
+                       "evidence":  {
+                                        "result_status":  "passed",
+                                        "candidate_channel_package_id":  "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+                                        "stable_channel_projection_id":  "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+                                        "external_mirror_publication_performed":  false
+                                    }
+                   },
+                   {
+                       "id":  "downgrade_rollback.evidence.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback evidence must bind downgrade intent, rollback plan, audit record, local channel history, restored state, and snapshot baseline.",
+                       "evidence":  {
+                                        "downgrade_rollback_drill_id":  "sha256:119c3168a6e0859a5ab4e688cd2c5e4865289c2dfc4e9824689d840530683656",
+                                        "downgrade_rollback_audit_record_id":  "sha256:2d1691511a72fe494b3d919a8dd879f6c3448d2ca4951fc18ea7c9c5d993c7d7",
+                                        "restored_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+                                    }
+                   },
+                   {
+                       "id":  "downgrade_rollback.boundary_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback drill must execute only inside disposable installed-system boundary and must not claim host boot or remote-fetch authority.",
+                       "evidence":  {
+                                        "observed_state":  "downgrade-rollback-restored-local-channel-state-projection",
+                                        "disposable_installed_system_boundary":  true,
+                                        "local_channel_history_only":  true,
+                                        "host_boot_state_authority":  false,
+                                        "host_rootfs_mutated":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false
+                                    }
+                   },
+                   {
+                       "id":  "downgrade_rollback.audit.local_only",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback audit record must stay local-only and must not write journal sink files or perform remote/support/recovery effects.",
+                       "evidence":  {
+                                        "audit_record_id":  "sha256:2d1691511a72fe494b3d919a8dd879f6c3448d2ca4951fc18ea7c9c5d993c7d7",
+                                        "local_only":  true,
+                                        "journal_sink_file_written":  false
+                                    }
+                   },
+                   {
+                       "id":  "authority.no_forbidden_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-031 must not perform remote fetch, support upload, recovery execution, remote dispatch, signer authority, object storage provisioning, private material handling, host mutation, active artifact mutation, production mutation, or GA claim.",
+                       "evidence":  {
+                                        "downgrade_rollback_drill_performed":  true,
+                                        "disposable_installed_system_boundary_only":  true,
+                                        "local_channel_history_only":  true,
+                                        "remote_fetch_performed":  false,
+                                        "payload_bytes_uploaded":  false,
+                                        "host_rootfs_mutated":  false,
+                                        "host_active_slot_mutated":  false,
+                                        "host_boot_metadata_mutated":  false,
+                                        "host_boot_state_authority":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "support_upload_performed":  false,
+                                        "recovery_execution_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "signer_authority_granted":  false,
+                                        "object_storage_provisioned":  false,
+                                        "private_signing_material_handled":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "production_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Downgrade/rollback outputs must not contain private material, tokens, raw secrets, support upload payloads, or recovery execution authority.",
+                       "evidence":  null
+                   }
+               ],
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "consumer_ready_claim":  false,
+                       "downgrade_rollback_drill_performed":  true,
+                       "disposable_installed_system_boundary_only":  true,
+                       "local_channel_history_only":  true,
+                       "remote_fetch_performed":  false,
+                       "payload_bytes_uploaded":  false,
+                       "host_boot_state_authority":  false,
+                       "host_rootfs_mutated":  false,
+                       "host_active_slot_mutated":  false,
+                       "host_boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "support_upload_performed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "signer_authority":  false,
+                       "object_storage_authority":  false,
+                       "private_signing_material_handled":  false,
+                       "cryptographic_signing_performed":  false
+                   },
+    "summary":  {
+                    "checks":  10,
+                    "failed_checks":  0,
+                    "rc21_031_complete":  true,
+                    "downgrade_rollback_drill_id":  "sha256:119c3168a6e0859a5ab4e688cd2c5e4865289c2dfc4e9824689d840530683656",
+                    "downgrade_rollback_audit_record_id":  "sha256:2d1691511a72fe494b3d919a8dd879f6c3448d2ca4951fc18ea7c9c5d993c7d7",
+                    "transaction_id":  "sha256:bfbec201fbac0c13ed34a8142898fcac441ce5214017490e8a6d865f886bfa5b",
+                    "restored_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                    "candidate_channel_package_id":  "sha256:e2a49ea986b4fcb83d55c529c9c75801c32b1bf472180cd8715e3357f6968777",
+                    "stable_channel_projection_id":  "sha256:43fa046e05c7bb842d095ae7e11848e1cd9eec99a68115973bdcd38060711bb8",
+                    "downgrade_rollback_drill_performed":  true,
+                    "disposable_installed_system_boundary_only":  true,
+                    "local_channel_history_only":  true,
+                    "remote_fetch_performed":  false,
+                    "support_upload_performed":  false,
+                    "recovery_execution_performed":  false,
+                    "remote_dispatch_enabled":  false,
+                    "host_rootfs_mutated":  false,
+                    "active_artifact_set_mutated":  false,
+                    "production_ring_mutated":  false,
+                    "next_task":  "RC21-032"
+                }
+}
