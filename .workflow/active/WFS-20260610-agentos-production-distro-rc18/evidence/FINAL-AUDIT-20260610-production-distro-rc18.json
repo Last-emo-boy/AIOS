@@ -1,0 +1,765 @@
+{
+  "schema": "agentos.production-distro-rc18-final-audit.v1",
+  "generated_at": "2026-06-10T08:30:00+08:00",
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "milestone": "Production Distro RC18",
+  "verdict": "PASS",
+  "decision": "rc18-isolated-installed-system-image-ready-non-ga",
+  "production_ready_claim": false,
+  "objective": "AIOS-body isolated installed-system image install/update/rollback drill readiness, without mirror frontend, nginx/TLS, signer, object storage, private signing material, support upload, recovery execution, remote dispatch, host boot mutation, production ring, shell, TUI, endpoint, or model authority.",
+  "task_results": [
+    {
+      "id": "RC18-000",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-001",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-010",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-011",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-012",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-020",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-021",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-022",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-030",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-031",
+      "status": "completed"
+    },
+    {
+      "id": "RC18-040",
+      "status": "completed"
+    }
+  ],
+  "acceptance_coverage": [
+    {
+      "requirement": "disposable installed-system image boundary and state root bound",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json"
+      ]
+    },
+    {
+      "requirement": "installed-system baseline identity and boot-state projection bound",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-installed-system-baseline/result.json"
+      ]
+    },
+    {
+      "requirement": "image-boundary side-effect fail-closed fixtures verified",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json"
+      ]
+    },
+    {
+      "requirement": "isolated installed-system install drill executed",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-isolated-install-drill/result.json"
+      ]
+    },
+    {
+      "requirement": "isolated installed-system update drill executed",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-isolated-update-drill/result.json"
+      ]
+    },
+    {
+      "requirement": "post-update observation and rollback preconditions bound inside the image",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-image-rollback-preconditions/result.json"
+      ]
+    },
+    {
+      "requirement": "isolated rollback drill executed and restored installed image state",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-isolated-rollback-drill/result.json"
+      ]
+    },
+    {
+      "requirement": "support/recovery evidence local-only and projection-only",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-isolated-support-recovery/result.json"
+      ]
+    },
+    {
+      "requirement": "installed-system consumer smoke reports readiness truthfully",
+      "status": "proved",
+      "evidence": [
+        ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json"
+      ]
+    }
+  ],
+  "readiness_status": {
+    "disposable_image_boundary_bound": true,
+    "baseline_identity_bound": true,
+    "image_boundary_fail_closed_verified": true,
+    "isolated_install_performed": true,
+    "isolated_update_performed": true,
+    "rollback_preconditions_bound": true,
+    "isolated_rollback_performed": true,
+    "support_recovery_local_projection_bound": true,
+    "local_consumer_smoke_audited": true,
+    "local_consumer_decision": "installed-system-image-ready",
+    "install_readiness": "ready",
+    "update_readiness": "ready",
+    "rollback_readiness": "ready",
+    "support_recovery_readiness": "ready",
+    "installed_system_image_ready": true,
+    "production_ready_claim": false
+  },
+  "execution_surface": {
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+    "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+    "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "rollback_precondition_id": "sha256:bcd61fba39e82a893e90f86a8f3bf5ce14c1cc4ea6b1e63e79090c8882b764f4",
+    "consumer_audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35",
+    "isolated_install_performed": true,
+    "isolated_update_performed": true,
+    "isolated_rollback_performed": true,
+    "disposable_image_state_mutated": true,
+    "consumer_executed_new_effects": false,
+    "support_bundle_local_only": true,
+    "support_bundle_redacted": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false
+  },
+  "invariants_verified": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "disposable_image_or_vm_only": true,
+    "isolated_install_update_rollback_performed": true,
+    "consumer_smoke_new_effects": false,
+    "mirror_frontend_changed": false,
+    "mirror_frontend_authority": false,
+    "nginx_or_tls_changed": false,
+    "signer_infra_changed": false,
+    "signer_authority": false,
+    "object_storage_infra_changed": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "normal_shell_authority": false,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "endpoint_reachability_authority": false
+  },
+  "source_artifacts": [
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "f3112fda4f0c15b87486beba77ab29f9b3d5dfe5be352edcb051ccbe3cb75560",
+      "size_bytes": 7397,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "completed",
+      "production_ready_claim": null
+    },
+    {
+      "task": "RC18-010",
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a",
+      "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-011",
+      "path": ".workflow/artifacts/rc18-installed-system-baseline/result.json",
+      "sha256": "0b0c7005e5c98c556dddb4a931cea2221257df2cb7c20db74eb70990e8e1a256",
+      "schema": "agentos.rc18-installed-system-baseline-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-012",
+      "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json",
+      "sha256": "e315df879aa9e7e5bdcc38df2c3586213fc05f7c445e7b87894da779c35dfc1a",
+      "schema": "agentos.rc18-image-boundary-fail-closed-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-020",
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+      "sha256": "70c8bb7ffe13bde1f0bc887047090d52aba145ebff28239d9d305a11b4d717b2",
+      "schema": "agentos.rc18-isolated-install-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-021",
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+      "sha256": "067513a7ebed25c2d7e3209a91a9bb5f58b79dd8de151277e56759c0159bea9e",
+      "schema": "agentos.rc18-isolated-update-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-022",
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/result.json",
+      "sha256": "dac3cab86af79bcf4073849b388cdd603e88d044bf7b47d62683bea0da19c6bb",
+      "schema": "agentos.rc18-image-rollback-preconditions-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-030",
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+      "sha256": "35d1ff3488d5d0b21d7dead735e23b9351e3762413cd6a183b8ac0de331f6d78",
+      "schema": "agentos.rc18-isolated-rollback-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-031",
+      "path": ".workflow/artifacts/rc18-isolated-support-recovery/result.json",
+      "sha256": "edac34ee16df8258425363247d5274901e7fb0aa9a77c057819b43d7df96e040",
+      "schema": "agentos.rc18-isolated-support-recovery-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    {
+      "task": "RC18-040",
+      "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json",
+      "sha256": "60f891000510c879b792cc43ce8d6465194ba27b4816829eea38f295da5372af",
+      "schema": "agentos.rc18-installed-system-consumer-smoke-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    }
+  ],
+  "next_milestone": {
+    "id": "Production Distro RC19",
+    "title": "reproducible installable image artifact and first-user installation path",
+    "direction": "Move from isolated installed-system image readiness to a reproducible installable image artifact, installer media manifest, first-user install path, and offline/local mirror consumption evidence while preserving non-GA and no production-ring authority."
+  },
+  "checks": [
+    {
+      "id": "plan.pointer.rc18_050",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit must run at RC18-050 after RC18-040 completed.",
+      "evidence": {
+        "plan_status": "completed",
+        "current_task": null,
+        "final_task_status": "completed"
+      }
+    },
+    {
+      "id": "tasks.previous.completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-000 through RC18-040 must be completed before final closeout.",
+      "evidence": [
+        {
+          "task": "RC18-000",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-001",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-010",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-011",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-012",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-020",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-021",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-022",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-030",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-031",
+          "status": "completed"
+        },
+        {
+          "task": "RC18-040",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "results.all_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC18 executable task results must be passed.",
+      "evidence": [
+        {
+          "task": "RC18-010",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json"
+        },
+        {
+          "task": "RC18-011",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-installed-system-baseline/result.json"
+        },
+        {
+          "task": "RC18-012",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json"
+        },
+        {
+          "task": "RC18-020",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json"
+        },
+        {
+          "task": "RC18-021",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json"
+        },
+        {
+          "task": "RC18-022",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-image-rollback-preconditions/result.json"
+        },
+        {
+          "task": "RC18-030",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json"
+        },
+        {
+          "task": "RC18-031",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-isolated-support-recovery/result.json"
+        },
+        {
+          "task": "RC18-040",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc18-installed-system-consumer-smoke/result.json"
+        }
+      ]
+    },
+    {
+      "id": "results.failed_checks.zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 task checks and fail-closed cases must have zero failures.",
+      "evidence": {
+        "failed_checks": 0,
+        "cases": 187,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "boundary.disposable_image_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Disposable installed-system image boundary, state root, allowed write surface, and RC17 exact evidence must be bound before image effects.",
+      "evidence": {
+        "state": "disposable-installed-system-boundary-bound-no-image-mutation",
+        "state_root_bound": true,
+        "allowed_write_surface_bound": true,
+        "denied_host_write_surface_bound": true,
+        "artifact_roots_bound": true,
+        "rc17_exact_evidence_bound": true,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_authority": false,
+        "signer_authority": false,
+        "blockers": [
+          "rc18-installed-system-baseline-not-bound",
+          "rc18-image-boundary-fail-closed-not-run",
+          "rc18-isolated-install-not-run",
+          "rc18-isolated-update-not-run"
+        ]
+      }
+    },
+    {
+      "id": "baseline.identity_projection_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installed-system baseline identity and boot-state projection must be image-local and non-authoritative for host boot state.",
+      "evidence": {
+        "state": "installed-system-baseline-bound-projection-only",
+        "release_bound": true,
+        "media_bound": true,
+        "package_bound": true,
+        "agentcore_bound": true,
+        "security_execution_bound": true,
+        "rollback_support_bound": true,
+        "image_boundary_bound": true,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "blockers": [
+          "rc18-image-boundary-fail-closed-not-run",
+          "rc18-isolated-install-not-run",
+          "rc18-isolated-update-not-run",
+          "rc18-isolated-rollback-not-run"
+        ]
+      }
+    },
+    {
+      "id": "boundary.fail_closed_verified",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Image boundary side-effect fixtures must fail closed before image or host mutation.",
+      "evidence": {
+        "state": "image-boundary-side-effect-fail-closed-fixtures-passed",
+        "cases": 23,
+        "failed_cases": 0,
+        "denied_before_image_mutation": true,
+        "denied_before_host_mutation": true,
+        "local_only_fixture_execution": true,
+        "image_mutation_performed": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "network_fetch_attempted": false,
+        "blockers": [
+          "rc18-isolated-install-not-run",
+          "rc18-isolated-update-not-run",
+          "rc18-isolated-rollback-not-run"
+        ]
+      }
+    },
+    {
+      "id": "isolated_install.executed_in_image",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Isolated install drill must execute only inside the disposable image boundary.",
+      "evidence": {
+        "state": "isolated-install-executed-inside-disposable-image",
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "image_boundary_bound": true,
+        "baseline_identity_bound": true,
+        "image_boundary_fail_closed_verified": true,
+        "exact_target_bound": true,
+        "exact_approval_bound": true,
+        "agentcore_planspec_bound": true,
+        "security_execution_allow_bound": true,
+        "rollback_preconditions_bound": true,
+        "isolated_install_allowed": true,
+        "isolated_install_performed": true,
+        "disposable_image_state_mutated": true,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "isolated_update.executed_after_install",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Isolated update drill must execute after the prior isolated install image state.",
+      "evidence": {
+        "state": "isolated-update-executed-inside-disposable-image",
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "image_boundary_bound": true,
+        "prior_isolated_install_bound": true,
+        "rc17_controlled_update_ready": true,
+        "exact_target_bound": true,
+        "exact_approval_bound": true,
+        "agentcore_planspec_bound": true,
+        "security_execution_allow_bound": true,
+        "rollback_preconditions_bound": true,
+        "identity_matches_isolated_install": true,
+        "post_update_observation_plan_bound": true,
+        "isolated_update_allowed": true,
+        "isolated_update_performed": true,
+        "disposable_image_state_mutated": true,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "rollback.preconditions_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-update observation and rollback preconditions must be bound inside the image before rollback drill.",
+      "evidence": {
+        "state": "image-rollback-preconditions-bound-execution-gated",
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "image_boundary_bound": true,
+        "isolated_install_bound": true,
+        "isolated_update_bound": true,
+        "identity_matches_update": true,
+        "post_update_observation_bound": true,
+        "rc17_rollback_support_bound": true,
+        "rollback_preconditions_bound": true,
+        "rollback_execution_allowed": false,
+        "rollback_execution_performed": false,
+        "rollback_execution_gate": "RC18-030",
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "blockers": [
+          "rollback-execution-deferred-to-rc18-030"
+        ]
+      }
+    },
+    {
+      "id": "isolated_rollback.executed_restored",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Isolated rollback drill must execute inside the disposable image and restore the installed image state.",
+      "evidence": {
+        "state": "isolated-rollback-executed-inside-disposable-image",
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "image_boundary_bound": true,
+        "rollback_preconditions_bound": true,
+        "updated_image_state_bound": true,
+        "post_update_observation_bound": true,
+        "separate_rollback_approval_bound": true,
+        "agentcore_rollback_planspec_bound": true,
+        "security_execution_rollback_allow_bound": true,
+        "audit_bound": true,
+        "support_recovery_references_bound": true,
+        "isolated_rollback_allowed": true,
+        "isolated_rollback_performed": true,
+        "disposable_image_state_mutated": true,
+        "previous_updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "support_recovery.local_projection_bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support/recovery evidence must be local-only, redacted, projection-only, and keep upload/recovery/remote dispatch disabled.",
+      "evidence": {
+        "state": "isolated-support-recovery-projection-bound",
+        "isolated_install_bound": true,
+        "isolated_update_bound": true,
+        "isolated_rollback_bound": true,
+        "image_state_chain_bound": true,
+        "rc17_support_recovery_bound": true,
+        "support_bundle_local_only": true,
+        "support_bundle_redacted": true,
+        "support_upload_performed": false,
+        "recovery_execution_allowed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "blockers": []
+      }
+    },
+    {
+      "id": "consumer_smoke.installed_system_ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installed-system consumer smoke must follow the local release channel and truthfully report install/update/rollback/support readiness without new effects.",
+      "evidence": {
+        "state": "installed-system-consumer-installed-system-image-ready",
+        "local_release_channel_followed": true,
+        "install_readiness": "ready",
+        "update_readiness": "ready",
+        "rollback_readiness": "ready",
+        "support_recovery_readiness": "ready",
+        "consumer_decision": "installed-system-image-ready",
+        "audited": true,
+        "audit_digest": "10962e8a02578c70bbbdd4c99fab7448973815bb1fcb18f5927612a6941ece35",
+        "blockers": []
+      }
+    },
+    {
+      "id": "image_state_chain.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install, update, rollback, support, and consumer evidence must bind the same image state chain.",
+      "evidence": {
+        "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+      }
+    },
+    {
+      "id": "boundary.identity.bound_across_rc18",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 boundary identity must remain consistent across baseline, install, update, rollback, support, and consumer evidence.",
+      "evidence": {
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+        "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+        "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f"
+      }
+    },
+    {
+      "id": "authority.boundaries.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 must not broaden mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery/remote-dispatch/host-boot/production-ring authority.",
+      "evidence": {
+        "invariant_violations": null,
+        "host_mutation_preserved": true
+      }
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 must remain non-GA and must not claim production readiness.",
+      "evidence": null
+    },
+    {
+      "id": "installed_system_image.ready_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 may close only as non-GA isolated installed-system image install/update/rollback readiness.",
+      "evidence": {
+        "installed_system_image_ready": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc18.final_audit.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit evidence must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/evidence/FINAL-AUDIT-20260610-production-distro-rc18.json",
+        "present": true
+      }
+    },
+    {
+      "id": "rc18.closeout_summary.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 closeout summary must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/final-rc18-closeout-summary.md",
+        "sha256": "b33d6ea22bcc8f394340fde339f918a57f884f2af254a4de0a846bc033e4716d"
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18 final audit outputs must not contain key blocks, auth tokens, private paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ]
+}
