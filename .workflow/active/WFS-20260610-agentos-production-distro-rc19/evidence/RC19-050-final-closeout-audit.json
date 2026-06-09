@@ -1,0 +1,467 @@
+{
+  "schema": "agentos.rc19-final-closeout-task-evidence.v1",
+  "generated_at": "2026-06-10T12:45:00+08:00",
+  "task": "RC19-050",
+  "status": "completed",
+  "production_ready_claim": false,
+  "consumer_ready_claim": true,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc19",
+  "script": {
+    "path": "scripts/run-rc19-final-closeout-audit.ps1",
+    "sha256": "27c5999db0bcd5497e33d7d3e9cc80ae1edef394e384e77e156349b3bdbbe33e"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc19-final-closeout-audit/result.json",
+    "status": "passed",
+    "sha256": "f553ce72077a08ee7e5647d2fb0ac7cb4618e379af54ad783ad7bef54fddc432"
+  },
+  "final_audit": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/FINAL-AUDIT-20260610-production-distro-rc19.json",
+    "sha256": "70cdbbe5dbab57c8533dc68d8d3d1fd2b047cefabf9d0f7d32a266aee8379d6d"
+  },
+  "closeout_summary": {
+    "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/final-rc19-closeout-summary.md",
+    "sha256": "16aa004e9b529e935a521bc53560db40b21bf41799241cc932a014b9743fd9c5"
+  },
+  "checks": [
+    {
+      "id": "plan.pointer.rc19_050",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 final audit must run at RC19-050 after RC19-040 completed.",
+      "evidence": {
+        "plan_status": "completed",
+        "current_task": null,
+        "final_task_status": "completed"
+      }
+    },
+    {
+      "id": "tasks.previous.completed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19-000 through RC19-040 must be completed before final closeout.",
+      "evidence": [
+        {
+          "task": "RC19-000",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-001",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-010",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-011",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-012",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-020",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-021",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-022",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-030",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-031",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-032",
+          "status": "completed"
+        },
+        {
+          "task": "RC19-040",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "results.all_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC19 executable task results must be passed.",
+      "evidence": [
+        {
+          "task": "RC19-010",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-reproducible-installable-image-artifact/result.json"
+        },
+        {
+          "task": "RC19-011",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-installer-media-manifest/result.json"
+        },
+        {
+          "task": "RC19-012",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-image-artifact-reproducibility-fail-closed/result.json"
+        },
+        {
+          "task": "RC19-020",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-first-user-install-target-boundary/result.json"
+        },
+        {
+          "task": "RC19-021",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-first-user-install-drill/result.json"
+        },
+        {
+          "task": "RC19-022",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-first-boot-provisioning-projection/result.json"
+        },
+        {
+          "task": "RC19-030",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-offline-local-channel-consumption/result.json"
+        },
+        {
+          "task": "RC19-031",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-post-install-update-rollback-smoke/result.json"
+        },
+        {
+          "task": "RC19-032",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-first-user-support-recovery/result.json"
+        },
+        {
+          "task": "RC19-040",
+          "status": "passed",
+          "path": ".workflow/artifacts/rc19-installable-image-consumer-smoke/result.json"
+        }
+      ]
+    },
+    {
+      "id": "results.failed_checks.zero",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 task checks and fail-closed cases must have zero failures.",
+      "evidence": {
+        "failed_checks": 0,
+        "cases": 232,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "image.artifact.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Reproducible installable image artifact must be bound without missing inputs or hash mismatches.",
+      "evidence": {
+        "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "missing_required_inputs": 0,
+        "source_hash_mismatches": 0
+      }
+    },
+    {
+      "id": "media.manifest.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installer media manifest and boot target descriptor must be bound.",
+      "evidence": {
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb"
+      }
+    },
+    {
+      "id": "repro.fail_closed.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installable image reproducibility fail-closed fixtures must be verified.",
+      "evidence": {
+        "cases": 41,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "first_user.target.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First-user install target boundary and preflight package must be bound to the disposable target surface.",
+      "evidence": {
+        "checks": 12,
+        "failed_checks": 0,
+        "cases": 19,
+        "failed_cases": 0,
+        "rc19_020_complete": true,
+        "target_boundary_bound": true,
+        "install_preflight_package_bound": true,
+        "only_writable_first_user_install_surface": "disposable-first-user-install-target",
+        "install_allowed": false,
+        "first_user_install_allowed": false,
+        "install_performed": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "remote_dispatch_enabled": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "next_task": "RC19-021"
+      }
+    },
+    {
+      "id": "first_user.install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First-user install drill must execute inside the disposable target without host or remote mutation.",
+      "evidence": {
+        "checks": 10,
+        "failed_checks": 0,
+        "cases": 24,
+        "failed_cases": 0,
+        "rc19_021_complete": true,
+        "first_user_install_allowed": true,
+        "first_user_install_performed": true,
+        "target_materialized": true,
+        "disposable_target_state_mutated": true,
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "consumer_ready_claim": false,
+        "next_task": "RC19-022"
+      }
+    },
+    {
+      "id": "first_boot.projection.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First boot provisioning and local operator identity must remain projection-only without raw secrets.",
+      "evidence": {
+        "checks": 9,
+        "failed_checks": 0,
+        "cases": 22,
+        "failed_cases": 0,
+        "rc19_022_complete": true,
+        "projection_only": true,
+        "first_boot_provisioning_executed": false,
+        "local_operator_identity_projection_bound": true,
+        "raw_user_secret_introduced": false,
+        "credential_material_introduced": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false,
+        "next_task": "RC19-030"
+      }
+    },
+    {
+      "id": "offline_channel.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Offline/local channel consumption must be bound without remote payload download or object storage.",
+      "evidence": {
+        "checks": 10,
+        "failed_checks": 0,
+        "cases": 24,
+        "failed_cases": 0,
+        "rc19_030_complete": true,
+        "offline_local_channel_package_bound": true,
+        "local_channel_consumption_evaluated": true,
+        "remote_payload_downloaded": false,
+        "object_storage_provisioned": false,
+        "endpoint_reachability_trusted": false,
+        "frontend_output_trusted": false,
+        "shell_output_trusted": false,
+        "tui_output_trusted": false,
+        "model_replay_trusted": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "production_ring_mutated": false,
+        "consumer_ready_claim": false,
+        "next_task": "RC19-031"
+      }
+    },
+    {
+      "id": "post_install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Post-install update and rollback compatibility smoke must report readiness without new update or rollback effects.",
+      "evidence": {
+        "checks": 11,
+        "failed_checks": 0,
+        "cases": 30,
+        "failed_cases": 0,
+        "rc19_031_complete": true,
+        "post_install_smoke_decision": "post-install-update-rollback-compatible",
+        "update_compatibility_readiness": "ready",
+        "rollback_compatibility_readiness": "ready",
+        "first_user_install_bound": true,
+        "offline_channel_bound": true,
+        "update_or_rollback_executed_by_this_smoke": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "consumer_ready_claim": false,
+        "next_task": "RC19-032"
+      }
+    },
+    {
+      "id": "support_recovery.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First-user support/recovery evidence must be local-only, redacted, and projection-only.",
+      "evidence": {
+        "checks": 9,
+        "failed_checks": 0,
+        "cases": 24,
+        "failed_cases": 0,
+        "rc19_032_complete": true,
+        "first_user_install_bound": true,
+        "post_install_smoke_bound": true,
+        "rc18_support_recovery_bound": true,
+        "support_bundle_local_only": true,
+        "support_bundle_redacted": true,
+        "support_upload_performed": false,
+        "recovery_execution_allowed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "consumer_ready_claim": false,
+        "next_task": "RC19-040"
+      }
+    },
+    {
+      "id": "consumer_smoke.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installable image local consumer smoke must truthfully report local consumer readiness while keeping production_ready_claim=false.",
+      "evidence": {
+        "state": "installable-image-local-consumer-ready",
+        "local_offline_channel_followed": true,
+        "installable_image_readiness": "ready",
+        "first_user_install_readiness": "ready",
+        "post_install_update_readiness": "ready",
+        "post_install_rollback_readiness": "ready",
+        "support_recovery_readiness": "ready",
+        "consumer_decision": "installable-image-local-consumer-ready",
+        "consumer_ready_claim": true,
+        "production_ready_claim": false,
+        "audited": true,
+        "audit_digest": "f92d833290d15ea5cc2db50760a867b163188c59423fa4823582609a0133ef4c",
+        "blockers": []
+      }
+    },
+    {
+      "id": "identity.target_chain.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "First-user target state must be consistent across install, channel, post-install smoke, support, and consumer evidence.",
+      "evidence": {
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "channel_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "post_install_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "support_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "consumer_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "identity.artifact.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Installable image artifact identity must remain consistent across artifact, channel, and consumer smoke evidence.",
+      "evidence": {
+        "image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "channel_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "consumer_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2"
+      }
+    },
+    {
+      "id": "authority.boundaries.preserved",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 must not broaden mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery/remote-dispatch/host-boot/production-ring authority.",
+      "evidence": {
+        "invariant_violations": null
+      }
+    },
+    {
+      "id": "production_ready_claim.false",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 must remain non-GA and must not claim production readiness.",
+      "evidence": null
+    },
+    {
+      "id": "consumer_ready.local_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 may close with local consumer readiness only, not production readiness.",
+      "evidence": {
+        "consumer_ready_claim": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "rc19.final_audit.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 final audit evidence must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/evidence/FINAL-AUDIT-20260610-production-distro-rc19.json",
+        "present": true
+      }
+    },
+    {
+      "id": "rc19.closeout_summary.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 closeout summary must be written.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc19/docs/final-rc19-closeout-summary.md",
+        "sha256": "16aa004e9b529e935a521bc53560db40b21bf41799241cc932a014b9743fd9c5"
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 final audit outputs must not contain key blocks, auth tokens, private paths, signer internals, or raw public identity markers.",
+      "evidence": null
+    }
+  ],
+  "completion": {
+    "rc19_050_complete": true,
+    "next_task": "RC20-planning",
+    "commit_required": true
+  }
+}
