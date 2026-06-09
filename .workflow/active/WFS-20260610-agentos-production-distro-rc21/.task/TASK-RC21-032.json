@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-032",
+  "title": "bind support recovery closure after lifecycle drills",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+    ".workflow/artifacts/rc21-downgrade-rollback-drill/result.json",
+    ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc21-lifecycle-support-recovery.ps1",
+      "role": "support recovery closure runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-lifecycle-support-recovery/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-lifecycle-support-recovery/lifecycle-support-bundle.json",
+      "role": "local support bundle"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-lifecycle-support-recovery/recovery-reference-index.json",
+      "role": "recovery reference index"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-032-lifecycle-support-recovery.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Support bundle is local-only, redacted, and bound to RC21 repair/reinstall, downgrade/rollback, dry-run, explain/resume, and RC20 lifecycle support evidence.",
+      "Recovery reference index remains projection-only and cannot execute recovery service operations.",
+      "No support upload, recovery execution, remote dispatch, host mutation, production ring mutation, private signing material handling, signer authority, object storage authority, or external infra authority is introduced."
+    ]
+  },
+  "next_task": "RC21-040"
+}

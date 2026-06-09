@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-011",
+  "title": "bind transaction journal and snapshot baseline package",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+    ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc21-transaction-journal-snapshot-baseline.ps1",
+      "role": "journal snapshot baseline runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/transaction-journal-package.json",
+      "role": "transaction journal package"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/snapshot-baseline-package.json",
+      "role": "snapshot baseline package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-011-transaction-journal-snapshot-baseline.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Journal package binds lifecycle operation intents to deterministic transaction ids, audit sinks, resume checkpoints, and rollback snapshot references.",
+      "Snapshot baseline package is projection-only and binds RC20 target, updated, and restored states without mutating host or active artifact set.",
+      "Support upload, recovery execution, remote dispatch, host mutation, production ring mutation, signer authority, object storage provisioning, and private material handling remain disabled."
+    ]
+  },
+  "next_task": "RC21-012"
+}

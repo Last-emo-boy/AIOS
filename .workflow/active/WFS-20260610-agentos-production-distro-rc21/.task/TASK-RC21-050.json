@@ -1,0 +1,50 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-050",
+  "title": "run Production Distro RC21 final closeout audit",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+    ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+    ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+    ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/result.json",
+    ".workflow/artifacts/rc21-dry-run-execution-plan/result.json",
+    ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+    ".workflow/artifacts/rc21-explain-resume-audit-package/result.json",
+    ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+    ".workflow/artifacts/rc21-downgrade-rollback-drill/result.json",
+    ".workflow/artifacts/rc21-lifecycle-support-recovery/result.json",
+    ".workflow/artifacts/rc21-transactional-lifecycle-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc21-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/FINAL-AUDIT-20260610-production-distro-rc21.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/final-rc21-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-050-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit covers all RC21 tasks and reports transactional local lifecycle readiness truthfully.",
+      "Final audit preserves production_ready_claim=false and still forbids GA claims.",
+      "Final audit verifies no external mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery-execution/remote-dispatch/host-rootfs/host-boot/active-artifact-set/production-ring authority was broadened."
+    ]
+  },
+  "next_task": "RC22-planning"
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-021",
+  "title": "run transactional install update dry-run acceptance",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-dry-run-execution-plan/result.json",
+    ".workflow/artifacts/rc20-single-user-install-acceptance/result.json",
+    ".workflow/artifacts/rc20-post-install-update-drill/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc21-transactional-dry-run-acceptance.ps1",
+      "role": "dry-run acceptance runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transactional-dry-run-acceptance/dry-run-acceptance-evidence.json",
+      "role": "dry-run acceptance evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transactional-dry-run-acceptance/dry-run-audit-record.json",
+      "role": "dry-run audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-021-transactional-dry-run-acceptance.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Dry-run acceptance evaluates install and update transaction plans inside a disposable target without preparing or executing host effects.",
+      "Evidence binds transaction ids, resume checkpoints, audit record, snapshot baseline, and RC20 install/update evidence.",
+      "Support upload, recovery execution, remote dispatch, host mutation, active artifact set mutation, production ring mutation, signer authority, object storage provisioning, and private material handling remain disabled."
+    ]
+  },
+  "next_task": "RC21-022"
+}

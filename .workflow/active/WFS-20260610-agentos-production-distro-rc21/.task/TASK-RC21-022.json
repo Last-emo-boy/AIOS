@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-022",
+  "title": "bind user-visible explain resume audit package",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+    ".workflow/artifacts/rc21-dry-run-execution-plan/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc21-explain-resume-audit-package.ps1",
+      "role": "explain resume audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-explain-resume-audit-package/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-explain-resume-audit-package/explain-resume-audit-package.json",
+      "role": "explain resume audit package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-022-explain-resume-audit-package.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Package explains each local lifecycle decision from bound evidence, transaction journal, dry-run plan, and audit records.",
+      "Resume checkpoints are projection-only and cannot execute host effects or claim endpoint, shell, TUI, or model authority.",
+      "Package is redacted and contains no raw secrets, private signing material, tokens, support upload payloads, or recovery execution authority."
+    ]
+  },
+  "next_task": "RC21-030"
+}

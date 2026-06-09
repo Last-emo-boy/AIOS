@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-012",
+  "title": "verify lifecycle operation fail-closed fixtures",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+    ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/verify-rc21-lifecycle-operation-fail-closed.ps1",
+      "role": "fail-closed verifier"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-012-lifecycle-operation-fail-closed.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Fixtures cover missing/stale RC20 evidence, intent mismatch, journal mismatch, snapshot mismatch, broad operation scope, host mutation request, remote dependency, signer authority, support upload, recovery execution, and GA claim.",
+      "All fixtures fail closed before effect preparation, host mutation, support upload, recovery execution, remote dispatch, or production mutation.",
+      "Fixture outputs are local-only and contain no private signing material, tokens, raw secrets, or endpoint authority claims."
+    ]
+  },
+  "next_task": "RC21-020"
+}

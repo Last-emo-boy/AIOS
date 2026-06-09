@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-031",
+  "title": "run downgrade rollback drill from local channel history",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+    ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+    ".workflow/artifacts/rc20-local-channel-promotion/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc21-downgrade-rollback-drill.ps1",
+      "role": "downgrade rollback drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-downgrade-rollback-drill/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-downgrade-rollback-drill/downgrade-rollback-evidence.json",
+      "role": "downgrade rollback evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-downgrade-rollback-drill/downgrade-rollback-audit-record.json",
+      "role": "downgrade rollback audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-031-downgrade-rollback-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Downgrade/rollback drill uses only local channel history and transaction snapshot evidence inside the disposable installed-system boundary.",
+      "Result binds downgrade intent, rollback plan, audit record, restored state, and post-drill observation without host or production mutation.",
+      "Remote fetch, support upload, recovery execution, remote dispatch, signer authority, object storage provisioning, private material handling, and GA claims remain disabled."
+    ]
+  },
+  "next_task": "RC21-032"
+}

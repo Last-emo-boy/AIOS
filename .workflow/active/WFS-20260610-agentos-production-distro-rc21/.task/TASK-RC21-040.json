@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-040",
+  "title": "run transactional lifecycle local consumer smoke",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+    ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+    ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+    ".workflow/artifacts/rc21-dry-run-execution-plan/result.json",
+    ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+    ".workflow/artifacts/rc21-explain-resume-audit-package/result.json",
+    ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+    ".workflow/artifacts/rc21-downgrade-rollback-drill/result.json",
+    ".workflow/artifacts/rc21-lifecycle-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc21-transactional-lifecycle-consumer-smoke.ps1",
+      "role": "consumer smoke runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transactional-lifecycle-consumer-smoke/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-transactional-lifecycle-consumer-smoke/consumer-smoke-evidence.json",
+      "role": "consumer smoke evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-040-transactional-lifecycle-consumer-smoke.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Consumer smoke follows RC21 local operation catalog, journal, dry-run, explain/resume, repair, downgrade, support, and recovery evidence without executing new effects.",
+      "Consumer decision reports transactional local lifecycle readiness only if every RC21 lifecycle gate is bound.",
+      "production_ready_claim remains false even if local lifecycle consumer readiness is true."
+    ]
+  },
+  "next_task": "RC21-050"
+}

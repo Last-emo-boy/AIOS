@@ -1,0 +1,39 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-020",
+  "title": "bind install update reinstall dry-run execution plan",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+    ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json",
+    ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc21-dry-run-execution-plan.ps1",
+      "role": "dry-run execution plan runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-dry-run-execution-plan/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-dry-run-execution-plan/dry-run-execution-plan.json",
+      "role": "dry-run execution plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-020-dry-run-execution-plan.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Dry-run plan binds install, update, and repair/reinstall intents to transaction journal, snapshot baseline, RC20 release bundle, and local channel evidence.",
+      "Dry-run plan prepares no real effect and keeps host mutation, active artifact set mutation, production mutation, support upload, recovery execution, remote dispatch, signer authority, and object storage disabled.",
+      "Plan records explainable preconditions and denial reasons for every operation."
+    ]
+  },
+  "next_task": "RC21-021"
+}

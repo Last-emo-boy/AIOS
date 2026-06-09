@@ -1,0 +1,38 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-010",
+  "title": "bind local lifecycle operation intent catalog",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc20-final-closeout-audit/result.json",
+    ".workflow/artifacts/rc20-single-user-distribution-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc21-local-operation-intent-catalog.ps1",
+      "role": "operation intent catalog runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+      "role": "operation intent catalog"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-010-local-operation-intent-catalog.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Catalog binds install, update, repair/reinstall, downgrade/rollback, support export, and recovery reference intents to RC20 release/channel/consumer evidence.",
+      "Catalog is local-only and does not authorize host mutation, active artifact set mutation, production ring mutation, remote dispatch, support upload, recovery execution, signer authority, object storage, or GA claims.",
+      "Catalog records exact required inputs, audit expectations, and denial reasons for missing or stale RC20 evidence."
+    ]
+  },
+  "next_task": "RC21-011"
+}

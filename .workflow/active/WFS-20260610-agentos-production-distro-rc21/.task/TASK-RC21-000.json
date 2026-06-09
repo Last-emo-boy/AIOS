@@ -1,0 +1,40 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-000",
+  "title": "plan Production Distro RC21 local transactional user lifecycle candidate",
+  "status": "completed",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/evidence/FINAL-AUDIT-20260610-production-distro-rc20.json",
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/final-rc20-closeout-summary.md",
+    ".workflow/state.json"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+      "role": "RC21 execution plan"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/workflow-session.json",
+      "role": "workflow session"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-user-lifecycle-plan.md",
+      "role": "planning summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-000-planning.json",
+      "role": "planning evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Plan derives RC21 tasks from RC20 final audit next milestone direction.",
+      "Plan preserves AIOS-body-only scope and excludes external mirror frontend, nginx/TLS, remote signer, object storage provisioning, remote dispatch, private signing material, support upload, recovery execution, host rootfs mutation, host active slot mutation, host boot metadata mutation, active artifact set mutation, and production ring mutation.",
+      "Plan keeps production_ready_claim=false and sets RC21-001 as next executable task."
+    ]
+  },
+  "completed_at": "2026-06-10T17:25:00+08:00",
+  "evidence": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-000-planning.json",
+  "next_task": "RC21-001"
+}

@@ -1,0 +1,194 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260610-agentos-production-distro-rc21",
+  "milestone": "Production Distro RC21",
+  "status": "active",
+  "objective": "Move RC20 non-GA single-user distribution local consumer readiness into a transactional local user lifecycle candidate with local operation intent catalog, transaction journal, dry-run explainability, repair/reinstall and downgrade/rollback drills, local support/recovery closure, and lifecycle consumer smoke, without mutating the host, production rings, mirror infrastructure, signer infrastructure, object storage, remote dispatch, support upload, recovery services, private signing material, or GA authority.",
+  "scope": {
+    "included": [
+      "AIOS-body RC21 planning",
+      "local transactional lifecycle authority contract",
+      "local operation intent catalog for install/update/repair/downgrade/support/recovery",
+      "transaction journal and snapshot baseline package",
+      "lifecycle operation fail-closed fixtures",
+      "install/update/reinstall dry-run execution plan",
+      "transactional install/update dry-run acceptance inside disposable target",
+      "user-visible explain/resume/audit package",
+      "repair/reinstall drill inside disposable installed-system boundary",
+      "downgrade/rollback drill from local channel history inside disposable boundary",
+      "local support/recovery closure after repair and downgrade drills",
+      "transactional lifecycle local consumer smoke",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "external mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload object storage provisioning",
+      "remote fleet dispatch infrastructure",
+      "support upload endpoint",
+      "recovery execution service",
+      "host rootfs mutation",
+      "host active slot mutation",
+      "host boot metadata mutation",
+      "active artifact set mutation",
+      "production ring mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC21 planning and local lifecycle authority contract",
+      "tasks": [
+        {
+          "id": "RC21-000",
+          "status": "completed",
+          "title": "plan Production Distro RC21 local transactional user lifecycle candidate",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-000-planning.json"
+        },
+        {
+          "id": "RC21-001",
+          "status": "pending",
+          "title": "freeze RC21 local transactional lifecycle authority contract",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "local operation intent catalog and transaction baseline",
+      "tasks": [
+        {
+          "id": "RC21-010",
+          "status": "pending",
+          "title": "bind local lifecycle operation intent catalog",
+          "deliverable": ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json"
+        },
+        {
+          "id": "RC21-011",
+          "status": "pending",
+          "title": "bind transaction journal and snapshot baseline package",
+          "deliverable": ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/result.json"
+        },
+        {
+          "id": "RC21-012",
+          "status": "pending",
+          "title": "verify lifecycle operation fail-closed fixtures",
+          "deliverable": ".workflow/artifacts/rc21-lifecycle-operation-fail-closed/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "dry-run execution plan and explainable resume audit",
+      "tasks": [
+        {
+          "id": "RC21-020",
+          "status": "pending",
+          "title": "bind install update reinstall dry-run execution plan",
+          "deliverable": ".workflow/artifacts/rc21-dry-run-execution-plan/result.json"
+        },
+        {
+          "id": "RC21-021",
+          "status": "pending",
+          "title": "run transactional install update dry-run acceptance",
+          "deliverable": ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json"
+        },
+        {
+          "id": "RC21-022",
+          "status": "pending",
+          "title": "bind user-visible explain resume audit package",
+          "deliverable": ".workflow/artifacts/rc21-explain-resume-audit-package/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "repair reinstall downgrade rollback lifecycle drills",
+      "tasks": [
+        {
+          "id": "RC21-030",
+          "status": "pending",
+          "title": "run repair reinstall drill inside disposable installed-system boundary",
+          "deliverable": ".workflow/artifacts/rc21-repair-reinstall-drill/result.json"
+        },
+        {
+          "id": "RC21-031",
+          "status": "pending",
+          "title": "run downgrade rollback drill from local channel history",
+          "deliverable": ".workflow/artifacts/rc21-downgrade-rollback-drill/result.json"
+        },
+        {
+          "id": "RC21-032",
+          "status": "pending",
+          "title": "bind support recovery closure after lifecycle drills",
+          "deliverable": ".workflow/artifacts/rc21-lifecycle-support-recovery/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "transactional lifecycle consumer smoke and closeout",
+      "tasks": [
+        {
+          "id": "RC21-040",
+          "status": "pending",
+          "title": "run transactional lifecycle local consumer smoke",
+          "deliverable": ".workflow/artifacts/rc21-transactional-lifecycle-consumer-smoke/result.json"
+        },
+        {
+          "id": "RC21-050",
+          "status": "pending",
+          "title": "run Production Distro RC21 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/FINAL-AUDIT-20260610-production-distro-rc21.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC21-001",
+  "previous_workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "rc20_single_user_distribution_local_consumer_ready_required": true,
+    "local_operation_intent_catalog_required": true,
+    "transaction_journal_required": true,
+    "snapshot_baseline_required": true,
+    "lifecycle_operation_fail_closed_required": true,
+    "dry_run_execution_plan_required": true,
+    "transactional_dry_run_acceptance_required": true,
+    "explain_resume_audit_required": true,
+    "repair_reinstall_drill_required": true,
+    "downgrade_rollback_drill_required": true,
+    "local_support_recovery_closure_required": true,
+    "host_rootfs_mutation_allowed": false,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "active_artifact_set_mutation_allowed": false,
+    "production_ready_claim": false,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.85,
+    "requirements_coverage": 0.91,
+    "task_quality": 0.86,
+    "dependency_correctness": 0.89,
+    "estimation_accuracy": 0.75,
+    "collision_safety": 0.84,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC21 follows the RC20 final audit next milestone direction and narrows the next work to AIOS-body transactional local user lifecycle evidence. The plan separates operation intent, journal/snapshot, fail-closed fixtures, dry-run/explainability, repair/reinstall, downgrade/rollback, support/recovery, consumer smoke, and final audit while preserving non-GA and no host, remote, mirror, signer, object-storage, support-upload, recovery-execution, or production mutation scope."
+  }
+}

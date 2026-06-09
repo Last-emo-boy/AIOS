@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC21-030",
+  "title": "run repair reinstall drill inside disposable installed-system boundary",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+    ".workflow/artifacts/rc21-explain-resume-audit-package/result.json",
+    ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+    ".workflow/artifacts/rc20-post-update-rollback-drill/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc21-repair-reinstall-drill.ps1",
+      "role": "repair reinstall drill runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+      "role": "result"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-repair-reinstall-drill/repair-reinstall-evidence.json",
+      "role": "repair reinstall evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc21-repair-reinstall-drill/repair-reinstall-audit-record.json",
+      "role": "repair reinstall audit record"
+    },
+    {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc21/evidence/RC21-030-repair-reinstall-drill.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Repair/reinstall drill executes only inside the disposable installed-system boundary and binds transaction journal, snapshot baseline, dry-run acceptance, and explain/resume audit evidence.",
+      "Result binds repair/reinstall plan, audit record, restored local state, and post-drill observation without claiming host boot authority.",
+      "Support upload, recovery execution, remote dispatch, host mutation, active artifact set mutation, production ring mutation, signer authority, object storage authority, and private material handling remain disabled."
+    ]
+  },
+  "next_task": "RC21-031"
+}
