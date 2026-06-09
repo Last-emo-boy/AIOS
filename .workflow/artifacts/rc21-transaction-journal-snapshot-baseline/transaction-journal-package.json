@@ -1,0 +1,356 @@
+{
+    "schema":  "agentos.rc21-transaction-journal-package.v1",
+    "generated_at":  "2026-06-10T18:25:00+08:00",
+    "task":  "RC21-011",
+    "status":  "transaction-journal-baseline-bound-non-executable",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "transaction_journal_package_id":  "sha256:5ea7ab41f0c093c69f3d742430871d29ba3d33a8a314bc1f94006b8801e5c4a0",
+    "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62",
+    "operation_intent_catalog_id":  "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+    "append_only_evidence":  true,
+    "executable_by_journal":  false,
+    "dry_run_required_before_effect":  true,
+    "entry_count":  6,
+    "entries":  [
+                    {
+                        "operation":  "downgrade-rollback",
+                        "kind":  "downgrade-rollback",
+                        "operation_intent_id":  "sha256:b6e33047da1299340e8c7216e108511291ba362d6a78722b869926f20903cd89",
+                        "transaction_id":  "sha256:bfbec201fbac0c13ed34a8142898fcac441ce5214017490e8a6d865f886bfa5b",
+                        "transaction_state":  "baseline-bound-non-executable",
+                        "append_only":  true,
+                        "dry_run_required_before_effect":  true,
+                        "executable_by_journal":  false,
+                        "effect_boundary":  "disposable-installed-system-evidence-only",
+                        "source_snapshot_id":  "sha256:63e2211aeb708eead14a176a4cffcd901cb7a9ef51514109068b33371f61d96b",
+                        "target_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                        "rollback_snapshot_reference":  {
+                                                            "snapshot_id":  "sha256:63e2211aeb708eead14a176a4cffcd901cb7a9ef51514109068b33371f61d96b",
+                                                            "required_before_effect":  true,
+                                                            "projection_only":  true
+                                                        },
+                        "audit_sink":  {
+                                           "audit_sink_id":  "rc21-011-audit-downgrade-rollback-bfbec201fbac0c13",
+                                           "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/downgrade-rollback.jsonl",
+                                           "local_only":  true,
+                                           "append_only_required":  true,
+                                           "written":  false
+                                       },
+                        "resume_checkpoint":  {
+                                                  "checkpoint_id":  "rc21-011-resume-downgrade-rollback-bfbec201fbac0c13",
+                                                  "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/downgrade-rollback.json",
+                                                  "local_only":  true,
+                                                  "written":  false,
+                                                  "required_before_resume":  true
+                                              },
+                        "denial_before_effect":  {
+                                                     "required":  true,
+                                                     "reason":  "RC21-011 binds journal and snapshot baseline only; dry-run and lifecycle effects are later gates."
+                                                 },
+                        "forbidden_authority":  {
+                                                    "support_upload":  true,
+                                                    "recovery_execution":  true,
+                                                    "remote_dispatch":  true,
+                                                    "host_mutation":  true,
+                                                    "production_ring_mutation":  true,
+                                                    "signer_authority":  true,
+                                                    "object_storage_provisioning":  true
+                                                }
+                    },
+                    {
+                        "operation":  "install",
+                        "kind":  "install",
+                        "operation_intent_id":  "sha256:d2e906c0b1faec63f5c5a4d41415fddb9e091b1d2d5aa011133d3814ed05a8d2",
+                        "transaction_id":  "sha256:5941f22e2fbc02e5b890c76009a7ca454b55eace732390523693fa7356a3274f",
+                        "transaction_state":  "baseline-bound-non-executable",
+                        "append_only":  true,
+                        "dry_run_required_before_effect":  true,
+                        "executable_by_journal":  false,
+                        "effect_boundary":  "dry-run-only-until-transaction-journal-and-disposable-target-acceptance",
+                        "source_snapshot_id":  "sha256:68c5e4c5e3d35dbf00167893c69c23c2ae62e5fa767192616cf20625611b933a",
+                        "target_snapshot_id":  "sha256:6542cdac87ce9c7d20ce6ccd60b7be10f76c686ae7ffaa60f4c2fe1a78d88565",
+                        "rollback_snapshot_reference":  {
+                                                            "snapshot_id":  "sha256:68c5e4c5e3d35dbf00167893c69c23c2ae62e5fa767192616cf20625611b933a",
+                                                            "required_before_effect":  true,
+                                                            "projection_only":  true
+                                                        },
+                        "audit_sink":  {
+                                           "audit_sink_id":  "rc21-011-audit-install-5941f22e2fbc02e5",
+                                           "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/install.jsonl",
+                                           "local_only":  true,
+                                           "append_only_required":  true,
+                                           "written":  false
+                                       },
+                        "resume_checkpoint":  {
+                                                  "checkpoint_id":  "rc21-011-resume-install-5941f22e2fbc02e5",
+                                                  "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/install.json",
+                                                  "local_only":  true,
+                                                  "written":  false,
+                                                  "required_before_resume":  true
+                                              },
+                        "denial_before_effect":  {
+                                                     "required":  true,
+                                                     "reason":  "RC21-011 binds journal and snapshot baseline only; dry-run and lifecycle effects are later gates."
+                                                 },
+                        "forbidden_authority":  {
+                                                    "support_upload":  true,
+                                                    "recovery_execution":  true,
+                                                    "remote_dispatch":  true,
+                                                    "host_mutation":  true,
+                                                    "production_ring_mutation":  true,
+                                                    "signer_authority":  true,
+                                                    "object_storage_provisioning":  true
+                                                }
+                    },
+                    {
+                        "operation":  "recovery-reference",
+                        "kind":  "recovery-reference",
+                        "operation_intent_id":  "sha256:9ad8e2c8942454d200369b79ee9a72fd4eaaa771e9034e6ce000a97203376968",
+                        "transaction_id":  "sha256:f4ad9fc2ba11eec1f2332036afbcf526fc0ee454193805140bd260a078af648b",
+                        "transaction_state":  "baseline-bound-non-executable",
+                        "append_only":  true,
+                        "dry_run_required_before_effect":  true,
+                        "executable_by_journal":  false,
+                        "effect_boundary":  "projection-and-reference-index-only",
+                        "source_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                        "target_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                        "rollback_snapshot_reference":  {
+                                                            "snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                                                            "required_before_effect":  true,
+                                                            "projection_only":  true
+                                                        },
+                        "audit_sink":  {
+                                           "audit_sink_id":  "rc21-011-audit-recovery-reference-f4ad9fc2ba11eec1",
+                                           "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/recovery-reference.jsonl",
+                                           "local_only":  true,
+                                           "append_only_required":  true,
+                                           "written":  false
+                                       },
+                        "resume_checkpoint":  {
+                                                  "checkpoint_id":  "rc21-011-resume-recovery-reference-f4ad9fc2ba11eec1",
+                                                  "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/recovery-reference.json",
+                                                  "local_only":  true,
+                                                  "written":  false,
+                                                  "required_before_resume":  true
+                                              },
+                        "denial_before_effect":  {
+                                                     "required":  true,
+                                                     "reason":  "RC21-011 binds journal and snapshot baseline only; dry-run and lifecycle effects are later gates."
+                                                 },
+                        "forbidden_authority":  {
+                                                    "support_upload":  true,
+                                                    "recovery_execution":  true,
+                                                    "remote_dispatch":  true,
+                                                    "host_mutation":  true,
+                                                    "production_ring_mutation":  true,
+                                                    "signer_authority":  true,
+                                                    "object_storage_provisioning":  true
+                                                }
+                    },
+                    {
+                        "operation":  "repair-reinstall",
+                        "kind":  "repair-reinstall",
+                        "operation_intent_id":  "sha256:16a0d52d9f4c78253790e9c40a5df959453d2eba1a05e063be42af1d1b11e5ef",
+                        "transaction_id":  "sha256:1beb6554cbd5296ae8aa4530a8774f098dd4577f3e3350481a07a463ce9dbcc1",
+                        "transaction_state":  "baseline-bound-non-executable",
+                        "append_only":  true,
+                        "dry_run_required_before_effect":  true,
+                        "executable_by_journal":  false,
+                        "effect_boundary":  "disposable-installed-system-evidence-only",
+                        "source_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                        "target_snapshot_id":  "sha256:6542cdac87ce9c7d20ce6ccd60b7be10f76c686ae7ffaa60f4c2fe1a78d88565",
+                        "rollback_snapshot_reference":  {
+                                                            "snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                                                            "required_before_effect":  true,
+                                                            "projection_only":  true
+                                                        },
+                        "audit_sink":  {
+                                           "audit_sink_id":  "rc21-011-audit-repair-reinstall-1beb6554cbd5296a",
+                                           "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/repair-reinstall.jsonl",
+                                           "local_only":  true,
+                                           "append_only_required":  true,
+                                           "written":  false
+                                       },
+                        "resume_checkpoint":  {
+                                                  "checkpoint_id":  "rc21-011-resume-repair-reinstall-1beb6554cbd5296a",
+                                                  "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/repair-reinstall.json",
+                                                  "local_only":  true,
+                                                  "written":  false,
+                                                  "required_before_resume":  true
+                                              },
+                        "denial_before_effect":  {
+                                                     "required":  true,
+                                                     "reason":  "RC21-011 binds journal and snapshot baseline only; dry-run and lifecycle effects are later gates."
+                                                 },
+                        "forbidden_authority":  {
+                                                    "support_upload":  true,
+                                                    "recovery_execution":  true,
+                                                    "remote_dispatch":  true,
+                                                    "host_mutation":  true,
+                                                    "production_ring_mutation":  true,
+                                                    "signer_authority":  true,
+                                                    "object_storage_provisioning":  true
+                                                }
+                    },
+                    {
+                        "operation":  "support-export",
+                        "kind":  "support-export",
+                        "operation_intent_id":  "sha256:30fdbfdc23d991905285a80bccd779de40f0cb8d9a9a52ebac229e582f6ccdc2",
+                        "transaction_id":  "sha256:e11aa0b2091b06ecd90111d293030b85f8ef20370a4469e5a2bb58862bfd9d87",
+                        "transaction_state":  "baseline-bound-non-executable",
+                        "append_only":  true,
+                        "dry_run_required_before_effect":  true,
+                        "executable_by_journal":  false,
+                        "effect_boundary":  "local-redacted-bundle-only",
+                        "source_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                        "target_snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                        "rollback_snapshot_reference":  {
+                                                            "snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                                                            "required_before_effect":  true,
+                                                            "projection_only":  true
+                                                        },
+                        "audit_sink":  {
+                                           "audit_sink_id":  "rc21-011-audit-support-export-e11aa0b2091b06ec",
+                                           "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/support-export.jsonl",
+                                           "local_only":  true,
+                                           "append_only_required":  true,
+                                           "written":  false
+                                       },
+                        "resume_checkpoint":  {
+                                                  "checkpoint_id":  "rc21-011-resume-support-export-e11aa0b2091b06ec",
+                                                  "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/support-export.json",
+                                                  "local_only":  true,
+                                                  "written":  false,
+                                                  "required_before_resume":  true
+                                              },
+                        "denial_before_effect":  {
+                                                     "required":  true,
+                                                     "reason":  "RC21-011 binds journal and snapshot baseline only; dry-run and lifecycle effects are later gates."
+                                                 },
+                        "forbidden_authority":  {
+                                                    "support_upload":  true,
+                                                    "recovery_execution":  true,
+                                                    "remote_dispatch":  true,
+                                                    "host_mutation":  true,
+                                                    "production_ring_mutation":  true,
+                                                    "signer_authority":  true,
+                                                    "object_storage_provisioning":  true
+                                                }
+                    },
+                    {
+                        "operation":  "update",
+                        "kind":  "update",
+                        "operation_intent_id":  "sha256:8e90e1b197341fa8832761777711b24e4c02f3181131bb68c7439b02890b0b89",
+                        "transaction_id":  "sha256:14733e657551956996d3f1e75659edf04e50d1c871b31fac33e3abb6a76f5723",
+                        "transaction_state":  "baseline-bound-non-executable",
+                        "append_only":  true,
+                        "dry_run_required_before_effect":  true,
+                        "executable_by_journal":  false,
+                        "effect_boundary":  "dry-run-only-until-transaction-journal-and-disposable-installed-system-acceptance",
+                        "source_snapshot_id":  "sha256:355ad393a7ba7d7b9e9ec3a2e0aa0f7806088b059c69986723e574cf781225fd",
+                        "target_snapshot_id":  "sha256:63e2211aeb708eead14a176a4cffcd901cb7a9ef51514109068b33371f61d96b",
+                        "rollback_snapshot_reference":  {
+                                                            "snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                                                            "required_before_effect":  true,
+                                                            "projection_only":  true
+                                                        },
+                        "audit_sink":  {
+                                           "audit_sink_id":  "rc21-011-audit-update-14733e6575519569",
+                                           "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/audit/update.jsonl",
+                                           "local_only":  true,
+                                           "append_only_required":  true,
+                                           "written":  false
+                                       },
+                        "resume_checkpoint":  {
+                                                  "checkpoint_id":  "rc21-011-resume-update-14733e6575519569",
+                                                  "path":  ".workflow/artifacts/rc21-transaction-journal-snapshot-baseline/checkpoints/update.json",
+                                                  "local_only":  true,
+                                                  "written":  false,
+                                                  "required_before_resume":  true
+                                              },
+                        "denial_before_effect":  {
+                                                     "required":  true,
+                                                     "reason":  "RC21-011 binds journal and snapshot baseline only; dry-run and lifecycle effects are later gates."
+                                                 },
+                        "forbidden_authority":  {
+                                                    "support_upload":  true,
+                                                    "recovery_execution":  true,
+                                                    "remote_dispatch":  true,
+                                                    "host_mutation":  true,
+                                                    "production_ring_mutation":  true,
+                                                    "signer_authority":  true,
+                                                    "object_storage_provisioning":  true
+                                                }
+                    }
+                ],
+    "authority":  {
+                      "transaction_journal_authority":  true,
+                      "effect_execution_authority":  false,
+                      "support_upload_authority":  false,
+                      "recovery_execution_authority":  false,
+                      "remote_dispatch_authority":  false,
+                      "host_rootfs_mutation_authority":  false,
+                      "active_artifact_set_mutation_authority":  false,
+                      "production_ring_mutation_authority":  false,
+                      "signer_authority":  false,
+                      "object_storage_authority":  false
+                  },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "4a2c8912ad3230c529d8d4f3e01d0ecb8fcc6ac5dd560be27e859126102bdebe",
+                                     "size_bytes":  8623,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_operation_intent_catalog_result":  {
+                                                                "role":  "rc21 operation intent catalog result",
+                                                                "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+                                                                "sha256":  "96755fd238fcebdaa46ec5f3d90ba89a1b1f7bef070c0c256553638722d7cf47",
+                                                                "size_bytes":  57638,
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc21-local-operation-intent-catalog-result.v1",
+                                                                "status":  "passed",
+                                                                "task":  "RC21-010",
+                                                                "production_ready_claim":  false,
+                                                                "consumer_ready_claim":  false
+                                                            },
+                   "rc21_operation_intent_catalog":  {
+                                                         "role":  "rc21 operation intent catalog",
+                                                         "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+                                                         "sha256":  "10e671302515e6b9c36fd50fac3532f2abca9c7b0f0da99f4796ed257b86da6d",
+                                                         "size_bytes":  25256,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc21-local-operation-intent-catalog.v1",
+                                                         "status":  "local-operation-intent-catalog-bound-non-ga",
+                                                         "task":  "RC21-010",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc20_lifecycle_support_result":  {
+                                                         "role":  "rc20 lifecycle support result",
+                                                         "path":  ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+                                                         "sha256":  "6e475b3ef5a1da47c464ed3f86fd018684836e176c4857cb79eef5ed91a67733",
+                                                         "size_bytes":  59069,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc20-lifecycle-support-recovery-result.v1",
+                                                         "status":  "passed",
+                                                         "task":  "RC20-032",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     }
+               }
+}

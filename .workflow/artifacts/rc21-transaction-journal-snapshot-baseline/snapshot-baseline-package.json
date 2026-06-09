@@ -1,0 +1,160 @@
+{
+    "schema":  "agentos.rc21-snapshot-baseline-package.v1",
+    "generated_at":  "2026-06-10T18:25:00+08:00",
+    "task":  "RC21-011",
+    "status":  "snapshot-baseline-bound-projection-only",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "snapshot_baseline_package_id":  "sha256:af0473188cd47819c81caa36a0f15223027eec7ab1e765dc2e75766b2b773a62",
+    "operation_intent_catalog_id":  "sha256:928ffb07f63b8b8b65fcd528efef97311398cc60a11f41110e732e3ea04a8f80",
+    "release_bundle_id":  "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "selected_version":  "rc20-single-user-stable-local-projection",
+    "projection_only":  true,
+    "bound_states":  {
+                         "rc20_target_state_id":  "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+                         "rc20_previous_installed_image_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                         "rc20_updated_image_state_id":  "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+                         "rc20_restored_target_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+                     },
+    "snapshots":  [
+                      {
+                          "id":  "rc21-preinstall-placeholder",
+                          "snapshot_id":  "sha256:68c5e4c5e3d35dbf00167893c69c23c2ae62e5fa767192616cf20625611b933a",
+                          "state_id":  "sha256:9f0a80eff452f22437ad4a3023fa5463389f2af67aba679f4da7cac9c15b47a7",
+                          "description":  "Projection-only placeholder for an unmodified host or disposable target before install.",
+                          "projection_only":  true,
+                          "host_boot_state_authority":  false,
+                          "host_rootfs_mutation_allowed":  false,
+                          "active_artifact_set_mutation_allowed":  false,
+                          "production_ring_mutation_allowed":  false,
+                          "bound_sources":  [
+                                                "rc21-authority-contract",
+                                                "rc21-operation-intent-catalog"
+                                            ]
+                      },
+                      {
+                          "id":  "rc20-target-state",
+                          "snapshot_id":  "sha256:6542cdac87ce9c7d20ce6ccd60b7be10f76c686ae7ffaa60f4c2fe1a78d88565",
+                          "state_id":  "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+                          "description":  "RC20 selected target state from single-user local lifecycle evidence.",
+                          "projection_only":  true,
+                          "host_boot_state_authority":  false,
+                          "host_rootfs_mutation_allowed":  false,
+                          "active_artifact_set_mutation_allowed":  false,
+                          "production_ring_mutation_allowed":  false,
+                          "bound_sources":  [
+                                                "rc20-lifecycle-support-result"
+                                            ]
+                      },
+                      {
+                          "id":  "rc20-previous-installed-state",
+                          "snapshot_id":  "sha256:355ad393a7ba7d7b9e9ec3a2e0aa0f7806088b059c69986723e574cf781225fd",
+                          "state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                          "description":  "RC20 previous installed image state before update inside disposable evidence.",
+                          "projection_only":  true,
+                          "host_boot_state_authority":  false,
+                          "host_rootfs_mutation_allowed":  false,
+                          "active_artifact_set_mutation_allowed":  false,
+                          "production_ring_mutation_allowed":  false,
+                          "bound_sources":  [
+                                                "rc20-lifecycle-support-result"
+                                            ]
+                      },
+                      {
+                          "id":  "rc20-updated-state",
+                          "snapshot_id":  "sha256:63e2211aeb708eead14a176a4cffcd901cb7a9ef51514109068b33371f61d96b",
+                          "state_id":  "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+                          "description":  "RC20 updated image state after post-install update drill inside disposable evidence.",
+                          "projection_only":  true,
+                          "host_boot_state_authority":  false,
+                          "host_rootfs_mutation_allowed":  false,
+                          "active_artifact_set_mutation_allowed":  false,
+                          "production_ring_mutation_allowed":  false,
+                          "bound_sources":  [
+                                                "rc20-lifecycle-support-result"
+                                            ]
+                      },
+                      {
+                          "id":  "rc20-restored-state",
+                          "snapshot_id":  "sha256:e7c810eb84e99b6552250bbaa99a5a67cb4004387f4ff89764bf7eebd54b8edc",
+                          "state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                          "description":  "RC20 restored target state after rollback drill inside disposable evidence.",
+                          "projection_only":  true,
+                          "host_boot_state_authority":  false,
+                          "host_rootfs_mutation_allowed":  false,
+                          "active_artifact_set_mutation_allowed":  false,
+                          "production_ring_mutation_allowed":  false,
+                          "bound_sources":  [
+                                                "rc20-lifecycle-support-result"
+                                            ]
+                      }
+                  ],
+    "authority":  {
+                      "snapshot_baseline_authority":  true,
+                      "projection_only":  true,
+                      "host_boot_state_authority":  false,
+                      "host_rootfs_mutation_authority":  false,
+                      "active_artifact_set_mutation_authority":  false,
+                      "production_ring_mutation_authority":  false,
+                      "support_upload_authority":  false,
+                      "recovery_execution_authority":  false,
+                      "remote_dispatch_authority":  false
+                  },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "4a2c8912ad3230c529d8d4f3e01d0ecb8fcc6ac5dd560be27e859126102bdebe",
+                                     "size_bytes":  8623,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_operation_intent_catalog_result":  {
+                                                                "role":  "rc21 operation intent catalog result",
+                                                                "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/result.json",
+                                                                "sha256":  "96755fd238fcebdaa46ec5f3d90ba89a1b1f7bef070c0c256553638722d7cf47",
+                                                                "size_bytes":  57638,
+                                                                "present":  true,
+                                                                "schema":  "agentos.rc21-local-operation-intent-catalog-result.v1",
+                                                                "status":  "passed",
+                                                                "task":  "RC21-010",
+                                                                "production_ready_claim":  false,
+                                                                "consumer_ready_claim":  false
+                                                            },
+                   "rc21_operation_intent_catalog":  {
+                                                         "role":  "rc21 operation intent catalog",
+                                                         "path":  ".workflow/artifacts/rc21-local-operation-intent-catalog/operation-intent-catalog.json",
+                                                         "sha256":  "10e671302515e6b9c36fd50fac3532f2abca9c7b0f0da99f4796ed257b86da6d",
+                                                         "size_bytes":  25256,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc21-local-operation-intent-catalog.v1",
+                                                         "status":  "local-operation-intent-catalog-bound-non-ga",
+                                                         "task":  "RC21-010",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc20_lifecycle_support_result":  {
+                                                         "role":  "rc20 lifecycle support result",
+                                                         "path":  ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+                                                         "sha256":  "6e475b3ef5a1da47c464ed3f86fd018684836e176c4857cb79eef5ed91a67733",
+                                                         "size_bytes":  59069,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc20-lifecycle-support-recovery-result.v1",
+                                                         "status":  "passed",
+                                                         "task":  "RC20-032",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     }
+               }
+}
