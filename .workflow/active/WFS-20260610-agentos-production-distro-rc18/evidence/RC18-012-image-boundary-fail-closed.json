@@ -1,0 +1,183 @@
+{
+  "schema": "agentos.rc18-image-boundary-fail-closed-evidence.v1",
+  "generated_at": "2026-06-10T06:10:00+08:00",
+  "task": "RC18-012",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "script": {
+    "path": "scripts/verify-rc18-image-boundary-fail-closed.ps1",
+    "sha256": "839c19620e54c4db156298165b8aa0774b3daf41a892d5c1b17b60c240fc2155"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/result.json",
+    "status": "passed",
+    "sha256": "e315df879aa9e7e5bdcc38df2c3586213fc05f7c445e7b87894da779c35dfc1a"
+  },
+  "outputs": {
+    "image_boundary_fail_closed_matrix": {
+      "path": ".workflow/artifacts/rc18-image-boundary-fail-closed/image-boundary-fail-closed-matrix.json",
+      "sha256": "62d6837a716edd4738f2a4fea02e7d1ec6cd5e7379d288646adc03d1fd4c19e8"
+    }
+  },
+  "fail_closed_surface": {
+    "state": "image-boundary-side-effect-fail-closed-fixtures-passed",
+    "cases": 23,
+    "failed_cases": 0,
+    "denied_before_image_mutation": true,
+    "denied_before_host_mutation": true,
+    "local_only_fixture_execution": true,
+    "image_mutation_performed": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "network_fetch_attempted": false,
+    "blockers": [
+      "rc18-isolated-install-not-run",
+      "rc18-isolated-update-not-run",
+      "rc18-isolated-rollback-not-run"
+    ]
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "fixtures_local_only": true,
+    "image_mutation_performed": false,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_changed": false,
+    "signer_authority": false,
+    "tui_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false
+  },
+  "completion": {
+    "rc18_012_complete": true,
+    "next_task": "RC18-020",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc18_012",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-012 must run after RC18-011 completed, while current_task is RC18-012 or during a completed rerun.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC18-012",
+        "rc18_011_status": "completed",
+        "rc18_012_status": "pending"
+      }
+    },
+    {
+      "id": "contract.fail_closed_scope.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-012 must consume the isolated installed-system drill contract fail-closed scope.",
+      "evidence": {
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/docs/rc18-isolated-installed-system-drill-contract.md",
+        "sha256": "d452dae7e4511d8497368523ccbac3029a2cf9dd384b6b6f1431315958877ce8",
+        "size_bytes": 5721,
+        "present": true,
+        "schema": null,
+        "status": null,
+        "production_ready_claim": null
+      }
+    },
+    {
+      "id": "source.boundary.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-012 must bind the completed RC18 image boundary before fixture evaluation.",
+      "evidence": {
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+        "image_boundary_bound": true,
+        "host_boot_metadata_mutated": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "source.baseline.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-012 must bind the completed installed-system baseline identity and boot-state projection before fixture evaluation.",
+      "evidence": {
+        "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+        "baseline_identity_bound": true,
+        "boot_state_projection_bound": true,
+        "host_boot_metadata_mutated": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "source.boot_projection.image_local",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Boot-state projection must remain image-local and non-authoritative for host boot state.",
+      "evidence": {
+        "image_local_projection": true,
+        "non_authoritative_for_host_boot_state": true,
+        "image_mutation_allowed_now": false
+      }
+    },
+    {
+      "id": "baseline.fixture.valid_non_authoritative",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "The unmodified RC18 image-boundary fixture must be internally valid and non-authoritative.",
+      "evidence": {
+        "observed_state": "fixture-valid-non-authoritative",
+        "reasons": []
+      }
+    },
+    {
+      "id": "fixtures.coverage",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-012 negative fixtures must cover missing boundary, stale baseline, host write broadening, remote dispatch, support upload, recovery execution, signer authority, mirror/frontend authority, production ring mutation, GA claim, and projection authority broadening.",
+      "evidence": {
+        "cases": 23,
+        "required_minimum": 20
+      }
+    },
+    {
+      "id": "fixtures.all_cases_passed",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC18 image-boundary negative fixtures must deny before image or host mutation.",
+      "evidence": {
+        "cases": 23,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "fixtures.no_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Fixture execution must be local-only and create no image, host, remote, support, recovery, mirror/frontend, signer, network, or production side effects.",
+      "evidence": {
+        "side_effect_case_ids": []
+      }
+    },
+    {
+      "id": "outputs.matrix.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-012 fail-closed matrix must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
