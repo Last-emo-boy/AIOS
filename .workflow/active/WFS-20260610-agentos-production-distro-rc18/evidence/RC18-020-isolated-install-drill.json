@@ -1,0 +1,214 @@
+{
+  "schema": "agentos.rc18-isolated-install-drill-task-evidence.v1",
+  "generated_at": "2026-06-10T06:30:00+08:00",
+  "task": "RC18-020",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "script": {
+    "path": "scripts/run-rc18-isolated-install-drill.ps1",
+    "sha256": "e75643386c213bc5b7699462d5114baeea0a4c14d52318e667e2a80de2c30596"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc18-isolated-install-drill/result.json",
+    "status": "passed",
+    "sha256": "70c8bb7ffe13bde1f0bc887047090d52aba145ebff28239d9d305a11b4d717b2"
+  },
+  "outputs": {
+    "install_drill_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-install-drill/install-drill-evidence.json",
+      "sha256": "e5f523e36bff01996e3fd06469c15e87d86f798a51049ffdc2f891c0f3e4ecaa",
+      "install_drill_digest": "3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+      "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    }
+  },
+  "install_surface": {
+    "state": "isolated-install-executed-inside-disposable-image",
+    "image_scope": "disposable-installed-system-image-or-vm",
+    "image_boundary_bound": true,
+    "baseline_identity_bound": true,
+    "image_boundary_fail_closed_verified": true,
+    "exact_target_bound": true,
+    "exact_approval_bound": true,
+    "agentcore_planspec_bound": true,
+    "security_execution_allow_bound": true,
+    "rollback_preconditions_bound": true,
+    "isolated_install_allowed": true,
+    "isolated_install_performed": true,
+    "disposable_image_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "private_signing_material_handled": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "install_drill_inside_disposable_image_only": true,
+    "isolated_install_performed": true,
+    "disposable_image_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_changed": false,
+    "signer_authority": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc18_020_complete": true,
+    "next_task": "RC18-021",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc18_020",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 must run after RC18-012 completed, while current_task is RC18-020 or during a completed rerun.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC18-020",
+        "rc18_012_status": "completed",
+        "rc18_020_status": "pending"
+      }
+    },
+    {
+      "id": "source.image_boundary.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 must bind the disposable installed-system image boundary and allowed write surface.",
+      "evidence": {
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+        "state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+        "only_writable_drill_surface": "disposable-installed-system-image-or-vm"
+      }
+    },
+    {
+      "id": "source.baseline.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 must bind installed-system baseline identity and boot-state projection.",
+      "evidence": {
+        "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+        "baseline_identity_bound": true,
+        "boot_state_projection_bound": true,
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2"
+      }
+    },
+    {
+      "id": "source.fail_closed.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 must bind the image-boundary side-effect fail-closed matrix before any image install effect.",
+      "evidence": {
+        "side_effect_fail_closed_verified": true,
+        "cases": 23,
+        "failed_cases": 0
+      }
+    },
+    {
+      "id": "source.rc17_install.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 must consume RC17 controlled local install evidence with non-fabricated audit and no forbidden host or remote side effects.",
+      "evidence": {
+        "install_allowed": true,
+        "install_performed": true,
+        "audit_fabricated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "gates.exact_install_chain.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install evidence must bind exact target, exact approval, AgentCore PlanSpec, SecurityExecution allow, rollback preconditions, and baseline identity.",
+      "evidence": {
+        "exact_target_bound": true,
+        "exact_approval_bound": true,
+        "agentcore_planspec_bound": true,
+        "security_execution_allow_bound": true,
+        "rollback_preconditions_bound": true,
+        "identity_matches_baseline": true
+      }
+    },
+    {
+      "id": "install.image_local.execute_or_deny",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Install drill must execute only inside the disposable image boundary or deny before image effect.",
+      "evidence": {
+        "isolated_install_allowed": true,
+        "isolated_install_performed": true,
+        "disposable_image_state_mutated": true,
+        "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "blockers": []
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 must not mutate host rootfs, host slot, host boot metadata, active artifact set, production ring, support upload, recovery, remote dispatch, mirror/frontend, signer, or private material.",
+      "evidence": {
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "isolated_install_allowed": true,
+        "image_install_effect_prepared": true,
+        "image_install_effect_executed": true,
+        "isolated_install_performed": true,
+        "disposable_image_state_mutated": true,
+        "previous_state_root_id": "sha256:ca1e1cfd60f31f11084f6cb904ae9173c3d0969d5c4f38cb06cc7826656cd32f",
+        "installed_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "installed_image_state_digest": "3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing gates and forbidden authority surfaces must deny before image install or host mutation.",
+      "evidence": {
+        "cases": 22,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-020 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
