@@ -1,0 +1,892 @@
+{
+  "schema": "agentos.rc18-isolated-rollback-drill-evidence.v1",
+  "generated_at": "2026-06-10T07:30:00+08:00",
+  "task": "RC18-030",
+  "status": "isolated-rollback-executed-inside-disposable-image",
+  "production_ready_claim": false,
+  "isolated_rollback_allowed": true,
+  "isolated_rollback_performed": true,
+  "denied": false,
+  "denial_reasons": [],
+  "rollback_drill_digest": "11d2a2b7a796a8b188df66303f2934bf8a32c7d161da78ce7d6d4ed8fbf9f837",
+  "rollback_audit_digest": "80d9a7a5d52fc0cbd574a7c2483247c332899a9fec6725f8efe89dcf49d2dce8",
+  "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+  "rollback_drill_material": {
+    "schema": "agentos.rc18-isolated-rollback-drill-material.v1",
+    "task": "RC18-030",
+    "operation": "rollback",
+    "execution_mode": "execute-inside-disposable-image",
+    "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+    "baseline_id": "sha256:4371f2b74ace478c1aac490bcc4031e3f2bb2e59d252946690d2df667c51e9f5",
+    "release_id": "production-distro-rc8-current-artifacts",
+    "media_id": "sha256:cd1e439ebe99ad509ee8efa8bed9d817959ae362df7f03fba880b7326eace3ec",
+    "package_id": "production-distro-rc16-repo-local-distributable-package",
+    "previous_updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "rollback_target_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "post_update_observation_id": "sha256:c24cc3f9fe61410fd9dbd1016eb348503f9d6c0bc61b8e760d60c1080367ca9d",
+    "rollback_precondition_id": "sha256:bcd61fba39e82a893e90f86a8f3bf5ce14c1cc4ea6b1e63e79090c8882b764f4",
+    "rollback_precondition_core_hash": "32f261e5e71bcb07b443c37473c1ea33fdfee39c3ef6b1cede276544e422ee3d",
+    "rollback_approval_id": "rc17-install-update-rollback-f3069ddbe304b668",
+    "rollback_approval_digest": "f3069ddbe304b668111da3c9191fc8d4f156590de864a055fc4931325add3b27",
+    "rollback_planspec_hash": "8ebc9c5b9c2e1fe01185ab5664a6d1d911c93a9086fe9fefe8df3558f054826c",
+    "security_execution_rollback_allow_bound": true,
+    "rc17_rollback_attempt_digest": "a4b479707fbdc37d6b434d2d83c7b6905b413b6072f692328f792e0c789d51b7",
+    "rc17_rollback_audit_digest": "61227e0991ffc4944ca9015e1f32db40de8eeedf358b0240e66b050c238ecb3a",
+    "support_recovery_chain_sha256": "cf364d1ab268b5426a202a0bace762712140a8b07858822c08f1c5240d299bf0",
+    "host_mutation_allowed": false,
+    "production_ring_mutation_allowed": false
+  },
+  "rollback_audit": {
+    "schema": "agentos.rc18-isolated-rollback-audit-core.v1",
+    "task": "RC18-030",
+    "event_type": "IsolatedInstalledSystemRollbackExecuted",
+    "generated_at": "2026-06-10T07:30:00+08:00",
+    "rollback_drill_digest": "11d2a2b7a796a8b188df66303f2934bf8a32c7d161da78ce7d6d4ed8fbf9f837",
+    "rollback_precondition_id": "sha256:bcd61fba39e82a893e90f86a8f3bf5ce14c1cc4ea6b1e63e79090c8882b764f4",
+    "previous_updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "fabricated": false,
+    "local_only": true,
+    "rollback_execution_allowed": true,
+    "rollback_execution_performed": true,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false
+  },
+  "gate_bindings": {
+    "image_boundary_bound": true,
+    "rollback_preconditions_bound": true,
+    "updated_image_state_bound": true,
+    "post_update_observation_bound": true,
+    "separate_rollback_approval_bound": true,
+    "agentcore_rollback_planspec_bound": true,
+    "security_execution_rollback_allow_bound": true,
+    "audit_bound": true,
+    "support_recovery_references_bound": true
+  },
+  "image_effect": {
+    "image_scope": "disposable-installed-system-image-or-vm",
+    "isolated_rollback_allowed": true,
+    "image_rollback_effect_prepared": true,
+    "image_rollback_effect_executed": true,
+    "isolated_rollback_performed": true,
+    "disposable_image_state_mutated": true,
+    "previous_updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "rollback_target_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "rollback_drill_digest": "11d2a2b7a796a8b188df66303f2934bf8a32c7d161da78ce7d6d4ed8fbf9f837",
+    "rollback_audit_digest": "80d9a7a5d52fc0cbd574a7c2483247c332899a9fec6725f8efe89dcf49d2dce8",
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "fail_closed_cases": [
+    {
+      "id": "missing-boundary",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-disposable-image-boundary-not-bound"
+      ],
+      "reason": "Rollback drill requires RC18 image boundary.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-preconditions",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-rollback-preconditions-not-bound"
+      ],
+      "reason": "Rollback drill requires RC18-022 rollback preconditions.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-update-evidence",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rc18-isolated-update-evidence-not-bound"
+      ],
+      "reason": "Rollback drill must start from the RC18-021 updated image state.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "stale-updated-image-state",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "updated-image-state-mismatch"
+      ],
+      "reason": "Rollback drill cannot run against stale image state.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-observation",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "post-update-observation-not-bound"
+      ],
+      "reason": "Post-update observation is required.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-rollback-approval",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "separate-rollback-approval-not-bound"
+      ],
+      "reason": "Separate rollback approval is required.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-agentcore-rollback-planspec",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "agentcore-rollback-planspec-not-bound"
+      ],
+      "reason": "AgentCore rollback PlanSpec is required.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-security-rollback-allow",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "security-execution-rollback-allow-not-bound"
+      ],
+      "reason": "SecurityExecution rollback allow is required.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-rollback-audit",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-audit-not-bound"
+      ],
+      "reason": "Rollback audit binding is required.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "missing-support-recovery-reference",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-recovery-references-not-bound"
+      ],
+      "reason": "Support/recovery references must be bound.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "host-rootfs-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-rootfs-mutation-denied"
+      ],
+      "reason": "Host rootfs writes are outside the image boundary.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "host-active-slot-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-active-slot-mutation-denied"
+      ],
+      "reason": "Host active slot writes are outside the image boundary.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "host-boot-metadata-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "host-boot-metadata-mutation-denied"
+      ],
+      "reason": "Host boot metadata writes are outside the image boundary.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "active-artifact-set-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "active-artifact-set-mutation-denied"
+      ],
+      "reason": "Active artifact set writes are outside the image boundary.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "production-ring-mutation-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "production-ring-mutation-denied"
+      ],
+      "reason": "Production ring mutation is out of RC18 rollback drill scope.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "support-upload-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "support-upload-denied"
+      ],
+      "reason": "Support upload is out of RC18 rollback drill scope.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "recovery-execution-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "recovery-execution-denied"
+      ],
+      "reason": "Recovery execution is out of RC18 rollback drill scope.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "remote-dispatch-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-dispatch-denied"
+      ],
+      "reason": "Remote dispatch is out of RC18 rollback drill scope.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "remote-payload-download-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "remote-payload-download-denied"
+      ],
+      "reason": "Remote payload download is out of RC18 rollback drill scope.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "mirror-frontend-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "mirror-frontend-authority-denied"
+      ],
+      "reason": "Mirror/frontend output is not rollback authority.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "signer-authority-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "signer-authority-denied"
+      ],
+      "reason": "Signer reachability is not rollback authority.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "private-material-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "private-signing-material-denied"
+      ],
+      "reason": "Private signing material is out of RC18 rollback drill scope.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "fabricated-audit-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "rollback-audit-fabrication-denied"
+      ],
+      "reason": "Fabricated audit cannot prove rollback.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    },
+    {
+      "id": "ga-claim-attempt",
+      "status": "passed",
+      "expected_denied": true,
+      "observed_denied": true,
+      "blockers": [
+        "ga-claim-denied"
+      ],
+      "reason": "RC18 rollback drill cannot claim GA production readiness.",
+      "denied_before_image_rollback": true,
+      "denied_before_host_mutation": true,
+      "side_effects": {
+        "image_rollback_effect_prepared": false,
+        "isolated_rollback_performed": false,
+        "disposable_image_state_mutated": false,
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false
+      }
+    }
+  ],
+  "source": {
+    "rc18_plan": {
+      "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc18/plan.json",
+      "sha256": "4a46fc86808abfe8b94004dd27acc5931405d1f4df6d83c2adfaa77cb8bec4a3",
+      "size_bytes": 7412,
+      "present": true,
+      "schema": "agentos.workflow-plan.v1",
+      "status": "active",
+      "production_ready_claim": null
+    },
+    "rc18_boundary_result": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/result.json",
+      "sha256": "ef30989d331aa768791b6282ec0c32413533152574616895290510d783bd649a",
+      "size_bytes": 25772,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-boundary-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_image_boundary": {
+      "path": ".workflow/artifacts/rc18-disposable-installed-system-boundary/image-boundary.json",
+      "sha256": "14b25e7fb5b8b0fdfb795a4709a6a5e5082fab2a04a3f6d96751de2fb15c0df3",
+      "size_bytes": 25924,
+      "present": true,
+      "schema": "agentos.rc18-disposable-installed-system-image-boundary.v1",
+      "status": "disposable-image-boundary-bound-no-image-mutation",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_update_result": {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/result.json",
+      "sha256": "067513a7ebed25c2d7e3209a91a9bb5f58b79dd8de151277e56759c0159bea9e",
+      "size_bytes": 41493,
+      "present": true,
+      "schema": "agentos.rc18-isolated-update-drill-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_isolated_update_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-update-drill/update-drill-evidence.json",
+      "sha256": "ee522b0d97921ce95da9e80ff4bbcc3b10a71a4c833e6245f4ac1c0108c96ade",
+      "size_bytes": 36658,
+      "present": true,
+      "schema": "agentos.rc18-isolated-update-drill-evidence.v1",
+      "status": "isolated-update-executed-inside-disposable-image",
+      "production_ready_claim": false
+    },
+    "rc18_rollback_precondition_result": {
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/result.json",
+      "sha256": "dac3cab86af79bcf4073849b388cdd603e88d044bf7b47d62683bea0da19c6bb",
+      "size_bytes": 36418,
+      "present": true,
+      "schema": "agentos.rc18-image-rollback-preconditions-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc18_post_update_observation": {
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/post-update-observation.json",
+      "sha256": "342236109f351606e2172a1edb622e0b556b8ed9457442325a2e0b0a7d062fac",
+      "size_bytes": 3696,
+      "present": true,
+      "schema": "agentos.rc18-image-post-update-observation.v1",
+      "status": "post-update-observation-bound-inside-disposable-image",
+      "production_ready_claim": false
+    },
+    "rc18_rollback_precondition_package": {
+      "path": ".workflow/artifacts/rc18-image-rollback-preconditions/rollback-precondition-package.json",
+      "sha256": "13ec7f53d39e0489e08e63938ea28786234b020f103d542d228b4165251ead39",
+      "size_bytes": 3065,
+      "present": true,
+      "schema": "agentos.rc18-image-rollback-precondition-package.v1",
+      "status": "image-rollback-preconditions-bound-execution-gated",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_support_result": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+      "sha256": "fb3c305eb332b8b823abe2facbe0f9d6550292e3041c7f3cbb552669b1ee9683",
+      "size_bytes": 25138,
+      "present": true,
+      "schema": "agentos.rc17-controlled-install-update-rollback-support-result.v1",
+      "status": "passed",
+      "production_ready_claim": false
+    },
+    "rc17_rollback_evidence": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/rollback-execute-or-deny-evidence.json",
+      "sha256": "cb74414ec307e3da44eb7d75c633de054f78bdb6957d64864d358b7063cbbbad",
+      "size_bytes": 11464,
+      "present": true,
+      "schema": "agentos.rc17-rollback-execute-or-deny-evidence.v1",
+      "status": "controlled-install-update-rollback-executed",
+      "production_ready_claim": false
+    },
+    "rc17_support_recovery_chain": {
+      "path": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/support-recovery-evidence-chain.json",
+      "sha256": "cf364d1ab268b5426a202a0bace762712140a8b07858822c08f1c5240d299bf0",
+      "size_bytes": 1820,
+      "present": true,
+      "schema": "agentos.rc17-install-update-support-recovery-evidence-chain.v1",
+      "status": null,
+      "production_ready_claim": null
+    }
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "schema": "agentos.rc18-isolated-rollback-drill-task-evidence.v1",
+  "generated_at": "2026-06-10T07:30:00+08:00",
+  "task": "RC18-030",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc18",
+  "script": {
+    "path": "scripts/run-rc18-isolated-rollback-drill.ps1",
+    "sha256": "b17aa84286c1c2d5f7b79d176be9fb43ad41d3d6bacea2d4536eff296a04876f"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc18-isolated-rollback-drill/result.json",
+    "status": "passed",
+    "sha256": "35d1ff3488d5d0b21d7dead735e23b9351e3762413cd6a183b8ac0de331f6d78"
+  },
+  "outputs": {
+    "rollback_drill_evidence": {
+      "path": ".workflow/artifacts/rc18-isolated-rollback-drill/rollback-drill-evidence.json",
+      "sha256": "e95a64e61e6b360ddd1400b9c93661dddbe16c7a7489b1eec8e02bab12d7295b",
+      "rollback_drill_digest": "11d2a2b7a796a8b188df66303f2934bf8a32c7d161da78ce7d6d4ed8fbf9f837",
+      "rollback_audit_digest": "80d9a7a5d52fc0cbd574a7c2483247c332899a9fec6725f8efe89dcf49d2dce8",
+      "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+    }
+  },
+  "rollback_surface": {
+    "state": "isolated-rollback-executed-inside-disposable-image",
+    "image_scope": "disposable-installed-system-image-or-vm",
+    "image_boundary_bound": true,
+    "rollback_preconditions_bound": true,
+    "updated_image_state_bound": true,
+    "post_update_observation_bound": true,
+    "separate_rollback_approval_bound": true,
+    "agentcore_rollback_planspec_bound": true,
+    "security_execution_rollback_allow_bound": true,
+    "audit_bound": true,
+    "support_recovery_references_bound": true,
+    "isolated_rollback_allowed": true,
+    "isolated_rollback_performed": true,
+    "disposable_image_state_mutated": true,
+    "previous_updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+    "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_mutated": false,
+    "signer_authority_granted": false,
+    "private_signing_material_handled": false,
+    "blockers": []
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "rollback_drill_inside_disposable_image_only": true,
+    "isolated_rollback_performed": true,
+    "disposable_image_state_mutated": true,
+    "host_rootfs_mutated": false,
+    "active_slot_mutated": false,
+    "boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_payload_downloaded": false,
+    "remote_dispatch_enabled": false,
+    "mirror_frontend_changed": false,
+    "signer_authority": false,
+    "private_signing_material_handled": false,
+    "cryptographic_signing_performed": false
+  },
+  "completion": {
+    "rc18_030_complete": true,
+    "next_task": "RC18-031",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc18_030",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-030 must run after RC18-022 completed, while current_task is RC18-030 or during a completed rerun.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC18-030",
+        "rc18_022_status": "completed",
+        "rc18_030_status": "pending"
+      }
+    },
+    {
+      "id": "source.image_boundary.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-030 must bind the disposable installed-system image boundary and allowed write surface.",
+      "evidence": {
+        "boundary_id": "sha256:f0f504f11c940063e480d48eb09fd728d4e69042f12fee6ac0f5ce08991269c2",
+        "only_writable_drill_surface": "disposable-installed-system-image-or-vm"
+      }
+    },
+    {
+      "id": "source.preconditions.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback drill must bind RC18-022 preconditions, RC18-021 updated image state, and post-update observation.",
+      "evidence": {
+        "preconditions_ready": true,
+        "update_ready": true,
+        "post_update_observation_ready": true,
+        "rollback_precondition_id": "sha256:bcd61fba39e82a893e90f86a8f3bf5ce14c1cc4ea6b1e63e79090c8882b764f4",
+        "updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45"
+      }
+    },
+    {
+      "id": "gates.rollback_authority.bound",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback evidence must bind separate rollback approval, AgentCore rollback PlanSpec, SecurityExecution rollback allow, audit, and support/recovery references.",
+      "evidence": {
+        "separate_rollback_approval_bound": true,
+        "agentcore_rollback_planspec_bound": true,
+        "security_execution_rollback_allow_bound": true,
+        "audit_bound": true,
+        "support_recovery_bound": true
+      }
+    },
+    {
+      "id": "rollback.image_local.execute_or_deny",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback drill must execute only inside the disposable image boundary or deny before image effect.",
+      "evidence": {
+        "isolated_rollback_allowed": true,
+        "isolated_rollback_performed": true,
+        "disposable_image_state_mutated": true,
+        "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "blockers": []
+      }
+    },
+    {
+      "id": "rollback.audit.non_fabricated",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Rollback drill must produce non-fabricated local audit evidence.",
+      "evidence": {
+        "rollback_audit_digest": "80d9a7a5d52fc0cbd574a7c2483247c332899a9fec6725f8efe89dcf49d2dce8",
+        "fabricated": false,
+        "local_only": true
+      }
+    },
+    {
+      "id": "authority.no_forbidden_side_effects",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-030 must not mutate host rootfs, host slot, host boot metadata, active artifact set, production ring, support upload, recovery, remote dispatch, mirror/frontend, signer, or private material.",
+      "evidence": {
+        "image_scope": "disposable-installed-system-image-or-vm",
+        "isolated_rollback_allowed": true,
+        "image_rollback_effect_prepared": true,
+        "image_rollback_effect_executed": true,
+        "isolated_rollback_performed": true,
+        "disposable_image_state_mutated": true,
+        "previous_updated_image_state_id": "sha256:29ddd5c8c62694ee6b2019f3c8ff132d17d7b590cb899bf700b33d51d912dd45",
+        "rollback_target_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "restored_image_state_id": "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+        "rollback_drill_digest": "11d2a2b7a796a8b188df66303f2934bf8a32c7d161da78ce7d6d4ed8fbf9f837",
+        "rollback_audit_digest": "80d9a7a5d52fc0cbd574a7c2483247c332899a9fec6725f8efe89dcf49d2dce8",
+        "host_rootfs_mutated": false,
+        "host_active_slot_mutated": false,
+        "host_boot_metadata_mutated": false,
+        "active_artifact_set_mutated": false,
+        "production_ring_mutated": false,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_payload_downloaded": false,
+        "remote_dispatch_enabled": false,
+        "mirror_frontend_mutated": false,
+        "signer_authority_granted": false,
+        "private_signing_material_handled": false,
+        "cryptographic_signing_performed": false
+      }
+    },
+    {
+      "id": "fixtures.fail_closed.pass",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Missing gates and forbidden authority surfaces must deny before image rollback or host mutation.",
+      "evidence": {
+        "cases": 24,
+        "failed_cases": []
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC18-030 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
