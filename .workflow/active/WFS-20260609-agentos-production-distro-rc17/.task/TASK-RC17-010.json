@@ -1,0 +1,44 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-010",
+  "title": "bind exact repo-local install and update target package",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+    ".workflow/artifacts/rc16-release-package-artifact-set/result.json",
+    ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+    ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+    ".workflow/artifacts/rc16-local-release-channel-consumer-smoke/result.json",
+    ".workflow/artifacts/rc15-two-real-local-target-identities/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc17-exact-install-update-target-binding.ps1",
+      "role": "target binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/exact-install-update-target-package.json",
+      "role": "exact target package"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-exact-install-update-target-binding/target-binding-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-010-exact-install-update-target-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Exact install and update targets are bound to repo-local target identities, RC16 package identity, installable media, and preflight evidence.",
+      "Broad, missing, mismatched, stale, replayed, or unowned target packages fail closed.",
+      "No install, update, activation, host active slot mutation, host boot metadata mutation, remote dispatch, support upload, recovery execution, or production ring mutation occurs."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-001",
+  "title": "freeze RC17 exact install/update execution authority contract",
+  "status": "pending",
+  "wave": "wave-0",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/evidence/FINAL-AUDIT-20260609-production-distro-rc16.json",
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc16/docs/final-rc16-closeout-summary.md"
+  ],
+  "files": [
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+      "role": "authority contract"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-001-exact-install-update-execution-contract.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Contract freezes gate order from exact target through exact approval, AgentCore PlanSpec, SecurityExecution allow, rollback preconditions, install/update execute-or-deny, rollback/support, consumer smoke, and final audit.",
+      "Contract states mirror/frontend/signer/shell/TUI/model/reachability output is not authority.",
+      "Contract keeps production_ready_claim=false and forbids remote dispatch, support upload, recovery execution, host active slot mutation, host boot metadata mutation, and production ring mutation."
+    ]
+  }
+}

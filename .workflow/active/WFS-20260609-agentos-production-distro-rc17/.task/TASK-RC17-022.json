@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-022",
+  "title": "bind rollback preconditions and post install/update observation package",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+    ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+    ".workflow/artifacts/rc16-rollback-support-package/result.json",
+    ".workflow/artifacts/rc15-controlled-rollback-support-recovery/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc17-install-update-rollback-preconditions.ps1",
+      "role": "rollback precondition runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/rollback-precondition-package.json",
+      "role": "rollback precondition package"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-install-update-rollback-preconditions/post-install-update-observation-plan.json",
+      "role": "post-effect observation package"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-022-install-update-rollback-preconditions.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Rollback preconditions bind baseline, target package, exact approval, AgentCore PlanSpec, SecurityExecution decision, audit sink, post-effect observation plan, and local support/recovery evidence.",
+      "Rollback preconditions are required before any controlled local install/update effect is prepared.",
+      "Support upload, recovery execution, remote dispatch, host boot mutation, and production ring mutation remain disabled."
+    ]
+  }
+}

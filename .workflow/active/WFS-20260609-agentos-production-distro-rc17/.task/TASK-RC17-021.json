@@ -1,0 +1,42 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-021",
+  "title": "bind SecurityExecution install/update allow decision",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+    ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+    ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+    ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc17-security-execution-install-update-allow.ps1",
+      "role": "SecurityExecution allow runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/security-execution-install-update-allow-decision.json",
+      "role": "allow decision"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-security-execution-install-update-allow/security-execution-install-update-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-021-security-execution-install-update-allow.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "SecurityExecution evaluates exact install/update effect envelopes from executable AgentCore PlanSpec, exact target, exact approval, audit sink, nonce, expiry, policy version, rollback, and support references.",
+      "Allow is scoped to repo-local controlled target effects only and denies broad, mismatched, stale, replayed, unapproved, remote, support-upload, recovery, host boot, or production ring effects.",
+      "SecurityExecution allow decision alone does not execute install/update effects."
+    ]
+  }
+}

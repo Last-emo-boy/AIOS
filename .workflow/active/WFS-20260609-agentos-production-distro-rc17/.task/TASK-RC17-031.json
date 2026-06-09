@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-031",
+  "title": "run controlled local update execute-or-deny evidence",
+  "status": "pending",
+  "wave": "wave-3",
+  "read_first": [
+    ".workflow/artifacts/rc17-controlled-local-install/result.json",
+    ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+    ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json",
+    ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+    ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc17-controlled-local-update.ps1",
+      "role": "controlled update runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/update-execute-or-deny-evidence.json",
+      "role": "execute-or-deny evidence"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-controlled-local-update/update-audit-record.json",
+      "role": "audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-031-controlled-local-update.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Controlled local update either executes against the exact repo-local target or denies before effect with non-fabricated audit evidence.",
+      "Update execution is impossible unless exact target, exact approval, executable AgentCore PlanSpec, SecurityExecution allow, rollback preconditions, and install/update ordering evidence are bound.",
+      "No remote payload download, host active slot mutation, host boot metadata mutation, production ring mutation, support upload, recovery execution, or remote dispatch occurs."
+    ]
+  }
+}

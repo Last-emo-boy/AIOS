@@ -1,0 +1,184 @@
+{
+  "schema": "agentos.workflow-plan.v1",
+  "workflow_id": "WFS-20260609-agentos-production-distro-rc17",
+  "milestone": "Production Distro RC17",
+  "status": "active",
+  "objective": "Turn RC16 non-GA distributable packaging readiness into exact-gated install/update execute-or-deny readiness by binding repo-local install and update targets, exact operator approval, executable AgentCore install/update PlanSpecs, SecurityExecution allow decisions, rollback preconditions, controlled local install/update evidence, rollback/support evidence, and a final consumer smoke without relying on mirror, frontend, signer, object storage, remote dispatch, support upload, recovery execution, production ring authority, or GA claims.",
+  "scope": {
+    "included": [
+      "AIOS-body exact install/update execution planning",
+      "exact repo-local install/update target contract",
+      "exact install/update approval with audit sink nonce expiry and policy binding",
+      "AgentCore executable install/update PlanSpec binding",
+      "SecurityExecution install/update allow decision binding",
+      "rollback preconditions and post-effect observation binding",
+      "controlled local install execute-or-deny evidence",
+      "controlled local update execute-or-deny evidence",
+      "controlled rollback/support evidence after install/update",
+      "local release channel consumer smoke for exact install/update gates",
+      "final closeout audit"
+    ],
+    "excluded": [
+      "mirror frontend redesign",
+      "nginx or TLS infrastructure changes",
+      "remote signer service changes",
+      "private signing material handling",
+      "production signing ceremony",
+      "large payload object storage provisioning",
+      "remote fleet dispatch infrastructure",
+      "support upload endpoint",
+      "recovery execution service",
+      "production ring mutation",
+      "host active slot mutation",
+      "host boot metadata mutation",
+      "GA production-ready claim"
+    ]
+  },
+  "waves": [
+    {
+      "id": "wave-0",
+      "name": "RC17 planning and exact install/update contract",
+      "tasks": [
+        {
+          "id": "RC17-000",
+          "status": "completed",
+          "title": "plan Production Distro RC17 exact install/update execute-or-deny readiness",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-000-planning.json"
+        },
+        {
+          "id": "RC17-001",
+          "status": "pending",
+          "title": "freeze RC17 exact install/update execution authority contract",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md"
+        }
+      ]
+    },
+    {
+      "id": "wave-1",
+      "name": "exact target and approval substrate",
+      "tasks": [
+        {
+          "id": "RC17-010",
+          "status": "pending",
+          "title": "bind exact repo-local install and update target package",
+          "deliverable": ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json"
+        },
+        {
+          "id": "RC17-011",
+          "status": "pending",
+          "title": "bind exact install/update approval to target package audit nonce expiry and policy",
+          "deliverable": ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "name": "AgentCore SecurityExecution and rollback preconditions",
+      "tasks": [
+        {
+          "id": "RC17-020",
+          "status": "pending",
+          "title": "make AgentCore install/update PlanSpec executable from exact package evidence",
+          "deliverable": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json"
+        },
+        {
+          "id": "RC17-021",
+          "status": "pending",
+          "title": "bind SecurityExecution install/update allow decision",
+          "deliverable": ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json"
+        },
+        {
+          "id": "RC17-022",
+          "status": "pending",
+          "title": "bind rollback preconditions and post install/update observation package",
+          "deliverable": ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "name": "controlled local install update and rollback",
+      "tasks": [
+        {
+          "id": "RC17-030",
+          "status": "pending",
+          "title": "run controlled local install execute-or-deny evidence",
+          "deliverable": ".workflow/artifacts/rc17-controlled-local-install/result.json"
+        },
+        {
+          "id": "RC17-031",
+          "status": "pending",
+          "title": "run controlled local update execute-or-deny evidence",
+          "deliverable": ".workflow/artifacts/rc17-controlled-local-update/result.json"
+        },
+        {
+          "id": "RC17-032",
+          "status": "pending",
+          "title": "run controlled rollback and support evidence after install/update",
+          "deliverable": ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json"
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "name": "local consumer smoke and closeout",
+      "tasks": [
+        {
+          "id": "RC17-040",
+          "status": "pending",
+          "title": "run local release channel exact install/update consumer smoke",
+          "deliverable": ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json"
+        },
+        {
+          "id": "RC17-050",
+          "status": "pending",
+          "title": "run Production Distro RC17 final closeout audit",
+          "deliverable": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json"
+        }
+      ]
+    }
+  ],
+  "current_task": "RC17-001",
+  "previous_workflow": ".workflow/active/WFS-20260609-agentos-production-distro-rc16",
+  "acceptance_gates": {
+    "aios_body_only": true,
+    "mirror_frontend_infra_out_of_scope": true,
+    "nginx_or_tls_infra_out_of_scope": true,
+    "signer_infra_out_of_scope": true,
+    "remote_service_infra_out_of_scope": true,
+    "object_storage_provisioning_out_of_scope": true,
+    "private_signing_material_forbidden": true,
+    "support_upload_out_of_scope": true,
+    "recovery_execution_out_of_scope": true,
+    "rc16_distributable_packaging_ready_required": true,
+    "exact_install_update_target_required": true,
+    "exact_install_update_approval_required": true,
+    "agentcore_install_update_planspec_must_be_executable_before_effects": true,
+    "security_execution_install_update_allow_required_before_effects": true,
+    "rollback_preconditions_required_before_effects": true,
+    "install_effect_must_execute_or_deny_with_audit": true,
+    "update_effect_must_execute_or_deny_with_audit": true,
+    "rollback_support_binding_required": true,
+    "local_consumer_smoke_must_execute_or_deny_with_audit": true,
+    "host_active_slot_mutation_allowed": false,
+    "host_boot_metadata_mutation_allowed": false,
+    "production_ready_claim": false,
+    "frontend_authority": false,
+    "mirror_authority": false,
+    "signer_reachability_authority": false,
+    "remote_dispatch_enabled": false,
+    "production_ring_mutation_allowed": false,
+    "tui_authority": false,
+    "model_replay_authority": false
+  },
+  "confidence": {
+    "overall": 0.87,
+    "requirements_coverage": 0.94,
+    "task_quality": 0.88,
+    "dependency_correctness": 0.9,
+    "estimation_accuracy": 0.78,
+    "collision_safety": 0.88,
+    "weakest_dimension": "estimation_accuracy",
+    "basis": "RC17 follows the RC16 final audit next_milestone direction and narrows the next work to exact repo-local install/update gates before any install/update effect. The plan preserves AIOS-body-only boundaries and separates target, approval, AgentCore, SecurityExecution, rollback, execute-or-deny, consumer smoke, and final audit evidence."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-050",
+  "title": "run Production Distro RC17 final closeout audit",
+  "status": "pending",
+  "wave": "wave-4",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/plan.json",
+    ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+    ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+    ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+    ".workflow/artifacts/rc17-security-execution-install-update-allow/result.json",
+    ".workflow/artifacts/rc17-install-update-rollback-preconditions/result.json",
+    ".workflow/artifacts/rc17-controlled-local-install/result.json",
+    ".workflow/artifacts/rc17-controlled-local-update/result.json",
+    ".workflow/artifacts/rc17-controlled-install-update-rollback-support/result.json",
+    ".workflow/artifacts/rc17-local-release-channel-install-update-consumer-smoke/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/run-rc17-final-closeout-audit.ps1",
+      "role": "final audit runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-final-closeout-audit/result.json",
+      "role": "final audit result"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/FINAL-AUDIT-20260609-production-distro-rc17.json",
+      "role": "final audit evidence"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/final-rc17-closeout-summary.md",
+      "role": "closeout summary"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-050-final-closeout-audit.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Final audit covers all RC17 tasks and reports exact install/update execute-or-deny readiness truthfully.",
+      "Final audit preserves production_ready_claim=false unless every scoped local install/update gate is proved and explicitly allowed by scope.",
+      "Final audit verifies no mirror/frontend/nginx/signer/object-storage/private-key/support-upload/recovery-execution/remote-dispatch/host-boot/production-ring authority was broadened."
+    ]
+  }
+}

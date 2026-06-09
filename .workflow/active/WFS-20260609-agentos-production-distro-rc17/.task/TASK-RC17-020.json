@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-020",
+  "title": "make AgentCore install/update PlanSpec executable from exact package evidence",
+  "status": "pending",
+  "wave": "wave-2",
+  "read_first": [
+    ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+    ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+    ".workflow/artifacts/rc16-installer-updater-preflight-package/result.json",
+    ".workflow/artifacts/rc16-install-update-planspec-binding/result.json",
+    ".workflow/artifacts/rc16-rollback-support-package/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc17-agentcore-install-update-executable-planspec.ps1",
+      "role": "AgentCore PlanSpec runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/install-update-planspec.json",
+      "role": "executable PlanSpec package"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-agentcore-install-update-executable-planspec/install-update-planspec-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-020-agentcore-install-update-executable-planspec.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "AgentCore install/update PlanSpec is executable only when RC16 package/preflight evidence, exact target, exact approval, audit sink, nonce, expiry, policy version, rollback baseline, and support/recovery references are bound.",
+      "Missing, broad, stale, mismatched, or unapproved PlanSpec packages fail closed.",
+      "PlanSpec materialization does not prepare or execute install/update effects."
+    ]
+  }
+}

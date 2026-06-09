@@ -1,0 +1,43 @@
+{
+  "schema": "agentos.task.v1",
+  "id": "RC17-011",
+  "title": "bind exact install/update approval to target package audit nonce expiry and policy",
+  "status": "pending",
+  "wave": "wave-1",
+  "read_first": [
+    ".workflow/active/WFS-20260609-agentos-production-distro-rc17/docs/rc17-exact-install-update-execution-contract.md",
+    ".workflow/artifacts/rc17-exact-install-update-target-binding/result.json",
+    ".workflow/artifacts/rc15-audit-nonce-policy-binding/result.json",
+    ".workflow/artifacts/rc15-exact-approval-controlled-execution/result.json",
+    ".workflow/artifacts/rc16-rollback-support-package/result.json"
+  ],
+  "files": [
+    {
+      "path": "scripts/project-rc17-exact-install-update-approval-binding.ps1",
+      "role": "approval binding runner"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/result.json",
+      "role": "task result"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/exact-install-update-approval-packet.json",
+      "role": "exact approval packet"
+    },
+    {
+      "path": ".workflow/artifacts/rc17-exact-install-update-approval-binding/exact-approval-fail-closed-matrix.json",
+      "role": "fail-closed matrix"
+    },
+    {
+      "path": ".workflow/active/WFS-20260609-agentos-production-distro-rc17/evidence/RC17-011-exact-install-update-approval-binding.json",
+      "role": "task evidence"
+    }
+  ],
+  "convergence": {
+    "criteria": [
+      "Exact approval binds actor, release object, target package, install/update operation type, AgentCore package reference, SecurityExecution envelope reference, audit sink, nonce, expiry, policy version, rollback baseline, and support/recovery references.",
+      "Approval does not imply execution and stale, broad, unsigned, mismatched, missing, replayed, or expired approvals fail closed.",
+      "No install, update, activation, rollback, support upload, recovery execution, remote dispatch, host boot mutation, or production ring mutation occurs."
+    ]
+  }
+}
