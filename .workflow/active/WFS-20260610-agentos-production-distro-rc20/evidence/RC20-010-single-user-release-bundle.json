@@ -1,0 +1,297 @@
+{
+  "schema": "agentos.rc20-single-user-release-bundle-evidence.v1",
+  "generated_at": "2026-06-10T13:45:00+08:00",
+  "task": "RC20-010",
+  "status": "completed",
+  "production_ready_claim": false,
+  "workflow": ".workflow/active/WFS-20260610-agentos-production-distro-rc20",
+  "script": {
+    "path": "scripts/project-rc20-single-user-release-bundle.ps1",
+    "sha256": "aa94fa85e16b0a1aa2976f3e21b46c7d327faa739fff950f5617442f9e41dfca"
+  },
+  "result": {
+    "path": ".workflow/artifacts/rc20-single-user-release-bundle/result.json",
+    "status": "passed",
+    "sha256": "3ddf6f2f6bf7f2a72754b95ee6617f44275990eac1547380dc49d24ac2c6e37b"
+  },
+  "outputs": {
+    "release_bundle_manifest": {
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-manifest.json",
+      "sha256": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d",
+      "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b"
+    },
+    "release_bundle_input_map": {
+      "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-input-map.json",
+      "sha256": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64",
+      "identity_material_hash": "615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b"
+    }
+  },
+  "bundle_surface": {
+    "state": "single-user-release-bundle-bound-non-ga",
+    "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+    "installable_image_artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+    "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+    "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb",
+    "first_user_target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+    "offline_local_channel_package_id": "sha256:643abec3adfbd26d336c345d5398e41dd784adcf00a937c01feec6f47a7ef4fa",
+    "support_bundle_id": "rc19-first-user-support-b1c927261884cb5a",
+    "local_consumer_ready_carried": true,
+    "stable_channel_claim_allowed": false,
+    "install_allowed_by_bundle": false,
+    "update_allowed_by_bundle": false,
+    "rollback_allowed_by_bundle": false
+  },
+  "invariants": {
+    "aios_body_only": true,
+    "production_ready_claim": false,
+    "consumer_ready_claim": false,
+    "release_bundle_identity_bound": true,
+    "payload_uploaded": false,
+    "external_payload_published": false,
+    "object_storage_provisioned": false,
+    "remote_payload_downloaded": false,
+    "install_performed": false,
+    "update_performed": false,
+    "rollback_execution_performed": false,
+    "support_upload_performed": false,
+    "recovery_execution_performed": false,
+    "remote_dispatch_enabled": false,
+    "host_rootfs_mutated": false,
+    "host_active_slot_mutated": false,
+    "host_boot_metadata_mutated": false,
+    "active_artifact_set_mutated": false,
+    "production_ring_mutated": false,
+    "mirror_authority": false,
+    "frontend_authority": false,
+    "signer_authority": false,
+    "object_storage_authority": false,
+    "endpoint_reachability_authority": false,
+    "model_replay_authority": false,
+    "normal_shell_authority": false,
+    "tui_authority": false
+  },
+  "completion": {
+    "rc20_010_complete": true,
+    "next_task": "RC20-011",
+    "commit_required": true
+  },
+  "checks": [
+    {
+      "id": "plan.current_task.rc20_010",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-010 must run after RC20-001 completed, while current_task is RC20-010 or during an idempotent rerun after pointer advancement.",
+      "evidence": {
+        "status": "active",
+        "current_task": "RC20-010",
+        "rc20_001_status": "completed",
+        "rc20_010_status": "pending"
+      }
+    },
+    {
+      "id": "contract.bundle_gate.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-010 must consume the RC20 single-user distribution authority contract.",
+      "evidence": {
+        "id": "rc20-authority-contract",
+        "role": "rc20 contract",
+        "path": ".workflow/active/WFS-20260610-agentos-production-distro-rc20/docs/rc20-single-user-distribution-authority-contract.md",
+        "sha256": "66a3397844264e59ba41a54b5d529c6e9bc2b1ebdb95d8f8dd5042273a16a2db",
+        "size_bytes": 3825,
+        "present": true,
+        "required": true,
+        "schema": null,
+        "status": null,
+        "task": null,
+        "production_ready_claim": null,
+        "consumer_ready_claim": null
+      }
+    },
+    {
+      "id": "sources.required.present",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC20-010 required source inputs must be present and hashable.",
+      "evidence": []
+    },
+    {
+      "id": "sources.passed_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "All RC19 source task results must be passed or bound, and no source may claim production readiness.",
+      "evidence": {
+        "source_statuses_passed": true,
+        "all_non_ga": true
+      }
+    },
+    {
+      "id": "rc19.final.ready",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC19 final audit must prove installable image local consumer readiness without GA claim.",
+      "evidence": {
+        "status": "passed",
+        "local_consumer_ready": true,
+        "consumer_ready_claim": true,
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "identity.chain.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 release bundle identity must keep image, installer, boot target, and consumer identities coherent.",
+      "evidence": {
+        "artifact_id": "sha256:598c8088b94e3063888feb09f045e8e034d4dbd6af05fe2ae0b1c31c0773c5f2",
+        "installer_media_id": "sha256:4a4e3446ab1cfa28071ee772c7fc8c73b1c2cefefb17b0f91c2a2a5d7f1c51e2",
+        "boot_target_descriptor_id": "sha256:26c35a601c42fdd4877775c1961e4918f98d82c785868619afe83f561f84dcbb"
+      }
+    },
+    {
+      "id": "target.chain.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 release bundle must bind a coherent first-user target state across install, post-install, and consumer evidence.",
+      "evidence": {
+        "target_state_id": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "install_target": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "post_install_target": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242",
+        "consumer_target": "sha256:93310e5fc3e007422fe11a4a4dc7e34c5384b472ecd91d6511381f2bd53f2242"
+      }
+    },
+    {
+      "id": "readiness.coherent",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20 release bundle must carry RC19 local consumer readiness while keeping production_ready_claim=false.",
+      "evidence": {
+        "installable_image_local_consumer_ready": true,
+        "first_user_install_readiness": "ready",
+        "post_install_update_readiness": "ready",
+        "post_install_rollback_readiness": "ready",
+        "support_recovery_readiness": "ready",
+        "production_ready_claim": false
+      }
+    },
+    {
+      "id": "support_recovery.local_only",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Support/recovery inputs must be local-only, redacted, and non-executing.",
+      "evidence": {
+        "support_bundle_local_only": true,
+        "support_bundle_redacted": true,
+        "support_upload_performed": false,
+        "recovery_execution_performed": false,
+        "remote_dispatch_enabled": false
+      }
+    },
+    {
+      "id": "bundle.identity.deterministic",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release bundle identity must be deterministic from source hashes and stable identity material.",
+      "evidence": {
+        "release_bundle_id": "sha256:615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "identity_material_hash": "615140bff91f02c98e5fe4dac8a73ca405de2d98614ff5c129ebb77185e2ff3b",
+        "generated_at_excluded": true
+      }
+    },
+    {
+      "id": "bundle.bound_non_ga",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "Release bundle manifest must be bound as non-GA and require later local channel promotion before stable channel claim.",
+      "evidence": {
+        "status": "single-user-release-bundle-bound-non-ga",
+        "production_ready_claim": false,
+        "consumer_ready_claim": false,
+        "next_required_gates": {
+          "rc20_011_local_channel_promotion": "required-before-stable-channel-claim",
+          "rc20_012_fail_closed": "required-before-bundle-trust",
+          "rc20_020_installer_selection": "required-before-single-user-install-acceptance",
+          "rc20_021_single_user_install_acceptance": "execute-or-deny-inside-disposable-target",
+          "rc20_030_update_drill": "execute-or-deny-inside-disposable-installed-system",
+          "rc20_031_rollback_drill": "execute-or-deny-inside-disposable-installed-system",
+          "rc20_050_final_audit": "required-before-rc20-closeout"
+        }
+      }
+    },
+    {
+      "id": "authority.no_broadening",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-010 must not broaden host, production, remote, signer, mirror, object storage, support upload, recovery, shell, TUI, endpoint, or model authority.",
+      "evidence": {
+        "authority": {
+          "aios_body_only": true,
+          "production_ready_claim": false,
+          "install_authority": false,
+          "update_authority": false,
+          "rollback_execution_authority": false,
+          "support_upload_authority": false,
+          "recovery_execution_authority": false,
+          "remote_dispatch_authority": false,
+          "host_rootfs_mutation_authority": false,
+          "host_active_slot_mutation_authority": false,
+          "host_boot_metadata_mutation_authority": false,
+          "active_artifact_set_mutation_authority": false,
+          "production_ring_mutation_authority": false,
+          "mirror_authority": false,
+          "frontend_authority": false,
+          "signer_authority": false,
+          "object_storage_authority": false,
+          "normal_shell_authority": false,
+          "tui_authority": false,
+          "endpoint_reachability_authority": false,
+          "model_replay_authority": false
+        },
+        "side_effects": {
+          "release_bundle_manifest_written": true,
+          "payload_uploaded": false,
+          "external_payload_published": false,
+          "object_storage_provisioned": false,
+          "remote_payload_downloaded": false,
+          "install_performed": false,
+          "update_performed": false,
+          "rollback_execution_performed": false,
+          "support_upload_performed": false,
+          "recovery_execution_performed": false,
+          "remote_dispatch_enabled": false,
+          "host_rootfs_mutated": false,
+          "host_active_slot_mutated": false,
+          "host_boot_metadata_mutated": false,
+          "active_artifact_set_mutated": false,
+          "production_ring_mutated": false,
+          "mirror_frontend_changed": false,
+          "signer_authority_granted": false,
+          "cryptographic_signing_performed": false
+        }
+      }
+    },
+    {
+      "id": "outputs.written",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-010 must write release bundle manifest and input map outputs.",
+      "evidence": {
+        "input_map": {
+          "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-input-map.json",
+          "sha256": "e92408716c21357bb2c636fccb654aca525da0167f83174385774f7b6d2aee64"
+        },
+        "manifest": {
+          "path": ".workflow/artifacts/rc20-single-user-release-bundle/release-bundle-manifest.json",
+          "sha256": "d491897cceb5cb964e43961eb5b4671a894519785e2a744ac13e4ef3acf7488d"
+        }
+      }
+    },
+    {
+      "id": "outputs.secret_safe",
+      "status": "passed",
+      "severity": "blocking",
+      "message": "RC20-010 outputs must not contain key blocks, private key paths, auth tokens, public identity markers, or signing key file names.",
+      "evidence": null
+    }
+  ]
+}
