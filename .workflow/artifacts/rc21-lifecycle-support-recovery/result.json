@@ -1,0 +1,1040 @@
+{
+    "schema":  "agentos.rc21-lifecycle-support-recovery-result.v1",
+    "generated_at":  "2026-06-10T20:45:00+08:00",
+    "task":  "RC21-032",
+    "status":  "passed",
+    "production_ready_claim":  false,
+    "consumer_ready_claim":  false,
+    "support_bundle_id":  "rc21-lifecycle-support-70c0cee39f99090e",
+    "support_bundle_digest":  "70c0cee39f99090e0f1a6d60361437b87bcb8cf75445c584983bff690e4a12cd",
+    "recovery_reference_digest":  "1ebb30b7b5c10c0aaad2a26e8a3647a7b6bc2643bde5a1fe9f7c5d43540cb086",
+    "restored_state_id":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+    "lifecycle_support_surface":  {
+                                      "state":  "lifecycle-support-recovery-projection-bound",
+                                      "dry_run_acceptance_bound":  true,
+                                      "explain_resume_audit_bound":  true,
+                                      "repair_reinstall_bound":  true,
+                                      "downgrade_rollback_bound":  true,
+                                      "rc20_lifecycle_support_bound":  true,
+                                      "restored_state_chain_bound":  true,
+                                      "support_bundle_local_only":  true,
+                                      "support_bundle_redacted":  true,
+                                      "support_upload_performed":  false,
+                                      "recovery_execution_allowed":  false,
+                                      "recovery_execution_performed":  false,
+                                      "remote_dispatch_enabled":  false,
+                                      "host_rootfs_mutated":  false,
+                                      "host_active_slot_mutated":  false,
+                                      "host_boot_metadata_mutated":  false,
+                                      "active_artifact_set_mutated":  false,
+                                      "production_ring_mutated":  false,
+                                      "signer_authority_granted":  false,
+                                      "object_storage_provisioned":  false,
+                                      "private_signing_material_handled":  false,
+                                      "blockers":  [
+
+                                                   ]
+                                  },
+    "outputs":  {
+                    "lifecycle_support_bundle":  {
+                                                     "path":  ".workflow/artifacts/rc21-lifecycle-support-recovery/lifecycle-support-bundle.json",
+                                                     "sha256":  "8c7286355eb3d2a8321120f204738665eef19fa24d83b9d1ffeeee2e77f8087c",
+                                                     "support_bundle_id":  "rc21-lifecycle-support-70c0cee39f99090e",
+                                                     "support_bundle_digest":  "70c0cee39f99090e0f1a6d60361437b87bcb8cf75445c584983bff690e4a12cd",
+                                                     "local_only":  true,
+                                                     "redacted":  true,
+                                                     "uploaded":  false
+                                                 },
+                    "recovery_reference_index":  {
+                                                     "path":  ".workflow/artifacts/rc21-lifecycle-support-recovery/recovery-reference-index.json",
+                                                     "sha256":  "1176b7c8f820734fcc22cd39cbcdf1315f42be9e7b9e6a4c95e7370c619fd6e4",
+                                                     "recovery_reference_digest":  "1ebb30b7b5c10c0aaad2a26e8a3647a7b6bc2643bde5a1fe9f7c5d43540cb086",
+                                                     "projection_only":  true,
+                                                     "recovery_execution_performed":  false
+                                                 }
+                },
+    "source":  {
+                   "rc21_plan":  {
+                                     "role":  "rc21 workflow plan",
+                                     "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/plan.json",
+                                     "sha256":  "d2d0c81867d6a6e656e6f5afa521d8a75401cf92519408945fbc34f1ffb74361",
+                                     "size_bytes":  8618,
+                                     "present":  true,
+                                     "schema":  "agentos.workflow-plan.v1",
+                                     "status":  "active",
+                                     "task":  null,
+                                     "production_ready_claim":  null,
+                                     "consumer_ready_claim":  null
+                                 },
+                   "rc21_authority_contract":  {
+                                                   "role":  "rc21 authority contract",
+                                                   "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                                   "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf",
+                                                   "size_bytes":  8744,
+                                                   "present":  true
+                                               },
+                   "rc21_repair_reinstall_result":  {
+                                                        "role":  "rc21 repair/reinstall result",
+                                                        "path":  ".workflow/artifacts/rc21-repair-reinstall-drill/result.json",
+                                                        "sha256":  "0ae77aa9517464ef12e448dac2844d552ce0f93b015539bcb38602812515bfd3",
+                                                        "size_bytes":  27032,
+                                                        "present":  true,
+                                                        "schema":  "agentos.rc21-repair-reinstall-drill-result.v1",
+                                                        "status":  "passed",
+                                                        "task":  "RC21-030",
+                                                        "production_ready_claim":  false,
+                                                        "consumer_ready_claim":  false
+                                                    },
+                   "rc21_repair_reinstall_evidence":  {
+                                                          "role":  "rc21 repair/reinstall evidence",
+                                                          "path":  ".workflow/artifacts/rc21-repair-reinstall-drill/repair-reinstall-evidence.json",
+                                                          "sha256":  "ca91a9e2d4717fa6c1bd561c4c8e02bcfebb4eaab41a771b969a6b1d388b2bd8",
+                                                          "size_bytes":  16614,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-repair-reinstall-evidence.v1",
+                                                          "status":  "repair-reinstall-drill-executed-inside-disposable-installed-system",
+                                                          "task":  "RC21-030",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc21_downgrade_rollback_result":  {
+                                                          "role":  "rc21 downgrade/rollback result",
+                                                          "path":  ".workflow/artifacts/rc21-downgrade-rollback-drill/result.json",
+                                                          "sha256":  "5601a097d4859b4da4be34773a64744267fcb7ea06216a3314c9ee5f6cfa8241",
+                                                          "size_bytes":  25931,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-downgrade-rollback-drill-result.v1",
+                                                          "status":  "passed",
+                                                          "task":  "RC21-031",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc21_downgrade_rollback_evidence":  {
+                                                            "role":  "rc21 downgrade/rollback evidence",
+                                                            "path":  ".workflow/artifacts/rc21-downgrade-rollback-drill/downgrade-rollback-evidence.json",
+                                                            "sha256":  "54c522c1b5e51eb8d4803b4ead7ca2e98e91f4ac3084c83e0d99b73c33a24e6c",
+                                                            "size_bytes":  16225,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-downgrade-rollback-evidence.v1",
+                                                            "status":  "downgrade-rollback-drill-executed-inside-disposable-installed-system",
+                                                            "task":  "RC21-031",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_dry_run_acceptance_result":  {
+                                                          "role":  "rc21 dry-run acceptance result",
+                                                          "path":  ".workflow/artifacts/rc21-transactional-dry-run-acceptance/result.json",
+                                                          "sha256":  "4e66dd67a3bbfb3484629ef3c82e6f96c5ba66046e3db4b3851b8b1d10931c96",
+                                                          "size_bytes":  22451,
+                                                          "present":  true,
+                                                          "schema":  "agentos.rc21-transactional-dry-run-acceptance-result.v1",
+                                                          "status":  "passed",
+                                                          "task":  "RC21-021",
+                                                          "production_ready_claim":  false,
+                                                          "consumer_ready_claim":  false
+                                                      },
+                   "rc21_dry_run_acceptance_evidence":  {
+                                                            "role":  "rc21 dry-run acceptance evidence",
+                                                            "path":  ".workflow/artifacts/rc21-transactional-dry-run-acceptance/dry-run-acceptance-evidence.json",
+                                                            "sha256":  "99a6c78592cdafa640d0de76d1710f84833e8dabae2ce2e0cf66ee44cb723fe5",
+                                                            "size_bytes":  22669,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-transactional-dry-run-acceptance-evidence.v1",
+                                                            "status":  "transactional-dry-run-accepted-no-effect",
+                                                            "task":  "RC21-021",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_dry_run_audit_record":  {
+                                                     "role":  "rc21 dry-run audit record",
+                                                     "path":  ".workflow/artifacts/rc21-transactional-dry-run-acceptance/dry-run-audit-record.json",
+                                                     "sha256":  "29d5b4bd9f1e87c88908827374e6626d9a1938d7ee014e3ade5130a09a6b93c5",
+                                                     "size_bytes":  9762,
+                                                     "present":  true,
+                                                     "schema":  "agentos.rc21-dry-run-audit-record.v1",
+                                                     "status":  "dry-run-audit-record-local-only",
+                                                     "task":  "RC21-021",
+                                                     "production_ready_claim":  false,
+                                                     "consumer_ready_claim":  false
+                                                 },
+                   "rc21_explain_resume_audit_result":  {
+                                                            "role":  "rc21 explain/resume/audit result",
+                                                            "path":  ".workflow/artifacts/rc21-explain-resume-audit-package/result.json",
+                                                            "sha256":  "0b5203ecc8d6e99a63d3c719b692a905001d54cd8a4aaf5dd0c42084509bf76d",
+                                                            "size_bytes":  21513,
+                                                            "present":  true,
+                                                            "schema":  "agentos.rc21-explain-resume-audit-package-result.v1",
+                                                            "status":  "passed",
+                                                            "task":  "RC21-022",
+                                                            "production_ready_claim":  false,
+                                                            "consumer_ready_claim":  false
+                                                        },
+                   "rc21_explain_resume_audit_package":  {
+                                                             "role":  "rc21 explain/resume/audit package",
+                                                             "path":  ".workflow/artifacts/rc21-explain-resume-audit-package/explain-resume-audit-package.json",
+                                                             "sha256":  "2effc6d3c3b6b08536c9640655c197e340b233da19a168d911e172b0274f97ec",
+                                                             "size_bytes":  17608,
+                                                             "present":  true,
+                                                             "schema":  "agentos.rc21-explain-resume-audit-package.v1",
+                                                             "status":  "explain-resume-audit-package-bound-projection-only",
+                                                             "task":  "RC21-022",
+                                                             "production_ready_claim":  false,
+                                                             "consumer_ready_claim":  false
+                                                         },
+                   "rc20_lifecycle_support_result":  {
+                                                         "role":  "rc20 lifecycle support result",
+                                                         "path":  ".workflow/artifacts/rc20-lifecycle-support-recovery/result.json",
+                                                         "sha256":  "6e475b3ef5a1da47c464ed3f86fd018684836e176c4857cb79eef5ed91a67733",
+                                                         "size_bytes":  59069,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc20-lifecycle-support-recovery-result.v1",
+                                                         "status":  "passed",
+                                                         "task":  "RC20-032",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc20_lifecycle_support_bundle":  {
+                                                         "role":  "rc20 lifecycle support bundle",
+                                                         "path":  ".workflow/artifacts/rc20-lifecycle-support-recovery/lifecycle-support-bundle.json",
+                                                         "sha256":  "1c974de1e8aeaafb123394a66461840a2af128524ca439cd691c56d2bd007213",
+                                                         "size_bytes":  10988,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc20-lifecycle-support-bundle.v1",
+                                                         "status":  "lifecycle-support-bundle-local-redacted",
+                                                         "task":  "RC20-032",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     },
+                   "rc20_recovery_reference_index":  {
+                                                         "role":  "rc20 recovery reference index",
+                                                         "path":  ".workflow/artifacts/rc20-lifecycle-support-recovery/recovery-reference-index.json",
+                                                         "sha256":  "e1bb907dbca54e10a5047abc3928d3eadd6399abacf7631bdd2805ead4a06350",
+                                                         "size_bytes":  8519,
+                                                         "present":  true,
+                                                         "schema":  "agentos.rc20-lifecycle-recovery-reference-index.v1",
+                                                         "status":  "projection-only-no-recovery-execution",
+                                                         "task":  "RC20-032",
+                                                         "production_ready_claim":  false,
+                                                         "consumer_ready_claim":  false
+                                                     }
+               },
+    "checks":  [
+                   {
+                       "id":  "plan.current_task.rc21_032",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-032 must run after RC21-031 completed, with current_task set to RC21-032 or during an idempotent rerun.",
+                       "evidence":  {
+                                        "status":  "active",
+                                        "current_task":  "RC21-040",
+                                        "rc21_031_status":  "completed",
+                                        "rc21_032_status":  "completed"
+                                    }
+                   },
+                   {
+                       "id":  "contract.support_recovery.present",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-032 must consume the local redacted support and projection-only recovery contract language.",
+                       "evidence":  {
+                                        "path":  ".workflow/active/WFS-20260610-agentos-production-distro-rc21/docs/rc21-local-transactional-lifecycle-authority-contract.md",
+                                        "sha256":  "6e51944f3953c3c0063f04b95a636a62209cca96c67fc9413119b57d974414cf"
+                                    }
+                   },
+                   {
+                       "id":  "source.dry_run_explain.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Support bundle must bind RC21 dry-run acceptance and explain/resume/audit evidence.",
+                       "evidence":  {
+                                        "dry_run_status":  "passed",
+                                        "explain_status":  "passed",
+                                        "dry_run_effect_preparation":  false,
+                                        "resume_projection_count":  3
+                                    }
+                   },
+                   {
+                       "id":  "source.lifecycle_drills.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Support bundle must bind completed repair/reinstall and downgrade/rollback drill evidence.",
+                       "evidence":  {
+                                        "repair_status":  "passed",
+                                        "downgrade_status":  "passed",
+                                        "repair_drill_id":  "sha256:5441ff106eaf5bd7d854def76c35bb84f01e028ba9c0ac229945264ef66a18b4",
+                                        "downgrade_drill_id":  "sha256:119c3168a6e0859a5ab4e688cd2c5e4865289c2dfc4e9824689d840530683656"
+                                    }
+                   },
+                   {
+                       "id":  "source.rc20_support.bound",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Support bundle must bind RC20 local-only lifecycle support/recovery evidence without upload or recovery execution.",
+                       "evidence":  {
+                                        "support_bundle_id":  "rc20-lifecycle-support-6f370c1ba46e584a",
+                                        "support_bundle_local_only":  true,
+                                        "support_bundle_redacted":  true,
+                                        "support_upload_performed":  false,
+                                        "recovery_execution_performed":  false
+                                    }
+                   },
+                   {
+                       "id":  "source.restored_state.chain",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Repair/reinstall, downgrade/rollback, and RC20 lifecycle support restored states must match.",
+                       "evidence":  {
+                                        "repair_restored_state":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "downgrade_restored_state":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5",
+                                        "rc20_restored_state":  "sha256:3c407255ba8f5c2b26979bc2ceb4fa2d34eda72b5efbd2a244f21e6e13f098a5"
+                                    }
+                   },
+                   {
+                       "id":  "support.bundle.local_redacted",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Lifecycle support bundle must be local-only, redacted, and hash-bound to RC21 repair, downgrade, dry-run, explain/resume, and RC20 support evidence.",
+                       "evidence":  {
+                                        "support_bundle_id":  "rc21-lifecycle-support-70c0cee39f99090e",
+                                        "local_only":  true,
+                                        "redacted":  true,
+                                        "uploaded":  false
+                                    }
+                   },
+                   {
+                       "id":  "recovery.index.projection_only",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Recovery reference index must be projection-only and must not execute recovery, upload support, or dispatch remotely.",
+                       "evidence":  {
+                                        "recovery_reference_digest":  "1ebb30b7b5c10c0aaad2a26e8a3647a7b6bc2643bde5a1fe9f7c5d43540cb086",
+                                        "recovery_execution_allowed":  false,
+                                        "recovery_execution_performed":  false,
+                                        "support_bundle_upload_allowed":  false,
+                                        "remote_dispatch_enabled":  false
+                                    }
+                   },
+                   {
+                       "id":  "authority.no_forbidden_side_effects",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-032 must not upload support, execute recovery, remote dispatch, mutate host/production state, grant signer/object storage authority, handle private material, or sign.",
+                       "evidence":  {
+                                        "lifecycle_support_bundle_created":  true,
+                                        "recovery_reference_index_created":  true,
+                                        "local_only":  true,
+                                        "redacted":  true,
+                                        "projection_only":  true,
+                                        "support_upload_performed":  false,
+                                        "recovery_execution_allowed":  false,
+                                        "recovery_execution_performed":  false,
+                                        "remote_dispatch_enabled":  false,
+                                        "host_rootfs_mutated":  false,
+                                        "host_active_slot_mutated":  false,
+                                        "host_boot_metadata_mutated":  false,
+                                        "host_boot_state_authority":  false,
+                                        "active_artifact_set_mutated":  false,
+                                        "production_ring_mutated":  false,
+                                        "mirror_frontend_mutated":  false,
+                                        "nginx_or_tls_changed":  false,
+                                        "signer_authority_granted":  false,
+                                        "object_storage_provisioned":  false,
+                                        "private_signing_material_handled":  false,
+                                        "cryptographic_signing_performed":  false,
+                                        "endpoint_reachability_authority":  false,
+                                        "shell_output_authority":  false,
+                                        "tui_output_authority":  false,
+                                        "model_replay_authority":  false,
+                                        "production_ready_claim":  false,
+                                        "consumer_ready_claim":  false
+                                    }
+                   },
+                   {
+                       "id":  "fixtures.fail_closed.pass",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "Missing lifecycle sources and forbidden authority surfaces must fail closed before support upload, recovery execution, host mutation, or production mutation.",
+                       "evidence":  {
+                                        "cases":  22,
+                                        "failed_cases":  [
+
+                                                         ]
+                                    }
+                   },
+                   {
+                       "id":  "outputs.secret_safe",
+                       "status":  "passed",
+                       "severity":  "blocking",
+                       "message":  "RC21-032 outputs must not contain private material, tokens, raw sensitive assignments, support upload payloads, or recovery execution authority.",
+                       "evidence":  null
+                   }
+               ],
+    "fail_closed_cases":  [
+                              {
+                                  "id":  "missing-dry-run-acceptance",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "rc21-dry-run-acceptance-not-ready"
+                                               ],
+                                  "reason":  "Lifecycle support requires RC21 dry-run acceptance evidence.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "missing-explain-resume-audit",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "rc21-explain-resume-audit-not-ready"
+                                               ],
+                                  "reason":  "Lifecycle support requires explain/resume/audit evidence.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "missing-repair-reinstall",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "rc21-repair-reinstall-drill-not-ready"
+                                               ],
+                                  "reason":  "Lifecycle support requires RC21 repair/reinstall drill evidence.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "missing-downgrade-rollback",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "rc21-downgrade-rollback-drill-not-ready"
+                                               ],
+                                  "reason":  "Lifecycle support requires RC21 downgrade/rollback drill evidence.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "missing-rc20-support",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "rc20-lifecycle-support-recovery-not-ready"
+                                               ],
+                                  "reason":  "Lifecycle support must bind RC20 lifecycle support/recovery evidence.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "restored-state-mismatch",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "rc21-lifecycle-restored-state-chain-mismatch"
+                                               ],
+                                  "reason":  "Lifecycle support denies incoherent restored state chain.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "support-upload-attempt",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "support-upload-denied"
+                                               ],
+                                  "reason":  "Support upload is outside RC21 scope.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "recovery-execution-attempt",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "recovery-execution-denied"
+                                               ],
+                                  "reason":  "Recovery execution is outside RC21 scope.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "remote-dispatch-attempt",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "remote-dispatch-denied"
+                                               ],
+                                  "reason":  "Remote dispatch is outside RC21 scope.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "host-rootfs-mutation",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "host-rootfs-mutation-denied"
+                                               ],
+                                  "reason":  "Host rootfs mutation is forbidden.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "host-slot-mutation",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "host-active-slot-mutation-denied"
+                                               ],
+                                  "reason":  "Host active slot mutation is forbidden.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "host-boot-metadata-mutation",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "host-boot-metadata-mutation-denied"
+                                               ],
+                                  "reason":  "Host boot metadata mutation is forbidden.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "active-artifact-set-mutation",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "active-artifact-set-mutation-denied"
+                                               ],
+                                  "reason":  "Active artifact set mutation is forbidden.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "production-ring-mutation",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "production-ring-mutation-denied"
+                                               ],
+                                  "reason":  "Production ring mutation is forbidden.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "signer-authority",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "signer-authority-denied"
+                                               ],
+                                  "reason":  "Signer authority is outside RC21 scope.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "object-storage-authority",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "object-storage-authority-denied"
+                                               ],
+                                  "reason":  "Object storage authority is outside RC21 scope.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "private-material-attempt",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "private-signing-material-denied"
+                                               ],
+                                  "reason":  "Private signing material is forbidden.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "endpoint-authority",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "endpoint-reachability-authority-denied"
+                                               ],
+                                  "reason":  "Endpoint reachability is not lifecycle support authority.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "shell-authority",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "shell-output-authority-denied"
+                                               ],
+                                  "reason":  "Shell output is not lifecycle support authority.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "tui-authority",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "tui-output-authority-denied"
+                                               ],
+                                  "reason":  "TUI output is not lifecycle support authority.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "model-replay-authority",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "model-replay-authority-denied"
+                                               ],
+                                  "reason":  "Model replay is not lifecycle support authority.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              },
+                              {
+                                  "id":  "ga-claim",
+                                  "status":  "passed",
+                                  "expected_denied":  true,
+                                  "observed_denied":  true,
+                                  "blockers":  [
+                                                   "ga-claim-denied"
+                                               ],
+                                  "reason":  "RC21 lifecycle support cannot claim GA production readiness.",
+                                  "denied_before_support_upload":  true,
+                                  "denied_before_recovery_execution":  true,
+                                  "denied_before_host_mutation":  true,
+                                  "side_effects":  {
+                                                       "support_bundle_created":  false,
+                                                       "recovery_reference_index_created":  false,
+                                                       "support_upload_performed":  false,
+                                                       "recovery_execution_performed":  false,
+                                                       "remote_dispatch_enabled":  false,
+                                                       "host_rootfs_mutated":  false,
+                                                       "host_active_slot_mutated":  false,
+                                                       "host_boot_metadata_mutated":  false,
+                                                       "active_artifact_set_mutated":  false,
+                                                       "production_ring_mutated":  false,
+                                                       "signer_authority_granted":  false,
+                                                       "object_storage_provisioned":  false,
+                                                       "private_signing_material_handled":  false
+                                                   }
+                              }
+                          ],
+    "invariants":  {
+                       "aios_body_only":  true,
+                       "production_ready_claim":  false,
+                       "consumer_ready_claim":  false,
+                       "lifecycle_support_projection_only":  true,
+                       "support_bundle_local_only":  true,
+                       "support_bundle_redacted":  true,
+                       "support_upload_performed":  false,
+                       "recovery_execution_allowed":  false,
+                       "recovery_execution_performed":  false,
+                       "remote_dispatch_enabled":  false,
+                       "host_rootfs_mutated":  false,
+                       "host_active_slot_mutated":  false,
+                       "host_boot_metadata_mutated":  false,
+                       "active_artifact_set_mutated":  false,
+                       "production_ring_mutated":  false,
+                       "signer_authority":  false,
+                       "object_storage_authority":  false,
+                       "private_signing_material_handled":  false,
+                       "cryptographic_signing_performed":  false,
+                       "endpoint_reachability_authority":  false,
+                       "shell_output_authority":  false,
+                       "tui_output_authority":  false,
+                       "model_replay_authority":  false
+                   },
+    "summary":  {
+                    "checks":  11,
+                    "failed_checks":  0,
+                    "cases":  22,
+                    "failed_cases":  0,
+                    "rc21_032_complete":  true,
+                    "support_bundle_id":  "rc21-lifecycle-support-70c0cee39f99090e",
+                    "recovery_reference_digest":  "1ebb30b7b5c10c0aaad2a26e8a3647a7b6bc2643bde5a1fe9f7c5d43540cb086",
+                    "restored_state_chain_bound":  true,
+                    "support_bundle_local_only":  true,
+                    "support_bundle_redacted":  true,
+                    "support_upload_performed":  false,
+                    "recovery_execution_allowed":  false,
+                    "recovery_execution_performed":  false,
+                    "remote_dispatch_enabled":  false,
+                    "host_rootfs_mutated":  false,
+                    "host_active_slot_mutated":  false,
+                    "host_boot_metadata_mutated":  false,
+                    "active_artifact_set_mutated":  false,
+                    "production_ring_mutated":  false,
+                    "signer_authority":  false,
+                    "object_storage_authority":  false,
+                    "private_signing_material_handled":  false,
+                    "next_task":  "RC21-040"
+                }
+}
