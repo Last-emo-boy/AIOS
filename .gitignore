@@ -15,5 +15,9 @@ target/
 .local-release-authority/
 .worktrees/
 
+# cp7 磁盘镜像构建产物（build-disk-image.sh 每次从零重建，不入库）
+appliance/*.img
+appliance/*.manifest.sha256
+
 # Claude Code 工作区与临时 worktree
 .claude/
