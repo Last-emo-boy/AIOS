@@ -1,0 +1,9 @@
+[package]
+name = "agent_runtime"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# 真实、未模拟的编排运行循环（ADR-004 D2 / cp3）。
+[dependencies]
+runtime_contracts = { path = "../runtime_contracts" }

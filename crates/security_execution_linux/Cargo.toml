@@ -1,0 +1,18 @@
+[package]
+name = "security_execution_linux"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# 真实内核强制执行后端（ADR-004 D2 / cp5）。沙箱施加经 platform_sys 的
+# execve-based confined helper（src/bin/sandbox_probe.rs）。
+# security_execution 是**冻结**依赖：只读其 SandboxProfile/SandboxExecutor 作为
+# 差分 oracle（D2：real 更严=通过），从不修改它。
+[dependencies]
+platform_sys = { path = "../platform_sys" }
+runtime_contracts = { path = "../runtime_contracts" }
+security_execution = { path = "../security_execution" }
+
+# helper bin / 名→号表用 libc 的 SYS_*/EACCES/ENOENT 常量（Linux-only，无 unsafe）。
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2"

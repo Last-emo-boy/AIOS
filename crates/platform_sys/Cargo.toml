@@ -1,0 +1,16 @@
+[package]
+name = "platform_sys"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# platform_sys 是 workspace 中唯一允许直接 libc/syscall FFI 的 crate（ADR-004 D1）。
+# libc：手写 extern 之外的常量；seccompiler / landlock：两个最易被绕过的面用受审计
+# 封装（seccomp default-deny allowlist；Landlock fail-closed，仅 FullyEnforced 才算施加）。
+[dependencies]
+libc = "0.2.186"
+
+# seccompiler / landlock 是 Linux-only；放 target 段以保持 workspace 跨平台可编译。
+[target.'cfg(target_os = "linux")'.dependencies]
+landlock = "0.4.5"
+seccompiler = "0.5.0"

@@ -1,0 +1,48 @@
+# ADR-004 D4 / cp0：真实 Linux + KVM CI，取代 Windows/PowerShell 投影证据。
+name: real-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    name: build + test (host target)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: cargo build
+        run: cargo build --workspace
+      - name: cargo test
+        run: cargo test --workspace
+
+  musl-appliance:
+    name: static-musl agentd_init (cp2)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: add musl target
+        run: rustup target add x86_64-unknown-linux-musl
+      - name: install musl tools
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - name: build static agentd_init
+        run: cargo build -p agentd_init --target x86_64-unknown-linux-musl --release
+      - name: assert static (no dynamic deps)
+        run: |
+          f=target/x86_64-unknown-linux-musl/release/agentd_init
+          file "$f"
+          if ldd "$f" 2>&1 | grep -q "=>"; then
+            echo "ERROR: binary is dynamically linked"; exit 1
+          fi
+
+  # cp5：真实内核强制 + 逃逸 harness。需要暴露 /dev/kvm 的 self-hosted runner
+  # （GitHub 标准 runner 不提供 /dev/kvm）。在该 runner 就绪前保持禁用，
+  # 避免在无 KVM 的标准 runner 上产生虚假绿灯（ADR-004 D5）。
+  kvm-enforcement:
+    name: real sandbox + escape harness (cp5, needs /dev/kvm)
+    if: ${{ false }}
+    runs-on: [self-hosted, kvm]
+    steps:
+      - uses: actions/checkout@v4
+      - name: real-kernel escape harness
+        run: echo "TODO(cp5): boot pinned kernel under QEMU/KVM, apply sandbox, run real escape attempts"
