@@ -137,6 +137,38 @@ fn main() {
         // 完整受限执行器（namespace + landlock + seccomp 全栈）。
         "confined" => run_confined(&args),
 
+        // cgroup v2 pids.max 探针：加入测试预设的 cgroup（其 pids.max 已设），连续
+        // fork；子进程立即退出成 zombie 占用 pids 配额（直到 reap），超额时内核 EAGAIN。
+        "cgroup-pids" => {
+            use platform_sys::ForkResult;
+            let cg = arg(&args, 2);
+            let n: i32 = arg(&args, 3).parse().unwrap_or(0);
+            if std::fs::write(
+                format!("{cg}/cgroup.procs"),
+                platform_sys::getpid().to_string(),
+            )
+            .is_err()
+            {
+                platform_sys::exit_now(28);
+            }
+            let mut kids = Vec::new();
+            let mut denied = false;
+            for _ in 0..n {
+                match platform_sys::fork() {
+                    Ok(ForkResult::Child) => platform_sys::exit_now(0), // zombie 占配额
+                    Ok(ForkResult::Parent(pid)) => kids.push(pid),
+                    Err(_) => {
+                        denied = true; // EAGAIN = pids.max 拒绝
+                        break;
+                    }
+                }
+            }
+            for pid in &kids {
+                let _ = platform_sys::wait_child(*pid); // reap zombies
+            }
+            platform_sys::exit_now(if denied { 60 } else { 0 });
+        }
+
         // 无沙箱基线：证明同 uid 本可读该文件（排除 DAC-EACCES / ENOENT 误判）。
         "baseline-open" => {
             let target = arg(&args, 2);

@@ -209,6 +209,31 @@ impl LinuxEnforcer {
             }),
         }
     }
+
+    /// 真 cgroup v2 pids.max 强制：helper 加入 `cgroup_path`（测试预设 pids.max），
+    /// 连续 fork `fork_n` 个；超出配额时内核以 EAGAIN 拒绝（KernelDenied）。对接冻结
+    /// oracle 的 `SandboxOperation::SpawnProcesses{count}`（count>pids_max ⇒ Denied）。
+    pub fn enforce_cgroup_pids(
+        &self,
+        helper: &str,
+        cgroup_path: &str,
+        fork_n: i32,
+    ) -> std::io::Result<EnforcementOutcome> {
+        use platform_sys::ChildExit;
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(
+            helper,
+            &["cgroup-pids", cgroup_path, &fork_n.to_string()],
+        )? {
+            ChildExit::Exited(60) => Ok(EnforcementOutcome::KernelDenied {
+                reason: "cgroup pids.max: fork denied by kernel (EAGAIN)".into(),
+            }),
+            ChildExit::Exited(0) => Ok(EnforcementOutcome::Confined),
+            ChildExit::Exited(28) => Err(mkerr("cgroup join (cgroup.procs write) failed".into())),
+            ChildExit::Exited(c) => Err(mkerr(format!("cgroup probe failure code {c}"))),
+            ChildExit::KilledBySignal(s) => Err(mkerr(format!("cgroup helper killed by signal {s}"))),
+        }
+    }
 }
 
 #[cfg(not(target_os = "linux"))]
