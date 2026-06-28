@@ -19,5 +19,8 @@ libc = "0.2"
 
 # 仅测试：把 agent_runtime 的 run loop 端到端接到真实 LinuxEnforcer（cp3）。
 # 用 dev-dependency 反转避免生产期循环依赖（agent_runtime 不依赖本 crate）。
+# agent_core 仅作差分 oracle（冻结 AgentCoreServiceRecovery，service="nginx"）单独对照，
+# 同样以 dev-dependency 引入（agent_core 不依赖本 crate，无生产期循环）。
 [dev-dependencies]
 agent_runtime = { path = "../agent_runtime" }
+agent_core = { path = "../agent_core" }

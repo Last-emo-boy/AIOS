@@ -502,6 +502,27 @@ fn run_tool_write_denied(args: &[String]) -> ! {
     }
 }
 
+/// 被监督的真服务 `service-sleep <health_file> <secs>`：周期性把递增心跳计数写入
+/// `health_file`（首拍在任何 sleep 之前写出，使监督方 await_health 立即可见），存活
+/// `secs` 秒后自然退出。直接进程、不施加任何沙箱（workload 而非 probe）。
+#[cfg(target_os = "linux")]
+fn run_service_sleep(args: &[String]) -> ! {
+    let health = arg(args, 2);
+    let secs: u64 = arg(args, 3).parse().unwrap_or(0);
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(secs);
+    let mut beat: u64 = 0;
+    loop {
+        beat += 1;
+        // 心跳写在 sleep 之前：第一拍即落盘，监督方轮询 health 文件可立刻判就绪。
+        let _ = std::fs::write(health, format!("{beat}\n"));
+        if std::time::Instant::now() >= deadline {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
+    platform_sys::exit_now(0)
+}
+
 #[cfg(target_os = "linux")]
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -518,6 +539,12 @@ fn main() {
         "tool-write-diff" => run_tool_write_diff(&args),
         "tool-write-rollback" => run_tool_write_rollback(&args),
         "tool-write-denied" => run_tool_write_denied(&args),
+
+        // 被监督的真服务（直接进程，**不进沙箱** —— 它是 workload 而非 probe）：
+        // 周期性把递增心跳计数写入 health 文件，存活 <secs> 秒后自然退出。secs 取够长
+        // （测试用 ServiceSupervisor::fail()/restart() 主动杀），首次心跳在任何 sleep
+        // 之前写出，使监督方的 await_health 能有界轮询到就绪。
+        "service-sleep" => run_service_sleep(&args),
 
         // cgroup v2 pids.max 探针：加入测试预设的 cgroup（其 pids.max 已设），连续
         // fork；子进程立即退出成 zombie 占用 pids 配额（直到 reap），超额时内核 EAGAIN。

@@ -12,6 +12,8 @@
 #![forbid(unsafe_code)]
 
 #[cfg(target_os = "linux")]
+use security_execution::policy::ApprovalToken;
+#[cfg(target_os = "linux")]
 use security_execution::sandbox::SandboxProfile;
 
 /// 一次强制执行的结果。
@@ -556,6 +558,194 @@ impl LinuxEnforcer {
             }
             ChildExit::KilledBySignal(s) => {
                 Err(mkerr(format!("write.denied helper killed by signal {s}")))
+            }
+        }
+    }
+}
+
+// ===== 真服务监督（ServiceSupervisor）：over platform_sys，forbid unsafe =====
+
+/// 受监督服务的规格（被监督的 workload 是 `sandbox_probe service-sleep`，直接进程）。
+#[derive(Debug, Clone)]
+pub struct ServiceSpec {
+    /// helper 可执行路径（`sandbox_probe`，承载 `service-sleep` 模式）。
+    pub helper: String,
+    /// 服务写入心跳的 health 文件路径（首拍即落盘，供 await_health 轮询）。
+    pub health_file: String,
+    /// 记录当前实例 pid 的文件路径。
+    pub pid_file: String,
+    /// 服务自然存活秒数（取够长，测试用 fail()/restart() 主动杀，避免自然退出）。
+    pub secs: u64,
+}
+
+/// 一次 svc.status 真探活的观测。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ServiceStatus {
+    /// 当前实例 pid。
+    pub pid: i32,
+    /// 宿主 /proc/<pid> 是否存在（已 reap 的进程 => false）。
+    pub alive: bool,
+    /// health 文件首行（心跳计数；缺失为空）。
+    pub heartbeat: String,
+}
+
+/// 真服务监督：经 [`platform_sys`] 拉起 / 探活 / 杀掉 / 重启一个直接子进程服务。
+/// 不施加沙箱（监督的是 workload），svc.status 走宿主 /proc（不进 pid/mount ns）。
+#[cfg(target_os = "linux")]
+#[derive(Debug)]
+pub struct ServiceSupervisor {
+    spec: ServiceSpec,
+    current: Option<i32>,
+}
+
+#[cfg(target_os = "linux")]
+impl ServiceSupervisor {
+    pub fn new(spec: ServiceSpec) -> Self {
+        Self {
+            spec,
+            current: None,
+        }
+    }
+
+    /// 当前实例 pid（未启动则 None）。
+    pub fn current_pid(&self) -> Option<i32> {
+        self.current
+    }
+
+    fn require_current(&self) -> std::io::Result<i32> {
+        self.current.ok_or_else(|| {
+            std::io::Error::new(std::io::ErrorKind::NotFound, "no current service instance")
+        })
+    }
+
+    /// 启动一个新实例：spawn_service → 写 pid_file → await_health（有界轮询，超时 Err）。
+    pub fn start(&mut self) -> std::io::Result<i32> {
+        let pid = self.spawn_instance()?;
+        self.current = Some(pid);
+        Ok(pid)
+    }
+
+    /// 真探活：alive = 宿主 /proc/<pid> 存在；heartbeat = health 文件首行。
+    pub fn status(&self) -> std::io::Result<ServiceStatus> {
+        let pid = self.require_current()?;
+        let alive = std::path::Path::new(&format!("/proc/{pid}")).exists();
+        let heartbeat = std::fs::read_to_string(&self.spec.health_file)
+            .ok()
+            .and_then(|s| s.lines().next().map(str::to_string))
+            .unwrap_or_default();
+        Ok(ServiceStatus {
+            pid,
+            alive,
+            heartbeat,
+        })
+    }
+
+    /// 模拟服务挂掉：SIGKILL 当前实例并回收 zombie（否则 /proc/<pid> 残留致 alive 误判）。
+    pub fn fail(&mut self) -> std::io::Result<()> {
+        let pid = self.require_current()?;
+        // kill 命中 zombie 也返回 Ok；命中已 reap 的 pid 则 ESRCH（视为已死）。
+        match platform_sys::kill(pid, platform_sys::SIGKILL) {
+            Ok(()) => {}
+            Err(e) if e.raw_os_error() == Some(libc::ESRCH) => return Ok(()),
+            Err(e) => return Err(e),
+        }
+        Self::reap_bounded(pid, 200)?;
+        Ok(())
+    }
+
+    /// 重启（**消费 token** —— 参数即 consume-once 的执行许可证明）：先优雅终止旧实例并
+    /// **在 spawn 新实例之前阻塞回收**（否则 /proc/old 残留导致 alive 误判），再拉起新实例、
+    /// 更新 pid_file 与 current、await_health，返回新 pid。
+    pub fn restart(&mut self, token: ApprovalToken) -> std::io::Result<i32> {
+        let _consumed = token; // consume-once：拿到此参数即证明 policy gate 已放行。
+        let old = self.require_current()?;
+        // 优雅终止；若旧实例已死（fail() 已回收）则 ESRCH，直接进入重启。
+        let already_gone = match platform_sys::kill(old, platform_sys::SIGTERM) {
+            Ok(()) => false,
+            Err(e) if e.raw_os_error() == Some(libc::ESRCH) => true,
+            Err(e) => return Err(e),
+        };
+        if !already_gone {
+            // 宽限期内非阻塞轮询回收；超时则 SIGKILL + 阻塞回收，确保 old 在 spawn 前已 reaped。
+            if !Self::reap_bounded(old, 100)? {
+                let _ = platform_sys::kill(old, platform_sys::SIGKILL);
+                match platform_sys::wait_child(old) {
+                    Ok(_) => {}
+                    Err(e) if e.raw_os_error() == Some(libc::ECHILD) => {}
+                    Err(e) => return Err(e),
+                }
+            }
+        }
+        // old 已回收（/proc/old 消失），拉起新实例。
+        let new = self.spawn_instance()?;
+        self.current = Some(new);
+        Ok(new)
+    }
+
+    /// 测试清理：杀掉并回收当前实例（无僵尸泄漏），清空 current。Drop 为安全网。
+    pub fn shutdown(&mut self) -> std::io::Result<()> {
+        if let Some(pid) = self.current.take() {
+            match platform_sys::kill(pid, platform_sys::SIGKILL) {
+                Ok(()) => {
+                    Self::reap_bounded(pid, 200)?;
+                }
+                Err(e) if e.raw_os_error() == Some(libc::ESRCH) => {}
+                Err(e) => return Err(e),
+            }
+        }
+        Ok(())
+    }
+
+    /// 拉起一个新 `service-sleep` 实例：先清陈旧心跳（使 await_health 有意义）→
+    /// spawn_service → 写 pid_file → await_health。
+    fn spawn_instance(&self) -> std::io::Result<i32> {
+        let _ = std::fs::remove_file(&self.spec.health_file);
+        let secs = self.spec.secs.to_string();
+        let pid = platform_sys::spawn_service(
+            &self.spec.helper,
+            &["service-sleep", &self.spec.health_file, &secs],
+        )?;
+        std::fs::write(&self.spec.pid_file, pid.to_string())?;
+        self.await_health()?;
+        Ok(pid)
+    }
+
+    /// 有界轮询等待 health 文件出现且非空（服务就绪）；超时 => `TimedOut` Err。
+    fn await_health(&self) -> std::io::Result<()> {
+        for _ in 0..400 {
+            if let Ok(s) = std::fs::read_to_string(&self.spec.health_file) {
+                if !s.trim().is_empty() {
+                    return Ok(());
+                }
+            }
+            std::thread::sleep(std::time::Duration::from_millis(5));
+        }
+        Err(std::io::Error::new(
+            std::io::ErrorKind::TimedOut,
+            "service health did not appear within bound",
+        ))
+    }
+
+    /// 有界非阻塞回收：轮询 try_wait 直到子进程可 reap（返回 true）或耗尽配额（false）。
+    fn reap_bounded(pid: i32, attempts: u32) -> std::io::Result<bool> {
+        for _ in 0..attempts {
+            if platform_sys::try_wait(pid)?.is_some() {
+                return Ok(true);
+            }
+            std::thread::sleep(std::time::Duration::from_millis(5));
+        }
+        Ok(false)
+    }
+}
+
+/// 安全网：Drop 时 best-effort 杀掉并回收当前实例，防止测试遗漏导致僵尸泄漏。
+#[cfg(target_os = "linux")]
+impl Drop for ServiceSupervisor {
+    fn drop(&mut self) {
+        if let Some(pid) = self.current.take() {
+            // kill 命中 zombie 返回 Ok（需 reap）；命中已 reap 的 pid 返回 ESRCH（无需回收）。
+            if platform_sys::kill(pid, platform_sys::SIGKILL).is_ok() {
+                let _ = Self::reap_bounded(pid, 200);
             }
         }
     }

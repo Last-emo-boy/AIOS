@@ -7,3 +7,6 @@ license.workspace = true
 # 真实、未模拟的编排运行循环（ADR-004 D2 / cp3）。
 [dependencies]
 runtime_contracts = { path = "../runtime_contracts" }
+# 冻结策略 oracle：复用 PolicyEvaluator / ApprovalToken / PolicyRequest 做多步审批门，
+# 不自造 ApprovalToken（ADR 架构裁决）。security_execution 为只读冻结依赖。
+security_execution = { path = "../security_execution" }

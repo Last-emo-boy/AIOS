@@ -62,6 +62,18 @@ pub const SIGCHLD: i32 = libc::SIGCHLD;
 #[cfg(not(target_os = "linux"))]
 pub const SIGCHLD: i32 = 17;
 
+/// `SIGTERM` —— 优雅终止信号（服务监督先发 SIGTERM 宽限，再 SIGKILL 兜底）。
+#[cfg(target_os = "linux")]
+pub const SIGTERM: i32 = libc::SIGTERM;
+#[cfg(not(target_os = "linux"))]
+pub const SIGTERM: i32 = 15;
+
+/// `SIGKILL` —— 不可捕获的强制终止信号（模拟服务挂掉 / 宽限超时兜底回收）。
+#[cfg(target_os = "linux")]
+pub const SIGKILL: i32 = libc::SIGKILL;
+#[cfg(not(target_os = "linux"))]
+pub const SIGKILL: i32 = 9;
+
 /// 立即退出（`_exit`，async-signal-safe、不 flush）。
 #[cfg(target_os = "linux")]
 pub fn exit_now(code: i32) -> ! {
@@ -492,6 +504,84 @@ pub fn spawn_and_wait(exe: &str, args: &[&str]) -> io::Result<ChildExit> {
     wait_child(pid)
 }
 
+/// `kill(2)`：向 `pid` 发送信号 `sig`。`-1` => last_os_error（如 `ESRCH` 表示进程
+/// 已不存在，调用方据此判定服务已死）。
+#[cfg(target_os = "linux")]
+pub fn kill(pid: i32, sig: i32) -> io::Result<()> {
+    // SAFETY: kill(2) 仅接受整型 pid/signal，无内存副作用。
+    let rc = unsafe { libc::kill(pid, sig) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `fork` + `execve` 一个 helper 程序并**立即返回子 pid（父不 wait）**：用于把一个
+/// 长期存活的工作负载（受监督的真服务）拉起为直接子进程。子进程在 `fork` 后**只**
+/// 做 `execve`（async-signal-safe），失败则 `_exit(127)`。回收由调用方负责
+/// （[`try_wait`] 非阻塞轮询 / [`wait_child`] 阻塞）。即 [`spawn_and_wait`] 去掉 wait。
+#[cfg(target_os = "linux")]
+pub fn spawn_service(exe: &str, args: &[&str]) -> io::Result<i32> {
+    use core::ffi::c_char;
+
+    let exe_c =
+        CString::new(exe).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in exe"))?;
+    let mut argv_owned: Vec<CString> = Vec::with_capacity(args.len() + 1);
+    argv_owned.push(exe_c.clone());
+    for a in args {
+        argv_owned.push(
+            CString::new(*a)
+                .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in arg"))?,
+        );
+    }
+    let mut argv_ptrs: Vec<*const c_char> = argv_owned.iter().map(|c| c.as_ptr()).collect();
+    argv_ptrs.push(core::ptr::null());
+
+    // SAFETY: fork(2) 无参数。
+    let pid = unsafe { ffi::fork() };
+    if pid < 0 {
+        return Err(io::Error::last_os_error());
+    }
+    if pid == 0 {
+        // SAFETY: exe_c/argv_ptrs 有效、NUL 结尾；execv 仅在失败时返回（async-signal-safe）。
+        unsafe { libc::execv(exe_c.as_ptr(), argv_ptrs.as_ptr()) };
+        // SAFETY: noreturn。
+        unsafe { ffi::_exit(127) };
+    }
+    Ok(pid)
+}
+
+/// 非阻塞回收：`waitpid(pid, &st, WNOHANG)`。子进程仍在运行（返回 0）或已无该子进程
+/// （`ECHILD`）=> `Ok(None)`；`EINTR` => 重试；已结束 => `Ok(Some(ChildExit))`。
+#[cfg(target_os = "linux")]
+pub fn try_wait(pid: i32) -> io::Result<Option<ChildExit>> {
+    loop {
+        let mut status: core::ffi::c_int = 0;
+        // SAFETY: status 指向栈上有效 c_int；WNOHANG 使其非阻塞。
+        let w = unsafe { ffi::waitpid(pid, &mut status as *mut core::ffi::c_int, libc::WNOHANG) };
+        if w < 0 {
+            let e = io::Error::last_os_error();
+            match e.raw_os_error() {
+                Some(c) if c == libc::EINTR => continue,
+                Some(c) if c == libc::ECHILD => return Ok(None),
+                _ => return Err(e),
+            }
+        }
+        if w == 0 {
+            return Ok(None); // 仍在运行，尚不可回收
+        }
+        if libc::WIFEXITED(status) {
+            return Ok(Some(ChildExit::Exited(libc::WEXITSTATUS(status))));
+        }
+        if libc::WIFSIGNALED(status) {
+            return Ok(Some(ChildExit::KilledBySignal(libc::WTERMSIG(status))));
+        }
+        // stopped/continued：尚未真正退出，视为不可回收。
+        return Ok(None);
+    }
+}
+
 // ===== 非 Linux host 下的同名 stub（保证 workspace 跨平台可编译）=====
 
 #[cfg(not(target_os = "linux"))]
@@ -570,6 +660,18 @@ pub fn apply_landlock(_read_paths: &[&str], _write_paths: &[&str]) -> io::Result
 pub fn spawn_and_wait(_exe: &str, _args: &[&str]) -> io::Result<ChildExit> {
     Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
 }
+#[cfg(not(target_os = "linux"))]
+pub fn kill(_pid: i32, _sig: i32) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn spawn_service(_exe: &str, _args: &[&str]) -> io::Result<i32> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn try_wait(_pid: i32) -> io::Result<Option<ChildExit>> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
 
 #[cfg(test)]
 mod tests {
@@ -599,5 +701,30 @@ mod tests {
         block_sigchld().expect("block SIGCHLD");
         let fd = signalfd_sigchld().expect("create signalfd");
         assert!(fd.as_raw_fd() >= 0, "signalfd must be a valid descriptor");
+    }
+
+    /// spawn_service 返回的子 pid 在被信号杀后可经 try_wait 非阻塞回收（无僵尸泄漏）。
+    #[cfg(target_os = "linux")]
+    #[test]
+    fn spawn_service_kill_and_try_wait_reaps() {
+        let pid = spawn_service("/bin/sleep", &["100"]).expect("spawn sleeper");
+        assert!(pid > 0, "parent must observe a real child pid");
+        // 进程存活时 try_wait 返回 None（仍在运行）。
+        assert_eq!(try_wait(pid).expect("try_wait running"), None);
+        kill(pid, SIGKILL).expect("kill sleeper");
+        // SIGKILL 后有界轮询直到回收（zombie 变为可 reap）。
+        let mut reaped = None;
+        for _ in 0..200 {
+            if let Some(exit) = try_wait(pid).expect("try_wait reap") {
+                reaped = Some(exit);
+                break;
+            }
+            std::thread::sleep(std::time::Duration::from_millis(5));
+        }
+        assert_eq!(
+            reaped,
+            Some(ChildExit::KilledBySignal(SIGKILL)),
+            "SIGKILL'd child must be reaped as KilledBySignal(SIGKILL)"
+        );
     }
 }
