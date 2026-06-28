@@ -43,6 +43,44 @@ pub struct SvcStatusObservation {
     pub comm: String,
 }
 
+/// 真 write-with-diff 事务在受限沙箱内完成后回传的真实观测（与冻结
+/// `CommitReport` 同形：committed + 三个内容哈希 + rollback_id）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct WriteDiffObservation {
+    /// 回读校验是否等于 proposed_hash（沙箱内真实写入并回读后判定）。
+    pub committed: bool,
+    /// 回滚句柄 id，`rb-{parameter_hash}-{proposed_hash}`，与冻结 oracle 同形。
+    pub rollback_id: String,
+    /// 期望的基线哈希（事务前 target 应有的内容哈希）。
+    pub base_hash: String,
+    /// 拟写入内容的哈希。
+    pub proposed_hash: String,
+    /// 写入并回读后的实际内容哈希。
+    pub final_hash: String,
+}
+
+/// 一次真 write-with-diff 的结局。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum WriteDiffOutcome {
+    /// 写入成功并回读校验通过（final_hash == proposed_hash）。
+    Committed(WriteDiffObservation),
+    /// 写入了但回读校验未通过：需回滚（rollback pending）。
+    RollbackPending(WriteDiffObservation),
+    /// 事务前 target 的实际哈希与期望 base_hash 不符：未改动 target（与 oracle 一致）。
+    BaseHashMismatch { expected: String, actual: String },
+    /// 内核阻止了写入（Landlock EACCES / seccomp SIGSYS）。
+    KernelDenied { reason: String },
+}
+
+/// 真 write-with-diff 回滚在受限沙箱内完成后回传的真实观测。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RollbackObservation {
+    /// 回读校验是否等于 base_hash（恢复成功）。
+    pub restored: bool,
+    /// 回写并回读后的实际内容哈希。
+    pub restored_hash: String,
+}
+
 /// 极简 JSON 字段抽取（仅服务于 helper 自产的良构观测，无需 serde 依赖）。
 #[cfg(target_os = "linux")]
 fn json_uint(s: &str, key: &str) -> Option<u64> {
@@ -347,6 +385,177 @@ impl LinuxEnforcer {
             ChildExit::Exited(c) => Err(mkerr(format!("svc.status helper exit {c}"))),
             ChildExit::KilledBySignal(s) => {
                 Err(mkerr(format!("svc.status helper killed by signal {s}")))
+            }
+        }
+    }
+
+    /// 从 out 文件解析 helper 回传的 write-with-diff 观测（committed + 三哈希）。
+    /// `rollback_id` 由调用方（与 helper 同形计算）提供，不在 JSON 内回传。
+    fn parse_write_diff_obs(
+        &self,
+        out: &str,
+        rollback_id: String,
+    ) -> std::io::Result<WriteDiffObservation> {
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        let s = std::fs::read_to_string(out)?;
+        let committed = json_bool(&s, "committed").unwrap_or(false);
+        let base_hash = json_str(&s, "base_hash")
+            .ok_or_else(|| mkerr(format!("observation missing base_hash: {s}")))?;
+        let proposed_hash = json_str(&s, "proposed_hash")
+            .ok_or_else(|| mkerr(format!("observation missing proposed_hash: {s}")))?;
+        let final_hash = json_str(&s, "final_hash")
+            .ok_or_else(|| mkerr(format!("observation missing final_hash: {s}")))?;
+        Ok(WriteDiffObservation {
+            committed,
+            rollback_id,
+            base_hash,
+            proposed_hash,
+            final_hash,
+        })
+    }
+
+    /// 真 write-with-diff：在 confined helper 内运行事务（Landlock 限定到 target 父目录 +
+    /// shadow 目录读写 + seccomp default-deny）。父进程预建 `shadow_root/{rollback_id}` 并把
+    /// proposed 暂存为 `proposed.txt`（沙箱内不创建目录）；`rollback_id` 与冻结 oracle 的
+    /// `RollbackHandle.rollback_id` 同形 `rb-{parameter_hash}-{proposed_hash}`。helper 在事务前
+    /// 校验 base_hash：不符则不动 target（exit 81 → BaseHashMismatch，保持 oracle 不变量）。
+    pub fn run_write_diff(
+        &self,
+        helper: &str,
+        out: &str,
+        shadow_root: &str,
+        target: &str,
+        proposed: &str,
+        base_hash: &str,
+        parameter_hash: &str,
+    ) -> std::io::Result<WriteDiffOutcome> {
+        use platform_sys::{ChildExit, SIGSYS};
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+
+        // 与冻结 oracle 同形：用同一个 content_hash 计算 proposed_hash / rollback_id。
+        let proposed_hash = security_execution::rollback::content_hash(proposed);
+        let rollback_id = format!("rb-{parameter_hash}-{proposed_hash}");
+        let shadow_dir = format!("{shadow_root}/{rollback_id}");
+        // 父进程预建 shadow 目录并 stage proposed.txt（沙箱内只读写、不建目录）。
+        std::fs::create_dir_all(&shadow_dir)?;
+        let proposed_path = format!("{shadow_dir}/proposed.txt");
+        std::fs::write(&proposed_path, proposed.as_bytes())?;
+
+        match platform_sys::spawn_and_wait(
+            helper,
+            &[
+                "tool-write-diff",
+                out,
+                target,
+                base_hash,
+                &proposed_path,
+                &shadow_dir,
+            ],
+        )? {
+            ChildExit::Exited(0) => Ok(WriteDiffOutcome::Committed(
+                self.parse_write_diff_obs(out, rollback_id)?,
+            )),
+            ChildExit::Exited(82) => Ok(WriteDiffOutcome::RollbackPending(
+                self.parse_write_diff_obs(out, rollback_id)?,
+            )),
+            ChildExit::Exited(81) => {
+                let s = std::fs::read_to_string(out)?;
+                let actual = json_str(&s, "actual_base").ok_or_else(|| {
+                    mkerr(format!("base-mismatch observation missing actual_base: {s}"))
+                })?;
+                Ok(WriteDiffOutcome::BaseHashMismatch {
+                    expected: base_hash.to_string(),
+                    actual,
+                })
+            }
+            ChildExit::Exited(10) => Ok(WriteDiffOutcome::KernelDenied {
+                reason: format!("landlock EACCES writing {target}"),
+            }),
+            ChildExit::Exited(20) => Err(mkerr("landlock not FullyEnforced — fail-closed".into())),
+            ChildExit::Exited(70) => {
+                Err(mkerr("write.diff: helper could not open out file".into()))
+            }
+            ChildExit::Exited(c) => Err(mkerr(format!("write.diff helper exit {c}"))),
+            ChildExit::KilledBySignal(s) if s == SIGSYS => Ok(WriteDiffOutcome::KernelDenied {
+                reason: format!("seccomp SIGSYS({s}) inside write.diff"),
+            }),
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("write.diff helper killed by signal {s}")))
+            }
+        }
+    }
+
+    /// 真 write-with-diff 回滚：在 confined helper 内把 `shadow_root/{rollback_id}/previous.txt`
+    /// 写回 target，回读校验 restored_hash == base_hash。
+    pub fn run_rollback(
+        &self,
+        helper: &str,
+        out: &str,
+        target: &str,
+        shadow_root: &str,
+        rollback_id: &str,
+        base_hash: &str,
+    ) -> std::io::Result<RollbackObservation> {
+        use platform_sys::ChildExit;
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        let shadow_dir = format!("{shadow_root}/{rollback_id}");
+        match platform_sys::spawn_and_wait(
+            helper,
+            &["tool-write-rollback", out, target, &shadow_dir, base_hash],
+        )? {
+            ChildExit::Exited(0) => {
+                let s = std::fs::read_to_string(out)?;
+                let restored = json_bool(&s, "restored")
+                    .ok_or_else(|| mkerr(format!("rollback observation missing restored: {s}")))?;
+                let restored_hash = json_str(&s, "restored_hash").ok_or_else(|| {
+                    mkerr(format!("rollback observation missing restored_hash: {s}"))
+                })?;
+                Ok(RollbackObservation {
+                    restored,
+                    restored_hash,
+                })
+            }
+            ChildExit::Exited(10) => Err(mkerr(format!("landlock EACCES restoring {target}"))),
+            ChildExit::Exited(70) => {
+                Err(mkerr("rollback: helper could not open out file".into()))
+            }
+            ChildExit::Exited(c) => Err(mkerr(format!("rollback helper exit {c}"))),
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("rollback helper killed by signal {s}")))
+            }
+        }
+    }
+
+    /// 负面证明：沙箱只授权 `granted` 读写，却尝试写沙箱外的 `forbidden`。内核以
+    /// Landlock EACCES 拒绝 => `KernelDenied`；若写成功 => `Confined`（逃逸，调用测试应失败）。
+    pub fn run_write_denied(
+        &self,
+        helper: &str,
+        out: &str,
+        granted: &str,
+        forbidden: &str,
+        content: &str,
+    ) -> std::io::Result<EnforcementOutcome> {
+        use platform_sys::{ChildExit, SIGSYS};
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(
+            helper,
+            &["tool-write-denied", out, granted, forbidden, content],
+        )? {
+            ChildExit::Exited(10) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("landlock: write of {forbidden} outside {granted} denied (EACCES)"),
+            }),
+            ChildExit::Exited(0) => Ok(EnforcementOutcome::Confined), // 逃逸：调用测试应失败
+            ChildExit::Exited(20) => Err(mkerr("landlock not FullyEnforced — fail-closed".into())),
+            ChildExit::Exited(70) => {
+                Err(mkerr("write.denied: helper could not open out file".into()))
+            }
+            ChildExit::Exited(c) => Err(mkerr(format!("write.denied helper exit {c}"))),
+            ChildExit::KilledBySignal(s) if s == SIGSYS => {
+                Err(mkerr(format!("write.denied SIGSYS({s}) — unexpected")))
+            }
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("write.denied helper killed by signal {s}")))
             }
         }
     }

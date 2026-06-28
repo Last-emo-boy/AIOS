@@ -6,6 +6,10 @@
 //! 的子进程可安全分配（landlock/seccomp 库代码）。
 #![forbid(unsafe_code)]
 
+// 冻结 oracle 的稳定内容哈希：真 write-with-diff 的事务比对与 oracle 同形（同一函数）。
+#[cfg(target_os = "linux")]
+use security_execution::rollback::content_hash;
+
 #[cfg(target_os = "linux")]
 fn open_code(target: &str) -> i32 {
     match std::fs::File::open(target) {
@@ -116,6 +120,86 @@ fn enter_confined(ns: &str, seccomp_csv: &str, landlock_dir: &str) {
     }
 }
 
+/// 与 [`enter_confined`] 完全同序的读写版：唯一区别是 child 里用
+/// [`platform_sys::apply_landlock`]（read+write 并集授权）替换 `apply_landlock_readonly`，
+/// 以便在受限沙箱内同时读写 `reads`/`writes` 覆盖的目录（真 write-with-diff）。
+/// 其余（user ns→uid/gid_map→其余 ns→make_root_private→fork→parent reraise→child
+/// mount_proc→no_new_privs→seccomp LAST）逐字一致。仅在受限 child 中返回。
+#[cfg(target_os = "linux")]
+fn enter_confined_rw(ns: &str, seccomp_csv: &str, reads: &[&str], writes: &[&str]) {
+    use platform_sys::{clone_flags as cf, ChildExit, ForkResult};
+    let want = |k: &str| ns.split(',').any(|x| x == k);
+
+    // ===== STAGE A：helper 主进程（execve 后单线程）=====
+    if want("user") {
+        let uid = platform_sys::getuid();
+        let gid = platform_sys::getgid();
+        if platform_sys::unshare(cf::CLONE_NEWUSER).is_err() {
+            platform_sys::exit_now(23);
+        }
+        let _ = std::fs::write("/proc/self/setgroups", "deny");
+        if std::fs::write("/proc/self/uid_map", format!("0 {uid} 1")).is_err()
+            || std::fs::write("/proc/self/gid_map", format!("0 {gid} 1")).is_err()
+        {
+            platform_sys::exit_now(25);
+        }
+    }
+    let mut nsflags = 0;
+    if want("mount") {
+        nsflags |= cf::CLONE_NEWNS;
+    }
+    if want("pid") {
+        nsflags |= cf::CLONE_NEWPID;
+    }
+    if want("net") {
+        nsflags |= cf::CLONE_NEWNET;
+    }
+    if nsflags != 0 && platform_sys::unshare(nsflags).is_err() {
+        platform_sys::exit_now(23);
+    }
+    if want("mount") && platform_sys::make_root_private().is_err() {
+        platform_sys::exit_now(24);
+    }
+
+    // ===== STAGE B：fork，child 是新 pidns 的 PID 1 =====
+    match platform_sys::fork() {
+        Err(_) => platform_sys::exit_now(26),
+        Ok(ForkResult::Parent(pid)) => match platform_sys::wait_child(pid) {
+            Ok(ChildExit::Exited(c)) => platform_sys::exit_now(c),
+            Ok(ChildExit::KilledBySignal(s)) => platform_sys::reraise(s),
+            Err(_) => platform_sys::exit_now(40),
+        },
+        Ok(ForkResult::Child) => {
+            if want("mount") && platform_sys::mount_proc("/proc").is_err() {
+                platform_sys::exit_now(24);
+            }
+            if platform_sys::set_no_new_privs().is_err() {
+                platform_sys::exit_now(27);
+            }
+            // Landlock read+write 并集授权（fail-closed）。在 seccomp 之前。
+            match platform_sys::apply_landlock(reads, writes) {
+                Ok(true) => {}
+                Ok(false) => platform_sys::exit_now(20),
+                Err(_) => platform_sys::exit_now(22),
+            }
+            // seccomp **最后**：default-deny allowlist（自动含 exit/exit_group）。
+            if !seccomp_csv.is_empty() {
+                let mut allow: Vec<i64> = seccomp_csv
+                    .split(',')
+                    .filter(|s| !s.is_empty())
+                    .filter_map(|s| s.parse::<i64>().ok())
+                    .collect();
+                allow.push(libc::SYS_exit_group as i64);
+                allow.push(libc::SYS_exit as i64);
+                if platform_sys::apply_seccomp_allowlist(&allow).is_err() {
+                    platform_sys::exit_now(21);
+                }
+            }
+            // child 分支落空：控制权交回调用者，在完整沙箱内运行真实事务。
+        }
+    }
+}
+
 /// 完整受限执行器序列（ADR-004 cp5）：施加沙箱后运行一个**合成探针向量**。
 #[cfg(target_os = "linux")]
 fn run_confined(args: &[String]) -> ! {
@@ -191,13 +275,20 @@ fn tool_seccomp_csv() -> String {
 /// 把观测 JSON 写入 `out`（已在沙箱施加**之前**打开的 fd —— Landlock 仅在 open 时
 /// 校验路径，已打开的 fd 不受其约束；故工具产物经此 fd 真实回传给 parent）。
 #[cfg(target_os = "linux")]
-fn write_observation(mut out: std::fs::File, json: &str) -> ! {
+fn write_observation(out: std::fs::File, json: &str) -> ! {
+    write_observation_code(out, json, 0)
+}
+
+/// 同 [`write_observation`]，但以指定退出码发散（真 write-with-diff 用 exit 码区分
+/// committed=0 / rollback-pending=82 / base-mismatch=81，且这些路径都需先回传观测 JSON）。
+#[cfg(target_os = "linux")]
+fn write_observation_code(mut out: std::fs::File, json: &str, code: i32) -> ! {
     use std::io::Write;
     if out.write_all(json.as_bytes()).is_err() {
         platform_sys::exit_now(71);
     }
     let _ = out.flush();
-    platform_sys::exit_now(0)
+    platform_sys::exit_now(code)
 }
 
 /// 工具 `fs.read <path>`：在完整受限栈（user/mount/pid/net ns + Landlock 限定到
@@ -274,6 +365,143 @@ fn run_tool_svc_status(args: &[String]) -> ! {
     write_observation(out_file, &json)
 }
 
+/// 工具 `fs.write.diff`：在完整受限沙箱（user/mount/pid/net ns + Landlock 限定到 target
+/// 父目录 + shadow 目录读写 + seccomp default-deny）内执行真 write-with-diff 事务：
+/// 校验 base_hash → 暂存 previous → 写入 proposed → 回读校验 → 经 out fd 回传观测。
+/// base mismatch 时在改动任何文件**之前** exit 81（保持冻结 oracle「prepare 不改 target」不变量）。
+#[cfg(target_os = "linux")]
+fn run_tool_write_diff(args: &[String]) -> ! {
+    let out = arg(args, 2);
+    let target = arg(args, 3);
+    let base_hash = arg(args, 4);
+    let proposed_path = arg(args, 5);
+    let shadow_dir = arg(args, 6);
+
+    // out fd 必须在沙箱施加**之前**打开（Landlock 仅在 open 时校验路径）。
+    let out_file = match std::fs::File::create(out) {
+        Ok(f) => f,
+        Err(_) => platform_sys::exit_now(70),
+    };
+    // target 父目录与 shadow 目录都需读写：读 target / 读 shadow/proposed.txt、
+    // 写 target / 写 shadow/previous.txt。两者同时出现在 reads 与 writes。
+    let parent = std::path::Path::new(target)
+        .parent()
+        .and_then(|p| p.to_str())
+        .unwrap_or("/");
+    let reads = [parent, shadow_dir];
+    let writes = [parent, shadow_dir];
+
+    enter_confined_rw("user,mount,pid,net", &tool_seccomp_csv(), &reads, &writes);
+
+    // ===== 仅受限 child 到达此处：在沙箱内运行真实事务 =====
+    let current = std::fs::read_to_string(target).unwrap_or_default();
+    let actual_base = content_hash(&current);
+    if actual_base != base_hash {
+        // base 不匹配：不动 target，回传观测后 exit 81。
+        let json = format!(
+            "{{\"tool\":\"fs.write.diff\",\"committed\":false,\"base_mismatch\":true,\"base_hash\":\"{base_hash}\",\"actual_base\":\"{actual_base}\"}}"
+        );
+        write_observation_code(out_file, &json, 81);
+    }
+    let proposed = std::fs::read_to_string(proposed_path).unwrap_or_default();
+    let proposed_hash = content_hash(&proposed);
+
+    // 暂存原内容到 shadow（回滚依据）。
+    let prev_path = format!("{shadow_dir}/previous.txt");
+    if let Err(e) = std::fs::write(&prev_path, current.as_bytes()) {
+        match e.raw_os_error() {
+            Some(c) if c == libc::EACCES => platform_sys::exit_now(10),
+            _ => platform_sys::exit_now(73),
+        }
+    }
+    // 写入 proposed（O_TRUNC 由 Landlock V1 的 WriteFile 管、被允许）。
+    if let Err(e) = std::fs::write(target, proposed.as_bytes()) {
+        match e.raw_os_error() {
+            Some(c) if c == libc::EACCES => platform_sys::exit_now(10),
+            _ => platform_sys::exit_now(74),
+        }
+    }
+    let final_content = std::fs::read_to_string(target).unwrap_or_default();
+    let final_hash = content_hash(&final_content);
+    let committed = final_hash == proposed_hash;
+    let json = format!(
+        "{{\"tool\":\"fs.write.diff\",\"committed\":{committed},\"base_hash\":\"{base_hash}\",\"proposed_hash\":\"{proposed_hash}\",\"final_hash\":\"{final_hash}\"}}"
+    );
+    write_observation_code(out_file, &json, if committed { 0 } else { 82 })
+}
+
+/// 工具 `fs.write.rollback`：在受限沙箱内把 shadow 暂存的 `previous.txt` 写回 target，
+/// 回读校验后经 out fd 回传 `restored`（restored_hash == base_hash）。
+#[cfg(target_os = "linux")]
+fn run_tool_write_rollback(args: &[String]) -> ! {
+    let out = arg(args, 2);
+    let target = arg(args, 3);
+    let shadow_dir = arg(args, 4);
+    let base_hash = arg(args, 5);
+
+    let out_file = match std::fs::File::create(out) {
+        Ok(f) => f,
+        Err(_) => platform_sys::exit_now(70),
+    };
+    let parent = std::path::Path::new(target)
+        .parent()
+        .and_then(|p| p.to_str())
+        .unwrap_or("/");
+    let reads = [parent, shadow_dir];
+    let writes = [parent, shadow_dir];
+
+    enter_confined_rw("user,mount,pid,net", &tool_seccomp_csv(), &reads, &writes);
+
+    // ===== 仅受限 child：把 shadow 暂存的原内容写回 target =====
+    let prev_path = format!("{shadow_dir}/previous.txt");
+    let previous = std::fs::read_to_string(&prev_path).unwrap_or_default();
+    if let Err(e) = std::fs::write(target, previous.as_bytes()) {
+        match e.raw_os_error() {
+            Some(c) if c == libc::EACCES => platform_sys::exit_now(10),
+            _ => platform_sys::exit_now(74),
+        }
+    }
+    let restored = std::fs::read_to_string(target).unwrap_or_default();
+    let restored_hash = content_hash(&restored);
+    let json = format!(
+        "{{\"tool\":\"fs.write.rollback\",\"restored\":{},\"restored_hash\":\"{restored_hash}\"}}",
+        restored_hash == base_hash
+    );
+    write_observation(out_file, &json)
+}
+
+/// 工具 `fs.write.denied`（负面证明）：沙箱只授权 `granted` 读写，却尝试写沙箱外的
+/// `forbidden`。内核应以 Landlock EACCES 拒绝（exit 10）。若写成功 = 逃逸（回传
+/// escaped 观测、exit 0，对应测试应失败）。
+#[cfg(target_os = "linux")]
+fn run_tool_write_denied(args: &[String]) -> ! {
+    let out = arg(args, 2);
+    let granted = arg(args, 3);
+    let forbidden = arg(args, 4);
+    let content = arg(args, 5);
+
+    let out_file = match std::fs::File::create(out) {
+        Ok(f) => f,
+        Err(_) => platform_sys::exit_now(70),
+    };
+    let reads = [granted];
+    let writes = [granted];
+
+    enter_confined_rw("user,mount,pid,net", &tool_seccomp_csv(), &reads, &writes);
+
+    // ===== 仅受限 child：尝试写一个 Landlock 未授权的路径 =====
+    match std::fs::write(forbidden, content.as_bytes()) {
+        Err(e) => match e.raw_os_error() {
+            Some(c) if c == libc::EACCES => platform_sys::exit_now(10), // 内核拒绝（期望）
+            _ => platform_sys::exit_now(74),
+        },
+        Ok(()) => {
+            // 写成功 = 沙箱逃逸（测试应失败）。
+            write_observation(out_file, "{\"tool\":\"fs.write.denied\",\"escaped\":true}")
+        }
+    }
+}
+
 #[cfg(target_os = "linux")]
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -285,6 +513,11 @@ fn main() {
         // 真实工具：在完整受限沙箱内执行并把真实观测写入 out 文件（侧信道）。
         "tool-fs-read" => run_tool_fs_read(&args),
         "tool-svc-status" => run_tool_svc_status(&args),
+
+        // 真 write-with-diff：受限沙箱内事务写、回滚、负面拒绝证明。
+        "tool-write-diff" => run_tool_write_diff(&args),
+        "tool-write-rollback" => run_tool_write_rollback(&args),
+        "tool-write-denied" => run_tool_write_denied(&args),
 
         // cgroup v2 pids.max 探针：加入测试预设的 cgroup（其 pids.max 已设），连续
         // fork；子进程立即退出成 zombie 占用 pids 配额（直到 reap），超额时内核 EAGAIN。

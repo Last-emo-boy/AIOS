@@ -418,6 +418,47 @@ pub fn apply_landlock_readonly(allowed_dir: &str) -> io::Result<bool> {
     Ok(matches!(status.ruleset, RulesetStatus::FullyEnforced) && status.no_new_privs)
 }
 
+/// 施加 Landlock 读 + 写授权（多目录）。`read_paths` 仅授予读，`write_paths` 授予写
+/// （含创建/截断，V1 由 WriteFile 管，无独立 Truncate 权限）。同时需读写的目录必须同时
+/// 出现在两个切片里。handle_access **必须**是 read|write 的并集——未 handle 的访问类型
+/// 不受 Landlock 限制。Fail-closed：仅 FullyEnforced + no_new_privs 返回 `Ok(true)`。
+#[cfg(target_os = "linux")]
+pub fn apply_landlock(read_paths: &[&str], write_paths: &[&str]) -> io::Result<bool> {
+    // 注意：`from_read`/`from_write` 经 `AccessFs` 的 trait 实现解析，无需在此 `use Access`
+    // （只读版用 `from_all` 才需要 `Access` trait；本函数不用，故省去以免 unused 告警）。
+    use landlock::{
+        AccessFs, PathBeneath, PathFd, Ruleset, RulesetAttr, RulesetCreatedAttr, RulesetStatus,
+        ABI,
+    };
+
+    let abi = ABI::V1;
+    // 必须 union：只 handle read 会让 write 不受限（反之亦然），未 handle 的权限恒放行。
+    let handled = AccessFs::from_read(abi) | AccessFs::from_write(abi);
+    let mut rs = Ruleset::default()
+        .handle_access(handled)
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("landlock handle: {e}")))?
+        .create()
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("landlock create: {e}")))?;
+    for p in read_paths {
+        let fd = PathFd::new(p)
+            .map_err(|e| io::Error::new(io::ErrorKind::InvalidInput, format!("landlock path: {e}")))?;
+        rs = rs
+            .add_rule(PathBeneath::new(fd, AccessFs::from_read(abi)))
+            .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("landlock rule: {e}")))?;
+    }
+    for p in write_paths {
+        let fd = PathFd::new(p)
+            .map_err(|e| io::Error::new(io::ErrorKind::InvalidInput, format!("landlock path: {e}")))?;
+        rs = rs
+            .add_rule(PathBeneath::new(fd, AccessFs::from_write(abi)))
+            .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("landlock rule: {e}")))?;
+    }
+    let status = rs
+        .restrict_self()
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("landlock restrict: {e}")))?;
+    Ok(matches!(status.ruleset, RulesetStatus::FullyEnforced) && status.no_new_privs)
+}
+
 /// `fork` + `execve` 一个 helper 程序并等待其结束（EINTR-safe）。子进程在 `fork`
 /// 后**只**做 `execve`（async-signal-safe）。
 #[cfg(target_os = "linux")]
@@ -519,6 +560,10 @@ pub fn apply_seccomp_allowlist(_allowed: &[i64]) -> io::Result<()> {
 }
 #[cfg(not(target_os = "linux"))]
 pub fn apply_landlock_readonly(_allowed_dir: &str) -> io::Result<bool> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn apply_landlock(_read_paths: &[&str], _write_paths: &[&str]) -> io::Result<bool> {
     Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
 }
 #[cfg(not(target_os = "linux"))]
