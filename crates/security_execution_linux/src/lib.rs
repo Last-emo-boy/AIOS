@@ -173,6 +173,42 @@ impl LinuxEnforcer {
             ChildExit::KilledBySignal(s) => Err(mkerr(&format!("helper killed by signal {s}"))),
         }
     }
+
+    /// 完整受限执行器：在 user/mount/pid/net namespace + no_new_privs + Landlock +
+    /// seccomp（default-deny）的完整栈下运行一个探针向量，验证内核强制。helper 内部
+    /// 按正确顺序施加（user ns→maps→其他 ns→make-rprivate→fork→[child: /proc→nnp→
+    /// landlock→seccomp LAST→vector]），子进程 SIGSYS 经 reraise 上浮为外层信号。
+    pub fn enforce_confined(
+        &self,
+        helper: &str,
+        ns_csv: &str,
+        seccomp_csv: &str,
+        landlock_dir: &str,
+        vector: &str,
+        varg: &str,
+    ) -> std::io::Result<EnforcementOutcome> {
+        use platform_sys::{ChildExit, SIGSYS};
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(
+            helper,
+            &["confined", ns_csv, seccomp_csv, landlock_dir, vector, varg],
+        )? {
+            ChildExit::KilledBySignal(s) if s == SIGSYS => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("seccomp SIGSYS({s}) through full namespace stack"),
+            }),
+            ChildExit::Exited(0) => Ok(EnforcementOutcome::Confined),
+            ChildExit::Exited(10) => Ok(EnforcementOutcome::KernelDenied {
+                reason: "landlock EACCES through namespace stack".into(),
+            }),
+            ChildExit::Exited(11) => Err(mkerr("forbidden file missing (ENOENT)".into())),
+            ChildExit::Exited(20) => Err(mkerr("landlock not FullyEnforced — fail-closed".into())),
+            ChildExit::Exited(30) => Ok(EnforcementOutcome::Confined),
+            ChildExit::Exited(c) => Err(mkerr(format!("confined setup/probe failure code {c}"))),
+            ChildExit::KilledBySignal(s) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("child killed by signal {s}"),
+            }),
+        }
+    }
 }
 
 #[cfg(not(target_os = "linux"))]
