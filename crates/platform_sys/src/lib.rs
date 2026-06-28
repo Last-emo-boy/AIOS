@@ -197,6 +197,27 @@ pub fn wait_child(pid: i32) -> io::Result<ChildExit> {
     }
 }
 
+/// 反复 `waitpid(-1)` reap 所有子进程（含 re-parented 孤儿），返回 reap 数。
+/// 供真 PID1 的回收循环使用；阻塞至 `ECHILD`（无更多子进程）。
+#[cfg(target_os = "linux")]
+pub fn reap_all() -> io::Result<usize> {
+    let mut n = 0usize;
+    loop {
+        let mut status: core::ffi::c_int = 0;
+        // SAFETY: waitpid(-1) 等待任意子进程；status 指向栈上有效 c_int。
+        let w = unsafe { ffi::waitpid(-1, &mut status as *mut core::ffi::c_int, 0) };
+        if w < 0 {
+            let e = io::Error::last_os_error();
+            match e.raw_os_error() {
+                Some(c) if c == libc::EINTR => continue,
+                Some(c) if c == libc::ECHILD => return Ok(n),
+                _ => return Err(e),
+            }
+        }
+        n += 1;
+    }
+}
+
 /// 恢复默认信号处置并重新发出 `sig`，使外层进程链观测到相同的信号
 /// （否则 helper 内的 SIGSYS 会塌缩成普通退出码，导致强制测试假绿）。
 #[cfg(target_os = "linux")]
@@ -339,6 +360,10 @@ pub fn fork() -> io::Result<ForkResult> {
 }
 #[cfg(not(target_os = "linux"))]
 pub fn wait_child(_pid: i32) -> io::Result<ChildExit> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn reap_all() -> io::Result<usize> {
     Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
 }
 #[cfg(not(target_os = "linux"))]
