@@ -83,6 +83,25 @@ pub struct RollbackObservation {
     pub restored_hash: String,
 }
 
+/// 不可信内容流水线在受限沙箱（user/mount/pid/net ns + Landlock 限定到 input 父目录 +
+/// seccomp default-deny）内净化一段外部/模型来源 blob 后回传的真实观测（ADR-000 第三
+/// MVP「不可信内容处理」）。`trust` 恒为 `sanitized-summary`，并由父进程用冻结
+/// `TrustBoundary::from_str` 二次校验；secret 若净化后仍存活，helper fail-closed（exit 85），
+/// 父进程映射为硬 `Err`（绝不回传一份仍含 secret 的「净化」摘要）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ContentPipelineObservation {
+    /// 信任边界标签（恒 `sanitized-summary`；父进程用冻结 `TrustBoundary` 校验）。
+    pub trust: String,
+    /// 净化摘要的字节长度（collapse + 截断后）。
+    pub sanitized_len: usize,
+    /// 是否中和/丢弃了危险内容（shell metachar / 控制字符 / secret token）。
+    pub removed_dangerous: bool,
+    /// 净化摘要的稳定哈希（16 位十六进制，固定种子 `DefaultHasher`，可跨进程复现）。
+    pub summary_hash: String,
+    /// 原始 blob 是否含 secret-like 串（净化前判定；净化后必为假，否则 fail-closed）。
+    pub contained_secret: bool,
+}
+
 /// 极简 JSON 字段抽取（仅服务于 helper 自产的良构观测，无需 serde 依赖）。
 #[cfg(target_os = "linux")]
 fn json_uint(s: &str, key: &str) -> Option<u64> {
@@ -142,6 +161,86 @@ pub fn resolve_syscall_name(name: &str) -> Option<i64> {
 #[cfg(all(target_os = "linux", not(target_arch = "x86_64")))]
 pub fn resolve_syscall_name(_name: &str) -> Option<i64> {
     None
+}
+
+/// 受限工具固定 seccomp allowlist（x86_64 syscall 号）——**单一真相源**。
+/// `sandbox_probe` 各工具 mode（fs.read / svc.status / write.diff / content.pipeline）
+/// 都经此构建过滤器。default-deny 下放行真实文件 I/O 所需 syscall，其余被内核 SIGSYS。
+/// 结构性反假绿：本表**不含** socket/connect/clone/execve —— 这正是「沙箱内 net/exec
+/// 结构性死」（连接腿、shell 腿被拒）的权威依据。
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+pub fn tool_seccomp_syscalls() -> Vec<i64> {
+    let nums: [libc::c_long; 27] = [
+        libc::SYS_read,
+        libc::SYS_write,
+        libc::SYS_open,
+        libc::SYS_openat,
+        libc::SYS_close,
+        libc::SYS_fstat,
+        libc::SYS_stat,
+        libc::SYS_lstat,
+        libc::SYS_newfstatat,
+        libc::SYS_statx,
+        libc::SYS_lseek,
+        libc::SYS_pread64,
+        libc::SYS_mmap,
+        libc::SYS_mprotect,
+        libc::SYS_munmap,
+        libc::SYS_madvise,
+        libc::SYS_brk,
+        libc::SYS_getrandom,
+        libc::SYS_rt_sigaction,
+        libc::SYS_rt_sigprocmask,
+        libc::SYS_rt_sigreturn,
+        libc::SYS_sigaltstack,
+        libc::SYS_futex,
+        libc::SYS_getdents64,
+        libc::SYS_clock_gettime,
+        libc::SYS_getpid,
+        libc::SYS_close_range,
+    ];
+    nums.iter().map(|n| *n as i64).collect()
+}
+
+/// 把工具 allowlist 编译为逗号分隔号串（喂给 `enter_confined` 的 seccomp 参数）。
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+pub fn tool_seccomp_csv() -> String {
+    tool_seccomp_syscalls()
+        .iter()
+        .map(|n| n.to_string())
+        .collect::<Vec<_>>()
+        .join(",")
+}
+
+/// 非 x86_64 Linux：尚无 syscall 号表，工具 allowlist 留空（`enter_confined` 跳过 seccomp）。
+#[cfg(all(target_os = "linux", not(target_arch = "x86_64")))]
+pub fn tool_seccomp_syscalls() -> Vec<i64> {
+    Vec::new()
+}
+
+#[cfg(all(target_os = "linux", not(target_arch = "x86_64")))]
+pub fn tool_seccomp_csv() -> String {
+    String::new()
+}
+
+/// 工具 seccomp allowlist 是否放行某 syscall（按名）。结构性反假绿断言用：
+/// socket/connect/clone/clone3/execve/execveat 必须为 `false`（沙箱内 net/exec 结构性
+/// 不可达）；read/write 等必须为 `true`（证明 allowlist 非空、强制是选择性的）。
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+pub fn tool_seccomp_allows_syscall(name: &str) -> bool {
+    let nr: i64 = match name {
+        "socket" => libc::SYS_socket as i64,
+        "connect" => libc::SYS_connect as i64,
+        "execve" => libc::SYS_execve as i64,
+        "execveat" => libc::SYS_execveat as i64,
+        "clone" => libc::SYS_clone as i64,
+        "clone3" => libc::SYS_clone3 as i64,
+        "read" => libc::SYS_read as i64,
+        "write" => libc::SYS_write as i64,
+        "openat" => libc::SYS_openat as i64,
+        _ => return false,
+    };
+    tool_seccomp_syscalls().contains(&nr)
 }
 
 /// 真实沙箱后端：经 confined helper 施加并验证内核强制。
@@ -560,6 +659,167 @@ impl LinuxEnforcer {
                 Err(mkerr(format!("write.denied helper killed by signal {s}")))
             }
         }
+    }
+
+    // ===== ADR-000 第三 MVP「不可信内容处理」：沙箱内净化 + 内核外泄/shell 拒绝证明 =====
+
+    /// 不可信内容流水线：在完整受限沙箱（user/mount/pid/net ns + Landlock 限定到 `input`
+    /// 父目录 + seccomp default-deny）内读取一段外部/模型来源 blob，中和 shell metachar /
+    /// 丢弃控制字符 / 红action secret token，产出**净化摘要**与稳定哈希，经 `out` fd 回传。
+    /// 沙箱内 net/exec 因 `tool_seccomp_csv()` 无 socket/clone/execve 而结构性死。
+    /// 父进程用冻结 `TrustBoundary::from_str` 校验 `trust==SanitizedSummary`，否则 fail-closed。
+    /// helper exit 10=>Landlock EACCES、20=>未 FullyEnforced、85=>secret 净化后仍存活、
+    /// SIGSYS=>越权 net/exec —— 均映射为硬 `Err`（绝不回传不可信的「成功」）。
+    pub fn run_content_pipeline(
+        &self,
+        helper: &str,
+        out: &str,
+        input: &str,
+    ) -> std::io::Result<ContentPipelineObservation> {
+        use platform_sys::{ChildExit, SIGSYS};
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(helper, &["tool-content-pipeline", out, input])? {
+            ChildExit::Exited(0) => {
+                let s = std::fs::read_to_string(out)?;
+                let trust = json_str(&s, "trust")
+                    .ok_or_else(|| mkerr(format!("content pipeline observation missing trust: {s}")))?;
+                // 用冻结 `TrustBoundary` 验证 trust 标签：必须是 SanitizedSummary，否则
+                // helper 产出了一份未达「净化摘要」边界的内容 —— fail-closed 拒绝。
+                if runtime_contracts::TrustBoundary::from_str(&trust)
+                    != Some(runtime_contracts::TrustBoundary::SanitizedSummary)
+                {
+                    return Err(mkerr(format!(
+                        "content pipeline produced non-sanitized trust boundary (fail-closed): {trust}"
+                    )));
+                }
+                let sanitized_len = json_uint(&s, "sanitized_len").ok_or_else(|| {
+                    mkerr(format!("content pipeline observation missing sanitized_len: {s}"))
+                })? as usize;
+                let removed_dangerous = json_bool(&s, "removed_dangerous").ok_or_else(|| {
+                    mkerr(format!("content pipeline observation missing removed_dangerous: {s}"))
+                })?;
+                let summary_hash = json_str(&s, "summary_hash").ok_or_else(|| {
+                    mkerr(format!("content pipeline observation missing summary_hash: {s}"))
+                })?;
+                let contained_secret = json_bool(&s, "contained_secret").ok_or_else(|| {
+                    mkerr(format!("content pipeline observation missing contained_secret: {s}"))
+                })?;
+                Ok(ContentPipelineObservation {
+                    trust,
+                    sanitized_len,
+                    removed_dangerous,
+                    summary_hash,
+                    contained_secret,
+                })
+            }
+            ChildExit::Exited(10) => {
+                Err(mkerr("content pipeline: landlock EACCES reading input".into()))
+            }
+            ChildExit::Exited(20) => {
+                Err(mkerr("content pipeline: landlock not FullyEnforced — fail-closed".into()))
+            }
+            ChildExit::Exited(85) => Err(mkerr(
+                "content pipeline FAIL-CLOSED: secret survived sanitization".into(),
+            )),
+            ChildExit::Exited(70) => {
+                Err(mkerr("content pipeline: helper could not open out file".into()))
+            }
+            ChildExit::Exited(c) => Err(mkerr(format!("content pipeline helper exit {c}"))),
+            ChildExit::KilledBySignal(s) if s == SIGSYS => Err(mkerr(format!(
+                "content pipeline: forbidden net/exec killed by SIGSYS({s})"
+            ))),
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("content pipeline helper killed by signal {s}")))
+            }
+        }
+    }
+
+    /// 证明不可信内容**不能外泄网络**：在仅 netns 强制（空 seccomp + 无 Landlock）的沙箱内
+    /// 尝试 TCP connect 一个字面 `addr`（IP:port，**不经 DNS**）。新 netns 只有 down 的 `lo`，
+    /// 故路由查找失败 => ENETUNREACH（exit 41）=> `KernelDenied`。connect 成功（exit 0）=
+    /// 逃逸（调用测试应失败）。layer honesty：唯一强制者是 netns —— 见 `baseline_connect`。
+    pub fn run_connect_denied(
+        &self,
+        helper: &str,
+        addr: &str,
+    ) -> std::io::Result<EnforcementOutcome> {
+        use platform_sys::ChildExit;
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(helper, &["confined-connect", addr])? {
+            ChildExit::Exited(41) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("netns: connect to {addr} unreachable (ENETUNREACH/EHOSTUNREACH/EPERM)"),
+            }),
+            ChildExit::Exited(42) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("netns: connect to {addr} refused (no listener inside netns)"),
+            }),
+            ChildExit::Exited(43) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("netns: connect to {addr} timed out (no route out of netns)"),
+            }),
+            ChildExit::Exited(44) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("netns: connect to {addr} failed (other errno)"),
+            }),
+            ChildExit::Exited(0) => Ok(EnforcementOutcome::Confined), // 逃逸：调用测试应失败
+            ChildExit::Exited(45) => Err(mkerr(format!("connect probe: bad literal addr {addr}"))),
+            ChildExit::Exited(c) => Err(mkerr(format!("connect probe failure code {c}"))),
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("connect helper killed by signal {s}")))
+            }
+        }
+    }
+
+    /// 网络腿基线（layer honesty）：**不进 netns** 直接 connect 同一 `addr`，返回分类码。
+    /// 用于断言「无 netns 时 errno != 41」—— 证明 41 来自 netns 隔离而非地址本身不可达。
+    pub fn baseline_connect(&self, helper: &str, addr: &str) -> std::io::Result<i32> {
+        use platform_sys::ChildExit;
+        match platform_sys::spawn_and_wait(helper, &["confined-connect-baseline", addr])? {
+            ChildExit::Exited(c) => Ok(c),
+            ChildExit::KilledBySignal(s) => Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                format!("baseline connect killed by signal {s}"),
+            )),
+        }
+    }
+
+    /// 证明不可信内容**不能 spawn shell**：在 user ns + `tool_seccomp_csv()`（无 clone/execve）
+    /// 的沙箱内调用 `Command::new(prog).status()`。Command 的首个 spawn syscall（clone）非
+    /// allowlist => 本受限进程被内核 SIGSYS 杀（外层 `spawn_and_wait` 经 reraise 见 SIGSYS）
+    /// => `KernelDenied`。防御性：若 clone 侥幸过而 execve 被拦，grandchild 带 SIGSYS（exit 31）；
+    /// exec 真跑了（exit 0）= 逃逸（调用测试应失败）。layer honesty：唯一强制者是 seccomp。
+    pub fn run_exec_denied(
+        &self,
+        helper: &str,
+        prog: &str,
+    ) -> std::io::Result<EnforcementOutcome> {
+        use platform_sys::{ChildExit, SIGSYS};
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(helper, &["confined-exec", prog])? {
+            ChildExit::KilledBySignal(s) if s == SIGSYS => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("seccomp: Command spawn (clone/execve) not in allowlist → SIGSYS({s})"),
+            }),
+            ChildExit::Exited(31) => Ok(EnforcementOutcome::KernelDenied {
+                reason: "seccomp: execve killed grandchild by SIGSYS".into(),
+            }),
+            ChildExit::Exited(32) => Ok(EnforcementOutcome::KernelDenied {
+                reason: "exec child killed by non-SIGSYS signal".into(),
+            }),
+            ChildExit::Exited(0) => Ok(EnforcementOutcome::Confined), // 逃逸：exec 真跑了
+            ChildExit::Exited(33) => {
+                Err(mkerr("exec probe: Command spawn returned Err (not killed)".into()))
+            }
+            ChildExit::Exited(c) => Err(mkerr(format!("exec probe failure code {c}"))),
+            ChildExit::KilledBySignal(s) => Ok(EnforcementOutcome::KernelDenied {
+                reason: format!("exec child killed by signal {s}"),
+            }),
+        }
+    }
+
+    /// shell 腿基线（layer honesty）：**无 seccomp** 直接 `Command::new(prog).status()`。
+    /// 能 spawn => `true`，证明拦截源是 seccomp 而非环境本身不能起子进程。
+    pub fn baseline_can_exec(&self, helper: &str, prog: &str) -> std::io::Result<bool> {
+        Ok(matches!(
+            platform_sys::spawn_and_wait(helper, &["confined-exec-baseline", prog])?,
+            platform_sys::ChildExit::Exited(0)
+        ))
     }
 }
 

@@ -9,6 +9,10 @@
 // 冻结 oracle 的稳定内容哈希：真 write-with-diff 的事务比对与 oracle 同形（同一函数）。
 #[cfg(target_os = "linux")]
 use security_execution::rollback::content_hash;
+// 受限工具 seccomp allowlist 的**单一真相源**在 lib（`tool_seccomp_syscalls`，结构性
+// 证明不含 socket/clone/execve）。fs.read / svc.status / write.diff / content.pipeline 共用。
+#[cfg(target_os = "linux")]
+use security_execution_linux::tool_seccomp_csv;
 
 #[cfg(target_os = "linux")]
 fn open_code(target: &str) -> i32 {
@@ -227,50 +231,8 @@ fn run_confined(args: &[String]) -> ! {
     }
 }
 
-/// 工具用固定 seccomp allowlist（号 csv）：default-deny 下放行真实文件 I/O 所需
-/// syscall（open/read/write/stat/mmap 等），其余仍被内核 SIGSYS。覆盖 glibc 读
-/// 一个文件 + 写观测文件所需集合（在本 KVM VM kernel 6.12 + glibc 上实测足够）。
-#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
-fn tool_seccomp_csv() -> String {
-    let nums: [libc::c_long; 27] = [
-        libc::SYS_read,
-        libc::SYS_write,
-        libc::SYS_open,
-        libc::SYS_openat,
-        libc::SYS_close,
-        libc::SYS_fstat,
-        libc::SYS_stat,
-        libc::SYS_lstat,
-        libc::SYS_newfstatat,
-        libc::SYS_statx,
-        libc::SYS_lseek,
-        libc::SYS_pread64,
-        libc::SYS_mmap,
-        libc::SYS_mprotect,
-        libc::SYS_munmap,
-        libc::SYS_madvise,
-        libc::SYS_brk,
-        libc::SYS_getrandom,
-        libc::SYS_rt_sigaction,
-        libc::SYS_rt_sigprocmask,
-        libc::SYS_rt_sigreturn,
-        libc::SYS_sigaltstack,
-        libc::SYS_futex,
-        libc::SYS_getdents64,
-        libc::SYS_clock_gettime,
-        libc::SYS_getpid,
-        libc::SYS_close_range,
-    ];
-    nums.iter()
-        .map(|n| n.to_string())
-        .collect::<Vec<_>>()
-        .join(",")
-}
-
-#[cfg(all(target_os = "linux", not(target_arch = "x86_64")))]
-fn tool_seccomp_csv() -> String {
-    String::new()
-}
+// 工具用固定 seccomp allowlist 已上移到 `security_execution_linux::tool_seccomp_csv`
+// （单一真相源；结构性证明不含 socket/clone/execve）。此处经文件顶部 `use` 引入。
 
 /// 把观测 JSON 写入 `out`（已在沙箱施加**之前**打开的 fd —— Landlock 仅在 open 时
 /// 校验路径，已打开的 fd 不受其约束；故工具产物经此 fd 真实回传给 parent）。
@@ -502,6 +464,191 @@ fn run_tool_write_denied(args: &[String]) -> ! {
     }
 }
 
+// ===== ADR-000 第三 MVP「不可信内容处理」=====
+
+/// 净化时需中和的 shell metacharacter 集合（替换为空格）。
+#[cfg(target_os = "linux")]
+const SHELL_META: &[char] = &[
+    ';', '|', '&', '$', '`', '(', ')', '<', '>', '{', '}', '[', ']', '\\', '!', '*', '?', '~',
+    '\n', '\r', '"', '\'',
+];
+
+/// 净化一段不可信 blob：pass1 丢弃非空格控制字符 + 把 shell metachar 中和为空格；
+/// pass2 按 whitespace 切 token，对 `contains_secret_value` 为真的 token 整体红action。
+/// 返回 `(净化文本, 是否移除过危险内容)`。
+#[cfg(target_os = "linux")]
+fn sanitize_untrusted(raw: &str) -> (String, bool) {
+    let mut removed = false;
+    // pass1：丢弃非空格控制字符；shell metachar 中和为空格。
+    let mut pass1 = String::with_capacity(raw.len());
+    for ch in raw.chars() {
+        if ch.is_control() && ch != ' ' {
+            removed = true;
+            continue;
+        }
+        if SHELL_META.contains(&ch) {
+            pass1.push(' ');
+            removed = true;
+            continue;
+        }
+        pass1.push(ch);
+    }
+    // pass2：按 whitespace 切 token，secret-like token 整体红action。
+    let mut tokens: Vec<String> = Vec::new();
+    for tok in pass1.split_whitespace() {
+        if runtime_contracts::contains_secret_value(tok) {
+            tokens.push("[secret-redacted]".to_string());
+            removed = true;
+        } else {
+            tokens.push(tok.to_string());
+        }
+    }
+    (tokens.join(" "), removed)
+}
+
+/// 工具 `content.pipeline`：在完整受限沙箱（user/mount/pid/net ns + Landlock 限定到
+/// `input` 父目录 + seccomp default-deny）内净化一段外部/模型来源 blob，产出净化摘要 +
+/// 稳定哈希，经 `out` fd 回传。沙箱内 net/exec 因 `tool_seccomp_csv()` 无 socket/clone/
+/// execve 而结构性死。**fail-closed**：净化后若仍含 secret-like 串，exit 85（绝不回传）。
+#[cfg(target_os = "linux")]
+fn run_tool_content_pipeline(args: &[String]) -> ! {
+    use std::hash::Hasher;
+    let out = arg(args, 2);
+    let input = arg(args, 3);
+    // out fd 必须在沙箱施加**之前**打开（侧信道，Landlock 仅在 open 时校验路径）。
+    let out_file = match std::fs::File::create(out) {
+        Ok(f) => f,
+        Err(_) => platform_sys::exit_now(70),
+    };
+    // Landlock 授权目录 = input 父目录（只读授权恰好覆盖目标 blob）。
+    let parent = std::path::Path::new(input)
+        .parent()
+        .and_then(|p| p.to_str())
+        .unwrap_or("/");
+
+    enter_confined("user,mount,pid,net", &tool_seccomp_csv(), parent);
+
+    // ===== 仅受限 child 到达此处：在沙箱内净化不可信 blob =====
+    let raw = match std::fs::read(input) {
+        Ok(b) => b,
+        Err(e) => match e.raw_os_error() {
+            Some(c) if c == libc::EACCES => platform_sys::exit_now(10),
+            _ => platform_sys::exit_now(12),
+        },
+    };
+    let raw_str = String::from_utf8_lossy(&raw);
+    let (san, removed) = sanitize_untrusted(raw_str.as_ref());
+    // fail-closed：净化后若仍含 secret-like 串，绝不回传一份「净化」摘要。
+    if runtime_contracts::contains_secret_value(&san) {
+        platform_sys::exit_now(85);
+    }
+    // summary：collapse whitespace + 截断到固定字节上界（UTF-8 边界安全）。
+    let collapsed = san.split_whitespace().collect::<Vec<_>>().join(" ");
+    let summary = {
+        const SUMMARY_MAX: usize = 256;
+        if collapsed.len() <= SUMMARY_MAX {
+            collapsed
+        } else {
+            let mut end = SUMMARY_MAX;
+            while end > 0 && !collapsed.is_char_boundary(end) {
+                end -= 1;
+            }
+            collapsed[..end].to_string()
+        }
+    };
+    let mut h = std::collections::hash_map::DefaultHasher::new();
+    h.write(summary.as_bytes());
+    let summary_hash = h.finish();
+    let contained_secret = runtime_contracts::contains_secret_value(raw_str.as_ref());
+    let json = format!(
+        "{{\"tool\":\"content.pipeline\",\"trust\":\"sanitized-summary\",\"sanitized_len\":{},\"removed_dangerous\":{},\"summary_hash\":\"{summary_hash:016x}\",\"contained_secret\":{}}}",
+        summary.len(),
+        removed,
+        contained_secret
+    );
+    write_observation(out_file, &json)
+}
+
+/// 把 connect 错误分类为退出码：41=netns 不可达类、42=拒绝、43=超时、44=其他、45=坏地址。
+#[cfg(target_os = "linux")]
+fn classify_connect_err(e: &std::io::Error) -> i32 {
+    match e.raw_os_error() {
+        Some(c)
+            if c == libc::ENETUNREACH
+                || c == libc::EHOSTUNREACH
+                || c == libc::ENETDOWN
+                || c == libc::EPERM =>
+        {
+            41
+        }
+        Some(c) if c == libc::ECONNREFUSED => 42,
+        Some(c) if c == libc::ETIMEDOUT => 43,
+        None => 43, // connect_timeout 合成 TimedOut（raw_os_error 为 None）
+        Some(_) => 44,
+    }
+}
+
+/// 对字面 `addr`（IP:port，**不经 DNS**）做有界 TCP connect 并分类。0=连上（逃逸）。
+#[cfg(target_os = "linux")]
+fn classify_connect(addr_s: &str) -> i32 {
+    use std::net::{SocketAddr, TcpStream};
+    use std::time::Duration;
+    let addr: SocketAddr = match addr_s.parse() {
+        Ok(a) => a,
+        Err(_) => return 45,
+    };
+    match TcpStream::connect_timeout(&addr, Duration::from_millis(500)) {
+        Ok(_) => 0,
+        Err(e) => classify_connect_err(&e),
+    }
+}
+
+/// 不可信内容网络外泄探针（受限）：仅 netns 强制（**空 seccomp + 无 Landlock**，唯一
+/// 强制者 = netns）。新 netns 只有 down 的 `lo` => 连出 ENETUNREACH（exit 41）。
+#[cfg(target_os = "linux")]
+fn run_confined_connect(args: &[String]) -> ! {
+    let addr_s = arg(args, 2);
+    enter_confined("user,net", "", "");
+    // ===== 仅受限 child：在 netns 内尝试连出 =====
+    platform_sys::exit_now(classify_connect(addr_s))
+}
+
+/// 网络腿基线（layer honesty）：不进 netns 直接 connect 同一 addr，证明 errno != 41。
+#[cfg(target_os = "linux")]
+fn run_confined_connect_baseline(args: &[String]) -> ! {
+    let addr_s = arg(args, 2);
+    platform_sys::exit_now(classify_connect(addr_s))
+}
+
+/// 不可信内容 shell 探针（受限）：user ns + `tool_seccomp_csv()`（**无 clone/execve**，
+/// 唯一强制者 = seccomp）。Command 首个 spawn syscall(clone) 非 allowlist => 本进程 SIGSYS
+/// （外层经 reraise 见 SIGSYS）。防御性：clone 侥幸过而 execve 被拦 => grandchild SIGSYS(31)。
+#[cfg(target_os = "linux")]
+fn run_confined_exec(args: &[String]) -> ! {
+    use std::os::unix::process::ExitStatusExt;
+    let prog = arg(args, 2);
+    enter_confined("user", &tool_seccomp_csv(), "");
+    // ===== 仅受限 child：尝试 spawn 外部程序 =====
+    match std::process::Command::new(prog).status() {
+        Ok(st) => match st.signal() {
+            Some(s) if s == platform_sys::SIGSYS => platform_sys::exit_now(31),
+            Some(_) => platform_sys::exit_now(32),
+            None => platform_sys::exit_now(0), // exec 真跑了 = 逃逸
+        },
+        Err(_) => platform_sys::exit_now(33),
+    }
+}
+
+/// shell 腿基线（layer honesty）：无 seccomp 直接 spawn，证明拦截源是 seccomp 而非环境。
+#[cfg(target_os = "linux")]
+fn run_confined_exec_baseline(args: &[String]) -> ! {
+    let prog = arg(args, 2);
+    match std::process::Command::new(prog).status() {
+        Ok(_) => platform_sys::exit_now(0),
+        Err(_) => platform_sys::exit_now(1),
+    }
+}
+
 /// 被监督的真服务 `service-sleep <health_file> <secs>`：周期性把递增心跳计数写入
 /// `health_file`（首拍在任何 sleep 之前写出，使监督方 await_health 立即可见），存活
 /// `secs` 秒后自然退出。直接进程、不施加任何沙箱（workload 而非 probe）。
@@ -539,6 +686,13 @@ fn main() {
         "tool-write-diff" => run_tool_write_diff(&args),
         "tool-write-rollback" => run_tool_write_rollback(&args),
         "tool-write-denied" => run_tool_write_denied(&args),
+
+        // ADR-000 第三 MVP「不可信内容处理」：沙箱内净化流水线 + net/exec 拒绝证明。
+        "tool-content-pipeline" => run_tool_content_pipeline(&args),
+        "confined-connect" => run_confined_connect(&args),
+        "confined-connect-baseline" => run_confined_connect_baseline(&args),
+        "confined-exec" => run_confined_exec(&args),
+        "confined-exec-baseline" => run_confined_exec_baseline(&args),
 
         // 被监督的真服务（直接进程，**不进沙箱** —— 它是 workload 而非 probe）：
         // 周期性把递增心跳计数写入 health 文件，存活 <secs> 秒后自然退出。secs 取够长
