@@ -1,23 +1,22 @@
 //! agentd_init —— 真实 PID1 / init（ADR-004 D3.2 / D5 / cp4）。
 //!
-//! 目标形态：最小 static-musl appliance 的唯一 PID1。
-//! 职责：挂载 /proc /sys /dev（devtmpfs）→ 安装信号处理 → 永不退出地
-//! reap 孤儿进程 → fork 一个受监督子进程托管 agent_runtime 运行循环。
-//! 当前为骨架，真实 mount/reap/signal 经 platform_sys 在 cp4 填充。
+//! 目标形态：最小 static-musl appliance 的唯一 PID1。boot（D5）把内核拓扑交给
+//! 本进程后，调用 [`agentd_init::run_pid1`] 进入真 init 序列：挂载 /proc /sys /dev
+//! → no_new_privs → 屏蔽 SIGCHLD + signalfd → fork 受监督子进程托管运行循环 →
+//! 父进程进入永不返回的 signalfd 驱动回收循环。
 #![forbid(unsafe_code)]
 
-use agent_runtime::AgentRuntime;
+use agentd_init::{run_pid1, Pid1Config};
 
-fn main() {
-    // cp4 待实现的真实 init 序列（全部经 platform_sys 安全封装）：
-    //   1. mount devtmpfs/proc/sys；创建 /dev 节点
-    //   2. prctl(PR_SET_NO_NEW_PRIVS)；安装 SIGCHLD/SIGTERM 处理
-    //   3. pivot_root 到 ext4 rootfs 分区（D5 boot topology）
-    //   4. fork 受监督子进程托管运行循环；主进程进入 reap 循环，永不退出
+fn main() -> std::io::Result<()> {
     let pid = platform_sys::getpid();
-    let runtime = AgentRuntime::new();
-    println!(
-        "agentd_init skeleton: pid={pid} runtime_state={:?} (cp4 init sequence pending)",
-        runtime.state()
-    );
+    if pid != 1 {
+        // 真 init 必须是 PID 1；否则回收语义（孤儿 re-parent 到 1 号）不成立。
+        // 打印诊断后以非 0 退出，绝不伪装成功（Fix, don't hide）。
+        eprintln!("agentd_init: refusing to run as non-PID1 (pid={pid})");
+        std::process::exit(1);
+    }
+    // 生产形态：回收循环永不返回；run_pid1 只在 Err（某步内核失败）时返回。
+    run_pid1(&Pid1Config::production())?;
+    unreachable!("production run_pid1 reap loop never returns");
 }

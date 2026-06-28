@@ -2796,12 +2796,12 @@ impl std::fmt::Display for EcosystemContractError {
 impl std::error::Error for EcosystemContractError {}
 
 pub fn stable_contract_hash(value: &str) -> String {
-    let mut hash: u64 = 0xcbf29ce484222325;
-    for byte in value.as_bytes() {
-        hash ^= u64::from(*byte);
-        hash = hash.wrapping_mul(0x100000001b3);
-    }
-    format!("sha256:agentos-stable-v1-{hash:016x}")
+    use sha2::{Digest, Sha256};
+    let hex: String = Sha256::digest(value.as_bytes())
+        .iter()
+        .map(|byte| format!("{byte:02x}"))
+        .collect();
+    format!("sha256:agentos-stable-v1-{hex}")
 }
 
 fn runtime_in_range(runtime: &str, min: &str, max: &str) -> bool {

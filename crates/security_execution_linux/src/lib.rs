@@ -23,6 +23,56 @@ pub enum EnforcementOutcome {
     KernelDenied { reason: String },
 }
 
+/// `fs.read` 工具在受限沙箱内读取一个文件后回传的真实观测。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FsReadObservation {
+    /// 沙箱内是否成功读到文件（Landlock 越界 / 文件缺失 => false）。
+    pub ok: bool,
+    /// 文件真实字节长度。
+    pub len: usize,
+    /// 首行字节的稳定哈希（16 位十六进制，固定种子 `DefaultHasher`，可跨进程复现）。
+    pub first_line_hash: String,
+}
+
+/// `svc.status` 工具在受限沙箱内探测一个进程后回传的真实观测。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SvcStatusObservation {
+    /// `/proc/<pid>/comm` 可读 => 进程在宿主 pidns 存活。
+    pub alive: bool,
+    /// 进程 comm 名（不存活时为空）。
+    pub comm: String,
+}
+
+/// 极简 JSON 字段抽取（仅服务于 helper 自产的良构观测，无需 serde 依赖）。
+#[cfg(target_os = "linux")]
+fn json_uint(s: &str, key: &str) -> Option<u64> {
+    let k = format!("\"{key}\":");
+    let rest = &s[s.find(&k)? + k.len()..];
+    let digits: String = rest.chars().take_while(|c| c.is_ascii_digit()).collect();
+    digits.parse().ok()
+}
+
+#[cfg(target_os = "linux")]
+fn json_bool(s: &str, key: &str) -> Option<bool> {
+    let k = format!("\"{key}\":");
+    let rest = &s[s.find(&k)? + k.len()..];
+    if rest.starts_with("true") {
+        Some(true)
+    } else if rest.starts_with("false") {
+        Some(false)
+    } else {
+        None
+    }
+}
+
+#[cfg(target_os = "linux")]
+fn json_str(s: &str, key: &str) -> Option<String> {
+    let k = format!("\"{key}\":\"");
+    let rest = &s[s.find(&k)? + k.len()..];
+    let end = rest.find('"')?;
+    Some(rest[..end].to_string())
+}
+
 /// 把 syscall 名解析为 x86_64 syscall 号（fail-closed：未知名返回 `None`，
 /// 调用方据此拒绝构建过滤器）。`libc::SYS_*` 为目标 arch 的权威号。
 #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
@@ -232,6 +282,72 @@ impl LinuxEnforcer {
             ChildExit::Exited(28) => Err(mkerr("cgroup join (cgroup.procs write) failed".into())),
             ChildExit::Exited(c) => Err(mkerr(format!("cgroup probe failure code {c}"))),
             ChildExit::KilledBySignal(s) => Err(mkerr(format!("cgroup helper killed by signal {s}"))),
+        }
+    }
+
+    /// 真实工具 `fs.read`：在完整受限沙箱（user/mount/pid/net ns + Landlock 限定到
+    /// **文件父目录** + seccomp default-deny）内真实读取 `file` 的字节，helper 把观测
+    /// JSON 写入 `out_path`（沙箱施加前打开的侧信道 fd），父进程在此读回并解析为
+    /// 真实字节长度 + 首行哈希。helper 非 0 退出 / 被信号杀（如 seccomp SIGSYS）=> Err。
+    pub fn run_fs_read(
+        &self,
+        helper: &str,
+        out_path: &str,
+        file: &str,
+    ) -> std::io::Result<FsReadObservation> {
+        use platform_sys::ChildExit;
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(helper, &["tool-fs-read", out_path, file])? {
+            ChildExit::Exited(0) => {
+                let s = std::fs::read_to_string(out_path)?;
+                let ok = json_bool(&s, "ok").unwrap_or(false);
+                let len = json_uint(&s, "len")
+                    .ok_or_else(|| mkerr(format!("observation missing len: {s}")))?
+                    as usize;
+                let first_line_hash = json_str(&s, "first_line_hash")
+                    .ok_or_else(|| mkerr(format!("observation missing first_line_hash: {s}")))?;
+                Ok(FsReadObservation {
+                    ok,
+                    len,
+                    first_line_hash,
+                })
+            }
+            ChildExit::Exited(70) => Err(mkerr("fs.read: helper could not open out file".into())),
+            ChildExit::Exited(c) => Err(mkerr(format!("fs.read helper exit {c}"))),
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("fs.read helper killed by signal {s}")))
+            }
+        }
+    }
+
+    /// 真实工具 `svc.status`：在受限沙箱（user ns + Landlock 限定到 `/proc` 只读 +
+    /// seccomp default-deny；不进 pid/mount ns 以保留宿主 /proc）内读取
+    /// `/proc/<pid>/comm`，helper 把观测 JSON 写入 `out_path`，父进程读回并解析为
+    /// `alive + comm`（进程不存在 => alive=false）。
+    pub fn run_svc_status(
+        &self,
+        helper: &str,
+        out_path: &str,
+        pid: i32,
+    ) -> std::io::Result<SvcStatusObservation> {
+        use platform_sys::ChildExit;
+        let mkerr = |m: String| std::io::Error::new(std::io::ErrorKind::Other, m);
+        match platform_sys::spawn_and_wait(helper, &["tool-svc-status", out_path, &pid.to_string()])?
+        {
+            ChildExit::Exited(0) => {
+                let s = std::fs::read_to_string(out_path)?;
+                let alive = json_bool(&s, "alive")
+                    .ok_or_else(|| mkerr(format!("observation missing alive: {s}")))?;
+                let comm = json_str(&s, "comm").unwrap_or_default();
+                Ok(SvcStatusObservation { alive, comm })
+            }
+            ChildExit::Exited(70) => {
+                Err(mkerr("svc.status: helper could not open out file".into()))
+            }
+            ChildExit::Exited(c) => Err(mkerr(format!("svc.status helper exit {c}"))),
+            ChildExit::KilledBySignal(s) => {
+                Err(mkerr(format!("svc.status helper killed by signal {s}")))
+            }
         }
     }
 }

@@ -56,6 +56,12 @@ pub const SIGSYS: i32 = libc::SIGSYS;
 #[cfg(not(target_os = "linux"))]
 pub const SIGSYS: i32 = 31;
 
+/// `SIGCHLD` —— 子进程状态变更信号；真 PID1 的 reap 循环通过 signalfd 观测它。
+#[cfg(target_os = "linux")]
+pub const SIGCHLD: i32 = libc::SIGCHLD;
+#[cfg(not(target_os = "linux"))]
+pub const SIGCHLD: i32 = 17;
+
 /// 立即退出（`_exit`，async-signal-safe、不 flush）。
 #[cfg(target_os = "linux")]
 pub fn exit_now(code: i32) -> ! {
@@ -144,6 +150,123 @@ pub fn mount_proc(target: &str) -> io::Result<()> {
     } else {
         Err(io::Error::last_os_error())
     }
+}
+
+/// 在 `target` 挂载一个全新的 `sysfs`。flags 禁 suid/dev/exec。
+///
+/// 注意：在 user namespace 内挂 sysfs 需调用者**拥有**对应的 network namespace
+/// （否则 `EPERM`）——真 PID1 在完整特权的根 netns 下不受此限；userns 测试需先
+/// `unshare(CLONE_NEWNET)`。
+#[cfg(target_os = "linux")]
+pub fn mount_sysfs(target: &str) -> io::Result<()> {
+    let sysfs_c = CString::new("sysfs").expect("static");
+    let target_c =
+        CString::new(target).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in path"))?;
+    // SAFETY: mount(2) 挂载 sysfs 文件系统，flags 禁 suid/dev/exec，data 为 NULL。
+    let rc = unsafe {
+        libc::mount(
+            sysfs_c.as_ptr(),
+            target_c.as_ptr(),
+            sysfs_c.as_ptr(),
+            (libc::MS_NOSUID | libc::MS_NODEV | libc::MS_NOEXEC) as libc::c_ulong,
+            core::ptr::null(),
+        )
+    };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// 在 `target` 挂载 `devtmpfs`（内核维护的 /dev）。flags 禁 suid。
+///
+/// 注意：devtmpfs 未标记 `FS_USERNS_MOUNT`，**无法**在任何 user namespace 内挂载
+/// （恒 `EPERM`）——仅真 PID1（完整特权、非 userns）可成功。
+#[cfg(target_os = "linux")]
+pub fn mount_devtmpfs(target: &str) -> io::Result<()> {
+    let dev_c = CString::new("devtmpfs").expect("static");
+    let target_c =
+        CString::new(target).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in path"))?;
+    // SAFETY: mount(2) 挂载 devtmpfs，flags 禁 suid，data 为 NULL。
+    let rc = unsafe {
+        libc::mount(
+            dev_c.as_ptr(),
+            target_c.as_ptr(),
+            dev_c.as_ptr(),
+            libc::MS_NOSUID as libc::c_ulong,
+            core::ptr::null(),
+        )
+    };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `sigprocmask(SIG_BLOCK, {SIGCHLD})` —— 屏蔽 SIGCHLD 的默认/异步投递，使其只能
+/// 经 signalfd 同步消费。**必须在 fork 受监督子进程之前调用**，否则子进程在 reap
+/// 循环建立前退出会丢失唤醒。
+#[cfg(target_os = "linux")]
+pub fn block_sigchld() -> io::Result<()> {
+    // SAFETY: sigset_t 为 POD，zeroed 后由 sigemptyset/sigaddset 正确初始化。
+    let mut mask: libc::sigset_t = unsafe { core::mem::zeroed() };
+    // SAFETY: mask 指向栈上有效 sigset_t。
+    unsafe {
+        libc::sigemptyset(&mut mask);
+        libc::sigaddset(&mut mask, libc::SIGCHLD);
+    }
+    // SAFETY: 第三参 NULL（不取旧掩码）；mask 有效。
+    let rc = unsafe { libc::sigprocmask(libc::SIG_BLOCK, &mask, core::ptr::null_mut()) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `signalfd(2)` —— 为 SIGCHLD 创建可读 fd（`SFD_CLOEXEC`）。配合
+/// [`block_sigchld`] 使 PID1 用 `read` 同步消费子进程退出事件，再 `reap_all`。
+/// 返回 `OwnedFd`（drop 即 close，无 fd 泄漏）。
+#[cfg(target_os = "linux")]
+pub fn signalfd_sigchld() -> io::Result<std::os::fd::OwnedFd> {
+    use std::os::fd::FromRawFd;
+    // SAFETY: sigset_t POD，zeroed 后由 sigemptyset/sigaddset 初始化。
+    let mut mask: libc::sigset_t = unsafe { core::mem::zeroed() };
+    // SAFETY: mask 指向栈上有效 sigset_t。
+    unsafe {
+        libc::sigemptyset(&mut mask);
+        libc::sigaddset(&mut mask, libc::SIGCHLD);
+    }
+    // SAFETY: signalfd(2)，fd=-1 新建；mask 有效；SFD_CLOEXEC 防 exec 泄漏。
+    let fd = unsafe { libc::signalfd(-1, &mask, libc::SFD_CLOEXEC) };
+    if fd < 0 {
+        return Err(io::Error::last_os_error());
+    }
+    // SAFETY: signalfd 成功返回一个全新拥有的内核 fd，转交 OwnedFd 管理生命周期。
+    Ok(unsafe { std::os::fd::OwnedFd::from_raw_fd(fd) })
+}
+
+/// 从 signalfd 阻塞读取一条 `signalfd_siginfo`，返回其 `ssi_signo`（应为
+/// [`SIGCHLD`]）。短读视为错误（不静默吞掉损坏的事件）。
+#[cfg(target_os = "linux")]
+pub fn read_sigchld(fd: std::os::fd::RawFd) -> io::Result<u32> {
+    let sz = core::mem::size_of::<libc::signalfd_siginfo>();
+    // SAFETY: signalfd_siginfo 为 POD（全整型字段），zeroed 是合法初值。
+    let mut si: libc::signalfd_siginfo = unsafe { core::mem::zeroed() };
+    // SAFETY: read(2) 写入 si（恰 sz 字节）；&mut si 指向栈上有效缓冲。
+    let n = unsafe { libc::read(fd, (&mut si as *mut libc::signalfd_siginfo).cast(), sz) };
+    if n < 0 {
+        return Err(io::Error::last_os_error());
+    }
+    if (n as usize) < sz {
+        return Err(io::Error::new(
+            io::ErrorKind::UnexpectedEof,
+            "short signalfd read",
+        ));
+    }
+    Ok(si.ssi_signo)
 }
 
 /// `prctl(PR_SET_NO_NEW_PRIVS, 1)` —— 安装 seccomp / Landlock 的前置条件。
@@ -351,6 +474,26 @@ pub fn mount_proc(_target: &str) -> io::Result<()> {
     Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
 }
 #[cfg(not(target_os = "linux"))]
+pub fn mount_sysfs(_target: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn mount_devtmpfs(_target: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn block_sigchld() -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn signalfd_sigchld() -> io::Result<std::os::fd::OwnedFd> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn read_sigchld(_fd: std::os::fd::RawFd) -> io::Result<u32> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
 pub fn set_no_new_privs() -> io::Result<()> {
     Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
 }
@@ -399,5 +542,17 @@ mod tests {
             Ok(ChildExit::Exited(127)) => {}
             other => panic!("expected Exited(127) on exec failure, got {other:?}"),
         }
+    }
+
+    // SIGCHLD 屏蔽 + signalfd 创建是确定性的，可在多线程 test harness 里安全验证。
+    // 完整的 “子进程退出 → signalfd 可读 → reap” 闭环需单线程 PID1 进程，由
+    // agentd_init 的 boot_probe 集成测试覆盖（避免 harness 多线程下的信号投递竞态）。
+    #[cfg(target_os = "linux")]
+    #[test]
+    fn block_sigchld_and_signalfd_create_ok() {
+        use std::os::fd::AsRawFd;
+        block_sigchld().expect("block SIGCHLD");
+        let fd = signalfd_sigchld().expect("create signalfd");
+        assert!(fd.as_raw_fd() >= 0, "signalfd must be a valid descriptor");
     }
 }
