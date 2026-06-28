@@ -582,6 +582,24 @@ pub fn try_wait(pid: i32) -> io::Result<Option<ChildExit>> {
     }
 }
 
+/// `reboot(2)`：以 `cmd` 执行下电/重启/停机。成功时随系统下电**永不返回**，故唯一可达
+/// 的返回是失败（如缺 `CAP_SYS_BOOT` => `EPERM`），直接返回 `io::Error`。真 PID1
+///（initramfs 内 uid0、初始 namespace）持有 `CAP_SYS_BOOT`。
+#[cfg(target_os = "linux")]
+pub fn reboot(cmd: i32) -> io::Error {
+    // SAFETY: reboot(2) 的 libc 单参封装内部填入 LINUX_REBOOT_MAGIC1/MAGIC2，仅接受整型
+    // cmd、无内存参数。POWER_OFF/HALT/RESTART 成功随机器关机永不返回；返回即失败。
+    unsafe { libc::reboot(cmd) };
+    io::Error::last_os_error()
+}
+
+/// 便捷封装：`reboot(RB_POWER_OFF)` —— 干净 ACPI 下电，使 QEMU 干净退出（exit 0）。
+/// 真 PID1 自检完成后的唯一下电调用点。
+#[cfg(target_os = "linux")]
+pub fn power_off() -> io::Error {
+    reboot(libc::RB_POWER_OFF)
+}
+
 // ===== 非 Linux host 下的同名 stub（保证 workspace 跨平台可编译）=====
 
 #[cfg(not(target_os = "linux"))]
@@ -671,6 +689,14 @@ pub fn spawn_service(_exe: &str, _args: &[&str]) -> io::Result<i32> {
 #[cfg(not(target_os = "linux"))]
 pub fn try_wait(_pid: i32) -> io::Result<Option<ChildExit>> {
     Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn reboot(_cmd: i32) -> io::Error {
+    io::Error::new(io::ErrorKind::Unsupported, "Linux-only")
+}
+#[cfg(not(target_os = "linux"))]
+pub fn power_off() -> io::Error {
+    io::Error::new(io::ErrorKind::Unsupported, "Linux-only")
 }
 
 #[cfg(test)]

@@ -23,17 +23,50 @@ jobs:
       - uses: actions/checkout@v4
       - name: add musl target
         run: rustup target add x86_64-unknown-linux-musl
-      - name: install musl tools
-        run: sudo apt-get update && sudo apt-get install -y musl-tools
-      - name: build static agentd_init
-        run: cargo build -p agentd_init --target x86_64-unknown-linux-musl --release
-      - name: assert static (no dynamic deps)
+      - name: install musl tools + static-analysis utils
+        run: sudo apt-get update && sudo apt-get install -y musl-tools file binutils
+      - name: build static agentd_init + probes (all bins)
+        run: cargo build -p agentd_init --target x86_64-unknown-linux-musl --release --bins
+      - name: assert fully static (triple-check, static-pie safe)
         run: |
           f=target/x86_64-unknown-linux-musl/release/agentd_init
           file "$f"
-          if ldd "$f" 2>&1 | grep -q "=>"; then
-            echo "ERROR: binary is dynamically linked"; exit 1
-          fi
+          # musl 默认产 static-pie：带 .dynamic 段做自重定位，但无 INTERP/NEEDED。故不能用
+          # 'readelf -d 有 Dynamic 段=动态'（会误杀 static-pie）。三重判据如下。
+          if ldd "$f" 2>&1 | grep -q "=>"; then echo "ERROR: dynamically linked"; exit 1; fi
+          if [ "$(readelf -l "$f" | grep -c INTERP)" != 0 ]; then echo "ERROR: has INTERP"; exit 1; fi
+          if [ "$(readelf -d "$f" 2>/dev/null | grep -c NEEDED)" != 0 ]; then echo "ERROR: has NEEDED"; exit 1; fi
+          echo "OK: fully static (no =>, no INTERP, no NEEDED)"
+      - name: run static probes (cp2 de-risk：musl 下搬运的 syscall 真能跑)
+        run: |
+          # probe 退出 0 = unshare/mount(/proc,/sys)/no_new_privs/signalfd/fork/reap/run loop 在
+          # musl 静态二进制里真跑通（ubuntu-latest 允许 unprivileged userns，同 build-test 前提）。
+          D=target/x86_64-unknown-linux-musl/release
+          "$D/init_probe" || { echo "ERROR: init_probe failed"; exit 1; }
+          "$D/boot_probe" || { echo "ERROR: boot_probe failed"; exit 1; }
+          echo "OK: init_probe + boot_probe both exited 0 (musl static, real syscalls)"
+
+  tcg-boot:
+    name: real TCG boot to PID1 (no kvm, machine-verified poweroff, cp4)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: add musl target
+        run: rustup target add x86_64-unknown-linux-musl
+      - name: install qemu + musl + cpio + file
+        run: sudo apt-get update && sudo apt-get install -y qemu-system-x86 musl-tools cpio gzip file
+      - name: build static boot_smoke (/init)
+        run: cargo build -p agentd_init --bin boot_smoke --target x86_64-unknown-linux-musl --release
+      - name: provide readable kernel
+        # 标准 runner 的 /boot 内核 root-only；复制到可读路径供 QEMU -kernel（无需 /dev/kvm，TCG）。
+        run: sudo cp "/boot/vmlinuz-$(uname -r)" /tmp/vmlinuz && sudo chmod a+r /tmp/vmlinuz
+      - name: real boot + assert runtime-derived READY marker
+        env:
+          AIOS_QEMU_REQUIRED: '1'        # 缺工具/内核=硬 FAIL，杜绝静默 skip-green
+          AIOS_QEMU_KERNEL: /tmp/vmlinuz
+        run: |
+          export AIOS_AGENTD_INIT_MUSL="$PWD/target/x86_64-unknown-linux-musl/release/boot_smoke"
+          cargo test -p agentd_init --test real_qemu_boot -- --ignored --nocapture
 
   # cp5：真实内核强制 + 逃逸 harness。需要暴露 /dev/kvm 的 self-hosted runner
   # （GitHub 标准 runner 不提供 /dev/kvm）。在该 runner 就绪前保持禁用，

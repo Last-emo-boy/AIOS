@@ -48,6 +48,21 @@ impl Pid1Config {
             run_once: false,
         }
     }
+
+    /// 真开机自检形态（ADR-004 cp4，QEMU 内真 PID1 用）：生产挂载（含真 devtmpfs）+
+    /// `run_once`（受监督子进程被 reap 后回收循环返回 [`Pid1Report`]，供 `boot_smoke` bin
+    /// 打印 READY 标记并 `power_off`）。仅供初始 namespace 的完整特权 PID 1 使用——userns
+    /// 探针挂不了 devtmpfs，故不能复用此形态。
+    pub fn boot_smoke() -> Self {
+        Self {
+            proc_target: "/proc".to_string(),
+            sys_target: "/sys".to_string(),
+            dev_target: "/dev".to_string(),
+            mount_dev: true,
+            make_private: true,
+            run_once: true,
+        }
+    }
 }
 
 /// 回收循环返回时的事实（仅 `run_once` 形态可达；生产形态永不返回）。
