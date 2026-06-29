@@ -1,0 +1,11 @@
+[package]
+name = "early_init"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# AIOS 早期 init（initramfs /init，ADR-004 cp7）：挂内核 fs + 加载根模块 + 挂磁盘 ext4 根 +
+# switch_root + exec 交接 PID1 给磁盘 /sbin/init。依赖隔离：**只**依赖 platform_sys，绝不拉
+# agent_runtime——一个 forbid-unsafe / 单线程 / no-async / no-panic 的 PID1 不应有重依赖图。
+[dependencies]
+platform_sys = { path = "../platform_sys" }

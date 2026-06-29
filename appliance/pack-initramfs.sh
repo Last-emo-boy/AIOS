@@ -64,10 +64,28 @@ trap 'rm -rf "$STAGING"' EXIT
 # 3. 铺设最小布局。
 install -D -m 0755 "$INIT_BIN" "$STAGING/init"
 mkdir -m 0755 "$STAGING/proc" "$STAGING/sys" "$STAGING/dev"
+# /newroot：cp7 switch_root 落点（early_init 把磁盘 ext4 根挂这里再 MS_MOVE 成 /）。cp4 无害。
+mkdir -m 0755 "$STAGING/newroot"
 # 设备节点需 root（mknod）：root 时建，非 root 跳过（boot_smoke 挂 devtmpfs 后自有 /dev/console）。
 if [ "$IS_ROOT" -eq 1 ]; then
   mknod -m 0600 "$STAGING/dev/console" c 5 1
   mknod -m 0666 "$STAGING/dev/null"    c 1 3
+fi
+
+# 3b. cp7：bundle 根所需内核模块（env MODS=空格分隔模块名，按依赖序，默认空）。宿主内核
+#     ext4/virtio_blk=m 时 early_init 须 finit_module 加载它们才能挂磁盘 ext4 根；builtin-ext4
+#     内核（CI/vendored）留 MODS 空即 no-op（同一脚本两用）。从 /lib/modules/$(uname -r) 按名
+#     找 .ko.xz 复制到 /mods（early_init 以 compressed=true / MODULE_INIT_COMPRESSED_FILE 加载）。
+MODS="${MODS:-}"
+if [ -n "$MODS" ]; then
+  MODDIR="/lib/modules/$(uname -r)"
+  mkdir -m 0755 "$STAGING/mods"
+  for m in $MODS; do
+    ko="$(find "$MODDIR" -name "${m}.ko.xz" 2>/dev/null | head -1)"
+    [ -n "$ko" ] || { echo "错误: 模块 ${m}.ko.xz 未在 $MODDIR 找到（内核模块版本不匹配？）" >&2; exit 1; }
+    cp "$ko" "$STAGING/mods/"
+  done
+  echo "  bundled modules (/mods): $MODS" >&2
 fi
 
 # 4. 归一化 mtime —— 可重复构建（不依赖打包时刻）。

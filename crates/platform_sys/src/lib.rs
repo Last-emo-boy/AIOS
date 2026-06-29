@@ -600,6 +600,226 @@ pub fn power_off() -> io::Error {
     reboot(libc::RB_POWER_OFF)
 }
 
+// ───── cp7 磁盘/pivot syscall（ADR-004 cp7；仍是唯一 unsafe 边界）─────
+
+/// `statfs(2)` 的 `f_type` 魔数——根 fs 身份证明（反假绿：磁盘 ext4 产 `EXT4_SUPER_MAGIC`，
+/// initramfs 的 ramfs/tmpfs 产不出 0xEF53）。
+#[cfg(target_os = "linux")]
+pub const EXT4_SUPER_MAGIC: i64 = 0xEF53;
+#[cfg(target_os = "linux")]
+pub const TMPFS_MAGIC: i64 = 0x0102_1994;
+#[cfg(target_os = "linux")]
+pub const RAMFS_MAGIC: i64 = 0x8584_58f6;
+
+/// `finit_module(2)` flag：模块文件是压缩的（.ko.xz），内核解压（需 `CONFIG_MODULE_DECOMPRESS=y`）。
+#[cfg(target_os = "linux")]
+pub const MODULE_INIT_COMPRESSED_FILE: i32 = 4;
+
+/// `umount2(2)` flags。
+#[cfg(target_os = "linux")]
+pub mod umount_flags {
+    pub const MNT_FORCE: i32 = libc::MNT_FORCE;
+    pub const MNT_DETACH: i32 = libc::MNT_DETACH;
+}
+
+/// `mount(2)` 把块设备文件系统（如 ext4 磁盘根）挂到 `target`。
+/// flags 仅 `MS_RDONLY`(若 `read_only`) | `MS_NOSUID`——**绝不**设 `MS_NOEXEC`/`MS_NODEV`：
+/// 磁盘根必须可 `exec /sbin/init` 且可持有设备节点（与 mount_proc 的 NOEXEC|NODEV 相反，
+/// 照抄会让磁盘根不可执行、boot 死在 exec）。
+#[cfg(target_os = "linux")]
+pub fn mount_block(source_dev: &str, target: &str, fstype: &str, read_only: bool) -> io::Result<()> {
+    let src = CString::new(source_dev)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in dev"))?;
+    let tgt = CString::new(target)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in target"))?;
+    let fst = CString::new(fstype)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in fstype"))?;
+    let mut flags: libc::c_ulong = libc::MS_NOSUID;
+    if read_only {
+        flags |= libc::MS_RDONLY;
+    }
+    // SAFETY: mount(2) 挂载块设备 fs；source/target/fstype 为有效 NUL 结尾指针，data 为 NULL。
+    let rc = unsafe {
+        libc::mount(src.as_ptr(), tgt.as_ptr(), fst.as_ptr(), flags, core::ptr::null())
+    };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `mount(source, target, NULL, MS_MOVE, NULL)` —— 把已挂载子树整体迁到新挂载点
+/// （子挂载随父子树迁移）。switch_root 的核心：把新根 move 成 `/`。
+#[cfg(target_os = "linux")]
+pub fn mount_move(source: &str, target: &str) -> io::Result<()> {
+    let src = CString::new(source)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in source"))?;
+    let tgt = CString::new(target)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in target"))?;
+    // SAFETY: mount(2) MS_MOVE；source 已是挂载点、target 为有效 NUL 结尾指针，fstype/data NULL。
+    let rc = unsafe {
+        libc::mount(
+            src.as_ptr(),
+            tgt.as_ptr(),
+            core::ptr::null(),
+            libc::MS_MOVE as libc::c_ulong,
+            core::ptr::null(),
+        )
+    };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `chroot(2)`。
+#[cfg(target_os = "linux")]
+pub fn chroot(path: &str) -> io::Result<()> {
+    let p = CString::new(path)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in path"))?;
+    // SAFETY: chroot(2) 仅接受有效 NUL 结尾路径指针。
+    let rc = unsafe { libc::chroot(p.as_ptr()) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `chdir(2)`。
+#[cfg(target_os = "linux")]
+pub fn chdir(path: &str) -> io::Result<()> {
+    let p = CString::new(path)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in path"))?;
+    // SAFETY: chdir(2) 仅接受有效 NUL 结尾路径指针。
+    let rc = unsafe { libc::chdir(p.as_ptr()) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `umount2(2)`。
+#[cfg(target_os = "linux")]
+pub fn umount2(target: &str, flags: i32) -> io::Result<()> {
+    let t = CString::new(target)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in target"))?;
+    // SAFETY: umount2(2) 接受有效 NUL 结尾路径 + flag 整数。
+    let rc = unsafe { libc::umount2(t.as_ptr(), flags) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// 从 initramfs（ramfs/tmpfs 根）切到真磁盘根的 **switch_root 序列**：
+/// `chdir(new_root)` → `mount(".","/",MS_MOVE)` → `chroot(".")` → `chdir("/")`。
+/// 不能用 [`pivot_root`]——initramfs 的 `/` 是 rootfs、无父挂载，pivot_root 恒 `EINVAL`。
+#[cfg(target_os = "linux")]
+pub fn switch_root(new_root: &str) -> io::Result<()> {
+    chdir(new_root)?;
+    mount_move(".", "/")?;
+    chroot(".")?;
+    chdir("/")?;
+    Ok(())
+}
+
+/// `pivot_root(2)`（经 `SYS_pivot_root`，libc 无包装）。
+///
+/// **注意**：从 initramfs 的 rootfs 调用恒返回 `EINVAL`（rootfs 无父挂载、不可移动）；
+/// boot 路径用 [`switch_root`]。本封装保留给 cp5 沙箱子进程的**真挂载** rootfs 切换
+/// （旧根是真挂载、可干净 umount，pivot_root 比 switch_root 更安全）。
+#[cfg(target_os = "linux")]
+pub fn pivot_root(new_root: &str, put_old: &str) -> io::Result<()> {
+    let new = CString::new(new_root)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in new_root"))?;
+    let old = CString::new(put_old)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in put_old"))?;
+    // SAFETY: pivot_root(2) 经 syscall(SYS_pivot_root)；两参为有效 NUL 结尾路径指针。
+    let rc = unsafe { libc::syscall(libc::SYS_pivot_root, new.as_ptr(), old.as_ptr()) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `statfs(2)`：返回 `path` 所在文件系统的 `f_type` 魔数（ext4=`EXT4_SUPER_MAGIC`）。
+/// 反假绿用：运行时证明根 fs 真是磁盘 ext4 而非 initramfs ramfs/tmpfs。
+#[cfg(target_os = "linux")]
+pub fn statfs_type(path: &str) -> io::Result<i64> {
+    let p = CString::new(path)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in path"))?;
+    // SAFETY: libc::statfs 是 POD，全零是合法初值（紧接着被 statfs(2) 覆写）。
+    let mut buf: libc::statfs = unsafe { core::mem::zeroed() };
+    // SAFETY: statfs(2)；path 为有效 NUL 结尾指针，buf 指向栈上有效 statfs。
+    let rc = unsafe { libc::statfs(p.as_ptr(), &mut buf) };
+    if rc == 0 {
+        Ok(buf.f_type as i64)
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// `finit_module(2)`（经 `SYS_finit_module`）：从已打开 fd 加载内核模块。
+/// `flags` 含 [`MODULE_INIT_COMPRESSED_FILE`] 时直接吃 .ko.xz（需 `CONFIG_MODULE_DECOMPRESS=y`）。
+#[cfg(target_os = "linux")]
+pub fn finit_module(module_fd: std::os::fd::RawFd, params: &str, flags: i32) -> io::Result<()> {
+    let p = CString::new(params)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "nul in params"))?;
+    // SAFETY: finit_module(2) 经 syscall；fd 为已打开模块文件，params 为有效 NUL 结尾指针。
+    let rc = unsafe { libc::syscall(libc::SYS_finit_module, module_fd, p.as_ptr(), flags) };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+/// 打开模块文件并 `finit_module` 加载之。`compressed=true` 走 .ko.xz 直读。
+/// 已加载（`EEXIST`）视为成功（幂等）。
+#[cfg(target_os = "linux")]
+pub fn load_module_file(path: &str, compressed: bool) -> io::Result<()> {
+    use std::os::fd::AsRawFd;
+    let f = std::fs::File::open(path)?;
+    let flags = if compressed { MODULE_INIT_COMPRESSED_FILE } else { 0 };
+    match finit_module(f.as_raw_fd(), "", flags) {
+        Ok(()) => Ok(()),
+        Err(e) if e.raw_os_error() == Some(libc::EEXIST) => Ok(()),
+        Err(e) => Err(e),
+    }
+}
+
+/// `execv(2)` **不 fork**，原地用 `exe` 替换当前进程映像（PID 不变）。
+/// 仅在 `execv` 失败时返回 `io::Error`（成功则永不返回）。early_init 用它把 PID1
+/// 映像交接给磁盘 `/sbin/init`（agentd_init 继承 PID1，系统始终只有一个 PID1 映像）。
+#[cfg(target_os = "linux")]
+pub fn exec_replace(exe: &str, args: &[&str]) -> io::Error {
+    use core::ffi::c_char;
+    let exe_c = match CString::new(exe) {
+        Ok(c) => c,
+        Err(_) => return io::Error::new(io::ErrorKind::InvalidInput, "nul in exe"),
+    };
+    let mut argv_owned: Vec<CString> = Vec::with_capacity(args.len() + 1);
+    argv_owned.push(exe_c.clone());
+    for a in args {
+        match CString::new(*a) {
+            Ok(c) => argv_owned.push(c),
+            Err(_) => return io::Error::new(io::ErrorKind::InvalidInput, "nul in arg"),
+        }
+    }
+    let mut argv_ptrs: Vec<*const c_char> = argv_owned.iter().map(|c| c.as_ptr()).collect();
+    argv_ptrs.push(core::ptr::null());
+    // SAFETY: execv(2) 替换当前映像；exe_c/argv_ptrs 有效、NUL 结尾、argv 以 NULL 收尾；
+    // 仅失败时返回。
+    unsafe { libc::execv(exe_c.as_ptr(), argv_ptrs.as_ptr()) };
+    io::Error::last_os_error()
+}
+
 // ===== 非 Linux host 下的同名 stub（保证 workspace 跨平台可编译）=====
 
 #[cfg(not(target_os = "linux"))]
@@ -696,6 +916,63 @@ pub fn reboot(_cmd: i32) -> io::Error {
 }
 #[cfg(not(target_os = "linux"))]
 pub fn power_off() -> io::Error {
+    io::Error::new(io::ErrorKind::Unsupported, "Linux-only")
+}
+#[cfg(not(target_os = "linux"))]
+pub const EXT4_SUPER_MAGIC: i64 = 0xEF53;
+#[cfg(not(target_os = "linux"))]
+pub const TMPFS_MAGIC: i64 = 0x0102_1994;
+#[cfg(not(target_os = "linux"))]
+pub const RAMFS_MAGIC: i64 = 0x8584_58f6;
+#[cfg(not(target_os = "linux"))]
+pub const MODULE_INIT_COMPRESSED_FILE: i32 = 4;
+#[cfg(not(target_os = "linux"))]
+pub mod umount_flags {
+    pub const MNT_FORCE: i32 = 1;
+    pub const MNT_DETACH: i32 = 2;
+}
+#[cfg(not(target_os = "linux"))]
+pub fn mount_block(_source_dev: &str, _target: &str, _fstype: &str, _read_only: bool) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn mount_move(_source: &str, _target: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn chroot(_path: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn chdir(_path: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn umount2(_target: &str, _flags: i32) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn switch_root(_new_root: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn pivot_root(_new_root: &str, _put_old: &str) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn statfs_type(_path: &str) -> io::Result<i64> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn finit_module(_module_fd: std::os::fd::RawFd, _params: &str, _flags: i32) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn load_module_file(_path: &str, _compressed: bool) -> io::Result<()> {
+    Err(io::Error::new(io::ErrorKind::Unsupported, "Linux-only"))
+}
+#[cfg(not(target_os = "linux"))]
+pub fn exec_replace(_exe: &str, _args: &[&str]) -> io::Error {
     io::Error::new(io::ErrorKind::Unsupported, "Linux-only")
 }
 
