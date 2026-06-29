@@ -49,19 +49,44 @@ use security_execution::source_to_sink::{
     SourceToSinkRequest,
 };
 
-/// 计划步骤的风险类（映射到冻结 `RiskClass`）。只暴露 run loop 实际驱动的两类：
-/// 只读诊断（svc.status）与需确认的执行（svc.restart）。
+/// 计划步骤的风险类（与冻结 `RiskClass` 一一对应）。
+///
+/// **附加式扩展（ADR-006 LLM 接入）**：原先只暴露 run loop 实际驱动的两类
+/// （`ReadOnly` 诊断 / `ExecuteWithConfirmation` 执行）；现补齐 `RiskClass` 的全部 5 类，
+/// 使 LLM 桥接层能把冻结 `ToolRouter` 给出的**权威** RiskClass（如 `fs.write.diff`=
+/// WriteWithDiff、`pkg.host.install`=PrivilegedWithHumanApproval）无损映射、绝不降级。
+/// 现有 `ReadOnly`/`ExecuteWithConfirmation` 的行为字节一致（向后兼容）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum StepRisk {
     ReadOnly,
+    WriteWithDiff,
     ExecuteWithConfirmation,
+    PrivilegedWithHumanApproval,
+    Never,
 }
 
 impl StepRisk {
     pub fn to_risk_class(self) -> RiskClass {
         match self {
             StepRisk::ReadOnly => RiskClass::ReadOnly,
+            StepRisk::WriteWithDiff => RiskClass::WriteWithDiff,
             StepRisk::ExecuteWithConfirmation => RiskClass::ExecuteWithConfirmation,
+            StepRisk::PrivilegedWithHumanApproval => RiskClass::PrivilegedWithHumanApproval,
+            StepRisk::Never => RiskClass::Never,
+        }
+    }
+}
+
+/// 由冻结 `RiskClass` 构造 `StepRisk`（桥接层用：权威风险只来自 `ToolRouter`/`TOOL_SCHEMAS`，
+/// 绝不信任 LLM 自报）。一一对应，无降级。
+impl From<RiskClass> for StepRisk {
+    fn from(risk: RiskClass) -> Self {
+        match risk {
+            RiskClass::ReadOnly => StepRisk::ReadOnly,
+            RiskClass::WriteWithDiff => StepRisk::WriteWithDiff,
+            RiskClass::ExecuteWithConfirmation => StepRisk::ExecuteWithConfirmation,
+            RiskClass::PrivilegedWithHumanApproval => StepRisk::PrivilegedWithHumanApproval,
+            RiskClass::Never => StepRisk::Never,
         }
     }
 }

@@ -1,0 +1,26 @@
+[package]
+name = "llm_planner"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# 真 LLM 接入 阶段 A+B（ADR-006）：provider 抽象（Claude messages / OpenAI-compatible
+# chat-completions）+ LLM 输出（不可信 ModelOutput）经冻结控制面（ToolRouter +
+# PolicyEvaluator + source_to_sink + 审批门）约束。本 crate 零 unsafe（#![forbid]）；
+# unsafe 全在 ureq→rustls/ring 等 deps 内。
+[dependencies]
+runtime_contracts = { path = "../runtime_contracts" }
+# 冻结只读 oracle：ToolRouter / PolicyEvaluator / source_to_sink / secret_runtime。
+security_execution = { path = "../security_execution" }
+# 真编排 run loop：run_plan_guarded / PlannedStep / StepProvenance / StepExecutor。
+agent_runtime = { path = "../agent_runtime" }
+# 纯 Rust HTTP/TLS（rustls + ring + webpki-roots），musl 静态友好，无 openssl/native-tls。
+ureq = { version = "2", default-features = false, features = ["tls"] }
+# 纯 Rust JSON 解析，musl 静态友好，无 C 依赖。
+serde_json = "1"
+
+# 集成测试（tests/）作为独立 crate，需显式依赖冻结 oracle + run loop 才能直接 use 其类型。
+[dev-dependencies]
+runtime_contracts = { path = "../runtime_contracts" }
+security_execution = { path = "../security_execution" }
+agent_runtime = { path = "../agent_runtime" }
