@@ -44,6 +44,7 @@ if [ -n "$READY_LINE" ]; then
   echo "$READY_LINE" | grep -q "root_fstype=ext4"           || { echo "  → root_fstype != ext4（未真切到磁盘 ext4 根）" >&2; ok=0; }
   echo "$READY_LINE" | grep -qE "reaped=[1-9]"              || { echo "  → reaped<1（受监督 child 未被 reap）" >&2; ok=0; }
   echo "$READY_LINE" | grep -q "manifest_sha=$EXPECT_SHA"   || { echo "  → manifest_sha 不匹配 sidecar（$EXPECT_SHA）" >&2; ok=0; }
+  echo "$READY_LINE" | grep -q "state_write=ok"             || { echo "  → state_write != ok（持久分区 vda3 未挂/不可写）" >&2; ok=0; }
 fi
 
 if [ "$ok" -eq 1 ]; then

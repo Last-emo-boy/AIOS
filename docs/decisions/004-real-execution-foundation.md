@@ -153,7 +153,13 @@ option.
   failure, not a silent degrade. (Landlock TCP-network rules need 6.7+; MVP
   egress is enforced by netns+proxy, not Landlock-net, so 6.6 suffices.)
 - **Boot topology = minimal initramfs → `pivot_root` → GPT ext4 rootfs
-  partition.** Mutable state is NOT in tmpfs.
+  partition.** Mutable state is NOT in tmpfs. (cp7 实现注脚：从 initramfs 的 rootfs
+  调 `pivot_root` 恒返回 EINVAL——rootfs 无父挂载、不可移动——故 boot 路径实现为
+  **switch_root 序列**（`chdir`+`mount(MS_MOVE)`+`chroot`，均在 `platform_sys`）；
+  `pivot_root` 封装保留给 cp5 沙箱子进程的真挂载 rootfs 切换。宿主内核 `EXT4_FS`/`VIRTIO_BLK`=m
+  时 early_init 须 `finit_module` 按依赖序加载 `.ko.xz`（virtio_blk→crc16→crc32c→mbcache→jbd2→ext4）；
+  vendored builtin-ext4 内核则模块列表为空、同一代码路径 no-op。本机 TCG 实测全链路通过，反假绿凭
+  运行时派生量：root_dev major≠0 + root_fstype=ext4 + manifest SHA-256 运行时重算 + state_write=ok。)
 - **Mutable/persistent state = a dedicated writable GPT partition** (ext4,
   journaled) mounted at `/var/lib/agentos`, with `fsync`/journal discipline that
   `fs.write.diff` + rollback + post-crash recovery depend on.

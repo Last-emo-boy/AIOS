@@ -67,8 +67,15 @@ fn main() {
     };
     let sha_hex: String = Sha256::digest(&manifest).iter().map(|b| format!("{b:02x}")).collect();
 
+    // 反假绿 4：持久分区 /var/lib/agentos（vda3）写 + sync_all + 读回，证明真可写
+    //（cp8 fs.write.diff/rollback/recovery 依赖；也证明 vda3 真挂对——root vda2 只读，
+    // 若 vda3 未挂则写落到只读 root 失败 → state-write FAIL）。
+    if let Err(e) = probe_state_write("/var/lib/agentos/.aios-boot-probe") {
+        fail(&format!("stage=state-write errno={}", e.raw_os_error().unwrap_or(-1)));
+    }
+
     mark(&format!(
-        "AGENTD_DISK_READY pid=1 root_dev={root_dev} root_fstype={root_fstype} root_src={root_src} manifest_sha={sha_hex} reaped={}",
+        "AGENTD_DISK_READY pid=1 root_dev={root_dev} root_fstype={root_fstype} root_src={root_src} manifest_sha={sha_hex} reaped={} state_write=ok",
         report.reaped
     ));
 
@@ -94,6 +101,29 @@ fn parse_root_mount() -> Option<(String, String, String)> {
         return Some((majmin, fstype, src));
     }
     None
+}
+
+/// 持久分区写探针：写 token → `sync_all`(journal/fsync per ADR) → 读回比对。证明
+/// `/var/lib/agentos`（vda3）真挂载且可写（root vda2 只读，未挂 vda3 则写落只读 root 失败）。
+#[cfg(target_os = "linux")]
+fn probe_state_write(path: &str) -> std::io::Result<()> {
+    use std::io::{Read, Write};
+    let token: &[u8] = b"aios-cp7-state-probe";
+    {
+        let mut f = std::fs::File::create(path)?;
+        f.write_all(token)?;
+        f.sync_all()?;
+    }
+    let mut buf = Vec::new();
+    std::fs::File::open(path)?.read_to_end(&mut buf)?;
+    if buf == token {
+        Ok(())
+    } else {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "state probe readback mismatch",
+        ))
+    }
 }
 
 #[cfg(not(target_os = "linux"))]

@@ -126,8 +126,16 @@ fn real_qemu_disk_boot_pivots_to_ext4_root() {
         "FAIL: manifest_sha 不匹配 sidecar（运行时重算 != 构建期 expected）"
     );
     assert!(reaped >= 1, "FAIL: reaped={reaped}，受监督 child 未被 reap");
+    let state_write = parse_kv(line, "state_write").expect("state_write=");
+    assert_eq!(
+        state_write, "ok",
+        "FAIL: state_write={state_write}，持久分区 vda3 未挂/不可写"
+    );
 
-    eprintln!("PASS: 真 pivot 到磁盘 ext4 根 + 干净 poweroff（{}）", line.trim());
+    eprintln!(
+        "PASS: 真 pivot 到磁盘 ext4 根 + 持久分区可写 + 干净 poweroff（{}）",
+        line.trim()
+    );
 }
 
 #[cfg(target_os = "linux")]
