@@ -12,6 +12,10 @@
 //! 所有系统调用经 `platform_sys` 安全封装，本 crate 保持 `#![forbid(unsafe_code)]`。
 #![forbid(unsafe_code)]
 
+/// cp8 真磁盘 OS 持久写引擎：fs.write.diff 落 vda3（fsync 屏障）+ post-crash recovery。
+/// 只读复用冻结 `security_execution` 的 pub API；run_pid1/Pid1Config 与本模块解耦。
+pub mod cp8;
+
 use std::io;
 
 use agent_runtime::{AgentRuntime, RunState, StepConfiner, StepOutcome};

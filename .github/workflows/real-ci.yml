@@ -101,6 +101,33 @@ jobs:
           export AIOS_DISK_MANIFEST_SHA="$(cat "$PWD/appliance/disk.img.manifest.sha256")"
           cargo test -p agentd_init --test real_qemu_disk_boot -- --ignored --nocapture
 
+  tcg-cp8-recovery:
+    name: real TCG cp8 persist + crash recovery (no kvm, cp8)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: add musl target
+        run: rustup target add x86_64-unknown-linux-musl
+      - name: install qemu + disk/grub/fs tools + musl
+        run: sudo apt-get update && sudo apt-get install -y qemu-system-x86 gdisk grub-pc-bin e2fsprogs util-linux kmod musl-tools cpio gzip file
+      - name: build static early_init + disk_init
+        run: |
+          cargo build -p early_init --bin early_init --target x86_64-unknown-linux-musl --release
+          cargo build -p agentd_init --bin disk_init --target x86_64-unknown-linux-musl --release
+      - name: build bootable disk image (full pivot)
+        run: |
+          KREL="$(uname -r)"
+          if grep -q "CONFIG_EXT4_FS=y" "/boot/config-$KREL" && grep -q "CONFIG_VIRTIO_BLK=y" "/boot/config-$KREL"; then
+            MODS=""
+          else
+            MODS="virtio_blk crc16 crc32c_generic mbcache jbd2 ext4"
+          fi
+          sudo MODS="$MODS" KERNEL="/boot/vmlinuz-$KREL" bash appliance/build-disk-image.sh
+      - name: cp8 3-boot persist + crash recovery（须 root：losetup/mount seed + host 复核）
+        # 直接 sudo bash 脚本（须 root 的 losetup；避免 sudo cargo 的 PATH 问题）。脚本内 3 次 TCG boot
+        # + 真崩溃注入 + 真回滚 + host loop-mount 独立复核；任一断言失败/超时即 FAIL，杜绝假绿。
+        run: sudo bash appliance/cp8-recovery-smoke.sh "$PWD/appliance/disk.img"
+
   # cp5：真实内核强制 + 逃逸 harness。需要暴露 /dev/kvm 的 self-hosted runner
   # （GitHub 标准 runner 不提供 /dev/kvm）。在该 runner 就绪前保持禁用，
   # 避免在无 KVM 的标准 runner 上产生虚假绿灯（ADR-004 D5）。

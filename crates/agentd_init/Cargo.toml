@@ -10,6 +10,13 @@ license.workspace = true
 platform_sys = { path = "../platform_sys" }
 agent_runtime = { path = "../agent_runtime" }
 
+# cp8 持久写引擎（src/cp8.rs）：只读复用冻结 oracle 的 pub API
+# （WriteDiffExecutor / AuditJournal / content_hash）落 fs.write.diff + audit + recovery。
+# security_execution 已是经 agent_runtime 的传递生产依赖（纯 crate，仅依赖 runtime_contracts），
+# 加直接依赖零 cycle / 零 lock churn / musl 兼容；runtime_contracts 供 RiskClass 构造 CapabilityLease。
+security_execution = { path = "../security_execution" }
+runtime_contracts = { path = "../runtime_contracts" }
+
 # disk_init bin（cp7）运行时重算 runtime-manifest SHA-256（反假绿）。lock 已有 0.10.9
 # （runtime_contracts/agent_core），零新 lock churn。
 sha2 = "0.10"

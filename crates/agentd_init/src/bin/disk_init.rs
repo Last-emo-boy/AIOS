@@ -33,6 +33,12 @@ fn main() {
         let _ = platform_sys::power_off();
         platform_sys::exit_now(1)
     }
+    // cp8 失败收敛（同 fail，但 AGENTD_CP8_FAIL 前缀，便于 harness 区分 cp7/cp8 阶段）。
+    fn fail_cp8(reason: &str) -> ! {
+        mark(&format!("AGENTD_CP8_FAIL {reason}"));
+        let _ = platform_sys::power_off();
+        platform_sys::exit_now(1)
+    }
 
     if platform_sys::getpid() != 1 {
         platform_sys::exit_now(1);
@@ -79,6 +85,73 @@ fn main() {
         report.reaped
     ));
 
+    // ── cp8：真持久 fs.write.diff + post-crash recovery（gated；cp7 pristine disk.img no-op）──
+    // gate = /var/lib/agentos/cp8-control 存在 OR 非空 unresolved_effects()。cp7 镜像两者皆无 →
+    // 整块跳过 → 上面 AGENTD_DISK_READY 字节一致 → cp7 real_qemu_disk_boot/disk-boot-smoke 不受影响。
+    {
+        use agentd_init::cp8;
+        use security_execution::rollback::content_hash;
+        const V1: &str = "mode=prod\nport=8080\n";
+        const V2: &str = "mode=prod\nport=9090\n";
+        let phase_path = "/var/lib/agentos/cp8-phase";
+
+        let l = cp8::layout("/var/lib/agentos");
+        let gated = std::path::Path::new("/var/lib/agentos/cp8-control").exists()
+            || cp8::unresolved_count(&l).unwrap_or(0) > 0;
+        if gated {
+            // recovery-first：无条件回滚上次崩溃残留（boot3 在此真回滚 boot2 装弹的 unresolved）。
+            let rec = match cp8::recover(&l) {
+                Ok(r) => r,
+                Err(e) => fail_cp8(&format!("stage=recover errno={}", e.raw_os_error().unwrap_or(-1))),
+            };
+            // phase 文件驱动跨 reboot 状态机。target_hash 闭包：独立复读目标算 hash。
+            let target_hash = || content_hash(&std::fs::read_to_string(&l.target).unwrap_or_default());
+            match std::fs::read_to_string(phase_path).unwrap_or_default().trim() {
+                "" => {
+                    // boot1：正常持久写 v1 → 落 A_DONE phase。
+                    let r = match cp8::run_effect(&l, "cp8-boot", "cp8-A-write", "agentd-init", "param-A", V1) {
+                        Ok(r) => r,
+                        Err(e) => fail_cp8(&format!("stage=produce-A errno={}", e.raw_os_error().unwrap_or(-1))),
+                    };
+                    if let Err(e) = write_phase(phase_path, "A_DONE") {
+                        fail_cp8(&format!("stage=phase-A errno={}", e.raw_os_error().unwrap_or(-1)));
+                    }
+                    mark(&format!(
+                        "AGENTD_CP8_A_COMMIT committed=1 target_hash={} base_hash={} audit_unresolved={} verify=reread-ok",
+                        r.final_hash, r.base_hash, cp8::unresolved_count(&l).unwrap_or(99)
+                    ));
+                }
+                "A_DONE" => {
+                    // boot2：先 verify-by-re-read（跨 reboot 持久证据）→ 装弹 mid-commit 崩溃。
+                    mark(&format!("AGENTD_CP8_A_VERIFY persisted=1 reread_hash={}", target_hash()));
+                    let arm = match cp8::arm_crash(&l, "cp8-boot", "cp8-B-write", "agentd-init", "param-B", V2) {
+                        Ok(a) => a,
+                        Err(e) => fail_cp8(&format!("stage=arm-B errno={}", e.raw_os_error().unwrap_or(-1))),
+                    };
+                    if let Err(e) = write_phase(phase_path, "B_ARMED") {
+                        fail_cp8(&format!("stage=phase-B errno={}", e.raw_os_error().unwrap_or(-1)));
+                    }
+                    mark(&format!(
+                        "AGENTD_CP8_B_ARMED rollback_id={} base_hash={} proposed_hash={} unresolved={}",
+                        arm.rollback_id, arm.base_hash, arm.proposed_hash, cp8::unresolved_count(&l).unwrap_or(99)
+                    ));
+                    // 下面 power_off = 装弹后无 CommitSealed 的真崩溃（target=v2 已 fsync，EffectPrepared 已落）。
+                }
+                "B_ARMED" => {
+                    // boot3：recovery-first 已回滚 boot2 的未完成 effect；报告 + 落 DONE。
+                    if let Err(e) = write_phase(phase_path, "DONE") {
+                        fail_cp8(&format!("stage=phase-done errno={}", e.raw_os_error().unwrap_or(-1)));
+                    }
+                    mark(&format!(
+                        "AGENTD_CP8_B_RECOVERED restored=1 restored_hash={} reread_hash={} rolled_back={} unresolved_after={}",
+                        rec.restored_hash, target_hash(), rec.rolled_back, rec.unresolved_after
+                    ));
+                }
+                _ => {} // DONE / 未知：幂等无操作。
+            }
+        }
+    }
+
     // 干净下电；返回即下电失败 → best-effort 记录后兜底退出（harness 凭 CONTENT 判 FAIL）。
     let err = platform_sys::power_off();
     fail(&format!("stage=poweroff errno={}", err.raw_os_error().unwrap_or(-1)));
@@ -124,6 +197,21 @@ fn probe_state_write(path: &str) -> std::io::Result<()> {
             "state probe readback mismatch",
         ))
     }
+}
+
+/// 跨 reboot 持久写 cp8 phase 文件 + fsync（文件 + 父目录 dirent），确保崩溃不丢 phase。
+#[cfg(target_os = "linux")]
+fn write_phase(path: &str, phase: &str) -> std::io::Result<()> {
+    use std::io::Write;
+    {
+        let mut f = std::fs::File::create(path)?;
+        f.write_all(phase.as_bytes())?;
+        f.sync_all()?;
+    }
+    if let Some(parent) = std::path::Path::new(path).parent() {
+        std::fs::File::open(parent)?.sync_all()?;
+    }
+    Ok(())
 }
 
 #[cfg(not(target_os = "linux"))]
