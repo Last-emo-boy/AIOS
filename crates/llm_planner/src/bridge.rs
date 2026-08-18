@@ -138,38 +138,8 @@ pub fn bridge_plan(raw: &RawPlan) -> Result<Vec<PlannedStep>, BridgeError> {
 /// 先把每个 dep 解析成原始 step 索引，再 Kahn 拓扑排序。引用不存在或循环 → fail-closed。
 fn topo_sort(raw: &RawPlan, plan: Vec<PlannedStep>) -> Result<Vec<PlannedStep>, BridgeError> {
     let n = raw.steps.len();
-    // 解析每个 step 的 depends_on 成原始索引集合。
-    // dep 可以是索引字符串（"0"）或 tool 名（"svc.status"，匹配第一个同名 step）。
-    let mut deps: Vec<Vec<usize>> = Vec::with_capacity(n);
-    for (i, step) in raw.steps.iter().enumerate() {
-        let mut resolved = Vec::new();
-        for dep in &step.depends_on {
-            // 先尝试解析为索引。
-            if let Ok(idx) = dep.parse::<usize>() {
-                if idx < n {
-                    resolved.push(idx);
-                    continue;
-                }
-            }
-            // 再按 tool 名匹配（第一个同名 step）。
-            if let Some(idx) = raw.steps.iter().position(|s| s.tool == *dep) {
-                resolved.push(idx);
-                continue;
-            }
-            return Err(BridgeError::DagMissingDep {
-                step_index: i,
-                dep: dep.clone(),
-            });
-        }
-        // 自引用（依赖自己）→ 循环。
-        if resolved.contains(&i) {
-            return Err(BridgeError::DagCycle {
-                step_index: i,
-                cycle: format!("step-{i} depends on itself"),
-            });
-        }
-        deps.push(resolved);
-    }
+    // 解析依赖（与 dag_levels 共用 resolve_deps，保证一致性）。
+    let deps = resolve_deps(raw)?;
 
     // Kahn 算法：计算入度，从入度 0 的节点开始。
     // in_degree[i] = deps[i].len()（i 依赖的 step 数）
@@ -219,6 +189,85 @@ fn derive_resource(tool: &str, params: &[(String, String)]) -> String {
         .find(|(key, _)| key == "path" || key == "service" || key == "url")
         .map(|(_, value)| value.clone())
         .unwrap_or_else(|| tool.to_string())
+}
+
+/// cp-llm 阶段 Q：计算每步的拓扑层级（advisory，仅供上层决定哪些步可并行）。
+///
+/// 层级语义：根步（无依赖）= 层 0；其余步 = `max(依赖步层级) + 1`。同层步互不依赖，
+/// 理论上可并行执行。**本函数不改变 plan 顺序，也不参与裁决**——执行序仍由
+/// `topo_sort` 的权威拓扑序决定；层级只是 advisory 元数据，供未来并行调度器使用。
+///
+/// 依赖解析与 `topo_sort` 同形：dep 元素是 step 索引（"0"）或 tool 名。引用缺失/循环 →
+/// `Err`（fail-closed，与 `topo_sort` 一致）。
+pub fn dag_levels(raw: &RawPlan) -> Result<Vec<u32>, BridgeError> {
+    let n = raw.steps.len();
+    let deps = resolve_deps(raw)?;
+    // Kahn 同时计算层级与循环检测：根步（无依赖）= 层 0；其余步 = max(依赖层级) + 1。
+    let mut level = vec![0u32; n];
+    let mut in_degree: Vec<usize> = deps.iter().map(|d| d.len()).collect();
+    let mut queue: std::collections::VecDeque<usize> =
+        (0..n).filter(|&i| in_degree[i] == 0).collect();
+    let mut processed = 0usize;
+    while let Some(i) = queue.pop_front() {
+        processed += 1;
+        for j in 0..n {
+            if deps[j].contains(&i) {
+                // j 依赖 i，j 的层级至少为 level[i] + 1。
+                if level[i] + 1 > level[j] {
+                    level[j] = level[i] + 1;
+                }
+                in_degree[j] -= 1;
+                if in_degree[j] == 0 {
+                    queue.push_back(j);
+                }
+            }
+        }
+    }
+    if processed != n {
+        // 循环：列出未入序的节点（与 topo_sort 的报错同形）。
+        let remaining: Vec<String> = (0..n)
+            .filter(|i| in_degree[*i] > 0)
+            .map(|i| format!("step-{i}({})", raw.steps[i].tool))
+            .collect();
+        return Err(BridgeError::DagCycle {
+            step_index: processed,
+            cycle: remaining.join(" -> "),
+        });
+    }
+    Ok(level)
+}
+
+/// 解析 `raw.steps` 的 depends_on 为索引集合（与 `topo_sort` 同形逻辑，抽出复用）。
+fn resolve_deps(raw: &RawPlan) -> Result<Vec<Vec<usize>>, BridgeError> {
+    let n = raw.steps.len();
+    let mut deps: Vec<Vec<usize>> = Vec::with_capacity(n);
+    for (i, step) in raw.steps.iter().enumerate() {
+        let mut resolved = Vec::new();
+        for dep in &step.depends_on {
+            if let Ok(idx) = dep.parse::<usize>() {
+                if idx < n {
+                    resolved.push(idx);
+                    continue;
+                }
+            }
+            if let Some(idx) = raw.steps.iter().position(|s| s.tool == *dep) {
+                resolved.push(idx);
+                continue;
+            }
+            return Err(BridgeError::DagMissingDep {
+                step_index: i,
+                dep: dep.clone(),
+            });
+        }
+        if resolved.contains(&i) {
+            return Err(BridgeError::DagCycle {
+                step_index: i,
+                cycle: format!("step-{i} depends on itself"),
+            });
+        }
+        deps.push(resolved);
+    }
+    Ok(deps)
 }
 
 /// LLM 衍生步的溯源：每步返回 `ContentSource::model_output("step-{i}")`（不可信 ModelOutput）。
@@ -354,7 +403,7 @@ mod tests {
     /// 有效依赖 → 拓扑排序（step 1 依赖 step 0 → order 不变）。
     #[test]
     fn dag_valid_dependency_preserves_order() {
-        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let s0 = step("svc.status", &[("service", "a")], None);
         let mut s1 = step("svc.status", &[("service", "b")], None);
         s1.depends_on = vec!["0".to_string()];
         let plan = bridge_plan(&RawPlan {
@@ -418,5 +467,64 @@ mod tests {
             steps: vec![s0, s1],
         });
         assert!(matches!(result, Err(BridgeError::DagCycle { .. })));
+    }
+
+    // ===== 阶段 Q：dag_levels =====
+
+    #[test]
+    fn dag_levels_all_root_when_no_deps() {
+        let s0 = step("svc.status", &[("service", "a")], None);
+        let s1 = step("svc.logs", &[("service", "a")], None);
+        let raw = raw_plan(
+            r#"{"steps":[{"tool":"svc.status","params":{"service":"a"}},{"tool":"svc.logs","params":{"service":"a"}}]}"#,
+            vec![s0, s1],
+        );
+        let levels = dag_levels(&raw).expect("levels");
+        assert_eq!(levels, vec![0, 0]);
+    }
+
+    #[test]
+    fn dag_levels_chain_increments() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let mut s1 = step("svc.logs", &[("service", "a")], None);
+        let mut s2 = step("fs.read", &[("path", "/etc/hosts")], None);
+        s0.depends_on = vec![];
+        s1.depends_on = vec!["0".to_string()];
+        s2.depends_on = vec!["1".to_string()];
+        let raw = raw_plan("{}", vec![s0, s1, s2]);
+        let levels = dag_levels(&raw).expect("levels");
+        assert_eq!(levels, vec![0, 1, 2]);
+    }
+
+    #[test]
+    fn dag_levels_parallel_siblings_same_level() {
+        // s0, s1 = 根层 0；s2 依赖两者 → 层 1；s3 依赖 s2 → 层 2。
+        let s0 = step("svc.status", &[("service", "a")], None);
+        let s1 = step("svc.logs", &[("service", "a")], None);
+        let mut s2 = step("fs.read", &[("path", "/x")], None);
+        s2.depends_on = vec!["0".to_string(), "1".to_string()];
+        let mut s3 = step("fs.write.diff", &[("path", "/y")], None);
+        s3.depends_on = vec!["2".to_string()];
+        let raw = raw_plan("{}", vec![s0, s1, s2, s3]);
+        let levels = dag_levels(&raw).expect("levels");
+        assert_eq!(levels, vec![0, 0, 1, 2]);
+    }
+
+    #[test]
+    fn dag_levels_cycle_fail_closed() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let mut s1 = step("svc.logs", &[("service", "a")], None);
+        s0.depends_on = vec!["1".to_string()];
+        s1.depends_on = vec!["0".to_string()];
+        let raw = raw_plan("{}", vec![s0, s1]);
+        assert!(matches!(dag_levels(&raw), Err(BridgeError::DagCycle { .. })));
+    }
+
+    #[test]
+    fn dag_levels_missing_dep_fail_closed() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        s0.depends_on = vec!["99".to_string()]; // 不存在的索引
+        let raw = raw_plan("{}", vec![s0]);
+        assert!(matches!(dag_levels(&raw), Err(BridgeError::DagMissingDep { .. })));
     }
 }
