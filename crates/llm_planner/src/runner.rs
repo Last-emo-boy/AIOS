@@ -282,6 +282,17 @@ impl ReplanOutcome {
         self.trace.iter().map(|span| span.elapsed_ms).sum()
     }
 
+    /// 整个 replan 会话中观察到的最大并行潜力（advisory 仅观测）。
+    /// 取所有轮次 `max_parallel_width` 的最大值。>1 表示至少有一轮计划存在可并行层。
+    /// 绝不参与裁决——仅供上层判断是否值得引入并行调度器。
+    pub fn max_parallel_width(&self) -> usize {
+        self.trace
+            .iter()
+            .map(|span| span.max_parallel_width)
+            .max()
+            .unwrap_or(0)
+    }
+
     /// 把所有 trace span 渲染成多行可读串（每轮一行），供审计/调试输出。
     pub fn render_trace(&self) -> String {
         self.trace
@@ -1258,5 +1269,20 @@ mod replan_tests {
         let total = outcome.total_elapsed_ms();
         let sum: u64 = outcome.trace.iter().map(|s| s.elapsed_ms).sum();
         assert_eq!(total, sum);
+    }
+
+    #[test]
+    fn max_parallel_width_aggregates_across_spans() {
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("mpw");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-mpw",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        // ok_plan 产出单步（无 depends_on）→ max_parallel_width == 各 span 最大值。
+        let per_span_max = outcome.trace.iter().map(|s| s.max_parallel_width).max().unwrap_or(0);
+        assert_eq!(outcome.max_parallel_width(), per_span_max);
     }
 }
