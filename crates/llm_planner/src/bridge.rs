@@ -237,6 +237,23 @@ pub fn dag_levels(raw: &RawPlan) -> Result<Vec<u32>, BridgeError> {
     Ok(level)
 }
 
+/// cp-llm 阶段 S：分析计划的并行潜力（advisory，仅观测）。
+///
+/// 返回每层的步数：`widths[level] = 该层步数`。同层步互不依赖（由 `dag_levels` 算出），
+/// 理论上可并行执行。**本函数不执行任何并行**——只返回观测数据，供上层决策是否
+/// 值得用并行调度器（同层步数 ≥ 2 才有并行收益）。绝不参与裁决。
+///
+/// 循环/缺依赖时透传 `dag_levels` 的 fail-closed 错误。
+pub fn parallel_potential(raw: &RawPlan) -> Result<Vec<usize>, BridgeError> {
+    let levels = dag_levels(raw)?;
+    let max_level = levels.iter().copied().max().unwrap_or(0);
+    let mut widths = vec![0usize; (max_level as usize) + 1];
+    for &lvl in &levels {
+        widths[lvl as usize] += 1;
+    }
+    Ok(widths)
+}
+
 /// 解析 `raw.steps` 的 depends_on 为索引集合（与 `topo_sort` 同形逻辑，抽出复用）。
 fn resolve_deps(raw: &RawPlan) -> Result<Vec<Vec<usize>>, BridgeError> {
     let n = raw.steps.len();
@@ -526,5 +543,56 @@ mod tests {
         s0.depends_on = vec!["99".to_string()]; // 不存在的索引
         let raw = raw_plan("{}", vec![s0]);
         assert!(matches!(dag_levels(&raw), Err(BridgeError::DagMissingDep { .. })));
+    }
+
+    // ===== 阶段 S：parallel_potential =====
+
+    #[test]
+    fn parallel_potential_all_root_width_equals_count() {
+        let s0 = step("svc.status", &[("service", "a")], None);
+        let s1 = step("svc.logs", &[("service", "a")], None);
+        let s2 = step("fs.read", &[("path", "/etc/hosts")], None);
+        let raw = raw_plan("{}", vec![s0, s1, s2]);
+        let widths = parallel_potential(&raw).expect("widths");
+        // 3 个根步全在层 0。
+        assert_eq!(widths, vec![3]);
+    }
+
+    #[test]
+    fn parallel_potential_chain_is_width_one() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let mut s1 = step("svc.logs", &[("service", "a")], None);
+        let mut s2 = step("fs.read", &[("path", "/x")], None);
+        s0.depends_on = vec![];
+        s1.depends_on = vec!["0".to_string()];
+        s2.depends_on = vec!["1".to_string()];
+        let raw = raw_plan("{}", vec![s0, s1, s2]);
+        let widths = parallel_potential(&raw).expect("widths");
+        // 每层一个步，无并行潜力。
+        assert_eq!(widths, vec![1, 1, 1]);
+    }
+
+    #[test]
+    fn parallel_potential_diamond_has_wide_middle_root() {
+        // s0,s1 根层(2); s2 依赖两者→层1(1); s3 依赖 s2→层2(1)
+        let s0 = step("svc.status", &[("service", "a")], None);
+        let s1 = step("svc.logs", &[("service", "a")], None);
+        let mut s2 = step("fs.read", &[("path", "/x")], None);
+        s2.depends_on = vec!["0".to_string(), "1".to_string()];
+        let mut s3 = step("fs.write.diff", &[("path", "/y")], None);
+        s3.depends_on = vec!["2".to_string()];
+        let raw = raw_plan("{}", vec![s0, s1, s2, s3]);
+        let widths = parallel_potential(&raw).expect("widths");
+        assert_eq!(widths, vec![2, 1, 1]);
+    }
+
+    #[test]
+    fn parallel_potential_cycle_fail_closed() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let mut s1 = step("svc.logs", &[("service", "a")], None);
+        s0.depends_on = vec!["1".to_string()];
+        s1.depends_on = vec!["0".to_string()];
+        let raw = raw_plan("{}", vec![s0, s1]);
+        assert!(matches!(parallel_potential(&raw), Err(BridgeError::DagCycle { .. })));
     }
 }

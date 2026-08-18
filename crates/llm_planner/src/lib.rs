@@ -22,7 +22,7 @@ pub mod openai;
 pub mod runner;
 
 pub use anthropic::ClaudeProvider;
-pub use bridge::{bridge_plan, dag_levels, BridgeError, ModelProvenance};
+pub use bridge::{bridge_plan, dag_levels, parallel_potential, BridgeError, ModelProvenance};
 pub use chain::{ProviderChain, RetryPolicy};
 pub use openai::OpenAiCompatProvider;
 
