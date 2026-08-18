@@ -376,7 +376,15 @@ impl AgentRuntime {
                         self.log.push(RunEvent::RunFailedClosed);
                         StepFlow::Halt(self.state())
                     }
-                    Err(_) => {
+                    Err(err) => {
+                        // 阶段 U：exec 后端返回传输/IO 错误时记录原因（而非丢弃），使
+                        // replan loop 的 extract_denied_reason 能归类为 ExecDenied 而非
+                        // 误报 BudgetExhausted。向后兼容：仍收束为 RunFailedClosed，
+                        // 仅多推一条带原因的 StepDenied。
+                        self.log.push(RunEvent::StepDenied {
+                            step_id: step.step_id.clone(),
+                            reason: format!("exec io error: {err}"),
+                        });
                         self.log.push(RunEvent::RunFailedClosed);
                         StepFlow::Halt(self.state())
                     }

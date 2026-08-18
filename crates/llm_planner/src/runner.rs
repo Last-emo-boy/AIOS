@@ -1285,4 +1285,30 @@ mod replan_tests {
         let per_span_max = outcome.trace.iter().map(|s| s.max_parallel_width).max().unwrap_or(0);
         assert_eq!(outcome.max_parallel_width(), per_span_max);
     }
+
+    /// 阶段 U：exec 后端返回 IO 错误时，extract_denied_reason 应归类为 ExecDenied
+    /// 而非误报 BudgetExhausted（此前 Err(_) 丢弃原因，无 StepDenied 可提取）。
+    struct FailingExecutor;
+    impl StepExecutor for FailingExecutor {
+        fn execute(&self, _step: &PlannedStep) -> std::io::Result<StepObservation> {
+            Err(std::io::Error::new(std::io::ErrorKind::Other, "backend io failed"))
+        }
+    }
+
+    #[test]
+    fn exec_io_error_classified_as_exec_denied_not_budget() {
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = FailingExecutor;
+        let journal = journal("exec-io");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-io",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 0, // max_replans=0 → 首轮失败即收束
+        );
+        let last_cause = outcome.trace.last().expect("at least one span").cause.clone();
+        assert!(
+            matches!(last_cause, TraceCause::ExecDenied { ref reason } if reason.contains("exec io error")),
+            "expected ExecDenied with io error reason, got {last_cause:?}"
+        );
+    }
 }
