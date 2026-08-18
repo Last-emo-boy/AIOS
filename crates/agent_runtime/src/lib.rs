@@ -43,7 +43,7 @@ use security_execution::policy::{
     stable_parameter_hash, ApprovalToken, PolicyDecisionKind, PolicyEvaluator, PolicyRequest,
 };
 // ADR-000 第三 MVP「不可信内容处理」：把冻结 source-to-sink 门接到多步 run loop（ADDITIVE）。
-use security_execution::audit::AuditJournal;
+use security_execution::audit::{AuditEvent, AuditEventType, AuditJournal};
 use security_execution::source_to_sink::{
     ContentSource, SinkDescriptor, SourceToSinkDecisionKind, SourceToSinkError, SourceToSinkPolicy,
     SourceToSinkRequest,
@@ -267,7 +267,7 @@ impl AgentRuntime {
             self.log.push(RunEvent::StepPlanned {
                 step_id: step.step_id.clone(),
             });
-            match self.run_plan_step(actor, step, approvals, exec) {
+            match self.run_plan_step(actor, step, approvals, exec, None, "") {
                 StepFlow::Continue => {}
                 StepFlow::Halt(state) => return state,
             }
@@ -279,12 +279,18 @@ impl AgentRuntime {
     /// 单步主体（policy → 审批 → exec），`run_plan` / `run_plan_guarded` 共用。**前置不变量**：
     /// 调用方已 push 该步 `StepPlanned`。返回 `Continue`（走下一步）或 `Halt`（早退收束）。
     /// 逻辑与原 `run_plan` 每步体逐字一致（行为不变）。
+    ///
+    /// `journal`（阶段 H）：`Some` 时，exec 阶段事件（`StepConfined`/`EffectObserved`/
+    /// `StepDenied`）追加到 audit journal——持久化 exec 副作用观测，summary 经
+    /// `redact_summary` 脱敏。`None` 时跳过（`run_plan` 行为不变）。
     fn run_plan_step(
         &mut self,
         actor: &str,
         step: &PlannedStep,
         approvals: &dyn ApprovalSource,
         exec: &dyn StepExecutor,
+        journal: Option<&AuditJournal>,
+        run_id: &str,
     ) -> StepFlow {
         let evaluator = PolicyEvaluator;
         let request = step.policy_request(actor);
@@ -316,6 +322,17 @@ impl AgentRuntime {
                             tool: step.tool.clone(),
                             detail: detail.clone(),
                         });
+                        // 阶段 H：exec 副作用观测持久化到 audit journal（summary 经
+                        // `redact_summary` 脱敏，防 exec 后端注入 secret 回流到审计/反馈）。
+                        if let Some(journal) = journal {
+                            let _ = journal.append(&AuditEvent::new(
+                                AuditEventType::EffectObserved,
+                                run_id,
+                                &step.step_id,
+                                actor,
+                                &format!("{} observed: {detail}", step.tool),
+                            ));
+                        }
                         // verify 步的 svc.status 仍探到 alive=false => 触发回滚并收束。
                         if step.tool == "svc.status"
                             && step.step_id.starts_with("verify")
@@ -344,8 +361,18 @@ impl AgentRuntime {
                     }) => {
                         self.log.push(RunEvent::StepDenied {
                             step_id: step.step_id.clone(),
-                            reason,
+                            reason: reason.clone(),
                         });
+                        // 阶段 H：内核拒绝也持久化到审计日志。
+                        if let Some(journal) = journal {
+                            let _ = journal.append(&AuditEvent::new(
+                                AuditEventType::SandboxDenied,
+                                run_id,
+                                &step.step_id,
+                                actor,
+                                &format!("kernel denied: {reason}"),
+                            ));
+                        }
                         self.log.push(RunEvent::RunFailedClosed);
                         StepFlow::Halt(self.state())
                     }
@@ -439,7 +466,7 @@ impl AgentRuntime {
                     }
                 }
             }
-            match self.run_plan_step(actor, step, approvals, exec) {
+            match self.run_plan_step(actor, step, approvals, exec, Some(journal), run_id) {
                 StepFlow::Continue => {}
                 StepFlow::Halt(state) => return state,
             }
@@ -681,9 +708,16 @@ mod tests {
                 "summarize".to_string()
             ]
         );
+        // 阶段 H：允许流的 exec 副作用观测现在持久化到审计日志（source-to-sink 门
+        // 仍仅在 Denied 写审计行；exec 审计是新增的独立可观测性）。
+        let lines = journal.event_lines().unwrap();
         assert!(
-            journal.event_lines().unwrap().is_empty(),
-            "allowed flow must not write audit rows"
+            lines.iter().any(|l| l.contains("EffectObserved")),
+            "exec observations must be audited, got {lines:?}"
+        );
+        assert!(
+            !lines.iter().any(|l| l.contains("SourceToSinkDenied")),
+            "allowed flow must not write s2s deny rows, got {lines:?}"
         );
     }
 
@@ -843,6 +877,12 @@ mod tests {
             rt2.events(),
             "guarded with no provenance must equal run_plan event-for-event"
         );
-        assert!(journal.event_lines().unwrap().is_empty());
+        // 阶段 H：run_plan_guarded 现在持久化 exec 副作用观测到审计日志（run_plan
+        // 不写审计，行为不变）。事件序列仍逐事件一致（审计 append 不影响 self.log）。
+        let lines = journal.event_lines().unwrap();
+        assert!(
+            lines.iter().any(|l| l.contains("EffectObserved")),
+            "exec observations must be audited even without provenance, got {lines:?}"
+        );
     }
 }

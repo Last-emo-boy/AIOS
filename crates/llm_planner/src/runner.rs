@@ -16,7 +16,7 @@ use agent_runtime::{
     AgentRuntime, ApprovalSource, PlannedStep, RunEvent, RunState, StepExecutor, StepObservation,
     StepOutcome, StepProvenance, StepRisk,
 };
-use security_execution::audit::AuditJournal;
+use security_execution::audit::{redact_summary, AuditJournal};
 use security_execution::policy::ApprovalToken;
 use security_execution::source_to_sink::ContentSource;
 
@@ -457,7 +457,7 @@ fn extract_feedback(events: &[RunEvent]) -> Option<String> {
     for event in events.iter().rev() {
         match event {
             RunEvent::EffectObserved { step_id, tool, detail } => {
-                return Some(format!("step {step_id} ({tool}) observed: {detail}"))
+                return Some(format!("step {step_id} ({tool}) observed: {}", redact_summary(detail)))
             }
             RunEvent::StepDenied { step_id, reason } => {
                 return Some(format!("step {step_id} denied: {reason}"))
