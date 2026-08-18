@@ -1,23 +1,22 @@
-//! llm_plan —— 阶段 A+B+C 端到端演示 host 入口（无 appliance/egress/secret 物化，那是 D）。
+//! llm_plan —— 阶段 A+B+C+D 端到端演示 host 入口（无 appliance/egress/secret 物化）。
 //!
 //! 流程：provider（有 key 则真 Claude/OpenAI，否则 RecordedProvider 罐装信封，无网无 key）
 //! → `bridge_plan`（经冻结 ToolRouter，权威风险）→ `run_plan_guarded`（ModelProvenance =
 //! 每步 model_output，经冻结 source_to_sink → PolicyEvaluator → exec）。LLM 自主驱动的
 //! 非 ReadOnly 步会被 source_to_sink 门 Denied（符合设计意图：危险步须算子重规划）。
 //!
-//! 阶段 C：当同时配置 `ANTHROPIC_API_KEY` 与 `OPENAI_API_KEY` 时，构造 `ProviderChain`
-//! fallback 链（首选 Anthropic，OpenAI 兜底）+ 默认重试策略；任一可用 key 单独配置时退
-//! 回单 provider；均无 key 时用 `RecordedProvider`（仍流经真控制面）。
+//! 阶段 C：`ProviderChain` fallback 链（两 key 齐备→链；单 key→单 provider；无 key→录制）。
+//!
+//! 阶段 D：`run_replan_loop` —— 若首轮未 Completed，把 `EffectObserved`/`StepDenied` 作为
+//! 上下文喂回 provider 再 plan，最多 `AIOS_MAX_REPLANS` 次（默认 3）。LLM 仍只产 intention。
 //!
 //! 也作 musl 静态构建产物，验证 webpki-roots TLS 栈纯 Rust 静态链。
 #![forbid(unsafe_code)]
 
-use agent_runtime::AgentRuntime;
 use llm_planner::bridge::ModelProvenance;
-use llm_planner::runner::{OperatorApprovals, StubExecutor};
+use llm_planner::runner::{run_replan_loop, OperatorApprovals, StubExecutor};
 use llm_planner::{
-    bridge_plan, ClaudeProvider, LlmProvider, OpenAiCompatProvider, ProviderChain, RecordedProvider,
-    RetryPolicy,
+    ClaudeProvider, LlmProvider, OpenAiCompatProvider, ProviderChain, RecordedProvider, RetryPolicy,
 };
 use security_execution::audit::AuditJournal;
 
@@ -58,58 +57,34 @@ fn main() {
         (None, None) => Box::new(RecordedProvider::anthropic("claude-opus-4-8", RECORDED_ANTHROPIC)),
     };
 
-    let raw = match provider.plan(&intent) {
-        Ok(raw) => raw,
-        Err(error) => {
-            eprintln!("provider error (fail-closed): {error}");
-            std::process::exit(2);
-        }
-    };
-    println!(
-        "RAW_PLAN provider={} model={} http_status={} steps={}",
-        raw.provider,
-        raw.model,
-        raw.http_status,
-        raw.steps.len()
-    );
-
-    let plan = match bridge_plan(&raw) {
-        Ok(plan) => plan,
-        Err(error) => {
-            eprintln!("bridge rejected untrusted plan (fail-closed): {error}");
-            std::process::exit(3);
-        }
-    };
-    for step in &plan {
-        println!(
-            "PLANNED step_id={} tool={} resource={} risk={}",
-            step.step_id,
-            step.tool,
-            step.resource,
-            step.risk.to_risk_class().as_str()
-        );
-    }
-
     let journal = AuditJournal::new(
         std::env::temp_dir().join(format!("llm-plan-{}.jsonl", std::process::id())),
     );
     let exec = StubExecutor::new("alive=true pid=1");
     let approvals = OperatorApprovals::new("operator", false);
-    let mut runtime = AgentRuntime::new();
+    let max_replans = std::env::var("AIOS_MAX_REPLANS")
+        .ok()
+        .and_then(|value| value.parse::<usize>().ok())
+        .unwrap_or(3);
     // ModelProvenance：每步 model_output（不可信）。LLM 自主驱动的非 ReadOnly 步将被 s2s 门拦。
-    let state = runtime.run_plan_guarded(
+    // 阶段 D：replan loop —— provider→bridge→run_plan_guarded，未完成时把观察喂回 provider
+    // 再 plan（每轮仍经冻结 bridge + run_plan_guarded，LLM 只产 intention）。
+    let outcome = run_replan_loop(
+        provider.as_ref(),
+        &intent,
         "operator",
         "run-demo",
-        &plan,
         &ModelProvenance,
         &approvals,
         &exec,
         &journal,
+        max_replans,
     );
     println!(
-        "RUN state={:?} events={} executed={:?}",
-        state,
-        runtime.events().len(),
+        "RUN state={:?} attempts={} replan_feedback={:?} executed={:?}",
+        outcome.state,
+        outcome.attempts,
+        outcome.feedback,
         exec.executed()
     );
 }
