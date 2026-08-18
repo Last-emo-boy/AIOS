@@ -647,6 +647,7 @@ mod replan_tests {
                 params: vec![("service".to_string(), "nginx".to_string())],
                 claimed_risk: None,
                 text: String::new(),
+                depends_on: vec![],
             }],
         }
     }
@@ -715,6 +716,7 @@ mod replan_tests {
                 params: vec![],
                 claimed_risk: None,
                 text: String::new(),
+                depends_on: vec![],
             }],
         };
         let provider = ScriptedProvider::new(vec![bad, ok_plan()]);
@@ -765,6 +767,7 @@ mod replan_tests {
                 params: vec![],
                 claimed_risk: None,
                 text: String::new(),
+                depends_on: vec![],
             }],
         };
         let provider = ScriptedProvider::new(vec![bad, ok_plan()]);
@@ -855,6 +858,7 @@ mod replan_tests {
                 params: vec![],
                 claimed_risk: None,
                 text: String::new(),
+                depends_on: vec![],
             }],
         };
         let provider = ScriptedProvider::new(vec![bad, ok_plan()]);
@@ -996,6 +1000,7 @@ mod replan_tests {
                 params: vec![("service".to_string(), "nginx".to_string())],
                 claimed_risk: None,
                 text: String::new(),
+                depends_on: vec![],
             }],
         };
         // ScriptedProvider 给两轮 plan（第二轮因 abort 不会被调用）。

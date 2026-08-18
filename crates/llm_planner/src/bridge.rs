@@ -30,6 +30,16 @@ pub enum BridgeError {
         tool: String,
         reason: String,
     },
+    /// cp-llm 阶段 N：LLM 提议的步骤依赖引用不存在的 step（索引越界或 tool 名不匹配）。
+    DagMissingDep {
+        step_index: usize,
+        dep: String,
+    },
+    /// cp-llm 阶段 N：LLM 提议的步骤依赖含循环（无法生成拓扑序）。
+    DagCycle {
+        step_index: usize,
+        cycle: String,
+    },
 }
 
 impl std::fmt::Display for BridgeError {
@@ -49,6 +59,14 @@ impl std::fmt::Display for BridgeError {
             } => write!(
                 formatter,
                 "tool rejected at step-{step_index} ({tool}): {reason}"
+            ),
+            BridgeError::DagMissingDep { step_index, dep } => write!(
+                formatter,
+                "dag missing dependency at step-{step_index}: \"{dep}\" not found"
+            ),
+            BridgeError::DagCycle { step_index, cycle } => write!(
+                formatter,
+                "dag cycle detected at step-{step_index}: {cycle}"
             ),
         }
     }
@@ -102,7 +120,95 @@ pub fn bridge_plan(raw: &RawPlan) -> Result<Vec<PlannedStep>, BridgeError> {
             risk: StepRisk::from(routed.risk),
         });
     }
+
+    // cp-llm 阶段 N：DAG 验证 + 权威拓扑排序。
+    // 若任一步声明了 depends_on，验证引用存在性、无循环，生成权威拓扑序。
+    // LLM 只提议依赖（intention）；拓扑排序由 host 裁决（reality）。
+    // 无任何 depends_on → 原序（向后兼容）。
+    if raw.steps.iter().any(|s| !s.depends_on.is_empty()) {
+        plan = topo_sort(raw, plan)?;
+    }
+
     Ok(plan)
+}
+
+/// cp-llm 阶段 N：验证 `depends_on` 引用并生成拓扑序。
+///
+/// `depends_on` 元素可以是 step 索引（"0", "1"）或 tool 名（"svc.status"）。
+/// 先把每个 dep 解析成原始 step 索引，再 Kahn 拓扑排序。引用不存在或循环 → fail-closed。
+fn topo_sort(raw: &RawPlan, plan: Vec<PlannedStep>) -> Result<Vec<PlannedStep>, BridgeError> {
+    let n = raw.steps.len();
+    // 解析每个 step 的 depends_on 成原始索引集合。
+    // dep 可以是索引字符串（"0"）或 tool 名（"svc.status"，匹配第一个同名 step）。
+    let mut deps: Vec<Vec<usize>> = Vec::with_capacity(n);
+    for (i, step) in raw.steps.iter().enumerate() {
+        let mut resolved = Vec::new();
+        for dep in &step.depends_on {
+            // 先尝试解析为索引。
+            if let Ok(idx) = dep.parse::<usize>() {
+                if idx < n {
+                    resolved.push(idx);
+                    continue;
+                }
+            }
+            // 再按 tool 名匹配（第一个同名 step）。
+            if let Some(idx) = raw.steps.iter().position(|s| s.tool == *dep) {
+                resolved.push(idx);
+                continue;
+            }
+            return Err(BridgeError::DagMissingDep {
+                step_index: i,
+                dep: dep.clone(),
+            });
+        }
+        // 自引用（依赖自己）→ 循环。
+        if resolved.contains(&i) {
+            return Err(BridgeError::DagCycle {
+                step_index: i,
+                cycle: format!("step-{i} depends on itself"),
+            });
+        }
+        deps.push(resolved);
+    }
+
+    // Kahn 算法：计算入度，从入度 0 的节点开始。
+    // in_degree[i] = deps[i].len()（i 依赖的 step 数）
+    let mut in_degree: Vec<usize> = deps.iter().map(|d| d.len()).collect();
+
+    let mut queue: std::collections::VecDeque<usize> = (0..n).filter(|&i| in_degree[i] == 0).collect();
+    let mut order: Vec<usize> = Vec::with_capacity(n);
+    // 保持原始序的稳定性：queue 初始按原始序入队。
+    while let Some(i) = queue.pop_front() {
+        order.push(i);
+        // 对所有依赖 i 的 step j，in_degree[j] -= 1；若归零则入队。
+        for j in 0..n {
+            if deps[j].contains(&i) {
+                in_degree[j] -= 1;
+                if in_degree[j] == 0 {
+                    queue.push_back(j);
+                }
+            }
+        }
+    }
+
+    if order.len() != n {
+        // 存在循环：找出未入序的节点。
+        let remaining: Vec<String> = (0..n)
+            .filter(|i| !order.contains(i))
+            .map(|i| format!("step-{i}({})", raw.steps[i].tool))
+            .collect();
+        return Err(BridgeError::DagCycle {
+            step_index: order.len(),
+            cycle: remaining.join(" -> "),
+        });
+    }
+
+    // 按拓扑序重排 plan（step_id 保持原索引语义：step-{i} 对应 raw.steps[i]）。
+    let mut sorted = Vec::with_capacity(n);
+    for &i in &order {
+        sorted.push(plan[i].clone());
+    }
+    Ok(sorted)
 }
 
 /// 权威 resource 从规范化参数派生（与冻结 `PolicyRequest::from_routed` 同形：path/service/url
@@ -151,6 +257,7 @@ mod tests {
                 .collect(),
             claimed_risk: claimed_risk.map(|risk| risk.to_string()),
             text: String::new(),
+                depends_on: vec![],
         }
     }
 
@@ -225,5 +332,91 @@ mod tests {
         ))
         .expect("handle passes");
         assert_eq!(plan[0].params[0].1, "secret://vault/db");
+    }
+
+    // ===== cp-llm 阶段 N：PlanDAG 测试 =====
+
+    /// 无 depends_on → 原序（向后兼容）。
+    #[test]
+    fn dag_empty_deps_preserves_order() {
+        let plan = bridge_plan(&raw_plan(
+            r#"{"steps":[{"tool":"svc.status","params":{"service":"a"}},{"tool":"svc.status","params":{"service":"b"}}]}"#,
+            vec![
+                step("svc.status", &[("service", "a")], None),
+                step("svc.status", &[("service", "b")], None),
+            ],
+        ))
+        .expect("no deps");
+        assert_eq!(plan[0].resource, "a");
+        assert_eq!(plan[1].resource, "b");
+    }
+
+    /// 有效依赖 → 拓扑排序（step 1 依赖 step 0 → order 不变）。
+    #[test]
+    fn dag_valid_dependency_preserves_order() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let mut s1 = step("svc.status", &[("service", "b")], None);
+        s1.depends_on = vec!["0".to_string()];
+        let plan = bridge_plan(&RawPlan {
+            provider: "stub".to_string(),
+            model: "m".to_string(),
+            raw_json: r#"{"steps":[{"tool":"svc.status","params":{"service":"a"}},{"tool":"svc.status","params":{"service":"b"},"depends_on":["0"]}]}"#.to_string(),
+            http_status: 200,
+            steps: vec![s0, s1],
+        })
+        .expect("valid dag");
+        assert_eq!(plan[0].resource, "a");
+        assert_eq!(plan[1].resource, "b");
+    }
+
+    /// 依赖反序 → 拓扑排序把依赖项排前。
+    #[test]
+    fn dag_reorders_when_dependency_is_later() {
+        // step 0 依赖 step 1 → 拓扑序应为 [1, 0]。
+        let mut s0 = step("svc.logs", &[("service", "a")], None);
+        let s1 = step("svc.status", &[("service", "a")], None);
+        s0.depends_on = vec!["svc.status".to_string()];
+        let plan = bridge_plan(&RawPlan {
+            provider: "stub".to_string(),
+            model: "m".to_string(),
+            raw_json: r#"{"steps":[{"tool":"svc.logs","params":{"service":"a"},"depends_on":["svc.status"]},{"tool":"svc.status","params":{"service":"a"}}]}"#.to_string(),
+            http_status: 200,
+            steps: vec![s0, s1],
+        })
+        .expect("reordered");
+        assert_eq!(plan[0].tool, "svc.status");
+        assert_eq!(plan[1].tool, "svc.logs");
+    }
+
+    /// 缺失依赖 → fail-closed。
+    #[test]
+    fn dag_missing_dependency_fail_closed() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        s0.depends_on = vec!["99".to_string()]; // 不存在的索引
+        let result = bridge_plan(&RawPlan {
+            provider: "stub".to_string(),
+            model: "m".to_string(),
+            raw_json: r#"{"steps":[{"tool":"svc.status","params":{"service":"a"},"depends_on":["99"]}]}"#.to_string(),
+            http_status: 200,
+            steps: vec![s0],
+        });
+        assert!(matches!(result, Err(BridgeError::DagMissingDep { dep, .. }) if dep == "99"));
+    }
+
+    /// 循环依赖 → fail-closed。
+    #[test]
+    fn dag_cycle_fail_closed() {
+        let mut s0 = step("svc.status", &[("service", "a")], None);
+        let mut s1 = step("svc.logs", &[("service", "a")], None);
+        s0.depends_on = vec!["1".to_string()];
+        s1.depends_on = vec!["0".to_string()];
+        let result = bridge_plan(&RawPlan {
+            provider: "stub".to_string(),
+            model: "m".to_string(),
+            raw_json: r#"{"steps":[{"tool":"svc.status","params":{"service":"a"},"depends_on":["1"]},{"tool":"svc.logs","params":{"service":"a"},"depends_on":["0"]}]}"#.to_string(),
+            http_status: 200,
+            steps: vec![s0, s1],
+        });
+        assert!(matches!(result, Err(BridgeError::DagCycle { .. })));
     }
 }

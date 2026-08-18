@@ -45,6 +45,7 @@ fn raw_step(tool: &str, params: &[(&str, &str)], claimed_risk: Option<&str>) -> 
             .collect(),
         claimed_risk: claimed_risk.map(|risk| risk.to_string()),
         text: String::new(),
+                depends_on: vec![],
     }
 }
 

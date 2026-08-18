@@ -95,7 +95,11 @@ Never embed secrets, API keys, tokens or passwords in any field.",
 
 /// 一个 LLM 提议的原始步骤 —— **不可信内容（ModelOutput）**。`claimed_risk` 仅 advisory，
 /// 桥接层绝不据此构造权威风险。
-#[derive(Debug, Clone, PartialEq, Eq)]
+///
+/// **阶段 N（DAG）**：`depends_on` 是 LLM 提议的步骤依赖（advisory intention）——
+/// 元素是 step 的索引（0-based）或 tool 名。桥接层验证引用存在性、无循环、
+/// 生成权威拓扑序。验证失败 → fail-closed。LLM 只提议依赖，拓扑排序由 host 裁决。
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct RawStep {
     pub tool: String,
     pub params: Vec<(String, String)>,
@@ -103,6 +107,9 @@ pub struct RawStep {
     pub claimed_risk: Option<String>,
     /// LLM 提供的人读资源标签（advisory）；权威 resource 由桥接层据 normalized_params 派生。
     pub text: String,
+    /// cp-llm 阶段 N：LLM 提议的步骤依赖（advisory）。元素是 step 索引或 tool 名。
+    /// 桥接层验证后生成权威拓扑序；空 = 无依赖（顺序执行，向后兼容）。
+    pub depends_on: Vec<String>,
 }
 
 /// 一个 LLM 提议的原始计划。**整体是不可信 ModelOutput**；`raw_json` 是不可信原始文本，
@@ -184,11 +191,22 @@ pub(crate) fn parse_plan_steps(plan_text: &str) -> io::Result<Vec<RawStep>> {
             .and_then(|resource| resource.as_str())
             .unwrap_or("")
             .to_string();
+        // 阶段 N：解析可选 "depends_on" 数组（元素是 step 索引或 tool 名的字符串）。
+        let depends_on = step
+            .get("depends_on")
+            .and_then(|d| d.as_array())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect::<Vec<_>>()
+            })
+            .unwrap_or_default();
         out.push(RawStep {
             tool: tool.to_string(),
             params,
             claimed_risk,
             text,
+            depends_on,
         });
     }
     Ok(out)

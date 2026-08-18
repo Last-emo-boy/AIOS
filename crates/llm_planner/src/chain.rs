@@ -275,6 +275,7 @@ mod tests {
                 params: vec![("service".to_string(), "nginx".to_string())],
                 claimed_risk: None,
                 text: String::new(),
+                depends_on: vec![],
             }],
         }
     }
