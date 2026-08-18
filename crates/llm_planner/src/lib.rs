@@ -17,11 +17,13 @@ use std::io;
 
 pub mod anthropic;
 pub mod bridge;
+pub mod chain;
 pub mod openai;
 pub mod runner;
 
 pub use anthropic::ClaudeProvider;
 pub use bridge::{bridge_plan, BridgeError, ModelProvenance};
+pub use chain::{ProviderChain, RetryPolicy};
 pub use openai::OpenAiCompatProvider;
 
 /// 强制 LLM 只输出单个纯 JSON 对象的系统提示。结构由冻结工具集决定，但**风险绝不信任
@@ -61,8 +63,16 @@ pub struct RawPlan {
 }
 
 /// provider 抽象：把算子意图变成不可信 `RawPlan`。provider 层只产意图，无任何控制面逻辑。
+///
+/// `name`（cp-llm 阶段 C）返回 provider 标识，供 `ProviderChain` 审计哪一环兜底成功；
+/// 默认实现返回 `"unknown"`，保证向后兼容（现有 provider 实现可按需覆盖）。
 pub trait LlmProvider {
     fn plan(&self, intent: &str) -> io::Result<RawPlan>;
+
+    /// provider 标识（advisory，仅用于观测/审计，绝不参与裁决）。默认 `"unknown"`。
+    fn name(&self) -> &str {
+        "unknown"
+    }
 }
 
 pub(crate) fn invalid(msg: impl Into<String>) -> io::Error {
@@ -261,6 +271,10 @@ impl LlmProvider for RecordedProvider {
             http_status: self.http_status,
             steps,
         })
+    }
+
+    fn name(&self) -> &str {
+        &self.provider
     }
 }
 

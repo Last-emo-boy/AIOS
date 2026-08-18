@@ -43,9 +43,24 @@ impl ClaudeProvider {
             1024,
         )
     }
+
+    /// 据环境变量构造（便于接自托管网关 / 本地代理）：
+    /// - `ANTHROPIC_BASE_URL`（缺省 `https://api.anthropic.com`）
+    /// - `ANTHROPIC_MODEL`（缺省 `claude-opus-4-8`）
+    pub fn from_env(api_key: impl Into<String>) -> Self {
+        let base_url = std::env::var("ANTHROPIC_BASE_URL")
+            .unwrap_or_else(|_| "https://api.anthropic.com".to_string());
+        let model = std::env::var("ANTHROPIC_MODEL")
+            .unwrap_or_else(|_| "claude-opus-4-8".to_string());
+        Self::new(base_url, api_key, model, 1024)
+    }
 }
 
 impl LlmProvider for ClaudeProvider {
+    fn name(&self) -> &str {
+        "anthropic"
+    }
+
     fn plan(&self, intent: &str) -> io::Result<RawPlan> {
         let body = serde_json::json!({
             "model": self.model,

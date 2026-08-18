@@ -40,9 +40,24 @@ impl OpenAiCompatProvider {
     pub fn openai(api_key: impl Into<String>) -> Self {
         Self::new("https://api.openai.com/v1", api_key, "gpt-4o-mini", 1024)
     }
+
+    /// 据环境变量构造（便于接 vLLM / ollama / 本地兼容网关）：
+    /// - `OPENAI_BASE_URL`（缺省 `https://api.openai.com/v1`）
+    /// - `OPENAI_MODEL`（缺省 `gpt-4o-mini`）
+    pub fn from_env(api_key: impl Into<String>) -> Self {
+        let base_url = std::env::var("OPENAI_BASE_URL")
+            .unwrap_or_else(|_| "https://api.openai.com/v1".to_string());
+        let model = std::env::var("OPENAI_MODEL")
+            .unwrap_or_else(|_| "gpt-4o-mini".to_string());
+        Self::new(base_url, api_key, model, 1024)
+    }
 }
 
 impl LlmProvider for OpenAiCompatProvider {
+    fn name(&self) -> &str {
+        "openai"
+    }
+
     fn plan(&self, intent: &str) -> io::Result<RawPlan> {
         let body = serde_json::json!({
             "model": self.model,
