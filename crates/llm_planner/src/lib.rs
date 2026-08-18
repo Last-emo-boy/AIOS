@@ -28,6 +28,10 @@ pub use openai::OpenAiCompatProvider;
 
 /// 强制 LLM 只输出单个纯 JSON 对象的系统提示。结构由冻结工具集决定，但**风险绝不信任
 /// LLM 自报**（桥接层一律以 `ToolRouter` 的权威 RiskClass 为准）。
+///
+/// **注意**（阶段 I）：此常量硬编码了一个工具子集示例。生产代码应使用
+/// `build_system_prompt()` 从冻结 `TOOL_SCHEMAS` 动态生成工具列表，确保 prompt
+/// 永远与 ToolRouter 同步。此常量保留用于向后兼容（已有 provider 构造点引用它）。
 pub const SYSTEM_PROMPT: &str = concat!(
     "You are the AIOS planner. Translate the operator intent into tool steps. ",
     "Output ONLY a single JSON object, no prose and no markdown fence:\n",
@@ -37,6 +41,57 @@ pub const SYSTEM_PROMPT: &str = concat!(
     "svc.restart, fs.write.diff). Never use shell or arbitrary commands. ",
     "Never embed secrets, API keys, tokens or passwords in any field."
 );
+
+/// cp-llm 阶段 I：从冻结 `TOOL_SCHEMAS` 动态构建系统提示词。
+///
+/// 问题：`SYSTEM_PROMPT` 常量硬编码了一个工具子集示例。若 ToolRouter 新增/移除工具，
+/// prompt 不会自动更新——LLM 可能提议已废弃的工具（被 bridge 拒）或漏掉新工具。
+///
+/// 方案：`build_system_prompt()` 遍历 `TOOL_SCHEMAS`，为每个工具生成一行描述
+/// （`tool_name (risk, required: a, b, optional: c)`），注入到 prompt 的工具列表段。
+/// 这确保 LLM 看到的工具列表永远与冻结控制面真正接受的工具列表一致——**prompt
+/// 不自造工具，只镜像冻结 ToolRouter**。`SYSTEM_PROMPT` 常量仍保留（向后兼容）。
+///
+/// 风险描述仍只作 advisory 提示——桥接层绝不据此构造权威风险（权威风险永远取自
+/// `ToolRouter::route`）。
+pub fn build_system_prompt() -> String {
+    use security_execution::tools::TOOL_SCHEMAS;
+
+    let mut tools: Vec<String> = Vec::new();
+    for schema in TOOL_SCHEMAS {
+        let required: Vec<&str> = schema
+            .params
+            .iter()
+            .filter(|p| matches!(p.requirement, security_execution::tools::ParamRequirement::Required))
+            .map(|p| p.name)
+            .collect();
+        let optional: Vec<&str> = schema
+            .params
+            .iter()
+            .filter(|p| matches!(p.requirement, security_execution::tools::ParamRequirement::Optional))
+            .map(|p| p.name)
+            .collect();
+        let mut line = format!("- {} (risk: {:?}", schema.name, schema.risk);
+        if !required.is_empty() {
+            line.push_str(&format!(", required: {}", required.join(", ")));
+        }
+        if !optional.is_empty() {
+            line.push_str(&format!(", optional: {}", optional.join(", ")));
+        }
+        line.push(')');
+        tools.push(line);
+    }
+    format!(
+        "You are the AIOS planner. Translate the operator intent into tool steps. \
+Output ONLY a single JSON object, no prose and no markdown fence:\n\
+{{\"steps\":[{{\"tool\":<string>,\"resource\":<string>,\"params\":{{<string>:<string>}}}}]}}\n\
+Every step's \"params\" MUST be a flat object whose keys and values are all strings. \
+Use only known AIOS semantic tools:\n{}\n\
+Never use shell or arbitrary commands. \
+Never embed secrets, API keys, tokens or passwords in any field.",
+        tools.join("\n")
+    )
+}
 
 /// 一个 LLM 提议的原始步骤 —— **不可信内容（ModelOutput）**。`claimed_risk` 仅 advisory，
 /// 桥接层绝不据此构造权威风险。
@@ -357,5 +412,31 @@ mod tests {
         )
         .expect("parse");
         assert_eq!(steps[0].claimed_risk.as_deref(), Some("read-only"));
+    }
+
+    // ===== cp-llm 阶段 I：build_system_prompt =====
+
+    #[test]
+    fn build_prompt_includes_all_frozen_tools() {
+        let prompt = build_system_prompt();
+        // 每个冻结工具都应出现在 prompt 中（prompt 镜像 ToolRouter，不自造工具）。
+        use security_execution::tools::TOOL_SCHEMAS;
+        for schema in TOOL_SCHEMAS {
+            assert!(
+                prompt.contains(schema.name),
+                "prompt missing frozen tool {:?}: {}",
+                schema.name,
+                prompt
+            );
+        }
+    }
+
+    #[test]
+    fn build_prompt_contains_risk_and_params_hint() {
+        let prompt = build_system_prompt();
+        // 应包含 risk 标注和 JSON schema 指令。
+        assert!(prompt.contains("risk:"));
+        assert!(prompt.contains("\"steps\""));
+        assert!(prompt.contains("Never embed secrets"));
     }
 }
