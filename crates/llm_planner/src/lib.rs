@@ -84,8 +84,11 @@ pub fn build_system_prompt() -> String {
     format!(
         "You are the AIOS planner. Translate the operator intent into tool steps. \
 Output ONLY a single JSON object, no prose and no markdown fence:\n\
-{{\"steps\":[{{\"tool\":<string>,\"resource\":<string>,\"params\":{{<string>:<string>}}}}]}}\n\
+{{\"steps\":[{{\"tool\":<string>,\"resource\":<string>,\"params\":{{<string>:<string>}},\"depends_on\":[<string>]}}]}}\n\
 Every step's \"params\" MUST be a flat object whose keys and values are all strings. \
+\"depends_on\" is optional: a list of step indices (\"0\", \"1\") or tool names that must \
+complete before this step. The host validates dependencies and generates the execution \
+order; cycles or missing refs are rejected. \
 Use only known AIOS semantic tools:\n{}\n\
 Never use shell or arbitrary commands. \
 Never embed secrets, API keys, tokens or passwords in any field.",
