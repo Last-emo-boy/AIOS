@@ -228,6 +228,70 @@ impl ReplanOutcome {
     pub fn completed(&self) -> bool {
         matches!(self.state, RunState::Completed)
     }
+
+    /// 是否被算子中止（阶段 G）。
+    pub fn aborted(&self) -> bool {
+        self.trace
+            .last()
+            .is_some_and(|span| matches!(span.cause, TraceCause::Aborted))
+    }
+
+    /// 是否因 fail-closed 收束（provider/bridge/exec 拒绝）——非 Completed、非 Aborted。
+    pub fn fail_closed(&self) -> bool {
+        !self.completed() && !self.aborted()
+    }
+
+    /// 最终结局的人读摘要（单行，不含 secret——reason 经 extract_feedback 已净化）。
+    /// 供 bin/CLI 直接打印，无需调用方自己拼字符串。
+    pub fn summary(&self) -> String {
+        if self.completed() {
+            format!("completed in {} attempt(s)", self.attempts)
+        } else if self.aborted() {
+            format!("aborted after {} attempt(s)", self.attempts)
+        } else if let Some(span) = self.trace.last() {
+            format!(
+                "failed after {} attempt(s): {}",
+                self.attempts,
+                trace_cause_str(&span.cause)
+            )
+        } else {
+            format!("failed after {} attempt(s)", self.attempts)
+        }
+    }
+
+    /// 把所有 trace span 渲染成多行可读串（每轮一行），供审计/调试输出。
+    pub fn render_trace(&self) -> String {
+        self.trace
+            .iter()
+            .map(|span| {
+                format!(
+                    "attempt {} provider={} model={} steps={} state={:?} cause={}",
+                    span.attempt,
+                    span.provider,
+                    span.model,
+                    span.step_count,
+                    span.state,
+                    trace_cause_str(&span.cause)
+                )
+            })
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+}
+
+/// 把 `TraceCause` 渲染成单行可读串（不含 secret：reason 经 extract_feedback 已净化）。
+/// cp-llm 阶段 J：从 bin/llm_plan.rs 提升为模块级 pub 函数，供 `ReplanOutcome::summary`
+/// / `render_trace` 及外部调用方复用。
+pub fn trace_cause_str(cause: &TraceCause) -> String {
+    match cause {
+        TraceCause::Completed => "completed".to_string(),
+        TraceCause::ProviderFailed { reason } => format!("provider_failed: {reason}"),
+        TraceCause::BridgeRejected { reason } => format!("bridge_rejected: {reason}"),
+        TraceCause::ExecDenied { reason } => format!("exec_denied: {reason}"),
+        TraceCause::BudgetExhausted => "budget_exhausted".to_string(),
+        TraceCause::Aborted => "aborted".to_string(),
+        TraceCause::NoFeedback => "no_feedback".to_string(),
+    }
 }
 
 /// 算子中止信号源（阶段 G）。
@@ -888,5 +952,82 @@ mod replan_tests {
             &exec, &journal, 3, &NoAbort,
         );
         assert!(outcome.completed()); // 正常完成，未被中止
+    }
+
+    // ===== cp-llm 阶段 J：ReplanOutcome 辅助方法测试 =====
+
+    #[test]
+    fn summary_completed() {
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("sum-1");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-s1",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        assert!(outcome.completed());
+        assert!(!outcome.aborted());
+        assert!(!outcome.fail_closed());
+        assert!(outcome.summary().contains("completed"));
+        assert!(outcome.summary().contains("1 attempt"));
+    }
+
+    #[test]
+    fn summary_aborted() {
+        struct AlwaysAborted;
+        impl AbortSignal for AlwaysAborted {
+            fn is_aborted(&self) -> bool { true }
+        }
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("sum-2");
+        let outcome = run_replan_loop_with_abort(
+            &provider, "x", "operator", "run-s2",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3, &AlwaysAborted,
+        );
+        assert!(!outcome.completed());
+        assert!(outcome.aborted());
+        assert!(!outcome.fail_closed());
+        assert!(outcome.summary().contains("aborted"));
+    }
+
+    #[test]
+    fn summary_fail_closed_on_provider_error() {
+        struct FailingProvider;
+        impl LlmProvider for FailingProvider {
+            fn name(&self) -> &str { "failing" }
+            fn plan(&self, _intent: &str) -> std::io::Result<RawPlan> {
+                Err(std::io::Error::new(std::io::ErrorKind::Other, "transport: down"))
+            }
+        }
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("sum-3");
+        let outcome = run_replan_loop(
+            &FailingProvider, "x", "operator", "run-s3",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        assert!(!outcome.completed());
+        assert!(!outcome.aborted());
+        assert!(outcome.fail_closed());
+        assert!(outcome.summary().contains("failed"));
+        assert!(outcome.summary().contains("provider_failed"));
+    }
+
+    #[test]
+    fn render_trace_is_multiline() {
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("sum-4");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-s4",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        let trace = outcome.render_trace();
+        assert!(trace.contains("attempt 1"));
+        assert!(trace.contains("completed"));
     }
 }

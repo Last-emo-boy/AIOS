@@ -80,33 +80,13 @@ fn main() {
         &journal,
         max_replans,
     );
+    // 阶段 J：用 ReplanOutcome 辅助方法渲染结局摘要 + trace。
     println!(
-        "RUN state={:?} attempts={} replan_feedback={:?} executed={:?}",
+        "RUN state={:?} {} executed={:?}",
         outcome.state,
-        outcome.attempts,
-        outcome.feedback,
+        outcome.summary(),
         exec.executed()
     );
     // 阶段 E：结构化 trace 摘要（每轮 attempt 的 provider/state/cause）。
-    for span in &outcome.trace {
-        println!(
-            "TRACE attempt={} provider={} model={} steps={} state={:?} cause={}",
-            span.attempt, span.provider, span.model, span.step_count, span.state,
-            trace_cause_str(&span.cause),
-        );
-    }
-}
-
-/// 把 TraceCause 渲染成单行可读串（不含 secret：reason 经净化）。
-fn trace_cause_str(cause: &llm_planner::runner::TraceCause) -> String {
-    use llm_planner::runner::TraceCause;
-    match cause {
-        TraceCause::Completed => "completed".to_string(),
-        TraceCause::ProviderFailed { reason } => format!("provider_failed: {reason}"),
-        TraceCause::BridgeRejected { reason } => format!("bridge_rejected: {reason}"),
-        TraceCause::ExecDenied { reason } => format!("exec_denied: {reason}"),
-        TraceCause::BudgetExhausted => "budget_exhausted".to_string(),
-        TraceCause::Aborted => "aborted".to_string(),
-        TraceCause::NoFeedback => "no_feedback".to_string(),
-    }
+    println!("{}", outcome.render_trace());
 }
