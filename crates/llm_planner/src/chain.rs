@@ -44,21 +44,55 @@ pub enum AttemptOutcome {
 
 /// 重试策略：仅对 `Transient` 错误生效。
 ///
-/// `max_retries=0` ⇒ 不重试（第一次失败即 fallback）。重试之间无 sleep（本 crate 保持
-/// 同步、无 tokio；真部署的退避由 provider 自身的 `ureq::Agent` 超时 + 调用方编排决定）。
+/// `max_retries=0` ⇒ 不重试（第一次失败即 fallback）。
+///
+/// **阶段 L（指数退避）**：`backoff_base_ms > 0` 时，重试之间按指数退避 sleep
+/// （第 n 次重试前 sleep `backoff_base_ms * 2^n` ms，封顶 `backoff_cap_ms`）。
+/// `backoff_base_ms=0` ⇒ 无 sleep（向后兼容，行为与阶段 K 前一致）。本 crate 保持
+/// 同步、无 tokio——sleep 用 `std::thread::sleep`（阻塞当前线程，适合同步编排）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct RetryPolicy {
     pub max_retries: u32,
+    /// 指数退避基准毫秒（阶段 L）。0 = 不 sleep（向后兼容）。
+    pub backoff_base_ms: u64,
+    /// 指数退避封顶毫秒（阶段 L）。0 = 不封顶（实际由 u64 溢出自然封顶）。
+    pub backoff_cap_ms: u64,
 }
 
 impl Default for RetryPolicy {
     fn default() -> Self {
-        Self { max_retries: 1 }
+        Self {
+            max_retries: 1,
+            backoff_base_ms: 0, // 向后兼容：默认不 sleep
+            backoff_cap_ms: 0,
+        }
     }
 }
 
 impl RetryPolicy {
-    pub const NO_RETRY: Self = Self { max_retries: 0 };
+    pub const NO_RETRY: Self = Self {
+        max_retries: 0,
+        backoff_base_ms: 0,
+        backoff_cap_ms: 0,
+    };
+
+    /// 计算第 `retry_index` 次重试（0-based）前的 sleep 时长（毫秒）。
+    /// 指数退避：base * 2^retry_index，封顶 cap。base=0 时永远返回 0。
+    pub fn backoff_ms(&self, retry_index: u32) -> u64 {
+        if self.backoff_base_ms == 0 {
+            return 0;
+        }
+        // 饱和乘法，防溢出。
+        let exp = (1u64)
+            .checked_shl(retry_index)
+            .unwrap_or(u64::MAX);
+        let delay = self.backoff_base_ms.saturating_mul(exp);
+        if self.backoff_cap_ms > 0 {
+            delay.min(self.backoff_cap_ms)
+        } else {
+            delay
+        }
+    }
 }
 
 /// 有序 provider fallback 链。`providers[0]` 是首选；后续是兜底。
@@ -138,6 +172,11 @@ impl LlmProvider for ProviderChain {
                             ErrorClass::Transient => {
                                 last_transient = Some(error);
                                 if attempts_for_this_provider < self.policy.max_retries {
+                                    // 阶段 L：指数退避 sleep（base=0 时无 sleep，向后兼容）。
+                                    let delay = self.policy.backoff_ms(attempts_for_this_provider);
+                                    if delay > 0 {
+                                        std::thread::sleep(std::time::Duration::from_millis(delay));
+                                    }
                                     attempts_for_this_provider += 1;
                                     continue; // 重试当前 provider
                                 }
@@ -334,7 +373,7 @@ mod tests {
         let p2 = ScriptedProvider::new("b", vec![Ok(ok_plan("b"))]);
         let chain = ProviderChain::new(
             vec![Box::new(p1), Box::new(p2)],
-            RetryPolicy { max_retries: 3 },
+            RetryPolicy { max_retries: 3, ..Default::default() },
         );
         let plan = chain.plan("x").expect("retry then succeed");
         assert_eq!(plan.provider, "a");
@@ -362,7 +401,7 @@ mod tests {
         ]);
         let chain = ProviderChain::single(
             Box::new(provider),
-            RetryPolicy { max_retries: 2 },
+            RetryPolicy { max_retries: 2, ..Default::default() },
         );
         let plan = chain.plan("x").expect("429 retried");
         assert_eq!(plan.provider, "a");
@@ -377,7 +416,7 @@ mod tests {
         ]);
         let chain = ProviderChain::single(
             Box::new(provider),
-            RetryPolicy { max_retries: 5 },
+            RetryPolicy { max_retries: 5, ..Default::default() },
         );
         let err = chain.plan("x").expect_err("401 permanent");
         assert!(err.to_string().contains("401"));
@@ -450,5 +489,49 @@ mod tests {
         let _ = chain.plan("x").unwrap();
         let attempts = chain.last_attempts();
         assert_eq!(attempts.len(), 1, "second call should reset to 1 attempt");
+    }
+
+    // ===== cp-llm 阶段 L：指数退避测试 =====
+
+    #[test]
+    fn backoff_ms_zero_base_means_no_sleep() {
+        let policy = RetryPolicy { max_retries: 5, backoff_base_ms: 0, backoff_cap_ms: 0 };
+        assert_eq!(policy.backoff_ms(0), 0);
+        assert_eq!(policy.backoff_ms(1), 0);
+        assert_eq!(policy.backoff_ms(5), 0);
+    }
+
+    #[test]
+    fn backoff_ms_exponential() {
+        let policy = RetryPolicy { max_retries: 5, backoff_base_ms: 10, backoff_cap_ms: 0 };
+        assert_eq!(policy.backoff_ms(0), 10);      // 10 * 2^0 = 10
+        assert_eq!(policy.backoff_ms(1), 20);      // 10 * 2^1 = 20
+        assert_eq!(policy.backoff_ms(2), 40);      // 10 * 2^2 = 40
+        assert_eq!(policy.backoff_ms(3), 80);      // 10 * 2^3 = 80
+    }
+
+    #[test]
+    fn backoff_ms_capped() {
+        let policy = RetryPolicy { max_retries: 5, backoff_base_ms: 10, backoff_cap_ms: 50 };
+        assert_eq!(policy.backoff_ms(0), 10);      // 10
+        assert_eq!(policy.backoff_ms(1), 20);      // 20
+        assert_eq!(policy.backoff_ms(2), 40);      // 40
+        assert_eq!(policy.backoff_ms(3), 50);      // capped at 50
+        assert_eq!(policy.backoff_ms(10), 50);     // still capped
+    }
+
+    #[test]
+    fn retry_with_tiny_backoff_succeeds() {
+        // 429 → 重试（sleep 1ms）→ 成功。验证 backoff 路径不破坏重试逻辑。
+        let provider = ScriptedProvider::new("a", vec![
+            Err(transient_err().to_string()),
+            Ok(ok_plan("a")),
+        ]);
+        let chain = ProviderChain::single(
+            Box::new(provider),
+            RetryPolicy { max_retries: 1, backoff_base_ms: 1, backoff_cap_ms: 10 },
+        );
+        let plan = chain.plan("x").expect("retry with backoff succeeds");
+        assert_eq!(plan.provider, "a");
     }
 }
