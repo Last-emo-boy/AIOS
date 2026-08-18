@@ -108,11 +108,12 @@ fn main() {
     };
     // 阶段 J：用 ReplanOutcome 辅助方法渲染结局摘要 + trace。
     println!(
-        "RUN state={:?} {} executed={:?} total_elapsed_ms={} max_parallel_width={}",
+        "RUN state={:?} {} executed={:?} total_elapsed_ms={} avg_elapsed_ms={} max_parallel_width={}",
         outcome.state,
         outcome.summary(),
         exec.executed(),
         outcome.total_elapsed_ms(),
+        outcome.avg_elapsed_ms(),
         outcome.max_parallel_width()
     );
     // 阶段 E：结构化 trace 摘要（每轮 attempt 的 provider/state/cause）。

@@ -293,6 +293,16 @@ impl ReplanOutcome {
             .unwrap_or(0)
     }
 
+    /// 每轮平均耗时（毫秒，advisory 仅观测）。无 attempt 时为 0。
+    /// 供上层判断 replan 效率——平均高 + 多轮可能提示 provider/bridge 延迟。
+    pub fn avg_elapsed_ms(&self) -> u64 {
+        if self.attempts == 0 {
+            0
+        } else {
+            self.total_elapsed_ms() / self.attempts as u64
+        }
+    }
+
     /// 把所有 trace span 渲染成多行可读串（每轮一行），供审计/调试输出。
     pub fn render_trace(&self) -> String {
         self.trace
@@ -1269,6 +1279,20 @@ mod replan_tests {
         let total = outcome.total_elapsed_ms();
         let sum: u64 = outcome.trace.iter().map(|s| s.elapsed_ms).sum();
         assert_eq!(total, sum);
+        // avg = total / attempts。
+        assert_eq!(outcome.avg_elapsed_ms(), total / outcome.attempts as u64);
+    }
+
+    #[test]
+    fn avg_elapsed_ms_zero_when_no_attempts() {
+        // 构造一个无 span 的 outcome（直接构造，不经 run_replan_loop）。
+        let outcome = ReplanOutcome {
+            state: RunState::Idle,
+            attempts: 0,
+            feedback: vec![],
+            trace: vec![],
+        };
+        assert_eq!(outcome.avg_elapsed_ms(), 0);
     }
 
     #[test]
