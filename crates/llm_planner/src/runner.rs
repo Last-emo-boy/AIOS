@@ -110,6 +110,41 @@ impl StepExecutor for StubExecutor {
 }
 
 // ===== cp-llm 阶段 D：tool-result 反馈 / replan 循环 =====
+// ===== cp-llm 阶段 E：agent 决策结构化追踪（TraceSpan） =====
+
+/// 单次 replan attempt 的结构化追踪记录（advisory，供观测/审计；绝不参与裁决）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TraceSpan {
+    /// 第几轮（1-based）。
+    pub attempt: usize,
+    /// 该轮 LLM 的 provider 标识（取 `LlmProvider::name`）。
+    pub provider: String,
+    /// 该轮 LLM 的模型（取 `RawPlan.model`）。
+    pub model: String,
+    /// bridge 后的步数（0 = bridge 失败或 plan 空）。
+    pub step_count: usize,
+    /// 该轮 `run_plan_guarded` 的终态（bridge/provider 失败时为 `FailedClosed`）。
+    pub state: RunState,
+    /// 该轮结束的原因。
+    pub cause: TraceCause,
+}
+
+/// 一轮 attempt 结束的原因。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum TraceCause {
+    /// 计划全步跑完。
+    Completed,
+    /// LLM provider 失败（fail-closed）。
+    ProviderFailed { reason: String },
+    /// bridge 拒绝（幻觉 tool / secret / 缺参）。
+    BridgeRejected { reason: String },
+    /// exec 阶段被冻结控制面拒绝/内核拒绝。
+    ExecDenied { reason: String },
+    /// run loop 收束于非 Completed 非 Denied 的中间态且配额耗尽。
+    BudgetExhausted,
+    /// 无可反馈观察，replan 无意义。
+    NoFeedback,
+}
 
 /// `run_replan_loop` 的结果（advisory，供观测）。
 #[derive(Debug, Clone)]
@@ -120,6 +155,8 @@ pub struct ReplanOutcome {
     pub attempts: usize,
     /// 每轮（从第二轮起）喂给 LLM 的反馈上下文片段。
     pub feedback: Vec<String>,
+    /// 每轮 attempt 的结构化追踪（阶段 E）。
+    pub trace: Vec<TraceSpan>,
 }
 
 impl ReplanOutcome {
@@ -155,8 +192,10 @@ pub fn run_replan_loop(
 ) -> ReplanOutcome {
     let mut context = intent.to_string();
     let mut feedback: Vec<String> = Vec::new();
+    let mut trace: Vec<TraceSpan> = Vec::new();
     let mut state = RunState::FailedClosed;
     let mut attempts = 0usize;
+    let provider_name = provider.name().to_string();
 
     for attempt in 0..=max_replans {
         attempts = attempt + 1;
@@ -164,52 +203,113 @@ pub fn run_replan_loop(
         let raw = match provider.plan(&context) {
             Ok(raw) => raw,
             Err(error) => {
-                feedback.push(format!("provider fail-closed: {error}"));
+                let reason = error.to_string();
+                feedback.push(format!("provider fail-closed: {reason}"));
+                trace.push(TraceSpan {
+                    attempt: attempts,
+                    provider: provider_name.clone(),
+                    model: String::new(),
+                    step_count: 0,
+                    state: RunState::FailedClosed,
+                    cause: TraceCause::ProviderFailed { reason },
+                });
                 return ReplanOutcome {
                     state: RunState::FailedClosed,
                     attempts,
                     feedback,
+                    trace,
                 };
             }
         };
+        let model = raw.model.clone();
         // 2. 桥接：冻结 ToolRouter 路由 + secret 净化。bridge 失败 → 反馈原因并 replan。
         let plan = match crate::bridge_plan(&raw) {
             Ok(plan) => plan,
             Err(error) => {
+                let reason = error.to_string();
+                trace.push(TraceSpan {
+                    attempt: attempts,
+                    provider: provider_name.clone(),
+                    model: model.clone(),
+                    step_count: 0,
+                    state: RunState::FailedClosed,
+                    cause: TraceCause::BridgeRejected { reason: reason.clone() },
+                });
                 if attempt >= max_replans {
                     return ReplanOutcome {
                         state: RunState::FailedClosed,
                         attempts,
                         feedback,
+                        trace,
                     };
                 }
-                let note = format!("bridge rejected: {error}");
+                let note = format!("bridge rejected: {reason}");
                 feedback.push(note.clone());
                 context = format!("{intent}\nprevious attempt {attempt} feedback: {note}");
                 continue;
             }
         };
+        let step_count = plan.len();
         // 3. 冻结 run loop 裁决 + exec（每轮用新 runtime，事件序列独立）。
         let mut runtime = AgentRuntime::new();
         state = runtime.run_plan_guarded(actor, run_id, &plan, provenance, approvals, exec, journal);
         if matches!(state, RunState::Completed) {
+            trace.push(TraceSpan {
+                attempt: attempts,
+                provider: provider_name.clone(),
+                model: model.clone(),
+                step_count,
+                state,
+                cause: TraceCause::Completed,
+            });
             return ReplanOutcome {
                 state,
                 attempts,
                 feedback,
+                trace,
             };
         }
         // 4. 未完成：提取观察作为反馈，replan（若还有配额）。
         if attempt >= max_replans {
+            // 提取 exec 拒绝原因（若有）。
+            let cause = extract_denied_reason(&runtime.events())
+                .map(|reason| TraceCause::ExecDenied { reason })
+                .unwrap_or(TraceCause::BudgetExhausted);
+            trace.push(TraceSpan {
+                attempt: attempts,
+                provider: provider_name.clone(),
+                model: model.clone(),
+                step_count,
+                state,
+                cause,
+            });
             break;
         }
         let observation = extract_feedback(&runtime.events());
         match observation {
             Some(note) => {
+                trace.push(TraceSpan {
+                    attempt: attempts,
+                    provider: provider_name.clone(),
+                    model: model.clone(),
+                    step_count,
+                    state,
+                    cause: TraceCause::ExecDenied { reason: note.clone() },
+                });
                 feedback.push(note.clone());
                 context = format!("{intent}\nprevious attempt {attempt} feedback: {note}");
             }
-            None => break, // 无可反馈观察，replan 无意义
+            None => {
+                trace.push(TraceSpan {
+                    attempt: attempts,
+                    provider: provider_name.clone(),
+                    model: model.clone(),
+                    step_count,
+                    state,
+                    cause: TraceCause::NoFeedback,
+                });
+                break; // 无可反馈观察，replan 无意义
+            }
         }
     }
 
@@ -217,6 +317,7 @@ pub fn run_replan_loop(
         state,
         attempts,
         feedback,
+        trace,
     }
 }
 
@@ -232,6 +333,26 @@ fn extract_feedback(events: &[RunEvent]) -> Option<String> {
             }
             RunEvent::StepDenied { step_id, reason } => {
                 return Some(format!("step {step_id} denied: {reason}"))
+            }
+            RunEvent::RollbackTriggered { step_id, reason } => {
+                return Some(format!("step {step_id} rollback: {reason}"))
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
+/// 从事件序列提取 exec 阶段的拒绝原因（供 TraceCause::ExecDenied）。优先 `StepDenied`
+/// （含 source_to_sink 门拦的 `SourceToSinkDenied`），其次 `RollbackTriggered`。
+fn extract_denied_reason(events: &[RunEvent]) -> Option<String> {
+    for event in events.iter().rev() {
+        match event {
+            RunEvent::StepDenied { step_id, reason } => {
+                return Some(format!("step {step_id} denied: {reason}"))
+            }
+            RunEvent::SourceToSinkDenied { step_id, reason, .. } => {
+                return Some(format!("step {step_id} source-to-sink denied: {reason}"))
             }
             RunEvent::RollbackTriggered { step_id, reason } => {
                 return Some(format!("step {step_id} rollback: {reason}"))
@@ -424,5 +545,79 @@ mod replan_tests {
         assert!(outcome.completed(), "should complete on replan after kernel denial");
         assert_eq!(outcome.attempts, 2);
         assert!(!outcome.feedback.is_empty());
+    }
+
+    // ===== cp-llm 阶段 E：agent 决策结构化追踪（TraceSpan） =====
+
+    /// trace 每轮产出一个 span；首轮完成 → 1 个 Completed span。
+    #[test]
+    fn trace_single_span_on_first_completion() {
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("trace-1");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-t1",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        assert_eq!(outcome.trace.len(), 1);
+        let span = &outcome.trace[0];
+        assert_eq!(span.attempt, 1);
+        assert_eq!(span.state, RunState::Completed);
+        assert!(matches!(span.cause, TraceCause::Completed));
+        assert_eq!(span.step_count, 1);
+        assert_eq!(span.model, "m");
+    }
+
+    /// 两轮（bridge 拒→成功）→ 2 个 span：首个 BridgeRejected，次个 Completed。
+    #[test]
+    fn trace_spans_for_bridge_replan() {
+        let bad = RawPlan {
+            provider: "stub".to_string(),
+            model: "m".to_string(),
+            raw_json: "{\"steps\":[{\"tool\":\"frobnicate\",\"params\":{}}]}".to_string(),
+            http_status: 200,
+            steps: vec![RawStep {
+                tool: "frobnicate".to_string(),
+                params: vec![],
+                claimed_risk: None,
+                text: String::new(),
+            }],
+        };
+        let provider = ScriptedProvider::new(vec![bad, ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("trace-2");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-t2",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        assert_eq!(outcome.trace.len(), 2);
+        assert!(matches!(&outcome.trace[0].cause, TraceCause::BridgeRejected { .. }));
+        assert_eq!(outcome.trace[0].step_count, 0);
+        assert!(matches!(outcome.trace[1].cause, TraceCause::Completed));
+        assert_eq!(outcome.trace[1].attempt, 2);
+    }
+
+    /// provider 失败 → 1 个 ProviderFailed span。
+    #[test]
+    fn trace_provider_failure_span() {
+        struct FailingProvider;
+        impl LlmProvider for FailingProvider {
+            fn name(&self) -> &str { "failing" }
+            fn plan(&self, _intent: &str) -> std::io::Result<RawPlan> {
+                Err(std::io::Error::new(std::io::ErrorKind::Other, "transport: down"))
+            }
+        }
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("trace-3");
+        let outcome = run_replan_loop(
+            &FailingProvider, "x", "operator", "run-t3",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3,
+        );
+        assert_eq!(outcome.trace.len(), 1);
+        assert_eq!(outcome.trace[0].provider, "failing");
+        assert!(matches!(&outcome.trace[0].cause, TraceCause::ProviderFailed { reason } if reason.contains("transport")));
     }
 }
