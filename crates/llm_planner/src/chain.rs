@@ -68,6 +68,8 @@ impl RetryPolicy {
 pub struct ProviderChain {
     providers: Vec<Box<dyn LlmProvider>>,
     policy: RetryPolicy,
+    /// 最近一次 `plan` 调用的逐 provider 尝试记录（供观测；Mutex 因 `plan(&self)` 不可变借用）。
+    attempts: std::sync::Mutex<Vec<ChainAttempt>>,
 }
 
 impl ProviderChain {
@@ -77,7 +79,11 @@ impl ProviderChain {
             !providers.is_empty(),
             "ProviderChain requires at least one provider"
         );
-        Self { providers, policy }
+        Self {
+            providers,
+            policy,
+            attempts: std::sync::Mutex::new(Vec::new()),
+        }
     }
 
     /// 单 provider 便捷构造（无 fallback，仅重试）。
@@ -85,9 +91,13 @@ impl ProviderChain {
         Self::new(vec![provider], policy)
     }
 
-    /// 本链的尝试记录（每次 `plan` 调用重置）。仅供观测，不影响裁决。
-    pub fn last_attempts(&self) -> &[ChainAttempt] {
-        &[]
+    /// 最近一次 `plan` 调用的逐 provider 尝试记录（克隆返回，供观测；不影响裁决）。
+    /// 每次 `plan` 调用重置。若锁被毒化返回空 Vec（fail-soft，观测不阻塞裁决）。
+    pub fn last_attempts(&self) -> Vec<ChainAttempt> {
+        self.attempts
+            .lock()
+            .map(|attempts| attempts.clone())
+            .unwrap_or_default()
     }
 }
 
@@ -95,6 +105,7 @@ impl LlmProvider for ProviderChain {
     fn plan(&self, intent: &str) -> io::Result<RawPlan> {
         let mut last_permanent: Option<io::Error> = None;
         let mut last_transient: Option<io::Error> = None;
+        let mut recorded: Vec<ChainAttempt> = Vec::new();
         for provider in &self.providers {
             let name = provider.name().to_string();
             let model = String::new(); // 成功时由 RawPlan 回填；失败时无模型可知。
@@ -102,26 +113,27 @@ impl LlmProvider for ProviderChain {
             loop {
                 match provider.plan(intent) {
                     Ok(plan) => {
-                        let _ = ChainAttempt {
+                        recorded.push(ChainAttempt {
                             provider: plan.provider.clone(),
                             model: plan.model.clone(),
                             outcome: AttemptOutcome::Succeeded {
                                 http_status: plan.http_status,
                             },
-                        };
+                        });
+                        self.commit_attempts(recorded);
                         return Ok(plan);
                     }
                     Err(error) => {
                         let reason = error.to_string();
                         let classified = classify(&error);
-                        let _ = ChainAttempt {
+                        recorded.push(ChainAttempt {
                             provider: name.clone(),
                             model: model.clone(),
                             outcome: match classified {
                                 ErrorClass::Transient => AttemptOutcome::Transient { reason },
                                 ErrorClass::Permanent => AttemptOutcome::Permanent { reason },
                             },
-                        };
+                        });
                         match classified {
                             ErrorClass::Transient => {
                                 last_transient = Some(error);
@@ -141,9 +153,19 @@ impl LlmProvider for ProviderChain {
             }
         }
         // 全部 provider 失败：优先报确定性错误（更可诊断），否则报最后一个临时错误。
+        self.commit_attempts(recorded);
         Err(last_permanent
             .or(last_transient)
             .unwrap_or_else(|| io::Error::new(io::ErrorKind::Other, "all providers failed")))
+    }
+}
+
+impl ProviderChain {
+    /// 把本次 plan 调用的尝试记录写入共享缓冲（fail-soft：锁毒化则丢弃，不阻塞裁决）。
+    fn commit_attempts(&self, attempts: Vec<ChainAttempt>) {
+        if let Ok(mut guard) = self.attempts.lock() {
+            *guard = attempts;
+        }
     }
 }
 
@@ -390,5 +412,43 @@ mod tests {
         let plan = chain.plan("check nginx").expect("recorded plan");
         assert_eq!(plan.provider, "anthropic");
         assert_eq!(plan.steps.len(), 1);
+    }
+
+    /// last_attempts 真正记录每次尝试：首选成功 → 1 个 Succeeded span。
+    #[test]
+    fn last_attempts_records_success() {
+        let p1 = ScriptedProvider::new("a", vec![Ok(ok_plan("a"))]);
+        let chain = ProviderChain::new(vec![Box::new(p1)], RetryPolicy::NO_RETRY);
+        let _ = chain.plan("x").expect("ok");
+        let attempts = chain.last_attempts();
+        assert_eq!(attempts.len(), 1);
+        assert_eq!(attempts[0].provider, "a");
+        assert!(matches!(attempts[0].outcome, AttemptOutcome::Succeeded { http_status: 200 }));
+    }
+
+    /// last_attempts 记录 fallback：首选临时失败 → 第二个成功：2 个 attempt。
+    #[test]
+    fn last_attempts_records_fallback() {
+        let p1 = ScriptedProvider::new("a", vec![Err(transient_err().to_string())]);
+        let p2 = ScriptedProvider::new("b", vec![Ok(ok_plan("b"))]);
+        let chain = ProviderChain::new(vec![Box::new(p1), Box::new(p2)], RetryPolicy::NO_RETRY);
+        let _ = chain.plan("x").expect("fallback");
+        let attempts = chain.last_attempts();
+        assert_eq!(attempts.len(), 2);
+        assert!(matches!(&attempts[0].outcome, AttemptOutcome::Transient { .. }));
+        assert_eq!(attempts[0].provider, "a");
+        assert!(matches!(&attempts[1].outcome, AttemptOutcome::Succeeded { .. }));
+        assert_eq!(attempts[1].provider, "b");
+    }
+
+    /// last_attempts 每次 plan 调用重置（不留旧记录）。
+    #[test]
+    fn last_attempts_resets_per_call() {
+        let p1 = ScriptedProvider::new("a", vec![Ok(ok_plan("a")), Ok(ok_plan("a"))]);
+        let chain = ProviderChain::single(Box::new(p1), RetryPolicy::NO_RETRY);
+        let _ = chain.plan("x").unwrap();
+        let _ = chain.plan("x").unwrap();
+        let attempts = chain.last_attempts();
+        assert_eq!(attempts.len(), 1, "second call should reset to 1 attempt");
     }
 }
