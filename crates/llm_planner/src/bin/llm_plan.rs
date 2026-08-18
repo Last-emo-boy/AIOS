@@ -50,7 +50,7 @@ fn main() {
                 Box::new(ClaudeProvider::from_env(anthropic_key)),
                 Box::new(OpenAiCompatProvider::from_env(openai_key)),
             ],
-            RetryPolicy::default(),
+            retry_policy_from_env(),
         )),
         (Some(key), None) => Box::new(ClaudeProvider::from_env(key)),
         (None, Some(key)) => Box::new(OpenAiCompatProvider::from_env(key)),
@@ -89,4 +89,28 @@ fn main() {
     );
     // 阶段 E：结构化 trace 摘要（每轮 attempt 的 provider/state/cause）。
     println!("{}", outcome.render_trace());
+}
+
+/// 从环境变量构造 RetryPolicy（阶段 L）：
+/// - `AIOS_BACKOFF_BASE_MS`（缺省 0 = 不 sleep，向后兼容）
+/// - `AIOS_BACKOFF_CAP_MS`（缺省 30000 = 30s 封顶）
+/// - `AIOS_MAX_RETRIES`（缺省 1）
+fn retry_policy_from_env() -> RetryPolicy {
+    let max_retries = std::env::var("AIOS_MAX_RETRIES")
+        .ok()
+        .and_then(|v| v.parse::<u32>().ok())
+        .unwrap_or(1);
+    let base_ms = std::env::var("AIOS_BACKOFF_BASE_MS")
+        .ok()
+        .and_then(|v| v.parse::<u64>().ok())
+        .unwrap_or(0);
+    let cap_ms = std::env::var("AIOS_BACKOFF_CAP_MS")
+        .ok()
+        .and_then(|v| v.parse::<u64>().ok())
+        .unwrap_or(30000);
+    RetryPolicy {
+        max_retries,
+        backoff_base_ms: base_ms,
+        backoff_cap_ms: cap_ms,
+    }
 }

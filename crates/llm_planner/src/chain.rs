@@ -93,6 +93,13 @@ impl RetryPolicy {
             delay
         }
     }
+
+    /// 便捷 builder：设置指数退避参数（阶段 L）。
+    pub fn with_backoff(mut self, base_ms: u64, cap_ms: u64) -> Self {
+        self.backoff_base_ms = base_ms;
+        self.backoff_cap_ms = cap_ms;
+        self
+    }
 }
 
 /// 有序 provider fallback 链。`providers[0]` 是首选；后续是兜底。
