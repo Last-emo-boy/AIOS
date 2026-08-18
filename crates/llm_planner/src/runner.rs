@@ -249,14 +249,24 @@ impl ReplanOutcome {
     /// 最终结局的人读摘要（单行，不含 secret——reason 经 extract_feedback 已净化）。
     /// 供 bin/CLI 直接打印，无需调用方自己拼字符串。
     pub fn summary(&self) -> String {
+        let elapsed = self.total_elapsed_ms();
         if self.completed() {
-            format!("completed in {} attempt(s)", self.attempts)
+            let depth = self
+                .trace
+                .last()
+                .map(|s| s.parallel_depth)
+                .unwrap_or(0);
+            format!(
+                "completed in {} attempt(s) ({} ms, depth {depth})",
+                self.attempts, elapsed
+            )
         } else if self.aborted() {
-            format!("aborted after {} attempt(s)", self.attempts)
+            format!("aborted after {} attempt(s) ({} ms)", self.attempts, elapsed)
         } else if let Some(span) = self.trace.last() {
             format!(
-                "failed after {} attempt(s): {}",
+                "failed after {} attempt(s) ({} ms): {}",
                 self.attempts,
+                elapsed,
                 trace_cause_str(&span.cause)
             )
         } else {
@@ -1136,6 +1146,8 @@ mod replan_tests {
         assert!(!outcome.fail_closed());
         assert!(outcome.summary().contains("completed"));
         assert!(outcome.summary().contains("1 attempt"));
+        assert!(outcome.summary().contains("ms"), "summary should report elapsed: {}", outcome.summary());
+        assert!(outcome.summary().contains("depth"), "summary should report depth: {}", outcome.summary());
     }
 
     #[test]
