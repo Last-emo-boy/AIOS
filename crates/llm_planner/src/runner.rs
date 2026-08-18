@@ -194,6 +194,9 @@ pub struct TraceSpan {
     /// 该轮计划的 DAG 最大深度（advisory 仅观测）：1 = 全根（无依赖），>1 = 有依赖链。
     /// bridge 无依赖信息或失败时为 0。绝不参与裁决。
     pub parallel_depth: u32,
+    /// 该轮计划的最大同层步数（advisory 仅观测）：>1 表示该层有并行潜力。
+    /// bridge 无依赖信息或失败时为 0。绝不参与裁决。
+    pub max_parallel_width: usize,
 }
 
 /// 一轮 attempt 结束的原因。
@@ -285,7 +288,7 @@ impl ReplanOutcome {
             .iter()
             .map(|span| {
                 format!(
-                    "attempt {} provider={} model={} steps={} state={:?} cause={} elapsed_ms={} parallel_depth={}",
+                    "attempt {} provider={} model={} steps={} state={:?} cause={} elapsed_ms={} parallel_depth={} max_parallel_width={}",
                     span.attempt,
                     span.provider,
                     span.model,
@@ -293,7 +296,8 @@ impl ReplanOutcome {
                     span.state,
                     trace_cause_str(&span.cause),
                     span.elapsed_ms,
-                    span.parallel_depth
+                    span.parallel_depth,
+                    span.max_parallel_width
                 )
             })
             .collect::<Vec<_>>()
@@ -468,6 +472,7 @@ pub fn run_replan_loop_with_abort(
                 cause: TraceCause::Aborted,
                 elapsed_ms: 0,
                 parallel_depth: 0,
+                max_parallel_width: 0,
             });
             return ReplanOutcome {
                 state: RunState::FailedClosed,
@@ -503,6 +508,7 @@ pub fn run_replan_loop_with_abort(
                     cause: TraceCause::ProviderFailed { reason },
                     elapsed_ms: elapsed_ms(),
                     parallel_depth: 0,
+                    max_parallel_width: 0,
                 });
                 return ReplanOutcome {
                     state: RunState::FailedClosed,
@@ -515,10 +521,19 @@ pub fn run_replan_loop_with_abort(
         let model = raw.model.clone();
         // 阶段 Q：计算该轮 DAG 最大深度（advisory）。dag_levels 失败时为 0（不阻断
         // 主流程——bridge_plan 已做过权威循环/缺依赖检测，此处仅观测）。
-        let parallel_depth = crate::dag_levels(&raw)
+        let (parallel_depth, max_parallel_width) = crate::dag_levels(&raw)
             .ok()
-            .map(|levels| levels.iter().copied().max().map(|m| m + 1).unwrap_or(0))
-            .unwrap_or(0);
+            .map(|levels| {
+                let depth = levels.iter().copied().max().map(|m| m + 1).unwrap_or(0);
+                // 阶段 S：最大同层步数 = 并行潜力。
+                let mut widths = std::collections::HashMap::new();
+                for &lvl in &levels {
+                    *widths.entry(lvl).or_insert(0usize) += 1;
+                }
+                let width = widths.into_values().max().unwrap_or(0);
+                (depth, width)
+            })
+            .unwrap_or((0, 0));
         // 2. 桥接：冻结 ToolRouter 路由 + secret 净化。bridge 失败 → 反馈原因并 replan。
         let plan = match crate::bridge_plan(&raw) {
             Ok(plan) => plan,
@@ -533,6 +548,7 @@ pub fn run_replan_loop_with_abort(
                     cause: TraceCause::BridgeRejected { reason: reason.clone() },
                     elapsed_ms: elapsed_ms(),
                     parallel_depth,
+                    max_parallel_width,
                 });
                 if attempt >= max_replans {
                     return ReplanOutcome {
@@ -562,6 +578,7 @@ pub fn run_replan_loop_with_abort(
                 cause: TraceCause::Completed,
                 elapsed_ms: elapsed_ms(),
                 parallel_depth,
+                max_parallel_width,
             });
             return ReplanOutcome {
                 state,
@@ -585,6 +602,7 @@ pub fn run_replan_loop_with_abort(
                 cause,
                 elapsed_ms: elapsed_ms(),
                 parallel_depth,
+                max_parallel_width,
             });
             break;
         }
@@ -600,6 +618,7 @@ pub fn run_replan_loop_with_abort(
                     cause: TraceCause::ExecDenied { reason: note.clone() },
                     elapsed_ms: elapsed_ms(),
                     parallel_depth,
+                    max_parallel_width,
                 });
                 feedback.push(note.clone());
                 context_window.push(note);
@@ -614,6 +633,7 @@ pub fn run_replan_loop_with_abort(
                     cause: TraceCause::NoFeedback,
                     elapsed_ms: elapsed_ms(),
                     parallel_depth,
+                    max_parallel_width,
                 });
                 break; // 无可反馈观察，replan 无意义
             }
@@ -1213,6 +1233,10 @@ mod replan_tests {
         assert!(
             trace.contains("parallel_depth="),
             "render_trace must include parallel_depth: {trace}"
+        );
+        assert!(
+            trace.contains("max_parallel_width="),
+            "render_trace must include max_parallel_width: {trace}"
         );
     }
 
