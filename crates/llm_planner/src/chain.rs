@@ -140,6 +140,24 @@ impl ProviderChain {
             .map(|attempts| attempts.clone())
             .unwrap_or_default()
     }
+
+    /// cp-llm 阶段 T：最近一次成功 fallback 到哪个 provider（advisory 仅观测）。
+    ///
+    /// 从 `last_attempts` 中找最后一个 `AttemptOutcome::Succeeded` 的 provider 名。
+    /// 无成功尝试时返回 `None`。用于审计哪一环兜底成功（如 anthropic 失败 → openai 成功）。
+    /// 绝不参与裁决——仅供观测/诊断。
+    pub fn last_success_provider(&self) -> Option<String> {
+        self.attempts
+            .lock()
+            .ok()
+            .and_then(|attempts| {
+                attempts
+                    .iter()
+                    .rev()
+                    .find(|a| matches!(a.outcome, AttemptOutcome::Succeeded { .. }))
+                    .map(|a| a.provider.clone())
+            })
+    }
 }
 
 impl LlmProvider for ProviderChain {
@@ -541,5 +559,33 @@ mod tests {
         );
         let plan = chain.plan("x").expect("retry with backoff succeeds");
         assert_eq!(plan.provider, "a");
+    }
+
+    // ===== 阶段 T：last_success_provider =====
+
+    #[test]
+    fn last_success_provider_identifies_fallback_target() {
+        let p1 = ScriptedProvider::new("a", vec![Err(transient_err().to_string())]);
+        let p2 = ScriptedProvider::new("b", vec![Ok(ok_plan("b"))]);
+        let chain = ProviderChain::new(vec![Box::new(p1), Box::new(p2)], RetryPolicy::NO_RETRY);
+        let _ = chain.plan("x").expect("fallback to b");
+        assert_eq!(chain.last_success_provider().as_deref(), Some("b"));
+    }
+
+    #[test]
+    fn last_success_provider_none_when_all_fail() {
+        let p1 = ScriptedProvider::new("a", vec![Err(http_err(401).to_string())]);
+        let p2 = ScriptedProvider::new("b", vec![Err(transient_err().to_string())]);
+        let chain = ProviderChain::new(vec![Box::new(p1), Box::new(p2)], RetryPolicy::NO_RETRY);
+        let _ = chain.plan("x").expect_err("all fail");
+        assert_eq!(chain.last_success_provider(), None);
+    }
+
+    #[test]
+    fn last_success_provider_first_when_no_fallback() {
+        let p1 = ScriptedProvider::new("a", vec![Ok(ok_plan("a"))]);
+        let chain = ProviderChain::single(Box::new(p1), RetryPolicy::NO_RETRY);
+        let _ = chain.plan("x").expect("first succeeds");
+        assert_eq!(chain.last_success_provider().as_deref(), Some("a"));
     }
 }
