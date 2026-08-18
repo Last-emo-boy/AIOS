@@ -438,7 +438,15 @@ impl AgentRuntime {
             if let Some(source) = provenance.content_source(step) {
                 let sink = match step.sink_descriptor() {
                     Ok(sink) => sink,
-                    Err(_) => {
+                    Err(err) => {
+                        // 阶段 U：sink 描述符构造失败（secret-like 字段）记录原因
+                        // （SourceToSinkError::reason 已脱敏），使 replan 可归类。
+                        self.log.push(RunEvent::SourceToSinkDenied {
+                            step_id: step.step_id.clone(),
+                            source_label: source.label.as_str().to_string(),
+                            sink_class: "unknown".to_string(),
+                            reason: err.reason(),
+                        });
                         self.log.push(RunEvent::RunFailedClosed);
                         return self.state();
                     }
@@ -451,7 +459,14 @@ impl AgentRuntime {
                     sink,
                 ) {
                     Ok(request) => request,
-                    Err(_) => {
+                    Err(err) => {
+                        // 阶段 U：请求构造失败记录原因（同上脱敏）。
+                        self.log.push(RunEvent::SourceToSinkDenied {
+                            step_id: step.step_id.clone(),
+                            source_label: String::new(),
+                            sink_class: String::new(),
+                            reason: err.reason(),
+                        });
                         self.log.push(RunEvent::RunFailedClosed);
                         return self.state();
                     }
