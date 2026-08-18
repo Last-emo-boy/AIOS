@@ -10,11 +10,17 @@
 //! 阶段 D：`run_replan_loop` —— 若首轮未 Completed，把 `EffectObserved`/`StepDenied` 作为
 //! 上下文喂回 provider 再 plan，最多 `AIOS_MAX_REPLANS` 次（默认 3）。LLM 仍只产 intention。
 //!
+//! 阶段 M：可选 `AIOS_DEADLINE_SECS` 环境变量——设置后使用 `DeadlineAbort`，超时即
+//! fail-closed（`RunState::FailedClosed`，`TraceCause::Aborted`）；未设置则保持无 deadline
+//! 行为（向后兼容）。
+//!
 //! 也作 musl 静态构建产物，验证 webpki-roots TLS 栈纯 Rust 静态链。
 #![forbid(unsafe_code)]
 
 use llm_planner::bridge::ModelProvenance;
-use llm_planner::runner::{run_replan_loop, OperatorApprovals, StubExecutor};
+use llm_planner::runner::{
+    run_replan_loop, run_replan_loop_with_abort, DeadlineAbort, OperatorApprovals, StubExecutor,
+};
 use llm_planner::{
     ClaudeProvider, LlmProvider, OpenAiCompatProvider, ProviderChain, RecordedProvider, RetryPolicy,
 };
@@ -69,17 +75,37 @@ fn main() {
     // ModelProvenance：每步 model_output（不可信）。LLM 自主驱动的非 ReadOnly 步将被 s2s 门拦。
     // 阶段 D：replan loop —— provider→bridge→run_plan_guarded，未完成时把观察喂回 provider
     // 再 plan（每轮仍经冻结 bridge + run_plan_guarded，LLM 只产 intention）。
-    let outcome = run_replan_loop(
-        provider.as_ref(),
-        &intent,
-        "operator",
-        "run-demo",
-        &ModelProvenance,
-        &approvals,
-        &exec,
-        &journal,
-        max_replans,
-    );
+    // 阶段 M：可选 deadline（AIOS_DEADLINE_SECS），超时即 fail-closed。
+    let outcome = if let Ok(secs) = std::env::var("AIOS_DEADLINE_SECS")
+        .map_err(|_| ())
+        .and_then(|v| v.parse::<u64>().map_err(|_| ()))
+    {
+        let deadline = DeadlineAbort::after_secs(secs);
+        run_replan_loop_with_abort(
+            provider.as_ref(),
+            &intent,
+            "operator",
+            "run-demo",
+            &ModelProvenance,
+            &approvals,
+            &exec,
+            &journal,
+            max_replans,
+            &deadline,
+        )
+    } else {
+        run_replan_loop(
+            provider.as_ref(),
+            &intent,
+            "operator",
+            "run-demo",
+            &ModelProvenance,
+            &approvals,
+            &exec,
+            &journal,
+            max_replans,
+        )
+    };
     // 阶段 J：用 ReplanOutcome 辅助方法渲染结局摘要 + trace。
     println!(
         "RUN state={:?} {} executed={:?}",
