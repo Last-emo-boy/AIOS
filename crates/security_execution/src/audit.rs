@@ -143,6 +143,40 @@ impl AuditJournal {
         Ok(())
     }
 
+    /// Group commit：把一批事件以**单次** `open + writeln×N + sync_all` 原子落盘。
+    ///
+    /// 相比逐事件 `append`（每事件一次 `sync_all`/fsync），N 个事件只 fsync 一次——高吞吐
+    /// 场景（如多步 run loop 的 PlanFrozen→PolicyEvaluated→EffectPrepared→CommitSealed 序列）
+    /// 把 N 次磁盘屏障降为 1 次，且整批原子：要么全部可见，要么全部不可见（崩溃不留下半批）。
+    /// 空批为 no-op。与 `append` 写出的行格式字节一致（每行一个 JSON 事件）。
+    pub fn append_batch(&self, events: &[AuditEvent]) -> std::io::Result<()> {
+        if events.is_empty() {
+            return Ok(());
+        }
+        if let Some(parent) = self.path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
+        let mut file = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(&self.path)?;
+        for event in events {
+            writeln!(file, "{}", event.to_json_line())?;
+        }
+        file.sync_all()?;
+        Ok(())
+    }
+
+    /// 累积型 builder：连续 `push` 事件后 `commit` 一次落盘（group commit 的人体工学入口）。
+    /// `push` 只写内存；`commit` 调 `append_batch`。未 `commit` 前 push 的事件不落盘
+    /// （调用方负责在耐久性边界上 commit）。
+    pub fn batch(&self) -> AuditBatch<'_> {
+        AuditBatch {
+            journal: self,
+            events: Vec::new(),
+        }
+    }
+
     pub fn event_lines(&self) -> std::io::Result<Vec<String>> {
         if !self.path.exists() {
             return Ok(Vec::new());
@@ -224,6 +258,47 @@ impl AuditJournal {
             events,
             warnings,
         )))
+    }
+}
+
+/// Group commit 累积器：`push` 写内存缓冲，`commit` 一次 `append_batch` 落盘。
+///
+/// 借用 `AuditJournal`（不可变），故可与其他 `&self` 读方法并发（文件 append 模式保证原子性）。
+/// 未 `commit` 时缓冲事件**不落盘**——调用方须在耐久性边界（如 run loop 一步结束时）显式 commit。
+/// `Drop` 时**不**自动 commit（避免静默落盘破坏 fail-closed 语义；漏 commit = 事件丢失，
+/// 与逐事件 `append` 相比是显式取舍）。
+#[derive(Debug)]
+pub struct AuditBatch<'a> {
+    journal: &'a AuditJournal,
+    events: Vec<AuditEvent>,
+}
+
+impl<'a> AuditBatch<'a> {
+    /// 累积一个事件到内存缓冲（不落盘）。
+    pub fn push(&mut self, event: AuditEvent) -> &mut Self {
+        self.events.push(event);
+        self
+    }
+
+    /// 当前缓冲的事件数。
+    pub fn len(&self) -> usize {
+        self.events.len()
+    }
+
+    /// 缓冲是否为空。
+    pub fn is_empty(&self) -> bool {
+        self.events.is_empty()
+    }
+
+    /// 把缓冲的事件批量落盘（单次 fsync），然后清空缓冲。空缓冲为 no-op。
+    pub fn commit(&mut self) -> std::io::Result<usize> {
+        if self.events.is_empty() {
+            return Ok(0);
+        }
+        let count = self.events.len();
+        self.journal.append_batch(&self.events)?;
+        self.events.clear();
+        Ok(count)
     }
 }
 
@@ -1628,5 +1703,73 @@ mod tests {
 
         assert_eq!(decision.status, RemoteAuditMirrorStatus::Warning);
         assert!(decision.warnings[0].contains("record hash mismatch"));
+    }
+
+    // ===== group commit（cp-audit-perf-1）：append_batch / AuditBatch =====
+
+    #[test]
+    fn append_batch_writes_all_events_in_one_fsync() {
+        let journal = test_journal("batch");
+        let events = vec![
+            event(AuditEventType::IntentReceived, "run-b", "step-0", "intent"),
+            event(AuditEventType::PlanFrozen, "run-b", "step-0", "frozen"),
+            event(AuditEventType::CommitSealed, "run-b", "step-0", "sealed"),
+        ];
+        journal.append_batch(&events).expect("batch commit");
+        let lines = journal.event_lines().expect("read");
+        assert_eq!(lines.len(), 3);
+        assert!(lines[0].contains("IntentReceived"));
+        assert!(lines[1].contains("PlanFrozen"));
+        assert!(lines[2].contains("CommitSealed"));
+        // 重开 journal 后仍可读全 3 行（耐久性：整批落盘）。
+        let reopened = AuditJournal::new(journal.path().to_path_buf());
+        assert_eq!(reopened.event_lines().unwrap().len(), 3);
+    }
+
+    #[test]
+    fn append_batch_empty_is_noop() {
+        let journal = test_journal("batch-empty");
+        journal.append_batch(&[]).expect("empty batch");
+        assert!(journal.event_lines().unwrap().is_empty());
+    }
+
+    #[test]
+    fn batch_builder_commit_flushes_and_clears() {
+        let journal = test_journal("batch-builder");
+        let mut batch = journal.batch();
+        assert!(batch.is_empty());
+        batch
+            .push(event(AuditEventType::IntentReceived, "run-bb", "s0", "i"))
+            .push(event(AuditEventType::EffectPrepared, "run-bb", "s0", "p"));
+        assert_eq!(batch.len(), 2);
+        let committed = batch.commit().expect("commit");
+        assert_eq!(committed, 2);
+        assert!(batch.is_empty());
+        assert_eq!(journal.event_lines().unwrap().len(), 2);
+    }
+
+    #[test]
+    fn batch_commit_empty_is_noop() {
+        let journal = test_journal("batch-empty-commit");
+        let mut batch = journal.batch();
+        let committed = batch.commit().expect("empty commit");
+        assert_eq!(committed, 0);
+        assert!(journal.event_lines().unwrap().is_empty());
+    }
+
+    /// group commit 与逐事件 append 写出的行格式字节一致（格式兼容）。
+    #[test]
+    fn batch_format_matches_append_line_for_line() {
+        let journal_single = test_journal("batch-fmt-single");
+        let journal_batch = test_journal("batch-fmt-batch");
+        let events = vec![
+            event(AuditEventType::PolicyEvaluated, "run-fmt", "s0", "eval"),
+            event(AuditEventType::ApprovalBound, "run-fmt", "s0", "bound"),
+        ];
+        for ev in &events {
+            journal_single.append(ev).expect("single");
+        }
+        journal_batch.append_batch(&events).expect("batch");
+        assert_eq!(journal_single.event_lines().unwrap(), journal_batch.event_lines().unwrap());
     }
 }

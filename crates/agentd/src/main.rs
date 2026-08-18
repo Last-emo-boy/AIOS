@@ -341,24 +341,24 @@ fn parse_tui_paths(args: &[String]) -> Result<TuiRuntimePaths, String> {
 
 fn run_audit_demo(path: &str) -> Result<(), String> {
     let journal = AuditJournal::new(path);
-    journal
-        .append(&AuditEvent::new(
+    // group commit：两事件单次 fsync 落盘（cp-audit-perf-1），格式与逐事件 append 字节一致。
+    let mut batch = journal.batch();
+    batch
+        .push(AuditEvent::new(
             AuditEventType::IntentReceived,
             "run-demo",
             "step-001",
             "operator",
             "recover local service",
         ))
-        .map_err(|error| error.to_string())?;
-    journal
-        .append(&AuditEvent::new(
+        .push(AuditEvent::new(
             AuditEventType::EffectPrepared,
             "run-demo",
             "step-001",
             "operator",
             "prepared svc.restart password=should-not-log",
-        ))
-        .map_err(|error| error.to_string())?;
+        ));
+    batch.commit().map_err(|error| error.to_string())?;
     println!(
         "{{\"latest_run\":\"{}\",\"unresolved_effects\":{}}}",
         journal
