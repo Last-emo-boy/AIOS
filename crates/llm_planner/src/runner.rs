@@ -261,6 +261,11 @@ impl ReplanOutcome {
         }
     }
 
+    /// 所有轮次耗时之和（毫秒，advisory 仅观测）。abort 轮的 0 不影响总和。
+    pub fn total_elapsed_ms(&self) -> u64 {
+        self.trace.iter().map(|span| span.elapsed_ms).sum()
+    }
+
     /// 把所有 trace span 渲染成多行可读串（每轮一行），供审计/调试输出。
     pub fn render_trace(&self) -> String {
         self.trace
@@ -1172,5 +1177,29 @@ mod replan_tests {
         let trace = outcome.render_trace();
         assert!(trace.contains("attempt 1"));
         assert!(trace.contains("completed"));
+        assert!(
+            trace.contains("elapsed_ms="),
+            "render_trace must include elapsed_ms: {trace}"
+        );
+    }
+
+    #[test]
+    fn total_elapsed_ms_sums_all_spans() {
+        let provider = ScriptedProvider::new(vec![
+            ok_plan(),
+            ok_plan(),
+            ok_plan(),
+        ]);
+        let exec = StubExecutor::new("denied"); // never completes → triggers replans
+        let journal = journal("sum-el");
+        let outcome = run_replan_loop(
+            &provider, "x", "operator", "run-el",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 2,
+        );
+        // 每个非零 span 贡献非负毫秒；总和 ≥ 0 且 == 各 span 之和。
+        let total = outcome.total_elapsed_ms();
+        let sum: u64 = outcome.trace.iter().map(|s| s.elapsed_ms).sum();
+        assert_eq!(total, sum);
     }
 }
