@@ -204,6 +204,8 @@ pub enum TraceCause {
     ExecDenied { reason: String },
     /// run loop 收束于非 Completed 非 Denied 的中间态且配额耗尽。
     BudgetExhausted,
+    /// 算子发出中止信号（阶段 G），run loop 在下一轮 plan 前 fail-closed。
+    Aborted,
     /// 无可反馈观察，replan 无意义。
     NoFeedback,
 }
@@ -228,6 +230,25 @@ impl ReplanOutcome {
     }
 }
 
+/// 算子中止信号源（阶段 G）。
+///
+/// 生产 LLM agent 系统（LangGraph `interrupt`、OpenAI Assistants cancel）都提供运行
+/// 中途叫停能力。本 trait 把「是否中止」的裁决权交给算子（通过共享 flag / channel /
+/// 信号 fd 实现），`run_replan_loop` 每轮 plan 前检查——若 aborted 则 fail-closed，
+/// 绝不让 LLM 继续产 intention。**不变量保持**：中止是算子裁决，不是 LLM 决策。
+pub trait AbortSignal {
+    fn is_aborted(&self) -> bool;
+}
+
+/// 默认实现：永不中止。向后兼容——`run_replan_loop` 的 `abort: &dyn AbortSignal`
+/// 传 `&NoAbort` 时行为与阶段 F 完全一致。
+pub struct NoAbort;
+impl AbortSignal for NoAbort {
+    fn is_aborted(&self) -> bool {
+        false
+    }
+}
+
 /// plan→bridge→exec→（若未完成）把观察反馈给 LLM 再 plan，最多 `max_replans` 次重规划。
 ///
 /// **不变量**：LLM 只产 intention。每轮：`LlmProvider::plan(context)` → `bridge_plan`
@@ -236,11 +257,14 @@ impl ReplanOutcome {
 /// `alive=false`、`restart approval denied`）作为上下文串拼进下一次 plan 调用——绝不
 /// 把裁决权交给 LLM，绝不绕过冻结控制面。
 ///
-/// 终止条件：`Completed`（成功）／达到 `max_replans` ／ provider/bridge fail-closed。
+/// 终止条件：`Completed`（成功）／达到 `max_replans` ／ provider/bridge fail-closed
+/// ／算子中止信号（阶段 G）。
 /// `max_replans=0` ⇒ 只跑首轮，不 replan（等价单次 plan+exec）。
 ///
 /// `provenance`：每轮的 `PlannedStep` 溯源——LLM 衍生步用 `ModelProvenance`（model_output，
 /// 非 ReadOnly 步被 s2s 门 Denied，符合设计意图：危险步须算子重规划而非 LLM 自主执行）。
+///
+/// 向后兼容入口：等价于 `run_replan_loop_with_abort(..., &NoAbort)`——不传中止信号。
 pub fn run_replan_loop(
     provider: &dyn crate::LlmProvider,
     intent: &str,
@@ -252,6 +276,27 @@ pub fn run_replan_loop(
     journal: &AuditJournal,
     max_replans: usize,
 ) -> ReplanOutcome {
+    run_replan_loop_with_abort(
+        provider, intent, actor, run_id, provenance, approvals, exec, journal,
+        max_replans, &NoAbort,
+    )
+}
+
+/// `run_replan_loop` 的完整版（阶段 G）：每轮 plan 前检查 `abort.is_aborted()`，
+/// 若算子已中止则 fail-closed（trace 记 `TraceCause::Aborted`），绝不让 LLM 继续
+/// 产 intention。其余行为与 `run_replan_loop` 一致。
+pub fn run_replan_loop_with_abort(
+    provider: &dyn crate::LlmProvider,
+    intent: &str,
+    actor: &str,
+    run_id: &str,
+    provenance: &dyn StepProvenance,
+    approvals: &dyn ApprovalSource,
+    exec: &dyn StepExecutor,
+    journal: &AuditJournal,
+    max_replans: usize,
+    abort: &dyn AbortSignal,
+) -> ReplanOutcome {
     // 阶段 F：ContextWindow 管理 replan 反馈上下文（滑动窗口，FIFO 滑出）。
     // max_history = max_replans：每轮最多产生一条反馈，窗口容量恰好覆盖全部 replan 轮次。
     let mut context_window = ContextWindow::new(intent, max_replans);
@@ -262,6 +307,24 @@ pub fn run_replan_loop(
     let provider_name = provider.name().to_string();
 
     for attempt in 0..=max_replans {
+        // 阶段 G：每轮 plan 前检查算子中止信号。若已中止 → fail-closed，绝不让 LLM
+        // 继续产 intention。首轮也检查（算子可能在 plan 前就叫停）。
+        if abort.is_aborted() {
+            trace.push(TraceSpan {
+                attempt: attempt + 1,
+                provider: provider_name.clone(),
+                model: String::new(),
+                step_count: 0,
+                state: RunState::FailedClosed,
+                cause: TraceCause::Aborted,
+            });
+            return ReplanOutcome {
+                state: RunState::FailedClosed,
+                attempts: attempt,
+                feedback,
+                trace,
+            };
+        }
         attempts = attempt + 1;
         // 1. LLM 产 intention（不可信 RawPlan）。
         let context = context_window.render();
@@ -398,6 +461,11 @@ fn extract_feedback(events: &[RunEvent]) -> Option<String> {
             }
             RunEvent::StepDenied { step_id, reason } => {
                 return Some(format!("step {step_id} denied: {reason}"))
+            }
+            RunEvent::SourceToSinkDenied { step_id, source_label, sink_class, reason } => {
+                return Some(format!(
+                    "step {step_id} source-to-sink denied ({source_label}→{sink_class}): {reason}"
+                ))
             }
             RunEvent::RollbackTriggered { step_id, reason } => {
                 return Some(format!("step {step_id} rollback: {reason}"))
@@ -731,5 +799,94 @@ mod replan_tests {
         assert!(cw.is_empty());
         assert_eq!(cw.len(), 0);
         assert_eq!(cw.render(), "intent");
+    }
+
+    // ===== cp-llm 阶段 G：OperatorAbort 测试 =====
+
+    /// 中止信号在首轮即触发 → 0 次 plan 调用、1 个 Aborted span、attempts=0。
+    #[test]
+    fn abort_before_first_plan_fail_closed() {
+        struct AlwaysAborted;
+        impl AbortSignal for AlwaysAborted {
+            fn is_aborted(&self) -> bool { true }
+        }
+        struct CountingProvider { calls: Cell<usize> }
+        impl LlmProvider for CountingProvider {
+            fn name(&self) -> &str { "counting" }
+            fn plan(&self, _intent: &str) -> std::io::Result<RawPlan> {
+                self.calls.set(self.calls.get() + 1);
+                Ok(ok_plan())
+            }
+        }
+        let provider = CountingProvider { calls: Cell::new(0) };
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("abort-1");
+        let outcome = run_replan_loop_with_abort(
+            &provider, "x", "operator", "run-ab1",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3, &AlwaysAborted,
+        );
+        assert_eq!(provider.calls.get(), 0); // plan 从未被调用
+        assert_eq!(outcome.attempts, 0);
+        assert_eq!(outcome.state, RunState::FailedClosed);
+        assert_eq!(outcome.trace.len(), 1);
+        assert!(matches!(outcome.trace[0].cause, TraceCause::Aborted));
+        assert!(exec.executed().is_empty()); // exec 也未被触达
+    }
+
+    /// 中止信号在第二轮触发：首轮 plan+exec 跑完未 Completed，replan 前被叫停。
+    #[test]
+    fn abort_after_first_attempt_stops_replan() {
+        struct AbortAfterFirst { calls: Cell<usize> }
+        impl AbortSignal for AbortAfterFirst {
+            fn is_aborted(&self) -> bool {
+                let n = self.calls.get();
+                self.calls.set(n + 1);
+                n >= 1 // 首次检查 false（attempt 0），第二次检查 true（attempt 1）
+            }
+        }
+        // 用一个首轮不 Completed 的 plan（非 ReadOnly 步被 s2s 拦 → Denied）触发 replan。
+        let bad = RawPlan {
+            provider: "stub".to_string(),
+            model: "m".to_string(),
+            raw_json: r#"{"steps":[{"tool":"svc.restart","resource":"nginx","params":{"service":"nginx"}}]}"#.to_string(),
+            http_status: 200,
+            steps: vec![RawStep {
+                tool: "svc.restart".to_string(),
+                params: vec![("service".to_string(), "nginx".to_string())],
+                claimed_risk: None,
+                text: String::new(),
+            }],
+        };
+        // ScriptedProvider 给两轮 plan（第二轮因 abort 不会被调用）。
+        let provider = ScriptedProvider::new(vec![bad, ok_plan()]);
+        let abort = AbortAfterFirst { calls: Cell::new(0) };
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("abort-2");
+        let outcome = run_replan_loop_with_abort(
+            &provider, "x", "operator", "run-ab2",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3, &abort,
+        );
+        // 首轮跑了（attempt 1），replan 前被叫停（attempt 计数停在 1）。
+        assert_eq!(outcome.attempts, 1);
+        assert_eq!(outcome.state, RunState::FailedClosed);
+        // 最后一个 trace span 是 Aborted。
+        let last = outcome.trace.last().expect("at least one span");
+        assert!(matches!(last.cause, TraceCause::Aborted));
+    }
+
+    /// NoAbort（默认）行为与 run_replan_loop 等价——向后兼容。
+    #[test]
+    fn no_abort_equivalent_to_default() {
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("abort-3");
+        let outcome = run_replan_loop_with_abort(
+            &provider, "x", "operator", "run-ab3",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3, &NoAbort,
+        );
+        assert!(outcome.completed()); // 正常完成，未被中止
     }
 }

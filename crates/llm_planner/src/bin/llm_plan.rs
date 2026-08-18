@@ -106,6 +106,7 @@ fn trace_cause_str(cause: &llm_planner::runner::TraceCause) -> String {
         TraceCause::BridgeRejected { reason } => format!("bridge_rejected: {reason}"),
         TraceCause::ExecDenied { reason } => format!("exec_denied: {reason}"),
         TraceCause::BudgetExhausted => "budget_exhausted".to_string(),
+        TraceCause::Aborted => "aborted".to_string(),
         TraceCause::NoFeedback => "no_feedback".to_string(),
     }
 }
