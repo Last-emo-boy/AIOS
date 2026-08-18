@@ -302,6 +302,96 @@ impl<'a> AuditBatch<'a> {
     }
 }
 
+/// run_id 倒排索引（cp-audit-perf-2）：一次性全扫日志构建 `run_id → Vec<行号>` 映射，
+/// 此后按 run_id 查询 O(1) 命中行号再按行读，免逐次全文件扫描。
+///
+/// `AuditJournal` 保持无状态（append-only 真相源不被缓存污染）；`RunIndex` 是独立的加速缓存，
+/// 调用方在需要多次按 run_id 查询（如 TUI event feed 轮询、recovery timeline 反复查同一 run）
+/// 时显式 `RunIndex::from_journal` 构建一次。日志在构建后被 append 新事件 → 索引过期，
+/// 调用方须重新构建（`lines_cached()` 返回构建时的行数，可据此判断是否过期）。
+#[derive(Debug, Clone)]
+pub struct RunIndex {
+    /// run_id → 该 run 的行号（0-based，升序）。
+    runs: std::collections::BTreeMap<String, Vec<usize>>,
+    /// 构建时的日志总行数（用于检测过期：当前日志行数 > 此值则索引过期）。
+    lines_cached: usize,
+    /// 构建时观测到的最后一个 run_id（= latest_run，O(1)）。
+    last_run_id: Option<String>,
+}
+
+impl RunIndex {
+    /// 从 journal 当前的全部事件行构建索引。单次全扫；之后查询 O(1)。
+    pub fn from_journal(journal: &AuditJournal) -> std::io::Result<Self> {
+        let lines = journal.event_lines()?;
+        let mut runs: std::collections::BTreeMap<String, Vec<usize>> =
+            std::collections::BTreeMap::new();
+        let mut last_run_id = None;
+        for (index, line) in lines.iter().enumerate() {
+            if let Some(run_id) = extract_json_string(line, "run_id") {
+                runs.entry(run_id.clone()).or_default().push(index);
+                last_run_id = Some(run_id);
+            }
+        }
+        Ok(Self {
+            runs,
+            lines_cached: lines.len(),
+            last_run_id,
+        })
+    }
+
+    /// 构建时缓存的日志行数。调用方可与当前 `journal.event_lines()?.len()` 比较判断索引是否过期。
+    pub fn lines_cached(&self) -> usize {
+        self.lines_cached
+    }
+
+    /// latest run_id（构建时观测），O(1)。无事件则 None。
+    pub fn latest_run(&self) -> Option<&str> {
+        self.last_run_id.as_deref()
+    }
+
+    /// 所有 run_id（按 BTreeMap 顺序，即字典序）。O(runs)。
+    pub fn run_ids(&self) -> impl Iterator<Item = &str> {
+        self.runs.keys().map(String::as_str)
+    }
+
+    /// 该 run 的行数。未知 run_id 返回 0。
+    pub fn run_line_count(&self, run_id: &str) -> usize {
+        self.runs.get(run_id).map(Vec::len).unwrap_or(0)
+    }
+
+    /// 取该 run 的全部行。需要 journal 读行（按索引跳读，而非全扫）。
+    /// 未知 run_id 返回空 Vec。
+    pub fn run_timeline(
+        &self,
+        journal: &AuditJournal,
+        run_id: &str,
+    ) -> std::io::Result<Vec<String>> {
+        let Some(indices) = self.runs.get(run_id) else {
+            return Ok(Vec::new());
+        };
+        if indices.is_empty() {
+            return Ok(Vec::new());
+        }
+        // 按行号跳读：用 BufReader 按行迭代到所需行。最坏情况仍遍历到 max(indices)，
+        // 但省去了对所有行做 run_id 字符串匹配 + clone（原 run_timeline 全扫 + filter）。
+        let file = File::open(journal.path())?;
+        let reader = BufReader::new(file);
+        let mut result = Vec::with_capacity(indices.len());
+        let mut wanted = indices.iter().copied();
+        let mut next_wanted = wanted.next();
+        for (current, line) in reader.lines().enumerate() {
+            if next_wanted == Some(current) {
+                result.push(line?);
+                next_wanted = wanted.next();
+                if next_wanted.is_none() {
+                    break; // 已取到该 run 全部行
+                }
+            }
+        }
+        Ok(result)
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RuntimeAuditProjection {
     pub run_id: String,
@@ -1771,5 +1861,80 @@ mod tests {
         }
         journal_batch.append_batch(&events).expect("batch");
         assert_eq!(journal_single.event_lines().unwrap(), journal_batch.event_lines().unwrap());
+    }
+
+    // ===== run_id 倒排索引（cp-audit-perf-2）：RunIndex =====
+
+    #[test]
+    fn run_index_builds_and_queries_timeline_by_run_id() {
+        let journal = test_journal("run-idx");
+        journal
+            .append(&event(AuditEventType::IntentReceived, "run-a", "s0", "a0"))
+            .unwrap();
+        journal
+            .append(&event(AuditEventType::PlanFrozen, "run-a", "s0", "a1"))
+            .unwrap();
+        journal
+            .append(&event(AuditEventType::IntentReceived, "run-b", "s0", "b0"))
+            .unwrap();
+        journal
+            .append(&event(AuditEventType::CommitSealed, "run-a", "s0", "a2"))
+            .unwrap();
+
+        let index = RunIndex::from_journal(&journal).expect("build");
+        // 两个 run。
+        let ids: Vec<&str> = index.run_ids().collect();
+        assert_eq!(ids, vec!["run-a", "run-b"]);
+        // run-a 3 行，run-b 1 行。
+        assert_eq!(index.run_line_count("run-a"), 3);
+        assert_eq!(index.run_line_count("run-b"), 1);
+        assert_eq!(index.run_line_count("run-missing"), 0);
+        // latest = 最后出现的 run_id（run-a）。
+        assert_eq!(index.latest_run(), Some("run-a"));
+        assert_eq!(index.lines_cached(), 4);
+    }
+
+    #[test]
+    fn run_index_timeline_matches_journal_run_timeline() {
+        let journal = test_journal("run-idx-match");
+        let events = vec![
+            event(AuditEventType::IntentReceived, "run-x", "s0", "x0"),
+            event(AuditEventType::PlanFrozen, "run-x", "s0", "x1"),
+            event(AuditEventType::IntentReceived, "run-y", "s0", "y0"),
+            event(AuditEventType::CommitSealed, "run-x", "s0", "x2"),
+            event(AuditEventType::EffectObserved, "run-y", "s0", "y1"),
+        ];
+        journal.append_batch(&events).unwrap();
+
+        let index = RunIndex::from_journal(&journal).expect("build");
+        // 索引查询结果须与 journal.run_timeline（全扫 filter）逐行一致。
+        let via_index = index.run_timeline(&journal, "run-x").expect("idx timeline");
+        let via_scan = journal.run_timeline("run-x").expect("scan timeline");
+        assert_eq!(via_index, via_scan);
+        assert_eq!(via_index.len(), 3);
+
+        let via_index_y = index.run_timeline(&journal, "run-y").expect("idx y");
+        let via_scan_y = journal.run_timeline("run-y").expect("scan y");
+        assert_eq!(via_index_y, via_scan_y);
+    }
+
+    #[test]
+    fn run_index_timeline_unknown_run_is_empty() {
+        let journal = test_journal("run-idx-unknown");
+        journal
+            .append(&event(AuditEventType::IntentReceived, "run-a", "s0", "a"))
+            .unwrap();
+        let index = RunIndex::from_journal(&journal).expect("build");
+        let timeline = index.run_timeline(&journal, "run-missing").expect("ok");
+        assert!(timeline.is_empty());
+    }
+
+    #[test]
+    fn run_index_empty_journal() {
+        let journal = test_journal("run-idx-empty");
+        let index = RunIndex::from_journal(&journal).expect("build");
+        assert_eq!(index.lines_cached(), 0);
+        assert_eq!(index.latest_run(), None);
+        assert!(index.run_ids().next().is_none());
     }
 }
