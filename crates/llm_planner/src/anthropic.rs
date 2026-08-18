@@ -3,7 +3,7 @@
 use std::io;
 use std::time::Duration;
 
-use crate::{anthropic_plan_text, parse_plan_steps, post_json, LlmProvider, RawPlan, SYSTEM_PROMPT};
+use crate::{anthropic_plan_text, build_system_prompt, parse_plan_steps, post_json, LlmProvider, RawPlan};
 
 /// Anthropic `/v1/messages` provider。鉴权头 `x-api-key` + `anthropic-version:2023-06-01`；
 /// `system` 是 body 顶层字段。
@@ -12,6 +12,9 @@ pub struct ClaudeProvider {
     pub api_key: String,
     pub model: String,
     pub max_tokens: u32,
+    /// 系统提示词（阶段 I）：默认用 `build_system_prompt()` 从冻结 `TOOL_SCHEMAS`
+    /// 动态生成，确保 prompt 与 ToolRouter 同步。算子可覆盖（`with_system_prompt`）。
+    pub system_prompt: String,
     agent: ureq::Agent,
 }
 
@@ -27,11 +30,18 @@ impl ClaudeProvider {
             api_key: api_key.into(),
             model: model.into(),
             max_tokens,
+            system_prompt: build_system_prompt(),
             agent: ureq::AgentBuilder::new()
                 .timeout_connect(Duration::from_secs(20))
                 .timeout_read(Duration::from_secs(120))
                 .build(),
         }
+    }
+
+    /// 覆盖默认系统提示词（阶段 I）。算子可注入自定义 prompt（仍经冻结 bridge 裁决）。
+    pub fn with_system_prompt(mut self, prompt: impl Into<String>) -> Self {
+        self.system_prompt = prompt.into();
+        self
     }
 
     /// 默认指向 api.anthropic.com + claude-opus-4-8。
@@ -65,7 +75,7 @@ impl LlmProvider for ClaudeProvider {
         let body = serde_json::json!({
             "model": self.model,
             "max_tokens": self.max_tokens,
-            "system": SYSTEM_PROMPT,
+            "system": self.system_prompt,
             "messages": [{"role": "user", "content": intent}],
         })
         .to_string();
