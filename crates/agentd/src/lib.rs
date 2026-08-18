@@ -2,6 +2,7 @@ pub mod agent_core;
 pub mod aom;
 pub mod api;
 pub mod audit;
+pub mod http_server;
 pub mod lifecycle;
 pub mod modules;
 pub mod operator_projection;
