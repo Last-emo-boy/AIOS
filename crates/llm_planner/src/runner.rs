@@ -111,6 +111,68 @@ impl StepExecutor for StubExecutor {
 
 // ===== cp-llm 阶段 D：tool-result 反馈 / replan 循环 =====
 // ===== cp-llm 阶段 E：agent 决策结构化追踪（TraceSpan） =====
+// ===== cp-llm 阶段 F：上下文窗口管理（ContextWindow，防 replan 反馈无限增长） =====
+
+/// 上下文窗口：管理 replan 反馈历史，构造给 LLM 的 context 字符串。
+///
+/// 问题：replan loop 多轮后，反馈串无限增长可能超出 LLM context window。且当前实现
+/// 每轮覆盖只留最近一条反馈，丢失前序观察。
+///
+/// 方案：`ContextWindow` 保留原始 intent（始终保留）+ 滑动窗口的最近 `max_history` 条
+/// 反馈。`render()` 拼成 `"{intent}\n[attempt N] {feedback}\n..."` 供 `LlmProvider::plan`
+/// 调用。旧反馈滑出窗口（FIFO），保证上下文有界。
+#[derive(Debug, Clone)]
+pub struct ContextWindow {
+    intent: String,
+    history: Vec<String>,
+    max_history: usize,
+}
+
+impl ContextWindow {
+    /// 构造一个窗口。`max_history=0` ⇒ 不保留任何反馈（每轮 context = intent，等价单次）。
+    pub fn new(intent: impl Into<String>, max_history: usize) -> Self {
+        Self {
+            intent: intent.into(),
+            history: Vec::new(),
+            max_history,
+        }
+    }
+
+    /// 追加一条反馈。超过 `max_history` 时滑出最旧（FIFO）。
+    pub fn push(&mut self, feedback: impl Into<String>) -> &mut Self {
+        if self.max_history == 0 {
+            return self; // 窗口关闭，不保留
+        }
+        self.history.push(feedback.into());
+        while self.history.len() > self.max_history {
+            self.history.remove(0);
+        }
+        self
+    }
+
+    /// 当前窗口保留的反馈条数。
+    pub fn len(&self) -> usize {
+        self.history.len()
+    }
+
+    /// 窗口是否为空（无反馈）。
+    pub fn is_empty(&self) -> bool {
+        self.history.is_empty()
+    }
+
+    /// 渲染给 LLM 的 context 字符串：intent + 反馈历史（按时间序，旧→新）。空窗口返回 intent。
+    /// 不标 attempt 序号（窗口滑出后序号会不连续；LLM 只需观察内容，不需序号）。
+    pub fn render(&self) -> String {
+        if self.history.is_empty() {
+            return self.intent.clone();
+        }
+        let mut parts: Vec<String> = vec![self.intent.clone()];
+        for feedback in &self.history {
+            parts.push(format!("previous feedback: {feedback}"));
+        }
+        parts.join("\n")
+    }
+}
 
 /// 单次 replan attempt 的结构化追踪记录（advisory，供观测/审计；绝不参与裁决）。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -190,7 +252,9 @@ pub fn run_replan_loop(
     journal: &AuditJournal,
     max_replans: usize,
 ) -> ReplanOutcome {
-    let mut context = intent.to_string();
+    // 阶段 F：ContextWindow 管理 replan 反馈上下文（滑动窗口，FIFO 滑出）。
+    // max_history = max_replans：每轮最多产生一条反馈，窗口容量恰好覆盖全部 replan 轮次。
+    let mut context_window = ContextWindow::new(intent, max_replans);
     let mut feedback: Vec<String> = Vec::new();
     let mut trace: Vec<TraceSpan> = Vec::new();
     let mut state = RunState::FailedClosed;
@@ -200,6 +264,7 @@ pub fn run_replan_loop(
     for attempt in 0..=max_replans {
         attempts = attempt + 1;
         // 1. LLM 产 intention（不可信 RawPlan）。
+        let context = context_window.render();
         let raw = match provider.plan(&context) {
             Ok(raw) => raw,
             Err(error) => {
@@ -245,7 +310,7 @@ pub fn run_replan_loop(
                 }
                 let note = format!("bridge rejected: {reason}");
                 feedback.push(note.clone());
-                context = format!("{intent}\nprevious attempt {attempt} feedback: {note}");
+                context_window.push(note);
                 continue;
             }
         };
@@ -297,7 +362,7 @@ pub fn run_replan_loop(
                     cause: TraceCause::ExecDenied { reason: note.clone() },
                 });
                 feedback.push(note.clone());
-                context = format!("{intent}\nprevious attempt {attempt} feedback: {note}");
+                context_window.push(note);
             }
             None => {
                 trace.push(TraceSpan {
@@ -619,5 +684,52 @@ mod replan_tests {
         assert_eq!(outcome.trace.len(), 1);
         assert_eq!(outcome.trace[0].provider, "failing");
         assert!(matches!(&outcome.trace[0].cause, TraceCause::ProviderFailed { reason } if reason.contains("transport")));
+    }
+
+    // ===== cp-llm 阶段 F：ContextWindow 单元测试 =====
+
+    #[test]
+    fn context_window_empty_renders_intent_only() {
+        let cw = ContextWindow::new("check nginx", 3);
+        assert!(cw.is_empty());
+        assert_eq!(cw.len(), 0);
+        assert_eq!(cw.render(), "check nginx");
+    }
+
+    #[test]
+    fn context_window_push_renders_history() {
+        let mut cw = ContextWindow::new("check nginx", 3);
+        cw.push("step s1 denied: source-to-sink");
+        assert_eq!(cw.len(), 1);
+        assert!(!cw.is_empty());
+        assert_eq!(
+            cw.render(),
+            "check nginx\nprevious feedback: step s1 denied: source-to-sink"
+        );
+    }
+
+    #[test]
+    fn context_window_fifo_slide() {
+        // max_history=2：push 3 条，最旧滑出，render 只含最近 2 条。
+        let mut cw = ContextWindow::new("intent", 2);
+        cw.push("fb-1");
+        cw.push("fb-2");
+        cw.push("fb-3");
+        assert_eq!(cw.len(), 2); // 滑出后窗口大小受限
+        let rendered = cw.render();
+        assert!(rendered.contains("previous feedback: fb-2"));
+        assert!(rendered.contains("previous feedback: fb-3"));
+        assert!(!rendered.contains("fb-1")); // 最旧已滑出
+        assert!(rendered.starts_with("intent\n"));
+    }
+
+    #[test]
+    fn context_window_zero_history_drops_feedback() {
+        // max_history=0：窗口关闭，push 被忽略，render 永远只返回 intent。
+        let mut cw = ContextWindow::new("intent", 0);
+        cw.push("fb-1");
+        assert!(cw.is_empty());
+        assert_eq!(cw.len(), 0);
+        assert_eq!(cw.render(), "intent");
     }
 }
