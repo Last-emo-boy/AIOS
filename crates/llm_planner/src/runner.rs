@@ -313,6 +313,66 @@ impl AbortSignal for NoAbort {
     }
 }
 
+/// cp-llm 阶段 M：基于截止时间的 `AbortSignal` 实现。
+///
+/// 生产 LLM agent 系统都有运行级 deadline/timeout。`DeadlineAbort` 在构造时记录一个
+/// 绝对截止时刻（`Instant`），`is_aborted()` 检查当前时间是否已过截止——超时即
+/// fail-closed，绝不让 LLM 继续产 intention。**不变量保持**：deadline 是算子裁决，
+/// 不是 LLM 决策。
+///
+/// 用法：`run_replan_loop_with_abort(..., &DeadlineAbort::after_secs(60))`。
+/// 也可与其它 abort 信号组合（如 `union` 两个信号）。
+pub struct DeadlineAbort {
+    deadline: std::time::Instant,
+}
+
+impl DeadlineAbort {
+    /// 从现在起 `secs` 秒后截止。
+    pub fn after_secs(secs: u64) -> Self {
+        Self {
+            deadline: std::time::Instant::now() + std::time::Duration::from_secs(secs),
+        }
+    }
+
+    /// 从现在起 `dur` 后截止。
+    pub fn after(dur: std::time::Duration) -> Self {
+        Self {
+            deadline: std::time::Instant::now() + dur,
+        }
+    }
+
+    /// 截止时刻是否已过。
+    pub fn is_expired(&self) -> bool {
+        std::time::Instant::now() >= self.deadline
+    }
+}
+
+impl AbortSignal for DeadlineAbort {
+    fn is_aborted(&self) -> bool {
+        self.is_expired()
+    }
+}
+
+/// cp-llm 阶段 M：组合两个 abort 信号——任一触发即中止。
+///
+/// 便于把 `DeadlineAbort` 与算子手动 abort 信号组合（如 `union(deadline, manual_flag)`）。
+pub struct UnionAbort<'a> {
+    a: &'a dyn AbortSignal,
+    b: &'a dyn AbortSignal,
+}
+
+impl<'a> UnionAbort<'a> {
+    pub fn new(a: &'a dyn AbortSignal, b: &'a dyn AbortSignal) -> Self {
+        Self { a, b }
+    }
+}
+
+impl<'a> AbortSignal for UnionAbort<'a> {
+    fn is_aborted(&self) -> bool {
+        self.a.is_aborted() || self.b.is_aborted()
+    }
+}
+
 /// plan→bridge→exec→（若未完成）把观察反馈给 LLM 再 plan，最多 `max_replans` 次重规划。
 ///
 /// **不变量**：LLM 只产 intention。每轮：`LlmProvider::plan(context)` → `bridge_plan`
@@ -968,6 +1028,55 @@ mod replan_tests {
             &exec, &journal, 3, &NoAbort,
         );
         assert!(outcome.completed()); // 正常完成，未被中止
+    }
+
+    // ===== cp-llm 阶段 M：DeadlineAbort / UnionAbort 测试 =====
+
+    #[test]
+    fn deadline_not_expired_when_future() {
+        let dl = DeadlineAbort::after_secs(60);
+        assert!(!dl.is_aborted());
+        assert!(!dl.is_expired());
+    }
+
+    #[test]
+    fn deadline_expired_when_past() {
+        let dl = DeadlineAbort::after(std::time::Duration::from_millis(1));
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        assert!(dl.is_aborted());
+        assert!(dl.is_expired());
+    }
+
+    #[test]
+    fn deadline_aborts_replan_loop() {
+        // 已过期的 deadline → 首轮即被中止（与 AlwaysAborted 等价）。
+        let dl = DeadlineAbort::after(std::time::Duration::from_millis(0));
+        std::thread::sleep(std::time::Duration::from_millis(2));
+        let provider = ScriptedProvider::new(vec![ok_plan()]);
+        let exec = StubExecutor::new("alive=true");
+        let journal = journal("dl-1");
+        let outcome = run_replan_loop_with_abort(
+            &provider, "x", "operator", "run-dl1",
+            &ModelProvenance, &OperatorApprovals::new("operator", false),
+            &exec, &journal, 3, &dl,
+        );
+        assert!(outcome.aborted());
+        assert_eq!(outcome.attempts, 0);
+    }
+
+    #[test]
+    fn union_abort_triggers_on_either() {
+        let never = NoAbort;
+        // future deadline: not expired; union with NoAbort → not aborted.
+        let dl = DeadlineAbort::after_secs(60);
+        let union = UnionAbort::new(&never, &dl);
+        assert!(!union.is_aborted());
+
+        // expired deadline: union with NoAbort → aborted.
+        let dl2 = DeadlineAbort::after(std::time::Duration::from_millis(0));
+        std::thread::sleep(std::time::Duration::from_millis(2));
+        let union2 = UnionAbort::new(&never, &dl2);
+        assert!(union2.is_aborted());
     }
 
     // ===== cp-llm 阶段 J：ReplanOutcome 辅助方法测试 =====
