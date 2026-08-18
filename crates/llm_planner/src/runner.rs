@@ -16,7 +16,7 @@ use agent_runtime::{
     AgentRuntime, ApprovalSource, PlannedStep, RunEvent, RunState, StepExecutor, StepObservation,
     StepOutcome, StepProvenance, StepRisk,
 };
-use security_execution::audit::{redact_summary, AuditJournal};
+use security_execution::audit::{redact_summary, AuditEvent, AuditEventType, AuditJournal};
 use security_execution::policy::ApprovalToken;
 use security_execution::source_to_sink::ContentSource;
 
@@ -390,6 +390,16 @@ pub fn run_replan_loop_with_abort(
             };
         }
         attempts = attempt + 1;
+        // 阶段 K：每轮 plan 前记录 IntentReceived 审计事件，使 replan 进度可审计、
+        // 崩溃后可从审计日志恢复（哪些 attempt 已执行、终态如何）。summary 经 redact_summary
+        // 脱敏（intent 可能含不可信内容）。
+        let _ = journal.append(&AuditEvent::new(
+            AuditEventType::IntentReceived,
+            run_id,
+            "replan",
+            actor,
+            &format!("attempt {attempts} intent: {intent}"),
+        ));
         // 1. LLM 产 intention（不可信 RawPlan）。
         let context = context_window.render();
         let raw = match provider.plan(&context) {
@@ -623,6 +633,12 @@ mod replan_tests {
         assert!(outcome.completed());
         assert_eq!(outcome.attempts, 1);
         assert!(outcome.feedback.is_empty());
+        // 阶段 K：首轮 IntentReceived 审计行已写入。
+        let lines = journal.event_lines().unwrap();
+        assert!(
+            lines.iter().any(|l| l.contains("IntentReceived") && l.contains("attempt 1")),
+            "replan attempt must be audited, got {lines:?}"
+        );
     }
 
     /// 首轮 bridge 拒（幻觉 tool）→ 反馈 → 第二轮成功：attempts=2，有反馈。
