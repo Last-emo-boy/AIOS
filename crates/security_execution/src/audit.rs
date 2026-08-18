@@ -261,6 +261,75 @@ impl AuditJournal {
     }
 }
 
+/// cp-llm 阶段 R：线程安全的 `AuditJournal` 包装器。
+///
+/// `AuditJournal::append` 每次调用 `open + writeln + sync_all`，文件 append 模式虽保证
+/// 单次 `writeln` 原子，但**多线程并发 append 不保证行间不交错**（OS 可能合并并发 write）。
+/// 未来并行执行同一拓扑层级的就绪步时，多个线程会并发向 journal 写事件——这需要
+/// 互斥以保证 JSON 行完整。`SyncAuditJournal` 用 `Mutex` 串行化所有写操作，`&self` 接口
+/// 与 `AuditJournal` 同形（`append`/`append_batch`/`event_lines`），便于在并行调度器中
+/// 透明替换。读方法（`event_lines`/`latest_run` 等）也经锁串行，避免读到半写行。
+///
+/// **不改变现有顺序执行路径**——`run_plan_guarded` 仍直接用 `&AuditJournal`。本类型仅
+/// 供未来并行版 `run_plan_guarded_parallel` 使用。`#![forbid(unsafe_code)]` 不受影响
+/// （`std::sync::Mutex` 是安全抽象）。
+#[derive(Debug, Clone)]
+pub struct SyncAuditJournal {
+    inner: std::sync::Arc<std::sync::Mutex<AuditJournal>>,
+}
+
+impl SyncAuditJournal {
+    pub fn new(path: impl Into<PathBuf>) -> Self {
+        Self {
+            inner: std::sync::Arc::new(std::sync::Mutex::new(AuditJournal::new(path))),
+        }
+    }
+
+    /// 从底层 `AuditJournal` 构造（共享同一文件路径，独立 Mutex 实例）。
+    pub fn from_journal(journal: &AuditJournal) -> Self {
+        Self::new(journal.path().to_path_buf())
+    }
+
+    pub fn path(&self) -> std::sync::MutexGuard<'_, AuditJournal> {
+        self.inner.lock().expect("SyncAuditJournal poisoned")
+    }
+
+    pub fn append(&self, event: &AuditEvent) -> std::io::Result<()> {
+        self.inner
+            .lock()
+            .expect("SyncAuditJournal poisoned")
+            .append(event)
+    }
+
+    pub fn append_batch(&self, events: &[AuditEvent]) -> std::io::Result<()> {
+        self.inner
+            .lock()
+            .expect("SyncAuditJournal poisoned")
+            .append_batch(events)
+    }
+
+    pub fn event_lines(&self) -> std::io::Result<Vec<String>> {
+        self.inner
+            .lock()
+            .expect("SyncAuditJournal poisoned")
+            .event_lines()
+    }
+
+    pub fn latest_run(&self) -> std::io::Result<Option<String>> {
+        self.inner
+            .lock()
+            .expect("SyncAuditJournal poisoned")
+            .latest_run()
+    }
+
+    pub fn run_timeline(&self, run_id: &str) -> std::io::Result<Vec<String>> {
+        self.inner
+            .lock()
+            .expect("SyncAuditJournal poisoned")
+            .run_timeline(run_id)
+    }
+}
+
 /// Group commit 累积器：`push` 写内存缓冲，`commit` 一次 `append_batch` 落盘。
 ///
 /// 借用 `AuditJournal`（不可变），故可与其他 `&self` 读方法并发（文件 append 模式保证原子性）。
@@ -1936,5 +2005,78 @@ mod tests {
         assert_eq!(index.lines_cached(), 0);
         assert_eq!(index.latest_run(), None);
         assert!(index.run_ids().next().is_none());
+    }
+
+    // ===== 阶段 R：SyncAuditJournal =====
+
+    #[test]
+    fn sync_journal_append_and_read() {
+        let path = std::env::temp_dir().join(format!(
+            "agentd-sync-basic-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        let sync = SyncAuditJournal::new(&path);
+        sync.append(&event(AuditEventType::IntentReceived, "run-s1", "step-0", "intent"))
+            .expect("append");
+        let lines = sync.event_lines().expect("read");
+        assert_eq!(lines.len(), 1);
+        assert!(lines[0].contains("IntentReceived"));
+    }
+
+    #[test]
+    fn sync_journal_concurrent_appends_no_interleaving() {
+        use std::sync::Arc;
+        use std::thread;
+        let path = std::env::temp_dir().join(format!(
+            "agentd-sync-concurrent-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        let sync = Arc::new(SyncAuditJournal::new(&path));
+        const N_THREADS: usize = 8;
+        const PER_THREAD: usize = 50;
+        let mut handles = Vec::new();
+        for t in 0..N_THREADS {
+            let sync = Arc::clone(&sync);
+            handles.push(thread::spawn(move || {
+                for i in 0..PER_THREAD {
+                    sync.append(&event(
+                        AuditEventType::EffectObserved,
+                        "run-concurrent",
+                        &format!("t{t}-i{i}"),
+                        "observed",
+                    ))
+                    .expect("append");
+                }
+            }));
+        }
+        for h in handles {
+            h.join().expect("thread");
+        }
+        let lines = sync.event_lines().expect("read");
+        // 无交错：每行完整 JSON，总行数 == N_THREADS * PER_THREAD。
+        assert_eq!(lines.len(), N_THREADS * PER_THREAD);
+        for line in &lines {
+            assert!(line.contains("\"event_type\":\"EffectObserved\""), "corrupt line: {line}");
+            assert!(line.starts_with('{') && line.ends_with('}'), "non-atomic line: {line}");
+        }
+    }
+
+    #[test]
+    fn sync_journal_append_batch_atomic() {
+        let path = std::env::temp_dir().join(format!(
+            "agentd-sync-batch-{}.jsonl",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_file(&path);
+        let sync = SyncAuditJournal::new(&path);
+        let batch = vec![
+            event(AuditEventType::PlanFrozen, "run-b1", "step-0", "plan"),
+            event(AuditEventType::PolicyEvaluated, "run-b1", "step-0", "policy"),
+            event(AuditEventType::EffectObserved, "run-b1", "step-0", "effect"),
+        ];
+        sync.append_batch(&batch).expect("batch");
+        assert_eq!(sync.event_lines().expect("read").len(), 3);
     }
 }
