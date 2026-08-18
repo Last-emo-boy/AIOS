@@ -189,6 +189,8 @@ pub struct TraceSpan {
     pub state: RunState,
     /// 该轮结束的原因。
     pub cause: TraceCause,
+    /// 该轮耗时（毫秒，advisory 仅观测，绝不参与裁决）。abort 检查命中时为 0。
+    pub elapsed_ms: u64,
 }
 
 /// 一轮 attempt 结束的原因。
@@ -265,13 +267,14 @@ impl ReplanOutcome {
             .iter()
             .map(|span| {
                 format!(
-                    "attempt {} provider={} model={} steps={} state={:?} cause={}",
+                    "attempt {} provider={} model={} steps={} state={:?} cause={} elapsed_ms={}",
                     span.attempt,
                     span.provider,
                     span.model,
                     span.step_count,
                     span.state,
-                    trace_cause_str(&span.cause)
+                    trace_cause_str(&span.cause),
+                    span.elapsed_ms
                 )
             })
             .collect::<Vec<_>>()
@@ -431,6 +434,9 @@ pub fn run_replan_loop_with_abort(
     let provider_name = provider.name().to_string();
 
     for attempt in 0..=max_replans {
+        // 阶段 P：每轮起始锚点（advisory 耗时观测，绝不参与裁决）。
+        let attempt_start = std::time::Instant::now();
+        let elapsed_ms = || attempt_start.elapsed().as_millis() as u64;
         // 阶段 G：每轮 plan 前检查算子中止信号。若已中止 → fail-closed，绝不让 LLM
         // 继续产 intention。首轮也检查（算子可能在 plan 前就叫停）。
         if abort.is_aborted() {
@@ -441,6 +447,7 @@ pub fn run_replan_loop_with_abort(
                 step_count: 0,
                 state: RunState::FailedClosed,
                 cause: TraceCause::Aborted,
+                elapsed_ms: 0,
             });
             return ReplanOutcome {
                 state: RunState::FailedClosed,
@@ -474,6 +481,7 @@ pub fn run_replan_loop_with_abort(
                     step_count: 0,
                     state: RunState::FailedClosed,
                     cause: TraceCause::ProviderFailed { reason },
+                    elapsed_ms: elapsed_ms(),
                 });
                 return ReplanOutcome {
                     state: RunState::FailedClosed,
@@ -496,6 +504,7 @@ pub fn run_replan_loop_with_abort(
                     step_count: 0,
                     state: RunState::FailedClosed,
                     cause: TraceCause::BridgeRejected { reason: reason.clone() },
+                    elapsed_ms: elapsed_ms(),
                 });
                 if attempt >= max_replans {
                     return ReplanOutcome {
@@ -523,6 +532,7 @@ pub fn run_replan_loop_with_abort(
                 step_count,
                 state,
                 cause: TraceCause::Completed,
+                elapsed_ms: elapsed_ms(),
             });
             return ReplanOutcome {
                 state,
@@ -544,6 +554,7 @@ pub fn run_replan_loop_with_abort(
                 step_count,
                 state,
                 cause,
+                elapsed_ms: elapsed_ms(),
             });
             break;
         }
@@ -557,6 +568,7 @@ pub fn run_replan_loop_with_abort(
                     step_count,
                     state,
                     cause: TraceCause::ExecDenied { reason: note.clone() },
+                    elapsed_ms: elapsed_ms(),
                 });
                 feedback.push(note.clone());
                 context_window.push(note);
@@ -569,6 +581,7 @@ pub fn run_replan_loop_with_abort(
                     step_count,
                     state,
                     cause: TraceCause::NoFeedback,
+                    elapsed_ms: elapsed_ms(),
                 });
                 break; // 无可反馈观察，replan 无意义
             }
