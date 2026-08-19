@@ -2,37 +2,52 @@
 //!
 //! 启动 `Agentd` lifecycle 并在 loopback 暴露 HTTP API server。operator 可通过
 //! `POST /plan {"intent":"..."}` 远程提交意图，`GET /health` 查询状态，
-//! `POST /execute` 执行工具，`GET /audit` 查审计 timeline。
+//! `POST /execute` 执行工具，`GET /audit` 查审计 timeline，`GET /recover` 查恢复。
 //!
-//! 配置（环境变量）：
-//! - `AIOS_HTTP_ADDR`：HTTP 监听地址（缺省 `127.0.0.1:8421`）。
-//! - `AIOS_AUDIT_PATH`：审计日志落盘路径（缺省 `/var/lib/aios/audit.jsonl`）。
-//!   启用后每次 `/execute` 走可审计路径，每步写 `AuditEvent`，audit 写失败则 fail-closed。
+//! 配置优先级：环境变量 > 配置文件 > 缺省。配置文件（`key=value`，`#` 注释）路径
+//! 由 `AIOS_CONFIG` 指定（缺省 `/etc/aios/agentd.conf`，不存在则用缺省 + 环境变量）。
+//! 关键环境变量：`AIOS_HTTP_ADDR`、`AIOS_AUDIT_PATH`、`AIOS_RUN_MODE`、
+//! `AIOS_PLANNER_MODE`、`AIOS_ARBITRARY_SHELL`、`AIOS_MAX_REPLANS`。
 //!
 //! 所有工具调用仍经冻结 `ToolRouter`——本入口只编排，不自造裁决。
 #![forbid(unsafe_code)]
 
 use agentd::audit::AuditJournal;
+use agentd::config::ConfigLoader;
 use agentd::http_server;
 use agentd::lifecycle::{Agentd, LifecycleConfig};
 use std::path::PathBuf;
 
 fn main() -> std::io::Result<()> {
-    let config = LifecycleConfig::default();
-    let audit_path = std::env::var("AIOS_AUDIT_PATH")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("/var/lib/aios/audit.jsonl"));
-    let mut agentd = Agentd::new(config).with_audit_and_executor(AuditJournal::new(&audit_path));
+    // 配置加载：环境变量 > 配置文件 > 缺省。
+    let config_path = std::env::var("AIOS_CONFIG")
+        .unwrap_or_else(|_| "/etc/aios/agentd.conf".to_string());
+    let loaded = ConfigLoader::new().with_file(&config_path).load();
+    let cfg = &loaded.config;
+
+    // audit + 真实执行后端。
+    let audit_path = PathBuf::from(&cfg.audit_path);
+    let lifecycle_cfg: LifecycleConfig = cfg.to_lifecycle_config();
+    let mut agentd = Agentd::new(lifecycle_cfg).with_audit_and_executor(AuditJournal::new(&audit_path));
     agentd.start();
 
-    let addr = std::env::var("AIOS_HTTP_ADDR").unwrap_or_else(|_| "127.0.0.1:8421".to_string());
-
     eprintln!(
-        "agentd starting (run_mode={}, planner_mode={}, audit_path={})",
-        agentd.health_report().run_mode,
-        agentd.health_report().planner_mode,
-        audit_path.display()
+        "agentd starting (run_mode={}, planner_mode={}, http_addr={}, audit_path={}, config={})",
+        cfg.run_mode,
+        cfg.planner_mode,
+        cfg.http_addr,
+        cfg.audit_path,
+        if agentd::config::config_exists(&config_path) {
+            &config_path
+        } else {
+            "<defaults>"
+        },
     );
+    if loaded.has_warnings() {
+        for warning in &loaded.warnings {
+            eprintln!("agentd config warning: {warning}");
+        }
+    }
 
-    http_server::serve(&agentd, &addr)
+    http_server::serve(&agentd, &cfg.http_addr)
 }

@@ -106,7 +106,8 @@ fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static 
         ("GET", "/audit") => ("200 OK", audit_timeline(lifecycle, body)),
         ("GET", "/audit/latest") => ("200 OK", audit_latest(lifecycle)),
         ("GET", "/recover") => ("200 OK", recover_run(lifecycle, body)),
-        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=..."]}"#.to_string()),
+        ("GET", "/config") => ("200 OK", config_diagnostics(lifecycle)),
+        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=...","GET /config"]}"#.to_string()),
         _ => ("404 Not Found", r#"{"error":"not found"}"#.to_string()),
     }
 }
@@ -255,6 +256,22 @@ fn recover_run(lifecycle: &Agentd, query: &str) -> String {
         ),
     }
 }
+
+/// `GET /config` —— 当前运行配置诊断（operator 查"audit/executor 是否启用、run_mode 是什么"）。
+/// 复用 `health_report` 字段 + audit/executor 启用状态，不引入额外 Agentd 字段。
+fn config_diagnostics(lifecycle: &Agentd) -> String {
+    let health = lifecycle.health_report().to_json();
+    // health_report 已含 state/run_mode/planner_mode/arbitrary_shell_enabled/module_count。
+    // 追加 audit_enabled / executor_enabled（编排链能力开关）。
+    format!(
+        "{}, \"audit_enabled\":{}, \"executor_enabled\":{}}}",
+        &health[..health.len() - 1], // 去掉末尾 }
+        lifecycle.audit_enabled(),
+        lifecycle.executor_enabled(),
+    )
+}
+
+
 
 
 /// 从 POST body 的 `{"params":{"k":"v",...}}` 提取字符串键值对。
@@ -673,5 +690,24 @@ mod tests {
         assert_eq!(status, "200 OK");
         assert!(timeline.contains("\"count\":5"), "got: {timeline}");
     }
+
+    #[test]
+    fn config_endpoint_reports_audit_and_executor_enabled() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (status, body) = route(&lc, "GET", "/config", "");
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"audit_enabled\":true"), "body: {body}");
+        assert!(body.contains("\"executor_enabled\":true"), "body: {body}");
+        assert!(body.contains("\"run_mode\":\"local-only\""), "body: {body}");
+    }
+
+    #[test]
+    fn config_endpoint_reports_disabled_without_audit() {
+        let lc = lifecycle();
+        let (_s, body) = route(&lc, "GET", "/config", "");
+        assert!(body.contains("\"audit_enabled\":false"), "body: {body}");
+        assert!(body.contains("\"executor_enabled\":false"), "body: {body}");
+    }
+
 
 }
