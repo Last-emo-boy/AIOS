@@ -55,7 +55,12 @@ fn handle_connection(
     reader.read_line(&mut request_line)?;
     let mut parts = request_line.split_whitespace();
     let method = parts.next().unwrap_or("");
-    let path = parts.next().unwrap_or("/");
+    let raw_path = parts.next().unwrap_or("/");
+    // 剥离 query string（? 之后）做路由匹配；query 串作为 GET 端点的参数来源。
+    let (path, query) = match raw_path.split_once('?') {
+        Some((p, q)) => (p, q),
+        None => (raw_path, ""),
+    };
 
     // 读取 headers 直到空行，提取 Content-Length。
     let mut content_length: usize = 0;
@@ -77,7 +82,9 @@ fn handle_connection(
     }
     let body_str = String::from_utf8_lossy(&body);
 
-    let (status, content) = route(lifecycle, method, path, &body_str);
+    // GET 请求用 query string 作为参数来源；POST 用 body。空 query 时用空串。
+    let params: &str = if content_length > 0 { &body_str } else { query };
+    let (status, content) = route(lifecycle, method, path, params);
     let response = format!(
         "HTTP/1.1 {status}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{content}",
         content.len()
@@ -98,7 +105,8 @@ fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static 
         ("POST", "/execute") => ("200 OK", execute_tool(lifecycle, body)),
         ("GET", "/audit") => ("200 OK", audit_timeline(lifecycle, body)),
         ("GET", "/audit/latest") => ("200 OK", audit_latest(lifecycle)),
-        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute","GET /audit?run_id=...","GET /audit/latest"]}"#.to_string()),
+        ("GET", "/recover") => ("200 OK", recover_run(lifecycle, body)),
+        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=..."]}"#.to_string()),
         _ => ("404 Not Found", r#"{"error":"not found"}"#.to_string()),
     }
 }
@@ -182,7 +190,7 @@ fn audit_timeline(lifecycle: &Agentd, query: &str) -> String {
     let Some(journal) = lifecycle.audit() else {
         return r#"{"audit_disabled":true}"#.to_string();
     };
-    let run_id = extract_field(query, "run_id");
+    let run_id = extract_query(query, "run_id");
     let lines = match journal.event_lines() {
         Ok(lines) => lines,
         Err(err) => {
@@ -226,6 +234,28 @@ fn audit_latest(lifecycle: &Agentd) -> String {
         Err(err) => format!(r#"{{"error":"{}"}}"#, crate::api::escape_json(&err.to_string())),
     }
 }
+
+/// `GET /recover?run_id=...` —— 扫描指定 run 的未完成效应（EffectPrepared 但未 CommitSealed/RollbackObserved）。
+/// 发行版关键能力：operator 重启后查"上次有哪些未完成效应需要恢复"。
+/// 走 `RecoveryReconciler`（记 RecoveryStarted/Completed 事件，分类每项）。
+/// audit 未启用时返回 `audit_disabled`。
+fn recover_run(lifecycle: &Agentd, query: &str) -> String {
+    use crate::recovery::RecoveryReconciler;
+    let Some(journal) = lifecycle.audit() else {
+        return r#"{"audit_disabled":true}"#.to_string();
+    };
+    let Some(run_id) = extract_query(query, "run_id") else {
+        return r#"{"error":"missing run_id"}"#.to_string();
+    };
+    match RecoveryReconciler.reconcile(journal, &run_id) {
+        Ok(report) => report.to_json(),
+        Err(err) => format!(
+            r#"{{"error":"{}"}}"#,
+            crate::api::escape_json(&err.to_string())
+        ),
+    }
+}
+
 
 /// 从 POST body 的 `{"params":{"k":"v",...}}` 提取字符串键值对。
 /// 极简解析（无 JSON 依赖）：扫描 `"params"` 对象内的 `"key":"value"` 对。
@@ -289,6 +319,23 @@ fn extract_field(body: &str, key: &str) -> Option<String> {
     let rest = &after[start + 1..];
     let end = rest.find('"')?;
     Some(rest[..end].replace("\\n", "\n").replace("\\\"", "\"").replace("\\\\", "\\"))
+}
+
+/// 从 URL query string（`key=value`，& 分隔）或 JSON body 提取字段值。
+/// GET 端点（/audit、/recover）的 run_id 经此提取。容错返回 None。
+fn extract_query(value: &str, key: &str) -> Option<String> {
+    // 先尝试 URL query 格式 `key=value`。
+    let needle = format!("{key}=");
+    for part in value.split('&') {
+        if let Some(rest) = part.strip_prefix(&needle) {
+            let v = rest.split('&').next().unwrap_or("");
+            if !v.is_empty() {
+                return Some(v.to_string());
+            }
+        }
+    }
+    // 退回 JSON 字段提取（兼容测试用 JSON body 传参）。
+    extract_field(value, key)
 }
 
 #[cfg(test)]
@@ -552,6 +599,79 @@ mod tests {
         );
         assert!(extract_params(r#"{"tool":"x"}"#).is_empty());
         assert!(extract_params(r#"{"params":{}}"#).is_empty());
+    }
+
+
+    // ===== 阶段 Y：/recover 端点 + query string 解析 =====
+
+    #[test]
+    fn extract_query_parses_url_query_string() {
+        assert_eq!(extract_query("run_id=run-1", "run_id"), Some("run-1".to_string()));
+        assert_eq!(extract_query("foo=bar&run_id=run-2", "run_id"), Some("run-2".to_string()));
+        assert_eq!(extract_query("run_id=run-3&extra=x", "run_id"), Some("run-3".to_string()));
+        // 空 value 不返回。
+        assert_eq!(extract_query("run_id=", "run_id"), None);
+        // 兼容 JSON body。
+        assert_eq!(extract_query(r#"{"run_id":"run-4"}"#, "run_id"), Some("run-4".to_string()));
+        assert_eq!(extract_query("missing", "run_id"), None);
+    }
+
+    #[test]
+    fn recover_endpoint_returns_empty_for_completed_run() {
+        let (lc, _path) = lifecycle_with_audit();
+        // 执行一个完整 run（committed）。
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let run_id = extract_field(&body, "run_id").expect("run_id");
+        // recover 该 run → 无未完成效应（已 CommitSealed）。
+        let (status, resp) = route(&lc, "GET", "/recover", &format!("run_id={}", run_id));
+        assert_eq!(status, "200 OK");
+        assert!(resp.contains(&format!("\"run_id\":\"{}\"", run_id)), "body: {resp}");
+        assert!(resp.contains("\"items\":[]"), "expected no unresolved, got: {resp}");
+    }
+
+    #[test]
+    fn recover_endpoint_requires_run_id() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (_s, resp) = route(&lc, "GET", "/recover", "");
+        assert!(resp.contains("missing run_id"), "body: {resp}");
+    }
+
+    #[test]
+    fn recover_endpoint_disabled_without_journal() {
+        let lc = lifecycle(); // 无 audit
+        let (_s, resp) = route(&lc, "GET", "/recover", "run_id=run-x");
+        assert!(resp.contains("\"audit_disabled\":true"), "body: {resp}");
+    }
+
+    #[test]
+    fn recover_endpoint_detects_unresolved_prepared_effect() {
+        let (lc, path) = lifecycle_with_audit();
+        // 手动注入一个未完成的 EffectPrepared 事件（无 CommitSealed）。
+        let journal = crate::audit::AuditJournal::new(&path);
+        journal
+            .append(&crate::audit::AuditEvent::new(
+                crate::audit::AuditEventType::EffectPrepared,
+                "run-stuck",
+                "step-stuck",
+                "operator",
+                "prepared fs.write.diff",
+            ))
+            .expect("append");
+        let (_s, resp) = route(&lc, "GET", "/recover", "run_id=run-stuck");
+        // 写操作未 sealed → 需要 rollback，需人工确认。
+        assert!(resp.contains("\"run_id\":\"run-stuck\""), "body: {resp}");
+        assert!(resp.contains("\"requires_human_confirmation\":true"), "body: {resp}");
+    }
+
+    #[test]
+    fn audit_timeline_supports_url_query_string() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let run_id = extract_field(&body, "run_id").expect("run_id");
+        // 用 URL query 格式（而非 JSON body）查 timeline。
+        let (status, timeline) = route(&lc, "GET", "/audit", &format!("run_id={}", run_id));
+        assert_eq!(status, "200 OK");
+        assert!(timeline.contains("\"count\":5"), "got: {timeline}");
     }
 
 }
