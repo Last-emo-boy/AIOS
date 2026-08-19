@@ -2,10 +2,13 @@ use crate::api::{
     CapabilityLease, CommitId, Effect, PlanSpec, PlanStep, PolicyDecision,
     ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult, escape_json,
 };
+use crate::adapter::ToolExecutorBridge;
 use crate::audit::AuditJournal;
 use crate::executor::{StdToolExecutor, ToolExecutor};
 use crate::modules::{ModuleKind, ModuleStatus};
 use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
+use llm_planner::runner::{run_replan_loop, OperatorApprovals, ReplanOutcome};
+use llm_planner::ModelProvenance;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LifecycleConfig {
@@ -472,6 +475,50 @@ impl Agentd {
             effect,
         }
     }
+
+    /// 驱动完整 agent 执行闭环：LLM 产意图 → bridge 验证 → run_plan_guarded 裁决+执行
+    /// → 反馈 → replan（受 `max_replans` 限制）。返回 `ReplanOutcome`（advisory 观测）。
+    ///
+    /// **冻结控制平面哲学**：LLM 只产 intention；裁决（policy / source-to-sink / 审批 /
+    /// ToolRouter）全在 `run_plan_guarded` + 桥接器内。本方法只编排，不自造裁决。
+    ///
+    /// 前置条件：planner + audit + executor 均已注入。任一缺失 → fail-closed
+    /// 返回 `None`（绝不谎报闭环跑通）。operator 入口据此区分"未配置"与"跑了但失败"。
+    ///
+    /// `approve`：非只读步是否自动批准。`false`（缺省建议）→ 只读步放行，执行类步被审批门拒
+    /// （operator 可经审计看到 StepDenied，再决定是否带 approve=true 重跑）。
+    pub fn run_intent(
+        &self,
+        intent: &str,
+        actor: &str,
+        run_id: &str,
+        approve: bool,
+        max_replans: usize,
+    ) -> Option<ReplanOutcome> {
+        // fail-closed：闭环三件套缺一不可。audit 是真相源（run_replan_loop 依赖 journal 持久化
+        // exec 观测 + IntentReceived 锚点，崩溃可恢复）；executor 是真实后端；planner 产 intention。
+        let planner = self.planner.as_ref()?;
+        let journal = self.audit.as_ref()?;
+        let executor = self.executor.as_ref()?;
+
+        // 桥接器：把 agentd 的 ToolExecutor 适配为 agent_runtime::StepExecutor。
+        let bridge = ToolExecutorBridge::new(executor.as_ref());
+
+        // ModelProvenance：LLM 产的 step 标记为 model_output（经 source-to-sink 门约束）。
+        // OperatorApprovals：approve=false 时非只读步被拒（consume-once token）。
+        let outcome = run_replan_loop(
+            planner.as_ref(),
+            intent,
+            actor,
+            run_id,
+            &ModelProvenance,
+            &OperatorApprovals::new(actor, approve),
+            &bridge,
+            journal,
+            max_replans,
+        );
+        Some(outcome)
+    }
 }
 
 /// 可审计执行路径的最终结果。
@@ -720,5 +767,84 @@ mod tests {
         let debug = format!("{agentd:?}");
         assert!(debug.contains("planner_enabled: true"));
         assert!(!debug.contains("api_key"));
+    }
+
+    // ===== 阶段 H：run_intent 接入完整 agent 执行闭环 =====
+
+    fn tmp_journal(tag: &str) -> AuditJournal {
+        use std::sync::atomic::{AtomicU64, Ordering};
+        static SEQ: AtomicU64 = AtomicU64::new(1);
+        let path = std::env::temp_dir().join(format!(
+            "agentd-run-intent-{}-{}-{}.jsonl",
+            tag,
+            std::process::id(),
+            SEQ.fetch_add(1, Ordering::Relaxed)
+        ));
+        let _ = std::fs::remove_file(&path);
+        AuditJournal::new(path)
+    }
+
+    /// 三件套齐全（planner + audit + executor）→ 闭环跑通，Completed。
+    #[test]
+    fn run_intent_completes_with_full_stack() {
+        let journal = tmp_journal("complete");
+        let provider =
+            llm_planner::RecordedProvider::openai("gpt-4o-mini", OPENAI_PLAN_ENVELOPE);
+        // OPENAI envelope 提议 svc.status（只读）+ fs.read（只读）——均 ReadOnly，
+        // approve=false 也能放行，桥接到真实 executor 观测后 Completed。
+        let agentd = Agentd::new(LifecycleConfig::default())
+            .with_planner(Box::new(provider))
+            .with_audit_and_executor(journal);
+
+        let outcome = agentd
+            .run_intent("inspect nginx config", "operator", "run-complete", false, 2)
+            .expect("full stack should run");
+
+        assert!(outcome.completed(), "summary: {}", outcome.summary());
+        assert!(outcome.attempts >= 1);
+        assert!(!outcome.trace.is_empty());
+    }
+
+    /// 缺 planner → fail-closed 返回 None（绝不谎报闭环跑通）。
+    #[test]
+    fn run_intent_fail_closed_without_planner() {
+        let journal = tmp_journal("no-planner");
+        // 有 audit + executor 但无 planner → None。
+        let agentd = Agentd::new(LifecycleConfig::default())
+            .with_audit_and_executor(journal);
+        assert!(agentd.run_intent("x", "operator", "run-np", false, 1).is_none());
+    }
+
+    /// 缺 audit → fail-closed 返回 None（无真相源无法走可恢复闭环）。
+    #[test]
+    fn run_intent_fail_closed_without_audit() {
+        let provider =
+            llm_planner::RecordedProvider::openai("m", OPENAI_PLAN_ENVELOPE);
+        // 有 planner 但无 audit/executor → None。
+        let agentd = Agentd::new(LifecycleConfig::default()).with_planner(Box::new(provider));
+        assert!(agentd.run_intent("x", "operator", "run-na", false, 1).is_none());
+    }
+
+    /// 审计持久化：run_intent 跑完后，journal 应含 IntentReceived 锚点（可恢复）。
+    #[test]
+    fn run_intent_persists_intent_anchor_to_audit() {
+        let journal = tmp_journal("audit");
+        let provider =
+            llm_planner::RecordedProvider::openai("m", OPENAI_PLAN_ENVELOPE);
+        let agentd = Agentd::new(LifecycleConfig::default())
+            .with_planner(Box::new(provider))
+            .with_audit_and_executor(journal.clone());
+
+        let outcome = agentd
+            .run_intent("inspect nginx", "operator", "run-audit", false, 1)
+            .expect("run");
+        assert!(outcome.completed());
+
+        // journal 应含至少一条 IntentReceived 事件（run_replan_loop 每轮 plan 前写入）。
+        let lines = journal.run_timeline("run-audit").expect("timeline");
+        assert!(
+            lines.iter().any(|l| l.contains("IntentReceived")),
+            "应有 IntentReceived 锚点: {lines:?}"
+        );
     }
 }

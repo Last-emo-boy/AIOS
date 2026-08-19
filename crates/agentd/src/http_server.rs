@@ -26,14 +26,15 @@ fn next_run_id() -> String {
 ///
 /// 绑定 `addr`（建议 loopback，如 `127.0.0.1:8421`）。每个连接单线程处理
 /// （无并发——发行版最小可用，避免 trait Send+Sync 问题）。连接处理失败不
-/// 终止 server（记录到 stderr，继续 accept 下一个）。
-pub fn serve(lifecycle: &Agentd, addr: &str) -> std::io::Result<()> {
+/// 终止 server（记录到 stderr，继续 accept 下一个）。`max_replans` 透传给
+/// `POST /run` 的 agent 执行闭环。
+pub fn serve(lifecycle: &Agentd, addr: &str, max_replans: usize) -> std::io::Result<()> {
     let listener = TcpListener::bind(addr)?;
     eprintln!("agentd http api listening on {addr}");
     for stream in listener.incoming() {
         match stream {
             Ok(mut stream) => {
-                if let Err(err) = handle_connection(&mut stream, lifecycle) {
+                if let Err(err) = handle_connection(&mut stream, lifecycle, max_replans) {
                     eprintln!("agentd http: connection error: {err}");
                 }
             }
@@ -48,6 +49,7 @@ pub fn serve(lifecycle: &Agentd, addr: &str) -> std::io::Result<()> {
 fn handle_connection(
     stream: &mut std::net::TcpStream,
     lifecycle: &Agentd,
+    max_replans: usize,
 ) -> std::io::Result<()> {
     let mut reader = BufReader::new(stream.try_clone()?);
     // 读请求行 + headers，再按 Content-Length 读 body。
@@ -84,7 +86,7 @@ fn handle_connection(
 
     // GET 请求用 query string 作为参数来源；POST 用 body。空 query 时用空串。
     let params: &str = if content_length > 0 { &body_str } else { query };
-    let (status, content) = route(lifecycle, method, path, params);
+    let (status, content) = route(lifecycle, method, path, params, max_replans);
     let response = format!(
         "HTTP/1.1 {status}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{content}",
         content.len()
@@ -94,7 +96,13 @@ fn handle_connection(
 }
 
 /// 路由请求到对应的 Agentd 方法。返回 (HTTP status, JSON body)。
-fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static str, String) {
+fn route(
+    lifecycle: &Agentd,
+    method: &str,
+    path: &str,
+    body: &str,
+    max_replans: usize,
+) -> (&'static str, String) {
     match (method, path) {
         ("GET", "/health") => ("200 OK", lifecycle.health_report().to_json()),
         ("POST", "/plan") => {
@@ -102,12 +110,13 @@ fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static 
             let plan = lifecycle.plan(intent);
             ("200 OK", plan.to_json())
         }
+        ("POST", "/run") => ("200 OK", run_intent(lifecycle, body, max_replans)),
         ("POST", "/execute") => ("200 OK", execute_tool(lifecycle, body)),
         ("GET", "/audit") => ("200 OK", audit_timeline(lifecycle, body)),
         ("GET", "/audit/latest") => ("200 OK", audit_latest(lifecycle)),
         ("GET", "/recover") => ("200 OK", recover_run(lifecycle, body)),
         ("GET", "/config") => ("200 OK", config_diagnostics(lifecycle)),
-        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=...","GET /config"]}"#.to_string()),
+        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /run","POST /execute","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=...","GET /config"]}"#.to_string()),
         _ => ("404 Not Found", r#"{"error":"not found"}"#.to_string()),
     }
 }
@@ -183,6 +192,99 @@ fn execute_tool(lifecycle: &Agentd, body: &str) -> String {
         verification.success,
         commit
     )
+}
+
+/// `POST /run` —— 单次提交意图即驱动完整 agent 执行闭环：
+/// LLM 产意图 → bridge 验证 → run_plan_guarded 裁决+执行 → 反馈 → replan。
+///
+/// 请求 body：`{"intent":"...","run_id":"run-xxx"(可选),"approve":true(可选)}`。
+/// - `run_id` 缺省时自动生成（`run-N`）。
+/// - `approve` 缺省 `false`：只读步放行，执行类步被审批门拒（operator 经审计看到后可带
+///   `approve=true` 重跑）。
+///
+/// 响应：
+/// - 闭环跑通：`{"ran":true,"run_id":"...","completed":<bool>,"aborted":<bool>,
+///   "fail_closed":<bool>,"attempts":N,"summary":"...","trace":[...]}`
+/// - 三件套未配齐（planner/audit/executor）：`{"ran":false,"reason":"..."}`
+/// - intent 缺失：`{"error":"missing intent"}`
+///
+/// **冻结控制平面哲学**：本端点只编排（调 `run_intent`），不自造裁决。裁决全在
+/// `run_plan_guarded` 的 policy / source-to-sink / 审批门 + 桥接器的 ToolRouter 内。
+fn run_intent(lifecycle: &Agentd, body: &str, max_replans: usize) -> String {
+    let intent = extract_intent(body);
+    if intent.is_empty() {
+        return r#"{"error":"missing intent"}"#.to_string();
+    }
+    let run_id = extract_field(body, "run_id").unwrap_or_else(next_run_id);
+    let approve = extract_bool(body, "approve");
+
+    match lifecycle.run_intent(&intent, "operator", &run_id, approve, max_replans) {
+        Some(outcome) => outcome_to_json(&outcome, &run_id),
+        None => {
+            // fail-closed：三件套未配齐。报告具体缺什么，便于 operator 排障。
+            let missing = [
+                ("planner", !lifecycle.planner_enabled()),
+                ("audit", !lifecycle.audit_enabled()),
+                ("executor", !lifecycle.executor_enabled()),
+            ]
+            .iter()
+            .filter(|(_, missing)| *missing)
+            .map(|(name, _)| *name)
+            .collect::<Vec<_>>()
+            .join(", ");
+            format!(
+                r#"{{"ran":false,"reason":"not configured: {missing}"}}"#,
+                missing = crate::api::escape_json(&missing)
+            )
+        }
+    }
+}
+
+/// 把 `ReplanOutcome` 序列化为 JSON（advisory 观测，不含 secret——summary 经 runner
+/// 内 `redact_summary` 脱敏，reason 经 `extract_feedback` 净化）。
+fn outcome_to_json(outcome: &llm_planner::runner::ReplanOutcome, run_id: &str) -> String {
+    let trace_json = outcome
+        .trace
+        .iter()
+        .map(trace_span_to_json)
+        .collect::<Vec<_>>()
+        .join(",");
+    format!(
+        r#"{{"ran":true,"run_id":"{}","completed":{},"aborted":{},"fail_closed":{},"attempts":{},"summary":"{}","trace":[{}]}}"#,
+        crate::api::escape_json(run_id),
+        outcome.completed(),
+        outcome.aborted(),
+        outcome.fail_closed(),
+        outcome.attempts,
+        crate::api::escape_json(&outcome.summary()),
+        trace_json
+    )
+}
+
+/// 单个 `TraceSpan` 序列化（advisory，仅观测字段）。
+fn trace_span_to_json(span: &llm_planner::runner::TraceSpan) -> String {
+    format!(
+        r#"{{"attempt":{},"provider":"{}","model":"{}","step_count":{},"state":"{:?}","cause":"{}","elapsed_ms":{},"parallel_depth":{},"max_parallel_width":{}}}"#,
+        span.attempt,
+        crate::api::escape_json(&span.provider),
+        crate::api::escape_json(&span.model),
+        span.step_count,
+        span.state,
+        crate::api::escape_json(&llm_planner::runner::trace_cause_str(&span.cause)),
+        span.elapsed_ms,
+        span.parallel_depth,
+        span.max_parallel_width
+    )
+}
+
+/// 从 POST body 提取布尔字段 `"key":true|false`。缺省 `false`。
+fn extract_bool(body: &str, key: &str) -> bool {
+    let pattern = format!("\"{key}\":");
+    let Some(idx) = body.find(&pattern) else {
+        return false;
+    };
+    let rest = &body[idx + pattern.len()..];
+    rest.trim_start().starts_with("true")
 }
 
 /// `GET /audit?run_id=...` —— 返回指定 run 的审计事件 timeline（JSON 数组）。
@@ -381,7 +483,7 @@ mod tests {
     #[test]
     fn route_health_returns_report() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "GET", "/health", "");
+        let (status, body) = route(&lc, "GET", "/health", "", 3);
         assert_eq!(status, "200 OK");
         assert!(body.contains("\"state\""));
         assert!(body.contains("\"run_mode\""));
@@ -390,7 +492,7 @@ mod tests {
     #[test]
     fn route_plan_returns_spec() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "POST", "/plan", r#"{"intent":"check nginx"}"#);
+        let (status, body) = route(&lc, "POST", "/plan", r#"{"intent":"check nginx"}"#, 3);
         assert_eq!(status, "200 OK");
         assert!(body.contains("\"intent\""));
         assert!(body.contains("check nginx"));
@@ -399,7 +501,7 @@ mod tests {
     #[test]
     fn route_root_lists_endpoints() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "GET", "/", "");
+        let (status, body) = route(&lc, "GET", "/", "", 3);
         assert_eq!(status, "200 OK");
         assert!(body.contains("agentd"));
         assert!(body.contains("/health"));
@@ -409,7 +511,7 @@ mod tests {
     #[test]
     fn route_execute_returns_effect() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#, 3);
         assert_eq!(status, "200 OK");
         // svc.status 是 ReadOnly → allowed:true，返回 lease + effect + commit。
         assert!(body.contains("\"allowed\":true"), "body: {body}");
@@ -420,7 +522,7 @@ mod tests {
     #[test]
     fn route_execute_shell_denied_fail_closed() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"shell.exec"}"#);
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"shell.exec"}"#, 3);
         assert_eq!(status, "200 OK");
         // shell.exec 被 classify 裁决为 Never → allowed:false（fail-closed）。
         assert!(body.contains("\"allowed\":false"), "body: {body}");
@@ -429,7 +531,7 @@ mod tests {
     #[test]
     fn route_execute_missing_tool_returns_error() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "POST", "/execute", r#"{}"#);
+        let (status, body) = route(&lc, "POST", "/execute", r#"{}"#, 3);
         assert_eq!(status, "200 OK");
         assert!(body.contains("\"error\""), "body: {body}");
     }
@@ -445,7 +547,7 @@ mod tests {
     #[test]
     fn route_unknown_returns_404() {
         let lc = lifecycle();
-        let (status, body) = route(&lc, "GET", "/nonexistent", "");
+        let (status, body) = route(&lc, "GET", "/nonexistent", "", 3);
         assert_eq!(status, "404 Not Found");
         assert!(body.contains("not found"));
     }
@@ -476,7 +578,7 @@ mod tests {
         let addr = format!("127.0.0.1:{}", 18400 + (std::process::id() % 1000));
         let server_addr = addr.clone();
         let handle = thread::spawn(move || {
-            let _ = serve(&lc, &server_addr);
+            let _ = serve(&lc, &server_addr, 3);
         });
 
         // 给 server 一点启动时间。
@@ -500,7 +602,7 @@ mod tests {
     #[test]
     fn execute_with_audit_returns_run_id_and_commit() {
         let (lc, _path) = lifecycle_with_audit();
-        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#, 3);
         assert_eq!(status, "200 OK");
         // 可审计 + 真实执行路径返回 committed:true + run_id + commit_id。
         assert!(body.contains("\"committed\":true"), "body: {body}");
@@ -511,7 +613,7 @@ mod tests {
     #[test]
     fn execute_with_audit_persists_events_to_journal() {
         let (lc, path) = lifecycle_with_audit();
-        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#, 3);
         // 重开 journal（模拟重启），事件应已落盘。
         let journal = crate::audit::AuditJournal::new(&path);
         let lines = journal.event_lines().expect("read");
@@ -527,7 +629,7 @@ mod tests {
     #[test]
     fn execute_shell_with_audit_denied_and_recorded() {
         let (lc, path) = lifecycle_with_audit();
-        let (_status, body) = route(&lc, "POST", "/execute", r#"{"tool":"shell.exec"}"#);
+        let (_status, body) = route(&lc, "POST", "/execute", r#"{"tool":"shell.exec"}"#, 3);
         // 被拒。
         assert!(body.contains("\"allowed\":false"), "body: {body}");
         assert!(body.contains("\"committed\":false"), "body: {body}");
@@ -541,11 +643,11 @@ mod tests {
     fn audit_timeline_endpoint_returns_events_by_run_id() {
         let (lc, _path) = lifecycle_with_audit();
         // 先执行一次，拿到 run_id。
-        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#, 3);
         let run_id = extract_field(&body, "run_id").expect("run_id in response");
         // 再查 timeline。
         let query = format!("{{\"run_id\":\"{}\"}}", run_id);
-        let (status, timeline) = route(&lc, "GET", "/audit", &query);
+        let (status, timeline) = route(&lc, "GET", "/audit", &query, 3);
         assert_eq!(status, "200 OK");
         assert!(timeline.contains("\"count\":5"), "expected 5 events, got: {timeline}");
         assert!(timeline.contains(&run_id), "timeline missing run_id");
@@ -554,20 +656,20 @@ mod tests {
     #[test]
     fn audit_latest_endpoint_returns_latest_run() {
         let (lc, _path) = lifecycle_with_audit();
-        let (status, empty) = route(&lc, "GET", "/audit/latest", "");
+        let (status, empty) = route(&lc, "GET", "/audit/latest", "", 3);
         assert_eq!(status, "200 OK");
         assert!(empty.contains("\"latest_run_id\":null"), "expected null, got: {empty}");
-        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
-        let (_s, latest) = route(&lc, "GET", "/audit/latest", "");
+        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#, 3);
+        let (_s, latest) = route(&lc, "GET", "/audit/latest", "", 3);
         assert!(latest.contains("\"latest_run_id\":\"run-"), "expected run id, got: {latest}");
     }
 
     #[test]
     fn audit_endpoints_disabled_without_journal() {
         let lc = lifecycle(); // 无 audit
-        let (_s, timeline) = route(&lc, "GET", "/audit", "");
+        let (_s, timeline) = route(&lc, "GET", "/audit", "", 3);
         assert!(timeline.contains("\"audit_disabled\":true"), "got: {timeline}");
-        let (_s, latest) = route(&lc, "GET", "/audit/latest", "");
+        let (_s, latest) = route(&lc, "GET", "/audit/latest", "", 3);
         assert!(latest.contains("\"audit_disabled\":true"), "got: {latest}");
     }
 
@@ -575,7 +677,7 @@ mod tests {
     fn execute_missing_required_param_fail_closed() {
         let (lc, _path) = lifecycle_with_audit();
         // svc.status 缺 service 参数 → ToolRouter route 拒绝 → fail-closed。
-        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#, 3);
         assert!(body.contains("\"failed_closed\":true"), "body: {body}");
         assert!(body.contains("missing required parameter"), "body: {body}");
     }
@@ -588,6 +690,7 @@ mod tests {
             "POST",
             "/execute",
             r#"{"tool":"svc.status","params":{"service":"nginx"}}"#,
+            3,
         );
         assert!(body.contains("\"committed\":true"), "body: {body}");
     }
@@ -600,7 +703,7 @@ mod tests {
         let path_str = file.to_str().unwrap().to_string();
         let (lc, _j) = lifecycle_with_audit();
         let body = format!(r#"{{"tool":"fs.read","params":{{"path":"{}"}}}}"#, path_str);
-        let (_s, resp) = route(&lc, "POST", "/execute", &body);
+        let (_s, resp) = route(&lc, "POST", "/execute", &body, 3);
         assert!(resp.contains("\"committed\":true"), "body: {resp}");
         // 真实执行：effect summary 含 bytes + preview。
         assert!(resp.contains("bytes=19"), "body: {resp}");
@@ -637,10 +740,10 @@ mod tests {
     fn recover_endpoint_returns_empty_for_completed_run() {
         let (lc, _path) = lifecycle_with_audit();
         // 执行一个完整 run（committed）。
-        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#, 3);
         let run_id = extract_field(&body, "run_id").expect("run_id");
         // recover 该 run → 无未完成效应（已 CommitSealed）。
-        let (status, resp) = route(&lc, "GET", "/recover", &format!("run_id={}", run_id));
+        let (status, resp) = route(&lc, "GET", "/recover", &format!("run_id={}", run_id), 3);
         assert_eq!(status, "200 OK");
         assert!(resp.contains(&format!("\"run_id\":\"{}\"", run_id)), "body: {resp}");
         assert!(resp.contains("\"items\":[]"), "expected no unresolved, got: {resp}");
@@ -649,14 +752,14 @@ mod tests {
     #[test]
     fn recover_endpoint_requires_run_id() {
         let (lc, _path) = lifecycle_with_audit();
-        let (_s, resp) = route(&lc, "GET", "/recover", "");
+        let (_s, resp) = route(&lc, "GET", "/recover", "", 3);
         assert!(resp.contains("missing run_id"), "body: {resp}");
     }
 
     #[test]
     fn recover_endpoint_disabled_without_journal() {
         let lc = lifecycle(); // 无 audit
-        let (_s, resp) = route(&lc, "GET", "/recover", "run_id=run-x");
+        let (_s, resp) = route(&lc, "GET", "/recover", "run_id=run-x", 3);
         assert!(resp.contains("\"audit_disabled\":true"), "body: {resp}");
     }
 
@@ -674,7 +777,7 @@ mod tests {
                 "prepared fs.write.diff",
             ))
             .expect("append");
-        let (_s, resp) = route(&lc, "GET", "/recover", "run_id=run-stuck");
+        let (_s, resp) = route(&lc, "GET", "/recover", "run_id=run-stuck", 3);
         // 写操作未 sealed → 需要 rollback，需人工确认。
         assert!(resp.contains("\"run_id\":\"run-stuck\""), "body: {resp}");
         assert!(resp.contains("\"requires_human_confirmation\":true"), "body: {resp}");
@@ -683,10 +786,10 @@ mod tests {
     #[test]
     fn audit_timeline_supports_url_query_string() {
         let (lc, _path) = lifecycle_with_audit();
-        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#, 3);
         let run_id = extract_field(&body, "run_id").expect("run_id");
         // 用 URL query 格式（而非 JSON body）查 timeline。
-        let (status, timeline) = route(&lc, "GET", "/audit", &format!("run_id={}", run_id));
+        let (status, timeline) = route(&lc, "GET", "/audit", &format!("run_id={}", run_id), 3);
         assert_eq!(status, "200 OK");
         assert!(timeline.contains("\"count\":5"), "got: {timeline}");
     }
@@ -694,7 +797,7 @@ mod tests {
     #[test]
     fn config_endpoint_reports_audit_and_executor_enabled() {
         let (lc, _path) = lifecycle_with_audit();
-        let (status, body) = route(&lc, "GET", "/config", "");
+        let (status, body) = route(&lc, "GET", "/config", "", 3);
         assert_eq!(status, "200 OK");
         assert!(body.contains("\"audit_enabled\":true"), "body: {body}");
         assert!(body.contains("\"executor_enabled\":true"), "body: {body}");
@@ -704,9 +807,93 @@ mod tests {
     #[test]
     fn config_endpoint_reports_disabled_without_audit() {
         let lc = lifecycle();
-        let (_s, body) = route(&lc, "GET", "/config", "");
+        let (_s, body) = route(&lc, "GET", "/config", "", 3);
         assert!(body.contains("\"audit_enabled\":false"), "body: {body}");
         assert!(body.contains("\"executor_enabled\":false"), "body: {body}");
+    }
+
+    // ===== POST /run：完整 agent 执行闭环端点 =====
+
+    /// OPENAI 兼容 envelope（提议 svc.status + fs.read，均只读，approve=false 可放行）。
+    const RUN_ENVELOPE: &str = r#"{
+        "id": "chatcmpl-1", "object": "chat.completion",
+        "choices": [{"index": 0, "finish_reason": "stop",
+         "message": {"role": "assistant",
+            "content": "{\"steps\":[{\"tool\":\"svc.status\",\"resource\":\"nginx\",\"params\":{\"service\":\"nginx\"}},{\"tool\":\"fs.read\",\"resource\":\"cfg\",\"params\":{\"path\":\"/etc/hostname\"}}]}"}}
+        ]
+    }"#;
+
+    /// 三件套齐全的 lifecycle（planner + audit + executor）。
+    fn lifecycle_with_planner() -> Agentd {
+        let path = std::env::temp_dir().join(format!(
+            "agentd-http-run-{}-{}.jsonl",
+            std::process::id(),
+            RUN_SEQ.fetch_add(1000, Ordering::Relaxed)
+        ));
+        let _ = std::fs::remove_file(&path);
+        let journal = crate::audit::AuditJournal::new(&path);
+        let provider = llm_planner::RecordedProvider::openai("gpt-4o-mini", RUN_ENVELOPE);
+        Agentd::new(LifecycleConfig::default())
+            .with_planner(Box::new(provider))
+            .with_audit_and_executor(journal)
+    }
+
+    #[test]
+    fn route_run_completes_full_loop() {
+        let lc = lifecycle_with_planner();
+        let (status, body) = route(
+            &lc,
+            "POST",
+            "/run",
+            r#"{"intent":"inspect nginx"}"#,
+            2,
+        );
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"ran\":true"), "body: {body}");
+        assert!(body.contains("\"completed\":true"), "body: {body}");
+        assert!(body.contains("\"attempts\":1"), "body: {body}");
+        assert!(body.contains("\"run_id\":\"run-"), "body: {body}");
+        assert!(body.contains("\"trace\":["), "body: {body}");
+    }
+
+    #[test]
+    fn route_run_uses_provided_run_id() {
+        let lc = lifecycle_with_planner();
+        let (status, body) = route(
+            &lc,
+            "POST",
+            "/run",
+            r#"{"intent":"inspect nginx","run_id":"my-run-42"}"#,
+            2,
+        );
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"run_id\":\"my-run-42\""), "body: {body}");
+    }
+
+    #[test]
+    fn route_run_missing_intent_returns_error() {
+        let lc = lifecycle_with_planner();
+        let (status, body) = route(&lc, "POST", "/run", r#"{}"#, 2);
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"error\""), "body: {body}");
+        assert!(body.contains("missing intent"), "body: {body}");
+    }
+
+    #[test]
+    fn route_run_fail_closed_when_not_configured() {
+        // 仅 audit+executor，无 planner → ran:false，报告 missing planner。
+        let (lc, _path) = lifecycle_with_audit();
+        let (status, body) = route(&lc, "POST", "/run", r#"{"intent":"x"}"#, 2);
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"ran\":false"), "body: {body}");
+        assert!(body.contains("planner"), "body: {body}");
+    }
+
+    #[test]
+    fn route_run_lists_in_root_endpoints() {
+        let lc = lifecycle();
+        let (_s, body) = route(&lc, "GET", "/", "", 3);
+        assert!(body.contains("/run"), "root 应列出 /run: {body}");
     }
 
 

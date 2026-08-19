@@ -61,5 +61,5 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    http_server::serve(&agentd, &cfg.http_addr)
+    http_server::serve(&agentd, &cfg.http_addr, cfg.max_replans as usize)
 }
