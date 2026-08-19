@@ -18,15 +18,11 @@
 //! 其余工具返回 "not-implemented: observed=false"（fail-safe，不谎报成功）。
 #![forbid(unsafe_code)]
 
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
 use crate::api::Effect;
 use crate::audit::AuditJournal;
 use crate::tools::RoutedToolCall;
-
-/// 测试用唯一 journal 文件名计数器（避免时间源依赖）。
-static TEST_SEQ: AtomicU64 = AtomicU64::new(1);
 
 /// 工具执行后端抽象。接收已裁决的 `RoutedToolCall`，返回真实 `Effect`。
 ///
@@ -256,6 +252,10 @@ mod tests {
     use crate::audit::{AuditEvent, AuditEventType, AuditJournal};
     use crate::tools::ToolRouter;
     use runtime_contracts::SemanticToolCall;
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    /// 测试用唯一 journal 文件名计数器（避免时间源依赖）。
+    static TEST_SEQ: AtomicU64 = AtomicU64::new(1);
 
     fn journal() -> AuditJournal {
         let path = std::env::temp_dir().join(format!(

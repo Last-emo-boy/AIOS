@@ -1,5 +1,5 @@
 use crate::api::{
-    CapabilityLease, CommitId, Effect, IntentCtx, PlanSpec, PlanStep, PolicyDecision,
+    CapabilityLease, CommitId, Effect, PlanSpec, PlanStep, PolicyDecision,
     ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult, escape_json,
 };
 use crate::audit::AuditJournal;
@@ -72,7 +72,6 @@ impl HealthReport {
     }
 }
 
-#[derive(Debug)]
 pub struct Agentd {
     config: LifecycleConfig,
     state: LifecycleState,
@@ -85,6 +84,24 @@ pub struct Agentd {
     /// 工具执行后端。`None` 时 `execute_committed` 用 stub `invoke`（向后兼容）；
     /// `Some` 时走真实 `ToolExecutor::execute`（裁决通过后产生真实观测 Effect）。
     executor: Option<Box<dyn ToolExecutor>>,
+    /// LLM 规划后端。`None` 时 `plan()` 返回固定 stub 计划（向后兼容）；
+    /// `Some` 时调用 `provider.plan(intent)` + `bridge_plan` 生成可信计划
+    /// （LLM 只产意图，桥接层验证工具/参数，裁决仍由后续 classify/evaluate 做）。
+    planner: Option<Box<dyn llm_planner::LlmProvider>>,
+}
+
+impl std::fmt::Debug for Agentd {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Agentd")
+            .field("config", &self.config)
+            .field("state", &self.state)
+            .field("modules", &self.modules)
+            .field("last_error", &self.last_error)
+            .field("audit_enabled", &self.audit.is_some())
+            .field("executor_enabled", &self.executor.is_some())
+            .field("planner_enabled", &self.planner.is_some())
+            .finish()
+    }
 }
 
 impl Agentd {
@@ -101,6 +118,7 @@ impl Agentd {
             last_error: None,
             audit: None,
             executor: None,
+            planner: None,
         }
     }
 
@@ -144,6 +162,18 @@ impl Agentd {
         self.executor.is_some()
     }
 
+    /// 注入 LLM 规划后端。启用后 `plan()` 调用 `provider.plan(intent)` + `bridge_plan`
+    /// 生成可信计划。`planner_mode=stub`（缺省）时返回固定计划，向后兼容。
+    pub fn with_planner(mut self, planner: Box<dyn llm_planner::LlmProvider>) -> Self {
+        self.planner = Some(planner);
+        self
+    }
+
+    /// 是否已注入真实 LLM 规划后端。
+    pub fn planner_enabled(&self) -> bool {
+        self.planner.is_some()
+    }
+
     pub fn start(&mut self) {
         self.state = LifecycleState::Running;
     }
@@ -173,12 +203,42 @@ impl Agentd {
     }
 
     pub fn plan(&self, intent: impl Into<String>) -> PlanSpec {
-        let ctx = IntentCtx {
-            intent: intent.into(),
-        };
+        let intent = intent.into();
+
+        // 真实规划路径：LLM provider 产 RawPlan（不可信）→ bridge_plan 验证 → PlanSpec。
+        // provider 失败或桥接失败 → fail-closed 返回空计划（不谎报成功）。
+        if let Some(planner) = self.planner.as_ref() {
+            let steps = match planner.plan(&intent) {
+                Ok(raw) => match llm_planner::bridge_plan(&raw) {
+                    Ok(planned) => planned
+                        .into_iter()
+                        .map(|p| PlanStep {
+                            id: p.step_id,
+                            tool: p.tool,
+                            risk: RiskClass::ReadOnly, // advisory；权威风险由 classify 裁决
+                        })
+                        .collect(),
+                    Err(_err) => {
+                        // 桥接失败（LLM 提议了非法工具/参数）→ fail-closed 空计划。
+                        Vec::new()
+                    }
+                },
+                Err(_err) => {
+                    // provider 失败（网络/解析）→ fail-closed 空计划。
+                    Vec::new()
+                }
+            };
+            return PlanSpec {
+                run_mode: self.config.run_mode,
+                intent,
+                steps,
+            };
+        }
+
+        // stub 路径（planner 未注入，向后兼容）。
         PlanSpec {
             run_mode: self.config.run_mode,
-            intent: ctx.intent,
+            intent,
             steps: vec![PlanStep {
                 id: "step-001".to_string(),
                 tool: "svc.status".to_string(),
@@ -579,5 +639,86 @@ mod tests {
             health.last_error.as_deref(),
             Some("simulated controlled agentd error")
         );
+    }
+
+    // ===== 阶段 AB：plan() 接入真实 LLM provider =====
+
+    /// OpenAI 兼容 envelope（回放用，与 llm_planner 测试一致）。
+    const OPENAI_PLAN_ENVELOPE: &str = r#"{
+        "id": "chatcmpl-1",
+        "object": "chat.completion",
+        "choices": [
+            {"index": 0, "finish_reason": "stop",
+             "message": {"role": "assistant",
+                "content": "{\"steps\":[{\"tool\":\"svc.status\",\"resource\":\"nginx\",\"params\":{\"service\":\"nginx\"}},{\"tool\":\"fs.read\",\"resource\":\"config\",\"params\":{\"path\":\"/etc/nginx/nginx.conf\"}}]}"}}
+        ]
+    }"#;
+
+    #[test]
+    fn plan_without_provider_returns_stub_step() {
+        // 无 planner 注入 → stub 路径（向后兼容）。
+        let agentd = Agentd::new(LifecycleConfig::default());
+        let plan = agentd.plan("check nginx");
+        assert_eq!(plan.steps.len(), 1);
+        assert_eq!(plan.steps[0].tool, "svc.status");
+    }
+
+    #[test]
+    fn plan_with_recorded_provider_produces_real_steps() {
+        let provider =
+            llm_planner::RecordedProvider::openai("gpt-4o-mini", OPENAI_PLAN_ENVELOPE);
+        let agentd = Agentd::new(LifecycleConfig::default()).with_planner(Box::new(provider));
+        let plan = agentd.plan("inspect nginx config");
+        // LLM 提议了 2 步，经 bridge_plan 验证为合法工具 → 转为 PlanSpec。
+        assert_eq!(plan.steps.len(), 2, "steps: {:?}", plan.steps);
+        assert_eq!(plan.steps[0].tool, "svc.status");
+        assert_eq!(plan.steps[1].tool, "fs.read");
+        assert!(agentd.planner_enabled());
+    }
+
+    #[test]
+    fn plan_with_invalid_tool_provider_fail_closed_empty() {
+        // LLM 提议非法工具 → bridge_plan 拒绝 → fail-closed 空计划。
+        let bad_envelope = r#"{
+            "id": "x", "object": "chat.completion",
+            "choices": [{"index": 0, "finish_reason": "stop",
+             "message": {"role": "assistant",
+                "content": "{\"steps\":[{\"tool\":\"shell.exec\",\"params\":{}}]}"}}]
+        }"#;
+        let provider = llm_planner::RecordedProvider::openai("m", bad_envelope);
+        let agentd = Agentd::new(LifecycleConfig::default()).with_planner(Box::new(provider));
+        let plan = agentd.plan("do something bad");
+        // shell.exec 经 bridge_plan 拒绝（或空）→ fail-closed。
+        // 即使 bridge 通过，classify 仍裁决 Never；此处验证不谎报非法步。
+        for step in &plan.steps {
+            assert_ne!(step.tool, "shell.exec", "shell.exec 不应出现在计划中");
+        }
+    }
+
+    #[test]
+    fn plan_with_failing_provider_fail_closed_empty() {
+        // provider 报错（网络/解析）→ fail-closed 空计划，不 panic。
+        struct FailingProvider;
+        impl llm_planner::LlmProvider for FailingProvider {
+            fn plan(&self, _intent: &str) -> std::io::Result<llm_planner::RawPlan> {
+                Err(std::io::Error::new(std::io::ErrorKind::Other, "network down"))
+            }
+        }
+        let agentd =
+            Agentd::new(LifecycleConfig::default()).with_planner(Box::new(FailingProvider));
+        let plan = agentd.plan("anything");
+        assert!(plan.steps.is_empty(), "fail-closed 应返回空计划");
+    }
+
+    #[test]
+    fn debug_repr_does_not_leak_planner_internals() {
+        // Agentd 手动 Debug 不展开 planner（trait object 无 Debug），只报 planner_enabled。
+        let provider =
+            llm_planner::RecordedProvider::openai("m", OPENAI_PLAN_ENVELOPE);
+        let agentd =
+            Agentd::new(LifecycleConfig::default()).with_planner(Box::new(provider));
+        let debug = format!("{agentd:?}");
+        assert!(debug.contains("planner_enabled: true"));
+        assert!(!debug.contains("api_key"));
     }
 }

@@ -29,6 +29,18 @@ fn main() -> std::io::Result<()> {
     let audit_path = PathBuf::from(&cfg.audit_path);
     let lifecycle_cfg: LifecycleConfig = cfg.to_lifecycle_config();
     let mut agentd = Agentd::new(lifecycle_cfg).with_audit_and_executor(AuditJournal::new(&audit_path));
+
+    // planner_mode=real 时注入 LLM provider（OpenAI 兼容 API，从环境变量配置）。
+    if cfg.planner_mode == "real" {
+        if let Ok(api_key) = std::env::var("AIOS_LLM_API_KEY") {
+            let provider = llm_planner::OpenAiCompatProvider::from_env(api_key);
+            agentd = agentd.with_planner(Box::new(provider));
+            eprintln!("agentd planner_mode=real (provider=openai)");
+        } else {
+            eprintln!("agentd planner_mode=real but AIOS_LLM_API_KEY unset; falling back to stub planner");
+        }
+    }
+
     agentd.start();
 
     eprintln!(

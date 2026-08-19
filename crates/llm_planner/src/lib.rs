@@ -131,7 +131,10 @@ pub struct RawPlan {
 ///
 /// `name`（cp-llm 阶段 C）返回 provider 标识，供 `ProviderChain` 审计哪一环兜底成功；
 /// 默认实现返回 `"unknown"`，保证向后兼容（现有 provider 实现可按需覆盖）。
-pub trait LlmProvider {
+///
+/// `Send + Sync`（阶段 AB）：让 `Agentd` 可跨线程（daemon 单线程，但测试与未来并发调度需要）。
+/// 所有现有 provider 实现（Recorded/OpenAi/Claude/Chain/Scripted）均天然 Send + Sync。
+pub trait LlmProvider: Send + Sync {
     fn plan(&self, intent: &str) -> io::Result<RawPlan>;
 
     /// provider 标识（advisory，仅用于观测/审计，绝不参与裁决）。默认 `"unknown"`。

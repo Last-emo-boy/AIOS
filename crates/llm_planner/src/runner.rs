@@ -721,6 +721,7 @@ mod replan_tests {
     use super::*;
     use crate::{bridge::ModelProvenance, LlmProvider, RawPlan, RawStep};
     use std::cell::Cell;
+    use std::sync::atomic::{AtomicUsize, Ordering};
 
     fn ok_plan() -> RawPlan {
         RawPlan {
@@ -741,17 +742,17 @@ mod replan_tests {
     /// 多剧本 stub：按调用序号返回不同 RawPlan（首轮失败→观察；第二轮成功）。
     struct ScriptedProvider {
         plans: Vec<RawPlan>,
-        calls: Cell<usize>,
+        calls: AtomicUsize,
     }
     impl ScriptedProvider {
         fn new(plans: Vec<RawPlan>) -> Self {
-            Self { plans, calls: Cell::new(0) }
+            Self { plans, calls: AtomicUsize::new(0) }
         }
     }
     impl LlmProvider for ScriptedProvider {
         fn plan(&self, _intent: &str) -> std::io::Result<RawPlan> {
-            let idx = self.calls.get();
-            self.calls.set(idx + 1);
+            let idx = self.calls.load(Ordering::Relaxed);
+            self.calls.store(idx + 1, Ordering::Relaxed);
             self.plans.get(idx).cloned().ok_or_else(|| {
                 std::io::Error::new(std::io::ErrorKind::Other, "script exhausted")
             })
@@ -1040,15 +1041,15 @@ mod replan_tests {
         impl AbortSignal for AlwaysAborted {
             fn is_aborted(&self) -> bool { true }
         }
-        struct CountingProvider { calls: Cell<usize> }
+        struct CountingProvider { calls: AtomicUsize }
         impl LlmProvider for CountingProvider {
             fn name(&self) -> &str { "counting" }
             fn plan(&self, _intent: &str) -> std::io::Result<RawPlan> {
-                self.calls.set(self.calls.get() + 1);
+                self.calls.fetch_add(1, Ordering::Relaxed);
                 Ok(ok_plan())
             }
         }
-        let provider = CountingProvider { calls: Cell::new(0) };
+        let provider = CountingProvider { calls: AtomicUsize::new(0) };
         let exec = StubExecutor::new("alive=true");
         let journal = journal("abort-1");
         let outcome = run_replan_loop_with_abort(
@@ -1056,7 +1057,7 @@ mod replan_tests {
             &ModelProvenance, &OperatorApprovals::new("operator", false),
             &exec, &journal, 3, &AlwaysAborted,
         );
-        assert_eq!(provider.calls.get(), 0); // plan 从未被调用
+        assert_eq!(provider.calls.load(Ordering::Relaxed), 0); // plan 从未被调用
         assert_eq!(outcome.attempts, 0);
         assert_eq!(outcome.state, RunState::FailedClosed);
         assert_eq!(outcome.trace.len(), 1);

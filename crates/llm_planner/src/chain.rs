@@ -107,7 +107,7 @@ impl RetryPolicy {
 /// `LlmProvider` 的实现：依次尝试每个 provider（首选先按 `RetryPolicy` 重试），返回第一个
 /// 成功的 `RawPlan`；全部失败则返回最后一个确定性错误（或最后一个临时错误）。
 pub struct ProviderChain {
-    providers: Vec<Box<dyn LlmProvider>>,
+    providers: Vec<Box<dyn LlmProvider + Send + Sync>>,
     policy: RetryPolicy,
     /// 最近一次 `plan` 调用的逐 provider 尝试记录（供观测；Mutex 因 `plan(&self)` 不可变借用）。
     attempts: std::sync::Mutex<Vec<ChainAttempt>>,
@@ -115,7 +115,7 @@ pub struct ProviderChain {
 
 impl ProviderChain {
     /// 构造一条 fallback 链。`providers` 不得为空。
-    pub fn new(providers: Vec<Box<dyn LlmProvider>>, policy: RetryPolicy) -> Self {
+    pub fn new(providers: Vec<Box<dyn LlmProvider + Send + Sync>>, policy: RetryPolicy) -> Self {
         assert!(
             !providers.is_empty(),
             "ProviderChain requires at least one provider"
@@ -128,7 +128,7 @@ impl ProviderChain {
     }
 
     /// 单 provider 便捷构造（无 fallback，仅重试）。
-    pub fn single(provider: Box<dyn LlmProvider>, policy: RetryPolicy) -> Self {
+    pub fn single(provider: Box<dyn LlmProvider + Send + Sync>, policy: RetryPolicy) -> Self {
         Self::new(vec![provider], policy)
     }
 
@@ -280,7 +280,7 @@ fn http_status_in_message(message: &str) -> Option<u16> {
 mod tests {
     use super::*;
     use crate::{RawPlan, RawStep, RecordedProvider};
-    use std::cell::Cell;
+    use std::sync::atomic::{AtomicU32, Ordering};
 
     fn ok_plan(provider: &str) -> RawPlan {
         RawPlan {
@@ -304,7 +304,7 @@ mod tests {
     struct ScriptedProvider {
         name: String,
         responses: Vec<Result<RawPlan, String>>,
-        calls: Cell<u32>,
+        calls: AtomicU32,
     }
 
     impl ScriptedProvider {
@@ -312,7 +312,7 @@ mod tests {
             Self {
                 name: name.to_string(),
                 responses,
-                calls: Cell::new(0),
+                calls: AtomicU32::new(0),
             }
         }
     }
@@ -322,8 +322,8 @@ mod tests {
             &self.name
         }
         fn plan(&self, _intent: &str) -> io::Result<RawPlan> {
-            let idx = self.calls.get() as usize;
-            self.calls.set(self.calls.get() + 1);
+            let idx = self.calls.load(Ordering::Relaxed) as usize;
+            self.calls.store(idx as u32 + 1, Ordering::Relaxed);
             match self.responses.get(idx) {
                 Some(Ok(plan)) => Ok(plan.clone()),
                 Some(Err(msg)) => {
