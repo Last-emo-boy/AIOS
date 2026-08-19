@@ -300,7 +300,7 @@ mod tests {
         Agentd::new(LifecycleConfig::default())
     }
 
-    /// 带 audit journal 的 lifecycle（每个测试独立临时文件）。
+    /// 带 audit journal + 真实执行后端的 lifecycle（每个测试独立临时文件）。
     fn lifecycle_with_audit() -> (Agentd, std::path::PathBuf) {
         let path = std::env::temp_dir().join(format!(
             "agentd-http-audit-{}-{}.jsonl",
@@ -309,7 +309,7 @@ mod tests {
         ));
         let _ = std::fs::remove_file(&path);
         let journal = crate::audit::AuditJournal::new(&path);
-        let lc = Agentd::new(LifecycleConfig::default()).with_audit(journal);
+        let lc = Agentd::new(LifecycleConfig::default()).with_audit_and_executor(journal);
         (lc, path)
     }
 
@@ -436,9 +436,9 @@ mod tests {
     #[test]
     fn execute_with_audit_returns_run_id_and_commit() {
         let (lc, _path) = lifecycle_with_audit();
-        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
         assert_eq!(status, "200 OK");
-        // 可审计路径返回 committed:true + run_id + commit_id。
+        // 可审计 + 真实执行路径返回 committed:true + run_id + commit_id。
         assert!(body.contains("\"committed\":true"), "body: {body}");
         assert!(body.contains("\"run_id\":\"run-"), "body: {body}");
         assert!(body.contains("\"commit_id\":\"commit-stub-001\""), "body: {body}");
@@ -447,7 +447,7 @@ mod tests {
     #[test]
     fn execute_with_audit_persists_events_to_journal() {
         let (lc, path) = lifecycle_with_audit();
-        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
         // 重开 journal（模拟重启），事件应已落盘。
         let journal = crate::audit::AuditJournal::new(&path);
         let lines = journal.event_lines().expect("read");
@@ -456,6 +456,8 @@ mod tests {
         assert!(lines.iter().any(|l| l.contains("CommitSealed")), "no commit event");
         assert!(lines.iter().any(|l| l.contains("decision=allow")), "no allow decision");
         assert!(lines.iter().any(|l| l.contains("\"run_id\":\"run-")), "no run_id in events");
+        // 真实执行：summary 应含 svc.status 的真实观测（systemd queryable）。
+        assert!(lines.iter().any(|l| l.contains("queryable=true")), "no real exec observation");
     }
 
     #[test]
@@ -475,7 +477,7 @@ mod tests {
     fn audit_timeline_endpoint_returns_events_by_run_id() {
         let (lc, _path) = lifecycle_with_audit();
         // 先执行一次，拿到 run_id。
-        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
         let run_id = extract_field(&body, "run_id").expect("run_id in response");
         // 再查 timeline。
         let query = format!("{{\"run_id\":\"{}\"}}", run_id);
@@ -491,7 +493,7 @@ mod tests {
         let (status, empty) = route(&lc, "GET", "/audit/latest", "");
         assert_eq!(status, "200 OK");
         assert!(empty.contains("\"latest_run_id\":null"), "expected null, got: {empty}");
-        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status","params":{"service":"nginx"}}"#);
         let (_s, latest) = route(&lc, "GET", "/audit/latest", "");
         assert!(latest.contains("\"latest_run_id\":\"run-"), "expected run id, got: {latest}");
     }
@@ -506,16 +508,40 @@ mod tests {
     }
 
     #[test]
+    fn execute_missing_required_param_fail_closed() {
+        let (lc, _path) = lifecycle_with_audit();
+        // svc.status 缺 service 参数 → ToolRouter route 拒绝 → fail-closed。
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        assert!(body.contains("\"failed_closed\":true"), "body: {body}");
+        assert!(body.contains("missing required parameter"), "body: {body}");
+    }
+
+    #[test]
     fn execute_with_params_passes_through() {
         let (lc, _path) = lifecycle_with_audit();
         let (_s, body) = route(
             &lc,
             "POST",
             "/execute",
-            r#"{"tool":"svc.status","params":{"service":"nginx","port":"80"}}"#,
+            r#"{"tool":"svc.status","params":{"service":"nginx"}}"#,
         );
         assert!(body.contains("\"committed\":true"), "body: {body}");
-        // params 落入 SemanticToolCall（虽 stub invoke 不反映，但参数解析不应崩）。
+    }
+
+    #[test]
+    fn execute_fs_read_real_observation() {
+        // 写临时文件，用 fs.read 真实读取。
+        let file = std::env::temp_dir().join(format!("agentd-fsread-{}.txt", std::process::id()));
+        std::fs::write(&file, "agentd release test").expect("write");
+        let path_str = file.to_str().unwrap().to_string();
+        let (lc, _j) = lifecycle_with_audit();
+        let body = format!(r#"{{"tool":"fs.read","params":{{"path":"{}"}}}}"#, path_str);
+        let (_s, resp) = route(&lc, "POST", "/execute", &body);
+        assert!(resp.contains("\"committed\":true"), "body: {resp}");
+        // 真实执行：effect summary 含 bytes + preview。
+        assert!(resp.contains("bytes=19"), "body: {resp}");
+        assert!(resp.contains("agentd release test"), "body: {resp}");
+        let _ = std::fs::remove_file(&file);
     }
 
     #[test]

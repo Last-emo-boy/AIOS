@@ -116,7 +116,7 @@ impl AuditEvent {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AuditJournal {
     path: PathBuf,
 }

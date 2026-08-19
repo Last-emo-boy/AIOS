@@ -22,7 +22,7 @@ fn main() -> std::io::Result<()> {
     let audit_path = std::env::var("AIOS_AUDIT_PATH")
         .map(PathBuf::from)
         .unwrap_or_else(|_| PathBuf::from("/var/lib/aios/audit.jsonl"));
-    let mut agentd = Agentd::new(config).with_audit(AuditJournal::new(&audit_path));
+    let mut agentd = Agentd::new(config).with_audit_and_executor(AuditJournal::new(&audit_path));
     agentd.start();
 
     let addr = std::env::var("AIOS_HTTP_ADDR").unwrap_or_else(|_| "127.0.0.1:8421".to_string());

@@ -3,6 +3,7 @@ use crate::api::{
     ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult, escape_json,
 };
 use crate::audit::AuditJournal;
+use crate::executor::{StdToolExecutor, ToolExecutor};
 use crate::modules::{ModuleKind, ModuleStatus};
 use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
 
@@ -81,6 +82,9 @@ pub struct Agentd {
     /// 保证向后兼容。`Some` 时（`with_audit`）走可审计路径：每步记 `AuditEvent`，
     /// 写失败则该步 fail-closed（无审计则不执行，符合可审计 OS 哲学）。
     audit: Option<AuditJournal>,
+    /// 工具执行后端。`None` 时 `execute_committed` 用 stub `invoke`（向后兼容）；
+    /// `Some` 时走真实 `ToolExecutor::execute`（裁决通过后产生真实观测 Effect）。
+    executor: Option<Box<dyn ToolExecutor>>,
 }
 
 impl Agentd {
@@ -96,6 +100,7 @@ impl Agentd {
             modules,
             last_error: None,
             audit: None,
+            executor: None,
         }
     }
 
@@ -107,6 +112,23 @@ impl Agentd {
         self
     }
 
+    /// 注入真实工具执行后端。启用后 `execute_committed` 走 `ToolExecutor::execute`
+    /// 产生真实观测 Effect（仍经裁决前置 + verify 后置）。`audit` 已启用时，
+    /// `StdToolExecutor` 会同时获得 journal 句柄供 `audit.show` 查询。
+    pub fn with_executor(mut self, executor: Box<dyn ToolExecutor>) -> Self {
+        self.executor = Some(executor);
+        self
+    }
+
+    /// 一键启用可审计 + 真实执行：注入 audit journal 与 `StdToolExecutor`，
+    /// executor 共享同一 journal（`audit.show`/`audit.project` 可查）。
+    pub fn with_audit_and_executor(mut self, audit: AuditJournal) -> Self {
+        let exec = StdToolExecutor::new().with_audit(audit.clone());
+        self.audit = Some(audit);
+        self.executor = Some(Box::new(exec));
+        self
+    }
+
     /// 审计日志是否已启用。
     pub fn audit_enabled(&self) -> bool {
         self.audit.is_some()
@@ -115,6 +137,11 @@ impl Agentd {
     /// 审计日志句柄（已启用时）。
     pub fn audit(&self) -> Option<&AuditJournal> {
         self.audit.as_ref()
+    }
+
+    /// 是否已注入真实执行后端。
+    pub fn executor_enabled(&self) -> bool {
+        self.executor.is_some()
     }
 
     pub fn start(&mut self) {
@@ -312,7 +339,27 @@ impl Agentd {
         }
 
         // 3. Invoke（执行意图）。
-        let effect = self.invoke(call);
+        // 冻结原则：真实执行前先经 ToolRouter 裁决（route），裁决通过才执行。
+        // executor 存在时走真实后端，否则退回 stub invoke（向后兼容）。
+        let effect = if let Some(executor) = self.executor.as_ref() {
+            match self.route_tool(&call) {
+                Ok(routed) => executor.execute(&routed),
+                Err(rejection) => {
+                    let _ = journal.append(&AuditEvent::new(
+                        AuditEventType::SandboxDenied,
+                        run_id,
+                        &step.id,
+                        "operator",
+                        format!("route rejected tool={} reason={}", rejection.tool, rejection.reason),
+                    ));
+                    return ExecutionOutcome::FailedClosed {
+                        reason: format!("route rejected: {}", rejection.reason),
+                    };
+                }
+            }
+        } else {
+            self.invoke(call)
+        };
         if !effect.prepared {
             return ExecutionOutcome::FailedClosed {
                 reason: "effect not prepared".to_string(),
