@@ -1,0 +1,43 @@
+# agentd —— AgentOS 发行版 operator 入口服务。
+#
+# 冻结控制平面 daemon：暴露 HTTP API（/health /plan /execute /audit /recover /config），
+# 所有工具调用经冻结 ToolRouter 裁决，每步落盘 AuditEvent（无审计即不执行）。
+#
+# 绑定 loopback（127.0.0.1:8421）——operator 从本机驱动，不对外暴露。
+# 配置：/etc/agentos/agentd.conf（环境变量 > 配置文件 > 缺省）。
+[Unit]
+Description=AgentOS agentd (operator entry / frozen control plane)
+Documentation=https://github.com/agentos/aios
+After=network.target
+Wants=network.target
+ConditionPathExists=/usr/local/bin/agentd_daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/agentd_daemon
+Environment=AIOS_CONFIG=/etc/agentos/agentd.conf
+# 以 agentos 用户运行（最小权限，无 shell 访问）。
+User=agentos
+Group=agentos
+# 审计日志与运行目录。
+RuntimeDirectory=agentos
+RuntimeDirectoryMode=0750
+StateDirectory=agentos
+StateDirectoryMode=0750
+LogsDirectory=agentos
+LogsDirectoryMode=0750
+# 安全加固（发行版默认）。
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/agentos /var/log/agentos
+# 崩溃自动重启（fail-closed 后可恢复）。
+Restart=on-failure
+RestartSec=2
+# 启动/停止超时。
+TimeoutStartSec=10
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

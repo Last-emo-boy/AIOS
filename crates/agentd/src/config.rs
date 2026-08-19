@@ -10,7 +10,7 @@
 //! run_mode = local-only
 //! planner_mode = stub
 //! http_addr = 127.0.0.1:8421
-//! audit_path = /var/lib/aios/audit.jsonl
+//! audit_path = /var/log/agentos/audit/agentd.jsonl
 //! arbitrary_shell_enabled = false
 //! max_replans = 3
 //! ```
@@ -41,7 +41,7 @@ impl Default for DaemonConfig {
             run_mode: "local-only".to_string(),
             planner_mode: "stub".to_string(),
             http_addr: "127.0.0.1:8421".to_string(),
-            audit_path: "/var/lib/aios/audit.jsonl".to_string(),
+            audit_path: "/var/log/agentos/audit/agentd.jsonl".to_string(),
             arbitrary_shell_enabled: false,
             max_replans: 3,
         }
@@ -294,7 +294,7 @@ mod tests {
         let result = loader.load();
         assert_eq!(result.config.run_mode, "local-only");
         assert_eq!(result.config.http_addr, "127.0.0.1:8421");
-        assert_eq!(result.config.audit_path, "/var/lib/aios/audit.jsonl");
+        assert_eq!(result.config.audit_path, "/var/log/agentos/audit/agentd.jsonl");
         assert!(!result.config.arbitrary_shell_enabled);
         assert_eq!(result.config.max_replans, 3);
         assert_eq!(result.sources.get("run_mode").copied(), Some("default"));
