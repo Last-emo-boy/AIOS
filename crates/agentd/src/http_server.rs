@@ -112,11 +112,12 @@ fn route(
         }
         ("POST", "/run") => ("200 OK", run_intent(lifecycle, body, max_replans)),
         ("POST", "/execute") => ("200 OK", execute_tool(lifecycle, body)),
+        ("GET", "/tools") => ("200 OK", list_tools()),
         ("GET", "/audit") => ("200 OK", audit_timeline(lifecycle, body)),
         ("GET", "/audit/latest") => ("200 OK", audit_latest(lifecycle)),
         ("GET", "/recover") => ("200 OK", recover_run(lifecycle, body)),
         ("GET", "/config") => ("200 OK", config_diagnostics(lifecycle)),
-        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /run","POST /execute","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=...","GET /config"]}"#.to_string()),
+        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /run","POST /execute","GET /tools","GET /audit?run_id=...","GET /audit/latest","GET /recover?run_id=...","GET /config"]}"#.to_string()),
         _ => ("404 Not Found", r#"{"error":"not found"}"#.to_string()),
     }
 }
@@ -285,6 +286,46 @@ fn extract_bool(body: &str, key: &str) -> bool {
     };
     let rest = &body[idx + pattern.len()..];
     rest.trim_start().starts_with("true")
+}
+
+/// `GET /tools` —— 列出冻结 `TOOL_SCHEMAS` 中全部可用工具及其 schema。
+///
+/// 让 operator 发现可用工具（名称/版本/风险类/参数 required|optional），据此构造
+/// 有效意图提交给 `POST /run` 或 `POST /execute`。**advisory**：只暴露冻结已注册的
+/// 工具清单，不参与裁决——裁决仍由 `ToolRouter` 在执行时做（参数 schema 校验）。
+/// 不含 secret：风险类是工具级的，参数 schema 只列名称与是否必填，不暴露默认值/示例。
+fn list_tools() -> String {
+    use crate::tools::{ParamRequirement, TOOL_SCHEMAS};
+    let tools_json = TOOL_SCHEMAS
+        .iter()
+        .map(|schema| {
+            let params = schema
+                .params
+                .iter()
+                .map(|p| {
+                    let req = match p.requirement {
+                        ParamRequirement::Required => "required",
+                        ParamRequirement::Optional => "optional",
+                    };
+                    format!(
+                        r#"{{"name":"{}","requirement":"{}"}}"#,
+                        crate::api::escape_json(p.name),
+                        req
+                    )
+                })
+                .collect::<Vec<_>>()
+                .join(",");
+            format!(
+                r#"{{"name":"{}","version":"{}","risk":"{}","params":[{}]}}"#,
+                crate::api::escape_json(schema.name),
+                crate::api::escape_json(schema.version),
+                schema.risk.as_str(),
+                params
+            )
+        })
+        .collect::<Vec<_>>()
+        .join(",");
+    format!(r#"{{"count":{},"tools":[{}]}}"#, TOOL_SCHEMAS.len(), tools_json)
 }
 
 /// `GET /audit?run_id=...` —— 返回指定 run 的审计事件 timeline（JSON 数组）。
@@ -894,6 +935,45 @@ mod tests {
         let lc = lifecycle();
         let (_s, body) = route(&lc, "GET", "/", "", 3);
         assert!(body.contains("/run"), "root 应列出 /run: {body}");
+    }
+
+    // ===== GET /tools：工具发现端点 =====
+
+    #[test]
+    fn route_tools_lists_all_schemas() {
+        let lc = lifecycle();
+        let (status, body) = route(&lc, "GET", "/tools", "", 3);
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"count\":"), "body: {body}");
+        assert!(body.contains("\"tools\":["), "body: {body}");
+        // 已知工具应出现（冻结 TOOL_SCHEMAS 含这些）。
+        assert!(body.contains("\"name\":\"svc.status\""), "body: {body}");
+        assert!(body.contains("\"name\":\"fs.read\""), "body: {body}");
+        // 每个工具带 version + risk + params。
+        assert!(body.contains("\"version\":\"v1\""), "body: {body}");
+        assert!(body.contains("\"risk\":\""), "body: {body}");
+        assert!(body.contains("\"requirement\":\"required\""), "body: {body}");
+    }
+
+    #[test]
+    fn route_tools_count_matches_schemas() {
+        let lc = lifecycle();
+        let (_s, body) = route(&lc, "GET", "/tools", "", 3);
+        // count 字段等于 TOOL_SCHEMAS 长度（>= 10，发行版已注册多个工具）。
+        let count_str = body
+            .split("\"count\":")
+            .nth(1)
+            .and_then(|s| s.split(',').next())
+            .unwrap_or("0");
+        let count: usize = count_str.parse().unwrap_or(0);
+        assert!(count >= 10, "应有至少 10 个工具，实得 {count}: {body}");
+    }
+
+    #[test]
+    fn route_tools_lists_in_root_endpoints() {
+        let lc = lifecycle();
+        let (_s, body) = route(&lc, "GET", "/", "", 3);
+        assert!(body.contains("/tools"), "root 应列出 /tools: {body}");
     }
 
 
