@@ -2,6 +2,7 @@ use crate::api::{
     CapabilityLease, CommitId, Effect, IntentCtx, PlanSpec, PlanStep, PolicyDecision,
     ReconciledState, RiskClass, RollbackResult, SemanticToolCall, VerificationResult, escape_json,
 };
+use crate::audit::AuditJournal;
 use crate::modules::{ModuleKind, ModuleStatus};
 use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
 
@@ -76,6 +77,10 @@ pub struct Agentd {
     state: LifecycleState,
     modules: Vec<ModuleStatus>,
     last_error: Option<String>,
+    /// 可选的持久化审计日志。`None` 时（默认）编排链照旧 stub 路径，不落盘——
+    /// 保证向后兼容。`Some` 时（`with_audit`）走可审计路径：每步记 `AuditEvent`，
+    /// 写失败则该步 fail-closed（无审计则不执行，符合可审计 OS 哲学）。
+    audit: Option<AuditJournal>,
 }
 
 impl Agentd {
@@ -90,7 +95,26 @@ impl Agentd {
             state: LifecycleState::Created,
             modules,
             last_error: None,
+            audit: None,
         }
+    }
+
+    /// 注入持久化审计日志，启用可审计执行路径。返回 `self`（builder 风格）。
+    /// 启用后 `execute_committed` / `execute_run` 会在每步写 `AuditEvent`，
+    /// 并在 `/execute` 返回中暴露 `run_id` 与 `commit_id`。
+    pub fn with_audit(mut self, audit: AuditJournal) -> Self {
+        self.audit = Some(audit);
+        self
+    }
+
+    /// 审计日志是否已启用。
+    pub fn audit_enabled(&self) -> bool {
+        self.audit.is_some()
+    }
+
+    /// 审计日志句柄（已启用时）。
+    pub fn audit(&self) -> Option<&AuditJournal> {
+        self.audit.as_ref()
     }
 
     pub fn start(&mut self) {
@@ -213,8 +237,217 @@ impl Agentd {
     pub fn reap_children_once(&self) -> usize {
         0
     }
+
+    /// 可审计的完整编排链：classify → evaluate → acquire → invoke → verify → commit，
+    /// 可审计的完整编排链：classify → evaluate → acquire → invoke → verify → commit，
+    /// 每步写 `AuditEvent`。audit 写失败 → 该步 fail-closed（无审计则不执行）。
+    ///
+    /// 返回 `ExecutionOutcome`：`Denied`（policy 拒绝）、`Committed`（成功提交，含 run_id/commit_id）、
+    /// `FailedClosed`（acquire/invoke/commit 失败或 audit 写失败）。
+    ///
+    /// 冻结控制平面哲学：audit 只观测、不裁决。裁决仍由 `classify`/`evaluate`/`verify` 做出；
+    /// audit 落盘失败时**拒绝继续执行**，保证"未审计即不发生"的可审计性。
+    pub fn execute_committed(
+        &self,
+        run_id: &str,
+        step: &PlanStep,
+        call: SemanticToolCall,
+    ) -> ExecutionOutcome {
+        use crate::audit::{AuditEvent, AuditEventType};
+        let Some(journal) = self.audit.as_ref() else {
+            return ExecutionOutcome::audit_disabled();
+        };
+
+        // 1. Policy 评估（裁决）。裁决先于审计——裁决是权威，审计是观测。
+        let decision = self.evaluate(step);
+        if !decision.allowed {
+            // 仍记审计（被拒步也是可审计事件），写失败则 fail-closed。
+            if let Err(err) = journal.append(&AuditEvent::new(
+                AuditEventType::PolicyEvaluated,
+                run_id,
+                &step.id,
+                "operator",
+                format!("decision=deny tool={} risk={} reason={}", step.tool, decision.risk.as_str(), decision.reason),
+            )) {
+                return ExecutionOutcome::audit_failure(&err);
+            }
+            return ExecutionOutcome::Denied {
+                risk: decision.risk,
+                reason: decision.reason,
+            };
+        }
+        // 记允许决策。
+        if let Err(err) = journal.append(&AuditEvent::new(
+            AuditEventType::PolicyEvaluated,
+            run_id,
+            &step.id,
+            "operator",
+            format!("decision=allow tool={} risk={} reason={}", step.tool, decision.risk.as_str(), decision.reason),
+        )) {
+            return ExecutionOutcome::audit_failure(&err);
+        }
+
+        // 2. Acquire lease。
+        let lease = match self.acquire(&decision) {
+            Ok(lease) => lease,
+            Err(reason) => {
+                let _ = journal.append(&AuditEvent::new(
+                    AuditEventType::PolicyEvaluated,
+                    run_id,
+                    &step.id,
+                    "operator",
+                    format!("acquire failed reason={reason}"),
+                ));
+                return ExecutionOutcome::FailedClosed { reason };
+            }
+        };
+        if let Err(err) = journal.append(&AuditEvent::new(
+            AuditEventType::ApprovalBound,
+            run_id,
+            &step.id,
+            "operator",
+            format!("lease_id={} risk={}", lease.lease_id, lease.risk.as_str()),
+        )) {
+            return ExecutionOutcome::audit_failure(&err);
+        }
+
+        // 3. Invoke（执行意图）。
+        let effect = self.invoke(call);
+        if !effect.prepared {
+            return ExecutionOutcome::FailedClosed {
+                reason: "effect not prepared".to_string(),
+            };
+        }
+        if let Err(err) = journal.append(&AuditEvent::new(
+            AuditEventType::EffectPrepared,
+            run_id,
+            &step.id,
+            "operator",
+            format!("prepared tool={} summary={}", effect.tool, effect.summary),
+        )) {
+            return ExecutionOutcome::audit_failure(&err);
+        }
+        if let Err(err) = journal.append(&AuditEvent::new(
+            AuditEventType::EffectObserved,
+            run_id,
+            &step.id,
+            "operator",
+            format!("observed tool={} summary={}", effect.tool, effect.summary),
+        )) {
+            return ExecutionOutcome::audit_failure(&err);
+        }
+
+        // 4. Verify + Commit（验证裁决 + 提交）。
+        let verification = self.verify(&effect);
+        let commit = match self.commit(&effect) {
+            Ok(commit) => commit,
+            Err(reason) => return ExecutionOutcome::FailedClosed { reason },
+        };
+        if !verification.success {
+            return ExecutionOutcome::FailedClosed {
+                reason: verification.reason,
+            };
+        }
+        if let Err(err) = journal.append(&AuditEvent::new(
+            AuditEventType::CommitSealed,
+            run_id,
+            &step.id,
+            "operator",
+            format!("commit_id={} tool={} sealed", commit.0, effect.tool),
+        )) {
+            return ExecutionOutcome::audit_failure(&err);
+        }
+
+        ExecutionOutcome::Committed {
+            run_id: run_id.to_string(),
+            lease_id: lease.lease_id,
+            commit_id: commit.0,
+            effect,
+        }
+    }
 }
 
+/// 可审计执行路径的最终结果。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ExecutionOutcome {
+    /// Policy 拒绝（裁决为 Never）。
+    Denied {
+        risk: RiskClass,
+        reason: String,
+    },
+    /// 成功提交：run_id、lease_id、commit_id、effect。
+    Committed {
+        run_id: String,
+        lease_id: String,
+        commit_id: String,
+        effect: Effect,
+    },
+    /// fail-closed：acquire/invoke/verify/commit 失败。
+    FailedClosed {
+        reason: String,
+    },
+    /// audit 未启用——编排链未走可审计路径。
+    AuditDisabled,
+}
+
+impl ExecutionOutcome {
+    fn audit_disabled() -> Self {
+        Self::AuditDisabled
+    }
+
+    fn audit_failure(err: &std::io::Error) -> Self {
+        Self::FailedClosed {
+            reason: format!("audit write failed: {err}"),
+        }
+    }
+
+    /// 是否成功提交。
+    pub fn is_committed(&self) -> bool {
+        matches!(self, Self::Committed { .. })
+    }
+
+    /// 是否被拒绝（policy 裁决）。
+    pub fn is_denied(&self) -> bool {
+        matches!(self, Self::Denied { .. })
+    }
+
+    /// 是否 fail-closed。
+    pub fn is_failed_closed(&self) -> bool {
+        matches!(self, Self::FailedClosed { .. })
+    }
+
+    /// 序列化为 JSON（/execute 端点用）。audit 未启用时返回 `audit_disabled` 标记。
+    pub fn to_json(&self) -> String {
+        match self {
+            Self::Committed {
+                run_id,
+                lease_id,
+                commit_id,
+                effect,
+            } => format!(
+                r#"{{"allowed":true,"committed":true,"run_id":"{}","lease_id":"{}","commit_id":"{}","effect":{}}}"#,
+                escape_json(run_id),
+                escape_json(lease_id),
+                escape_json(commit_id),
+                effect.to_json(),
+            ),
+            Self::Denied { risk, reason } => format!(
+                r#"{{"allowed":false,"committed":false,"risk":"{}","reason":"{}"}}"#,
+                risk.as_str(),
+                escape_json(reason),
+            ),
+            Self::FailedClosed { reason } => format!(
+                r#"{{"allowed":false,"committed":false,"failed_closed":true,"reason":"{}"}}"#,
+                escape_json(reason),
+            ),
+            Self::AuditDisabled => {
+                r#"{"allowed":false,"committed":false,"audit_disabled":true}"#.to_string()
+            }
+        }
+    }
+}
+
+#[cfg(test)]
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -11,8 +11,16 @@
 
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::TcpListener;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 use crate::lifecycle::Agentd;
+
+/// 单调递增的 run_id 计数器（进程级，避免引入随机/时间源依赖）。
+static RUN_SEQ: AtomicU64 = AtomicU64::new(1);
+
+fn next_run_id() -> String {
+    format!("run-{}", RUN_SEQ.fetch_add(1, Ordering::Relaxed))
+}
 
 /// 启动 HTTP server，阻塞调用（适合作为 agentd 主循环或独立线程）。
 ///
@@ -78,7 +86,7 @@ fn handle_connection(
     Ok(())
 }
 
-/// 路由请求到对应的 Lifecycle 方法。返回 (HTTP status, JSON body)。
+/// 路由请求到对应的 Agentd 方法。返回 (HTTP status, JSON body)。
 fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static str, String) {
     match (method, path) {
         ("GET", "/health") => ("200 OK", lifecycle.health_report().to_json()),
@@ -88,24 +96,48 @@ fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static 
             ("200 OK", plan.to_json())
         }
         ("POST", "/execute") => ("200 OK", execute_tool(lifecycle, body)),
-        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute"]}"#.to_string()),
+        ("GET", "/audit") => ("200 OK", audit_timeline(lifecycle, body)),
+        ("GET", "/audit/latest") => ("200 OK", audit_latest(lifecycle)),
+        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute","GET /audit?run_id=...","GET /audit/latest"]}"#.to_string()),
         _ => ("404 Not Found", r#"{"error":"not found"}"#.to_string()),
     }
 }
 
 /// 走完整冻结编排链：classify → evaluate → acquire → invoke → verify → commit。
 /// 接收 `{"tool":"svc.status","params":{"service":"nginx"}}`。任一步被拒绝即 fail-closed。
+///
+/// **审计路径**：当 Agentd 已 `with_audit` 时，走 `execute_committed` 可审计路径，
+/// 每步写 `AuditEvent`，返回中暴露 `run_id`/`commit_id`，audit 写失败则 fail-closed。
+/// 未启用 audit 时退回原 stub 路径（向后兼容）。
 /// 全程不自造裁决——每步委托冻结 `Agentd` 方法。
 fn execute_tool(lifecycle: &Agentd, body: &str) -> String {
     let tool = extract_field(body, "tool").unwrap_or_default();
     if tool.is_empty() {
         return r#"{"error":"missing \"tool\" field"}"#.to_string();
     }
-    // 构造 PlanStep（风险由 classify 裁决，不自造）。
+
+    // 可审计路径：audit 已启用。
+    if lifecycle.audit_enabled() {
+        let run_id = next_run_id();
+        let step = crate::api::PlanStep {
+            id: format!("exec-{}", tool),
+            tool: tool.clone(),
+            risk: crate::api::RiskClass::ReadOnly, // advisory；权威风险由 classify 裁决
+        };
+        let params = extract_params(body);
+        let call = runtime_contracts::SemanticToolCall::new(
+            tool,
+            params.iter().map(|(k, v)| (k.as_str(), v.as_str())).collect(),
+        );
+        let outcome = lifecycle.execute_committed(&run_id, &step, call);
+        return outcome.to_json();
+    }
+
+    // stub 路径（audit 未启用，向后兼容）。
     let step = crate::api::PlanStep {
         id: format!("exec-{}", tool),
         tool: tool.clone(),
-        risk: crate::api::RiskClass::ReadOnly, // advisory 初始值；权威风险由 classify 裁决
+        risk: crate::api::RiskClass::ReadOnly,
     };
     let decision = lifecycle.evaluate(&step);
     if !decision.allowed {
@@ -144,6 +176,104 @@ fn execute_tool(lifecycle: &Agentd, body: &str) -> String {
     )
 }
 
+/// `GET /audit?run_id=...` —— 返回指定 run 的审计事件 timeline（JSON 数组）。
+/// 无 `run_id` 时返回全部事件。audit 未启用时返回 `audit_disabled`。
+fn audit_timeline(lifecycle: &Agentd, query: &str) -> String {
+    let Some(journal) = lifecycle.audit() else {
+        return r#"{"audit_disabled":true}"#.to_string();
+    };
+    let run_id = extract_field(query, "run_id");
+    let lines = match journal.event_lines() {
+        Ok(lines) => lines,
+        Err(err) => {
+            return format!(
+                r#"{{"error":"{}"}}"#,
+                crate::api::escape_json(&err.to_string())
+            );
+        }
+    };
+    let filtered: Vec<&String> = match &run_id {
+        Some(run) => lines
+            .iter()
+            .filter(|l| l.contains(&format!("\"run_id\":\"{run}\"")))
+            .collect(),
+        None => lines.iter().collect(),
+    };
+    let joined = filtered
+        .iter()
+        .map(|l| l.as_str())
+        .collect::<Vec<_>>()
+        .join(",");
+    format!(
+        r#"{{"count":{},"events":[{}]}}"#,
+        filtered.len(),
+        joined
+    )
+}
+
+/// `GET /audit/latest` —— 返回最近 run 的 run_id（operator 重启后查"上次发生了什么"）。
+/// audit 未启用时返回 `audit_disabled`。
+fn audit_latest(lifecycle: &Agentd) -> String {
+    let Some(journal) = lifecycle.audit() else {
+        return r#"{"audit_disabled":true}"#.to_string();
+    };
+    match journal.latest_run() {
+        Ok(Some(run_id)) => format!(
+            r#"{{"latest_run_id":"{}"}}"#,
+            crate::api::escape_json(&run_id)
+        ),
+        Ok(None) => r#"{"latest_run_id":null}"#.to_string(),
+        Err(err) => format!(r#"{{"error":"{}"}}"#, crate::api::escape_json(&err.to_string())),
+    }
+}
+
+/// 从 POST body 的 `{"params":{"k":"v",...}}` 提取字符串键值对。
+/// 极简解析（无 JSON 依赖）：扫描 `"params"` 对象内的 `"key":"value"` 对。
+fn extract_params(body: &str) -> Vec<(String, String)> {
+    let Some(params_idx) = body.find("\"params\"") else {
+        return Vec::new();
+    };
+    let after = &body[params_idx..];
+    // 找到 params 对象的起始 `{`。
+    let Some(brace_start) = after.find('{') else {
+        return Vec::new();
+    };
+    let rest = &after[brace_start + 1..];
+    // 找到匹配的 `}`（不处理嵌套——发行版最小可用）。
+    let depth_end = rest
+        .find('}')
+        .unwrap_or(rest.len());
+    let obj = &rest[..depth_end];
+    // 在对象体内扫描 `"key":"value"` 对。
+    let mut pairs = Vec::new();
+    let mut cursor = 0usize;
+    while let Some(key_quote) = obj[cursor..].find('"') {
+        let abs = cursor + key_quote;
+        let key_start = abs + 1;
+        if let Some(key_end_rel) = obj[key_start..].find('"') {
+            let key_end = key_start + key_end_rel;
+            let key = &obj[key_start..key_end];
+            // 跳过冒号与空白，找值引号。
+            let after_key = &obj[key_end + 1..];
+            if let Some(colon) = after_key.find(':') {
+                let val_region = &after_key[colon + 1..];
+                if let Some(val_quote) = val_region.find('"') {
+                    let val_start = val_quote + 1;
+                    if let Some(val_end) = val_region[val_start..].find('"') {
+                        let value =
+                            &val_region[val_start..val_start + val_end];
+                        pairs.push((key.to_string(), value.to_string()));
+                        cursor = key_end + 1 + colon + 1 + val_start + val_end + 1;
+                        continue;
+                    }
+                }
+            }
+        }
+        break;
+    }
+    pairs
+}
+
 /// 从 POST body `{"intent":"..."}` 提取 intent 字段。容错：无字段则空串。
 fn extract_intent(body: &str) -> String {
     extract_field(body, "intent").unwrap_or_default()
@@ -169,6 +299,20 @@ mod tests {
     fn lifecycle() -> Agentd {
         Agentd::new(LifecycleConfig::default())
     }
+
+    /// 带 audit journal 的 lifecycle（每个测试独立临时文件）。
+    fn lifecycle_with_audit() -> (Agentd, std::path::PathBuf) {
+        let path = std::env::temp_dir().join(format!(
+            "agentd-http-audit-{}-{}.jsonl",
+            std::process::id(),
+            RUN_SEQ.fetch_add(1000, Ordering::Relaxed)
+        ));
+        let _ = std::fs::remove_file(&path);
+        let journal = crate::audit::AuditJournal::new(&path);
+        let lc = Agentd::new(LifecycleConfig::default()).with_audit(journal);
+        (lc, path)
+    }
+
 
     #[test]
     fn route_health_returns_report() {
@@ -286,4 +430,102 @@ mod tests {
         // 连接关闭后 server 的 incoming() 会继续——释放线程（连接 close 后 handle 阻塞在 accept）。
         drop(handle);
     }
+
+    // ===== 阶段 W：可审计 /execute 路径 =====
+
+    #[test]
+    fn execute_with_audit_returns_run_id_and_commit() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        assert_eq!(status, "200 OK");
+        // 可审计路径返回 committed:true + run_id + commit_id。
+        assert!(body.contains("\"committed\":true"), "body: {body}");
+        assert!(body.contains("\"run_id\":\"run-"), "body: {body}");
+        assert!(body.contains("\"commit_id\":\"commit-stub-001\""), "body: {body}");
+    }
+
+    #[test]
+    fn execute_with_audit_persists_events_to_journal() {
+        let (lc, path) = lifecycle_with_audit();
+        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        // 重开 journal（模拟重启），事件应已落盘。
+        let journal = crate::audit::AuditJournal::new(&path);
+        let lines = journal.event_lines().expect("read");
+        // 完整链：PolicyEvaluated + ApprovalBound + EffectPrepared + EffectObserved + CommitSealed。
+        assert!(lines.iter().any(|l| l.contains("PolicyEvaluated")), "no policy event");
+        assert!(lines.iter().any(|l| l.contains("CommitSealed")), "no commit event");
+        assert!(lines.iter().any(|l| l.contains("decision=allow")), "no allow decision");
+        assert!(lines.iter().any(|l| l.contains("\"run_id\":\"run-")), "no run_id in events");
+    }
+
+    #[test]
+    fn execute_shell_with_audit_denied_and_recorded() {
+        let (lc, path) = lifecycle_with_audit();
+        let (_status, body) = route(&lc, "POST", "/execute", r#"{"tool":"shell.exec"}"#);
+        // 被拒。
+        assert!(body.contains("\"allowed\":false"), "body: {body}");
+        assert!(body.contains("\"committed\":false"), "body: {body}");
+        // 被拒步也记 audit（decision=deny）。
+        let journal = crate::audit::AuditJournal::new(&path);
+        let lines = journal.event_lines().expect("read");
+        assert!(lines.iter().any(|l| l.contains("decision=deny")), "no deny event");
+    }
+
+    #[test]
+    fn audit_timeline_endpoint_returns_events_by_run_id() {
+        let (lc, _path) = lifecycle_with_audit();
+        // 先执行一次，拿到 run_id。
+        let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let run_id = extract_field(&body, "run_id").expect("run_id in response");
+        // 再查 timeline。
+        let query = format!("{{\"run_id\":\"{}\"}}", run_id);
+        let (status, timeline) = route(&lc, "GET", "/audit", &query);
+        assert_eq!(status, "200 OK");
+        assert!(timeline.contains("\"count\":5"), "expected 5 events, got: {timeline}");
+        assert!(timeline.contains(&run_id), "timeline missing run_id");
+    }
+
+    #[test]
+    fn audit_latest_endpoint_returns_latest_run() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (status, empty) = route(&lc, "GET", "/audit/latest", "");
+        assert_eq!(status, "200 OK");
+        assert!(empty.contains("\"latest_run_id\":null"), "expected null, got: {empty}");
+        let _ = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        let (_s, latest) = route(&lc, "GET", "/audit/latest", "");
+        assert!(latest.contains("\"latest_run_id\":\"run-"), "expected run id, got: {latest}");
+    }
+
+    #[test]
+    fn audit_endpoints_disabled_without_journal() {
+        let lc = lifecycle(); // 无 audit
+        let (_s, timeline) = route(&lc, "GET", "/audit", "");
+        assert!(timeline.contains("\"audit_disabled\":true"), "got: {timeline}");
+        let (_s, latest) = route(&lc, "GET", "/audit/latest", "");
+        assert!(latest.contains("\"audit_disabled\":true"), "got: {latest}");
+    }
+
+    #[test]
+    fn execute_with_params_passes_through() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (_s, body) = route(
+            &lc,
+            "POST",
+            "/execute",
+            r#"{"tool":"svc.status","params":{"service":"nginx","port":"80"}}"#,
+        );
+        assert!(body.contains("\"committed\":true"), "body: {body}");
+        // params 落入 SemanticToolCall（虽 stub invoke 不反映，但参数解析不应崩）。
+    }
+
+    #[test]
+    fn extract_params_parses_simple_object() {
+        assert_eq!(
+            extract_params(r#"{"params":{"service":"nginx","port":"80"}}"#),
+            vec![("service".to_string(), "nginx".to_string()), ("port".to_string(), "80".to_string())]
+        );
+        assert!(extract_params(r#"{"tool":"x"}"#).is_empty());
+        assert!(extract_params(r#"{"params":{}}"#).is_empty());
+    }
+
 }
