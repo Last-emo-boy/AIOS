@@ -87,27 +87,78 @@ fn route(lifecycle: &Agentd, method: &str, path: &str, body: &str) -> (&'static 
             let plan = lifecycle.plan(intent);
             ("200 OK", plan.to_json())
         }
-        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan"]}"#.to_string()),
+        ("POST", "/execute") => ("200 OK", execute_tool(lifecycle, body)),
+        ("GET", "/") => ("200 OK", r#"{"service":"agentd","endpoints":["GET /health","POST /plan","POST /execute"]}"#.to_string()),
         _ => ("404 Not Found", r#"{"error":"not found"}"#.to_string()),
     }
 }
 
+/// 走完整冻结编排链：classify → evaluate → acquire → invoke → verify → commit。
+/// 接收 `{"tool":"svc.status","params":{"service":"nginx"}}`。任一步被拒绝即 fail-closed。
+/// 全程不自造裁决——每步委托冻结 `Agentd` 方法。
+fn execute_tool(lifecycle: &Agentd, body: &str) -> String {
+    let tool = extract_field(body, "tool").unwrap_or_default();
+    if tool.is_empty() {
+        return r#"{"error":"missing \"tool\" field"}"#.to_string();
+    }
+    // 构造 PlanStep（风险由 classify 裁决，不自造）。
+    let step = crate::api::PlanStep {
+        id: format!("exec-{}", tool),
+        tool: tool.clone(),
+        risk: crate::api::RiskClass::ReadOnly, // advisory 初始值；权威风险由 classify 裁决
+    };
+    let decision = lifecycle.evaluate(&step);
+    if !decision.allowed {
+        return format!(
+            r#"{{"allowed":false,"risk":"{}","reason":"{}"}}"#,
+            decision.risk.as_str(),
+            crate::api::escape_json(&decision.reason)
+        );
+    }
+    let lease = match lifecycle.acquire(&decision) {
+        Ok(lease) => lease,
+        Err(reason) => {
+            return format!(
+                r#"{{"allowed":true,"error":"acquire failed: {}"}}"#,
+                crate::api::escape_json(&reason)
+            );
+        }
+    };
+    let call = runtime_contracts::SemanticToolCall::new(tool, Vec::<(&str, &str)>::new());
+    let effect = lifecycle.invoke(call);
+    let verification = lifecycle.verify(&effect);
+    let commit = match lifecycle.commit(&effect) {
+        Ok(commit) => format!(r#","commit_id":"{}""#, crate::api::escape_json(&commit.0)),
+        Err(reason) => format!(
+            r#","commit_error":"{}""#,
+            crate::api::escape_json(&reason)
+        ),
+    };
+    format!(
+        r#"{{"allowed":true,"risk":"{}","lease_id":"{}","effect":{},"verified":{}{}}}"#,
+        decision.risk.as_str(),
+        crate::api::escape_json(&lease.lease_id),
+        effect.to_json(),
+        verification.success,
+        commit
+    )
+}
+
 /// 从 POST body `{"intent":"..."}` 提取 intent 字段。容错：无字段则空串。
 fn extract_intent(body: &str) -> String {
-    // 极简解析：找 "intent":"..." 段。不引入 JSON 依赖——发行版最小可用。
-    if let Some(idx) = body.find("\"intent\"") {
-        let after = &body[idx + 8..];
-        if let Some(start) = after.find('"') {
-            let rest = &after[start + 1..];
-            if let Some(end) = rest.find('"') {
-                return rest[..end]
-                    .replace("\\n", "\n")
-                    .replace("\\\"", "\"")
-                    .replace("\\\\", "\\");
-            }
-        }
-    }
-    String::new()
+    extract_field(body, "intent").unwrap_or_default()
+}
+
+/// 从 POST body 提取任意字符串字段 `"key":"value"` 的 value。容错返回 None。
+/// 极简解析（不引入 JSON 依赖）——发行版最小可用。
+fn extract_field(body: &str, key: &str) -> Option<String> {
+    let pattern = format!("\"{key}\"");
+    let idx = body.find(&pattern)?;
+    let after = &body[idx + pattern.len()..];
+    let start = after.find('"')?;
+    let rest = &after[start + 1..];
+    let end = rest.find('"')?;
+    Some(rest[..end].replace("\\n", "\n").replace("\\\"", "\"").replace("\\\\", "\\"))
 }
 
 #[cfg(test)]
@@ -144,6 +195,43 @@ mod tests {
         assert_eq!(status, "200 OK");
         assert!(body.contains("agentd"));
         assert!(body.contains("/health"));
+        assert!(body.contains("/execute"));
+    }
+
+    #[test]
+    fn route_execute_returns_effect() {
+        let lc = lifecycle();
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#);
+        assert_eq!(status, "200 OK");
+        // svc.status 是 ReadOnly → allowed:true，返回 lease + effect + commit。
+        assert!(body.contains("\"allowed\":true"), "body: {body}");
+        assert!(body.contains("\"lease_id\""), "body: {body}");
+        assert!(body.contains("\"effect\""), "body: {body}");
+    }
+
+    #[test]
+    fn route_execute_shell_denied_fail_closed() {
+        let lc = lifecycle();
+        let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"shell.exec"}"#);
+        assert_eq!(status, "200 OK");
+        // shell.exec 被 classify 裁决为 Never → allowed:false（fail-closed）。
+        assert!(body.contains("\"allowed\":false"), "body: {body}");
+    }
+
+    #[test]
+    fn route_execute_missing_tool_returns_error() {
+        let lc = lifecycle();
+        let (status, body) = route(&lc, "POST", "/execute", r#"{}"#);
+        assert_eq!(status, "200 OK");
+        assert!(body.contains("\"error\""), "body: {body}");
+    }
+
+    #[test]
+    fn extract_field_general() {
+        assert_eq!(extract_field(r#"{"tool":"svc.status"}"#, "tool"), Some("svc.status".to_string()));
+        assert_eq!(extract_field(r#"{"intent":"x"}"#, "intent"), Some("x".to_string()));
+        assert_eq!(extract_field(r#"{"a":"1","b":"2"}"#, "b"), Some("2".to_string()));
+        assert_eq!(extract_field(r#"{}"#, "missing"), None);
     }
 
     #[test]
