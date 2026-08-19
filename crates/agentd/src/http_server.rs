@@ -976,5 +976,86 @@ mod tests {
         assert!(body.contains("/tools"), "root 应列出 /tools: {body}");
     }
 
+    // ===== daemon 级 /run 端到端：真实 OpenAiCompatProvider + mock LLM server =====
+
+    /// daemon 级装配链验证：mock LLM server + 真实 OpenAiCompatProvider（指向 mock）+
+    /// serve 线程 + HTTP 客户端 POST /run。证明 operator 配好 OPENAI_BASE_URL +
+    /// AIOS_LLM_API_KEY 指向兼容网关，POST /run 即真能跑通完整闭环。
+    ///
+    /// 这是发行版真实可用性的终极证据——无需真 OpenAI key/外网/成本。
+    #[test]
+    fn serve_run_end_to_end_with_mock_llm() {
+        use std::io::{Read, Write};
+        use std::net::{TcpListener, TcpStream};
+        use std::thread;
+
+        // 1. mock LLM server（回合法 OpenAI envelope，含 svc.status + fs.read 只读步）。
+        let llm_listener = TcpListener::bind("127.0.0.1:0").expect("llm bind");
+        let llm_addr = llm_listener.local_addr().expect("llm addr");
+        let llm_base = format!("http://{llm_addr}");
+        let envelope = r#"{"id":"x","object":"chat.completion","choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"{\"steps\":[{\"tool\":\"svc.status\",\"resource\":\"nginx\",\"params\":{\"service\":\"nginx\"}}]}"}}]}"#;
+        let envelope_owned = envelope.to_string();
+        thread::spawn(move || {
+            for stream in llm_listener.incoming() {
+                let Ok(mut stream) = stream else { break };
+                let env = envelope_owned.clone();
+                thread::spawn(move || {
+                    let mut buf = [0u8; 4096];
+                    let _ = stream.read(&mut buf);
+                    let resp = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",
+                        env.len(),
+                        env
+                    );
+                    let _ = stream.write_all(resp.as_bytes());
+                });
+            }
+        });
+
+        // 2. 装配 Agentd：真实 OpenAiCompatProvider（指向 mock LLM）+ audit + executor。
+        let provider = llm_planner::OpenAiCompatProvider::new(&llm_base, "test-key", "m", 1024);
+        let audit_path = std::env::temp_dir().join(format!(
+            "agentd-e2e-run-{}-{}.jsonl",
+            std::process::id(),
+            RUN_SEQ.fetch_add(1000, Ordering::Relaxed)
+        ));
+        let _ = std::fs::remove_file(&audit_path);
+        let journal = crate::audit::AuditJournal::new(&audit_path);
+        let lc = Agentd::new(LifecycleConfig::default())
+            .with_planner(Box::new(provider))
+            .with_audit_and_executor(journal);
+
+        // 3. 启动 agentd HTTP server。
+        let http_addr = format!("127.0.0.1:{}", 18600 + (std::process::id() % 1000));
+        let server_addr = http_addr.clone();
+        let handle = thread::spawn(move || {
+            let _ = serve(&lc, &server_addr, 2);
+        });
+        thread::sleep(std::time::Duration::from_millis(150));
+
+        // 4. HTTP 客户端 POST /run。
+        let mut client = TcpStream::connect(&http_addr).expect("connect agentd");
+        let body = r#"{"intent":"inspect nginx"}"#;
+        let req = format!(
+            "POST /run HTTP/1.1\r\nHost: localhost\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",
+            body.len(),
+            body
+        );
+        client.write_all(req.as_bytes()).expect("send");
+        let mut response = String::new();
+        client.read_to_string(&mut response).expect("read");
+
+        // 5. 验证完整闭环跑通。
+        assert!(response.starts_with("HTTP/1.1 200 OK"), "got: {response}");
+        assert!(response.contains("\"ran\":true"), "应 ran:true: {response}");
+        assert!(
+            response.contains("\"completed\":true"),
+            "应 completed:true: {response}"
+        );
+        assert!(response.contains("\"trace\":["), "应有 trace: {response}");
+
+        drop(handle);
+    }
+
 
 }
