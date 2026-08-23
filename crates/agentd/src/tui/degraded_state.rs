@@ -98,9 +98,7 @@ pub fn safe_evidence_path(path: &str) -> String {
     }
     let mut display = path
         .replace('\\', "/")
-        .replace('\n', " ")
-        .replace('\r', " ")
-        .replace('\t', " ");
+        .replace(['\n', '\r', '\t'], " ");
     if display.to_ascii_lowercase().contains("secret://") {
         return "[REDACTED-PATH]".to_string();
     }

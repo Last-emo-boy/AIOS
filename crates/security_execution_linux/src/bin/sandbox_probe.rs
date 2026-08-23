@@ -113,8 +113,8 @@ fn enter_confined(ns: &str, seccomp_csv: &str, landlock_dir: &str) {
                     .filter(|s| !s.is_empty())
                     .filter_map(|s| s.parse::<i64>().ok())
                     .collect();
-                allow.push(libc::SYS_exit_group as i64);
-                allow.push(libc::SYS_exit as i64);
+                allow.push(libc::SYS_exit_group);
+                allow.push(libc::SYS_exit);
                 if platform_sys::apply_seccomp_allowlist(&allow).is_err() {
                     platform_sys::exit_now(21);
                 }
@@ -193,8 +193,8 @@ fn enter_confined_rw(ns: &str, seccomp_csv: &str, reads: &[&str], writes: &[&str
                     .filter(|s| !s.is_empty())
                     .filter_map(|s| s.parse::<i64>().ok())
                     .collect();
-                allow.push(libc::SYS_exit_group as i64);
-                allow.push(libc::SYS_exit as i64);
+                allow.push(libc::SYS_exit_group);
+                allow.push(libc::SYS_exit);
                 if platform_sys::apply_seccomp_allowlist(&allow).is_err() {
                     platform_sys::exit_now(21);
                 }
@@ -757,8 +757,8 @@ fn main() {
                 .filter(|s| !s.is_empty())
                 .filter_map(|s| s.parse::<i64>().ok())
                 .collect();
-            allow.push(libc::SYS_exit_group as i64);
-            allow.push(libc::SYS_exit as i64);
+            allow.push(libc::SYS_exit_group);
+            allow.push(libc::SYS_exit);
             if platform_sys::apply_seccomp_allowlist(&allow).is_err() {
                 platform_sys::exit_now(21);
             }

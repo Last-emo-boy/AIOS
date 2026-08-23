@@ -3,7 +3,7 @@
 //! cp-llm 阶段 X：发行版关键缺口——delegate 研究指出"彻底移除 stub-success"。
 //! `ToolRouter::route()` 只做**裁决**（验证工具名/参数 schema/风险），不执行。
 //! 本模块提供 `ToolExecutor` trait + `StdToolExecutor`：在裁决通过后执行只读工具，
-//! 产生真实 observed summary（事实），但仍经冻结 `verify` 裁决。
+//! 产生真实 observed summary（事实）与显式 success bit，但仍经冻结 `verify` 裁决。
 //!
 //! **冻结控制平面哲学**：执行后端只产生**事实**（observed summary），不做裁决。
 //! 裁决链 classify → evaluate → acquire → [执行] → verify → commit 不变；
@@ -15,10 +15,12 @@
 //! - `http.check`：TCP 探活（`std::net::TcpStream::connect`），返回连通性 + 耗时。
 //! - `svc.status`：查 `/proc` 或服务状态（最小实现：报告进程可查性）。
 //! - `audit.show` / `audit.project`：查 audit journal（需注入 journal 句柄）。
+//!
 //! 其余工具返回 "not-implemented: observed=false"（fail-safe，不谎报成功）。
 #![forbid(unsafe_code)]
 
-use std::time::Instant;
+use std::net::ToSocketAddrs;
+use std::time::{Duration, Instant};
 
 use crate::api::Effect;
 use crate::audit::AuditJournal;
@@ -67,6 +69,7 @@ impl ToolExecutor for StdToolExecutor {
             _ => Effect {
                 prepared: true,
                 observed: false,
+                succeeded: false,
                 tool: tool.to_string(),
                 summary: format!("not-implemented: tool={tool} no real backend"),
             },
@@ -80,6 +83,7 @@ fn exec_fs_read(params: &std::collections::HashMap<&str, &str>) -> Effect {
         return Effect {
             prepared: true,
             observed: false,
+            succeeded: false,
             tool: "fs.read".to_string(),
             summary: "missing path".to_string(),
         };
@@ -92,6 +96,7 @@ fn exec_fs_read(params: &std::collections::HashMap<&str, &str>) -> Effect {
             Effect {
                 prepared: true,
                 observed: true,
+                succeeded: true,
                 tool: "fs.read".to_string(),
                 summary: format!(
                     "read path={} bytes={} preview={:?}",
@@ -103,7 +108,8 @@ fn exec_fs_read(params: &std::collections::HashMap<&str, &str>) -> Effect {
         }
         Err(err) => Effect {
             prepared: true,
-            observed: true, // 观测到"读失败"也是事实
+            observed: true,
+            succeeded: false,
             tool: "fs.read".to_string(),
             summary: format!("read failed path={} error={}", redact_path(path), err),
         },
@@ -116,18 +122,28 @@ fn exec_http_check(params: &std::collections::HashMap<&str, &str>) -> Effect {
         return Effect {
             prepared: true,
             observed: false,
+            succeeded: false,
             tool: "http.check".to_string(),
             summary: "missing url".to_string(),
         };
     };
     let host_port = strip_scheme(url);
     let start = Instant::now();
-    match std::net::TcpStream::connect(host_port.as_str()) {
+    let connect_result = host_port
+        .to_socket_addrs()
+        .and_then(|mut addrs| {
+            addrs
+                .next()
+                .ok_or_else(|| std::io::Error::other("address resolved to no endpoints"))
+        })
+        .and_then(|addr| std::net::TcpStream::connect_timeout(&addr, Duration::from_secs(3)));
+    match connect_result {
         Ok(_) => {
             let elapsed = start.elapsed().as_millis();
             Effect {
                 prepared: true,
                 observed: true,
+                succeeded: true,
                 tool: "http.check".to_string(),
                 summary: format!("alive url={} elapsed_ms={}", redact_url(url), elapsed),
             }
@@ -137,6 +153,7 @@ fn exec_http_check(params: &std::collections::HashMap<&str, &str>) -> Effect {
             Effect {
                 prepared: true,
                 observed: true,
+                succeeded: false,
                 tool: "http.check".to_string(),
                 summary: format!(
                     "dead url={} elapsed_ms={} error={}",
@@ -149,18 +166,56 @@ fn exec_http_check(params: &std::collections::HashMap<&str, &str>) -> Effect {
     }
 }
 
-/// `svc.status`：最小实现——检查服务名是否可查（systemctl 在 PATH 即报告可查性）。
-/// 不实际调用 systemctl（避免副作用），只报告观测能力。
+/// `svc.status`：通过 procfs 查询匹配的进程，而不是把 systemd 是否存在当作服务状态。
+/// 查询本身成功时 `succeeded=true`；服务未运行由 `alive=false` 表示，不是查询失败。
 fn exec_svc_status(params: &std::collections::HashMap<&str, &str>) -> Effect {
     let service = params.get("service").copied().unwrap_or("unknown");
-    let systemd_available = std::path::Path::new("/run/systemd/system").exists();
+    let entries = match std::fs::read_dir("/proc") {
+        Ok(entries) => entries,
+        Err(err) => {
+            return Effect {
+                prepared: true,
+                observed: true,
+                succeeded: false,
+                tool: "svc.status".to_string(),
+                summary: format!("status query failed service={service} source=procfs error={err}"),
+            };
+        }
+    };
+    let mut matches = 0usize;
+    for entry in entries.flatten() {
+        let pid = entry.file_name();
+        if !pid.as_encoded_bytes().iter().all(u8::is_ascii_digit) {
+            continue;
+        }
+        let process_dir = entry.path();
+        let comm_matches = std::fs::read_to_string(process_dir.join("comm"))
+            .is_ok_and(|comm| comm.trim() == service);
+        let cmdline_matches = std::fs::read(process_dir.join("cmdline")).is_ok_and(|cmdline| {
+            cmdline
+                .split(|byte| *byte == 0)
+                .filter_map(|arg| std::str::from_utf8(arg).ok())
+                .any(|arg| {
+                    std::path::Path::new(arg)
+                        .file_name()
+                        .and_then(|name| name.to_str())
+                        == Some(service)
+                })
+        });
+        if comm_matches || cmdline_matches {
+            matches += 1;
+        }
+    }
     Effect {
         prepared: true,
         observed: true,
+        succeeded: true,
         tool: "svc.status".to_string(),
         summary: format!(
-            "service={} systemd={} queryable=true",
-            service, systemd_available
+            "service={} alive={} matches={} source=procfs",
+            service,
+            matches > 0,
+            matches
         ),
     }
 }
@@ -175,6 +230,7 @@ fn exec_audit_query(
         return Effect {
             prepared: true,
             observed: false,
+            succeeded: false,
             tool: tool.to_string(),
             summary: "no audit journal attached".to_string(),
         };
@@ -184,6 +240,7 @@ fn exec_audit_query(
         return Effect {
             prepared: true,
             observed: false,
+            succeeded: false,
             tool: tool.to_string(),
             summary: format!("missing {key}"),
         };
@@ -192,12 +249,14 @@ fn exec_audit_query(
         Ok(lines) => Effect {
             prepared: true,
             observed: true,
+            succeeded: true,
             tool: tool.to_string(),
             summary: format!("run={} events={}", run_id, lines.len()),
         },
         Err(err) => Effect {
             prepared: true,
             observed: true,
+            succeeded: false,
             tool: tool.to_string(),
             summary: format!("query failed run={} error={}", run_id, err),
         },
@@ -210,12 +269,13 @@ fn strip_scheme(url: &str) -> String {
         .strip_prefix("http://")
         .or_else(|| url.strip_prefix("https://"))
         .unwrap_or(url);
-    if bare.contains(':') {
-        bare.to_string()
+    let authority = bare.split('/').next().unwrap_or(bare);
+    if authority.contains(':') {
+        authority.to_string()
     } else if url.starts_with("https://") {
-        format!("{bare}:443")
+        format!("{authority}:443")
     } else {
-        format!("{bare}:80")
+        format!("{authority}:80")
     }
 }
 
@@ -280,6 +340,7 @@ mod tests {
         let exec = StdToolExecutor::new();
         let effect = route_and_exec(&exec, "fs.read", &[("path", path.to_str().unwrap())]);
         assert!(effect.observed);
+        assert!(effect.succeeded);
         assert!(effect.summary.contains("bytes=11"), "summary: {}", effect.summary);
         assert!(effect.summary.contains("hello world"), "summary: {}", effect.summary);
         let _ = std::fs::remove_file(&path);
@@ -293,8 +354,9 @@ mod tests {
             "fs.read",
             &[("path", "/nonexistent-aios-test-xyz/nope")],
         );
-        // 观测到"读失败"也是事实（observed=true），summary 含 error。
+        // 观测到失败是事实，但不能等价为成功。
         assert!(effect.observed);
+        assert!(!effect.succeeded);
         assert!(effect.summary.contains("read failed"), "summary: {}", effect.summary);
     }
 
@@ -308,6 +370,7 @@ mod tests {
             &[("url", "127.0.0.1:1")],
         );
         assert!(effect.observed);
+        assert!(!effect.succeeded);
         assert!(effect.summary.contains("dead") || effect.summary.contains("alive"));
     }
 
@@ -323,17 +386,19 @@ mod tests {
             &[("url", &addr.to_string())],
         );
         assert!(effect.observed);
+        assert!(effect.succeeded);
         assert!(effect.summary.contains("alive"), "summary: {}", effect.summary);
         drop(listener);
     }
 
     #[test]
-    fn svc_status_reports_systemd_queryability() {
+    fn svc_status_queries_procfs() {
         let exec = StdToolExecutor::new();
         let effect = route_and_exec(&exec, "svc.status", &[("service", "nginx")]);
         assert!(effect.observed);
+        assert!(effect.succeeded);
         assert!(effect.summary.contains("service=nginx"), "summary: {}", effect.summary);
-        assert!(effect.summary.contains("queryable=true"));
+        assert!(effect.summary.contains("source=procfs"));
     }
 
     #[test]
@@ -350,6 +415,7 @@ mod tests {
         let exec = StdToolExecutor::new().with_audit(j);
         let effect = route_and_exec(&exec, "audit.show", &[("run", "run-x")]);
         assert!(effect.observed);
+        assert!(effect.succeeded);
         assert!(effect.summary.contains("run=run-x"), "summary: {}", effect.summary);
         assert!(effect.summary.contains("events=1"), "summary: {}", effect.summary);
     }
@@ -359,6 +425,7 @@ mod tests {
         let exec = StdToolExecutor::new();
         let effect = route_and_exec(&exec, "audit.show", &[("run", "run-x")]);
         assert!(!effect.observed);
+        assert!(!effect.succeeded);
         assert!(effect.summary.contains("no audit journal"));
     }
 
@@ -376,6 +443,7 @@ mod tests {
         let effect = exec.execute(&routed);
         assert!(effect.prepared);
         assert!(!effect.observed);
+        assert!(!effect.succeeded);
         assert!(effect.summary.contains("not-implemented"), "summary: {}", effect.summary);
     }
 
@@ -385,6 +453,7 @@ mod tests {
         assert_eq!(strip_scheme("https://example.com"), "example.com:443");
         assert_eq!(strip_scheme("example.com:8080"), "example.com:8080");
         assert_eq!(strip_scheme("http://h:9"), "h:9");
+        assert_eq!(strip_scheme("https://example.com/path?q=1"), "example.com:443");
     }
 
     #[test]

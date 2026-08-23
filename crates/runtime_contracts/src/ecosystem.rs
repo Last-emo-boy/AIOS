@@ -56,7 +56,7 @@ impl ArtifactKind {
         }
     }
 
-    pub fn from_str(value: &str) -> Option<Self> {
+    pub fn parse(value: &str) -> Option<Self> {
         Some(match value {
             "capability-pack" => Self::CapabilityPack,
             "semantic-tool-pack" => Self::SemanticToolPack,
@@ -100,7 +100,7 @@ impl TrustTier {
         }
     }
 
-    pub fn from_str(value: &str) -> Option<Self> {
+    pub fn parse(value: &str) -> Option<Self> {
         Some(match value {
             "core" => Self::Core,
             "verified" => Self::Verified,
@@ -944,7 +944,7 @@ impl ArtifactCoordinate {
             });
         }
         let kind =
-            ArtifactKind::from_str(parts[0]).ok_or_else(|| EcosystemContractError::Invalid {
+            ArtifactKind::parse(parts[0]).ok_or_else(|| EcosystemContractError::Invalid {
                 field: "coordinate.kind",
                 reason: "artifact kind is not recognized".to_string(),
             })?;
@@ -1839,7 +1839,7 @@ impl RegistrySnapshotV1 {
     pub fn validate_at(&self, now: &str) -> Result<(), EcosystemContractError> {
         self.validate()?;
         ensure_text("snapshot.now", now)?;
-        if self.expires_at <= now.to_string() {
+        if self.expires_at.as_str() <= now {
             return Err(EcosystemContractError::Invalid {
                 field: "snapshot.expires_at",
                 reason: "expired registry snapshots must not be silently accepted".to_string(),
@@ -2723,13 +2723,14 @@ impl CompatibilityValidationReportV1 {
             &self.runtime_contract_version,
         )?;
         ensure_text("compatibility_report.architecture", &self.architecture)?;
-        if self.downgrade_requested && self.rollback_contract.as_deref().unwrap_or("").is_empty() {
-            if self.can_activate {
-                return Err(EcosystemContractError::Invalid {
-                    field: "compatibility_report.can_activate",
-                    reason: "downgrade cannot activate without rollback contract".to_string(),
-                });
-            }
+        if self.downgrade_requested
+            && self.rollback_contract.as_deref().unwrap_or("").is_empty()
+            && self.can_activate
+        {
+            return Err(EcosystemContractError::Invalid {
+                field: "compatibility_report.can_activate",
+                reason: "downgrade cannot activate without rollback contract".to_string(),
+            });
         }
         for value in self
             .missing_required_features
@@ -2796,11 +2797,13 @@ impl std::fmt::Display for EcosystemContractError {
 impl std::error::Error for EcosystemContractError {}
 
 pub fn stable_contract_hash(value: &str) -> String {
+    use std::fmt::Write as _;
     use sha2::{Digest, Sha256};
-    let hex: String = Sha256::digest(value.as_bytes())
-        .iter()
-        .map(|byte| format!("{byte:02x}"))
-        .collect();
+    let digest = Sha256::digest(value.as_bytes());
+    let mut hex = String::with_capacity(digest.len() * 2);
+    for byte in digest {
+        write!(&mut hex, "{byte:02x}").expect("writing to String cannot fail");
+    }
     format!("sha256:agentos-stable-v1-{hex}")
 }
 

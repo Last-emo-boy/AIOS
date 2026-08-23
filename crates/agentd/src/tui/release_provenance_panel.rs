@@ -479,15 +479,14 @@ fn collect_signature_projections(
 }
 
 fn signature_file_for_name(name: &str) -> String {
-    let file = match name {
+    match name {
         "dependency_inventory" => "dependency-inventory.json.sig.json".to_string(),
         "update_metadata" => "update-metadata.json.sig.json".to_string(),
         other => {
             let leaf = other.replace('_', "-");
             format!("{leaf}.json.sig.json")
         }
-    };
-    file
+    }
 }
 
 fn resolve_artifact_path(release_dir: &Path, value: &str) -> Option<PathBuf> {

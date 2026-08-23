@@ -79,7 +79,7 @@ impl ApprovalSource for OperatorApprovals {
 
 /// host stub executor：记录每个被执行的 step_id（用于断言 exec 未被调用），返回 `Confined`
 /// + 给定 detail。不触发 run loop 的 verify-rollback（step_id 非 "verify*"、detail 不含
-/// "alive=false"）。
+///   `alive=false`）。
 pub struct StubExecutor {
     executed: RefCell<Vec<String>>,
     detail: String,
@@ -414,7 +414,7 @@ impl<'a> UnionAbort<'a> {
     }
 }
 
-impl<'a> AbortSignal for UnionAbort<'a> {
+impl AbortSignal for UnionAbort<'_> {
     fn is_aborted(&self) -> bool {
         self.a.is_aborted() || self.b.is_aborted()
     }
@@ -436,6 +436,7 @@ impl<'a> AbortSignal for UnionAbort<'a> {
 /// 非 ReadOnly 步被 s2s 门 Denied，符合设计意图：危险步须算子重规划而非 LLM 自主执行）。
 ///
 /// 向后兼容入口：等价于 `run_replan_loop_with_abort(..., &NoAbort)`——不传中止信号。
+#[allow(clippy::too_many_arguments)]
 pub fn run_replan_loop(
     provider: &dyn crate::LlmProvider,
     intent: &str,
@@ -456,6 +457,7 @@ pub fn run_replan_loop(
 /// `run_replan_loop` 的完整版（阶段 G）：每轮 plan 前检查 `abort.is_aborted()`，
 /// 若算子已中止则 fail-closed（trace 记 `TraceCause::Aborted`），绝不让 LLM 继续
 /// 产 intention。其余行为与 `run_replan_loop` 一致。
+#[allow(clippy::too_many_arguments)]
 pub fn run_replan_loop_with_abort(
     provider: &dyn crate::LlmProvider,
     intent: &str,
@@ -511,7 +513,7 @@ pub fn run_replan_loop_with_abort(
             run_id,
             "replan",
             actor,
-            &format!("attempt {attempts} intent: {intent}"),
+            format!("attempt {attempts} intent: {intent}"),
         ));
         // 1. LLM 产 intention（不可信 RawPlan）。
         let context = context_window.render();
@@ -611,7 +613,7 @@ pub fn run_replan_loop_with_abort(
         // 4. 未完成：提取观察作为反馈，replan（若还有配额）。
         if attempt >= max_replans {
             // 提取 exec 拒绝原因（若有）。
-            let cause = extract_denied_reason(&runtime.events())
+            let cause = extract_denied_reason(runtime.events())
                 .map(|reason| TraceCause::ExecDenied { reason })
                 .unwrap_or(TraceCause::BudgetExhausted);
             trace.push(TraceSpan {
@@ -627,7 +629,7 @@ pub fn run_replan_loop_with_abort(
             });
             break;
         }
-        let observation = extract_feedback(&runtime.events());
+        let observation = extract_feedback(runtime.events());
         match observation {
             Some(note) => {
                 trace.push(TraceSpan {

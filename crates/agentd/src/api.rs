@@ -66,6 +66,8 @@ pub struct CapabilityLease {
 pub struct Effect {
     pub prepared: bool,
     pub observed: bool,
+    /// 工具声明的操作是否成功。`observed` 仅表示拿到了事实，不能替代成功判定。
+    pub succeeded: bool,
     pub tool: String,
     pub summary: String,
 }
@@ -73,9 +75,10 @@ pub struct Effect {
 impl Effect {
     pub fn to_json(&self) -> String {
         format!(
-            "{{\"prepared\":{},\"observed\":{},\"tool\":\"{}\",\"summary\":\"{}\"}}",
+            "{{\"prepared\":{},\"observed\":{},\"succeeded\":{},\"tool\":\"{}\",\"summary\":\"{}\"}}",
             self.prepared,
             self.observed,
+            self.succeeded,
             escape_json(&self.tool),
             escape_json(&self.summary)
         )

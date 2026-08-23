@@ -86,7 +86,7 @@ pub struct RollbackObservation {
 /// 不可信内容流水线在受限沙箱（user/mount/pid/net ns + Landlock 限定到 input 父目录 +
 /// seccomp default-deny）内净化一段外部/模型来源 blob 后回传的真实观测（ADR-000 第三
 /// MVP「不可信内容处理」）。`trust` 恒为 `sanitized-summary`，并由父进程用冻结
-/// `TrustBoundary::from_str` 二次校验；secret 若净化后仍存活，helper fail-closed（exit 85），
+/// `TrustBoundary::parse` 二次校验；secret 若净化后仍存活，helper fail-closed（exit 85），
 /// 父进程映射为硬 `Err`（绝不回传一份仍含 secret 的「净化」摘要）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ContentPipelineObservation {
@@ -199,7 +199,7 @@ pub fn tool_seccomp_syscalls() -> Vec<i64> {
         libc::SYS_getpid,
         libc::SYS_close_range,
     ];
-    nums.iter().map(|n| *n as i64).collect()
+    nums.to_vec()
 }
 
 /// 把工具 allowlist 编译为逗号分隔号串（喂给 `enter_confined` 的 seccomp 参数）。
@@ -229,15 +229,15 @@ pub fn tool_seccomp_csv() -> String {
 #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
 pub fn tool_seccomp_allows_syscall(name: &str) -> bool {
     let nr: i64 = match name {
-        "socket" => libc::SYS_socket as i64,
-        "connect" => libc::SYS_connect as i64,
-        "execve" => libc::SYS_execve as i64,
-        "execveat" => libc::SYS_execveat as i64,
-        "clone" => libc::SYS_clone as i64,
-        "clone3" => libc::SYS_clone3 as i64,
-        "read" => libc::SYS_read as i64,
-        "write" => libc::SYS_write as i64,
-        "openat" => libc::SYS_openat as i64,
+        "socket" => libc::SYS_socket,
+        "connect" => libc::SYS_connect,
+        "execve" => libc::SYS_execve,
+        "execveat" => libc::SYS_execveat,
+        "clone" => libc::SYS_clone,
+        "clone3" => libc::SYS_clone3,
+        "read" => libc::SYS_read,
+        "write" => libc::SYS_write,
+        "openat" => libc::SYS_openat,
         _ => return false,
     };
     tool_seccomp_syscalls().contains(&nr)
@@ -520,6 +520,7 @@ impl LinuxEnforcer {
     /// proposed 暂存为 `proposed.txt`（沙箱内不创建目录）；`rollback_id` 与冻结 oracle 的
     /// `RollbackHandle.rollback_id` 同形 `rb-{parameter_hash}-{proposed_hash}`。helper 在事务前
     /// 校验 base_hash：不符则不动 target（exit 81 → BaseHashMismatch，保持 oracle 不变量）。
+    #[allow(clippy::too_many_arguments)]
     pub fn run_write_diff(
         &self,
         helper: &str,
@@ -667,7 +668,7 @@ impl LinuxEnforcer {
     /// 父目录 + seccomp default-deny）内读取一段外部/模型来源 blob，中和 shell metachar /
     /// 丢弃控制字符 / 红action secret token，产出**净化摘要**与稳定哈希，经 `out` fd 回传。
     /// 沙箱内 net/exec 因 `tool_seccomp_csv()` 无 socket/clone/execve 而结构性死。
-    /// 父进程用冻结 `TrustBoundary::from_str` 校验 `trust==SanitizedSummary`，否则 fail-closed。
+    /// 父进程用冻结 `TrustBoundary::parse` 校验 `trust==SanitizedSummary`，否则 fail-closed。
     /// helper exit 10=>Landlock EACCES、20=>未 FullyEnforced、85=>secret 净化后仍存活、
     /// SIGSYS=>越权 net/exec —— 均映射为硬 `Err`（绝不回传不可信的「成功」）。
     pub fn run_content_pipeline(
@@ -685,7 +686,7 @@ impl LinuxEnforcer {
                     .ok_or_else(|| mkerr(format!("content pipeline observation missing trust: {s}")))?;
                 // 用冻结 `TrustBoundary` 验证 trust 标签：必须是 SanitizedSummary，否则
                 // helper 产出了一份未达「净化摘要」边界的内容 —— fail-closed 拒绝。
-                if runtime_contracts::TrustBoundary::from_str(&trust)
+                if runtime_contracts::TrustBoundary::parse(&trust)
                     != Some(runtime_contracts::TrustBoundary::SanitizedSummary)
                 {
                     return Err(mkerr(format!(

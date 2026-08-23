@@ -1,4 +1,4 @@
-# ADR-004 D4 / cp0：真实 Linux + KVM CI，取代 Windows/PowerShell 投影证据。
+# ADR-004 D5 / cp0：真实 Linux + KVM CI，取代 Windows/PowerShell 投影证据。
 name: real-ci
 
 on:
@@ -15,6 +15,8 @@ jobs:
         run: cargo build --workspace
       - name: cargo test
         run: cargo test --workspace
+      - name: strict clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
 
   musl-appliance:
     name: static-musl agentd_init (cp2)
@@ -138,4 +140,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: real-kernel escape harness
-        run: echo "TODO(cp5): boot pinned kernel under QEMU/KVM, apply sandbox, run real escape attempts"
+        run: 'echo "TODO(cp5): boot pinned kernel under QEMU/KVM, apply sandbox, run real escape attempts"'

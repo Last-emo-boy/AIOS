@@ -18,7 +18,7 @@ impl RiskClass {
         }
     }
 
-    pub fn from_str(value: &str) -> Option<Self> {
+    pub fn parse(value: &str) -> Option<Self> {
         Some(match value {
             "read-only" => RiskClass::ReadOnly,
             "write-with-diff" => RiskClass::WriteWithDiff,
@@ -89,7 +89,7 @@ impl TrustBoundary {
         }
     }
 
-    pub fn from_str(value: &str) -> Option<Self> {
+    pub fn parse(value: &str) -> Option<Self> {
         Some(match value {
             "operator" => Self::Operator,
             "operator-approved" => Self::OperatorApproved,
@@ -121,8 +121,8 @@ pub fn contains_secret_value(value: &str) -> bool {
                     continue;
                 }
                 let after = tail[pattern.len()..].trim_start();
-                if after.starts_with("secret://") {
-                    search = &after["secret://".len()..];
+                if let Some(stripped) = after.strip_prefix("secret://") {
+                    search = stripped;
                     continue;
                 }
                 if after.chars().next().is_some_and(|ch| {
@@ -159,9 +159,9 @@ mod tests {
             RiskClass::PrivilegedWithHumanApproval,
             RiskClass::Never,
         ] {
-            assert_eq!(RiskClass::from_str(risk.as_str()), Some(risk));
+            assert_eq!(RiskClass::parse(risk.as_str()), Some(risk));
         }
-        assert_eq!(RiskClass::from_str("unknown"), None);
+        assert_eq!(RiskClass::parse("unknown"), None);
     }
 
     #[test]

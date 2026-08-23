@@ -2931,7 +2931,7 @@ pub mod engine {
         SandboxProfile(SandboxProfileError),
         WriteDiff(WriteDiffError),
         SandboxDenied {
-            report: SandboxReport,
+            report: Box<SandboxReport>,
         },
         InvalidState {
             action: &'static str,
@@ -3180,7 +3180,7 @@ pub mod engine {
                     )?;
                     if sandbox_report.decision == SandboxDecision::Denied {
                         return Err(SecurityExecutionError::SandboxDenied {
-                            report: sandbox_report,
+                            report: Box::new(sandbox_report),
                         });
                     }
                     ExecutionReport {

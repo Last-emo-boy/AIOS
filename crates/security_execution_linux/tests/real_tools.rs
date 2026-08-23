@@ -6,6 +6,7 @@
 //!    文件字节，观测的字节长度必须等于宿主侧真实长度。
 //!  - `svc.status <pid>`：受限沙箱内读 `/proc/<pid>/comm`，对 `std::process::id()`
 //!    必须报告存活且 comm 非空。
+//!
 //! 并把其中一个工具经 `agent_runtime` 真 run loop 端到端驱动到 `Completed`。
 #![cfg(target_os = "linux")]
 

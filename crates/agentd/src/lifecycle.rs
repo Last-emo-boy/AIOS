@@ -6,7 +6,7 @@ use crate::adapter::ToolExecutorBridge;
 use crate::audit::AuditJournal;
 use crate::executor::{StdToolExecutor, ToolExecutor};
 use crate::modules::{ModuleKind, ModuleStatus};
-use crate::tools::{RoutedToolCall, ToolRejection, ToolRouter};
+use crate::tools::{RoutedToolCall, TOOL_SCHEMAS, ToolRejection, ToolRouter};
 use llm_planner::runner::{run_replan_loop, OperatorApprovals, ReplanOutcome};
 use llm_planner::ModelProvenance;
 
@@ -218,7 +218,7 @@ impl Agentd {
                         .map(|p| PlanStep {
                             id: p.step_id,
                             tool: p.tool,
-                            risk: RiskClass::ReadOnly, // advisory；权威风险由 classify 裁决
+                            risk: p.risk.to_risk_class(),
                         })
                         .collect(),
                     Err(_err) => {
@@ -254,19 +254,23 @@ impl Agentd {
         if step.tool == "shell.exec" {
             RiskClass::Never
         } else {
-            step.risk
+            TOOL_SCHEMAS
+                .iter()
+                .find(|schema| schema.name == step.tool)
+                .map_or(RiskClass::Never, |schema| schema.risk)
         }
     }
 
     pub fn evaluate(&self, step: &PlanStep) -> PolicyDecision {
         let risk = self.classify(step);
+        let allowed = risk == RiskClass::ReadOnly;
         PolicyDecision {
-            allowed: risk != RiskClass::Never,
+            allowed,
             risk,
-            reason: if risk == RiskClass::Never {
-                "normal mode denies arbitrary shell".to_string()
-            } else {
-                "stub policy allows deterministic local-only step".to_string()
+            reason: match risk {
+                RiskClass::ReadOnly => "read-only semantic tool allowed".to_string(),
+                RiskClass::Never => "unknown or forbidden semantic tool".to_string(),
+                _ => "direct execution requires an exact operator approval flow".to_string(),
             },
         }
     }
@@ -286,6 +290,7 @@ impl Agentd {
         Effect {
             prepared: true,
             observed: true,
+            succeeded: true,
             tool: call.name,
             summary: "stub effect only; no persistent side effects".to_string(),
         }
@@ -297,8 +302,15 @@ impl Agentd {
 
     pub fn verify(&self, effect: &Effect) -> VerificationResult {
         VerificationResult {
-            success: effect.prepared && effect.observed,
-            reason: "stub verification over observed effect".to_string(),
+            success: effect.prepared && effect.observed && effect.succeeded,
+            reason: if effect.prepared && effect.observed && effect.succeeded {
+                "effect prepared, observed, and succeeded".to_string()
+            } else {
+                format!(
+                    "effect verification failed: prepared={} observed={} succeeded={}",
+                    effect.prepared, effect.observed, effect.succeeded
+                )
+            },
         }
     }
 
@@ -348,8 +360,39 @@ impl Agentd {
             return ExecutionOutcome::audit_disabled();
         };
 
-        // 1. Policy 评估（裁决）。裁决先于审计——裁决是权威，审计是观测。
-        let decision = self.evaluate(step);
+        // 1. ToolRouter 先给出权威 risk；HTTP/plan 携带的 step.risk 仅作 advisory。
+        let routed = match self.route_tool(&call) {
+            Ok(routed) => routed,
+            Err(rejection) => {
+                let reason = format!("route rejected: {}", rejection.reason);
+                if let Err(err) = journal.append(&AuditEvent::new(
+                    AuditEventType::PolicyEvaluated,
+                    run_id,
+                    &step.id,
+                    "operator",
+                    format!(
+                        "decision=deny tool={} risk={} reason={}",
+                        rejection.tool,
+                        RiskClass::Never.as_str(),
+                        reason
+                    ),
+                )) {
+                    return ExecutionOutcome::audit_failure(&err);
+                }
+                return ExecutionOutcome::Denied {
+                    risk: RiskClass::Never,
+                    reason,
+                };
+            }
+        };
+        let authoritative_step = PlanStep {
+            id: step.id.clone(),
+            tool: routed.tool.to_string(),
+            risk: routed.risk,
+        };
+
+        // 2. Policy 评估。当前 direct `/execute` 仅允许 ReadOnly；副作用必须走精确审批流。
+        let decision = self.evaluate(&authoritative_step);
         if !decision.allowed {
             // 仍记审计（被拒步也是可审计事件），写失败则 fail-closed。
             if let Err(err) = journal.append(&AuditEvent::new(
@@ -377,7 +420,7 @@ impl Agentd {
             return ExecutionOutcome::audit_failure(&err);
         }
 
-        // 2. Acquire lease。
+        // 3. Acquire lease。
         let lease = match self.acquire(&decision) {
             Ok(lease) => lease,
             Err(reason) => {
@@ -401,28 +444,13 @@ impl Agentd {
             return ExecutionOutcome::audit_failure(&err);
         }
 
-        // 3. Invoke（执行意图）。
-        // 冻结原则：真实执行前先经 ToolRouter 裁决（route），裁决通过才执行。
-        // executor 存在时走真实后端，否则退回 stub invoke（向后兼容）。
-        let effect = if let Some(executor) = self.executor.as_ref() {
-            match self.route_tool(&call) {
-                Ok(routed) => executor.execute(&routed),
-                Err(rejection) => {
-                    let _ = journal.append(&AuditEvent::new(
-                        AuditEventType::SandboxDenied,
-                        run_id,
-                        &step.id,
-                        "operator",
-                        format!("route rejected tool={} reason={}", rejection.tool, rejection.reason),
-                    ));
-                    return ExecutionOutcome::FailedClosed {
-                        reason: format!("route rejected: {}", rejection.reason),
-                    };
-                }
-            }
-        } else {
-            self.invoke(call)
+        // 4. Invoke。无 executor 时拒绝，不再退回 stub-success。
+        let Some(executor) = self.executor.as_ref() else {
+            return ExecutionOutcome::FailedClosed {
+                reason: "tool executor is not configured".to_string(),
+            };
         };
+        let effect = executor.execute(&routed);
         if !effect.prepared {
             return ExecutionOutcome::FailedClosed {
                 reason: "effect not prepared".to_string(),
@@ -442,22 +470,25 @@ impl Agentd {
             run_id,
             &step.id,
             "operator",
-            format!("observed tool={} summary={}", effect.tool, effect.summary),
+            format!(
+                "observed tool={} succeeded={} summary={}",
+                effect.tool, effect.succeeded, effect.summary
+            ),
         )) {
             return ExecutionOutcome::audit_failure(&err);
         }
 
-        // 4. Verify + Commit（验证裁决 + 提交）。
+        // 5. Verify + Commit（验证裁决 + 提交）。
         let verification = self.verify(&effect);
-        let commit = match self.commit(&effect) {
-            Ok(commit) => commit,
-            Err(reason) => return ExecutionOutcome::FailedClosed { reason },
-        };
         if !verification.success {
             return ExecutionOutcome::FailedClosed {
                 reason: verification.reason,
             };
         }
+        let commit = match self.commit(&effect) {
+            Ok(commit) => commit,
+            Err(reason) => return ExecutionOutcome::FailedClosed { reason },
+        };
         if let Err(err) = journal.append(&AuditEvent::new(
             AuditEventType::CommitSealed,
             run_id,
@@ -602,7 +633,6 @@ impl ExecutionOutcome {
 }
 
 #[cfg(test)]
-#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -656,6 +686,32 @@ mod tests {
     }
 
     #[test]
+    fn authoritative_schema_risk_overrides_advisory_downgrade() {
+        let agentd = Agentd::new(LifecycleConfig::default());
+        let step = PlanStep {
+            id: "write".to_string(),
+            tool: "fs.write.diff".to_string(),
+            risk: RiskClass::ReadOnly,
+        };
+        let decision = agentd.evaluate(&step);
+        assert_eq!(decision.risk, RiskClass::WriteWithDiff);
+        assert!(!decision.allowed);
+        assert!(decision.reason.contains("exact operator approval"));
+    }
+
+    #[test]
+    fn unknown_tool_is_never_even_with_read_only_hint() {
+        let agentd = Agentd::new(LifecycleConfig::default());
+        let step = PlanStep {
+            id: "unknown".to_string(),
+            tool: "future.tool".to_string(),
+            risk: RiskClass::ReadOnly,
+        };
+        assert_eq!(agentd.classify(&step), RiskClass::Never);
+        assert!(!agentd.evaluate(&step).allowed);
+    }
+
+    #[test]
     fn stub_api_flow_returns_typed_results() {
         let mut agentd = Agentd::new(LifecycleConfig::default());
         agentd.start();
@@ -697,7 +753,7 @@ mod tests {
         "choices": [
             {"index": 0, "finish_reason": "stop",
              "message": {"role": "assistant",
-                "content": "{\"steps\":[{\"tool\":\"svc.status\",\"resource\":\"nginx\",\"params\":{\"service\":\"nginx\"}},{\"tool\":\"fs.read\",\"resource\":\"config\",\"params\":{\"path\":\"/etc/nginx/nginx.conf\"}}]}"}}
+                "content": "{\"steps\":[{\"tool\":\"svc.status\",\"resource\":\"nginx\",\"params\":{\"service\":\"nginx\"}},{\"tool\":\"fs.read\",\"resource\":\"hosts\",\"params\":{\"path\":\"/etc/hosts\"}}]}"}}
         ]
     }"#;
 

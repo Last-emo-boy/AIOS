@@ -9,6 +9,7 @@
 //!      + 源设备（/dev/vda2）；
 //!   3. `/etc/agentos/runtime-manifest`（仅存在于磁盘 ext4 根）运行时重算 SHA-256（per-build，
 //!      硬编码 stub 伪造不出，且跨 build 变化）。
+//!
 //! 成功：`AGENTD_DISK_READY pid=1 root_dev=<maj:min> root_fstype=<fs> root_src=<dev> manifest_sha=<hex> reaped=<N>`。
 //! 失败：`AGENTD_DISK_FAIL stage=<s> errno=<n>`，再 power_off（PID1 退出=内核 panic，harness 凭 CONTENT 判 FAIL）。
 //!
@@ -19,6 +20,7 @@
 fn main() {
     use agentd_init::{run_pid1, Pid1Config};
     use sha2::{Digest, Sha256};
+    use std::fmt::Write as _;
     use std::io::Write;
 
     fn mark(line: &str) {
@@ -71,7 +73,11 @@ fn main() {
         Ok(b) => b,
         Err(e) => fail(&format!("stage=manifest-read errno={}", e.raw_os_error().unwrap_or(-1))),
     };
-    let sha_hex: String = Sha256::digest(&manifest).iter().map(|b| format!("{b:02x}")).collect();
+    let digest = Sha256::digest(&manifest);
+    let mut sha_hex = String::with_capacity(digest.len() * 2);
+    for byte in digest {
+        write!(&mut sha_hex, "{byte:02x}").expect("writing to String cannot fail");
+    }
 
     // 反假绿 4：持久分区 /var/lib/agentos（vda3）写 + sync_all + 读回，证明真可写
     //（cp8 fs.write.diff/rollback/recovery 依赖；也证明 vda3 真挂对——root vda2 只读，

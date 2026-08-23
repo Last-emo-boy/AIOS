@@ -1,8 +1,10 @@
 # AIOS TASK
 
 Source: `research.md`
-Workflow: `.workflow/active/WFS-20260610-agentos-production-distro-rc18`
-Previous workflow: `.workflow/active/WFS-20260609-agentos-production-distro-rc17`
+Workflow (legacy projection): `.workflow/active/WFS-20260610-agentos-production-distro-rc21`
+Engineering track: `feat/real-execution-foundation`
+Authoritative current status: `docs/current-status.md`
+Previous workflow: `.workflow/active/WFS-20260610-agentos-production-distro-rc20`
 Maestro session: `.workflow/.maestro/maestro-20260607-141323`
 
 ## 目标
@@ -22,6 +24,19 @@ Maestro session: `.workflow/.maestro/maestro-20260607-141323`
 - seL4/Genode 是高安全版独立产品线，不拖慢 Linux 主线。
 
 ## 当前进度
+
+> 2026-08-23 收口说明：以下 RC 历史主要是 PowerShell/JSON projection evidence。
+> ADR-004 之后的真实 Linux 实现以 `docs/current-status.md` 为当前事实源；不得用 RC 编号
+> 推导 `production_ready_claim` 或 `real_enforcement_claim`。当前 P0 收口任务是：真实 effect
+> 成功语义、权威 risk、HTTP loopback/请求上限、CI/clippy 基线和 ADR-006。下一批才进入
+> `LinuxEnforcer` 生产接线、长期 daemon appliance、pinned-kernel KVM 与供应链门。
+
+- `TASK-REAL-CLOSEOUT-001`：P0 truthful-execution/CI/status closeout，已完成。
+- `TASK-REAL-CLOSEOUT-002`：daemon → `LinuxEnforcer` 单一生产执行链，待开始。
+- `TASK-REAL-CLOSEOUT-003`：long-running appliance + pinned KVM/UEFI gate，待开始。
+- `TASK-REAL-CLOSEOUT-004`：统一 release/SBOM/provenance/signing pipeline，待开始。
+
+### Legacy RC progress archive
 
 - 当前任务：Production Distro RC19 `RC19-050` final closeout audit 已完成，RC19 作为 non-GA AIOS-body installable image local consumer milestone 关闭，下一步进入 `RC20-planning`。RC19 从 RC18 的 non-GA isolated installed-system image readiness 出发，完成了 `RC19-000` planning、`RC19-001` authority contract、`RC19-010` artifact binding、`RC19-011` media binding、`RC19-012` reproducibility fail-closed verifier、`RC19-020` first-user install target boundary、`RC19-021` first-user install drill、`RC19-022` first boot projection、`RC19-030` offline/local channel consumption package、`RC19-031` post-install update/rollback compatibility smoke、`RC19-032` first-user support/recovery evidence、`RC19-040` installable image local consumer smoke 和 `RC19-050` final audit；final audit 结论为 PASS，`consumer_ready_claim=true` 仅表示 local consumer readiness，`production_ready_claim=false` 仍保持不变。RC19 未执行新的 install/update/rollback/support upload/recovery/remote dispatch，未下载远程 payload，未 provision object storage，未改 host rootfs、host active slot、host boot metadata、active artifact set 或 production ring，也未授予 mirror/frontend、signer、shell/TUI/model/endpoint authority 或 private material handling。RC19 仍然只推进 AIOS 本体，不做 external mirror frontend、Nginx/TLS、remote signer、object storage provisioning、remote dispatch、private signing material handling、support upload、recovery execution、host rootfs/boot mutation、active artifact set mutation、production ring mutation 或 GA production-ready claim。下一步是规划 Production Distro RC20。
 - 当前正式里程碑已经关闭到 Production Distro RC8：RC6 已完成 installable signed payload channel metadata、bootstrap/installer consumption、storage/TLS policy、canary packet 和 rollback precondition projection；RC7 已完成 signed payload consumption、revocation、compatibility、rollback baseline、HTTPS mirror hardening、gated canary activation 和 gated rollback drill evidence；RC8 Wave 0 已完成 `RC8-001` real installable payload and controlled execution smoke contract、`RC8-002` immutable payload object descriptor and byte boundary、`RC8-003` public signature artifact ingestion and receipt boundary，Wave 1 已完成 `RC8-010` real installable payload object descriptor projection、`RC8-011` public signature artifact ingestion 和 `RC8-012` signed object descriptor fail-closed fixtures，Wave 2 已完成 `RC8-020` installer VM preflight and quarantined object-fetch smoke、`RC8-021` installer byte/signature/storage/compatibility fail-closed fixtures 和 `RC8-022` mirror metadata/frontend consistency refresh，Wave 3 已完成 `RC8-030` exact-approved canary activation smoke packet、`RC8-031` controlled rollback drill fail-closed evidence 和 `RC8-032` support/recovery evidence binding，closeout `RC8-040` 已完成。RC9 Wave 0 已完成 `RC9-001` external object storage and controlled canary execution contract、`RC9-002` external object descriptor publication and artifact drift reconciliation contract 和 `RC9-003` controlled execution binding contract，Wave 1 已完成 `RC9-010` external object publication candidate denial evidence、`RC9-011` artifact drift reconciliation denial evidence 和 `RC9-012` external object installer fetch fail-closed evidence，Wave 2 已完成 `RC9-020` two-node canary enrollment denial evidence、`RC9-021` exact approval execution binding denial evidence 和 `RC9-022` controlled canary activation denial evidence，Wave 3 已完成 `RC9-030` controlled rollback drill denial evidence 和 `RC9-031` controlled execution support/recovery binding evidence，closeout `RC9-040` 已完成。下一步进入 Production Distro RC10 planning。`.workflow/active/WFS-20260525-agentos-console-beta-production-ux` 的结论仍是 `console-beta`，RC0/RC1/RC2/RC3/RC4/RC5/RC6/RC7/RC8/RC9 当前都不是 GA production-ready claim。
@@ -1659,4 +1674,3 @@ ProjectionSnapshot is immutable render input, not source of truth.
 - Fleet and governance previews are explicit non-GA previews。
 - Remote features are optional and fail closed。
 - Final audit decided `console-beta` promotion；`production_ready_claim=false` remains intentional。
-

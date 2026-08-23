@@ -74,7 +74,7 @@ impl EventFeed {
             .iter()
             .enumerate()
             .filter_map(|(index, line)| EventFeedItem::from_line(index + 1, line))
-            .filter(|event| selected_run.map_or(true, |run_id| event.run_id == run_id))
+            .filter(|event| selected_run.is_none_or(|run_id| event.run_id == run_id))
             .collect::<Vec<_>>();
         let total_events = events.len();
         let cursor = EventCursor::from_snapshot(snapshot, total_events, limit);

@@ -558,7 +558,7 @@ mod tests {
                 .iter()
                 .all(|line| line.contains("\"parameter_hash\":\"param-hash\""))
         );
-        assert_eq!(prepared.handle.committed, true);
+        assert!(prepared.handle.committed);
     }
 
     #[test]

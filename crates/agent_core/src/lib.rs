@@ -157,7 +157,7 @@ pub mod ecosystem {
                     })
                 })
                 .collect::<Result<Vec<_>, _>>()?;
-            let trust_tier = TrustTier::from_str(&required_json_string(json, "trust_tier")?)
+            let trust_tier = TrustTier::parse(&required_json_string(json, "trust_tier")?)
                 .ok_or_else(|| {
                     EcosystemResolverError::invalid("trust_tier", "unknown trust tier")
                 })?;
@@ -1115,6 +1115,7 @@ pub mod ecosystem {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn activation_step(
         step_id: &str,
         tool: &str,
@@ -2109,7 +2110,7 @@ pub mod model {
             }
         }
 
-        pub fn from_str(value: &str) -> Option<Self> {
+        pub fn parse(value: &str) -> Option<Self> {
             Some(match value {
                 "tui" => Self::Tui,
                 "cli" => Self::Cli,
@@ -2157,7 +2158,7 @@ pub mod model {
             }
         }
 
-        pub fn from_str(value: &str) -> Option<Self> {
+        pub fn parse(value: &str) -> Option<Self> {
             Some(match value {
                 "Accepted" => Self::Accepted,
                 "Planning" => Self::Planning,
@@ -2197,7 +2198,7 @@ pub mod model {
             }
         }
 
-        pub fn from_str(value: &str) -> Option<Self> {
+        pub fn parse(value: &str) -> Option<Self> {
             Some(match value {
                 "NotRequired" => Self::NotRequired,
                 "Pending" => Self::Pending,
@@ -2227,7 +2228,7 @@ pub mod model {
             }
         }
 
-        pub fn from_str(value: &str) -> Option<Self> {
+        pub fn parse(value: &str) -> Option<Self> {
             Some(match value {
                 "None" => Self::None,
                 "ResumeFromStep" => Self::ResumeFromStep,
@@ -2922,7 +2923,7 @@ pub mod model {
         }
 
         fn from_json(json: &str) -> Result<Self, ModelValidationError> {
-            let status = ApprovalStatus::from_str(&required_json_string(json, "status")?)
+            let status = ApprovalStatus::parse(&required_json_string(json, "status")?)
                 .ok_or_else(|| {
                     ModelValidationError::new("approval_state.status", "unknown status")
                 })?;
@@ -3007,7 +3008,7 @@ pub mod model {
         }
 
         fn from_json(json: &str) -> Result<Self, ModelValidationError> {
-            let status = RecoveryStatus::from_str(&required_json_string(json, "status")?)
+            let status = RecoveryStatus::parse(&required_json_string(json, "status")?)
                 .ok_or_else(|| {
                     ModelValidationError::new("recovery_marker.status", "unknown status")
                 })?;
@@ -3094,7 +3095,7 @@ pub mod model {
         }
 
         fn from_json(json: &str) -> Result<Self, ModelValidationError> {
-            let trust_label = TrustBoundary::from_str(&required_json_string(json, "trust_label")?)
+            let trust_label = TrustBoundary::parse(&required_json_string(json, "trust_label")?)
                 .ok_or_else(|| {
                     ModelValidationError::new("observation_ref.trust_label", "unknown trust label")
                 })?;
@@ -3312,7 +3313,7 @@ pub mod model {
                     "unsupported schema version",
                 ));
             }
-            let state = RunState::from_str(&required_json_string(json, "state")?)
+            let state = RunState::parse(&required_json_string(json, "state")?)
                 .ok_or_else(|| ModelValidationError::new("run.state", "unknown run state"))?;
             let approval_state = ApprovalState::from_json(&object_field(json, "approval_state")?)?;
             let recovery_marker =
@@ -9495,9 +9496,8 @@ pub mod scheduler {
                 let steps = indegree
                     .iter()
                     .enumerate()
-                    .filter_map(|(index, degree)| {
-                        (*degree > 0).then(|| plan.steps()[index].step_id().to_string())
-                    })
+                    .filter(|(_, degree)| **degree > 0)
+                    .map(|(index, _)| plan.steps()[index].step_id().to_string())
                     .collect::<Vec<_>>();
                 return Err(SchedulerError::Cycle { steps });
             }
@@ -12185,6 +12185,7 @@ pub mod package_install {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn package_step(
         step_id: &str,
         tool: &str,

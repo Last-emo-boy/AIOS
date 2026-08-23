@@ -252,6 +252,7 @@ impl AgentRuntime {
     /// - PauseForApproval：记 StepDenied("restart approval denied; no effect prepared") 收束
     ///   （restart **不执行**，对应冻结 denied 分支）。
     /// - Deny：记 StepDenied 收束。
+    ///
     /// 全部步骤走完则 RunCompleted。状态纯从 append-only 日志重建。
     pub fn run_plan(
         &mut self,
@@ -330,7 +331,7 @@ impl AgentRuntime {
                                 run_id,
                                 &step.step_id,
                                 actor,
-                                &format!("{} observed: {detail}", step.tool),
+                                format!("{} observed: {detail}", step.tool),
                             ));
                         }
                         // verify 步的 svc.status 仍探到 alive=false => 触发回滚并收束。
@@ -345,12 +346,35 @@ impl AgentRuntime {
                                 params: step.params.clone(),
                                 risk: StepRisk::ExecuteWithConfirmation,
                             };
-                            let _ = exec.execute(&rollback_step);
-                            self.log.push(RunEvent::RollbackTriggered {
-                                step_id: step.step_id.clone(),
-                                reason: format!("verify probe still unhealthy: {detail}"),
-                            });
-                            self.log.push(RunEvent::RunRolledBack);
+                            match exec.execute(&rollback_step) {
+                                Ok(StepObservation {
+                                    outcome: StepOutcome::Confined,
+                                    ..
+                                }) => {
+                                    self.log.push(RunEvent::RollbackTriggered {
+                                        step_id: step.step_id.clone(),
+                                        reason: format!("verify probe still unhealthy: {detail}"),
+                                    });
+                                    self.log.push(RunEvent::RunRolledBack);
+                                    return StepFlow::Halt(self.state());
+                                }
+                                Ok(StepObservation {
+                                    outcome: StepOutcome::KernelDenied { reason },
+                                    ..
+                                }) => {
+                                    self.log.push(RunEvent::StepDenied {
+                                        step_id: rollback_step.step_id,
+                                        reason: format!("rollback denied: {reason}"),
+                                    });
+                                }
+                                Err(error) => {
+                                    self.log.push(RunEvent::StepDenied {
+                                        step_id: rollback_step.step_id,
+                                        reason: format!("rollback execution failed: {error}"),
+                                    });
+                                }
+                            }
+                            self.log.push(RunEvent::RunFailedClosed);
                             return StepFlow::Halt(self.state());
                         }
                         StepFlow::Continue
@@ -370,7 +394,7 @@ impl AgentRuntime {
                                 run_id,
                                 &step.step_id,
                                 actor,
-                                &format!("kernel denied: {reason}"),
+                                format!("kernel denied: {reason}"),
                             ));
                         }
                         self.log.push(RunEvent::RunFailedClosed);
@@ -415,7 +439,9 @@ impl AgentRuntime {
     /// - `Denied`：push `SourceToSinkDenied` 并收束（**exec 不触达**，no effect prepared）。
     /// - `Allowed`：落到既有每步主体（`run_plan_step`，与 `run_plan` 同形）。
     /// - 汇描述符 / 请求构造失败（secret-like 字段）=> push `RunFailedClosed` 收束。
+    ///
     /// `None`（算子原生步）：直接走既有逻辑。全部走完则 `RunCompleted`。状态纯从日志重建。
+    #[allow(clippy::too_many_arguments)]
     pub fn run_plan_guarded(
         &mut self,
         actor: &str,
@@ -593,6 +619,84 @@ mod tests {
         fn token_for(&self, _step: &PlannedStep) -> Option<ApprovalToken> {
             None
         }
+    }
+
+    struct VerifyRollbackExecutor {
+        rollback_succeeds: bool,
+    }
+    impl StepExecutor for VerifyRollbackExecutor {
+        fn execute(&self, step: &PlannedStep) -> std::io::Result<StepObservation> {
+            if step.tool == "svc.status" {
+                return Ok(StepObservation {
+                    outcome: StepOutcome::Confined,
+                    detail: "alive=false source=test".to_string(),
+                });
+            }
+            if step.tool == "svc.restart.rollback" && self.rollback_succeeds {
+                return Ok(StepObservation {
+                    outcome: StepOutcome::Confined,
+                    detail: "rollback complete".to_string(),
+                });
+            }
+            Err(std::io::Error::other("rollback backend unavailable"))
+        }
+    }
+
+    fn verify_step() -> PlannedStep {
+        PlannedStep {
+            step_id: "verify-service".to_string(),
+            tool: "svc.status".to_string(),
+            resource: "nginx".to_string(),
+            params: vec![("service".to_string(), "nginx".to_string())],
+            risk: StepRisk::ReadOnly,
+        }
+    }
+
+    #[test]
+    fn unhealthy_verify_reports_rolled_back_only_after_rollback_succeeds() {
+        let mut runtime = AgentRuntime::new();
+        let state = runtime.run_plan(
+            "operator",
+            &[verify_step()],
+            &NoApprovals,
+            &VerifyRollbackExecutor {
+                rollback_succeeds: true,
+            },
+        );
+        assert_eq!(state, RunState::RolledBack);
+        assert!(
+            runtime
+                .events()
+                .iter()
+                .any(|event| matches!(event, RunEvent::RunRolledBack))
+        );
+    }
+
+    #[test]
+    fn unhealthy_verify_fails_closed_when_rollback_fails() {
+        let mut runtime = AgentRuntime::new();
+        let state = runtime.run_plan(
+            "operator",
+            &[verify_step()],
+            &NoApprovals,
+            &VerifyRollbackExecutor {
+                rollback_succeeds: false,
+            },
+        );
+        assert_eq!(state, RunState::FailedClosed);
+        assert!(runtime.events().iter().any(|event| {
+            matches!(
+                event,
+                RunEvent::StepDenied { reason, .. }
+                    if reason.contains("rollback execution failed")
+            )
+        }));
+        assert!(!
+            runtime
+                .events()
+                .iter()
+                .any(|event| matches!(event, RunEvent::RunRolledBack))
+        );
     }
 
     /// 按 step_id 映射不可信来源；未登记 => None（算子原生，跳过门）。

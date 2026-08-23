@@ -39,7 +39,7 @@ impl AuditEventType {
         }
     }
 
-    pub fn from_str(value: &str) -> Option<Self> {
+    pub fn parse(value: &str) -> Option<Self> {
         Some(match value {
             "IntentReceived" => Self::IntentReceived,
             "PlanFrozen" => Self::PlanFrozen,
@@ -342,7 +342,7 @@ pub struct AuditBatch<'a> {
     events: Vec<AuditEvent>,
 }
 
-impl<'a> AuditBatch<'a> {
+impl AuditBatch<'_> {
     /// 累积一个事件到内存缓冲（不落盘）。
     pub fn push(&mut self, event: AuditEvent) -> &mut Self {
         self.events.push(event);

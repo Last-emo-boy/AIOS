@@ -127,7 +127,7 @@ impl UpdateRollbackPanel {
             ),
             format!(
                 "health_gate state={} active_artifact_set_present={} runtime_contract_compatibility_checked={} ecosystem_replay_status=\"{}\" promotion_allowed={} incompatible_active_artifact_count={} failed_visible={} safe_next_command=\"promotion.blockers.show\"",
-                safe_text(&self.readiness.health_state()),
+                safe_text(self.readiness.health_state()),
                 self.readiness.active_artifact_set_present,
                 self.readiness.runtime_contract_compatibility_checked,
                 safe_text(&self.readiness.ecosystem_replay_status),
@@ -137,7 +137,7 @@ impl UpdateRollbackPanel {
             ),
             format!(
                 "rollback_drill status={} rollback_preserves_previous_active_set={} previous_active_set_hash=\"{}\" restored_active_set_hash=\"{}\" previous_equals_restored={} safe_next_command=\"promotion.blockers.show\"",
-                safe_text(&self.readiness.rollback_drill_status()),
+                safe_text(self.readiness.rollback_drill_status()),
                 self.readiness.rollback_preserves_previous_active_set,
                 safe_text(&self.readiness.previous_active_set_hash),
                 safe_text(&self.readiness.restored_active_set_hash),
@@ -163,12 +163,7 @@ impl UpdateRollbackPanel {
         } else {
             lines.extend(self.blockers.iter().map(UpdateRollbackBlocker::render));
         }
-        lines
-            .into_iter()
-            .map(|line| format!("{line}\n"))
-            .collect::<String>()
-            .trim_end()
-            .to_string()
+        lines.join("\n")
     }
 
     fn active_slot_label(&self) -> String {

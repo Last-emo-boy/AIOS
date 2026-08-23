@@ -113,8 +113,10 @@ impl ConfigLoader {
     /// 加载配置。环境变量覆盖文件值，文件覆盖缺省。
     /// 文件不存在不算错误（视为无文件配置，用缺省 + 环境变量）。
     pub fn load(&self) -> ConfigLoadResult {
-        let mut result = ConfigLoadResult::default();
-        result.config = DaemonConfig::default();
+        let mut result = ConfigLoadResult {
+            config: DaemonConfig::default(),
+            ..ConfigLoadResult::default()
+        };
         for field in ["run_mode", "planner_mode", "http_addr", "audit_path", "arbitrary_shell_enabled", "max_replans"] {
             result.sources.insert(field.to_string(), "default");
         }
@@ -134,8 +136,27 @@ impl ConfigLoader {
 
         // 2. 环境变量（覆盖文件）。
         self.apply_env(&mut result);
+        self.validate(&mut result);
 
         result
+    }
+
+    fn validate(&self, result: &mut ConfigLoadResult) {
+        let valid_loopback = result
+            .config
+            .http_addr
+            .parse::<std::net::SocketAddr>()
+            .is_ok_and(|address| address.ip().is_loopback());
+        if !valid_loopback {
+            let rejected = std::mem::replace(
+                &mut result.config.http_addr,
+                DaemonConfig::default().http_addr,
+            );
+            result.sources.insert("http_addr".to_string(), "default");
+            result.warnings.push(format!(
+                "http_addr must be a numeric loopback socket; rejected {rejected:?} and restored default"
+            ));
+        }
     }
 
     fn apply_file(&self, content: &str, result: &mut ConfigLoadResult) {
@@ -302,16 +323,32 @@ mod tests {
 
     #[test]
     fn loads_from_file() {
-        let path = tmp_config("basic", "run_mode = hardened\nplanner_mode = real\nhttp_addr = 0.0.0.0:9000\naudit_path = /data/audit.jsonl\narbitrary_shell_enabled = true\nmax_replans = 5\n");
+        let path = tmp_config("basic", "run_mode = hardened\nplanner_mode = real\nhttp_addr = 127.0.0.1:9000\naudit_path = /data/audit.jsonl\narbitrary_shell_enabled = true\nmax_replans = 5\n");
         let loader = ConfigLoader::new().with_file(path);
         let result = loader.load();
         assert_eq!(result.config.run_mode, "hardened");
         assert_eq!(result.config.planner_mode, "real");
-        assert_eq!(result.config.http_addr, "0.0.0.0:9000");
+        assert_eq!(result.config.http_addr, "127.0.0.1:9000");
         assert_eq!(result.config.audit_path, "/data/audit.jsonl");
         assert!(result.config.arbitrary_shell_enabled);
         assert_eq!(result.config.max_replans, 5);
         assert_eq!(result.sources.get("run_mode").copied(), Some("file"));
+    }
+
+    #[test]
+    fn rejects_non_loopback_http_address() {
+        let path = tmp_config("non-loopback", "http_addr = 0.0.0.0:9000\n");
+        let result = ConfigLoader::new().with_file(path).load();
+        assert_eq!(result.config.http_addr, "127.0.0.1:8421");
+        assert_eq!(result.sources.get("http_addr").copied(), Some("default"));
+        assert!(
+            result
+                .warnings
+                .iter()
+                .any(|warning| warning.contains("must be a numeric loopback socket")),
+            "warnings: {:?}",
+            result.warnings
+        );
     }
 
     #[test]

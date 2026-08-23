@@ -1,22 +1,28 @@
 //! agentd HTTP API server —— 发行版 operator 入口（纯 `std::net`，零外部依赖）。
 //!
-//! cp-llm 阶段 V：暴露最小 JSON-over-HTTP 接口，让 operator 可远程驱动 OS：
+//! cp-llm 阶段 V：暴露最小 JSON-over-HTTP 接口，让本机 operator 驱动 OS：
 //! - `GET /health` → `HealthReport::to_json()`
 //! - `POST /plan` body `{"intent":"..."}` → `PlanSpec::to_json()`
 //!
 //! **安全边界**：本 server 只序列化已有的冻结编排结果（`Lifecycle`），不自造裁决。
-//! 它绑定 loopback（`127.0.0.1`）且不暴露 shell——所有工具调用仍经冻结 `ToolRouter`。
+//! 它强制绑定 loopback 且不暴露 shell——所有工具调用仍经冻结 `ToolRouter`。
 //! `#![forbid(unsafe_code)]` 适用（`std::net::TcpListener` 是安全抽象）。
 #![forbid(unsafe_code)]
 
 use std::io::{BufRead, BufReader, Read, Write};
-use std::net::TcpListener;
+use std::net::{SocketAddr, TcpListener};
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::Duration;
 
 use crate::lifecycle::Agentd;
 
 /// 单调递增的 run_id 计数器（进程级，避免引入随机/时间源依赖）。
 static RUN_SEQ: AtomicU64 = AtomicU64::new(1);
+const MAX_REQUEST_LINE_BYTES: usize = 8 * 1024;
+const MAX_HEADER_LINE_BYTES: usize = 8 * 1024;
+const MAX_HEADER_COUNT: usize = 64;
+const MAX_BODY_BYTES: usize = 1024 * 1024;
+const CONNECTION_TIMEOUT: Duration = Duration::from_secs(5);
 
 fn next_run_id() -> String {
     format!("run-{}", RUN_SEQ.fetch_add(1, Ordering::Relaxed))
@@ -24,13 +30,14 @@ fn next_run_id() -> String {
 
 /// 启动 HTTP server，阻塞调用（适合作为 agentd 主循环或独立线程）。
 ///
-/// 绑定 `addr`（建议 loopback，如 `127.0.0.1:8421`）。每个连接单线程处理
+/// 绑定 `addr`（必须是 loopback，如 `127.0.0.1:8421`）。每个连接单线程处理
 /// （无并发——发行版最小可用，避免 trait Send+Sync 问题）。连接处理失败不
 /// 终止 server（记录到 stderr，继续 accept 下一个）。`max_replans` 透传给
 /// `POST /run` 的 agent 执行闭环。
 pub fn serve(lifecycle: &Agentd, addr: &str, max_replans: usize) -> std::io::Result<()> {
-    let listener = TcpListener::bind(addr)?;
-    eprintln!("agentd http api listening on {addr}");
+    let socket_addr = validate_loopback_addr(addr)?;
+    let listener = TcpListener::bind(socket_addr)?;
+    eprintln!("agentd http api listening on {socket_addr}");
     for stream in listener.incoming() {
         match stream {
             Ok(mut stream) => {
@@ -51,10 +58,12 @@ fn handle_connection(
     lifecycle: &Agentd,
     max_replans: usize,
 ) -> std::io::Result<()> {
+    stream.set_read_timeout(Some(CONNECTION_TIMEOUT))?;
+    stream.set_write_timeout(Some(CONNECTION_TIMEOUT))?;
     let mut reader = BufReader::new(stream.try_clone()?);
     // 读请求行 + headers，再按 Content-Length 读 body。
-    let mut request_line = String::new();
-    reader.read_line(&mut request_line)?;
+    let request_line = read_limited_line(&mut reader, MAX_REQUEST_LINE_BYTES)?
+        .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::UnexpectedEof, "empty request"))?;
     let mut parts = request_line.split_whitespace();
     let method = parts.next().unwrap_or("");
     let raw_path = parts.next().unwrap_or("/");
@@ -66,18 +75,39 @@ fn handle_connection(
 
     // 读取 headers 直到空行，提取 Content-Length。
     let mut content_length: usize = 0;
+    let mut header_count = 0usize;
     loop {
-        let mut header = String::new();
-        let n = reader.read_line(&mut header)?;
-        if n == 0 || header.trim().is_empty() {
+        let header = read_limited_line(&mut reader, MAX_HEADER_LINE_BYTES)?
+            .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::UnexpectedEof, "headers ended before blank line"))?;
+        if header.trim().is_empty() {
             break;
         }
-        if let Some(value) = header.strip_prefix("Content-Length:") {
-            content_length = value.trim().parse().unwrap_or(0);
+        header_count += 1;
+        if header_count > MAX_HEADER_COUNT {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "too many request headers",
+            ));
+        }
+        if let Some((name, value)) = header.split_once(':') {
+            if name.eq_ignore_ascii_case("Content-Length") {
+                content_length = value.trim().parse().map_err(|_| {
+                    std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "invalid Content-Length",
+                    )
+                })?;
+            }
         }
     }
 
     // 读 body（POST）。
+    if content_length > MAX_BODY_BYTES {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            format!("request body exceeds {MAX_BODY_BYTES} bytes"),
+        ));
+    }
     let mut body = vec![0u8; content_length];
     if content_length > 0 {
         reader.read_exact(&mut body)?;
@@ -93,6 +123,44 @@ fn handle_connection(
     );
     stream.write_all(response.as_bytes())?;
     Ok(())
+}
+
+fn validate_loopback_addr(addr: &str) -> std::io::Result<SocketAddr> {
+    let socket_addr = addr.parse::<SocketAddr>().map_err(|error| {
+        std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            format!("invalid HTTP listen address {addr:?}: {error}"),
+        )
+    })?;
+    if !socket_addr.ip().is_loopback() {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::PermissionDenied,
+            format!("unauthenticated HTTP API requires a loopback address, got {socket_addr}"),
+        ));
+    }
+    Ok(socket_addr)
+}
+
+fn read_limited_line(
+    reader: &mut impl BufRead,
+    max_bytes: usize,
+) -> std::io::Result<Option<String>> {
+    let mut bytes = Vec::new();
+    let read = reader
+        .take((max_bytes + 1) as u64)
+        .read_until(b'\n', &mut bytes)?;
+    if read == 0 {
+        return Ok(None);
+    }
+    if bytes.len() > max_bytes {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            format!("HTTP line exceeds {max_bytes} bytes"),
+        ));
+    }
+    String::from_utf8(bytes)
+        .map(Some)
+        .map_err(|_| std::io::Error::new(std::io::ErrorKind::InvalidData, "HTTP line is not UTF-8"))
 }
 
 /// 路由请求到对应的 Agentd 方法。返回 (HTTP status, JSON body)。
@@ -127,72 +195,33 @@ fn route(
 ///
 /// **审计路径**：当 Agentd 已 `with_audit` 时，走 `execute_committed` 可审计路径，
 /// 每步写 `AuditEvent`，返回中暴露 `run_id`/`commit_id`，audit 写失败则 fail-closed。
-/// 未启用 audit 时退回原 stub 路径（向后兼容）。
+/// 未启用 audit 时 fail-closed；不再允许进入 legacy stub-success 路径。
 /// 全程不自造裁决——每步委托冻结 `Agentd` 方法。
 fn execute_tool(lifecycle: &Agentd, body: &str) -> String {
     let tool = extract_field(body, "tool").unwrap_or_default();
     if tool.is_empty() {
         return r#"{"error":"missing \"tool\" field"}"#.to_string();
     }
-
-    // 可审计路径：audit 已启用。
-    if lifecycle.audit_enabled() {
-        let run_id = next_run_id();
-        let step = crate::api::PlanStep {
-            id: format!("exec-{}", tool),
-            tool: tool.clone(),
-            risk: crate::api::RiskClass::ReadOnly, // advisory；权威风险由 classify 裁决
-        };
-        let params = extract_params(body);
-        let call = runtime_contracts::SemanticToolCall::new(
-            tool,
-            params.iter().map(|(k, v)| (k.as_str(), v.as_str())).collect(),
-        );
-        let outcome = lifecycle.execute_committed(&run_id, &step, call);
-        return outcome.to_json();
+    if !lifecycle.audit_enabled() {
+        return r#"{"allowed":false,"committed":false,"audit_disabled":true}"#.to_string();
     }
 
-    // stub 路径（audit 未启用，向后兼容）。
+    let run_id = next_run_id();
     let step = crate::api::PlanStep {
         id: format!("exec-{}", tool),
         tool: tool.clone(),
+        // advisory only；权威风险由 `execute_committed` 内的 ToolRouter 给出。
         risk: crate::api::RiskClass::ReadOnly,
     };
-    let decision = lifecycle.evaluate(&step);
-    if !decision.allowed {
-        return format!(
-            r#"{{"allowed":false,"risk":"{}","reason":"{}"}}"#,
-            decision.risk.as_str(),
-            crate::api::escape_json(&decision.reason)
-        );
-    }
-    let lease = match lifecycle.acquire(&decision) {
-        Ok(lease) => lease,
-        Err(reason) => {
-            return format!(
-                r#"{{"allowed":true,"error":"acquire failed: {}"}}"#,
-                crate::api::escape_json(&reason)
-            );
-        }
-    };
-    let call = runtime_contracts::SemanticToolCall::new(tool, Vec::<(&str, &str)>::new());
-    let effect = lifecycle.invoke(call);
-    let verification = lifecycle.verify(&effect);
-    let commit = match lifecycle.commit(&effect) {
-        Ok(commit) => format!(r#","commit_id":"{}""#, crate::api::escape_json(&commit.0)),
-        Err(reason) => format!(
-            r#","commit_error":"{}""#,
-            crate::api::escape_json(&reason)
-        ),
-    };
-    format!(
-        r#"{{"allowed":true,"risk":"{}","lease_id":"{}","effect":{},"verified":{}{}}}"#,
-        decision.risk.as_str(),
-        crate::api::escape_json(&lease.lease_id),
-        effect.to_json(),
-        verification.success,
-        commit
-    )
+    let params = extract_params(body);
+    let call = runtime_contracts::SemanticToolCall::new(
+        tool,
+        params
+            .iter()
+            .map(|(key, value)| (key.as_str(), value.as_str()))
+            .collect(),
+    );
+    lifecycle.execute_committed(&run_id, &step, call).to_json()
 }
 
 /// `POST /run` —— 单次提交意图即驱动完整 agent 执行闭环：
@@ -520,6 +549,28 @@ mod tests {
         (lc, path)
     }
 
+    #[test]
+    fn listen_address_must_be_loopback() {
+        assert!(validate_loopback_addr("127.0.0.1:8421").is_ok());
+        assert!(validate_loopback_addr("[::1]:8421").is_ok());
+        let err = validate_loopback_addr("0.0.0.0:8421").expect_err("wildcard must fail");
+        assert_eq!(err.kind(), std::io::ErrorKind::PermissionDenied);
+        assert!(validate_loopback_addr("localhost:8421").is_err());
+    }
+
+    #[test]
+    fn limited_line_rejects_oversized_input() {
+        let mut reader = std::io::Cursor::new(b"12345\n".to_vec());
+        let err = read_limited_line(&mut reader, 4).expect_err("line must be capped");
+        assert_eq!(err.kind(), std::io::ErrorKind::InvalidData);
+
+        let mut reader = std::io::Cursor::new(b"ok\n".to_vec());
+        assert_eq!(
+            read_limited_line(&mut reader, 4).expect("read"),
+            Some("ok\n".to_string())
+        );
+    }
+
 
     #[test]
     fn route_health_returns_report() {
@@ -550,14 +601,12 @@ mod tests {
     }
 
     #[test]
-    fn route_execute_returns_effect() {
+    fn route_execute_without_audit_fails_closed() {
         let lc = lifecycle();
         let (status, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#, 3);
         assert_eq!(status, "200 OK");
-        // svc.status 是 ReadOnly → allowed:true，返回 lease + effect + commit。
-        assert!(body.contains("\"allowed\":true"), "body: {body}");
-        assert!(body.contains("\"lease_id\""), "body: {body}");
-        assert!(body.contains("\"effect\""), "body: {body}");
+        assert!(body.contains("\"allowed\":false"), "body: {body}");
+        assert!(body.contains("\"audit_disabled\":true"), "body: {body}");
     }
 
     #[test]
@@ -663,8 +712,8 @@ mod tests {
         assert!(lines.iter().any(|l| l.contains("CommitSealed")), "no commit event");
         assert!(lines.iter().any(|l| l.contains("decision=allow")), "no allow decision");
         assert!(lines.iter().any(|l| l.contains("\"run_id\":\"run-")), "no run_id in events");
-        // 真实执行：summary 应含 svc.status 的真实观测（systemd queryable）。
-        assert!(lines.iter().any(|l| l.contains("queryable=true")), "no real exec observation");
+        // 真实执行：summary 应来自 procfs 服务查询，而不是 systemd 存在性猜测。
+        assert!(lines.iter().any(|l| l.contains("source=procfs")), "no real exec observation");
     }
 
     #[test]
@@ -719,8 +768,24 @@ mod tests {
         let (lc, _path) = lifecycle_with_audit();
         // svc.status 缺 service 参数 → ToolRouter route 拒绝 → fail-closed。
         let (_s, body) = route(&lc, "POST", "/execute", r#"{"tool":"svc.status"}"#, 3);
-        assert!(body.contains("\"failed_closed\":true"), "body: {body}");
+        assert!(body.contains("\"allowed\":false"), "body: {body}");
+        assert!(body.contains("\"risk\":\"never\""), "body: {body}");
         assert!(body.contains("missing required parameter"), "body: {body}");
+    }
+
+    #[test]
+    fn execute_side_effect_cannot_be_downgraded_by_advisory_risk() {
+        let (lc, _path) = lifecycle_with_audit();
+        let (_status, body) = route(
+            &lc,
+            "POST",
+            "/execute",
+            r#"{"tool":"fs.write.diff","params":{"path":"/tmp/x","content_hash":"sha256:x"}}"#,
+            3,
+        );
+        assert!(body.contains("\"allowed\":false"), "body: {body}");
+        assert!(body.contains("\"risk\":\"write-with-diff\""), "body: {body}");
+        assert!(body.contains("exact operator approval"), "body: {body}");
     }
 
     #[test]

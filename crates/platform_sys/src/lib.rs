@@ -299,12 +299,10 @@ pub fn set_no_new_privs() -> io::Result<()> {
 pub fn fork() -> io::Result<ForkResult> {
     // SAFETY: fork(2) 无参数。
     let pid = unsafe { ffi::fork() };
-    if pid < 0 {
-        Err(io::Error::last_os_error())
-    } else if pid == 0 {
-        Ok(ForkResult::Child)
-    } else {
-        Ok(ForkResult::Parent(pid))
+    match pid.cmp(&0) {
+        std::cmp::Ordering::Less => Err(io::Error::last_os_error()),
+        std::cmp::Ordering::Equal => Ok(ForkResult::Child),
+        std::cmp::Ordering::Greater => Ok(ForkResult::Parent(pid)),
     }
 }
 
@@ -759,7 +757,7 @@ pub fn statfs_type(path: &str) -> io::Result<i64> {
     // SAFETY: statfs(2)；path 为有效 NUL 结尾指针，buf 指向栈上有效 statfs。
     let rc = unsafe { libc::statfs(p.as_ptr(), &mut buf) };
     if rc == 0 {
-        Ok(buf.f_type as i64)
+        Ok(buf.f_type)
     } else {
         Err(io::Error::last_os_error())
     }

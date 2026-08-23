@@ -5,7 +5,7 @@
 //! `POST /execute` 执行工具，`GET /audit` 查审计 timeline，`GET /recover` 查恢复。
 //!
 //! 配置优先级：环境变量 > 配置文件 > 缺省。配置文件（`key=value`，`#` 注释）路径
-//! 由 `AIOS_CONFIG` 指定（缺省 `/etc/aios/agentd.conf`，不存在则用缺省 + 环境变量）。
+//! 由 `AIOS_CONFIG` 指定（缺省 `/etc/agentos/agentd.conf`，不存在则用缺省 + 环境变量）。
 //! 关键环境变量：`AIOS_HTTP_ADDR`、`AIOS_AUDIT_PATH`、`AIOS_RUN_MODE`、
 //! `AIOS_PLANNER_MODE`、`AIOS_ARBITRARY_SHELL`、`AIOS_MAX_REPLANS`。
 //!
@@ -21,7 +21,7 @@ use std::path::PathBuf;
 fn main() -> std::io::Result<()> {
     // 配置加载：环境变量 > 配置文件 > 缺省。
     let config_path = std::env::var("AIOS_CONFIG")
-        .unwrap_or_else(|_| "/etc/aios/agentd.conf".to_string());
+        .unwrap_or_else(|_| "/etc/agentos/agentd.conf".to_string());
     let loaded = ConfigLoader::new().with_file(&config_path).load();
     let cfg = &loaded.config;
 

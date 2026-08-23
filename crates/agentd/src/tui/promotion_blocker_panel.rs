@@ -298,8 +298,6 @@ fn next_command_for_blocker(blocker: &str) -> &'static str {
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/functional-capability-replay.ps1"
     } else if lower.contains("runbook") {
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/production-runbook-smoke.ps1"
-    } else if lower.contains("signature") || lower.contains("signing") || lower.contains("key") {
-        "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
     } else {
         "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-release.ps1"
     }

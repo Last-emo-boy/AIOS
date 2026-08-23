@@ -13,7 +13,8 @@
 //!   - root_fstype == ext4；root_src 以 /dev/vda 开头（真挂的磁盘分区）；
 //!   - manifest_sha == sidecar 的 per-build 值（运行时重算 /etc/agentos/runtime-manifest）；
 //!   - reaped >= 1（真 fork+waitpid）。
-//!   超时→kill→FAIL；串口 CONTENT 唯一权威（退出码 poweroff/panic 都 0）。
+//!
+//! 超时→kill→FAIL；串口 CONTENT 唯一权威（退出码 poweroff/panic 都 0）。
 
 #[cfg(target_os = "linux")]
 use std::time::{Duration, Instant};
